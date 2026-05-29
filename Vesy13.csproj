@@ -9,6 +9,16 @@
     <RootNamespace>Vesy13</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ScaleListener\**" />
+    <EmbeddedResource Remove="ScaleListener\**" />
+    <None Remove="ScaleListener\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="docs\" />
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
