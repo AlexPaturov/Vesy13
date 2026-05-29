@@ -1,244 +1,183 @@
-using System.IO.Ports;
+using Vesy13.Services;
 
 namespace Vesy13;
 
 public class MainForm : Form
 {
-    // ── UI controls ───────────────────────────────────────────────────────────
-    private TextBox      txtSend   = null!;
-    private RichTextBox  txtLog    = null!;
-    private Button       btnOnline = null!;
-    private Button       btnSend   = null!;
-    private Button       btnStop   = null!;
-    private Button       btnClear  = null!;
+    private readonly AdcService _adc;
 
-    // ── COM port ──────────────────────────────────────────────────────────────
-    private SerialPort?  _port;
+    private Panel _dotConn  = null!;
+    private Label _lblConn  = null!;
+    private Button _btnConn = null!;
 
-    // ── Frame detection ───────────────────────────────────────────────────────
-    private readonly List<byte>  _buffer    = new();
-    private readonly object      _lock      = new();
-    private System.Threading.Timer? _frameTimer;
-
-    // ── Polling ───────────────────────────────────────────────────────────────
-    private volatile bool _isPolling;
-    private byte          _pollByte = 214;
-
-    public MainForm()
+    public MainForm(AdcService adc)
     {
+        _adc = adc;
+        _adc.ConnectionChanged += (_, connected) => UpdateConn(connected);
         InitializeComponent();
     }
 
     private void InitializeComponent()
     {
-        txtSend   = new TextBox();
-        txtLog    = new RichTextBox();
-        btnOnline = new Button();
-        btnSend   = new Button();
-        btnStop   = new Button();
-        btnClear  = new Button();
+        Text          = "Весы №13";
+        ClientSize    = new Size(380, 500);
+        MinimumSize   = new Size(320, 440);
+        StartPosition = FormStartPosition.CenterScreen;
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        MaximizeBox   = false;
+        BackColor     = Color.FromArgb(240, 242, 245);
 
-        SuspendLayout();
+        // ── Header ──────────────────────────────────────────────────────────
+        var pnlHeader = new Panel
+        {
+            Dock      = DockStyle.Top,
+            Height    = 100,
+            BackColor = Color.FromArgb(25, 45, 90),
+        };
+        pnlHeader.Controls.Add(new Label
+        {
+            Text      = "ВЕСЫ №13",
+            Font      = new Font("Segoe UI", 22, FontStyle.Bold),
+            ForeColor = Color.White,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Dock      = DockStyle.Fill,
+        });
 
-        // txtSend
-        txtSend.Anchor   = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        txtSend.Font     = new Font("Courier New", 9.75F);
-        txtSend.Location = new Point(8, 8);
-        txtSend.Size     = new Size(340, 22);
+        // ── Menu buttons ────────────────────────────────────────────────────
+        var items = new (string Text, EventHandler Click)[]
+        {
+            ("Взвешивание — Статика",  BtnStatic_Click),
+            ("Взвешивание — Динамика", BtnDynamic_Click),
+            ("Сервис",                 BtnService_Click),
+            ("Корректировки",          BtnCorrections_Click),
+            ("Печать отвесной",        BtnPrint_Click),
+            ("Просмотр логов",         BtnLogs_Click),
+        };
 
-        // btnSend
-        btnSend.Anchor    = AnchorStyles.Top | AnchorStyles.Right;
-        btnSend.FlatStyle = FlatStyle.Flat;
-        btnSend.Location  = new Point(356, 8);
-        btnSend.Size      = new Size(90, 23);
-        btnSend.Text      = "Send";
-        btnSend.Click    += BtnSend_Click;
+        var pnlMenu = new TableLayoutPanel
+        {
+            Dock        = DockStyle.Fill,
+            ColumnCount = 1,
+            RowCount    = items.Length,
+            Padding     = new Padding(30, 16, 30, 16),
+        };
+        for (int i = 0; i < items.Length; i++)
+        {
+            pnlMenu.RowStyles.Add(new RowStyle(SizeType.Percent, 100f / items.Length));
+            var (text, handler) = items[i];
+            var btn = new Button
+            {
+                Text      = text,
+                Dock      = DockStyle.Fill,
+                Font      = new Font("Segoe UI", 13),
+                FlatStyle = FlatStyle.Flat,
+                Margin    = new Padding(0, 5, 0, 5),
+                BackColor = Color.FromArgb(25, 45, 90),
+                ForeColor = Color.White,
+                Cursor    = Cursors.Hand,
+            };
+            btn.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+            btn.Click += handler;
+            pnlMenu.Controls.Add(btn, 0, i);
+        }
 
-        // btnStop
-        btnStop.Anchor    = AnchorStyles.Top | AnchorStyles.Right;
-        btnStop.Enabled   = false;
-        btnStop.FlatStyle = FlatStyle.Flat;
-        btnStop.Location  = new Point(356, 38);
-        btnStop.Size      = new Size(90, 23);
-        btnStop.Text      = "Stop";
-        btnStop.Click    += BtnStop_Click;
+        // ── Status bar ──────────────────────────────────────────────────────
+        var pnlStatus = new Panel
+        {
+            Dock      = DockStyle.Bottom,
+            Height    = 36,
+            BackColor = Color.FromArgb(18, 32, 65),
+            Padding   = new Padding(8, 0, 8, 0),
+        };
 
-        // txtLog
-        txtLog.Anchor     = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        txtLog.BackColor  = Color.LightGray;
-        txtLog.DetectUrls = false;
-        txtLog.Font       = new Font("Courier New", 9.75F);
-        txtLog.Location   = new Point(8, 70);
-        txtLog.ReadOnly   = true;
-        txtLog.Size       = new Size(438, 150);
+        _dotConn = new Panel
+        {
+            Size      = new Size(10, 10),
+            Location  = new Point(10, 13),
+            BackColor = Color.Gray,
+        };
 
-        // btnOnline
-        btnOnline.Anchor    = AnchorStyles.Bottom | AnchorStyles.Left;
-        btnOnline.FlatStyle = FlatStyle.Flat;
-        btnOnline.Location  = new Point(8, 228);
-        btnOnline.Size      = new Size(90, 23);
-        btnOnline.Text      = "Offline";
-        btnOnline.Click    += BtnOnline_Click;
+        _lblConn = new Label
+        {
+            Text      = "АЦП: отключён",
+            Font      = new Font("Segoe UI", 9),
+            ForeColor = Color.Silver,
+            Location  = new Point(26, 9),
+            AutoSize  = true,
+        };
 
-        // btnClear
-        btnClear.Anchor    = AnchorStyles.Bottom | AnchorStyles.Right;
-        btnClear.FlatStyle = FlatStyle.Flat;
-        btnClear.Location  = new Point(356, 228);
-        btnClear.Size      = new Size(90, 23);
-        btnClear.Text      = "Clear";
-        btnClear.Click    += (_, _) => txtLog.Clear();
+        _btnConn = new Button
+        {
+            Text      = "Подключить",
+            Size      = new Size(90, 22),
+            Anchor    = AnchorStyles.Right | AnchorStyles.Top,
+            Location  = new Point(272, 7),
+            Font      = new Font("Segoe UI", 8),
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.FromArgb(40, 70, 130),
+            ForeColor = Color.White,
+        };
+        _btnConn.FlatAppearance.BorderSize = 0;
+        _btnConn.Click += BtnConn_Click;
 
-        ClientSize = new Size(454, 260);
-        MinimumSize = new Size(434, 180);
-        Text = "Vesy13: Offline";
-        Controls.AddRange(new Control[] { txtSend, btnSend, btnStop, txtLog, btnOnline, btnClear });
+        pnlStatus.Controls.AddRange(new Control[] { _dotConn, _lblConn, _btnConn });
 
-        ResumeLayout(false);
-        PerformLayout();
+        Controls.AddRange(new Control[] { pnlMenu, pnlHeader, pnlStatus });
     }
 
-    // ── COM port ──────────────────────────────────────────────────────────────
+    // ── Connection ──────────────────────────────────────────────────────────
 
-    private void BtnOnline_Click(object? sender, EventArgs e)
+    private void BtnConn_Click(object? sender, EventArgs e)
     {
-        if (_port?.IsOpen == true)
+        if (_adc.IsConnected)
         {
-            ClosePort();
+            _adc.Close();
         }
         else
         {
-            try { OpenPort(); }
-            catch (Exception ex) { Log($">>>> ERROR: {ex.Message}", Color.Red); }
+            try { _adc.Open("COM1"); }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 
-    private void OpenPort()
+    private void UpdateConn(bool connected)
     {
-        _port = new SerialPort("COM1", 4800, Parity.Even, 8, StopBits.One)
-        {
-            ReadTimeout  = SerialPort.InfiniteTimeout,
-            WriteTimeout = 500,
-        };
-        _port.DataReceived += OnDataReceived;
-        _port.Open();
-
-        _frameTimer = new System.Threading.Timer(OnFrameTimer, null, Timeout.Infinite, Timeout.Infinite);
-
-        txtLog.BackColor = Color.White;
-        btnOnline.Text   = "Online";
-        Text             = "Vesy13: COM1";
-        Log(">>>> ONLINE", Color.Green);
+        if (InvokeRequired) { BeginInvoke(() => UpdateConn(connected)); return; }
+        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
+        _lblConn.Text      = connected ? $"АЦП: {_adc.PortName}" : "АЦП: отключён";
+        _btnConn.Text      = connected ? "Отключить" : "Подключить";
     }
 
-    private void ClosePort()
+    // ── Navigation ──────────────────────────────────────────────────────────
+
+    private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new Forms.StaticWeighingForm(_adc));
+    private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new Forms.DynamicWeighingForm(_adc));
+
+    private void BtnService_Click(object? sender, EventArgs e) => OpenForm(new Forms.ServiceForm(_adc));
+
+    private void OpenForm(Form form)
     {
-        _isPolling = false;
-        _frameTimer?.Dispose();
-        _frameTimer = null;
-        lock (_lock) _buffer.Clear();
-
-        _port?.Close();
-        _port?.Dispose();
-        _port = null;
-
-        txtLog.BackColor = Color.LightGray;
-        btnOnline.Text   = "Offline";
-        btnSend.Enabled  = true;
-        btnStop.Enabled  = false;
-        Text             = "Vesy13: Offline";
-        Log(">>>> OFFLINE", Color.Green);
+        form.FormClosed += (_, _) => Show();
+        Hide();
+        form.Show();
     }
 
-    // ── Receive ───────────────────────────────────────────────────────────────
+    private void BtnCorrections_Click(object? sender, EventArgs e) =>
+        MessageBox.Show("В разработке", "Корректировки", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-    private void OnDataReceived(object sender, SerialDataReceivedEventArgs e)
-    {
-        if (_port == null || !_port.IsOpen) return;
+    private void BtnPrint_Click(object? sender, EventArgs e) =>
+        MessageBox.Show("В разработке", "Печать отвесной", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-        int count = _port.BytesToRead;
-        var buf = new byte[count];
-        _port.Read(buf, 0, count);
-
-        var text = string.Join(" ", buf) + " ";
-        ShowText(text);
-
-        lock (_lock) _buffer.AddRange(buf);
-        _frameTimer?.Change(20, Timeout.Infinite);
-    }
-
-    private void OnFrameTimer(object? state)
-    {
-        byte[] frame;
-        lock (_lock)
-        {
-            if (_buffer.Count == 0) return;
-            frame = _buffer.ToArray();
-            _buffer.Clear();
-        }
-
-        OnFrameReceived(frame);
-
-        if (_isPolling)
-            SendRaw(_pollByte);
-    }
-
-    private void OnFrameReceived(byte[] frame)
-    {
-        // TODO: parse frame, save to DB
-        Log($">>>> Frame [{frame.Length}]: {string.Join(" ", frame)}", Color.DarkCyan);
-    }
-
-    // ── Send ──────────────────────────────────────────────────────────────────
-
-    private void BtnSend_Click(object? sender, EventArgs e)
-    {
-        if (!byte.TryParse(txtSend.Text.Trim(), out byte value)) return;
-        if (_port == null || !_port.IsOpen) { Log(">>>> PORT CLOSED", Color.Red); return; }
-
-        txtSend.Text    = "";
-        btnSend.Enabled = false;
-        btnStop.Enabled = true;
-
-        _pollByte  = value;
-        _isPolling = true;
-        SendRaw(value);
-        Log($">> Poll started: {value}", Color.Green);
-    }
-
-    private void BtnStop_Click(object? sender, EventArgs e)
-    {
-        _isPolling      = false;
-        btnSend.Enabled = true;
-        btnStop.Enabled = false;
-        Log(">>>> STOPPED", Color.Green);
-    }
-
-    private void SendRaw(byte b)
-    {
-        try { _port?.Write(new[] { b }, 0, 1); }
-        catch (Exception ex) { Log($">>>> SEND ERROR: {ex.Message}", Color.Red); }
-    }
-
-    // ── UI helpers ────────────────────────────────────────────────────────────
-
-    private void ShowText(string s)
-    {
-        if (txtLog.InvokeRequired) { txtLog.BeginInvoke(() => ShowText(s)); return; }
-        txtLog.AppendText(s);
-    }
-
-    private void Log(string s, Color color)
-    {
-        if (txtLog.InvokeRequired) { txtLog.BeginInvoke(() => Log(s, color)); return; }
-        var prev = txtLog.SelectionColor;
-        txtLog.SelectionColor = color;
-        txtLog.AppendText("\r\n" + s + "\r\n");
-        txtLog.SelectionColor = prev;
-    }
+    private void BtnLogs_Click(object? sender, EventArgs e) =>
+        MessageBox.Show("В разработке", "Просмотр логов", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        ClosePort();
+        _adc.Close();
         base.OnFormClosed(e);
     }
 }
