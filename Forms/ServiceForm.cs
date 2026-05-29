@@ -159,7 +159,6 @@ public class ServiceForm : Form
             Width         = 90,
             Font          = new Font("Segoe UI", 10),
         };
-        RefreshPorts();
 
         _dotConn = new Panel
         {
@@ -180,6 +179,8 @@ public class ServiceForm : Form
         };
         _btnConn.FlatAppearance.BorderSize = 0;
         _btnConn.Click += BtnMonConn_Click;
+
+        RefreshPorts();
 
         var btnRefresh = new Button
         {
