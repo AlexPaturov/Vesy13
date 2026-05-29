@@ -188,7 +188,6 @@ public class ServiceForm : Form
             Size      = new Size(30, 28),
             FlatStyle = FlatStyle.Flat,
             Font      = new Font("Segoe UI", 11),
-            ToolTip   = null,
         };
         btnRefresh.Click += (_, _) => RefreshPorts();
 
