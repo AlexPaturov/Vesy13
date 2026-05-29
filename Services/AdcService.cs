@@ -8,7 +8,8 @@ public enum ActiveChannel { Main, Backup }
 public class AdcService : IDisposable
 {
     public event EventHandler<AdcFrame>? FrameReceived;
-    public event EventHandler<bool>?     ConnectionChanged;
+    public event EventHandler<byte[]>?  RawFrameReceived;
+    public event EventHandler<bool>?    ConnectionChanged;
 
     private SerialPort?              _port;
     private readonly List<byte>      _buffer = new();
@@ -73,6 +74,8 @@ public class AdcService : IDisposable
             raw = _buffer.ToArray();
             _buffer.Clear();
         }
+
+        RawFrameReceived?.Invoke(this, raw);
 
         var frame = AdcFrame.Parse(raw);
         if (frame.Valid)
