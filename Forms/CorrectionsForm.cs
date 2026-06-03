@@ -369,16 +369,17 @@ public class CorrectionsForm : Form
             {
                 var doneRow = _selected;
                 _gridPend.Rows.Remove(_gridPend.SelectedRows[0]);
-                int idx = _gridDone.Rows.Insert(0,
-                    doneRow.WagonTime.ToString("dd.MM.yyyy"),
-                    doneRow.WagonTime.ToString("HH:mm:ss"),
-                    doneRow.WagonNum,
-                    doneRow.Bogie1.ToString("F2"),
-                    doneRow.Bogie2.ToString("F2"),
-                    doneRow.Total.ToString("F2"),
-                    doneRow.Mode,
-                    doneRow.Direction);
-                _gridDone.Rows[idx].DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
+                _gridDone.Rows.Insert(0, 1);
+                var r = _gridDone.Rows[0];
+                r.Cells[0].Value = doneRow.WagonTime.ToString("dd.MM.yyyy");
+                r.Cells[1].Value = doneRow.WagonTime.ToString("HH:mm:ss");
+                r.Cells[2].Value = doneRow.WagonNum;
+                r.Cells[3].Value = doneRow.Bogie1.ToString("F2");
+                r.Cells[4].Value = doneRow.Bogie2.ToString("F2");
+                r.Cells[5].Value = doneRow.Total.ToString("F2");
+                r.Cells[6].Value = doneRow.Mode;
+                r.Cells[7].Value = doneRow.Direction;
+                r.DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
             }
             ClearTopPanel();
         }
