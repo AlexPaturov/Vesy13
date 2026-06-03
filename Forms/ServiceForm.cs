@@ -512,7 +512,7 @@ public class ServiceForm : Form
         return tab;
     }
 
-    private void BtnCalibSave_Click(object? sender, EventArgs e)
+    private async void BtnCalibSave_Click(object? sender, EventArgs e)
     {
         if (!double.TryParse(_txtK.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double k) ||
             !double.TryParse(_txtB.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double b))
@@ -525,9 +525,17 @@ public class ServiceForm : Form
         ch.K      = k;
         ch.B      = b;
         ch.Points = ReadGridPoints();
-        _calib.Save();
-        MessageBox.Show("Калибровка сохранена.", "Сохранение",
-            MessageBoxButtons.OK, MessageBoxIcon.Information);
+        try
+        {
+            await _calib.SaveAsync();
+            MessageBox.Show("Калибровка сохранена.", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void LoadCalibPoints()
@@ -711,7 +719,7 @@ public class ServiceForm : Form
         ForeColor = Color.FromArgb(80, 100, 140),
     };
 
-    private void BtnCalibDynSave_Click(object? sender, EventArgs e)
+    private async void BtnCalibDynSave_Click(object? sender, EventArgs e)
     {
         if (!double.TryParse(_txtKPlus.Text,  NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
             !double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km))
@@ -722,9 +730,17 @@ public class ServiceForm : Form
         }
         _calib.Profile.Dynamic.KPlus  = kp;
         _calib.Profile.Dynamic.KMinus = km;
-        _calib.Save();
-        MessageBox.Show("Калибровка динамики сохранена.", "Сохранение",
-            MessageBoxButtons.OK, MessageBoxIcon.Information);
+        try
+        {
+            await _calib.SaveAsync();
+            MessageBox.Show("Калибровка динамики сохранена.", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void LoadCalibDynamic()

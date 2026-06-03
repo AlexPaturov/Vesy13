@@ -1,20 +1,51 @@
 using System.Globalization;
 using System.Text.Json;
+using Npgsql;
 using Vesy13.Models;
 
 namespace Vesy13.Services;
 
 public class CalibrationService
 {
-    private static readonly string FilePath = Path.Combine(
-        AppDomain.CurrentDomain.BaseDirectory, "calibration.json");
+    private const string ConnStr =
+        "Host=localhost;Port=5432;Database=scale_db;Username=scale_user;Password=fluffyBunny";
 
     private static readonly JsonSerializerOptions JsonOpts =
-        new() { WriteIndented = true };
+        new() { WriteIndented = false };
 
-    public CalibrationProfile Profile { get; private set; }
+    public CalibrationProfile Profile { get; private set; } = new();
 
-    public CalibrationService() => Profile = Load();
+    public async Task LoadAsync()
+    {
+        try
+        {
+            await using var conn = new NpgsqlConnection(ConnStr);
+            await conn.OpenAsync();
+            const string sql = "SELECT profile FROM calibration_config WHERE id = 1";
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            var json = (string?)await cmd.ExecuteScalarAsync();
+            if (!string.IsNullOrWhiteSpace(json) && json != "{}")
+                Profile = JsonSerializer.Deserialize<CalibrationProfile>(json) ?? new CalibrationProfile();
+        }
+        catch
+        {
+            Profile = new CalibrationProfile();
+        }
+    }
+
+    public async Task SaveAsync()
+    {
+        var json = JsonSerializer.Serialize(Profile, JsonOpts);
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        const string sql = @"
+INSERT INTO calibration_config (id, profile, updated_at)
+VALUES (1, @profile::jsonb, NOW())
+ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()";
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("profile", json);
+        await cmd.ExecuteNonQueryAsync();
+    }
 
     public double Convert(int adcCode, ActiveChannel channel)
         => channel == ActiveChannel.Main
@@ -41,19 +72,5 @@ public class CalibrationService
         double k     = denom != 0 ? (n * sumXY - sumX * sumY) / denom : 0;
         double b     = (sumY - k * sumX) / n;
         return (k, b);
-    }
-
-    public void Save() =>
-        File.WriteAllText(FilePath, JsonSerializer.Serialize(Profile, JsonOpts));
-
-    private static CalibrationProfile Load()
-    {
-        if (!File.Exists(FilePath)) return new CalibrationProfile();
-        try
-        {
-            return JsonSerializer.Deserialize<CalibrationProfile>(
-                       File.ReadAllText(FilePath)) ?? new CalibrationProfile();
-        }
-        catch { return new CalibrationProfile(); }
     }
 }
