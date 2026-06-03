@@ -171,7 +171,7 @@ public class MainForm : Form
     }
 
     private void BtnCorrections_Click(object? sender, EventArgs e) =>
-        MessageBox.Show("В разработке", "Корректировки", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        OpenForm(new Forms.CorrectionsForm(_db));
 
     private void BtnPrint_Click(object? sender, EventArgs e) =>
         MessageBox.Show("В разработке", "Печать отвесной", MessageBoxButtons.OK, MessageBoxIcon.Information);
