@@ -10,6 +10,7 @@ static class Program
         ApplicationConfiguration.Initialize();
         using var adc   = new AdcService();
         var       calib = new CalibrationService();
-        Application.Run(new MainForm(adc, calib));
+        var       db    = new DatabaseService();
+        Application.Run(new MainForm(adc, calib, db));
     }
 }

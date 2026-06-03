@@ -21,7 +21,9 @@ public class DynamicWeighingForm : WeighingFormBase
     protected override double ToTonnes(int adcCode) =>
         _calib.ConvertDynamic(adcCode, GetDirection());
 
-    public DynamicWeighingForm(AdcService adc, CalibrationService calib) : base(adc, calib)
+    protected override string GetMode() => "ДИНАМИКА";
+
+    public DynamicWeighingForm(AdcService adc, CalibrationService calib, DatabaseService db) : base(adc, calib, db)
     {
         InitializeComponent();
     }

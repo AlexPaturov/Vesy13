@@ -7,6 +7,7 @@ public abstract class WeighingFormBase : Form
 {
     protected readonly AdcService         _adc;
     protected readonly CalibrationService _calib;
+    protected readonly DatabaseService    _db;
 
     // ── State machine ──────────────────────────────────────────────────────
     private enum WeighState { Idle, Bogie1Captured }
@@ -34,11 +35,13 @@ public abstract class WeighingFormBase : Form
     protected abstract bool   ValidateBeforeWeigh();
     protected abstract bool   ShowDirectionColumn { get; }
     protected abstract double ToTonnes(int adcCode);
+    protected abstract string GetMode();
 
-    protected WeighingFormBase(AdcService adc, CalibrationService calib)
+    protected WeighingFormBase(AdcService adc, CalibrationService calib, DatabaseService db)
     {
         _adc   = adc;
         _calib = calib;
+        _db    = db;
     }
 
     // ── Shared UI (call from derived InitializeComponent) ──────────────────
@@ -270,7 +273,7 @@ public abstract class WeighingFormBase : Form
             var      record    = new WagonRecord(_wagonNumber, _trainStartTime!.Value,
                                                  wagonTime, ToTonnes(_bogie1Code), ToTonnes(bogie2), GetDirection());
             AddToGrid(record);
-            // TODO: сохранить в БД через DatabaseService
+            SaveAsync(record);
 
             _state              = WeighState.Idle;
             _lblValue.Text      = record.Total.ToString("F2");
@@ -330,5 +333,18 @@ public abstract class WeighingFormBase : Form
         _grid.Rows.Insert(0, values.ToArray());
         while (_grid.Rows.Count > 10)
             _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
+    }
+
+    private async void SaveAsync(WagonRecord record)
+    {
+        try
+        {
+            await _db.SaveWagonAsync(record, GetMode());
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка сохранения в БД:\n{ex.Message}",
+                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
     }
 }

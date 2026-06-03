@@ -6,15 +6,17 @@ public class MainForm : Form
 {
     private readonly AdcService         _adc;
     private readonly CalibrationService _calib;
+    private readonly DatabaseService    _db;
 
     private Panel _dotConn  = null!;
     private Label _lblConn  = null!;
     private Button _btnConn = null!;
 
-    public MainForm(AdcService adc, CalibrationService calib)
+    public MainForm(AdcService adc, CalibrationService calib, DatabaseService db)
     {
         _adc   = adc;
         _calib = calib;
+        _db    = db;
         _adc.ConnectionChanged += (_, connected) => UpdateConn(connected);
         InitializeComponent();
     }
@@ -156,8 +158,8 @@ public class MainForm : Form
 
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new Forms.StaticWeighingForm(_adc, _calib));
-    private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new Forms.DynamicWeighingForm(_adc, _calib));
+    private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new Forms.StaticWeighingForm(_adc, _calib, _db));
+    private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new Forms.DynamicWeighingForm(_adc, _calib, _db));
 
     private void BtnService_Click(object? sender, EventArgs e) => OpenForm(new Forms.ServiceForm(_adc, _calib));
 

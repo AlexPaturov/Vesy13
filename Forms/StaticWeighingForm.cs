@@ -11,7 +11,9 @@ public class StaticWeighingForm : WeighingFormBase
     protected override double ToTonnes(int adcCode) =>
         _calib.Convert(adcCode, _adc.Channel);
 
-    public StaticWeighingForm(AdcService adc, CalibrationService calib) : base(adc, calib)
+    protected override string GetMode() => "СТАТИКА";
+
+    public StaticWeighingForm(AdcService adc, CalibrationService calib, DatabaseService db) : base(adc, calib, db)
     {
         InitializeComponent();
     }
