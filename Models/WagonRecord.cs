@@ -4,9 +4,9 @@ public record WagonRecord(
     int      Number,
     DateTime TrainTime,
     DateTime WagonTime,
-    int      Bogie1,
-    int      Bogie2,
+    double   Bogie1,
+    double   Bogie2,
     string   Direction)
 {
-    public int Total => Bogie1 + Bogie2;
+    public double Total => Bogie1 + Bogie2;
 }

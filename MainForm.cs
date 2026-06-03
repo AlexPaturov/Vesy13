@@ -156,8 +156,8 @@ public class MainForm : Form
 
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new Forms.StaticWeighingForm(_adc));
-    private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new Forms.DynamicWeighingForm(_adc));
+    private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new Forms.StaticWeighingForm(_adc, _calib));
+    private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new Forms.DynamicWeighingForm(_adc, _calib));
 
     private void BtnService_Click(object? sender, EventArgs e) => OpenForm(new Forms.ServiceForm(_adc, _calib));
 

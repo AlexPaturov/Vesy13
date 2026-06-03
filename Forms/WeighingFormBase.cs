@@ -5,7 +5,8 @@ namespace Vesy13.Forms;
 
 public abstract class WeighingFormBase : Form
 {
-    protected readonly AdcService _adc;
+    protected readonly AdcService         _adc;
+    protected readonly CalibrationService _calib;
 
     // ── State machine ──────────────────────────────────────────────────────
     private enum WeighState { Idle, Bogie1Captured }
@@ -32,8 +33,13 @@ public abstract class WeighingFormBase : Form
     protected abstract string GetDirection();
     protected abstract bool   ValidateBeforeWeigh();
     protected abstract bool   ShowDirectionColumn { get; }
+    protected abstract double ToTonnes(int adcCode);
 
-    protected WeighingFormBase(AdcService adc) => _adc = adc;
+    protected WeighingFormBase(AdcService adc, CalibrationService calib)
+    {
+        _adc   = adc;
+        _calib = calib;
+    }
 
     // ── Shared UI (call from derived InitializeComponent) ──────────────────
     protected void BuildSharedLayout(int topY)
@@ -209,7 +215,7 @@ public abstract class WeighingFormBase : Form
         _lastFrame = frame;
         if (_state == WeighState.Idle)
         {
-            _lblValue.Text      = ActiveCode(frame).ToString();
+            _lblValue.Text      = ToTonnes(ActiveCode(frame)).ToString("F2");
             _lblValue.ForeColor = _adc.IsConnected ? Color.LimeGreen : Color.DimGray;
         }
     }
@@ -251,7 +257,7 @@ public abstract class WeighingFormBase : Form
             _bogie1Code = ActiveCode(_lastFrame);
             _state      = WeighState.Bogie1Captured;
 
-            _lblValue.Text      = _bogie1Code.ToString();
+            _lblValue.Text      = ToTonnes(_bogie1Code).ToString("F2");
             _lblValue.ForeColor = Color.Yellow;
             _lblStatus.Text     = "Тележка 1 зафиксирована  —  Ожидание тележки 2";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
@@ -262,14 +268,14 @@ public abstract class WeighingFormBase : Form
             int      bogie2    = ActiveCode(_lastFrame);
             DateTime wagonTime = DateTime.Now;
             var      record    = new WagonRecord(_wagonNumber, _trainStartTime!.Value,
-                                                 wagonTime, _bogie1Code, bogie2, GetDirection());
+                                                 wagonTime, ToTonnes(_bogie1Code), ToTonnes(bogie2), GetDirection());
             AddToGrid(record);
             // TODO: сохранить в БД через DatabaseService
 
             _state              = WeighState.Idle;
-            _lblValue.Text      = record.Total.ToString();
+            _lblValue.Text      = record.Total.ToString("F2");
             _lblValue.ForeColor = Color.Cyan;
-            _lblStatus.Text     = $"Вагон №{_wagonNumber}: {record.Total}  —  Готов к следующему";
+            _lblStatus.Text     = $"Вагон №{_wagonNumber}: {record.Total:F2} т  —  Готов к следующему";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
             _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
         }
@@ -316,9 +322,9 @@ public abstract class WeighingFormBase : Form
         var values = new List<object>();
         if (ShowDirectionColumn) values.Add(r.Direction);
         values.Add(r.Number.ToString());
-        values.Add(r.Bogie1.ToString());
-        values.Add(r.Bogie2.ToString());
-        values.Add(r.Total.ToString());
+        values.Add(r.Bogie1.ToString("F2"));
+        values.Add(r.Bogie2.ToString("F2"));
+        values.Add(r.Total.ToString("F2"));
         values.Add(r.WagonTime.ToString("HH:mm:ss"));
 
         _grid.Rows.Insert(0, values.ToArray());

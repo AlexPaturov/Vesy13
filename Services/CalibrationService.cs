@@ -22,7 +22,7 @@ public class CalibrationService
             : Profile.Ch1.Convert(adcCode);
 
     public double ConvertDynamic(int adcCode, string direction)
-        => (direction == "→" ? Profile.Dynamic.KPlus : Profile.Dynamic.KMinus) * adcCode;
+        => (direction.StartsWith("→") ? Profile.Dynamic.KPlus : Profile.Dynamic.KMinus) * adcCode;
 
     public static (double k, double b) CalculateLsq(IList<CalibrationPoint> points)
     {

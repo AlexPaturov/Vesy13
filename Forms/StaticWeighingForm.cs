@@ -8,7 +8,10 @@ public class StaticWeighingForm : WeighingFormBase
     protected override string GetDirection()      => "";
     protected override bool   ValidateBeforeWeigh() => true;
 
-    public StaticWeighingForm(AdcService adc) : base(adc)
+    protected override double ToTonnes(int adcCode) =>
+        _calib.Convert(adcCode, _adc.Channel);
+
+    public StaticWeighingForm(AdcService adc, CalibrationService calib) : base(adc, calib)
     {
         InitializeComponent();
     }
