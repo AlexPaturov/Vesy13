@@ -1,9 +1,11 @@
+using System.ComponentModel;
 using System.Globalization;
 using Vesy13.Models;
 using Vesy13.Services;
 
 namespace Vesy13.Forms;
 
+[DesignerCategory("Code")]
 public class CorrectionsForm : Form
 {
     private readonly DatabaseService _db;
