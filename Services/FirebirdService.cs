@@ -6,7 +6,7 @@ namespace Vesy13.Services;
 public class FirebirdService
 {
     private const string ConnStr =
-        @"User=sysdba;Password=masterkey;Database=localhost:C:\Work\DC_OPER.FDB;Dialect=3;Charset=UTF8;WireCrypt=Disabled;Role=;Connection Lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;PacketSize=8192;ServerType=0";
+        @"User=sysdba;Password=masterkey;Database=localhost:C:\Work\DC_OPER.FDB;Dialect=3;Charset=UTF8;WireCrypt=Enabled;Role=;Connection Lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;PacketSize=8192;ServerType=0";
 
     public async Task InsertAsync(
         string          table,
