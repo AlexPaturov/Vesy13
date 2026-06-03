@@ -70,4 +70,37 @@ ORDER BY wagon_time DESC";
         cmd.Parameters.AddWithValue("id", id);
         await cmd.ExecuteNonQueryAsync();
     }
+
+    public async Task<List<WagonWeighingRow>> GetTransferredAsync()
+    {
+        var rows = new List<WagonWeighingRow>();
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+
+        const string sql = @"
+SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode
+FROM wagon_weighing
+WHERE transferred = true
+ORDER BY wagon_time DESC
+LIMIT 200";
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        await using var rdr = await cmd.ExecuteReaderAsync();
+        while (await rdr.ReadAsync())
+        {
+            rows.Add(new WagonWeighingRow
+            {
+                Id        = rdr.GetInt32(0),
+                TrainTime = rdr.GetDateTime(1),
+                WagonTime = rdr.GetDateTime(2),
+                WagonNum  = rdr.GetInt32(3),
+                Bogie1    = rdr.GetDecimal(4),
+                Bogie2    = rdr.GetDecimal(5),
+                Total     = rdr.GetDecimal(6),
+                Direction = rdr.IsDBNull(7) ? "" : rdr.GetString(7),
+                Mode      = rdr.GetString(8),
+            });
+        }
+        return rows;
+    }
 }
