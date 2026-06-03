@@ -27,3 +27,5 @@ INSERT INTO calibration_config (id, profile) VALUES (1, '{}')
 ON CONFLICT (id) DO NOTHING;
 
 
+
+
