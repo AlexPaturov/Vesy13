@@ -15,8 +15,15 @@ public class ChannelCalib
     public double Convert(int adcCode) => K * adcCode + B;
 }
 
+public class DynamicCalib
+{
+    public double KPlus  { get; set; }  // коэффициент для →
+    public double KMinus { get; set; }  // коэффициент для ←
+}
+
 public class CalibrationProfile
 {
-    public ChannelCalib Ch0 { get; set; } = new();
-    public ChannelCalib Ch1 { get; set; } = new();
+    public ChannelCalib Ch0     { get; set; } = new();
+    public ChannelCalib Ch1     { get; set; } = new();
+    public DynamicCalib Dynamic { get; set; } = new();
 }

@@ -21,6 +21,9 @@ public class CalibrationService
             ? Profile.Ch0.Convert(adcCode)
             : Profile.Ch1.Convert(adcCode);
 
+    public double ConvertDynamic(int adcCode, string direction)
+        => (direction == "→" ? Profile.Dynamic.KPlus : Profile.Dynamic.KMinus) * adcCode;
+
     public static (double k, double b) CalculateLsq(IList<CalibrationPoint> points)
     {
         int n = points.Count;

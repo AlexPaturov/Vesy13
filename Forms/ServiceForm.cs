@@ -33,6 +33,15 @@ public class ServiceForm : Form
     private TextBox      _txtK        = null!;
     private TextBox      _txtB        = null!;
 
+    // ── Calibration dynamic controls ───────────────────────────────────────
+    private Label   _lblLiveAdcD  = null!;
+    private TextBox _txtKPlus     = null!;
+    private TextBox _txtKMinus    = null!;
+    private TextBox _txtCodePlus  = null!;
+    private TextBox _txtCodeMinus = null!;
+    private TextBox _txtMassPlus  = null!;
+    private TextBox _txtMassMinus = null!;
+
     // ── Admin lock ─────────────────────────────────────────────────────────
     private Button  _btnAdmin  = null!;
     private TabPage _tabCalibS = null!;
@@ -548,21 +557,181 @@ public class ServiceForm : Form
 
     private void UpdateLiveAdcLabel()
     {
-        if (_lblLiveAdc == null) return;
-        int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
-        _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
+        if (_lblLiveAdc != null)
+        {
+            int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
+            _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
+        }
+        if (_lblLiveAdcD != null)
+        {
+            int dynCode = _adc.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
+            _lblLiveAdcD.Text = dynCode == 0 ? "—" : dynCode.ToString();
+        }
     }
 
     private TabPage BuildCalibDynamicTab()
     {
         var tab = new TabPage("Калибровка Динамика");
+
+        // ── Живой код АЦП (активный канал)
         tab.Controls.Add(new Label
         {
-            Text      = "TODO (Этап 5б):\n\n• Коэффициент → (Plus)\n• Коэффициент ← (Minus)\n• Ввод эталонной массы → авторасчёт\n• Ручной ввод коэффициентов",
-            Location  = new Point(20, 20), AutoSize = true,
-            Font      = new Font("Segoe UI", 10), ForeColor = Color.Gray,
+            Text = "Текущий код АЦП:", Location = new Point(20, 16),
+            AutoSize = true, Font = new Font("Segoe UI", 9), ForeColor = Color.Gray,
         });
+        _lblLiveAdcD = new Label
+        {
+            Text = "—", Location = new Point(165, 12),
+            AutoSize = true, Font = new Font("Courier New", 13, FontStyle.Bold), ForeColor = Color.DodgerBlue,
+        };
+        tab.Controls.Add(_lblLiveAdcD);
+
+        // ── Направление → ─────────────────────────────────────────────────
+        tab.Controls.Add(MakeSectionLabel("── Направление  →  ──────────────────", new Point(20, 44)));
+
+        tab.Controls.Add(new Label { Text = "K→  =", Location = new Point(20, 72), AutoSize = true, Font = new Font("Segoe UI", 10) });
+        _txtKPlus = new TextBox { Location = new Point(72, 68), Size = new Size(160, 26), Font = new Font("Courier New", 10), Text = "0" };
+
+        tab.Controls.Add(new Label { Text = "Авторасчёт:", Location = new Point(20, 104), AutoSize = true, Font = new Font("Segoe UI", 9), ForeColor = Color.Gray });
+
+        tab.Controls.Add(new Label { Text = "Код АЦП:", Location = new Point(36, 126), AutoSize = true, Font = new Font("Segoe UI", 9) });
+        _txtCodePlus = new TextBox { Location = new Point(160, 122), Size = new Size(120, 24), Font = new Font("Courier New", 9) };
+        var btnCapPlus = new Button
+        {
+            Text = "Захватить", Location = new Point(288, 120), Size = new Size(100, 26),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 8),
+            BackColor = Color.FromArgb(25, 45, 90), ForeColor = Color.White,
+        };
+        btnCapPlus.FlatAppearance.BorderSize = 0;
+        btnCapPlus.Click += (_, _) =>
+        {
+            int code = _adc.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
+            if (code != 0) _txtCodePlus.Text = code.ToString();
+        };
+
+        tab.Controls.Add(new Label { Text = "Эталон (т):", Location = new Point(36, 154), AutoSize = true, Font = new Font("Segoe UI", 9) });
+        _txtMassPlus = new TextBox { Location = new Point(160, 150), Size = new Size(120, 24), Font = new Font("Courier New", 9) };
+
+        var btnCalcPlus = new Button
+        {
+            Text = "Рассчитать K→", Location = new Point(36, 182), Size = new Size(180, 30),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 9),
+            BackColor = Color.FromArgb(25, 60, 120), ForeColor = Color.White,
+        };
+        btnCalcPlus.FlatAppearance.BorderSize = 0;
+        btnCalcPlus.Click += (_, _) =>
+        {
+            if (int.TryParse(_txtCodePlus.Text, out int code) &&
+                double.TryParse(_txtMassPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
+                code != 0)
+                _txtKPlus.Text = (mass / code).ToString("G8", CultureInfo.InvariantCulture);
+            else
+                MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        };
+
+        // ── Направление ← ─────────────────────────────────────────────────
+        tab.Controls.Add(MakeSectionLabel("── Направление  ←  ──────────────────", new Point(20, 224)));
+
+        tab.Controls.Add(new Label { Text = "K←  =", Location = new Point(20, 252), AutoSize = true, Font = new Font("Segoe UI", 10) });
+        _txtKMinus = new TextBox { Location = new Point(72, 248), Size = new Size(160, 26), Font = new Font("Courier New", 10), Text = "0" };
+
+        tab.Controls.Add(new Label { Text = "Авторасчёт:", Location = new Point(20, 284), AutoSize = true, Font = new Font("Segoe UI", 9), ForeColor = Color.Gray });
+
+        tab.Controls.Add(new Label { Text = "Код АЦП:", Location = new Point(36, 306), AutoSize = true, Font = new Font("Segoe UI", 9) });
+        _txtCodeMinus = new TextBox { Location = new Point(160, 302), Size = new Size(120, 24), Font = new Font("Courier New", 9) };
+        var btnCapMinus = new Button
+        {
+            Text = "Захватить", Location = new Point(288, 300), Size = new Size(100, 26),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 8),
+            BackColor = Color.FromArgb(25, 45, 90), ForeColor = Color.White,
+        };
+        btnCapMinus.FlatAppearance.BorderSize = 0;
+        btnCapMinus.Click += (_, _) =>
+        {
+            int code = _adc.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
+            if (code != 0) _txtCodeMinus.Text = code.ToString();
+        };
+
+        tab.Controls.Add(new Label { Text = "Эталон (т):", Location = new Point(36, 334), AutoSize = true, Font = new Font("Segoe UI", 9) });
+        _txtMassMinus = new TextBox { Location = new Point(160, 330), Size = new Size(120, 24), Font = new Font("Courier New", 9) };
+
+        var btnCalcMinus = new Button
+        {
+            Text = "Рассчитать K←", Location = new Point(36, 362), Size = new Size(180, 30),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 9),
+            BackColor = Color.FromArgb(25, 60, 120), ForeColor = Color.White,
+        };
+        btnCalcMinus.FlatAppearance.BorderSize = 0;
+        btnCalcMinus.Click += (_, _) =>
+        {
+            if (int.TryParse(_txtCodeMinus.Text, out int code) &&
+                double.TryParse(_txtMassMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
+                code != 0)
+                _txtKMinus.Text = (mass / code).ToString("G8", CultureInfo.InvariantCulture);
+            else
+                MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        };
+
+        // ── Сохранение ─────────────────────────────────────────────────────
+        tab.Controls.Add(new Label
+        {
+            Text = "Масса = K × Код",
+            Location = new Point(20, 406), AutoSize = true,
+            Font = new Font("Segoe UI", 9), ForeColor = Color.Gray,
+        });
+
+        var btnSave = new Button
+        {
+            Text = "Применить и сохранить", Location = new Point(20, 430), Size = new Size(220, 34),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 10),
+            BackColor = Color.FromArgb(0, 110, 40), ForeColor = Color.White,
+        };
+        btnSave.FlatAppearance.BorderSize = 0;
+        btnSave.Click += BtnCalibDynSave_Click;
+
+        tab.Controls.AddRange(new Control[]
+        {
+            _txtKPlus, btnCapPlus, _txtCodePlus, _txtMassPlus, btnCalcPlus,
+            _txtKMinus, btnCapMinus, _txtCodeMinus, _txtMassMinus, btnCalcMinus,
+            btnSave,
+        });
+
+        LoadCalibDynamic();
         return tab;
+    }
+
+    private static Label MakeSectionLabel(string text, Point location) => new()
+    {
+        Text      = text,
+        Location  = location,
+        AutoSize  = true,
+        Font      = new Font("Segoe UI", 9, FontStyle.Bold),
+        ForeColor = Color.FromArgb(80, 100, 140),
+    };
+
+    private void BtnCalibDynSave_Click(object? sender, EventArgs e)
+    {
+        if (!double.TryParse(_txtKPlus.Text,  NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
+            !double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km))
+        {
+            MessageBox.Show("Некорректные значения K→ или K←.", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        _calib.Profile.Dynamic.KPlus  = kp;
+        _calib.Profile.Dynamic.KMinus = km;
+        _calib.Save();
+        MessageBox.Show("Калибровка динамики сохранена.", "Сохранение",
+            MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void LoadCalibDynamic()
+    {
+        if (_txtKPlus == null) return;
+        _txtKPlus .Text = _calib.Profile.Dynamic.KPlus .ToString("G8", CultureInfo.InvariantCulture);
+        _txtKMinus.Text = _calib.Profile.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
     }
 
     private TabPage BuildSettingsTab()
