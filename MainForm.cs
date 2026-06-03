@@ -4,15 +4,17 @@ namespace Vesy13;
 
 public class MainForm : Form
 {
-    private readonly AdcService _adc;
+    private readonly AdcService         _adc;
+    private readonly CalibrationService _calib;
 
     private Panel _dotConn  = null!;
     private Label _lblConn  = null!;
     private Button _btnConn = null!;
 
-    public MainForm(AdcService adc)
+    public MainForm(AdcService adc, CalibrationService calib)
     {
-        _adc = adc;
+        _adc   = adc;
+        _calib = calib;
         _adc.ConnectionChanged += (_, connected) => UpdateConn(connected);
         InitializeComponent();
     }
@@ -157,7 +159,7 @@ public class MainForm : Form
     private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new Forms.StaticWeighingForm(_adc));
     private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new Forms.DynamicWeighingForm(_adc));
 
-    private void BtnService_Click(object? sender, EventArgs e) => OpenForm(new Forms.ServiceForm(_adc));
+    private void BtnService_Click(object? sender, EventArgs e) => OpenForm(new Forms.ServiceForm(_adc, _calib));
 
     private void OpenForm(Form form)
     {

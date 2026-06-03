@@ -8,7 +8,8 @@ static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
-        using var adc = new AdcService();
-        Application.Run(new MainForm(adc));
+        using var adc   = new AdcService();
+        var       calib = new CalibrationService();
+        Application.Run(new MainForm(adc, calib));
     }
 }

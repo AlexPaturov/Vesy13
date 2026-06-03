@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO.Ports;
 using Vesy13.Models;
 using Vesy13.Services;
@@ -6,7 +7,8 @@ namespace Vesy13.Forms;
 
 public class ServiceForm : Form
 {
-    private readonly AdcService _adc;
+    private readonly AdcService        _adc;
+    private readonly CalibrationService _calib;
     private bool _adminUnlocked;
 
     // ── Monitoring controls ────────────────────────────────────────────────
@@ -20,7 +22,16 @@ public class ServiceForm : Form
     private RichTextBox _rtbLog    = null!;
     private CheckBox    _chkLog    = null!;
     private int         _frameCount;
+    private int         _lastCh0;
+    private int         _lastCh1;
     private System.Windows.Forms.Timer _rateTimer = null!;
+
+    // ── Calibration static controls ────────────────────────────────────────
+    private bool         _calibUseCh0 = true;
+    private DataGridView _dgvCalib    = null!;
+    private Label        _lblLiveAdc  = null!;
+    private TextBox      _txtK        = null!;
+    private TextBox      _txtB        = null!;
 
     // ── Admin lock ─────────────────────────────────────────────────────────
     private Button  _btnAdmin  = null!;
@@ -28,9 +39,10 @@ public class ServiceForm : Form
     private TabPage _tabCalibD = null!;
     private TabPage _tabSett   = null!;
 
-    public ServiceForm(AdcService adc)
+    public ServiceForm(AdcService adc, CalibrationService calib)
     {
-        _adc = adc;
+        _adc   = adc;
+        _calib = calib;
         InitializeComponent();
     }
 
@@ -338,18 +350,207 @@ public class ServiceForm : Form
             AppendLog("=== Отключено ===", Color.Gray);
     }
 
-    // ── Tabs: Calibration / Settings (stubs) ──────────────────────────────
+    // ── Tab: Калибровка Статика ────────────────────────────────────────────
 
     private TabPage BuildCalibStaticTab()
     {
         var tab = new TabPage("Калибровка Статика");
+
+        // ── Выбор канала
+        var rbCh0 = new RadioButton
+        {
+            Text = "CH0 — Основной", Location = new Point(20, 16),
+            AutoSize = true, Font = new Font("Segoe UI", 11), Checked = true,
+        };
+        var rbCh1 = new RadioButton
+        {
+            Text = "CH1 — Резервный", Location = new Point(220, 16),
+            AutoSize = true, Font = new Font("Segoe UI", 11),
+        };
+        rbCh0.CheckedChanged += (_, _) => { if (rbCh0.Checked) { _calibUseCh0 = true;  LoadCalibPoints(); UpdateLiveAdcLabel(); } };
+        rbCh1.CheckedChanged += (_, _) => { if (rbCh1.Checked) { _calibUseCh0 = false; LoadCalibPoints(); UpdateLiveAdcLabel(); } };
+
+        // ── Живой код АЦП
         tab.Controls.Add(new Label
         {
-            Text      = "TODO (Этап 5а):\n\n• Выбор канала: CH0 / CH1\n• Таблица точек (код АЦП ↔ масса т)\n• Кнопки: Добавить / Удалить / Рассчитать\n• Поля k и b — ручной ввод или МНК",
-            Location  = new Point(20, 20), AutoSize = true,
-            Font      = new Font("Segoe UI", 10), ForeColor = Color.Gray,
+            Text = "Текущий код АЦП:", Location = new Point(20, 54),
+            AutoSize = true, Font = new Font("Segoe UI", 9), ForeColor = Color.Gray,
         });
+        _lblLiveAdc = new Label
+        {
+            Text = "—", Location = new Point(165, 50),
+            AutoSize = true, Font = new Font("Courier New", 13, FontStyle.Bold), ForeColor = Color.DodgerBlue,
+        };
+        var btnCapture = new Button
+        {
+            Text = "Захватить", Location = new Point(290, 46), Size = new Size(110, 28),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 9),
+            BackColor = Color.FromArgb(25, 45, 90), ForeColor = Color.White,
+        };
+        btnCapture.FlatAppearance.BorderSize = 0;
+        btnCapture.Click += (_, _) =>
+        {
+            int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
+            if (code == 0) return;
+            int row = _dgvCalib.Rows.Add();
+            _dgvCalib.Rows[row].Cells[0].Value = code;
+            _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
+            _dgvCalib.BeginEdit(true);
+        };
+
+        // ── Таблица точек
+        _dgvCalib = new DataGridView
+        {
+            Location  = new Point(20, 82),
+            Size      = new Size(380, 190),
+            Font      = new Font("Segoe UI", 10),
+            AllowUserToAddRows          = false,
+            AllowUserToDeleteRows       = false,
+            AllowUserToResizeRows       = false,
+            RowHeadersVisible           = false,
+            SelectionMode               = DataGridViewSelectionMode.FullRowSelect,
+            EditMode                    = DataGridViewEditMode.EditOnEnter,
+            BackgroundColor             = Color.White,
+            BorderStyle                 = BorderStyle.FixedSingle,
+            ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+            ColumnHeadersHeight         = 28,
+        };
+        _dgvCalib.RowTemplate.Height = 24;
+        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn
+            { HeaderText = "Код АЦП",   Width = 140, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn
+            { HeaderText = "Масса (т)", Width = 140, SortMode = DataGridViewColumnSortMode.NotSortable });
+
+        var btnAdd = new Button
+        {
+            Text = "Добавить строку", Location = new Point(20, 282), Size = new Size(160, 28),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 9),
+        };
+        btnAdd.Click += (_, _) =>
+        {
+            int row = _dgvCalib.Rows.Add();
+            _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[0];
+            _dgvCalib.BeginEdit(true);
+        };
+
+        var btnDel = new Button
+        {
+            Text = "Удалить выбранную", Location = new Point(190, 282), Size = new Size(170, 28),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 9),
+        };
+        btnDel.Click += (_, _) =>
+        {
+            if (_dgvCalib.SelectedRows.Count > 0)
+                _dgvCalib.Rows.Remove(_dgvCalib.SelectedRows[0]);
+        };
+
+        // ── k и b
+        tab.Controls.Add(new Label
+            { Text = "k  =", Location = new Point(20, 326), AutoSize = true, Font = new Font("Segoe UI", 10) });
+        _txtK = new TextBox
+            { Location = new Point(56, 322), Size = new Size(150, 26), Font = new Font("Courier New", 10), Text = "0" };
+        tab.Controls.Add(new Label
+            { Text = "b  =", Location = new Point(224, 326), AutoSize = true, Font = new Font("Segoe UI", 10) });
+        _txtB = new TextBox
+            { Location = new Point(260, 322), Size = new Size(150, 26), Font = new Font("Courier New", 10), Text = "0" };
+
+        tab.Controls.Add(new Label
+        {
+            Text = "Масса = k × Код + b",
+            Location = new Point(20, 358), AutoSize = true,
+            Font = new Font("Segoe UI", 9), ForeColor = Color.Gray,
+        });
+
+        var btnLsq = new Button
+        {
+            Text = "Рассчитать МНК", Location = new Point(20, 388), Size = new Size(180, 34),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 10),
+            BackColor = Color.FromArgb(25, 60, 120), ForeColor = Color.White,
+        };
+        btnLsq.FlatAppearance.BorderSize = 0;
+        btnLsq.Click += (_, _) =>
+        {
+            var pts = ReadGridPoints();
+            if (pts.Count < 2)
+            {
+                MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            var (k, b) = CalibrationService.CalculateLsq(pts);
+            _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
+            _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
+        };
+
+        var btnSave = new Button
+        {
+            Text = "Применить и сохранить", Location = new Point(212, 388), Size = new Size(220, 34),
+            FlatStyle = FlatStyle.Flat, Font = new Font("Segoe UI", 10),
+            BackColor = Color.FromArgb(0, 110, 40), ForeColor = Color.White,
+        };
+        btnSave.FlatAppearance.BorderSize = 0;
+        btnSave.Click += BtnCalibSave_Click;
+
+        tab.Controls.AddRange(new Control[]
+        {
+            rbCh0, rbCh1,
+            _lblLiveAdc, btnCapture,
+            _dgvCalib, btnAdd, btnDel,
+            _txtK, _txtB,
+            btnLsq, btnSave,
+        });
+
+        LoadCalibPoints();
         return tab;
+    }
+
+    private void BtnCalibSave_Click(object? sender, EventArgs e)
+    {
+        if (!double.TryParse(_txtK.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double k) ||
+            !double.TryParse(_txtB.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double b))
+        {
+            MessageBox.Show("Некорректные значения k или b.", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        var ch    = _calibUseCh0 ? _calib.Profile.Ch0 : _calib.Profile.Ch1;
+        ch.K      = k;
+        ch.B      = b;
+        ch.Points = ReadGridPoints();
+        _calib.Save();
+        MessageBox.Show("Калибровка сохранена.", "Сохранение",
+            MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void LoadCalibPoints()
+    {
+        if (_dgvCalib == null) return;
+        _dgvCalib.Rows.Clear();
+        var ch = _calibUseCh0 ? _calib.Profile.Ch0 : _calib.Profile.Ch1;
+        foreach (var p in ch.Points)
+            _dgvCalib.Rows.Add(p.AdcCode, p.MassTonnes.ToString("G8", CultureInfo.InvariantCulture));
+        _txtK.Text = ch.K.ToString("G8", CultureInfo.InvariantCulture);
+        _txtB.Text = ch.B.ToString("G8", CultureInfo.InvariantCulture);
+    }
+
+    private List<CalibrationPoint> ReadGridPoints()
+    {
+        var pts = new List<CalibrationPoint>();
+        foreach (DataGridViewRow row in _dgvCalib.Rows)
+        {
+            if (int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out int code) &&
+                double.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float,
+                    CultureInfo.InvariantCulture, out double mass))
+                pts.Add(new CalibrationPoint { AdcCode = code, MassTonnes = mass });
+        }
+        return pts;
+    }
+
+    private void UpdateLiveAdcLabel()
+    {
+        if (_lblLiveAdc == null) return;
+        int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
+        _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
     }
 
     private TabPage BuildCalibDynamicTab()
@@ -471,10 +672,13 @@ public class ServiceForm : Form
         // live values
         if (frame.Valid)
         {
+            _lastCh0          = frame.Ch0;
+            _lastCh1          = frame.Ch1;
             _lblCh0.Text      = frame.Ch0.ToString();
             _lblCh1.Text      = frame.Ch1.ToString();
             _lblCh0.ForeColor = Color.DodgerBlue;
             _lblCh1.ForeColor = Color.DodgerBlue;
+            UpdateLiveAdcLabel();
         }
         else
         {
