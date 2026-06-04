@@ -46,10 +46,10 @@ public partial class WeighingFormBase : Form
     }
 
     // ── Designer event handlers ────────────────────────────────────────────
-    private void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
-    private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
-    private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
-    private void BtnBack_Click(object? sender, EventArgs e)   => Close();
+    protected void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
+    protected void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
+    protected void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
+    protected void BtnBack_Click(object? sender, EventArgs e)   => Close();
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
