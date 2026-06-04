@@ -33,6 +33,31 @@ public class CorrectionsForm : Form
 
     private WagonWeighingRow? _selected;
 
+    public static readonly Dictionary<string, string> GpGridChapters = new()
+    {
+        { "DT",          "Дата взв."    },
+        { "VR",          "Время взв."   },
+        { "NVAG",        "Ном. вагона"  },
+        { "NDOK",        "Ном. докум."  },
+        { "GRUZ",        "Груз"         },
+        { "BRUTTO",      "Брутто"       },
+        { "TAR_BRS",     "Тара факт"    },
+        { "TAR_DOK",     "Тара док."    },
+        { "NETTO",       "Нетто"        },
+        { "NET_DOK",     "Нетто док."   },
+        { "MUSOR",       "Мусор"        },
+        { "CEX",         "Цех"          },
+        { "TARIF",       "Тариф"        },
+        { "POTR",        "Поставщик"    },
+        { "PLAT",        "Плательщик"   },
+        { "SKOR",        "Скорость"     },
+        { "VESY",        "Весы"         },
+        { "TN",          "Таб. ном."    },
+        { "MPP",         "МПП"          },
+        { "N_TEPLOVOZ",  "Ном. теплов." },
+        { "POGRESHNOST", "Погрешность"  },
+    };
+
     public CorrectionsForm(DatabaseService db)
     {
         _db = db;
@@ -240,18 +265,41 @@ public class CorrectionsForm : Form
 
     private static void AddGridColumns(DataGridView g)
     {
-        g.Columns.Add(Col("Дата",     84));
-        g.Columns.Add(Col("Время",    66));
-        g.Columns.Add(Col("№",        36));
-        g.Columns.Add(Col("Тел.1 т",  74));
-        g.Columns.Add(Col("Тел.2 т",  74));
-        g.Columns.Add(Col("Брутто т", 78));
-        g.Columns.Add(Col("Режим",    90));
-        g.Columns.Add(Col("Напр.",    60));
+        foreach (var (key, header) in GpGridChapters)
+            g.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name       = key,
+                HeaderText = header,
+                Width      = ColumnWidth(key),
+                SortMode   = DataGridViewColumnSortMode.NotSortable,
+            });
     }
 
-    private static DataGridViewTextBoxColumn Col(string header, int width) =>
-        new() { HeaderText = header, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };
+    private static int ColumnWidth(string key) => key switch
+    {
+        "DT"          => 90,
+        "VR"          => 70,
+        "NVAG"        => 90,
+        "NDOK"        => 75,
+        "GRUZ"        => 120,
+        "BRUTTO"      => 70,
+        "TAR_BRS"     => 70,
+        "TAR_DOK"     => 70,
+        "NETTO"       => 70,
+        "NET_DOK"     => 70,
+        "MUSOR"       => 60,
+        "CEX"         => 55,
+        "TARIF"       => 60,
+        "POTR"        => 100,
+        "PLAT"        => 100,
+        "SKOR"        => 65,
+        "VESY"        => 50,
+        "TN"          => 60,
+        "MPP"         => 55,
+        "N_TEPLOVOZ"  => 85,
+        "POGRESHNOST" => 85,
+        _             => 80,
+    };
 
     private static Label TableHeader(string text) => new()
     {
@@ -293,16 +341,13 @@ public class CorrectionsForm : Form
         g.Rows.Clear();
         foreach (var r in rows)
         {
-            int idx = g.Rows.Add(
-                r.WagonTime.ToString("dd.MM.yyyy"),
-                r.WagonTime.ToString("HH:mm:ss"),
-                r.WagonNum,
-                r.Bogie1.ToString("F2"),
-                r.Bogie2.ToString("F2"),
-                r.Total.ToString("F2"),
-                r.Mode,
-                r.Direction);
-            g.Rows[idx].Tag = r;
+            int idx = g.Rows.Add();
+            var row = g.Rows[idx];
+            row.Cells["DT"    ].Value = r.WagonTime.ToString("dd.MM.yyyy");
+            row.Cells["VR"    ].Value = r.WagonTime.ToString("HH:mm:ss");
+            row.Cells["BRUTTO"].Value = r.Total.ToString("F2");
+            row.Cells["VESY"  ].Value = "13";
+            row.Tag = r;
         }
     }
 
@@ -373,14 +418,15 @@ public class CorrectionsForm : Form
                 _gridPend.Rows.Remove(_gridPend.SelectedRows[0]);
                 _gridDone.Rows.Insert(0, 1);
                 var r = _gridDone.Rows[0];
-                r.Cells[0].Value = doneRow.WagonTime.ToString("dd.MM.yyyy");
-                r.Cells[1].Value = doneRow.WagonTime.ToString("HH:mm:ss");
-                r.Cells[2].Value = doneRow.WagonNum;
-                r.Cells[3].Value = doneRow.Bogie1.ToString("F2");
-                r.Cells[4].Value = doneRow.Bogie2.ToString("F2");
-                r.Cells[5].Value = doneRow.Total.ToString("F2");
-                r.Cells[6].Value = doneRow.Mode;
-                r.Cells[7].Value = doneRow.Direction;
+                r.Cells["DT"     ].Value = doneRow.WagonTime.ToString("dd.MM.yyyy");
+                r.Cells["VR"     ].Value = doneRow.WagonTime.ToString("HH:mm:ss");
+                r.Cells["NVAG"   ].Value = nvag;
+                r.Cells["NDOK"   ].Value = _txtNdok.Text.Trim();
+                r.Cells["GRUZ"   ].Value = gruz;
+                r.Cells["BRUTTO" ].Value = doneRow.Total.ToString("F2");
+                r.Cells["TAR_BRS"].Value = _txtTar.Text.Trim();
+                r.Cells["NETTO"  ].Value = _lblNetto.Text;
+                r.Cells["VESY"   ].Value = "13";
                 r.DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
             }
             ClearTopPanel();
