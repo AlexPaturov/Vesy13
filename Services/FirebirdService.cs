@@ -9,12 +9,14 @@ public class FirebirdService
         @"User=sysdba;Password=masterkey;Database=127.0.0.1:C:\Work\DC_OPER.FDB;Dialect=3;Charset=UTF8;WireCrypt=Enabled;Role=;Connection Lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;PacketSize=8192;ServerType=0";
 
     public async Task InsertAsync(
-        string          table,
+        string           table,
         WagonWeighingRow row,
-        string          nvag,
-        long?           ndok,
-        string?         gruz,
-        decimal?        tarDok)
+        string           nvag,
+        long?            ndok,
+        string?          gruz,
+        decimal?         tarDok,
+        string?          potr,
+        string?          plat)
     {
         decimal? netto = tarDok.HasValue ? row.Total - tarDok.Value : null;
 
@@ -23,9 +25,9 @@ public class FirebirdService
 
         string sql = $@"
 INSERT INTO {table}
-    (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_DOK, NETTO, VESY, NPP, V12, V34, REJVZVESH, WHEN_INSERT)
+    (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_DOK, NETTO, VESY, NPP, V12, V34, REJVZVESH, POTR, PLAT, WHEN_INSERT)
 VALUES
-    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tardok, @netto, 13, @npp, @v12, @v34, @rejvzvesh, CURRENT_TIMESTAMP)";
+    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tardok, @netto, 13, @npp, @v12, @v34, @rejvzvesh, @potr, @plat, CURRENT_TIMESTAMP)";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@dt",        row.WagonTime.Date);
@@ -40,6 +42,8 @@ VALUES
         cmd.Parameters.AddWithValue("@v12",       row.Bogie1);
         cmd.Parameters.AddWithValue("@v34",       row.Bogie2);
         cmd.Parameters.AddWithValue("@rejvzvesh", row.Mode);
+        cmd.Parameters.AddWithValue("@potr",      (object?)potr ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@plat",      (object?)plat ?? DBNull.Value);
         await cmd.ExecuteNonQueryAsync();
     }
 }

@@ -31,7 +31,7 @@ public partial class CorrectionsForm : Form
         { "SKOR",        "Скорость"     },
         { "VESY",        "Весы"         },
         { "TN",          "Таб. ном."    },
-        { "MPP",         "МПП"          },
+        { "NPP",         "НПП"          },
         { "N_TEPLOVOZ",  "Ном. теплов." },
         { "POGRESHNOST", "Погрешность"  },
     };
@@ -83,8 +83,8 @@ public partial class CorrectionsForm : Form
     {
         "DT"          => 90,
         "VR"          => 70,
-        "NVAG"        => 90,
-        "NDOK"        => 75,
+        "NVAG"        => 110,
+        "NDOK"        => 100,
         "GRUZ"        => 120,
         "BRUTTO"      => 70,
         "TAR_BRS"     => 70,
@@ -99,8 +99,8 @@ public partial class CorrectionsForm : Form
         "SKOR"        => 65,
         "VESY"        => 50,
         "TN"          => 60,
-        "MPP"         => 55,
-        "N_TEPLOVOZ"  => 85,
+        "NPP"         => 55,
+        "N_TEPLOVOZ"  => 120,
         "POGRESHNOST" => 85,
         _             => 80,
     };
@@ -193,6 +193,8 @@ public partial class CorrectionsForm : Form
         _lblMode  .Text = _selected.Mode;
         _lblDir   .Text = _selected.Direction;
         _lblBrutto.Text = _selected.Total.ToString("F2");
+        _tbPlat   .Text = _selected.Plat.Trim();
+        _tbPotr   .Text = _selected.Potr.Trim();
         _btnTransfer.Enabled = true;
         RecalcNetto();
     }
@@ -230,8 +232,10 @@ public partial class CorrectionsForm : Form
         _btnTransfer.Enabled = false;
         try
         {
+            string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
+            string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
             _fb ??= new FirebirdService();
-            await _fb.InsertAsync(table, _selected, nvag, ndok, gruz, tarDok);
+            await _fb.InsertAsync(table, _selected, nvag, ndok, gruz, tarDok, potr, plat);
             await _db.MarkTransferredAsync(_selected.Id);
 
             if (_gridPend.SelectedRows.Count > 0)
