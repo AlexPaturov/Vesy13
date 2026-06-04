@@ -70,7 +70,7 @@ partial class CorrectionsForm
         // 
         // _pnlTop
         // 
-        _pnlTop.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        _pnlTop.Dock = DockStyle.Top;
         _pnlTop.BackColor = Color.FromArgb(215, 225, 248);
         _pnlTop.Controls.Add(_pnlLeft);
         _pnlTop.Controls.Add(_lblDateCap);
@@ -456,16 +456,15 @@ partial class CorrectionsForm
         // 
         // _split
         // 
-        _split.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        _split.Dock = DockStyle.Fill;
         _split.BackColor = Color.FromArgb(18, 32, 65);
-        _split.Location = new Point(0, 168);
         _split.Name = "_split";
         // 
         // _split.Panel1
         // 
         _split.Panel1.Controls.Add(_gridPend);
         _split.Panel1.Controls.Add(_lblHeaderPend);
-        _split.Panel1MinSize = 579;
+        _split.Panel1MinSize = 563;
         _split.FixedPanel    = FixedPanel.Panel1;
         //
         // _split.Panel2
@@ -474,7 +473,7 @@ partial class CorrectionsForm
         _split.Panel2.Controls.Add(_lblHeaderDone);
         _split.Panel2MinSize = 280;
         _split.Size = new Size(1050, 458);
-        _split.SplitterDistance = 579;
+        _split.SplitterDistance = 563;
         _split.TabIndex = 1;
         // 
         // _gridPend
@@ -585,8 +584,8 @@ partial class CorrectionsForm
         // 
         BackColor = Color.FromArgb(240, 242, 245);
         ClientSize = new Size(1050, 660);
-        Controls.Add(_pnlTop);
         Controls.Add(_split);
+        Controls.Add(_pnlTop);
         Controls.Add(_pnlStatus);
         MinimumSize = new Size(860, 560);
         Name = "CorrectionsForm";
