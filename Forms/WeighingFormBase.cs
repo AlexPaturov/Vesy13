@@ -3,7 +3,7 @@ using Vesy13.Services;
 
 namespace Vesy13.Forms;
 
-public class WeighingFormBase : Form
+public partial class WeighingFormBase : Form
 {
     protected AdcService         _adc   = null!;
     protected CalibrationService _calib = null!;
@@ -12,176 +12,48 @@ public class WeighingFormBase : Form
     // ── State machine ──────────────────────────────────────────────────────
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
-
-    private DateTime? _trainStartTime;
-    private int       _wagonNumber;
-    private int       _bogie1Code;
-
+    private DateTime?  _trainStartTime;
+    private int        _wagonNumber;
+    private int        _bogie1Code;
     protected AdcFrame _lastFrame;
 
-    // ── Shared controls ────────────────────────────────────────────────────
-    protected Label        _lblValue   = null!;
-    protected Label        _lblStatus  = null!;
-    protected Button       _btnWeigh   = null!;
-    protected Button       _btnZero    = null!;
-    protected Button       _btnFinish  = null!;
-    protected Label        _lblChannel = null!;
-    private   DataGridView _grid       = null!;
-    private   Panel        _dotConn    = null!;
-    private   Label        _lblConn    = null!;
-
-    // ── Virtual interface (abstract replaced for designer support) ────────
+    // ── Virtual interface ──────────────────────────────────────────────────
     protected virtual string GetDirection()        => "";
     protected virtual bool   ValidateBeforeWeigh() => false;
     protected virtual bool   ShowDirectionColumn   => false;
     protected virtual double ToTonnes(int adcCode) => 0;
     protected virtual string GetMode()             => "";
 
-    public WeighingFormBase() { }  // for WinForms Designer
+    public WeighingFormBase()
+    {
+        InitializeComponent();
+    }
 
     protected WeighingFormBase(AdcService adc, CalibrationService calib, DatabaseService db)
     {
         _adc   = adc;
         _calib = calib;
         _db    = db;
+        InitializeComponent();
     }
 
-    // ── Shared UI (call from derived InitializeComponent) ──────────────────
-    protected void BuildSharedLayout(int topY)
+    // ── Grid columns (зависят от ShowDirectionColumn — добавляются в OnLoad) ─
+    private void SetupGridColumns()
     {
-        var pnlDisplay = new Panel
-        {
-            Location  = new Point(8, topY),
-            Size      = new Size(544, 158),
-            BackColor = Color.Black,
-        };
-        _lblValue = new Label
-        {
-            Text      = "—",
-            Font      = new Font("Courier New", 60, FontStyle.Bold),
-            ForeColor = Color.DimGray,
-            TextAlign = ContentAlignment.MiddleRight,
-            Bounds    = new Rectangle(8, 4, 450, 106),
-            AutoSize  = false,
-        };
-        var lblUnit = new Label
-        {
-            Text      = "т",
-            Font      = new Font("Segoe UI", 20),
-            ForeColor = Color.Gray,
-            TextAlign = ContentAlignment.BottomLeft,
-            Bounds    = new Rectangle(462, 60, 60, 62),
-            AutoSize  = false,
-        };
-        _lblStatus = new Label
-        {
-            Text      = "Готов к взвешиванию  —  Тележка 1",
-            Font      = new Font("Segoe UI", 10),
-            ForeColor = Color.Silver,
-            TextAlign = ContentAlignment.MiddleCenter,
-            Bounds    = new Rectangle(8, 118, 528, 34),
-            AutoSize  = false,
-        };
-        pnlDisplay.Controls.AddRange(new Control[] { _lblValue, lblUnit, _lblStatus });
-
-        int y = topY + 158 + 6;
-
-        _btnWeigh = new Button
-        {
-            Location  = new Point(8, y),
-            Size      = new Size(544, 54),
-            Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1",
-            Font      = new Font("Segoe UI", 14, FontStyle.Bold),
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.FromArgb(0, 130, 0),
-            ForeColor = Color.White,
-        };
-        _btnWeigh.Click += (_, _) => HandleWeighPress();
-        y += 54 + 4;
-
-        _btnZero = new Button
-        {
-            Location  = new Point(8, y),
-            Size      = new Size(100, 32),
-            Text      = "Ноль",
-            Font      = new Font("Segoe UI", 10),
-            FlatStyle = FlatStyle.Flat,
-        };
-        _btnZero.Click += (_, _) => OnZeroClick();
-
-        _btnFinish = new Button
-        {
-            Location  = new Point(116, y),
-            Size      = new Size(244, 32),
-            Text      = "Завершить состав",
-            Font      = new Font("Segoe UI", 10),
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.FromArgb(120, 40, 0),
-            ForeColor = Color.White,
-        };
-        _btnFinish.Click += (_, _) => HandleFinish();
-        y += 32 + 6;
-
-        _grid          = BuildGrid();
-        _grid.Location = new Point(8, y);
-        _grid.Size     = new Size(544, 10 * 22 + 28);
-
-        var pnlStatus = new Panel
-        {
-            Dock      = DockStyle.Bottom,
-            Height    = 34,
-            BackColor = Color.FromArgb(18, 32, 65),
-        };
-        var btnBack = new Button
-        {
-            Text      = "← Назад",
-            Location  = new Point(8, 6),
-            Size      = new Size(80, 22),
-            FlatStyle = FlatStyle.Flat,
-            Font      = new Font("Segoe UI", 8),
-            BackColor = Color.FromArgb(40, 70, 130),
-            ForeColor = Color.White,
-        };
-        btnBack.FlatAppearance.BorderSize = 0;
-        btnBack.Click += (_, _) => Close();
-        _dotConn = new Panel { Size = new Size(10, 10), Location = new Point(100, 12), BackColor = Color.Gray };
-        _lblConn = new Label { Text = "АЦП: —", Font = new Font("Segoe UI", 9), ForeColor = Color.Silver, Location = new Point(116, 8), AutoSize = true };
-        pnlStatus.Controls.AddRange(new Control[] { btnBack, _dotConn, _lblConn });
-
-        Controls.AddRange(new Control[] { pnlDisplay, _btnWeigh, _btnZero, _btnFinish, _grid, pnlStatus });
-    }
-
-    private DataGridView BuildGrid()
-    {
-        var g = new DataGridView
-        {
-            ReadOnly                    = true,
-            AllowUserToAddRows          = false,
-            AllowUserToDeleteRows       = false,
-            AllowUserToResizeRows       = false,
-            RowHeadersVisible           = false,
-            SelectionMode               = DataGridViewSelectionMode.FullRowSelect,
-            BackgroundColor             = Color.White,
-            BorderStyle                 = BorderStyle.None,
-            Font                        = new Font("Segoe UI", 9),
-            ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
-            ColumnHeadersHeight         = 28,
-        };
-        g.RowTemplate.Height = 22;
-
         if (ShowDirectionColumn)
-            g.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Напр.", Width = 52,  SortMode = DataGridViewColumnSortMode.NotSortable });
-
-        g.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "№",     Width = 38,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        g.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.1", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        g.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.2", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        g.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        g.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время", Width = ShowDirectionColumn ? 80 : 100, SortMode = DataGridViewColumnSortMode.NotSortable });
-
-        g.RowsDefaultCellStyle.BackColor            = Color.White;
-        g.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 245, 255);
-        return g;
+            _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Напр.", Width = 52,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "№",     Width = 38,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.1", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.2", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время", Width = ShowDirectionColumn ? 80 : 100, SortMode = DataGridViewColumnSortMode.NotSortable });
     }
+
+    // ── Designer event handlers ────────────────────────────────────────────
+    private void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
+    private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
+    private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
+    private void BtnBack_Click(object? sender, EventArgs e)   => Close();
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
@@ -189,6 +61,7 @@ public class WeighingFormBase : Form
     {
         base.OnLoad(e);
         if (DesignMode || _adc is null) return;
+        SetupGridColumns();
         _adc.FrameReceived     += OnFrame;
         _adc.ConnectionChanged += OnConnectionChanged;
         UpdateConn(_adc.IsConnected);
@@ -294,7 +167,6 @@ public class WeighingFormBase : Form
 
     private void OnZeroClick()
     {
-        // TODO: сохранить смещение нуля в ZeroService
         MessageBox.Show("Ноль установлен (в разработке)", "Ноль",
             MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
@@ -335,7 +207,6 @@ public class WeighingFormBase : Form
         values.Add(r.Bogie2.ToString("F2"));
         values.Add(r.Total.ToString("F2"));
         values.Add(r.WagonTime.ToString("HH:mm:ss"));
-
         _grid.Rows.Insert(0, values.ToArray());
         while (_grid.Rows.Count > 10)
             _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
