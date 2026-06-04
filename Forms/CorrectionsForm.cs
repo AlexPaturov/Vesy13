@@ -252,6 +252,8 @@ public partial class CorrectionsForm : Form
                 r.Cells["BRUTTO" ].Value = doneRow.Total.ToString("F2");
                 r.Cells["TAR_BRS"].Value = _txtTar.Text.Trim();
                 r.Cells["NETTO"  ].Value = _lblNetto.Text;
+                r.Cells["POTR"   ].Value = potr;
+                r.Cells["PLAT"   ].Value = plat;
                 r.Cells["VESY"   ].Value = "13";
                 r.DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
             }
