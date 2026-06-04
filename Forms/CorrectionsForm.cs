@@ -39,21 +39,35 @@ public partial class CorrectionsForm : Form
     public CorrectionsForm()
     {
         InitializeComponent();
-        AddGridColumns(_gridPend);
-        AddGridColumns(_gridDone);
+        AddPendingGridColumns(_gridPend);
+        AddFirebirdGridColumns(_gridDone);
     }
 
     public CorrectionsForm(DatabaseService db)
     {
         _db = db;
         InitializeComponent();
-        AddGridColumns(_gridPend);
-        AddGridColumns(_gridDone);
+        AddPendingGridColumns(_gridPend);
+        AddFirebirdGridColumns(_gridDone);
     }
 
     // ── Grid columns ────────────────────────────────────────────────────────
 
-    private static void AddGridColumns(DataGridView g)
+    private static void AddPendingGridColumns(DataGridView g)
+    {
+        DataGridViewTextBoxColumn Col(string header, int width) =>
+            new() { HeaderText = header, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };
+        g.Columns.Add(Col("Дата",     84));
+        g.Columns.Add(Col("Время",    66));
+        g.Columns.Add(Col("№",        36));
+        g.Columns.Add(Col("Тел.1 т",  74));
+        g.Columns.Add(Col("Тел.2 т",  74));
+        g.Columns.Add(Col("Брутто т", 78));
+        g.Columns.Add(Col("Режим",    90));
+        g.Columns.Add(Col("Напр.",    60));
+    }
+
+    private static void AddFirebirdGridColumns(DataGridView g)
     {
         foreach (var (key, header) in GpGridChapters)
             g.Columns.Add(new DataGridViewTextBoxColumn
@@ -106,8 +120,8 @@ public partial class CorrectionsForm : Form
         {
             var pending     = await _db.GetPendingAsync();
             var transferred = await _db.GetTransferredAsync();
-            FillGrid(_gridPend, pending);
-            FillGrid(_gridDone, transferred);
+            FillPendingGrid(_gridPend, pending);
+            FillDoneGrid(_gridDone, transferred);
         }
         catch (Exception ex)
         {
@@ -116,7 +130,25 @@ public partial class CorrectionsForm : Form
         }
     }
 
-    private static void FillGrid(DataGridView g, List<WagonWeighingRow> rows)
+    private static void FillPendingGrid(DataGridView g, List<WagonWeighingRow> rows)
+    {
+        g.Rows.Clear();
+        foreach (var r in rows)
+        {
+            int idx = g.Rows.Add(
+                r.WagonTime.ToString("dd.MM.yyyy"),
+                r.WagonTime.ToString("HH:mm:ss"),
+                r.WagonNum,
+                r.Bogie1.ToString("F2"),
+                r.Bogie2.ToString("F2"),
+                r.Total.ToString("F2"),
+                r.Mode,
+                r.Direction);
+            g.Rows[idx].Tag = r;
+        }
+    }
+
+    private static void FillDoneGrid(DataGridView g, List<WagonWeighingRow> rows)
     {
         g.Rows.Clear();
         foreach (var r in rows)
