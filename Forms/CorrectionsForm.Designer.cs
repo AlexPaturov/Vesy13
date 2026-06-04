@@ -572,9 +572,10 @@ partial class CorrectionsForm
         _btnBack.FlatStyle = FlatStyle.Flat;
         _btnBack.Font = new Font("Segoe UI", 8F);
         _btnBack.ForeColor = Color.White;
-        _btnBack.Location = new Point(8, 6);
-        _btnBack.Name = "_btnBack";
-        _btnBack.Size = new Size(80, 22);
+        _btnBack.Location  = new Point(8, 4);
+        _btnBack.Name      = "_btnBack";
+        _btnBack.Size      = new Size(90, 26);
+        _btnBack.TextAlign = ContentAlignment.MiddleCenter;
         _btnBack.TabIndex = 0;
         _btnBack.Text = "← Назад";
         _btnBack.UseVisualStyleBackColor = false;
