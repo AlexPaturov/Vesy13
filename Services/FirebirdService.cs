@@ -46,4 +46,38 @@ VALUES
         cmd.Parameters.AddWithValue("@plat",      (object?)plat ?? DBNull.Value);
         await cmd.ExecuteNonQueryAsync();
     }
+
+    public async Task<List<TaraOption>> GetTaraOptionsAsync(string nvag)
+    {
+        var result  = new List<TaraOption>();
+        var cutoff  = DateTime.Today.AddYears(-1);
+
+        await using var conn = new FbConnection(ConnStr);
+        await conn.OpenAsync();
+
+        const string sql = @"
+SELECT DT, VR, BRUTTO FROM GPRI WHERE NVAG = @nvag AND DT >= @cutoff
+UNION ALL
+SELECT DT, VR, BRUTTO FROM GRAS WHERE NVAG = @nvag AND DT >= @cutoff
+ORDER BY 1 DESC, 2 DESC";
+
+        await using var cmd = new FbCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@nvag",   nvag);
+        cmd.Parameters.AddWithValue("@cutoff", cutoff.Date);
+
+        await using var rdr = await cmd.ExecuteReaderAsync();
+        while (await rdr.ReadAsync())
+        {
+            var dt      = rdr.GetDateTime(0);
+            var vrRaw   = rdr.IsDBNull(1) ? TimeSpan.Zero : rdr.GetValue(1) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _           => TimeSpan.Zero,
+            };
+            var brutto  = rdr.GetDecimal(2);
+            result.Add(new TaraOption(dt.Date.Add(vrRaw), brutto));
+        }
+        return result;
+    }
 }

@@ -13,10 +13,10 @@ partial class CorrectionsForm
 
     private void InitializeComponent()
     {
-        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
         _pnlTop = new Panel();
         _pnlLeft = new Panel();
         _lblVidVzv = new Label();
@@ -42,7 +42,7 @@ partial class CorrectionsForm
         _lblBrutto = new Label();
         _lblBruttoUnit = new Label();
         _lblTarCap = new Label();
-        _txtTar = new TextBox();
+        _cmbTar = new ComboBox();
         _lblTarUnit = new Label();
         _lblNettoCap = new Label();
         _lblNetto = new Label();
@@ -57,6 +57,10 @@ partial class CorrectionsForm
         _lblHeaderDone = new Label();
         _pnlStatus = new Panel();
         _btnBack = new Button();
+        _tbPotr = new TextBox();
+        _tbPlat = new TextBox();
+        label1 = new Label();
+        label2 = new Label();
         _pnlTop.SuspendLayout();
         _pnlLeft.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_split).BeginInit();
@@ -70,8 +74,11 @@ partial class CorrectionsForm
         // 
         // _pnlTop
         // 
-        _pnlTop.Dock = DockStyle.Top;
         _pnlTop.BackColor = Color.FromArgb(215, 225, 248);
+        _pnlTop.Controls.Add(label2);
+        _pnlTop.Controls.Add(label1);
+        _pnlTop.Controls.Add(_tbPlat);
+        _pnlTop.Controls.Add(_tbPotr);
         _pnlTop.Controls.Add(_pnlLeft);
         _pnlTop.Controls.Add(_lblDateCap);
         _pnlTop.Controls.Add(_lblDt);
@@ -93,7 +100,7 @@ partial class CorrectionsForm
         _pnlTop.Controls.Add(_lblBrutto);
         _pnlTop.Controls.Add(_lblBruttoUnit);
         _pnlTop.Controls.Add(_lblTarCap);
-        _pnlTop.Controls.Add(_txtTar);
+        _pnlTop.Controls.Add(_cmbTar);
         _pnlTop.Controls.Add(_lblTarUnit);
         _pnlTop.Controls.Add(_lblNettoCap);
         _pnlTop.Controls.Add(_lblNetto);
@@ -101,9 +108,10 @@ partial class CorrectionsForm
         _pnlTop.Controls.Add(_btnTransfer);
         _pnlTop.Controls.Add(_btnClear);
         _pnlTop.Controls.Add(_btnRefresh);
+        _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(0, 0);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1050, 168);
+        _pnlTop.Size = new Size(1264, 168);
         _pnlTop.TabIndex = 0;
         // 
         // _pnlLeft
@@ -157,7 +165,7 @@ partial class CorrectionsForm
         _lblDateCap.AutoSize = true;
         _lblDateCap.Font = new Font("Segoe UI", 9F);
         _lblDateCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblDateCap.Location = new Point(148, 13);
+        _lblDateCap.Location = new Point(148, 11);
         _lblDateCap.Name = "_lblDateCap";
         _lblDateCap.Size = new Size(44, 20);
         _lblDateCap.TabIndex = 1;
@@ -168,7 +176,7 @@ partial class CorrectionsForm
         _lblDt.AutoSize = true;
         _lblDt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _lblDt.ForeColor = Color.FromArgb(20, 20, 80);
-        _lblDt.Location = new Point(191, 11);
+        _lblDt.Location = new Point(198, 11);
         _lblDt.Name = "_lblDt";
         _lblDt.Size = new Size(24, 20);
         _lblDt.TabIndex = 2;
@@ -179,7 +187,7 @@ partial class CorrectionsForm
         _lblTimeCap.AutoSize = true;
         _lblTimeCap.Font = new Font("Segoe UI", 9F);
         _lblTimeCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblTimeCap.Location = new Point(288, 13);
+        _lblTimeCap.Location = new Point(321, 11);
         _lblTimeCap.Name = "_lblTimeCap";
         _lblTimeCap.Size = new Size(57, 20);
         _lblTimeCap.TabIndex = 3;
@@ -190,7 +198,7 @@ partial class CorrectionsForm
         _lblVr.AutoSize = true;
         _lblVr.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _lblVr.ForeColor = Color.FromArgb(20, 20, 80);
-        _lblVr.Location = new Point(338, 11);
+        _lblVr.Location = new Point(384, 11);
         _lblVr.Name = "_lblVr";
         _lblVr.Size = new Size(24, 20);
         _lblVr.TabIndex = 4;
@@ -201,7 +209,7 @@ partial class CorrectionsForm
         _lblNppCap.AutoSize = true;
         _lblNppCap.Font = new Font("Segoe UI", 9F);
         _lblNppCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblNppCap.Location = new Point(458, 13);
+        _lblNppCap.Location = new Point(504, 11);
         _lblNppCap.Name = "_lblNppCap";
         _lblNppCap.Size = new Size(53, 20);
         _lblNppCap.TabIndex = 5;
@@ -212,7 +220,7 @@ partial class CorrectionsForm
         _lblNpp.AutoSize = true;
         _lblNpp.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _lblNpp.ForeColor = Color.FromArgb(20, 20, 80);
-        _lblNpp.Location = new Point(500, 11);
+        _lblNpp.Location = new Point(563, 11);
         _lblNpp.Name = "_lblNpp";
         _lblNpp.Size = new Size(24, 20);
         _lblNpp.TabIndex = 6;
@@ -223,7 +231,7 @@ partial class CorrectionsForm
         _lblModeCap.AutoSize = true;
         _lblModeCap.Font = new Font("Segoe UI", 9F);
         _lblModeCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblModeCap.Location = new Point(578, 13);
+        _lblModeCap.Location = new Point(672, 11);
         _lblModeCap.Name = "_lblModeCap";
         _lblModeCap.Size = new Size(59, 20);
         _lblModeCap.TabIndex = 7;
@@ -234,7 +242,7 @@ partial class CorrectionsForm
         _lblMode.AutoSize = true;
         _lblMode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _lblMode.ForeColor = Color.FromArgb(20, 20, 80);
-        _lblMode.Location = new Point(643, 13);
+        _lblMode.Location = new Point(737, 11);
         _lblMode.Name = "_lblMode";
         _lblMode.Size = new Size(24, 20);
         _lblMode.TabIndex = 8;
@@ -245,7 +253,7 @@ partial class CorrectionsForm
         _lblNvagCap.AutoSize = true;
         _lblNvagCap.Font = new Font("Segoe UI", 9F);
         _lblNvagCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblNvagCap.Location = new Point(148, 45);
+        _lblNvagCap.Location = new Point(151, 42);
         _lblNvagCap.Name = "_lblNvagCap";
         _lblNvagCap.Size = new Size(81, 20);
         _lblNvagCap.TabIndex = 9;
@@ -253,11 +261,12 @@ partial class CorrectionsForm
         // 
         // _txtNvag
         // 
-        _txtNvag.Font = new Font("Segoe UI", 9F);
+        _txtNvag.Font     = new Font("Segoe UI", 9F);
         _txtNvag.Location = new Point(235, 38);
-        _txtNvag.Name = "_txtNvag";
-        _txtNvag.Size = new Size(170, 27);
+        _txtNvag.Name     = "_txtNvag";
+        _txtNvag.Size     = new Size(170, 27);
         _txtNvag.TabIndex = 10;
+        _txtNvag.Leave   += TxtNvag_Leave;
         // 
         // _lblDirCap
         // 
@@ -275,7 +284,7 @@ partial class CorrectionsForm
         _lblDir.AutoSize = true;
         _lblDir.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _lblDir.ForeColor = Color.FromArgb(20, 20, 80);
-        _lblDir.Location = new Point(753, 36);
+        _lblDir.Location = new Point(738, 41);
         _lblDir.Name = "_lblDir";
         _lblDir.Size = new Size(24, 20);
         _lblDir.TabIndex = 12;
@@ -286,7 +295,7 @@ partial class CorrectionsForm
         _lblGruzCap.AutoSize = true;
         _lblGruzCap.Font = new Font("Segoe UI", 9F);
         _lblGruzCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblGruzCap.Location = new Point(187, 69);
+        _lblGruzCap.Location = new Point(190, 68);
         _lblGruzCap.Name = "_lblGruzCap";
         _lblGruzCap.Size = new Size(42, 20);
         _lblGruzCap.TabIndex = 13;
@@ -324,7 +333,7 @@ partial class CorrectionsForm
         _lblBruttoCap.AutoSize = true;
         _lblBruttoCap.Font = new Font("Segoe UI", 9F);
         _lblBruttoCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblBruttoCap.Location = new Point(148, 101);
+        _lblBruttoCap.Location = new Point(148, 96);
         _lblBruttoCap.Name = "_lblBruttoCap";
         _lblBruttoCap.Size = new Size(58, 20);
         _lblBruttoCap.TabIndex = 17;
@@ -335,7 +344,7 @@ partial class CorrectionsForm
         _lblBrutto.AutoSize = true;
         _lblBrutto.Font = new Font("Courier New", 10F, FontStyle.Bold);
         _lblBrutto.ForeColor = Color.FromArgb(20, 20, 80);
-        _lblBrutto.Location = new Point(212, 97);
+        _lblBrutto.Location = new Point(212, 96);
         _lblBrutto.Name = "_lblBrutto";
         _lblBrutto.Size = new Size(19, 20);
         _lblBrutto.TabIndex = 18;
@@ -346,7 +355,7 @@ partial class CorrectionsForm
         _lblBruttoUnit.AutoSize = true;
         _lblBruttoUnit.Font = new Font("Segoe UI", 9F);
         _lblBruttoUnit.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblBruttoUnit.Location = new Point(282, 101);
+        _lblBruttoUnit.Location = new Point(282, 96);
         _lblBruttoUnit.Name = "_lblBruttoUnit";
         _lblBruttoUnit.Size = new Size(15, 20);
         _lblBruttoUnit.TabIndex = 19;
@@ -357,27 +366,28 @@ partial class CorrectionsForm
         _lblTarCap.AutoSize = true;
         _lblTarCap.Font = new Font("Segoe UI", 9F);
         _lblTarCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblTarCap.Location = new Point(306, 101);
+        _lblTarCap.Location = new Point(306, 96);
         _lblTarCap.Name = "_lblTarCap";
         _lblTarCap.Size = new Size(45, 20);
         _lblTarCap.TabIndex = 20;
         _lblTarCap.Text = "Тара:";
         // 
-        // _txtTar
-        // 
-        _txtTar.Font = new Font("Segoe UI", 9F);
-        _txtTar.Location = new Point(357, 94);
-        _txtTar.Name = "_txtTar";
-        _txtTar.Size = new Size(90, 27);
-        _txtTar.TabIndex = 21;
-        _txtTar.TextChanged += TxtTar_TextChanged;
+        // _cmbTar
+        //
+        _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbTar.Font          = new Font("Segoe UI", 9F);
+        _cmbTar.Location      = new Point(357, 92);
+        _cmbTar.Name          = "_cmbTar";
+        _cmbTar.Size          = new Size(160, 27);
+        _cmbTar.TabIndex      = 21;
+        _cmbTar.SelectedIndexChanged += CmbTar_SelectedIndexChanged;
         // 
         // _lblTarUnit
         // 
         _lblTarUnit.AutoSize = true;
         _lblTarUnit.Font = new Font("Segoe UI", 9F);
         _lblTarUnit.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblTarUnit.Location = new Point(448, 101);
+        _lblTarUnit.Location = new Point(453, 96);
         _lblTarUnit.Name = "_lblTarUnit";
         _lblTarUnit.Size = new Size(15, 20);
         _lblTarUnit.TabIndex = 22;
@@ -388,7 +398,7 @@ partial class CorrectionsForm
         _lblNettoCap.AutoSize = true;
         _lblNettoCap.Font = new Font("Segoe UI", 9F);
         _lblNettoCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblNettoCap.Location = new Point(480, 105);
+        _lblNettoCap.Location = new Point(480, 96);
         _lblNettoCap.Name = "_lblNettoCap";
         _lblNettoCap.Size = new Size(52, 20);
         _lblNettoCap.TabIndex = 23;
@@ -399,7 +409,7 @@ partial class CorrectionsForm
         _lblNetto.AutoSize = true;
         _lblNetto.Font = new Font("Courier New", 10F, FontStyle.Bold);
         _lblNetto.ForeColor = Color.FromArgb(0, 110, 30);
-        _lblNetto.Location = new Point(538, 97);
+        _lblNetto.Location = new Point(544, 96);
         _lblNetto.Name = "_lblNetto";
         _lblNetto.Size = new Size(19, 20);
         _lblNetto.TabIndex = 24;
@@ -410,7 +420,7 @@ partial class CorrectionsForm
         _lblNettoUnit.AutoSize = true;
         _lblNettoUnit.Font = new Font("Segoe UI", 9F);
         _lblNettoUnit.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblNettoUnit.Location = new Point(588, 101);
+        _lblNettoUnit.Location = new Point(593, 96);
         _lblNettoUnit.Name = "_lblNettoUnit";
         _lblNettoUnit.Size = new Size(15, 20);
         _lblNettoUnit.TabIndex = 25;
@@ -456,8 +466,10 @@ partial class CorrectionsForm
         // 
         // _split
         // 
-        _split.Dock = DockStyle.Fill;
         _split.BackColor = Color.FromArgb(18, 32, 65);
+        _split.Dock = DockStyle.Fill;
+        _split.FixedPanel = FixedPanel.Panel1;
+        _split.Location = new Point(0, 168);
         _split.Name = "_split";
         // 
         // _split.Panel1
@@ -465,14 +477,13 @@ partial class CorrectionsForm
         _split.Panel1.Controls.Add(_gridPend);
         _split.Panel1.Controls.Add(_lblHeaderPend);
         _split.Panel1MinSize = 563;
-        _split.FixedPanel    = FixedPanel.Panel1;
-        //
+        // 
         // _split.Panel2
-        //
+        // 
         _split.Panel2.Controls.Add(_gridDone);
         _split.Panel2.Controls.Add(_lblHeaderDone);
         _split.Panel2MinSize = 280;
-        _split.Size = new Size(1050, 458);
+        _split.Size = new Size(1264, 458);
         _split.SplitterDistance = 563;
         _split.TabIndex = 1;
         // 
@@ -481,11 +492,11 @@ partial class CorrectionsForm
         _gridPend.AllowUserToAddRows = false;
         _gridPend.AllowUserToDeleteRows = false;
         _gridPend.AllowUserToResizeRows = false;
-        dataGridViewCellStyle1.BackColor = Color.FromArgb(242, 246, 255);
-        _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+        dataGridViewCellStyle5.BackColor = Color.FromArgb(242, 246, 255);
+        _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
         _gridPend.BackgroundColor = Color.White;
         _gridPend.BorderStyle = BorderStyle.None;
-        _gridPend.ColumnHeadersHeight = 24;
+        _gridPend.ColumnHeadersHeight = 26;
         _gridPend.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _gridPend.Dock = DockStyle.Fill;
         _gridPend.Font = new Font("Segoe UI", 9F);
@@ -495,11 +506,11 @@ partial class CorrectionsForm
         _gridPend.ReadOnly = true;
         _gridPend.RowHeadersVisible = false;
         _gridPend.RowHeadersWidth = 51;
-        dataGridViewCellStyle2.BackColor = Color.White;
-        _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle2;
+        dataGridViewCellStyle6.BackColor = Color.White;
+        _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle6;
         _gridPend.RowTemplate.Height = 22;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _gridPend.Size = new Size(524, 434);
+        _gridPend.Size = new Size(563, 434);
         _gridPend.TabIndex = 0;
         _gridPend.SelectionChanged += GridPend_SelectionChanged;
         // 
@@ -511,7 +522,7 @@ partial class CorrectionsForm
         _lblHeaderPend.ForeColor = Color.White;
         _lblHeaderPend.Location = new Point(0, 0);
         _lblHeaderPend.Name = "_lblHeaderPend";
-        _lblHeaderPend.Size = new Size(524, 24);
+        _lblHeaderPend.Size = new Size(563, 24);
         _lblHeaderPend.TabIndex = 1;
         _lblHeaderPend.Text = "  Не перенесённые";
         _lblHeaderPend.TextAlign = ContentAlignment.MiddleLeft;
@@ -521,11 +532,11 @@ partial class CorrectionsForm
         _gridDone.AllowUserToAddRows = false;
         _gridDone.AllowUserToDeleteRows = false;
         _gridDone.AllowUserToResizeRows = false;
-        dataGridViewCellStyle3.BackColor = Color.FromArgb(242, 246, 255);
-        _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+        dataGridViewCellStyle7.BackColor = Color.FromArgb(242, 246, 255);
+        _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
         _gridDone.BackgroundColor = Color.White;
         _gridDone.BorderStyle = BorderStyle.None;
-        _gridDone.ColumnHeadersHeight = 24;
+        _gridDone.ColumnHeadersHeight = 26;
         _gridDone.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _gridDone.Dock = DockStyle.Fill;
         _gridDone.Font = new Font("Segoe UI", 9F);
@@ -535,11 +546,11 @@ partial class CorrectionsForm
         _gridDone.ReadOnly = true;
         _gridDone.RowHeadersVisible = false;
         _gridDone.RowHeadersWidth = 51;
-        dataGridViewCellStyle4.BackColor = Color.White;
-        _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle4;
+        dataGridViewCellStyle8.BackColor = Color.White;
+        _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle8;
         _gridDone.RowTemplate.Height = 22;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _gridDone.Size = new Size(522, 434);
+        _gridDone.Size = new Size(697, 434);
         _gridDone.TabIndex = 0;
         // 
         // _lblHeaderDone
@@ -550,7 +561,7 @@ partial class CorrectionsForm
         _lblHeaderDone.ForeColor = Color.White;
         _lblHeaderDone.Location = new Point(0, 0);
         _lblHeaderDone.Name = "_lblHeaderDone";
-        _lblHeaderDone.Size = new Size(522, 24);
+        _lblHeaderDone.Size = new Size(697, 24);
         _lblHeaderDone.TabIndex = 1;
         _lblHeaderDone.Text = "  Перенесённые";
         _lblHeaderDone.TextAlign = ContentAlignment.MiddleLeft;
@@ -562,7 +573,7 @@ partial class CorrectionsForm
         _pnlStatus.Dock = DockStyle.Bottom;
         _pnlStatus.Location = new Point(0, 626);
         _pnlStatus.Name = "_pnlStatus";
-        _pnlStatus.Size = new Size(1050, 34);
+        _pnlStatus.Size = new Size(1264, 34);
         _pnlStatus.TabIndex = 2;
         // 
         // _btnBack
@@ -572,19 +583,56 @@ partial class CorrectionsForm
         _btnBack.FlatStyle = FlatStyle.Flat;
         _btnBack.Font = new Font("Segoe UI", 8F);
         _btnBack.ForeColor = Color.White;
-        _btnBack.Location  = new Point(8, 4);
-        _btnBack.Name      = "_btnBack";
-        _btnBack.Size      = new Size(90, 26);
-        _btnBack.TextAlign = ContentAlignment.MiddleCenter;
+        _btnBack.Location = new Point(8, 4);
+        _btnBack.Name = "_btnBack";
+        _btnBack.Size = new Size(90, 26);
         _btnBack.TabIndex = 0;
         _btnBack.Text = "← Назад";
         _btnBack.UseVisualStyleBackColor = false;
         _btnBack.Click += BtnBack_Click;
         // 
+        // tbPotr
+        // 
+        _tbPotr.Font = new Font("Segoe UI", 9F);
+        _tbPotr.Location = new Point(954, 5);
+        _tbPotr.Name = "tbPotr";
+        _tbPotr.Size = new Size(232, 27);
+        _tbPotr.TabIndex = 29;
+        // 
+        // tbPlat
+        // 
+        _tbPlat.Font = new Font("Segoe UI", 9F);
+        _tbPlat.Location = new Point(953, 33);
+        _tbPlat.Name = "tbPlat";
+        _tbPlat.Size = new Size(233, 27);
+        _tbPlat.TabIndex = 30;
+        // 
+        // label1
+        // 
+        label1.AutoSize = true;
+        label1.Font = new Font("Segoe UI", 9F);
+        label1.ForeColor = Color.FromArgb(60, 60, 80);
+        label1.Location = new Point(910, 8);
+        label1.Name = "label1";
+        label1.Size = new Size(38, 20);
+        label1.TabIndex = 31;
+        label1.Text = "Potr:";
+        // 
+        // label2
+        // 
+        label2.AutoSize = true;
+        label2.Font = new Font("Segoe UI", 9F);
+        label2.ForeColor = Color.FromArgb(60, 60, 80);
+        label2.Location = new Point(910, 40);
+        label2.Name = "label2";
+        label2.Size = new Size(37, 20);
+        label2.TabIndex = 32;
+        label2.Text = "Plat:";
+        // 
         // CorrectionsForm
         // 
         BackColor = Color.FromArgb(240, 242, 245);
-        ClientSize = new Size(1050, 660);
+        ClientSize = new Size(1264, 660);
         Controls.Add(_split);
         Controls.Add(_pnlTop);
         Controls.Add(_pnlStatus);
@@ -632,7 +680,7 @@ partial class CorrectionsForm
     private Label          _lblBrutto;
     private Label          _lblBruttoUnit;
     private Label          _lblTarCap;
-    private TextBox        _txtTar;
+    private ComboBox       _cmbTar;
     private Label          _lblTarUnit;
     private Label          _lblNettoCap;
     private Label          _lblNetto;
@@ -646,4 +694,8 @@ partial class CorrectionsForm
     private Label          _lblHeaderDone;
     private DataGridView   _gridDone;
     private Button         _btnBack;
+    private Label label2;
+    private Label label1;
+    private TextBox _tbPlat;
+    private TextBox _tbPotr;
 }

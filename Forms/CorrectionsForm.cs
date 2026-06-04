@@ -165,7 +165,25 @@ public partial class CorrectionsForm : Form
 
     // ── Обработчики ──────────────────────────────────────────────────────────
 
-    private void TxtTar_TextChanged(object? sender, EventArgs e) => RecalcNetto();
+    private void CmbTar_SelectedIndexChanged(object? sender, EventArgs e) => RecalcNetto();
+
+    private async void TxtNvag_Leave(object? sender, EventArgs e)
+    {
+        string nvag = _txtNvag.Text.Trim();
+        _cmbTar.Items.Clear();
+        if (string.IsNullOrEmpty(nvag)) return;
+        try
+        {
+            _fb ??= new FirebirdService();
+            var options = await _fb.GetTaraOptionsAsync(nvag);
+            foreach (var opt in options)
+                _cmbTar.Items.Add(opt);
+        }
+        catch
+        {
+            // Firebird недоступен — комбо остаётся пустым, это допустимо
+        }
+    }
     private void BtnClear_Click(object? sender, EventArgs e)     => ClearTopPanel();
     private void BtnBack_Click(object? sender, EventArgs e)      => Close();
 
@@ -202,9 +220,8 @@ public partial class CorrectionsForm : Form
     private void RecalcNetto()
     {
         if (_selected == null) return;
-        _lblNetto.Text = decimal.TryParse(_txtTar.Text, NumberStyles.Float,
-            CultureInfo.InvariantCulture, out decimal tar)
-            ? (_selected.Total - tar).ToString("F2")
+        _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt
+            ? (_selected.Total - (double)opt.Brutto).ToString("F2")
             : _selected.Total.ToString("F2");
     }
 
@@ -225,8 +242,7 @@ public partial class CorrectionsForm : Form
 
         long?    ndok   = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         string?  gruz   = string.IsNullOrWhiteSpace(_txtGruz.Text) ? null : _txtGruz.Text.Trim();
-        decimal? tarDok = decimal.TryParse(_txtTar.Text, NumberStyles.Float,
-            CultureInfo.InvariantCulture, out decimal td) ? td : null;
+        decimal? tarDok = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
         string table = _rbGpri.Checked ? "GPRI" : "GRAS";
 
         _btnTransfer.Enabled = false;
@@ -250,7 +266,7 @@ public partial class CorrectionsForm : Form
                 r.Cells["NDOK"   ].Value = _txtNdok.Text.Trim();
                 r.Cells["GRUZ"   ].Value = gruz;
                 r.Cells["BRUTTO" ].Value = doneRow.Total.ToString("F2");
-                r.Cells["TAR_BRS"].Value = _txtTar.Text.Trim();
+                r.Cells["TAR_BRS"].Value = tarDok.HasValue ? tarDok.Value.ToString("F2") : "";
                 r.Cells["NETTO"  ].Value = _lblNetto.Text;
                 r.Cells["POTR"   ].Value = potr;
                 r.Cells["PLAT"   ].Value = plat;
@@ -272,7 +288,9 @@ public partial class CorrectionsForm : Form
         _selected = null;
         _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = _lblDir.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
-        _txtNvag.Clear(); _txtGruz.Clear(); _txtNdok.Clear(); _txtTar.Clear();
+        _txtNvag.Clear(); _txtGruz.Clear(); _txtNdok.Clear();
+        _cmbTar.Items.Clear();
+        _cmbTar.SelectedIndex = -1;
         _btnTransfer.Enabled = false;
         _gridPend.ClearSelection();
     }
