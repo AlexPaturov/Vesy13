@@ -177,7 +177,20 @@ partial class DynamicWeighingForm
         ResumeLayout(false);
     }
 
-    private GroupBox    _gbDir;
-    private RadioButton _rbPlus;
-    private RadioButton _rbMinus;
+    private GroupBox      _gbDir;
+    private RadioButton   _rbPlus;
+    private RadioButton   _rbMinus;
+    private Label         _lblChannel;
+    private Panel         _pnlDisplay;
+    private Label         _lblValue;
+    private Label         _lblUnit;
+    private Label         _lblStatus;
+    private Button        _btnWeigh;
+    private Button        _btnZero;
+    private Button        _btnFinish;
+    private DataGridView  _grid;
+    private Panel         _pnlStatusBar;
+    private Button        _btnBack;
+    private Panel         _dotConn;
+    private Label         _lblConn;
 }

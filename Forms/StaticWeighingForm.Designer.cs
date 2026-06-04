@@ -1,18 +1,10 @@
 namespace Vesy13.Forms;
 
-partial class WeighingFormBase
+partial class StaticWeighingForm
 {
-    private System.ComponentModel.IContainer components = null;
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing && components != null)
-            components.Dispose();
-        base.Dispose(disposing);
-    }
-
     private void InitializeComponent()
     {
+        _lblChannel   = new Label();
         _pnlDisplay   = new Panel();
         _lblValue     = new Label();
         _lblUnit      = new Label();
@@ -25,21 +17,19 @@ partial class WeighingFormBase
         _btnBack      = new Button();
         _dotConn      = new Panel();
         _lblConn      = new Label();
-        _lblChannel   = new Label();
 
         _pnlDisplay.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatusBar.SuspendLayout();
         SuspendLayout();
 
-        // ── Display panel (topY = 66 — место для заголовка производного класса) ──
-        _pnlDisplay.Location  = new Point(8, 66);
-        _pnlDisplay.Size      = new Size(544, 158);
-        _pnlDisplay.BackColor = Color.Black;
-        _pnlDisplay.Controls.Add(_lblValue);
-        _pnlDisplay.Controls.Add(_lblUnit);
-        _pnlDisplay.Controls.Add(_lblStatus);
+        // ── _lblChannel (top area 0–34) ───────────────────────────────────────
+        _lblChannel.Location  = new Point(8, 10);
+        _lblChannel.AutoSize  = true;
+        _lblChannel.Font      = new Font("Segoe UI", 10F);
+        _lblChannel.ForeColor = Color.FromArgb(80, 80, 80);
 
+        // ── Display panel (topY = 34) ─────────────────────────────────────────
         _lblValue.Text      = "—";
         _lblValue.Font      = new Font("Courier New", 60F, FontStyle.Bold);
         _lblValue.ForeColor = Color.DimGray;
@@ -61,9 +51,16 @@ partial class WeighingFormBase
         _lblStatus.Bounds    = new Rectangle(8, 118, 528, 34);
         _lblStatus.AutoSize  = false;
 
-        // ── _btnWeigh (y = 66+158+6 = 230) ───────────────────────────────────
+        _pnlDisplay.Location  = new Point(8, 34);
+        _pnlDisplay.Size      = new Size(544, 158);
+        _pnlDisplay.BackColor = Color.Black;
+        _pnlDisplay.Controls.Add(_lblValue);
+        _pnlDisplay.Controls.Add(_lblUnit);
+        _pnlDisplay.Controls.Add(_lblStatus);
+
+        // ── _btnWeigh (y = 34+158+6 = 198) ───────────────────────────────────
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
-        _btnWeigh.Location  = new Point(8, 230);
+        _btnWeigh.Location  = new Point(8, 198);
         _btnWeigh.Size      = new Size(544, 54);
         _btnWeigh.Font      = new Font("Segoe UI", 14F, FontStyle.Bold);
         _btnWeigh.FlatStyle = FlatStyle.Flat;
@@ -71,16 +68,16 @@ partial class WeighingFormBase
         _btnWeigh.ForeColor = Color.White;
         _btnWeigh.Click    += BtnWeigh_Click;
 
-        // ── y = 230+54+4 = 288 ───────────────────────────────────────────────
+        // ── y = 198+54+4 = 256 ────────────────────────────────────────────────
         _btnZero.Text      = "Ноль";
-        _btnZero.Location  = new Point(8, 288);
+        _btnZero.Location  = new Point(8, 256);
         _btnZero.Size      = new Size(100, 32);
         _btnZero.Font      = new Font("Segoe UI", 10F);
         _btnZero.FlatStyle = FlatStyle.Flat;
         _btnZero.Click    += BtnZero_Click;
 
         _btnFinish.Text      = "Завершить состав";
-        _btnFinish.Location  = new Point(116, 288);
+        _btnFinish.Location  = new Point(116, 256);
         _btnFinish.Size      = new Size(244, 32);
         _btnFinish.Font      = new Font("Segoe UI", 10F);
         _btnFinish.FlatStyle = FlatStyle.Flat;
@@ -88,8 +85,8 @@ partial class WeighingFormBase
         _btnFinish.ForeColor = Color.White;
         _btnFinish.Click    += BtnFinish_Click;
 
-        // ── _grid (y = 288+32+6 = 326) ───────────────────────────────────────
-        _grid.Location                              = new Point(8, 326);
+        // ── _grid (y = 256+32+6 = 294) ────────────────────────────────────────
+        _grid.Location                              = new Point(8, 294);
         _grid.Size                                  = new Size(544, 248);
         _grid.ReadOnly                              = true;
         _grid.AllowUserToAddRows                    = false;
@@ -105,12 +102,6 @@ partial class WeighingFormBase
         _grid.RowTemplate.Height                    = 22;
         _grid.RowsDefaultCellStyle.BackColor            = Color.White;
         _grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 245, 255);
-
-        // ── _lblChannel (позиция по умолчанию для DynamicWeighingForm) ────────
-        _lblChannel.Location  = new Point(336, 22);
-        _lblChannel.AutoSize  = true;
-        _lblChannel.Font      = new Font("Segoe UI", 10F);
-        _lblChannel.ForeColor = Color.FromArgb(80, 80, 80);
 
         // ── Status bar ────────────────────────────────────────────────────────
         _btnBack.Text      = "← Назад";
@@ -141,7 +132,8 @@ partial class WeighingFormBase
         _pnlStatusBar.Controls.Add(_lblConn);
 
         // ── Form ──────────────────────────────────────────────────────────────
-        ClientSize    = new Size(560, 616);
+        Text          = "Взвешивание — Статика";
+        ClientSize    = new Size(560, 584);
         StartPosition = FormStartPosition.CenterScreen;
         KeyPreview    = true;
         BackColor     = Color.FromArgb(240, 242, 245);
@@ -160,17 +152,17 @@ partial class WeighingFormBase
         ResumeLayout(false);
     }
 
-    protected Panel         _pnlDisplay;
-    protected Label         _lblValue;
-    protected Label         _lblUnit;
-    protected Label         _lblStatus;
-    protected Button        _btnWeigh;
-    protected Button        _btnZero;
-    protected Button        _btnFinish;
-    protected DataGridView  _grid;
-    protected Panel         _pnlStatusBar;
-    protected Button        _btnBack;
-    protected Panel         _dotConn;
-    protected Label         _lblConn;
-    protected Label         _lblChannel;
+    private Label         _lblChannel;
+    private Panel         _pnlDisplay;
+    private Label         _lblValue;
+    private Label         _lblUnit;
+    private Label         _lblStatus;
+    private Button        _btnWeigh;
+    private Button        _btnZero;
+    private Button        _btnFinish;
+    private DataGridView  _grid;
+    private Panel         _pnlStatusBar;
+    private Button        _btnBack;
+    private Panel         _dotConn;
+    private Label         _lblConn;
 }
