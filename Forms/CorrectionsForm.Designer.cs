@@ -465,7 +465,7 @@ partial class CorrectionsForm
         // 
         _split.Panel1.Controls.Add(_gridPend);
         _split.Panel1.Controls.Add(_lblHeaderPend);
-        _split.Panel1MinSize = 585;
+        _split.Panel1MinSize = 579;
         _split.FixedPanel    = FixedPanel.Panel1;
         //
         // _split.Panel2
@@ -474,7 +474,7 @@ partial class CorrectionsForm
         _split.Panel2.Controls.Add(_lblHeaderDone);
         _split.Panel2MinSize = 280;
         _split.Size = new Size(1050, 458);
-        _split.SplitterDistance = 585;
+        _split.SplitterDistance = 579;
         _split.TabIndex = 1;
         // 
         // _gridPend
