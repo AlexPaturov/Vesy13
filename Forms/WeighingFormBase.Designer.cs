@@ -160,17 +160,17 @@ partial class WeighingFormBase
         ResumeLayout(false);
     }
 
-    private  Panel         _pnlDisplay;
-    protected Label        _lblValue;
-    private  Label         _lblUnit;
-    protected Label        _lblStatus;
-    protected Button       _btnWeigh;
-    protected Button       _btnZero;
-    protected Button       _btnFinish;
-    private  DataGridView  _grid;
-    private  Panel         _pnlStatusBar;
-    private  Button        _btnBack;
-    private  Panel         _dotConn;
-    private  Label         _lblConn;
-    protected Label        _lblChannel;
+    protected Panel         _pnlDisplay;
+    protected Label         _lblValue;
+    protected Label         _lblUnit;
+    protected Label         _lblStatus;
+    protected Button        _btnWeigh;
+    protected Button        _btnZero;
+    protected Button        _btnFinish;
+    protected DataGridView  _grid;
+    protected Panel         _pnlStatusBar;
+    protected Button        _btnBack;
+    protected Panel         _dotConn;
+    protected Label         _lblConn;
+    protected Label         _lblChannel;
 }
