@@ -3,11 +3,11 @@ using Vesy13.Services;
 
 namespace Vesy13.Forms;
 
-public abstract class WeighingFormBase : Form
+public class WeighingFormBase : Form
 {
-    protected readonly AdcService         _adc;
-    protected readonly CalibrationService _calib;
-    protected readonly DatabaseService    _db;
+    protected AdcService         _adc   = null!;
+    protected CalibrationService _calib = null!;
+    protected DatabaseService    _db    = null!;
 
     // ── State machine ──────────────────────────────────────────────────────
     private enum WeighState { Idle, Bogie1Captured }
@@ -30,12 +30,14 @@ public abstract class WeighingFormBase : Form
     private   Panel        _dotConn    = null!;
     private   Label        _lblConn    = null!;
 
-    // ── Abstract interface ─────────────────────────────────────────────────
-    protected abstract string GetDirection();
-    protected abstract bool   ValidateBeforeWeigh();
-    protected abstract bool   ShowDirectionColumn { get; }
-    protected abstract double ToTonnes(int adcCode);
-    protected abstract string GetMode();
+    // ── Virtual interface (abstract replaced for designer support) ────────
+    protected virtual string GetDirection()        => "";
+    protected virtual bool   ValidateBeforeWeigh() => false;
+    protected virtual bool   ShowDirectionColumn   => false;
+    protected virtual double ToTonnes(int adcCode) => 0;
+    protected virtual string GetMode()             => "";
+
+    public WeighingFormBase() { }  // for WinForms Designer
 
     protected WeighingFormBase(AdcService adc, CalibrationService calib, DatabaseService db)
     {
@@ -186,6 +188,7 @@ public abstract class WeighingFormBase : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        if (DesignMode || _adc is null) return;
         _adc.FrameReceived     += OnFrame;
         _adc.ConnectionChanged += OnConnectionChanged;
         UpdateConn(_adc.IsConnected);
@@ -195,8 +198,11 @@ public abstract class WeighingFormBase : Form
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        _adc.FrameReceived     -= OnFrame;
-        _adc.ConnectionChanged -= OnConnectionChanged;
+        if (!DesignMode && _adc is not null)
+        {
+            _adc.FrameReceived     -= OnFrame;
+            _adc.ConnectionChanged -= OnConnectionChanged;
+        }
         base.OnFormClosed(e);
     }
 

@@ -23,6 +23,8 @@ public class DynamicWeighingForm : WeighingFormBase
 
     protected override string GetMode() => "ДИНАМИКА";
 
+    public DynamicWeighingForm() { InitializeComponent(); }  // for WinForms Designer
+
     public DynamicWeighingForm(AdcService adc, CalibrationService calib, DatabaseService db) : base(adc, calib, db)
     {
         InitializeComponent();

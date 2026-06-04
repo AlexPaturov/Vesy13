@@ -13,6 +13,8 @@ public class StaticWeighingForm : WeighingFormBase
 
     protected override string GetMode() => "СТАТИКА";
 
+    public StaticWeighingForm() { InitializeComponent(); }  // for WinForms Designer
+
     public StaticWeighingForm(AdcService adc, CalibrationService calib, DatabaseService db) : base(adc, calib, db)
     {
         InitializeComponent();
