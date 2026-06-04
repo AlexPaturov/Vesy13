@@ -24,17 +24,13 @@ public partial class WeighingFormBase : Form
     protected virtual double ToTonnes(int adcCode) => 0;
     protected virtual string GetMode()             => "";
 
-    public WeighingFormBase()
-    {
-        InitializeComponent();
-    }
+    public WeighingFormBase() { }  // for designer / derived classes
 
     protected WeighingFormBase(AdcService adc, CalibrationService calib, DatabaseService db)
     {
         _adc   = adc;
         _calib = calib;
         _db    = db;
-        InitializeComponent();
     }
 
     // ── Grid columns (зависят от ShowDirectionColumn — добавляются в OnLoad) ─
