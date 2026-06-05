@@ -126,7 +126,8 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка загрузки из БД:\n{ex.Message}", "База данных",
+            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", "GetPendingAsync", "PostgreSQL", ex.Message);
+            MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -137,9 +138,11 @@ public partial class CorrectionsForm : Form
             FillDoneGrid(_gridDone, done);
             _gridDone.ClearSelection();
         }
-        catch
+        catch (Exception ex)
         {
-            // Firebird недоступен — грид остаётся пустым
+            AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", "GetRecentAsync", "Firebird", ex.Message);
+            MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 
@@ -411,8 +414,9 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка переноса:\n{ex.Message}", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", transfer.Table, "Firebird");
+            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", transfer.Table, "Firebird", ex.Message);
+            MessageBox.Show("Не удалось перенести запись в систему учёта.\nОбратитесь к администратору.",
+                "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnTransfer.Enabled = true;
         }
     }
@@ -480,8 +484,9 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", _selectedFb?.Table ?? "GPRI", "Firebird");
+            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", _selectedFb?.Table ?? "GPRI", "Firebird", ex.Message);
+            MessageBox.Show("Не удалось сохранить изменения в системе учёта.\nОбратитесь к администратору.",
+                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnSave.Enabled = true;
         }
     }

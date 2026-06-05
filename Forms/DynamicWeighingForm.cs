@@ -226,9 +226,10 @@ public partial class DynamicWeighingForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка сохранения в БД:\n{ex.Message}", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             AuditLogger.Error(AuditLogger.ErrorDb,
-                "LocalWagon", $"вагон №{record.Number}", "PostgreSQL");
+                "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
+            MessageBox.Show("Не удалось сохранить результат взвешивания.\nОбратитесь к администратору.",
+                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

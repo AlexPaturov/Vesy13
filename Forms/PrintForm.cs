@@ -74,9 +74,9 @@ public partial class PrintForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка загрузки:\n{ex.Message}", "База данных",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdTable", table, "Firebird");
+            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdTable", table, "Firebird", ex.Message);
+            MessageBox.Show("Не удалось загрузить данные из системы учёта.\nОбратитесь к администратору.",
+                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -122,9 +122,9 @@ public partial class PrintForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка генерации PDF:\n{ex.Message}", "Печать",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuditLogger.Error(AuditLogger.ErrorPdf, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()}", "QuestPDF");
+            AuditLogger.Error(AuditLogger.ErrorPdf, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()}", "QuestPDF", ex.Message);
+            MessageBox.Show("Не удалось сформировать PDF.\nОбратитесь к администратору.",
+                "Печать", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {

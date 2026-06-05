@@ -269,8 +269,9 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "static");
+            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "static", "PostgreSQL", ex.Message);
+            MessageBox.Show("Не удалось сохранить калибровку.\nОбратитесь к администратору.",
+                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -329,8 +330,9 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic");
+            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic", "PostgreSQL", ex.Message);
+            MessageBox.Show("Не удалось сохранить калибровку динамики.\nОбратитесь к администратору.",
+                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
