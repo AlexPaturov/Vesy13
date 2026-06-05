@@ -9,8 +9,8 @@ public partial class CorrectionsForm : Form
     private readonly LocalRepository _db;
     private FactoryRepository? _fb;
 
-    private WagonWeighingRow? _selected;
-    private FbRecord?         _selectedFb;
+    private LocalWagon? _selected;
+    private GpriGras?         _selectedFb;
 
     public static readonly Dictionary<string, string> GpGridChapters = new()
     {
@@ -142,7 +142,7 @@ public partial class CorrectionsForm : Form
         }
     }
 
-    private static void FillPendingGrid(DataGridView g, List<WagonWeighingRow> rows)
+    private static void FillPendingGrid(DataGridView g, List<LocalWagon> rows)
     {
         g.Rows.Clear();
         foreach (var r in rows)
@@ -150,7 +150,7 @@ public partial class CorrectionsForm : Form
             int idx = g.Rows.Add(
                 r.WagonTime.ToString("dd.MM.yyyy"),
                 r.WagonTime.ToString("HH:mm:ss"),
-                r.WagonNum,
+                r.Number,
                 r.Bogie1.ToString("F2"),
                 r.Bogie2.ToString("F2"),
                 r.Total.ToString("F2"),
@@ -160,7 +160,7 @@ public partial class CorrectionsForm : Form
         }
     }
 
-    private static void FillDoneGrid(DataGridView g, List<FbRecord> rows)
+    private static void FillDoneGrid(DataGridView g, List<GpriGras> rows)
     {
         g.Rows.Clear();
         foreach (var r in rows)
@@ -229,17 +229,15 @@ public partial class CorrectionsForm : Form
         _btnSave.Visible  = false;
         _btnTransfer.Visible = true;
 
-        _selected = _gridPend.SelectedRows[0].Tag as WagonWeighingRow;
+        _selected = _gridPend.SelectedRows[0].Tag as LocalWagon;
         if (_selected == null) return;
 
         _lblDt    .Text = _selected.WagonTime.ToString("dd.MM.yyyy");
         _lblVr    .Text = _selected.WagonTime.ToString("HH:mm:ss");
-        _lblNpp   .Text = _selected.WagonNum.ToString();
+        _lblNpp   .Text = _selected.Number.ToString();
         _lblMode  .Text = _selected.Mode;
         _lblDir   .Text = _selected.Direction;
         _lblBrutto.Text = _selected.Total.ToString("F2");
-        _tbPlat   .Text = _selected.Plat.Trim();
-        _tbPotr   .Text = _selected.Potr.Trim();
         _btnTransfer.Enabled = true;
         RecalcNetto();
     }
@@ -253,7 +251,7 @@ public partial class CorrectionsForm : Form
         }
         if (_selected == null) return;
         _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt
-            ? (_selected.Total - opt.Brutto).ToString("F2")
+            ? ((decimal)_selected.Total - opt.Brutto).ToString("F2")
             : _selected.Total.ToString("F2");
     }
 
@@ -281,7 +279,7 @@ public partial class CorrectionsForm : Form
             return;
         }
 
-        var fb = _gridDone.SelectedRows[0].Tag as FbRecord;
+        var fb = _gridDone.SelectedRows[0].Tag as GpriGras;
         if (fb == null) return;
 
         _selectedFb = fb;

@@ -63,7 +63,7 @@ ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()";
     /// </summary>
     /// <param name="record">Данные вагона: тележки, время, номер в составе.</param>
     /// <param name="mode">Режим взвешивания: «СТАТИКА» или «ДИНАМИКА».</param>
-    public async Task SaveWagonAsync(WagonRecord record, string mode)
+    public async Task SaveWagonAsync(LocalWagon record, string mode)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
@@ -88,14 +88,14 @@ VALUES (@trainTime, @wagonTime, @wagonNum, @bogie1, @bogie2, @total, @direction,
     /// Возвращает записи из <c>wagon_weighing</c>, ещё не перенесённые в Firebird
     /// (<c>transferred = false</c>), отсортированные по убыванию времени взвешивания.
     /// </summary>
-    public async Task<List<WagonWeighingRow>> GetPendingAsync()
+    public async Task<List<LocalWagon>> GetPendingAsync()
     {
-        var rows = new List<WagonWeighingRow>();
+        var rows = new List<LocalWagon>();
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
 
         const string sql = @"
-SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode
+SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, direction, mode
 FROM wagon_weighing
 WHERE transferred = false
 ORDER BY wagon_time DESC";
@@ -104,17 +104,16 @@ ORDER BY wagon_time DESC";
         await using var rdr = await cmd.ExecuteReaderAsync();
         while (await rdr.ReadAsync())
         {
-            rows.Add(new WagonWeighingRow
+            rows.Add(new LocalWagon(
+                Number:    rdr.GetInt32(3),
+                TrainTime: rdr.GetDateTime(1),
+                WagonTime: rdr.GetDateTime(2),
+                Bogie1:    (double)rdr.GetDecimal(4),
+                Bogie2:    (double)rdr.GetDecimal(5),
+                Direction: rdr.IsDBNull(6) ? "" : rdr.GetString(6))
             {
-                Id        = rdr.GetInt32(0),
-                TrainTime = rdr.GetDateTime(1),
-                WagonTime = rdr.GetDateTime(2),
-                WagonNum  = rdr.GetInt32(3),
-                Bogie1    = rdr.GetDecimal(4),
-                Bogie2    = rdr.GetDecimal(5),
-                Total     = rdr.GetDecimal(6),
-                Direction = rdr.IsDBNull(7) ? "" : rdr.GetString(7),
-                Mode      = rdr.GetString(8),
+                Id   = rdr.GetInt32(0),
+                Mode = rdr.GetString(7),
             });
         }
         return rows;
@@ -138,14 +137,14 @@ ORDER BY wagon_time DESC";
     /// Возвращает последние 200 записей из <c>wagon_weighing</c> с флагом
     /// <c>transferred = true</c>, отсортированных по убыванию времени взвешивания.
     /// </summary>
-    public async Task<List<WagonWeighingRow>> GetTransferredAsync()
+    public async Task<List<LocalWagon>> GetTransferredAsync()
     {
-        var rows = new List<WagonWeighingRow>();
+        var rows = new List<LocalWagon>();
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
 
         const string sql = @"
-SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode
+SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, direction, mode
 FROM wagon_weighing
 WHERE transferred = true
 ORDER BY wagon_time DESC
@@ -155,17 +154,16 @@ LIMIT 200";
         await using var rdr = await cmd.ExecuteReaderAsync();
         while (await rdr.ReadAsync())
         {
-            rows.Add(new WagonWeighingRow
+            rows.Add(new LocalWagon(
+                Number:    rdr.GetInt32(3),
+                TrainTime: rdr.GetDateTime(1),
+                WagonTime: rdr.GetDateTime(2),
+                Bogie1:    (double)rdr.GetDecimal(4),
+                Bogie2:    (double)rdr.GetDecimal(5),
+                Direction: rdr.IsDBNull(6) ? "" : rdr.GetString(6))
             {
-                Id        = rdr.GetInt32(0),
-                TrainTime = rdr.GetDateTime(1),
-                WagonTime = rdr.GetDateTime(2),
-                WagonNum  = rdr.GetInt32(3),
-                Bogie1    = rdr.GetDecimal(4),
-                Bogie2    = rdr.GetDecimal(5),
-                Total     = rdr.GetDecimal(6),
-                Direction = rdr.IsDBNull(7) ? "" : rdr.GetString(7),
-                Mode      = rdr.GetString(8),
+                Id   = rdr.GetInt32(0),
+                Mode = rdr.GetString(7),
             });
         }
         return rows;

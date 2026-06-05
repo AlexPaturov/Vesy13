@@ -29,7 +29,7 @@ public class FactoryRepository
     /// </param>
     public async Task InsertAsync(
         string           table,
-        WagonWeighingRow row,
+        LocalWagon row,
         string           nvag,
         long?            ndok,
         string?          gruz,
@@ -38,9 +38,9 @@ public class FactoryRepository
         string?          plat,
         bool             isTara = false)
     {
-        decimal? brutto    = isTara ? 0m        : row.Total;
-        decimal? tarBrs    = isTara ? row.Total : null;
-        decimal? netto     = isTara ? null      : (tarDok.HasValue ? row.Total - tarDok.Value : null);
+        decimal? brutto    = isTara ? 0m                  : (decimal)row.Total;
+        decimal? tarBrs    = isTara ? (decimal)row.Total : null;
+        decimal? netto     = isTara ? null                : (tarDok.HasValue ? (decimal)row.Total - tarDok.Value : null);
         string   gruzFinal = isTara ? "Тара"   : (gruz ?? "");
 
         await using var conn = new FbConnection(ConnStr);
@@ -62,7 +62,7 @@ VALUES
         cmd.Parameters.AddWithValue("@tarbrs",    tarBrs.HasValue ? (object)tarBrs.Value : DBNull.Value);
         cmd.Parameters.AddWithValue("@tardok",    tarDok.HasValue ? (object)tarDok.Value : DBNull.Value);
         cmd.Parameters.AddWithValue("@netto",     netto.HasValue  ? (object)netto.Value  : DBNull.Value);
-        cmd.Parameters.AddWithValue("@npp",       (short)row.WagonNum);
+        cmd.Parameters.AddWithValue("@npp",       (short)row.Number);
         cmd.Parameters.AddWithValue("@rejvzvesh", row.Mode);
         cmd.Parameters.AddWithValue("@potr",      (object?)potr ?? DBNull.Value);
         cmd.Parameters.AddWithValue("@plat",      (object?)plat ?? DBNull.Value);
@@ -122,9 +122,9 @@ WHERE ID=@id";
     /// Результат содержит поле <c>Table</c> («GPRI» или «GRAS») для последующего UPDATE.
     /// </summary>
     /// <param name="days">Глубина выборки в днях от сегодня. По умолчанию 7.</param>
-    public async Task<List<FbRecord>> GetRecentAsync(int days = 7)
+    public async Task<List<GpriGras>> GetRecentAsync(int days = 7)
     {
-        var result = new List<FbRecord>();
+        var result = new List<GpriGras>();
         var cutoff = DateTime.Today.AddDays(-days);
 
         await using var conn = new FbConnection(ConnStr);
@@ -152,7 +152,7 @@ ORDER BY DT DESC, VR DESC";
                 DateTime dv => dv.TimeOfDay,
                 _           => TimeSpan.Zero,
             };
-            result.Add(new FbRecord
+            result.Add(new GpriGras
             {
                 Id     = Convert.ToInt32(rdr.GetValue(0)),
                 Table  = rdr.GetString(1),
