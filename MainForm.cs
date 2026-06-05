@@ -69,7 +69,7 @@ public partial class MainForm : Form
     private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_sim, _ldb));
     private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb));
     private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb));
-    private void BtnPrint_Click(object? sender, EventArgs e)       => MessageBox.Show("В разработке", "Печать отвесной", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()));
     private void BtnLogs_Click(object? sender, EventArgs e)        => MessageBox.Show("В разработке", "Просмотр логов",  MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     private void OpenForm(Form form)

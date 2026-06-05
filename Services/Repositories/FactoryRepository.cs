@@ -56,19 +56,21 @@ public class FactoryRepository
         await conn.ExecuteAsync($@"
             UPDATE {record.Table} SET
                 NVAG=@nvag, NDOK=@ndok, GRUZ=@gruz,
-                TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
-                POTR=@potr, PLAT=@plat
+                BRUTTO=@brutto, TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
+                POTR=@potr, PLAT=@plat, CEX=@cex
             WHERE ID=@id",
             new {
                 id     = record.Id,
                 nvag   = record.Nvag,
                 ndok   = record.Ndok,
                 gruz   = record.Gruz,
+                brutto = record.Brutto,
                 tarbrs = record.TarBrs,
                 tardok = record.TarDok,
                 netto  = record.Netto,
                 potr   = record.Potr,
                 plat   = record.Plat,
+                cex    = record.Cex,
             });
     }
 
@@ -124,6 +126,71 @@ public class FactoryRepository
                 Potr   = rdr.IsDBNull(12) ? "" : rdr.GetString(12).Trim(),
                 Plat   = rdr.IsDBNull(13) ? "" : rdr.GetString(13).Trim(),
                 Cex    = rdr.IsDBNull(14) ? 0  : Convert.ToInt32(rdr.GetValue(14)),
+            });
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Возвращает записи из GPRI или GRAS по заданным фильтрам для печати отвесных.
+    /// </summary>
+    public async Task<List<GpriGras>> GetForPrintAsync(
+        string table,
+        DateTime dateFrom, DateTime dateTo,
+        string? nvag, string? gruz, string? potr, long? ndok)
+    {
+        var result     = new List<GpriGras>();
+        var conditions = new List<string> { "DT BETWEEN @datefrom AND @dateto" };
+
+        if (!string.IsNullOrWhiteSpace(nvag)) conditions.Add("NVAG = @nvag");
+        if (!string.IsNullOrWhiteSpace(gruz)) conditions.Add("GRUZ CONTAINING @gruz");
+        if (!string.IsNullOrWhiteSpace(potr)) conditions.Add("POTR CONTAINING @potr");
+        if (ndok.HasValue)                    conditions.Add("NDOK = @ndok");
+
+        var sql = $@"SELECT ID, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, REJVZVESH
+                     FROM {table}
+                     WHERE {string.Join(" AND ", conditions)}
+                     ORDER BY DT, VR";
+
+        await using var conn = new FbConnection(ConnStr);
+        await conn.OpenAsync();
+
+        await using var cmd = new FbCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@datefrom", dateFrom.Date);
+        cmd.Parameters.AddWithValue("@dateto",   dateTo.Date);
+        if (!string.IsNullOrWhiteSpace(nvag)) cmd.Parameters.AddWithValue("@nvag", nvag);
+        if (!string.IsNullOrWhiteSpace(gruz)) cmd.Parameters.AddWithValue("@gruz", gruz);
+        if (!string.IsNullOrWhiteSpace(potr)) cmd.Parameters.AddWithValue("@potr", potr);
+        if (ndok.HasValue)                    cmd.Parameters.AddWithValue("@ndok", ndok.Value);
+
+        await using var rdr = await cmd.ExecuteReaderAsync();
+        while (await rdr.ReadAsync())
+        {
+            var dt    = rdr.GetDateTime(1);
+            var vrRaw = rdr.IsDBNull(2) ? TimeSpan.Zero : rdr.GetValue(2) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _           => TimeSpan.Zero,
+            };
+            result.Add(new GpriGras
+            {
+                Id     = Convert.ToInt32(rdr.GetValue(0)),
+                Table  = table,
+                Dt     = dt.Date,
+                Vr     = vrRaw,
+                Nvag   = rdr.IsDBNull(3)  ? "" : rdr.GetString(3).Trim(),
+                Ndok   = rdr.IsDBNull(4)  ? null : Convert.ToInt64(rdr.GetValue(4)),
+                Gruz   = rdr.IsDBNull(5)  ? "" : rdr.GetString(5).Trim(),
+                Brutto = rdr.GetDecimal(6),
+                TarBrs = rdr.IsDBNull(7)  ? null : rdr.GetDecimal(7),
+                TarDok = rdr.IsDBNull(8)  ? null : rdr.GetDecimal(8),
+                Netto  = rdr.IsDBNull(9)  ? null : rdr.GetDecimal(9),
+                Npp    = rdr.IsDBNull(10) ? 0    : Convert.ToInt32(rdr.GetValue(10)),
+                Potr   = rdr.IsDBNull(11) ? ""   : rdr.GetString(11).Trim(),
+                Plat   = rdr.IsDBNull(12) ? ""   : rdr.GetString(12).Trim(),
+                Cex    = rdr.IsDBNull(13) ? 0    : Convert.ToInt32(rdr.GetValue(13)),
+                Mode   = rdr.IsDBNull(14) ? ""   : rdr.GetString(14).Trim(),
             });
         }
         return result;

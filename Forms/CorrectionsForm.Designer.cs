@@ -69,6 +69,7 @@ partial class CorrectionsForm
         label3 = new Label();
         _pnlTop.SuspendLayout();
         _pnlLeft.SuspendLayout();
+        _pnlMode.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_split).BeginInit();
         _split.Panel1.SuspendLayout();
         _split.Panel2.SuspendLayout();
@@ -88,6 +89,7 @@ partial class CorrectionsForm
         _pnlTop.Controls.Add(_tbPlat);
         _pnlTop.Controls.Add(_tbPotr);
         _pnlTop.Controls.Add(_pnlLeft);
+        _pnlTop.Controls.Add(_pnlMode);
         _pnlTop.Controls.Add(_lblDateCap);
         _pnlTop.Controls.Add(_lblDt);
         _pnlTop.Controls.Add(_lblTimeCap);
@@ -112,7 +114,6 @@ partial class CorrectionsForm
         _pnlTop.Controls.Add(_lblNettoCap);
         _pnlTop.Controls.Add(_lblNetto);
         _pnlTop.Controls.Add(_lblNettoUnit);
-        _pnlTop.Controls.Add(_pnlMode);
         _pnlTop.Controls.Add(_btnSave);
         _pnlTop.Controls.Add(_btnTransfer);
         _pnlTop.Controls.Add(_btnClear);
@@ -727,6 +728,8 @@ partial class CorrectionsForm
         _pnlTop.PerformLayout();
         _pnlLeft.ResumeLayout(false);
         _pnlLeft.PerformLayout();
+        _pnlMode.ResumeLayout(false);
+        _pnlMode.PerformLayout();
         _split.Panel1.ResumeLayout(false);
         _split.Panel2.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_split).EndInit();

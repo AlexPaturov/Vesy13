@@ -1,3 +1,4 @@
+using QuestPDF.Infrastructure;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -8,6 +9,7 @@ static class Program
     [STAThread]
     static void Main()
     {
+        QuestPDF.Settings.License = LicenseType.Community;
         ApplicationConfiguration.Initialize();
         using var sim = new SimA04Reader();
         var       ldb = new LocalRepository();
