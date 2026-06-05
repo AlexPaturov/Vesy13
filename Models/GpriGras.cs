@@ -1,6 +1,6 @@
 namespace Vesy13.Models;
 
-public class FbRecord
+public class GpriGras
 {
     public int      Id     { get; set; }
     public string   Table  { get; set; } = "";
