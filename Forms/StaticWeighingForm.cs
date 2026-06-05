@@ -1,5 +1,6 @@
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -47,6 +48,7 @@ public partial class StaticWeighingForm : Form
     {
         base.OnLoad(e);
         if (DesignMode || _sim is null) return;
+        AuditLogger.Action(AuditLogger.FormOpened, "Form", "StaticWeighingForm");
         SetupGridColumns();
         _sim.FrameReceived     += OnFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
@@ -154,6 +156,9 @@ public partial class StaticWeighingForm : Form
             };
             AddToGrid(record);
             SaveAsync(record);
+            AuditLogger.Action(AuditLogger.WeighingSaved,
+                "LocalWagon", $"вагон №{_wagonNumber} total={record.Total:F2}",
+                "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
             _lblValue.Text      = record.Total.ToString("F2");
             _lblValue.ForeColor = Color.Cyan;
@@ -174,6 +179,7 @@ public partial class StaticWeighingForm : Form
         if (MessageBox.Show($"Завершить состав?\nВзвешено вагонов: {_wagonNumber}",
                 "Завершить состав", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
 
+        int finishedCount   = _wagonNumber;
         _trainStartTime     = null;
         _wagonNumber        = 0;
         _state              = WeighState.Idle;
@@ -183,6 +189,8 @@ public partial class StaticWeighingForm : Form
         _lblStatus.Text     = "Готов к взвешиванию  —  Тележка 1";
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
+        AuditLogger.Action(AuditLogger.TrainFinished,
+            "Train", $"СТАТИКА вагонов={finishedCount}", "PostgreSQL");
         UpdateButtonStates();
     }
 
@@ -208,6 +216,8 @@ public partial class StaticWeighingForm : Form
         {
             MessageBox.Show($"Ошибка сохранения в БД:\n{ex.Message}",
                 "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            AuditLogger.Error(AuditLogger.ErrorDb,
+                "LocalWagon", $"вагон №{record.Number}", "PostgreSQL");
         }
     }
 }

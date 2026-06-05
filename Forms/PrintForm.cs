@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
@@ -21,6 +22,7 @@ public partial class PrintForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
         SetupGridColumns();
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
         _dtpTo.Value   = DateTime.Today;
@@ -75,6 +77,7 @@ public partial class PrintForm : Form
         {
             MessageBox.Show($"Ошибка загрузки:\n{ex.Message}", "База данных",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdTable", table, "Firebird");
         }
         finally
         {
@@ -114,11 +117,15 @@ public partial class PrintForm : Form
         {
             await Task.Run(() => doc.Generate(tempPath));
             Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
+            AuditLogger.Action(AuditLogger.SlipGenerated,
+                "WeighingSlip", $"№{_txtSlipNum.Text.Trim()} rows={toPrint.Count}",
+                "QuestPDF", tempPath);
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка генерации PDF:\n{ex.Message}", "Печать",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Error(AuditLogger.ErrorPdf, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()}", "QuestPDF");
         }
         finally
         {

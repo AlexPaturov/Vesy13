@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IO.Ports;
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -35,6 +36,7 @@ public partial class ServiceForm : Form
     {
         base.OnLoad(e);
         if (DesignMode || _sim is null) return;
+        AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
         _sim.RawFrameReceived  += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         _rateTimer.Start();
@@ -163,10 +165,24 @@ public partial class ServiceForm : Form
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
     {
-        if (_sim.IsConnected) { _sim.Close(); return; }
-        if (_cmbPort.SelectedItem is not string port) return;
-        try   { _sim.Open(port); }
-        catch (Exception ex) { AppendLog($"ОШИБКА: {ex.Message}", Color.Red); }
+        if (_sim.IsConnected)
+        {
+            var port = _sim.PortName;
+            _sim.Close();
+            AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04", port);
+            return;
+        }
+        if (_cmbPort.SelectedItem is not string selectedPort) return;
+        try
+        {
+            _sim.Open(selectedPort);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04", selectedPort);
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"ОШИБКА: {ex.Message}", Color.Red);
+            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04", selectedPort);
+        }
     }
 
     private void UpdateMonitorConn(bool connected)
@@ -249,10 +265,13 @@ public partial class ServiceForm : Form
         {
             await _calib.SaveAsync();
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            AuditLogger.Action(AuditLogger.CalibrationSaved,
+                "CalibProfile", $"static ch={(_calibUseCh0 ? "CH0" : "CH1")}");
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "static");
         }
     }
 
@@ -306,10 +325,13 @@ public partial class ServiceForm : Form
         {
             await _calib.SaveAsync();
             MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            AuditLogger.Action(AuditLogger.CalibrationSaved,
+                "CalibProfile", $"dynamic kp={kp:G4} km={km:G4}");
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic");
         }
     }
 
@@ -330,6 +352,7 @@ public partial class ServiceForm : Form
             _btnAdmin.Text      = "🔒 Войти как администратор";
             _btnAdmin.BackColor = Color.FromArgb(80, 60, 20);
             SetAdminTabs(false);
+            AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "выход из режима администратора");
         }
         else
         {
@@ -339,6 +362,7 @@ public partial class ServiceForm : Form
             _btnAdmin.Text      = "🔓 Выйти из режима администратора";
             _btnAdmin.BackColor = Color.FromArgb(20, 80, 30);
             SetAdminTabs(true);
+            AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "вход в режим администратора");
         }
     }
 

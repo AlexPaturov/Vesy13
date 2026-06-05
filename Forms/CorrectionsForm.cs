@@ -1,5 +1,6 @@
 using System.Globalization;
 using Vesy13.Models;
+using Vesy13.Services;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
@@ -112,6 +113,7 @@ public partial class CorrectionsForm : Form
     {
         base.OnLoad(e);
         if (DesignMode || _ldb is null) return;
+        AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();
     }
 
@@ -382,6 +384,9 @@ public partial class CorrectionsForm : Form
             _fdb ??= new FactoryRepository();
             await _fdb.InsertAsync(transfer);
             await _ldb.MarkTransferredAsync(_selected.Id);
+            AuditLogger.Action(AuditLogger.RecordTransferred,
+                "FirebirdRecord", $"{transfer.Table} nvag={transfer.Nvag}",
+                "Firebird", _selected.Id.ToString());
 
             if (_gridPend.SelectedRows.Count > 0)
             {
@@ -408,6 +413,7 @@ public partial class CorrectionsForm : Form
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка переноса:\n{ex.Message}", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", transfer.Table, "Firebird");
             _btnTransfer.Enabled = true;
         }
     }
@@ -455,6 +461,9 @@ public partial class CorrectionsForm : Form
         {
             _fdb ??= new FactoryRepository();
             await _fdb.UpdateAsync(updated);
+            AuditLogger.Action(AuditLogger.RecordUpdated,
+                "FirebirdRecord", $"{updated.Table} nvag={updated.Nvag}",
+                "Firebird", updated.Id.ToString());
 
             if (_gridDone.SelectedRows.Count > 0)
             {
@@ -473,6 +482,7 @@ public partial class CorrectionsForm : Form
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", _selectedFb?.Table ?? "GPRI", "Firebird");
             _btnSave.Enabled = true;
         }
     }

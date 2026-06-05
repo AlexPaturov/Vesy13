@@ -70,7 +70,7 @@ public partial class MainForm : Form
     private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb));
     private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb));
     private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()));
-    private void BtnLogs_Click(object? sender, EventArgs e)        => MessageBox.Show("В разработке", "Просмотр логов",  MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void BtnLogs_Click(object? sender, EventArgs e)        => OpenForm(new Forms.LogsForm());
 
     private void OpenForm(Form form)
     {
