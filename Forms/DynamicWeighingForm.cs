@@ -7,9 +7,8 @@ namespace Vesy13.Forms;
 
 public partial class DynamicWeighingForm : Form
 {
-    private SimA04Reader         _adc   = null!;
-    private CalibrationService _calib = null!;
-    private LocalDbService    _db    = null!;
+    private SimA04Reader    _adc = null!;
+    private LocalRepository _db  = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -23,16 +22,15 @@ public partial class DynamicWeighingForm : Form
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(SimA04Reader adc, CalibrationService calib, LocalDbService db)
+    public DynamicWeighingForm(SimA04Reader adc, LocalRepository db)
     {
-        _adc   = adc;
-        _calib = calib;
-        _db    = db;
+        _adc = adc;
+        _db  = db;
         InitializeComponent();
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
-    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_calib.Profile, adcCode, GetDirection());
+    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_db.Profile, adcCode, GetDirection());
 
     private bool ValidateBeforeWeigh()
     {

@@ -9,8 +9,8 @@ namespace Vesy13.Forms;
 
 public partial class ServiceForm : Form
 {
-    private SimA04Reader         _adc   = null!;
-    private CalibrationService _calib = null!;
+    private SimA04Reader    _adc   = null!;
+    private LocalRepository _calib = null!;
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
     private int  _frameCount;
@@ -22,7 +22,7 @@ public partial class ServiceForm : Form
         InitializeComponent();
     }
 
-    public ServiceForm(SimA04Reader adc, CalibrationService calib)
+    public ServiceForm(SimA04Reader adc, LocalRepository calib)
     {
         _adc   = adc;
         _calib = calib;

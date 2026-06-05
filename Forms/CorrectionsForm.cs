@@ -6,8 +6,8 @@ namespace Vesy13.Forms;
 
 public partial class CorrectionsForm : Form
 {
-    private readonly LocalDbService _db;
-    private FactoryDbService? _fb;
+    private readonly LocalRepository _db;
+    private FactoryRepository? _fb;
 
     private WagonWeighingRow? _selected;
     private FbRecord?         _selectedFb;
@@ -44,7 +44,7 @@ public partial class CorrectionsForm : Form
         AddFirebirdGridColumns(_gridDone);
     }
 
-    public CorrectionsForm(LocalDbService db)
+    public CorrectionsForm(LocalRepository db)
     {
         _db = db;
         InitializeComponent();
@@ -131,7 +131,7 @@ public partial class CorrectionsForm : Form
 
         try
         {
-            _fb ??= new FactoryDbService();
+            _fb ??= new FactoryRepository();
             var done = await _fb.GetRecentAsync();
             FillDoneGrid(_gridDone, done);
             _gridDone.ClearSelection();
@@ -196,7 +196,7 @@ public partial class CorrectionsForm : Form
         if (string.IsNullOrEmpty(nvag)) return;
         try
         {
-            _fb ??= new FactoryDbService();
+            _fb ??= new FactoryRepository();
             var options = await _fb.GetTaraOptionsAsync(nvag);
             foreach (var opt in options)
                 _cmbTar.Items.Add(opt);
@@ -313,7 +313,7 @@ public partial class CorrectionsForm : Form
         _cmbTar.Items.Clear();
         try
         {
-            _fb ??= new FactoryDbService();
+            _fb ??= new FactoryRepository();
             var options = await _fb.GetTaraOptionsAsync(fb.Nvag);
             foreach (var opt in options)
                 _cmbTar.Items.Add(opt);
@@ -358,7 +358,7 @@ public partial class CorrectionsForm : Form
         {
             string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
             string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
-            _fb ??= new FactoryDbService();
+            _fb ??= new FactoryRepository();
             await _fb.InsertAsync(table, _selected, nvag, ndok, gruz, tarDok, potr, plat, _rbTara.Checked);
             await _db.MarkTransferredAsync(_selected.Id);
 
@@ -416,7 +416,7 @@ public partial class CorrectionsForm : Form
         _btnSave.Enabled = false;
         try
         {
-            _fb ??= new FactoryDbService();
+            _fb ??= new FactoryRepository();
             await _fb.UpdateAsync(_selectedFb.Table, _selectedFb.Id, nvag, ndok, gruz, tarBrs, tarDok, netto, potr, plat);
 
             if (_gridDone.SelectedRows.Count > 0)

@@ -9,10 +9,9 @@ static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
-        using var adc   = new SimA04Reader();
-        var       calib = new CalibrationService();
-        calib.LoadAsync().GetAwaiter().GetResult();
-        var db = new LocalDbService();
-        System.Windows.Forms.Application.Run(new MainForm(adc, calib, db));
+        using var adc = new SimA04Reader();
+        var       db  = new LocalRepository();
+        db.LoadAsync().GetAwaiter().GetResult();
+        System.Windows.Forms.Application.Run(new MainForm(adc, db));
     }
 }

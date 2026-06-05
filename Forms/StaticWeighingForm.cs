@@ -7,9 +7,8 @@ namespace Vesy13.Forms;
 
 public partial class StaticWeighingForm : Form
 {
-    private SimA04Reader         _adc   = null!;
-    private CalibrationService _calib = null!;
-    private LocalDbService    _db    = null!;
+    private SimA04Reader    _adc = null!;
+    private LocalRepository _db  = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -23,16 +22,15 @@ public partial class StaticWeighingForm : Form
         InitializeComponent();
     }
 
-    public StaticWeighingForm(SimA04Reader adc, CalibrationService calib, LocalDbService db)
+    public StaticWeighingForm(SimA04Reader adc, LocalRepository db)
     {
-        _adc   = adc;
-        _calib = calib;
-        _db    = db;
+        _adc = adc;
+        _db  = db;
         InitializeComponent();
     }
 
     private double ToTonnes(int adcCode) =>
-        CalibrationCalculator.Convert(_calib.Profile, adcCode, _adc.Channel);
+        CalibrationCalculator.Convert(_db.Profile, adcCode, _adc.Channel);
 
     private void SetupGridColumns()
     {

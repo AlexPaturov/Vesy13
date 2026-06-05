@@ -5,20 +5,18 @@ namespace Vesy13;
 
 public partial class MainForm : Form
 {
-    private SimA04Reader         _adc   = null!;
-    private CalibrationService _calib = null!;
-    private LocalDbService    _db    = null!;
+    private SimA04Reader    _adc = null!;
+    private LocalRepository _db  = null!;
 
     public MainForm()
     {
         InitializeComponent();
     }
 
-    public MainForm(SimA04Reader adc, CalibrationService calib, LocalDbService db)
+    public MainForm(SimA04Reader adc, LocalRepository db)
     {
-        _adc   = adc;
-        _calib = calib;
-        _db    = db;
+        _adc = adc;
+        _db  = db;
         InitializeComponent();
     }
 
@@ -67,9 +65,9 @@ public partial class MainForm : Form
 
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_adc, _calib, _db));
-    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_adc, _calib, _db));
-    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_adc, _calib));
+    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_adc, _db));
+    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_adc, _db));
+    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_adc, _db));
     private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_db));
     private void BtnPrint_Click(object? sender, EventArgs e)       => MessageBox.Show("В разработке", "Печать отвесной", MessageBoxButtons.OK, MessageBoxIcon.Information);
     private void BtnLogs_Click(object? sender, EventArgs e)        => MessageBox.Show("В разработке", "Просмотр логов",  MessageBoxButtons.OK, MessageBoxIcon.Information);

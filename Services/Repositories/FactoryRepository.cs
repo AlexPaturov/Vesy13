@@ -2,13 +2,31 @@ using FirebirdSql.Data.FirebirdClient;
 using System.Data;
 using Vesy13.Models;
 
-namespace Vesy13.Services.Repositories;
+namespace Vesty13.Services.Repositories;
 
-public class FactoryDbService
+/// <summary>
+/// Репозиторий заводской базы Firebird (DC_OPER.FDB).
+/// Обеспечивает перенос и корректировку взвешиваний в таблицах GPRI и GRAS.
+/// </summary>
+public class FactoryRepository
 {
     private const string ConnStr =
         @"User=sysdba;Password=masterkey;Database=127.0.0.1:C:\Work\DC_OPER.FDB;Dialect=3;Charset=UTF8;WireCrypt=Enabled;Role=;Connection Lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;PacketSize=8192;ServerType=0";
 
+    /// <summary>
+    /// Вставляет новую запись взвешивания в таблицу GPRI или GRAS.
+    /// </summary>
+    /// <param name="table">Целевая таблица: «GPRI» (приход) или «GRAS» (расход).</param>
+    /// <param name="row">Исходная строка из wagon_weighing.</param>
+    /// <param name="nvag">Номер вагона.</param>
+    /// <param name="ndok">Номер документа (может отсутствовать).</param>
+    /// <param name="gruz">Наименование груза. Игнорируется при <paramref name="isTara"/> = true.</param>
+    /// <param name="tarDok">Тара по документу (т). При наличии вычисляется нетто.</param>
+    /// <param name="potr">Поставщик.</param>
+    /// <param name="plat">Плательщик.</param>
+    /// <param name="isTara">
+    /// Режим тары: BRUTTO = 0, TAR_BRS = вес с весов, NETTO = NULL, GRUZ = «Тара».
+    /// </param>
     public async Task InsertAsync(
         string           table,
         WagonWeighingRow row,
@@ -20,10 +38,10 @@ public class FactoryDbService
         string?          plat,
         bool             isTara = false)
     {
-        decimal? brutto = isTara ? 0m        : row.Total;
-        decimal? tarBrs = isTara ? row.Total : null;
-        decimal? netto  = isTara ? null      : (tarDok.HasValue ? row.Total - tarDok.Value : null);
-        string   gruzFinal = isTara ? "Тара" : (gruz ?? "");
+        decimal? brutto    = isTara ? 0m        : row.Total;
+        decimal? tarBrs    = isTara ? row.Total : null;
+        decimal? netto     = isTara ? null      : (tarDok.HasValue ? row.Total - tarDok.Value : null);
+        string   gruzFinal = isTara ? "Тара"   : (gruz ?? "");
 
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
@@ -51,6 +69,19 @@ VALUES
         await cmd.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Обновляет существующую запись в GPRI или GRAS по первичному ключу.
+    /// </summary>
+    /// <param name="table">Целевая таблица: «GPRI» или «GRAS».</param>
+    /// <param name="id">Первичный ключ записи (поле ID).</param>
+    /// <param name="nvag">Номер вагона.</param>
+    /// <param name="ndok">Номер документа.</param>
+    /// <param name="gruz">Наименование груза.</param>
+    /// <param name="tarBrs">Тара фактическая (т).</param>
+    /// <param name="tarDok">Тара по документу (т).</param>
+    /// <param name="netto">Нетто (т).</param>
+    /// <param name="potr">Поставщик.</param>
+    /// <param name="plat">Плательщик.</param>
     public async Task UpdateAsync(
         string   table,
         int      id,
@@ -86,6 +117,11 @@ WHERE ID=@id";
         await cmd.ExecuteNonQueryAsync();
     }
 
+    /// <summary>
+    /// Возвращает последние 200 записей из GPRI и GRAS за указанное количество дней.
+    /// Результат содержит поле <c>Table</c> («GPRI» или «GRAS») для последующего UPDATE.
+    /// </summary>
+    /// <param name="days">Глубина выборки в днях от сегодня. По умолчанию 7.</param>
     public async Task<List<FbRecord>> GetRecentAsync(int days = 7)
     {
         var result = new List<FbRecord>();
@@ -138,10 +174,15 @@ ORDER BY DT DESC, VR DESC";
         return result;
     }
 
+    /// <summary>
+    /// Возвращает варианты тары для вагона из GPRI и GRAS за последний год.
+    /// Используется для заполнения выпадающего списка тары в CorrectionsForm.
+    /// </summary>
+    /// <param name="nvag">Номер вагона.</param>
     public async Task<List<TaraOption>> GetTaraOptionsAsync(string nvag)
     {
-        var result  = new List<TaraOption>();
-        var cutoff  = DateTime.Today.AddYears(-1);
+        var result = new List<TaraOption>();
+        var cutoff = DateTime.Today.AddYears(-1);
 
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
@@ -159,15 +200,14 @@ ORDER BY 1 DESC, 2 DESC";
         await using var rdr = await cmd.ExecuteReaderAsync();
         while (await rdr.ReadAsync())
         {
-            var dt      = rdr.GetDateTime(0);
-            var vrRaw   = rdr.IsDBNull(1) ? TimeSpan.Zero : rdr.GetValue(1) switch
+            var dt    = rdr.GetDateTime(0);
+            var vrRaw = rdr.IsDBNull(1) ? TimeSpan.Zero : rdr.GetValue(1) switch
             {
                 TimeSpan ts => ts,
                 DateTime dv => dv.TimeOfDay,
                 _           => TimeSpan.Zero,
             };
-            var tara_brs  = rdr.GetDecimal(2);
-            result.Add(new TaraOption(dt.Date.Add(vrRaw), tara_brs));
+            result.Add(new TaraOption(dt.Date.Add(vrRaw), rdr.GetDecimal(2)));
         }
         return result;
     }
