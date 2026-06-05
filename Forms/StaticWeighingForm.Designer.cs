@@ -149,6 +149,8 @@ partial class StaticWeighingForm
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         _pnlStatusBar.ResumeLayout(false);
         _pnlStatusBar.PerformLayout();
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
         ResumeLayout(false);
     }
 

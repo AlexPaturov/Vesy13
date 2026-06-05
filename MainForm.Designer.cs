@@ -175,6 +175,8 @@ partial class MainForm
         _pnlMenu.ResumeLayout(false);
         _pnlStatus.ResumeLayout(false);
         _pnlStatus.PerformLayout();
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
         ResumeLayout(false);
     }
 

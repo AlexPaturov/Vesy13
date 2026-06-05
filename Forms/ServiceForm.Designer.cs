@@ -737,6 +737,8 @@ partial class ServiceForm
         _pnlCh1.PerformLayout();
         _pnlStatus.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_dgvCalib).EndInit();
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
         ResumeLayout(false);
     }
 
