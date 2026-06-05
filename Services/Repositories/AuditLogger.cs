@@ -10,7 +10,7 @@ using Serilog;
 using Serilog.Sinks.ApplicationInsights.TelemetryConverters;
 using Vesy13.Models;
 
-namespace Vesy13.Services;
+namespace Vesy13.Services.Repositories;
 
 public static class AuditLogger
 {
