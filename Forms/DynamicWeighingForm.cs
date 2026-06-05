@@ -157,6 +157,7 @@ public partial class DynamicWeighingForm : Form
                 Bogie1    = ToTonnes(_bogie1Code),
                 Bogie2    = ToTonnes(bogie2),
                 Direction = GetDirection(),
+                Mode      = "ДИНАМИКА",
             };
             AddToGrid(record);
             SaveAsync(record);
@@ -209,7 +210,7 @@ public partial class DynamicWeighingForm : Form
 
     private async void SaveAsync(LocalWagon record)
     {
-        try   { await _db.SaveWagonAsync(record, "ДИНАМИКА"); }
+        try   { await _db.SaveWagonAsync(record); }
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка сохранения в БД:\n{ex.Message}",

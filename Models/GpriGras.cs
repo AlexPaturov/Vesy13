@@ -7,8 +7,9 @@ public class GpriGras
     public DateTime Dt     { get; set; }
     public TimeSpan Vr     { get; set; }
     public string   Nvag   { get; set; } = "";
-    public string   Ndok   { get; set; } = "";
+    public long?    Ndok   { get; set; }
     public string   Gruz   { get; set; } = "";
+    public string   Mode   { get; set; } = "";
     public decimal  Brutto { get; set; }
     public decimal? TarBrs { get; set; }
     public decimal? TarDok { get; set; }

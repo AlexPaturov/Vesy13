@@ -2,7 +2,7 @@ using Dapper;
 using FirebirdSql.Data.FirebirdClient;
 using Vesy13.Models;
 
-namespace Vesty13.Services.Repositories;
+namespace Vesy13.Services.Repositories;
 
 /// <summary>
 /// Репозиторий заводской базы Firebird (DC_OPER.FDB).
@@ -15,92 +15,60 @@ public class FactoryRepository
 
     /// <summary>
     /// Вставляет новую запись взвешивания в таблицу GPRI или GRAS.
+    /// Таблица определяется <see cref="GpriGras.Table"/>.
+    /// Все поля (BRUTTO, TAR_BRS, NETTO, GRUZ) должны быть вычислены вызывающей стороной.
     /// </summary>
-    /// <param name="table">Целевая таблица: «GPRI» (приход) или «GRAS» (расход).</param>
-    /// <param name="row">Исходная строка из wagon_weighing.</param>
-    /// <param name="nvag">Номер вагона.</param>
-    /// <param name="ndok">Номер документа (может отсутствовать).</param>
-    /// <param name="gruz">Наименование груза. Игнорируется при <paramref name="isTara"/> = true.</param>
-    /// <param name="tarDok">Тара по документу (т). При наличии вычисляется нетто.</param>
-    /// <param name="potr">Поставщик.</param>
-    /// <param name="plat">Плательщик.</param>
-    /// <param name="isTara">
-    /// Режим тары: BRUTTO = 0, TAR_BRS = вес с весов, NETTO = NULL, GRUZ = «Тара».
-    /// </param>
-    public async Task InsertAsync(
-        string           table,
-        LocalWagon row,
-        string           nvag,
-        long?            ndok,
-        string?          gruz,
-        decimal?         tarDok,
-        string?          potr,
-        string?          plat,
-        bool             isTara = false)
+    public async Task InsertAsync(GpriGras record)
     {
-        decimal? brutto    = isTara ? 0m                  : (decimal)row.Total;
-        decimal? tarBrs    = isTara ? (decimal)row.Total : null;
-        decimal? netto     = isTara ? null                : (tarDok.HasValue ? (decimal)row.Total - tarDok.Value : null);
-        string   gruzFinal = isTara ? "Тара"   : (gruz ?? "");
-
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync($@"
-INSERT INTO {table}
+INSERT INTO {record.Table}
     (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT)
 VALUES
     (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat)",
             new {
-                dt        = row.WagonTime.Date,
-                vr        = row.WagonTime.TimeOfDay,
-                nvag,
-                ndok,
-                gruz      = gruzFinal,
-                brutto,
-                tarbrs    = tarBrs,
-                tardok    = tarDok,
-                netto,
-                npp       = (short)row.Number,
-                rejvzvesh = row.Mode,
-                potr,
-                plat,
+                dt        = record.Dt,
+                vr        = record.Vr,
+                nvag      = record.Nvag,
+                ndok      = record.Ndok,
+                gruz      = record.Gruz,
+                brutto    = record.Brutto,
+                tarbrs    = record.TarBrs,
+                tardok    = record.TarDok,
+                netto     = record.Netto,
+                npp       = (short)record.Npp,
+                rejvzvesh = record.Mode,
+                potr      = record.Potr,
+                plat      = record.Plat,
             });
     }
 
     /// <summary>
-    /// Обновляет существующую запись в GPRI или GRAS по первичному ключу.
+    /// Обновляет существующую запись в GPRI или GRAS.
+    /// Таблица и ID определяются полями <see cref="GpriGras.Table"/> и <see cref="GpriGras.Id"/>.
     /// </summary>
-    /// <param name="table">Целевая таблица: «GPRI» или «GRAS».</param>
-    /// <param name="id">Первичный ключ записи (поле ID).</param>
-    /// <param name="nvag">Номер вагона.</param>
-    /// <param name="ndok">Номер документа.</param>
-    /// <param name="gruz">Наименование груза.</param>
-    /// <param name="tarBrs">Тара фактическая (т).</param>
-    /// <param name="tarDok">Тара по документу (т).</param>
-    /// <param name="netto">Нетто (т).</param>
-    /// <param name="potr">Поставщик.</param>
-    /// <param name="plat">Плательщик.</param>
-    public async Task UpdateAsync(
-        string   table,
-        int      id,
-        string   nvag,
-        long?    ndok,
-        string?  gruz,
-        decimal? tarBrs,
-        decimal? tarDok,
-        decimal? netto,
-        string?  potr,
-        string?  plat)
+    public async Task UpdateAsync(GpriGras record)
     {
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync($@"
-UPDATE {table} SET
+UPDATE {record.Table} SET
     NVAG=@nvag, NDOK=@ndok, GRUZ=@gruz,
     TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
     POTR=@potr, PLAT=@plat
 WHERE ID=@id",
-            new { id, nvag, ndok, gruz, tarbrs = tarBrs, tardok = tarDok, netto, potr, plat });
+            new {
+                id     = record.Id,
+                nvag   = record.Nvag,
+                ndok   = record.Ndok,
+                gruz   = record.Gruz,
+                tarbrs = record.TarBrs,
+                tardok = record.TarDok,
+                netto  = record.Netto,
+                potr   = record.Potr,
+                plat   = record.Plat,
+            });
     }
 
     /// <summary>
@@ -145,7 +113,7 @@ ORDER BY DT DESC, VR DESC";
                 Dt     = dt.Date,
                 Vr     = vrRaw,
                 Nvag   = rdr.IsDBNull(4)  ? "" : rdr.GetString(4).Trim(),
-                Ndok   = rdr.IsDBNull(5)  ? "" : rdr.GetValue(5).ToString()!,
+                Ndok   = rdr.IsDBNull(5)  ? null : Convert.ToInt64(rdr.GetValue(5)),
                 Gruz   = rdr.IsDBNull(6)  ? "" : rdr.GetString(6).Trim(),
                 Brutto = rdr.GetDecimal(7),
                 TarBrs = rdr.IsDBNull(8)  ? null : rdr.GetDecimal(8),

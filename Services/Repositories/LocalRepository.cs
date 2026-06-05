@@ -60,24 +60,23 @@ ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()",
     /// Сохраняет взвешивание вагона в таблицу <c>wagon_weighing</c>.
     /// </summary>
     /// <param name="record">Данные вагона: тележки, время, номер в составе.</param>
-    /// <param name="mode">Режим взвешивания: «СТАТИКА» или «ДИНАМИКА».</param>
-    public async Task SaveWagonAsync(LocalWagon record, string mode)
+    public async Task SaveWagonAsync(LocalWagon record)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync(@"
 INSERT INTO wagon_weighing (train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode)
-VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @mode)",
+VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @Mode)",
             new
             {
                 record.TrainTime,
                 record.WagonTime,
                 record.Number,
-                Bogie1    = (decimal)record.Bogie1,
-                Bogie2    = (decimal)record.Bogie2,
-                Total     = (decimal)record.Total,
+                Bogie1 = (decimal)record.Bogie1,
+                Bogie2 = (decimal)record.Bogie2,
+                Total  = (decimal)record.Total,
                 record.Direction,
-                mode,
+                record.Mode,
             });
     }
 

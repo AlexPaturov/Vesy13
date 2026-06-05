@@ -294,7 +294,7 @@ public partial class CorrectionsForm : Form
         _lblBrutto.Text = fb.Brutto.ToString("F2");
 
         _txtNvag.Text = fb.Nvag;
-        _txtNdok.Text = fb.Ndok;
+        _txtNdok.Text = fb.Ndok?.ToString() ?? "";
         _tbPotr .Text = fb.Potr;
         _tbPlat .Text = fb.Plat;
 
@@ -346,36 +346,54 @@ public partial class CorrectionsForm : Form
             return;
         }
 
+        bool     isTara = _rbTara.Checked;
         long?    ndok   = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
-        string?  gruz   = string.IsNullOrWhiteSpace(_txtGruz.Text) ? null : _txtGruz.Text.Trim();
         decimal? tarDok = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
-        string table = _rbGpri.Checked ? "GPRI" : "GRAS";
+        string?  potr   = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
+        string?  plat   = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
+        decimal  total  = (decimal)_selected.Total;
+
+        var transfer = new GpriGras
+        {
+            Table  = _rbGpri.Checked ? "GPRI" : "GRAS",
+            Dt     = _selected.WagonTime.Date,
+            Vr     = _selected.WagonTime.TimeOfDay,
+            Nvag   = nvag,
+            Ndok   = ndok,
+            Gruz   = isTara ? "Тара" : _txtGruz.Text.Trim(),
+            Brutto = isTara ? 0m     : total,
+            TarBrs = isTara ? total  : null,
+            TarDok = tarDok,
+            Netto  = isTara ? null   : (tarDok.HasValue ? total - tarDok.Value : null),
+            Npp    = _selected.Number,
+            Mode   = _selected.Mode,
+            Potr   = potr ?? "",
+            Plat   = plat ?? "",
+        };
 
         _btnTransfer.Enabled = false;
         try
         {
-            string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
-            string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
             _fb ??= new FactoryRepository();
-            await _fb.InsertAsync(table, _selected, nvag, ndok, gruz, tarDok, potr, plat, _rbTara.Checked);
+            await _fb.InsertAsync(transfer);
             await _db.MarkTransferredAsync(_selected.Id);
 
             if (_gridPend.SelectedRows.Count > 0)
             {
-                var doneRow = _selected;
                 _gridPend.Rows.Remove(_gridPend.SelectedRows[0]);
                 _gridDone.Rows.Insert(0, 1);
                 var r = _gridDone.Rows[0];
-                r.Cells["DT"     ].Value = doneRow.WagonTime.ToString("dd.MM.yyyy");
-                r.Cells["VR"     ].Value = doneRow.WagonTime.ToString("HH:mm:ss");
-                r.Cells["NVAG"   ].Value = nvag;
-                r.Cells["NDOK"   ].Value = _txtNdok.Text.Trim();
-                r.Cells["GRUZ"   ].Value = gruz;
-                r.Cells["BRUTTO" ].Value = doneRow.Total.ToString("F2");
-                r.Cells["TAR_BRS"].Value = tarDok.HasValue ? tarDok.Value.ToString("F2") : "";
-                r.Cells["NETTO"  ].Value = _lblNetto.Text;
-                r.Cells["POTR"   ].Value = potr;
-                r.Cells["PLAT"   ].Value = plat;
+                r.Cells["DT"     ].Value = transfer.Dt.ToString("dd.MM.yyyy");
+                r.Cells["VR"     ].Value = transfer.Vr.ToString(@"hh\:mm\:ss");
+                r.Cells["NVAG"   ].Value = transfer.Nvag;
+                r.Cells["NDOK"   ].Value = transfer.Ndok?.ToString() ?? "";
+                r.Cells["GRUZ"   ].Value = transfer.Gruz;
+                r.Cells["BRUTTO" ].Value = transfer.Brutto.ToString("F2");
+                r.Cells["TAR_BRS"].Value = transfer.TarBrs?.ToString("F2") ?? "";
+                r.Cells["TAR_DOK"].Value = transfer.TarDok?.ToString("F2") ?? "";
+                r.Cells["NETTO"  ].Value = transfer.Netto?.ToString("F2")  ?? "";
+                r.Cells["POTR"   ].Value = transfer.Potr;
+                r.Cells["PLAT"   ].Value = transfer.Plat;
                 r.Cells["VESY"   ].Value = "13";
                 r.DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
             }
@@ -404,30 +422,46 @@ public partial class CorrectionsForm : Form
 
         bool     isTara = _rbTara.Checked;
         long?    ndok   = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
-        string?  gruz   = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? null : _txtGruz.Text.Trim());
         decimal? tarDok = (!isTara && _cmbTar.SelectedItem is TaraOption taraOpt) ? taraOpt.Brutto : null;
-        decimal? tarBrs = isTara ? _selectedFb.Brutto : null;
-        decimal? netto  = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null);
         string?  potr   = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
         string?  plat   = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
+
+        var updated = new GpriGras
+        {
+            Id     = _selectedFb.Id,
+            Table  = _selectedFb.Table,
+            Dt     = _selectedFb.Dt,
+            Vr     = _selectedFb.Vr,
+            Nvag   = nvag,
+            Ndok   = ndok,
+            Gruz   = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? "" : _txtGruz.Text.Trim()),
+            Brutto = _selectedFb.Brutto,
+            TarBrs = isTara ? _selectedFb.Brutto : null,
+            TarDok = tarDok,
+            Netto  = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
+            Npp    = _selectedFb.Npp,
+            Cex    = _selectedFb.Cex,
+            Potr   = potr ?? "",
+            Plat   = plat ?? "",
+        };
 
         _btnSave.Enabled = false;
         try
         {
             _fb ??= new FactoryRepository();
-            await _fb.UpdateAsync(_selectedFb.Table, _selectedFb.Id, nvag, ndok, gruz, tarBrs, tarDok, netto, potr, plat);
+            await _fb.UpdateAsync(updated);
 
             if (_gridDone.SelectedRows.Count > 0)
             {
                 var r = _gridDone.SelectedRows[0];
-                r.Cells["NVAG"   ].Value = nvag;
-                r.Cells["NDOK"   ].Value = _txtNdok.Text.Trim();
-                r.Cells["GRUZ"   ].Value = gruz;
-                r.Cells["TAR_BRS"].Value = tarBrs.HasValue ? tarBrs.Value.ToString("F2") : "";
-                r.Cells["TAR_DOK"].Value = tarDok.HasValue ? tarDok.Value.ToString("F2") : "";
-                r.Cells["NETTO"  ].Value = netto.HasValue  ? netto.Value.ToString("F2")  : "";
-                r.Cells["POTR"   ].Value = potr;
-                r.Cells["PLAT"   ].Value = plat;
+                r.Cells["NVAG"   ].Value = updated.Nvag;
+                r.Cells["NDOK"   ].Value = updated.Ndok?.ToString() ?? "";
+                r.Cells["GRUZ"   ].Value = updated.Gruz;
+                r.Cells["TAR_BRS"].Value = updated.TarBrs?.ToString("F2") ?? "";
+                r.Cells["TAR_DOK"].Value = updated.TarDok?.ToString("F2") ?? "";
+                r.Cells["NETTO"  ].Value = updated.Netto?.ToString("F2")  ?? "";
+                r.Cells["POTR"   ].Value = updated.Potr;
+                r.Cells["PLAT"   ].Value = updated.Plat;
             }
             ClearTopPanel();
         }
