@@ -13,15 +13,24 @@ partial class CorrectionsForm
 
     private void InitializeComponent()
     {
-        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
         _pnlTop = new Panel();
+        label2 = new Label();
+        lblpotr = new Label();
+        _tbPlat = new TextBox();
+        _tbPotr = new TextBox();
         _pnlLeft = new Panel();
         _lblVidVzv = new Label();
         _rbGpri = new RadioButton();
         _rbGras = new RadioButton();
+        _pnlMode = new Panel();
+        _lblVidMode = new Label();
+        _rbBrutto = new RadioButton();
+        _rbTara = new RadioButton();
+        _btnSave = new Button();
         _lblDateCap = new Label();
         _lblDt = new Label();
         _lblTimeCap = new Label();
@@ -43,7 +52,6 @@ partial class CorrectionsForm
         _lblBruttoUnit = new Label();
         _lblTarCap = new Label();
         _cmbTar = new ComboBox();
-        _lblTarUnit = new Label();
         _lblNettoCap = new Label();
         _lblNetto = new Label();
         _lblNettoUnit = new Label();
@@ -57,10 +65,8 @@ partial class CorrectionsForm
         _lblHeaderDone = new Label();
         _pnlStatus = new Panel();
         _btnBack = new Button();
-        _tbPotr = new TextBox();
-        _tbPlat = new TextBox();
-        label1 = new Label();
-        label2 = new Label();
+        tbCex = new TextBox();
+        label3 = new Label();
         _pnlTop.SuspendLayout();
         _pnlLeft.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_split).BeginInit();
@@ -75,8 +81,10 @@ partial class CorrectionsForm
         // _pnlTop
         // 
         _pnlTop.BackColor = Color.FromArgb(215, 225, 248);
+        _pnlTop.Controls.Add(label3);
+        _pnlTop.Controls.Add(tbCex);
         _pnlTop.Controls.Add(label2);
-        _pnlTop.Controls.Add(label1);
+        _pnlTop.Controls.Add(lblpotr);
         _pnlTop.Controls.Add(_tbPlat);
         _pnlTop.Controls.Add(_tbPotr);
         _pnlTop.Controls.Add(_pnlLeft);
@@ -101,10 +109,11 @@ partial class CorrectionsForm
         _pnlTop.Controls.Add(_lblBruttoUnit);
         _pnlTop.Controls.Add(_lblTarCap);
         _pnlTop.Controls.Add(_cmbTar);
-        _pnlTop.Controls.Add(_lblTarUnit);
         _pnlTop.Controls.Add(_lblNettoCap);
         _pnlTop.Controls.Add(_lblNetto);
         _pnlTop.Controls.Add(_lblNettoUnit);
+        _pnlTop.Controls.Add(_pnlMode);
+        _pnlTop.Controls.Add(_btnSave);
         _pnlTop.Controls.Add(_btnTransfer);
         _pnlTop.Controls.Add(_btnClear);
         _pnlTop.Controls.Add(_btnRefresh);
@@ -114,6 +123,44 @@ partial class CorrectionsForm
         _pnlTop.Size = new Size(1264, 168);
         _pnlTop.TabIndex = 0;
         // 
+        // label2
+        // 
+        label2.AutoSize = true;
+        label2.Font = new Font("Segoe UI", 9F);
+        label2.ForeColor = Color.FromArgb(60, 60, 80);
+        label2.Location = new Point(851, 38);
+        label2.Name = "label2";
+        label2.Size = new Size(94, 20);
+        label2.TabIndex = 32;
+        label2.Text = "Плательщик";
+        // 
+        // lblpotr
+        // 
+        lblpotr.AutoSize = true;
+        lblpotr.Font = new Font("Segoe UI", 9F);
+        lblpotr.ForeColor = Color.FromArgb(60, 60, 80);
+        lblpotr.Location = new Point(845, 11);
+        lblpotr.Name = "lblpotr";
+        lblpotr.Size = new Size(100, 20);
+        lblpotr.TabIndex = 31;
+        lblpotr.Text = "Потребитель";
+        // 
+        // _tbPlat
+        // 
+        _tbPlat.Font = new Font("Segoe UI", 9F);
+        _tbPlat.Location = new Point(954, 33);
+        _tbPlat.Name = "_tbPlat";
+        _tbPlat.Size = new Size(233, 27);
+        _tbPlat.TabIndex = 30;
+        // 
+        // _tbPotr
+        // 
+        _tbPotr.Font = new Font("Segoe UI", 9F);
+        _tbPotr.Location = new Point(954, 5);
+        _tbPotr.Name = "_tbPotr";
+        _tbPotr.Size = new Size(232, 27);
+        _tbPotr.TabIndex = 29;
+        // 
         // _pnlLeft
         // 
         _pnlLeft.BackColor = Color.FromArgb(190, 162, 38);
@@ -122,7 +169,7 @@ partial class CorrectionsForm
         _pnlLeft.Controls.Add(_rbGras);
         _pnlLeft.Location = new Point(0, 0);
         _pnlLeft.Name = "_pnlLeft";
-        _pnlLeft.Size = new Size(142, 168);
+        _pnlLeft.Size = new Size(142, 98);
         _pnlLeft.TabIndex = 0;
         // 
         // _lblVidVzv
@@ -130,7 +177,7 @@ partial class CorrectionsForm
         _lblVidVzv.AutoSize = true;
         _lblVidVzv.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _lblVidVzv.ForeColor = Color.White;
-        _lblVidVzv.Location = new Point(6, 8);
+        _lblVidVzv.Location = new Point(2, 5);
         _lblVidVzv.Name = "_lblVidVzv";
         _lblVidVzv.Size = new Size(140, 20);
         _lblVidVzv.TabIndex = 0;
@@ -142,7 +189,7 @@ partial class CorrectionsForm
         _rbGpri.Checked = true;
         _rbGpri.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
         _rbGpri.ForeColor = Color.White;
-        _rbGpri.Location = new Point(6, 36);
+        _rbGpri.Location = new Point(6, 29);
         _rbGpri.Name = "_rbGpri";
         _rbGpri.Size = new Size(96, 27);
         _rbGpri.TabIndex = 1;
@@ -154,14 +201,78 @@ partial class CorrectionsForm
         _rbGras.AutoSize = true;
         _rbGras.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
         _rbGras.ForeColor = Color.White;
-        _rbGras.Location = new Point(6, 68);
+        _rbGras.Location = new Point(6, 59);
         _rbGras.Name = "_rbGras";
         _rbGras.Size = new Size(88, 27);
         _rbGras.TabIndex = 2;
         _rbGras.Text = "Расход";
-        // 
+        //
+        // _pnlMode
+        //
+        _pnlMode.BackColor = Color.FromArgb(60, 100, 170);
+        _pnlMode.Controls.Add(_lblVidMode);
+        _pnlMode.Controls.Add(_rbBrutto);
+        _pnlMode.Controls.Add(_rbTara);
+        _pnlMode.Location = new Point(0, 100);
+        _pnlMode.Name = "_pnlMode";
+        _pnlMode.Size = new Size(142, 66);
+        _pnlMode.TabIndex = 35;
+        //
+        // _lblVidMode
+        //
+        _lblVidMode.AutoSize = true;
+        _lblVidMode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblVidMode.ForeColor = Color.White;
+        _lblVidMode.Location = new Point(2, 3);
+        _lblVidMode.Name = "_lblVidMode";
+        _lblVidMode.Size = new Size(100, 20);
+        _lblVidMode.TabIndex = 0;
+        _lblVidMode.Text = "Тип операции";
+        //
+        // _rbBrutto
+        //
+        _rbBrutto.AutoSize = true;
+        _rbBrutto.Checked = true;
+        _rbBrutto.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _rbBrutto.ForeColor = Color.White;
+        _rbBrutto.Location = new Point(6, 22);
+        _rbBrutto.Name = "_rbBrutto";
+        _rbBrutto.Size = new Size(90, 27);
+        _rbBrutto.TabIndex = 1;
+        _rbBrutto.TabStop = true;
+        _rbBrutto.Text = "Брутто";
+        //
+        // _rbTara
+        //
+        _rbTara.AutoSize = true;
+        _rbTara.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _rbTara.ForeColor = Color.White;
+        _rbTara.Location = new Point(6, 44);
+        _rbTara.Name = "_rbTara";
+        _rbTara.Size = new Size(72, 27);
+        _rbTara.TabIndex = 2;
+        _rbTara.Text = "Тара";
+        _rbTara.CheckedChanged += RbTara_CheckedChanged;
+        //
+        // _btnSave
+        //
+        _btnSave.BackColor = Color.FromArgb(0, 90, 160);
+        _btnSave.Enabled = false;
+        _btnSave.FlatAppearance.BorderSize = 0;
+        _btnSave.FlatStyle = FlatStyle.Flat;
+        _btnSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _btnSave.ForeColor = Color.White;
+        _btnSave.Location = new Point(148, 128);
+        _btnSave.Name = "_btnSave";
+        _btnSave.Size = new Size(240, 32);
+        _btnSave.TabIndex = 36;
+        _btnSave.Text = "Сохранить";
+        _btnSave.UseVisualStyleBackColor = false;
+        _btnSave.Visible = false;
+        _btnSave.Click += BtnSave_Click;
+        //
         // _lblDateCap
-        // 
+        //
         _lblDateCap.AutoSize = true;
         _lblDateCap.Font = new Font("Segoe UI", 9F);
         _lblDateCap.ForeColor = Color.FromArgb(60, 60, 80);
@@ -261,12 +372,12 @@ partial class CorrectionsForm
         // 
         // _txtNvag
         // 
-        _txtNvag.Font     = new Font("Segoe UI", 9F);
+        _txtNvag.Font = new Font("Segoe UI", 9F);
         _txtNvag.Location = new Point(235, 38);
-        _txtNvag.Name     = "_txtNvag";
-        _txtNvag.Size     = new Size(170, 27);
+        _txtNvag.Name = "_txtNvag";
+        _txtNvag.Size = new Size(170, 27);
         _txtNvag.TabIndex = 10;
-        _txtNvag.Leave   += TxtNvag_Leave;
+        _txtNvag.Leave += TxtNvag_Leave;
         // 
         // _lblDirCap
         // 
@@ -373,32 +484,21 @@ partial class CorrectionsForm
         _lblTarCap.Text = "Тара:";
         // 
         // _cmbTar
-        //
+        // 
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbTar.Font          = new Font("Segoe UI", 9F);
-        _cmbTar.Location      = new Point(357, 92);
-        _cmbTar.Name          = "_cmbTar";
-        _cmbTar.Size          = new Size(160, 27);
-        _cmbTar.TabIndex      = 21;
+        _cmbTar.Font = new Font("Segoe UI", 9F);
+        _cmbTar.Location = new Point(352, 94);
+        _cmbTar.Name = "_cmbTar";
+        _cmbTar.Size = new Size(284, 28);
+        _cmbTar.TabIndex = 21;
         _cmbTar.SelectedIndexChanged += CmbTar_SelectedIndexChanged;
-        // 
-        // _lblTarUnit
-        // 
-        _lblTarUnit.AutoSize = true;
-        _lblTarUnit.Font = new Font("Segoe UI", 9F);
-        _lblTarUnit.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblTarUnit.Location = new Point(453, 96);
-        _lblTarUnit.Name = "_lblTarUnit";
-        _lblTarUnit.Size = new Size(15, 20);
-        _lblTarUnit.TabIndex = 22;
-        _lblTarUnit.Text = "т";
         // 
         // _lblNettoCap
         // 
         _lblNettoCap.AutoSize = true;
         _lblNettoCap.Font = new Font("Segoe UI", 9F);
         _lblNettoCap.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblNettoCap.Location = new Point(480, 96);
+        _lblNettoCap.Location = new Point(646, 97);
         _lblNettoCap.Name = "_lblNettoCap";
         _lblNettoCap.Size = new Size(52, 20);
         _lblNettoCap.TabIndex = 23;
@@ -409,7 +509,7 @@ partial class CorrectionsForm
         _lblNetto.AutoSize = true;
         _lblNetto.Font = new Font("Courier New", 10F, FontStyle.Bold);
         _lblNetto.ForeColor = Color.FromArgb(0, 110, 30);
-        _lblNetto.Location = new Point(544, 96);
+        _lblNetto.Location = new Point(710, 97);
         _lblNetto.Name = "_lblNetto";
         _lblNetto.Size = new Size(19, 20);
         _lblNetto.TabIndex = 24;
@@ -420,7 +520,7 @@ partial class CorrectionsForm
         _lblNettoUnit.AutoSize = true;
         _lblNettoUnit.Font = new Font("Segoe UI", 9F);
         _lblNettoUnit.ForeColor = Color.FromArgb(60, 60, 80);
-        _lblNettoUnit.Location = new Point(593, 96);
+        _lblNettoUnit.Location = new Point(759, 97);
         _lblNettoUnit.Name = "_lblNettoUnit";
         _lblNettoUnit.Size = new Size(15, 20);
         _lblNettoUnit.TabIndex = 25;
@@ -492,8 +592,8 @@ partial class CorrectionsForm
         _gridPend.AllowUserToAddRows = false;
         _gridPend.AllowUserToDeleteRows = false;
         _gridPend.AllowUserToResizeRows = false;
-        dataGridViewCellStyle5.BackColor = Color.FromArgb(242, 246, 255);
-        _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+        dataGridViewCellStyle9.BackColor = Color.FromArgb(242, 246, 255);
+        _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
         _gridPend.BackgroundColor = Color.White;
         _gridPend.BorderStyle = BorderStyle.None;
         _gridPend.ColumnHeadersHeight = 26;
@@ -506,8 +606,8 @@ partial class CorrectionsForm
         _gridPend.ReadOnly = true;
         _gridPend.RowHeadersVisible = false;
         _gridPend.RowHeadersWidth = 51;
-        dataGridViewCellStyle6.BackColor = Color.White;
-        _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle6;
+        dataGridViewCellStyle10.BackColor = Color.White;
+        _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle10;
         _gridPend.RowTemplate.Height = 22;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridPend.Size = new Size(563, 434);
@@ -532,8 +632,8 @@ partial class CorrectionsForm
         _gridDone.AllowUserToAddRows = false;
         _gridDone.AllowUserToDeleteRows = false;
         _gridDone.AllowUserToResizeRows = false;
-        dataGridViewCellStyle7.BackColor = Color.FromArgb(242, 246, 255);
-        _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+        dataGridViewCellStyle11.BackColor = Color.FromArgb(242, 246, 255);
+        _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
         _gridDone.BackgroundColor = Color.White;
         _gridDone.BorderStyle = BorderStyle.None;
         _gridDone.ColumnHeadersHeight = 26;
@@ -546,12 +646,13 @@ partial class CorrectionsForm
         _gridDone.ReadOnly = true;
         _gridDone.RowHeadersVisible = false;
         _gridDone.RowHeadersWidth = 51;
-        dataGridViewCellStyle8.BackColor = Color.White;
-        _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle8;
+        dataGridViewCellStyle12.BackColor = Color.White;
+        _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle12;
         _gridDone.RowTemplate.Height = 22;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridDone.Size = new Size(697, 434);
         _gridDone.TabIndex = 0;
+        _gridDone.SelectionChanged += GridDone_SelectionChanged;
         // 
         // _lblHeaderDone
         // 
@@ -591,43 +692,25 @@ partial class CorrectionsForm
         _btnBack.UseVisualStyleBackColor = false;
         _btnBack.Click += BtnBack_Click;
         // 
-        // tbPotr
+        // tbCex
         // 
-        _tbPotr.Font = new Font("Segoe UI", 9F);
-        _tbPotr.Location = new Point(954, 5);
-        _tbPotr.Name = "tbPotr";
-        _tbPotr.Size = new Size(232, 27);
-        _tbPotr.TabIndex = 29;
+        tbCex.Font = new Font("Segoe UI", 9F);
+        tbCex.Location = new Point(954, 61);
+        tbCex.MaxLength = 3;
+        tbCex.Name = "tbCex";
+        tbCex.Size = new Size(233, 27);
+        tbCex.TabIndex = 33;
         // 
-        // tbPlat
+        // label3
         // 
-        _tbPlat.Font = new Font("Segoe UI", 9F);
-        _tbPlat.Location = new Point(953, 33);
-        _tbPlat.Name = "tbPlat";
-        _tbPlat.Size = new Size(233, 27);
-        _tbPlat.TabIndex = 30;
-        // 
-        // label1
-        // 
-        label1.AutoSize = true;
-        label1.Font = new Font("Segoe UI", 9F);
-        label1.ForeColor = Color.FromArgb(60, 60, 80);
-        label1.Location = new Point(910, 8);
-        label1.Name = "label1";
-        label1.Size = new Size(38, 20);
-        label1.TabIndex = 31;
-        label1.Text = "Potr:";
-        // 
-        // label2
-        // 
-        label2.AutoSize = true;
-        label2.Font = new Font("Segoe UI", 9F);
-        label2.ForeColor = Color.FromArgb(60, 60, 80);
-        label2.Location = new Point(910, 40);
-        label2.Name = "label2";
-        label2.Size = new Size(37, 20);
-        label2.TabIndex = 32;
-        label2.Text = "Plat:";
+        label3.AutoSize = true;
+        label3.Font = new Font("Segoe UI", 9F);
+        label3.ForeColor = Color.FromArgb(60, 60, 80);
+        label3.Location = new Point(910, 65);
+        label3.Name = "label3";
+        label3.Size = new Size(35, 20);
+        label3.TabIndex = 34;
+        label3.Text = "Цех";
         // 
         // CorrectionsForm
         // 
@@ -681,7 +764,6 @@ partial class CorrectionsForm
     private Label          _lblBruttoUnit;
     private Label          _lblTarCap;
     private ComboBox       _cmbTar;
-    private Label          _lblTarUnit;
     private Label          _lblNettoCap;
     private Label          _lblNetto;
     private Label          _lblNettoUnit;
@@ -694,8 +776,15 @@ partial class CorrectionsForm
     private Label          _lblHeaderDone;
     private DataGridView   _gridDone;
     private Button         _btnBack;
-    private Label label2;
-    private Label label1;
-    private TextBox _tbPlat;
-    private TextBox _tbPotr;
+    private Label          label2;
+    private Label          lblpotr;
+    private TextBox        _tbPlat;
+    private TextBox        _tbPotr;
+    private Label          label3;
+    private TextBox        tbCex;
+    private Panel          _pnlMode;
+    private Label          _lblVidMode;
+    private RadioButton    _rbBrutto;
+    private RadioButton    _rbTara;
+    private Button         _btnSave;
 }

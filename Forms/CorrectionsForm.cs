@@ -1,15 +1,16 @@
 using System.Globalization;
 using Vesy13.Models;
-using Vesy13.Services;
+using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
 public partial class CorrectionsForm : Form
 {
-    private readonly DatabaseService _db;
-    private FirebirdService? _fb;
+    private readonly LocalDbService _db;
+    private FactoryDbService? _fb;
 
     private WagonWeighingRow? _selected;
+    private FbRecord?         _selectedFb;
 
     public static readonly Dictionary<string, string> GpGridChapters = new()
     {
@@ -43,7 +44,7 @@ public partial class CorrectionsForm : Form
         AddFirebirdGridColumns(_gridDone);
     }
 
-    public CorrectionsForm(DatabaseService db)
+    public CorrectionsForm(LocalDbService db)
     {
         _db = db;
         InitializeComponent();
@@ -62,7 +63,7 @@ public partial class CorrectionsForm : Form
         g.Columns.Add(Col("№",        36));
         g.Columns.Add(Col("Тел.1 т",  74));
         g.Columns.Add(Col("Тел.2 т",  74));
-        g.Columns.Add(Col("Брутто т", 78));
+        g.Columns.Add(Col("T1+T2 т",  78));
         g.Columns.Add(Col("Режим",    90));
         g.Columns.Add(Col("Напр.",    60));
     }
@@ -118,15 +119,26 @@ public partial class CorrectionsForm : Form
     {
         try
         {
-            var pending     = await _db.GetPendingAsync();
-            var transferred = await _db.GetTransferredAsync();
+            var pending = await _db.GetPendingAsync();
             FillPendingGrid(_gridPend, pending);
-            FillDoneGrid(_gridDone, transferred);
+            _gridPend.ClearSelection();
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка загрузки из БД:\n{ex.Message}", "База данных",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        try
+        {
+            _fb ??= new FactoryDbService();
+            var done = await _fb.GetRecentAsync();
+            FillDoneGrid(_gridDone, done);
+            _gridDone.ClearSelection();
+        }
+        catch
+        {
+            // Firebird недоступен — грид остаётся пустым
         }
     }
 
@@ -148,17 +160,27 @@ public partial class CorrectionsForm : Form
         }
     }
 
-    private static void FillDoneGrid(DataGridView g, List<WagonWeighingRow> rows)
+    private static void FillDoneGrid(DataGridView g, List<FbRecord> rows)
     {
         g.Rows.Clear();
         foreach (var r in rows)
         {
             int idx = g.Rows.Add();
             var row = g.Rows[idx];
-            row.Cells["DT"    ].Value = r.WagonTime.ToString("dd.MM.yyyy");
-            row.Cells["VR"    ].Value = r.WagonTime.ToString("HH:mm:ss");
-            row.Cells["BRUTTO"].Value = r.Total.ToString("F2");
-            row.Cells["VESY"  ].Value = "13";
+            row.Cells["DT"     ].Value = r.Dt.ToString("dd.MM.yyyy");
+            row.Cells["VR"     ].Value = r.Vr.ToString(@"hh\:mm\:ss");
+            row.Cells["NVAG"   ].Value = r.Nvag;
+            row.Cells["NDOK"   ].Value = r.Ndok;
+            row.Cells["GRUZ"   ].Value = r.Gruz;
+            row.Cells["BRUTTO" ].Value = r.Brutto.ToString("F2");
+            row.Cells["TAR_BRS"].Value = r.TarBrs.HasValue ? r.TarBrs.Value.ToString("F2") : "";
+            row.Cells["TAR_DOK"].Value = r.TarDok.HasValue ? r.TarDok.Value.ToString("F2") : "";
+            row.Cells["NETTO"  ].Value = r.Netto.HasValue  ? r.Netto.Value.ToString("F2")  : "";
+            row.Cells["POTR"   ].Value = r.Potr;
+            row.Cells["PLAT"   ].Value = r.Plat;
+            row.Cells["VESY"   ].Value = "13";
+            row.Cells["NPP"    ].Value = r.Npp;
+            row.Cells["CEX"    ].Value = r.Cex;
             row.Tag = r;
         }
     }
@@ -174,7 +196,7 @@ public partial class CorrectionsForm : Form
         if (string.IsNullOrEmpty(nvag)) return;
         try
         {
-            _fb ??= new FirebirdService();
+            _fb ??= new FactoryDbService();
             var options = await _fb.GetTaraOptionsAsync(nvag);
             foreach (var opt in options)
                 _cmbTar.Items.Add(opt);
@@ -202,6 +224,11 @@ public partial class CorrectionsForm : Form
             return;
         }
 
+        _selectedFb = null;
+        _gridDone.ClearSelection();
+        _btnSave.Visible  = false;
+        _btnTransfer.Visible = true;
+
         _selected = _gridPend.SelectedRows[0].Tag as WagonWeighingRow;
         if (_selected == null) return;
 
@@ -219,10 +246,91 @@ public partial class CorrectionsForm : Form
 
     private void RecalcNetto()
     {
+        if (_rbTara.Checked)
+        {
+            _lblNetto.Text = "—";
+            return;
+        }
         if (_selected == null) return;
         _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt
-            ? (_selected.Total - (double)opt.Brutto).ToString("F2")
+            ? (_selected.Total - opt.Brutto).ToString("F2")
             : _selected.Total.ToString("F2");
+    }
+
+    private void RbTara_CheckedChanged(object? sender, EventArgs e)
+    {
+        if (_rbTara.Checked)
+        {
+            _txtGruz.Text    = "Тара";
+            _txtGruz.Enabled = false;
+        }
+        else
+        {
+            if (_txtGruz.Text == "Тара") _txtGruz.Clear();
+            _txtGruz.Enabled = true;
+        }
+        RecalcNetto();
+    }
+
+    private async void GridDone_SelectionChanged(object? sender, EventArgs e)
+    {
+        if (_gridDone.SelectedRows.Count == 0)
+        {
+            _selectedFb = null;
+            _btnSave.Enabled = false;
+            return;
+        }
+
+        var fb = _gridDone.SelectedRows[0].Tag as FbRecord;
+        if (fb == null) return;
+
+        _selectedFb = fb;
+        _selected   = null;
+        _gridPend.ClearSelection();
+
+        _lblDt   .Text = fb.Dt.ToString("dd.MM.yyyy");
+        _lblVr   .Text = fb.Vr.ToString(@"hh\:mm\:ss");
+        _lblNpp  .Text = fb.Npp.ToString();
+        _lblMode .Text = "—";
+        _lblDir  .Text = "—";
+        _lblBrutto.Text = fb.Brutto.ToString("F2");
+
+        _txtNvag.Text = fb.Nvag;
+        _txtNdok.Text = fb.Ndok;
+        _tbPotr .Text = fb.Potr;
+        _tbPlat .Text = fb.Plat;
+
+        _rbGpri.Checked = fb.Table == "GPRI";
+        _rbGras.Checked = fb.Table == "GRAS";
+
+        bool isTara = fb.Gruz.Trim() == "Тара";
+        _rbTara  .Checked = isTara;
+        _rbBrutto.Checked = !isTara;
+
+        if (!isTara)
+            _txtGruz.Text = fb.Gruz;
+
+        _cmbTar.Items.Clear();
+        try
+        {
+            _fb ??= new FactoryDbService();
+            var options = await _fb.GetTaraOptionsAsync(fb.Nvag);
+            foreach (var opt in options)
+                _cmbTar.Items.Add(opt);
+
+            decimal? tarVal = fb.TarDok ?? fb.TarBrs;
+            if (tarVal.HasValue)
+            {
+                foreach (TaraOption opt in _cmbTar.Items)
+                    if (opt.Brutto == tarVal.Value) { _cmbTar.SelectedItem = opt; break; }
+            }
+        }
+        catch { }
+
+        _btnSave    .Visible = true;
+        _btnSave    .Enabled = true;
+        _btnTransfer.Visible = false;
+        RecalcNetto();
     }
 
     // ── Перенос в Firebird ───────────────────────────────────────────────────
@@ -250,8 +358,8 @@ public partial class CorrectionsForm : Form
         {
             string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
             string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
-            _fb ??= new FirebirdService();
-            await _fb.InsertAsync(table, _selected, nvag, ndok, gruz, tarDok, potr, plat);
+            _fb ??= new FactoryDbService();
+            await _fb.InsertAsync(table, _selected, nvag, ndok, gruz, tarDok, potr, plat, _rbTara.Checked);
             await _db.MarkTransferredAsync(_selected.Id);
 
             if (_gridPend.SelectedRows.Count > 0)
@@ -283,15 +391,73 @@ public partial class CorrectionsForm : Form
         }
     }
 
+    private async void BtnSave_Click(object? sender, EventArgs e)
+    {
+        if (_selectedFb == null) return;
+
+        string nvag = _txtNvag.Text.Trim();
+        if (string.IsNullOrEmpty(nvag))
+        {
+            MessageBox.Show("Введите номер вагона (NVAG).", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtNvag.Focus();
+            return;
+        }
+
+        bool     isTara = _rbTara.Checked;
+        long?    ndok   = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
+        string?  gruz   = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? null : _txtGruz.Text.Trim());
+        decimal? tarDok = (!isTara && _cmbTar.SelectedItem is TaraOption taraOpt) ? taraOpt.Brutto : null;
+        decimal? tarBrs = isTara ? _selectedFb.Brutto : null;
+        decimal? netto  = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null);
+        string?  potr   = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
+        string?  plat   = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
+
+        _btnSave.Enabled = false;
+        try
+        {
+            _fb ??= new FactoryDbService();
+            await _fb.UpdateAsync(_selectedFb.Table, _selectedFb.Id, nvag, ndok, gruz, tarBrs, tarDok, netto, potr, plat);
+
+            if (_gridDone.SelectedRows.Count > 0)
+            {
+                var r = _gridDone.SelectedRows[0];
+                r.Cells["NVAG"   ].Value = nvag;
+                r.Cells["NDOK"   ].Value = _txtNdok.Text.Trim();
+                r.Cells["GRUZ"   ].Value = gruz;
+                r.Cells["TAR_BRS"].Value = tarBrs.HasValue ? tarBrs.Value.ToString("F2") : "";
+                r.Cells["TAR_DOK"].Value = tarDok.HasValue ? tarDok.Value.ToString("F2") : "";
+                r.Cells["NETTO"  ].Value = netto.HasValue  ? netto.Value.ToString("F2")  : "";
+                r.Cells["POTR"   ].Value = potr;
+                r.Cells["PLAT"   ].Value = plat;
+            }
+            ClearTopPanel();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _btnSave.Enabled = true;
+        }
+    }
+
     private void ClearTopPanel()
     {
-        _selected = null;
+        _selected   = null;
+        _selectedFb = null;
         _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = _lblDir.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
-        _txtNvag.Clear(); _txtGruz.Clear(); _txtNdok.Clear();
+        _txtNvag.Clear(); _txtNdok.Clear();
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
-        _btnTransfer.Enabled = false;
+        _rbBrutto.Checked  = true;
+        _txtGruz.Clear();
+        _txtGruz.Enabled   = true;
+        _btnTransfer.Enabled  = false;
+        _btnTransfer.Visible  = true;
+        _btnSave    .Enabled  = false;
+        _btnSave    .Visible  = false;
         _gridPend.ClearSelection();
+        _gridDone.ClearSelection();
     }
 }
