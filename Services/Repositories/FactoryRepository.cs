@@ -23,10 +23,10 @@ public class FactoryRepository
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync($@"
-INSERT INTO {record.Table}
-    (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT, CEX)
-VALUES
-    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat, @cex)",
+            INSERT INTO {record.Table}
+                (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT, CEX)
+            VALUES
+                (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat, @cex)",
             new {
                 dt        = record.Dt,
                 vr        = record.Vr,
@@ -54,11 +54,11 @@ VALUES
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync($@"
-UPDATE {record.Table} SET
-    NVAG=@nvag, NDOK=@ndok, GRUZ=@gruz,
-    TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
-    POTR=@potr, PLAT=@plat, CEX=@cex
-WHERE ID=@id",
+            UPDATE {record.Table} SET
+                NVAG=@nvag, NDOK=@ndok, GRUZ=@gruz,
+                TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
+                POTR=@potr, PLAT=@plat
+            WHERE ID=@id",
             new {
                 id     = record.Id,
                 nvag   = record.Nvag,
@@ -69,7 +69,6 @@ WHERE ID=@id",
                 netto  = record.Netto,
                 potr   = record.Potr,
                 plat   = record.Plat,
-                cex    = record.Cex,
             });
     }
 
@@ -87,13 +86,13 @@ WHERE ID=@id",
         await conn.OpenAsync();
 
         const string sql = @"
-SELECT FIRST 200 ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX
-FROM (
-    SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX FROM GPRI WHERE DT >= @cutoff
-    UNION ALL
-    SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX FROM GRAS WHERE DT >= @cutoff
-) t
-ORDER BY DT DESC, VR DESC";
+            SELECT FIRST 200 ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX
+            FROM (
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX FROM GPRI WHERE DT >= @cutoff
+                UNION ALL
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX FROM GRAS WHERE DT >= @cutoff
+            ) t
+            ORDER BY DT DESC, VR DESC";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@cutoff", cutoff.Date);
@@ -144,10 +143,10 @@ ORDER BY DT DESC, VR DESC";
         await conn.OpenAsync();
 
         const string sql = @"
-SELECT DT, VR, tar_brs FROM GPRI WHERE NVAG = @nvag AND DT >= @cutoff
-UNION ALL
-SELECT DT, VR, tar_brs FROM GRAS WHERE NVAG = @nvag AND DT >= @cutoff
-ORDER BY 1 DESC, 2 DESC";
+            SELECT DT, VR, tar_brs FROM GPRI WHERE NVAG = @nvag AND DT >= @cutoff
+            UNION ALL
+            SELECT DT, VR, tar_brs FROM GRAS WHERE NVAG = @nvag AND DT >= @cutoff
+            ORDER BY 1 DESC, 2 DESC";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@nvag",   nvag);

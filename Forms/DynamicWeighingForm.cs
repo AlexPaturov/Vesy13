@@ -24,8 +24,8 @@ public partial class DynamicWeighingForm : Form
 
     public DynamicWeighingForm(SimA04Reader sim, LocalRepository ldb)
     {
-        _sim = adc;
-        _ldb  = db;
+        _sim = sim;
+        _ldb  = ldb;
         InitializeComponent();
     }
 

@@ -50,9 +50,9 @@ public class LocalRepository
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync(@"
-INSERT INTO calibration_config (id, profile, updated_at)
-VALUES (1, @profile::jsonb, NOW())
-ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()",
+            INSERT INTO calibration_config (id, profile, updated_at)
+            VALUES (1, @profile::jsonb, NOW())
+            ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()",
             new { profile = json });
     }
 
@@ -65,8 +65,8 @@ ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()",
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync(@"
-INSERT INTO wagon_weighing (train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode)
-VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @Mode)",
+            INSERT INTO wagon_weighing (train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode)
+            VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @Mode)",
             new
             {
                 record.TrainTime,
@@ -89,17 +89,17 @@ VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         var rows = await conn.QueryAsync<LocalWagon>(@"
-SELECT id,
-       train_time              AS TrainTime,
-       wagon_time              AS WagonTime,
-       wagon_num               AS Number,
-       CAST(bogie1 AS float8)  AS Bogie1,
-       CAST(bogie2 AS float8)  AS Bogie2,
-       COALESCE(direction, '') AS Direction,
-       mode                    AS Mode
-FROM wagon_weighing
-WHERE transferred = false
-ORDER BY wagon_time DESC");
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode
+            FROM wagon_weighing
+            WHERE transferred = false
+            ORDER BY wagon_time DESC");
         return rows.ToList();
     }
 
@@ -125,18 +125,18 @@ ORDER BY wagon_time DESC");
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         var rows = await conn.QueryAsync<LocalWagon>(@"
-SELECT id,
-       train_time              AS TrainTime,
-       wagon_time              AS WagonTime,
-       wagon_num               AS Number,
-       CAST(bogie1 AS float8)  AS Bogie1,
-       CAST(bogie2 AS float8)  AS Bogie2,
-       COALESCE(direction, '') AS Direction,
-       mode                    AS Mode
-FROM wagon_weighing
-WHERE transferred = true
-ORDER BY wagon_time DESC
-LIMIT 200");
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode
+            FROM wagon_weighing
+            WHERE transferred = true
+            ORDER BY wagon_time DESC
+            LIMIT 200");
         return rows.ToList();
     }
 }

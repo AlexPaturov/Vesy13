@@ -24,8 +24,8 @@ public partial class StaticWeighingForm : Form
 
     public StaticWeighingForm(SimA04Reader sim, LocalRepository ldb)
     {
-        _sim = adc;
-        _ldb  = db;
+        _sim = sim;
+        _ldb  = ldb;
         InitializeComponent();
     }
 

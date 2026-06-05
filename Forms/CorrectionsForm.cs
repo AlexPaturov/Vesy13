@@ -46,7 +46,7 @@ public partial class CorrectionsForm : Form
 
     public CorrectionsForm(LocalRepository ldb)
     {
-        _ldb = db;
+        _ldb = ldb;
         InitializeComponent();
         AddPendingGridColumns(_gridPend);
         AddFirebirdGridColumns(_gridDone);
