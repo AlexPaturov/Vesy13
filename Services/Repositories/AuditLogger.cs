@@ -12,6 +12,11 @@ using Vesy13.Models;
 
 namespace Vesy13.Services.Repositories;
 
+/// <summary>
+/// Статический сервис аудита. При вызове Action/Error пишет в audit_log (PostgreSQL) и
+/// Application Insights (Serilog) одновременно, fire-and-forget.
+/// Контекст пользователя (SID, SubjectLogonId) собирается через P/Invoke при Initialize().
+/// </summary>
 public static class AuditLogger
 {
     // ── Event IDs ─────────────────────────────────────────────────────────────

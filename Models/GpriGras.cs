@@ -1,5 +1,9 @@
 namespace Vesy13.Models;
 
+/// <summary>
+/// Запись взвешивания в таблицах Firebird: GPRI (приход) или GRAS (расход).
+/// Поле Table указывает, в какой таблице хранится запись.
+/// </summary>
 public class GpriGras
 {
     public int      Id     { get; set; }

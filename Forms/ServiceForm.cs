@@ -7,6 +7,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
+/// <summary>
+/// Форма обслуживания: монитор АЦП, редактор тарировочных точек (статика/динамика),
+/// вкладка администратора защищена паролем.
+/// </summary>
 public partial class ServiceForm : Form
 {
     private SimA04Reader    _sim   = null!;

@@ -4,6 +4,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
+/// <summary>
+/// Форма корректировок: переносит взвешивания из PostgreSQL в Firebird (GPRI/GRAS)
+/// и позволяет редактировать уже перенесённые записи.
+/// </summary>
 public partial class CorrectionsForm : Form
 {
     private readonly LocalRepository _ldb;

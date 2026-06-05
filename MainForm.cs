@@ -3,6 +3,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13;
 
+/// <summary>
+/// Главная форма — навигационный хаб. Открывает дочерние формы через OpenForm и
+/// скрывается, пока открыта дочерняя.
+/// </summary>
 public partial class MainForm : Form
 {
     private SimA04Reader    _sim = null!;

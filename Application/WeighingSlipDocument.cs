@@ -5,6 +5,10 @@ using Vesy13.Models;
 
 namespace Vesy13.Application;
 
+/// <summary>
+/// QuestPDF-документ отвесной: шапка с реквизитами, таблица взвешиваний, итоговая строка ВСЕГО.
+/// Вызов Generate() записывает PDF на диск, после чего его открывает ОС.
+/// </summary>
 public sealed class WeighingSlipDocument : IDocument
 {
     private readonly List<GpriGras> _records;

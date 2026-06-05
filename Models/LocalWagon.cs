@@ -1,5 +1,9 @@
 namespace Vesy13.Models;
 
+/// <summary>
+/// Запись о взвешивании вагона (потележечно, в тоннах) в локальной БД PostgreSQL.
+/// Хранится до переноса в систему учёта предприятия (Firebird).
+/// </summary>
 public class LocalWagon
 {
     public int      Id        { get; set; }

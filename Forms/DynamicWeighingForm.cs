@@ -5,6 +5,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
+/// <summary>
+/// Форма динамического взвешивания: фиксирует две тележки на ходу и рассчитывает
+/// нетто с учётом направления движения состава (→/←).
+/// </summary>
 public partial class DynamicWeighingForm : Form
 {
     private SimA04Reader    _sim = null!;

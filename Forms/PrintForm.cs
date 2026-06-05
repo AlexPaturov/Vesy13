@@ -5,6 +5,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
+/// <summary>
+/// Форма формирования отвесных: поиск по Firebird с фильтрами, выбор строк чекбоксами,
+/// генерация PDF через QuestPDF и открытие его средствами ОС.
+/// </summary>
 public partial class PrintForm : Form
 {
     private readonly FactoryRepository _fdb;

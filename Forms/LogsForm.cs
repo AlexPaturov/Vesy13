@@ -3,6 +3,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
+/// <summary>
+/// Форма просмотра журнала аудита из таблицы audit_log PostgreSQL.
+/// Фильтр по дате и времени; строки Audit Failure выделяются красным.
+/// </summary>
 public partial class LogsForm : Form
 {
     public LogsForm()

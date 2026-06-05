@@ -3,6 +3,10 @@ using Vesy13.Services.Hardware;
 
 namespace Vesy13.Application;
 
+/// <summary>
+/// Пересчёт кода АЦП в тонны по сохранённому профилю калибровки.
+/// CalculateLsq реализует метод наименьших квадратов для подгонки коэффициентов K и B.
+/// </summary>
 public static class CalibrationCalculator
 {
     public static double Convert(CalibrationProfile profile, int adcCode, ActiveChannel channel)

@@ -1,5 +1,8 @@
 namespace Vesy13.Models;
 
+/// <summary>
+/// Строка из таблицы audit_log. Все поля nullable: в момент записи любое из них может быть недоступно.
+/// </summary>
 public class AuditRecord
 {
     public long      Id                { get; set; }

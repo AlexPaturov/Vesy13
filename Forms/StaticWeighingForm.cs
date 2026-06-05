@@ -5,6 +5,10 @@ using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
+/// <summary>
+/// Форма статического взвешивания: вагон стоит, оператор последовательно фиксирует
+/// две тележки нажатием пробела, результат сохраняется в PostgreSQL.
+/// </summary>
 public partial class StaticWeighingForm : Form
 {
     private SimA04Reader    _sim = null!;
