@@ -24,9 +24,9 @@ public class FactoryRepository
         await conn.OpenAsync();
         await conn.ExecuteAsync($@"
 INSERT INTO {record.Table}
-    (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT)
+    (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT, CEX)
 VALUES
-    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat)",
+    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat, @cex)",
             new {
                 dt        = record.Dt,
                 vr        = record.Vr,
@@ -41,6 +41,7 @@ VALUES
                 rejvzvesh = record.Mode,
                 potr      = record.Potr,
                 plat      = record.Plat,
+                cex       = record.Cex,
             });
     }
 
@@ -56,7 +57,7 @@ VALUES
 UPDATE {record.Table} SET
     NVAG=@nvag, NDOK=@ndok, GRUZ=@gruz,
     TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
-    POTR=@potr, PLAT=@plat
+    POTR=@potr, PLAT=@plat, CEX=@cex
 WHERE ID=@id",
             new {
                 id     = record.Id,
@@ -68,6 +69,7 @@ WHERE ID=@id",
                 netto  = record.Netto,
                 potr   = record.Potr,
                 plat   = record.Plat,
+                cex    = record.Cex,
             });
     }
 

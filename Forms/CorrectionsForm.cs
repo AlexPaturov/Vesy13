@@ -297,6 +297,7 @@ public partial class CorrectionsForm : Form
         _txtNdok.Text = fb.Ndok?.ToString() ?? "";
         _tbPotr .Text = fb.Potr;
         _tbPlat .Text = fb.Plat;
+        tbCex   .Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
 
         _rbGpri.Checked = fb.Table == "GPRI";
         _rbGras.Checked = fb.Table == "GRAS";
@@ -353,6 +354,8 @@ public partial class CorrectionsForm : Form
         string?  plat   = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
         decimal  total  = (decimal)_selected.Total;
 
+        int cex = int.TryParse(tbCex.Text.Trim(), out int c) ? c : 0;
+
         var transfer = new GpriGras
         {
             Table  = _rbGpri.Checked ? "GPRI" : "GRAS",
@@ -369,6 +372,7 @@ public partial class CorrectionsForm : Form
             Mode   = _selected.Mode,
             Potr   = potr ?? "",
             Plat   = plat ?? "",
+            Cex    = cex,
         };
 
         _btnTransfer.Enabled = false;
@@ -395,6 +399,7 @@ public partial class CorrectionsForm : Form
                 r.Cells["POTR"   ].Value = transfer.Potr;
                 r.Cells["PLAT"   ].Value = transfer.Plat;
                 r.Cells["VESY"   ].Value = "13";
+                r.Cells["CEX"    ].Value = transfer.Cex > 0 ? transfer.Cex.ToString() : "";
                 r.DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
             }
             ClearTopPanel();
@@ -440,7 +445,7 @@ public partial class CorrectionsForm : Form
             TarDok = tarDok,
             Netto  = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
             Npp    = _selectedFb.Npp,
-            Cex    = _selectedFb.Cex,
+            Cex    = int.TryParse(tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
             Potr   = potr ?? "",
             Plat   = plat ?? "",
         };
@@ -479,7 +484,7 @@ public partial class CorrectionsForm : Form
         _selectedFb = null;
         _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = _lblDir.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
-        _txtNvag.Clear(); _txtNdok.Clear();
+        _txtNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
         _rbBrutto.Checked  = true;
