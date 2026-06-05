@@ -369,7 +369,8 @@ public partial class CorrectionsForm : Form
         {
             Table  = _rbGpri.Checked ? "GPRI" : "GRAS",
             Dt     = _selected.WagonTime.Date,
-            Vr     = _selected.WagonTime.TimeOfDay,
+            Vr     = _selected.TrainTime.TimeOfDay,
+            VR_PRV = _selected.WagonTime.TimeOfDay,
             Nvag   = nvag,
             Ndok   = ndok,
             Gruz   = isTara ? "Тара" : _txtGruz.Text.Trim(),

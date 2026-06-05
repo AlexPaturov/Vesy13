@@ -24,12 +24,13 @@ public class FactoryRepository
         await conn.OpenAsync();
         await conn.ExecuteAsync($@"
             INSERT INTO {record.Table}
-                (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT, CEX)
+                (DT, VR, VR_PRV, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT, CEX)
             VALUES
-                (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat, @cex)",
+                (@dt, @vr, @vrprv, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat, @cex)",
             new {
                 dt        = record.Dt,
                 vr        = record.Vr,
+                vrprv     = record.VR_PRV,
                 nvag      = record.Nvag,
                 ndok      = record.Ndok,
                 gruz      = record.Gruz,
@@ -88,11 +89,11 @@ public class FactoryRepository
         await conn.OpenAsync();
 
         const string sql = @"
-            SELECT FIRST 200 ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX
+            SELECT FIRST 200 ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
             FROM (
-                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX FROM GPRI WHERE DT >= @cutoff
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV FROM GPRI WHERE DT >= @cutoff
                 UNION ALL
-                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX FROM GRAS WHERE DT >= @cutoff
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV FROM GRAS WHERE DT >= @cutoff
             ) t
             ORDER BY DT DESC, VR DESC";
 
@@ -104,6 +105,12 @@ public class FactoryRepository
         {
             var dt    = rdr.GetDateTime(2);
             var vrRaw = rdr.IsDBNull(3) ? TimeSpan.Zero : rdr.GetValue(3) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _           => TimeSpan.Zero,
+            };
+            var vrPrvRaw = rdr.IsDBNull(15) ? TimeSpan.Zero : rdr.GetValue(15) switch
             {
                 TimeSpan ts => ts,
                 DateTime dv => dv.TimeOfDay,
@@ -126,6 +133,7 @@ public class FactoryRepository
                 Potr   = rdr.IsDBNull(12) ? "" : rdr.GetString(12).Trim(),
                 Plat   = rdr.IsDBNull(13) ? "" : rdr.GetString(13).Trim(),
                 Cex    = rdr.IsDBNull(14) ? 0  : Convert.ToInt32(rdr.GetValue(14)),
+                VR_PRV = vrPrvRaw,
             });
         }
         return result;
@@ -147,7 +155,7 @@ public class FactoryRepository
         if (!string.IsNullOrWhiteSpace(potr)) conditions.Add("POTR CONTAINING @potr");
         if (ndok.HasValue)                    conditions.Add("NDOK = @ndok");
 
-        var sql = $@"SELECT ID, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, REJVZVESH
+        var sql = $@"SELECT ID, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, REJVZVESH, VR_PRV
                      FROM {table}
                      WHERE {string.Join(" AND ", conditions)}
                      ORDER BY DT, VR";
@@ -173,6 +181,12 @@ public class FactoryRepository
                 DateTime dv => dv.TimeOfDay,
                 _           => TimeSpan.Zero,
             };
+            var vrPrvRaw = rdr.IsDBNull(15) ? TimeSpan.Zero : rdr.GetValue(15) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _           => TimeSpan.Zero,
+            };
             result.Add(new GpriGras
             {
                 Id     = Convert.ToInt32(rdr.GetValue(0)),
@@ -191,6 +205,7 @@ public class FactoryRepository
                 Plat   = rdr.IsDBNull(12) ? ""   : rdr.GetString(12).Trim(),
                 Cex    = rdr.IsDBNull(13) ? 0    : Convert.ToInt32(rdr.GetValue(13)),
                 Mode   = rdr.IsDBNull(14) ? ""   : rdr.GetString(14).Trim(),
+                VR_PRV = vrPrvRaw,
             });
         }
         return result;
