@@ -15,7 +15,7 @@ public enum ActiveChannel { Main, Backup }
 public class SimA04Reader : IDisposable
 {
     /// <summary>Распарсенный фрейм АЦП — CH0, CH1, флаг валидности.</summary>
-    public event EventHandler<AdcFrame>? FrameReceived;
+    public event EventHandler<SimA04Frame>? FrameReceived;
 
     /// <summary>Сырые байты ответа — для отладочного мониторинга в ServiceForm.</summary>
     public event EventHandler<byte[]>?  RawFrameReceived;
@@ -113,7 +113,7 @@ public class SimA04Reader : IDisposable
 
         RawFrameReceived?.Invoke(this, raw);
 
-        var frame = AdcFrame.Parse(raw);
+        var frame = SimA04Frame.Parse(raw);
         if (frame.Valid)
             FrameReceived?.Invoke(this, frame);
 

@@ -15,7 +15,7 @@ public partial class DynamicWeighingForm : Form
     private DateTime?  _trainStartTime;
     private int        _wagonNumber;
     private int        _bogie1Code;
-    private AdcFrame   _lastFrame;
+    private SimA04Frame   _lastFrame;
 
     public DynamicWeighingForm()
     {
@@ -93,7 +93,7 @@ public partial class DynamicWeighingForm : Form
 
     // ── ADC events ─────────────────────────────────────────────────────────
 
-    private void OnFrame(object? sender, AdcFrame frame)
+    private void OnFrame(object? sender, SimA04Frame frame)
     {
         if (InvokeRequired) { BeginInvoke(() => OnFrame(sender, frame)); return; }
         _lastFrame = frame;
@@ -123,7 +123,7 @@ public partial class DynamicWeighingForm : Form
             ? "Канал: Основной (CH0)"
             : "Канал: Резервный (CH1)";
 
-    private int ActiveCode(AdcFrame f) =>
+    private int ActiveCode(SimA04Frame f) =>
         _adc.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
 
     // ── Weighing logic ─────────────────────────────────────────────────────

@@ -190,7 +190,7 @@ public partial class ServiceForm : Form
     private void OnRawFrame(object? sender, byte[] raw)
     {
         if (InvokeRequired) { BeginInvoke(() => OnRawFrame(sender, raw)); return; }
-        var frame = AdcFrame.Parse(raw);
+        var frame = SimA04Frame.Parse(raw);
         _frameCount++;
         if (frame.Valid)
         {
