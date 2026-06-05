@@ -9,7 +9,7 @@ public class GpriGras
     public int      Id     { get; set; }
     public string   Table  { get; set; } = "";
     public DateTime Dt     { get; set; }
-    public TimeSpan Vr     { get; set; }
+    public TimeSpan Vr     { get; set; }  // время взвешивания состава
     public string   Nvag   { get; set; } = "";
     public long?    Ndok   { get; set; }
     public string   Gruz   { get; set; } = "";
@@ -22,4 +22,5 @@ public class GpriGras
     public string   Potr   { get; set; } = "";
     public string   Plat   { get; set; } = "";
     public int      Cex    { get; set; }
+    public TimeSpan VR_PRV { get; set; }
 }
