@@ -6,8 +6,8 @@ namespace Vesy13.Forms;
 
 public partial class CorrectionsForm : Form
 {
-    private readonly LocalRepository _db;
-    private FactoryRepository? _fb;
+    private readonly LocalRepository _ldb;
+    private FactoryRepository? _fdb;
 
     private LocalWagon? _selected;
     private GpriGras?         _selectedFb;
@@ -44,9 +44,9 @@ public partial class CorrectionsForm : Form
         AddFirebirdGridColumns(_gridDone);
     }
 
-    public CorrectionsForm(LocalRepository db)
+    public CorrectionsForm(LocalRepository ldb)
     {
-        _db = db;
+        _ldb = db;
         InitializeComponent();
         AddPendingGridColumns(_gridPend);
         AddFirebirdGridColumns(_gridDone);
@@ -111,7 +111,7 @@ public partial class CorrectionsForm : Form
     protected override async void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        if (DesignMode || _db is null) return;
+        if (DesignMode || _ldb is null) return;
         await LoadBothGridsAsync();
     }
 
@@ -119,7 +119,7 @@ public partial class CorrectionsForm : Form
     {
         try
         {
-            var pending = await _db.GetPendingAsync();
+            var pending = await _ldb.GetPendingAsync();
             FillPendingGrid(_gridPend, pending);
             _gridPend.ClearSelection();
         }
@@ -131,8 +131,8 @@ public partial class CorrectionsForm : Form
 
         try
         {
-            _fb ??= new FactoryRepository();
-            var done = await _fb.GetRecentAsync();
+            _fdb ??= new FactoryRepository();
+            var done = await _fdb.GetRecentAsync();
             FillDoneGrid(_gridDone, done);
             _gridDone.ClearSelection();
         }
@@ -196,8 +196,8 @@ public partial class CorrectionsForm : Form
         if (string.IsNullOrEmpty(nvag)) return;
         try
         {
-            _fb ??= new FactoryRepository();
-            var options = await _fb.GetTaraOptionsAsync(nvag);
+            _fdb ??= new FactoryRepository();
+            var options = await _fdb.GetTaraOptionsAsync(nvag);
             foreach (var opt in options)
                 _cmbTar.Items.Add(opt);
         }
@@ -211,7 +211,7 @@ public partial class CorrectionsForm : Form
 
     private async void BtnRefresh_Click(object? sender, EventArgs e)
     {
-        if (_db is null) return;
+        if (_ldb is null) return;
         await LoadBothGridsAsync();
     }
 
@@ -249,10 +249,9 @@ public partial class CorrectionsForm : Form
             _lblNetto.Text = "—";
             return;
         }
+
         if (_selected == null) return;
-        _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt
-            ? ((decimal)_selected.Total - opt.Brutto).ToString("F2")
-            : _selected.Total.ToString("F2");
+        _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt ? ((decimal)_selected.Total - opt.Brutto).ToString("F2") : _selected.Total.ToString("F2");
     }
 
     private void RbTara_CheckedChanged(object? sender, EventArgs e)
@@ -312,8 +311,8 @@ public partial class CorrectionsForm : Form
         _cmbTar.Items.Clear();
         try
         {
-            _fb ??= new FactoryRepository();
-            var options = await _fb.GetTaraOptionsAsync(fb.Nvag);
+            _fdb ??= new FactoryRepository();
+            var options = await _fdb.GetTaraOptionsAsync(fb.Nvag);
             foreach (var opt in options)
                 _cmbTar.Items.Add(opt);
 
@@ -324,7 +323,10 @@ public partial class CorrectionsForm : Form
                     if (opt.Brutto == tarVal.Value) { _cmbTar.SelectedItem = opt; break; }
             }
         }
-        catch { }
+        catch 
+        {
+        // todo
+        }
 
         _btnSave    .Visible = true;
         _btnSave    .Enabled = true;
@@ -341,8 +343,7 @@ public partial class CorrectionsForm : Form
         string nvag = _txtNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
-            MessageBox.Show("Введите номер вагона (NVAG).", "Перенос",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Введите номер вагона (NVAG).", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning); 
             _txtNvag.Focus();
             return;
         }
@@ -378,9 +379,9 @@ public partial class CorrectionsForm : Form
         _btnTransfer.Enabled = false;
         try
         {
-            _fb ??= new FactoryRepository();
-            await _fb.InsertAsync(transfer);
-            await _db.MarkTransferredAsync(_selected.Id);
+            _fdb ??= new FactoryRepository();
+            await _fdb.InsertAsync(transfer);
+            await _ldb.MarkTransferredAsync(_selected.Id);
 
             if (_gridPend.SelectedRows.Count > 0)
             {
@@ -406,8 +407,7 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка переноса:\n{ex.Message}", "Перенос",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Ошибка переноса:\n{ex.Message}", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnTransfer.Enabled = true;
         }
     }
@@ -419,8 +419,7 @@ public partial class CorrectionsForm : Form
         string nvag = _txtNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
-            MessageBox.Show("Введите номер вагона (NVAG).", "Сохранение",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Введите номер вагона (NVAG).", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             _txtNvag.Focus();
             return;
         }
@@ -451,10 +450,11 @@ public partial class CorrectionsForm : Form
         };
 
         _btnSave.Enabled = false;
+
         try
         {
-            _fb ??= new FactoryRepository();
-            await _fb.UpdateAsync(updated);
+            _fdb ??= new FactoryRepository();
+            await _fdb.UpdateAsync(updated);
 
             if (_gridDone.SelectedRows.Count > 0)
             {
@@ -472,8 +472,7 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Ошибка сохранения:\n{ex.Message}", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnSave.Enabled = true;
         }
     }

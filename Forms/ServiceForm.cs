@@ -9,7 +9,7 @@ namespace Vesy13.Forms;
 
 public partial class ServiceForm : Form
 {
-    private SimA04Reader    _adc   = null!;
+    private SimA04Reader    _sim   = null!;
     private LocalRepository _calib = null!;
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
@@ -24,7 +24,7 @@ public partial class ServiceForm : Form
 
     public ServiceForm(SimA04Reader adc, LocalRepository calib)
     {
-        _adc   = adc;
+        _sim   = adc;
         _calib = calib;
         InitializeComponent();
     }
@@ -34,25 +34,25 @@ public partial class ServiceForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        if (DesignMode || _adc is null) return;
-        _adc.RawFrameReceived  += OnRawFrame;
-        _adc.ConnectionChanged += OnConnectionChanged;
+        if (DesignMode || _sim is null) return;
+        _sim.RawFrameReceived  += OnRawFrame;
+        _sim.ConnectionChanged += OnConnectionChanged;
         _rateTimer.Start();
-        _rbMain.Checked   = _adc.Channel == ActiveChannel.Main;
-        _rbBackup.Checked = _adc.Channel == ActiveChannel.Backup;
+        _rbMain.Checked   = _sim.Channel == ActiveChannel.Main;
+        _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
         LoadCalibPoints();
         LoadCalibDynamic();
         SetAdminTabs(false);
-        UpdateMonitorConn(_adc.IsConnected);
+        UpdateMonitorConn(_sim.IsConnected);
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        if (!DesignMode && _adc is not null)
+        if (!DesignMode && _sim is not null)
         {
-            _adc.RawFrameReceived  -= OnRawFrame;
-            _adc.ConnectionChanged -= OnConnectionChanged;
+            _sim.RawFrameReceived  -= OnRawFrame;
+            _sim.ConnectionChanged -= OnConnectionChanged;
             _rateTimer.Stop();
         }
         base.OnFormClosed(e);
@@ -93,7 +93,7 @@ public partial class ServiceForm : Form
     }
     private void BtnCapPlus_Click(object? sender, EventArgs e)
     {
-        int code = _adc.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
+        int code = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
         if (code != 0) _txtCodePlus.Text = code.ToString();
     }
     private void BtnCalcPlus_Click(object? sender, EventArgs e)
@@ -106,7 +106,7 @@ public partial class ServiceForm : Form
     }
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
-        int code = _adc.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
+        int code = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
         if (code != 0) _txtCodeMinus.Text = code.ToString();
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e)
@@ -122,11 +122,11 @@ public partial class ServiceForm : Form
 
     private void RbMain_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbMain.Checked && _adc is not null) _adc.Channel = ActiveChannel.Main;
+        if (_rbMain.Checked && _sim is not null) _sim.Channel = ActiveChannel.Main;
     }
     private void RbBackup_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbBackup.Checked && _adc is not null) _adc.Channel = ActiveChannel.Backup;
+        if (_rbBackup.Checked && _sim is not null) _sim.Channel = ActiveChannel.Backup;
     }
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
     {
@@ -146,13 +146,13 @@ public partial class ServiceForm : Form
 
     private void RefreshPorts()
     {
-        if (_adc is null) return;
+        if (_sim is null) return;
         var ports = SerialPort.GetPortNames();
         _cmbPort.Items.Clear();
         if (ports.Length > 0)
         {
             _cmbPort.Items.AddRange(ports);
-            int idx = Array.IndexOf(ports, _adc.PortName);
+            int idx = Array.IndexOf(ports, _sim.PortName);
             _cmbPort.SelectedIndex = idx >= 0 ? idx : 0;
         }
         _btnConn.Enabled = ports.Length > 0;
@@ -163,21 +163,21 @@ public partial class ServiceForm : Form
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
     {
-        if (_adc.IsConnected) { _adc.Close(); return; }
+        if (_sim.IsConnected) { _sim.Close(); return; }
         if (_cmbPort.SelectedItem is not string port) return;
-        try   { _adc.Open(port); }
+        try   { _sim.Open(port); }
         catch (Exception ex) { AppendLog($"ОШИБКА: {ex.Message}", Color.Red); }
     }
 
     private void UpdateMonitorConn(bool connected)
     {
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
-        _lblConn.Text      = connected ? $"Подключено: {_adc.PortName}  4800/Even/8/1" : "Нет подключения";
+        _lblConn.Text      = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
         _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Gray;
         _btnConn.Text      = connected ? "Отключить" : "Подключить";
         _btnConn.BackColor = connected ? Color.FromArgb(120, 40, 0) : Color.FromArgb(0, 100, 50);
         _cmbPort.Enabled   = !connected;
-        AppendLog(connected ? $"=== Подключено: {_adc.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
+        AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
             connected ? Color.LimeGreen : Color.Gray);
     }
 
@@ -283,9 +283,9 @@ public partial class ServiceForm : Form
     {
         int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
         _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
-        if (_adc is not null)
+        if (_sim is not null)
         {
-            int dynCode = _adc.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
+            int dynCode = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
             _lblLiveAdcD.Text = dynCode == 0 ? "—" : dynCode.ToString();
         }
     }

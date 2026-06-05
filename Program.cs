@@ -9,9 +9,9 @@ static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
-        using var adc = new SimA04Reader();
-        var       db  = new LocalRepository();
-        db.LoadAsync().GetAwaiter().GetResult();
-        System.Windows.Forms.Application.Run(new MainForm(adc, db));
+        using var sim = new SimA04Reader();
+        var       ldb = new LocalRepository();
+        ldb.LoadAsync().GetAwaiter().GetResult();
+        System.Windows.Forms.Application.Run(new MainForm(sim, ldb));
     }
 }

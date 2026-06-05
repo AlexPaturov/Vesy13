@@ -5,18 +5,18 @@ namespace Vesy13;
 
 public partial class MainForm : Form
 {
-    private SimA04Reader    _adc = null!;
-    private LocalRepository _db  = null!;
+    private SimA04Reader    _sim = null!;
+    private LocalRepository _ldb = null!;
 
     public MainForm()
     {
         InitializeComponent();
     }
 
-    public MainForm(SimA04Reader adc, LocalRepository db)
+    public MainForm(SimA04Reader sim, LocalRepository ldb)
     {
-        _adc = adc;
-        _db  = db;
+        _sim = sim;
+        _ldb = ldb;
         InitializeComponent();
     }
 
@@ -25,17 +25,17 @@ public partial class MainForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        if (DesignMode || _adc is null) return;
-        _adc.ConnectionChanged += Adc_ConnectionChanged;
-        UpdateConn(_adc.IsConnected);
+        if (DesignMode || _sim is null) return;
+        _sim.ConnectionChanged += Adc_ConnectionChanged;
+        UpdateConn(_sim.IsConnected);
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        if (!DesignMode && _adc is not null)
+        if (!DesignMode && _sim is not null)
         {
-            _adc.ConnectionChanged -= Adc_ConnectionChanged;
-            _adc.Close();
+            _sim.ConnectionChanged -= Adc_ConnectionChanged;
+            _sim.Close();
         }
         base.OnFormClosed(e);
     }
@@ -46,8 +46,8 @@ public partial class MainForm : Form
 
     private void BtnConn_Click(object? sender, EventArgs e)
     {
-        if (_adc.IsConnected) { _adc.Close(); return; }
-        try   { _adc.Open("COM1"); }
+        if (_sim.IsConnected) { _sim.Close(); return; }
+        try   { _sim.Open("COM1"); }
         catch (Exception ex)
         {
             MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
@@ -59,16 +59,16 @@ public partial class MainForm : Form
     {
         if (InvokeRequired) { BeginInvoke(() => UpdateConn(connected)); return; }
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
-        _lblConn.Text      = connected ? $"АЦП: {_adc.PortName}" : "АЦП: отключён";
+        _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         _btnConn.Text      = connected ? "Отключить" : "Подключить";
     }
 
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_adc, _db));
-    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_adc, _db));
-    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_adc, _db));
-    private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_db));
+    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_sim, _ldb));
+    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_sim, _ldb));
+    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb));
+    private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb));
     private void BtnPrint_Click(object? sender, EventArgs e)       => MessageBox.Show("В разработке", "Печать отвесной", MessageBoxButtons.OK, MessageBoxIcon.Information);
     private void BtnLogs_Click(object? sender, EventArgs e)        => MessageBox.Show("В разработке", "Просмотр логов",  MessageBoxButtons.OK, MessageBoxIcon.Information);
 

@@ -7,8 +7,8 @@ namespace Vesy13.Forms;
 
 public partial class DynamicWeighingForm : Form
 {
-    private SimA04Reader    _adc = null!;
-    private LocalRepository _db  = null!;
+    private SimA04Reader    _sim = null!;
+    private LocalRepository _ldb  = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -22,21 +22,20 @@ public partial class DynamicWeighingForm : Form
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(SimA04Reader adc, LocalRepository db)
+    public DynamicWeighingForm(SimA04Reader sim, LocalRepository ldb)
     {
-        _adc = adc;
-        _db  = db;
+        _sim = adc;
+        _ldb  = db;
         InitializeComponent();
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
-    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_db.Profile, adcCode, GetDirection());
+    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Profile, adcCode, GetDirection());
 
     private bool ValidateBeforeWeigh()
     {
         if (_rbPlus.Checked || _rbMinus.Checked) return true;
-        MessageBox.Show("Выберите направление движения состава.",
-            "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        MessageBox.Show("Выберите направление движения состава.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }
 
@@ -55,22 +54,23 @@ public partial class DynamicWeighingForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        if (DesignMode || _adc is null) return;
+        if (DesignMode || _sim is null) return;
         SetupGridColumns();
-        _adc.FrameReceived     += OnFrame;
-        _adc.ConnectionChanged += OnConnectionChanged;
-        UpdateConn(_adc.IsConnected);
+        _sim.FrameReceived     += OnFrame;
+        _sim.ConnectionChanged += OnConnectionChanged;
+        UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
         UpdateButtonStates();
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        if (!DesignMode && _adc is not null)
+        if (!DesignMode && _sim is not null)
         {
-            _adc.FrameReceived     -= OnFrame;
-            _adc.ConnectionChanged -= OnConnectionChanged;
+            _sim.FrameReceived     -= OnFrame;
+            _sim.ConnectionChanged -= OnConnectionChanged;
         }
+
         base.OnFormClosed(e);
     }
 
@@ -95,36 +95,43 @@ public partial class DynamicWeighingForm : Form
 
     private void OnFrame(object? sender, SimA04Frame frame)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnFrame(sender, frame)); return; }
+        if (InvokeRequired) 
+        { 
+            BeginInvoke(() => OnFrame(sender, frame)); 
+            return; 
+        }
+
         _lastFrame = frame;
         if (_state == WeighState.Idle)
         {
             _lblValue.Text      = ToTonnes(ActiveCode(frame)).ToString("F2");
-            _lblValue.ForeColor = _adc.IsConnected ? Color.LimeGreen : Color.DimGray;
+            _lblValue.ForeColor = _sim.IsConnected ? Color.LimeGreen : Color.DimGray;
         }
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnConnectionChanged(sender, connected)); return; }
+        if (InvokeRequired) 
+        { 
+            BeginInvoke(() => OnConnectionChanged(sender, connected)); 
+            return; 
+        }
+
         UpdateConn(connected);
     }
 
     private void UpdateConn(bool connected)
     {
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
-        _lblConn.Text      = connected ? $"АЦП: {_adc.PortName}" : "АЦП: отключён";
+        _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? Color.LimeGreen : Color.DimGray;
     }
 
     private void UpdateChannelLabel() =>
-        _lblChannel.Text = _adc.Channel == ActiveChannel.Main
-            ? "Канал: Основной (CH0)"
-            : "Канал: Резервный (CH1)";
+        _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
-    private int ActiveCode(SimA04Frame f) =>
-        _adc.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
+    private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
 
     // ── Weighing logic ─────────────────────────────────────────────────────
 
@@ -171,9 +178,7 @@ public partial class DynamicWeighingForm : Form
         UpdateButtonStates();
     }
 
-    private void OnZeroClick() =>
-        MessageBox.Show("Ноль установлен (в разработке)", "Ноль",
-            MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void OnZeroClick() => MessageBox.Show("Ноль установлен (в разработке)", "Ноль", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     private void HandleFinish()
     {
@@ -186,7 +191,7 @@ public partial class DynamicWeighingForm : Form
         _state              = WeighState.Idle;
         _grid.Rows.Clear();
         _lblValue.Text      = "—";
-        _lblValue.ForeColor = _adc.IsConnected ? Color.LimeGreen : Color.DimGray;
+        _lblValue.ForeColor = _sim.IsConnected ? Color.LimeGreen : Color.DimGray;
         _lblStatus.Text     = "Готов к взвешиванию  —  Тележка 1";
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
@@ -201,20 +206,20 @@ public partial class DynamicWeighingForm : Form
 
     private void AddToGrid(LocalWagon r)
     {
-        _grid.Rows.Insert(0, r.Direction, r.Number.ToString(),
-            r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"),
-            r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"));
+        _grid.Rows.Insert(0, r.Direction, r.Number.ToString(), r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"), r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"));
         while (_grid.Rows.Count > 10)
             _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
     }
 
     private async void SaveAsync(LocalWagon record)
     {
-        try   { await _db.SaveWagonAsync(record); }
+        try   
+        { 
+            await _ldb.SaveWagonAsync(record); 
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка сохранения в БД:\n{ex.Message}",
-                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show($"Ошибка сохранения в БД:\n{ex.Message}", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }
