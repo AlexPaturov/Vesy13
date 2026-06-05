@@ -7,7 +7,7 @@ namespace Vesy13.Forms;
 
 public partial class DynamicWeighingForm : Form
 {
-    private AdcService         _adc   = null!;
+    private SimA04Reader         _adc   = null!;
     private CalibrationService _calib = null!;
     private LocalDbService    _db    = null!;
 
@@ -23,7 +23,7 @@ public partial class DynamicWeighingForm : Form
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(AdcService adc, CalibrationService calib, LocalDbService db)
+    public DynamicWeighingForm(SimA04Reader adc, CalibrationService calib, LocalDbService db)
     {
         _adc   = adc;
         _calib = calib;

@@ -3,12 +3,24 @@ using Vesy13.Models;
 
 namespace Vesy13.Services.Hardware;
 
+/// <summary>
+/// Активный канал АЦП: Main — основной (CH0), Backup — резервный (CH1).
+/// </summary>
 public enum ActiveChannel { Main, Backup }
 
-public class AdcService : IDisposable
+/// <summary>
+/// Драйвер COM-порта для АЦП «СИМ А04».
+/// Реализует цикл поллинга: отправляет запрос → ждёт 4-байтовый ответ → парсит фрейм → повторяет.
+/// </summary>
+public class SimA04Reader : IDisposable
 {
+    /// <summary>Распарсенный фрейм АЦП — CH0, CH1, флаг валидности.</summary>
     public event EventHandler<AdcFrame>? FrameReceived;
+
+    /// <summary>Сырые байты ответа — для отладочного мониторинга в ServiceForm.</summary>
     public event EventHandler<byte[]>?  RawFrameReceived;
+
+    /// <summary>Изменение состояния соединения: true — подключён, false — отключён.</summary>
     public event EventHandler<bool>?    ConnectionChanged;
 
     private SerialPort?              _port;
@@ -18,10 +30,19 @@ public class AdcService : IDisposable
     private volatile bool            _polling;
     private byte                     _pollByte = 214;
 
+    /// <summary>Текущее состояние соединения с портом.</summary>
     public bool          IsConnected   { get; private set; }
+
+    /// <summary>Имя COM-порта, переданного в <see cref="Open"/>.</summary>
     public string        PortName      { get; private set; } = "COM1";
+
+    /// <summary>Активный канал: Main → CH0, Backup → CH1.</summary>
     public ActiveChannel Channel       { get; set; } = ActiveChannel.Main;
 
+    /// <summary>
+    /// Открывает COM-порт, запускает цикл поллинга и генерирует <see cref="ConnectionChanged"/>.
+    /// Параметры порта фиксированы протоколом АЦП: 4800 бод, чётность Even, 8 бит, 1 стоп-бит.
+    /// </summary>
     public void Open(string portName = "COM1")
     {
         PortName = portName;
@@ -40,6 +61,9 @@ public class AdcService : IDisposable
         ConnectionChanged?.Invoke(this, true);
     }
 
+    /// <summary>
+    /// Останавливает поллинг, закрывает и освобождает COM-порт.
+    /// </summary>
     public void Close()
     {
         _polling = false;
@@ -53,8 +77,16 @@ public class AdcService : IDisposable
         ConnectionChanged?.Invoke(this, false);
     }
 
+    /// <summary>
+    /// Задаёт байт запроса к АЦП. По умолчанию 214 — Static, CH0+CH1, Avg=256.
+    /// </summary>
     public void SetPollByte(byte b) => _pollByte = b;
 
+    /// <summary>
+    /// Накапливает байты от COM-порта в буфер и взводит таймер на 20 мс.
+    /// Таймер нужен, чтобы собрать полный 4-байтовый ответ если DataReceived
+    /// сработал несколько раз на один пакет.
+    /// </summary>
     private void OnDataReceived(object sender, SerialDataReceivedEventArgs e)
     {
         if (_port == null || !_port.IsOpen) return;
@@ -65,6 +97,10 @@ public class AdcService : IDisposable
         _frameTimer?.Change(20, Timeout.Infinite);
     }
 
+    /// <summary>
+    /// Срабатывает через 20 мс после последнего байта: разбирает буфер,
+    /// публикует события и отправляет следующий poll-запрос.
+    /// </summary>
     private void OnFrameTimer(object? state)
     {
         byte[] raw;
@@ -85,11 +121,13 @@ public class AdcService : IDisposable
             Send(_pollByte);
     }
 
+    /// <summary>Отправляет один байт в COM-порт. Ошибки записи не критичны — следующий цикл повторит.</summary>
     private void Send(byte b)
     {
         try { _port?.Write(new[] { b }, 0, 1); }
         catch { }
     }
 
+    /// <inheritdoc/>
     public void Dispose() => Close();
 }

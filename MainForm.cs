@@ -5,7 +5,7 @@ namespace Vesy13;
 
 public partial class MainForm : Form
 {
-    private AdcService         _adc   = null!;
+    private SimA04Reader         _adc   = null!;
     private CalibrationService _calib = null!;
     private LocalDbService    _db    = null!;
 
@@ -14,7 +14,7 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
-    public MainForm(AdcService adc, CalibrationService calib, LocalDbService db)
+    public MainForm(SimA04Reader adc, CalibrationService calib, LocalDbService db)
     {
         _adc   = adc;
         _calib = calib;
