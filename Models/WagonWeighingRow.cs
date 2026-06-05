@@ -11,4 +11,7 @@ public class WagonWeighingRow
     public decimal  Total       { get; set; }
     public string   Direction   { get; set; } = "";
     public string   Mode        { get; set; } = "";
+    public string   Potr        { get; set; } = "";
+    public string   Plat        { get; set; } = "";
+    public int      Cex         { get; set; }
 }
