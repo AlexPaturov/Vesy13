@@ -156,8 +156,8 @@ public partial class CorrectionsForm : Form
         foreach (var r in rows)
         {
             int idx = g.Rows.Add(
-                r.WagonTime.ToString("dd.MM.yyyy"),
-                r.WagonTime.ToString("HH:mm:ss"),
+                r.TrainTime.ToString("dd.MM.yyyy"),
+                r.TrainTime.ToString("HH:mm:ss"),
                 r.Number,
                 r.Bogie1.ToString("F2"),
                 r.Bogie2.ToString("F2"),
