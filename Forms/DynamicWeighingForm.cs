@@ -45,12 +45,14 @@ public partial class DynamicWeighingForm : Form
 
     private void SetupGridColumns()
     {
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Напр.", Width = 52,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "№",     Width = 38,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.1", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.2", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время", Width = 80,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Напр.",         Width = 52,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "№",             Width = 38,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.1",         Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.2",         Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон",         Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время вагона",  Width = 80,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Дата состава",  Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время состава", Width = 80,  SortMode = DataGridViewColumnSortMode.NotSortable });
     }
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
@@ -217,7 +219,10 @@ public partial class DynamicWeighingForm : Form
 
     private void AddToGrid(LocalWagon r)
     {
-        _grid.Rows.Insert(0, r.Direction, r.Number.ToString(), r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"), r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"));
+        _grid.Rows.Insert(0, r.Direction, r.Number.ToString(),
+            r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"),
+            r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"),
+            r.TrainTime.ToString("dd.MM.yyyy"), r.TrainTime.ToString("HH:mm:ss"));
         while (_grid.Rows.Count > 10)
             _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
     }
