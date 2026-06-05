@@ -1,9 +1,9 @@
 using Npgsql;
 using Vesy13.Models;
 
-namespace Vesy13.Services;
+namespace Vesy13.Services.Repositories;
 
-public class DatabaseService
+public class LocalDbService
 {
     private const string ConnStr =
         "Host=localhost;Port=5432;Database=scale_db;Username=scale_user;Password=fluffyBunny";

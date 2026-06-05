@@ -1,5 +1,7 @@
+using Vesy13.Application;
 using Vesy13.Models;
-using Vesy13.Services;
+using Vesy13.Services.Hardware;
+using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
@@ -7,7 +9,7 @@ public partial class DynamicWeighingForm : Form
 {
     private AdcService         _adc   = null!;
     private CalibrationService _calib = null!;
-    private DatabaseService    _db    = null!;
+    private LocalDbService    _db    = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -21,7 +23,7 @@ public partial class DynamicWeighingForm : Form
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(AdcService adc, CalibrationService calib, DatabaseService db)
+    public DynamicWeighingForm(AdcService adc, CalibrationService calib, LocalDbService db)
     {
         _adc   = adc;
         _calib = calib;
@@ -30,7 +32,7 @@ public partial class DynamicWeighingForm : Form
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
-    private double ToTonnes(int adcCode) => _calib.ConvertDynamic(adcCode, GetDirection());
+    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_calib.Profile, adcCode, GetDirection());
 
     private bool ValidateBeforeWeigh()
     {

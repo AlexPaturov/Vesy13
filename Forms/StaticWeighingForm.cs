@@ -1,5 +1,7 @@
+using Vesy13.Application;
 using Vesy13.Models;
-using Vesy13.Services;
+using Vesy13.Services.Hardware;
+using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
@@ -7,7 +9,7 @@ public partial class StaticWeighingForm : Form
 {
     private AdcService         _adc   = null!;
     private CalibrationService _calib = null!;
-    private DatabaseService    _db    = null!;
+    private LocalDbService    _db    = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -21,7 +23,7 @@ public partial class StaticWeighingForm : Form
         InitializeComponent();
     }
 
-    public StaticWeighingForm(AdcService adc, CalibrationService calib, DatabaseService db)
+    public StaticWeighingForm(AdcService adc, CalibrationService calib, LocalDbService db)
     {
         _adc   = adc;
         _calib = calib;
@@ -30,7 +32,7 @@ public partial class StaticWeighingForm : Form
     }
 
     private double ToTonnes(int adcCode) =>
-        _calib.Convert(adcCode, _adc.Channel);
+        CalibrationCalculator.Convert(_calib.Profile, adcCode, _adc.Channel);
 
     private void SetupGridColumns()
     {

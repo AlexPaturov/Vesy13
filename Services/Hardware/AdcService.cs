@@ -1,7 +1,7 @@
 using System.IO.Ports;
 using Vesy13.Models;
 
-namespace Vesy13.Services;
+namespace Vesy13.Services.Hardware;
 
 public enum ActiveChannel { Main, Backup }
 

@@ -1,4 +1,5 @@
-using Vesy13.Services;
+using Vesy13.Services.Hardware;
+using Vesy13.Services.Repositories;
 
 namespace Vesy13;
 
@@ -6,14 +7,14 @@ public partial class MainForm : Form
 {
     private AdcService         _adc   = null!;
     private CalibrationService _calib = null!;
-    private DatabaseService    _db    = null!;
+    private LocalDbService    _db    = null!;
 
     public MainForm()
     {
         InitializeComponent();
     }
 
-    public MainForm(AdcService adc, CalibrationService calib, DatabaseService db)
+    public MainForm(AdcService adc, CalibrationService calib, LocalDbService db)
     {
         _adc   = adc;
         _calib = calib;

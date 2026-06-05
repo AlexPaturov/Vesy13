@@ -1,7 +1,9 @@
 using System.Globalization;
 using System.IO.Ports;
+using Vesy13.Application;
 using Vesy13.Models;
-using Vesy13.Services;
+using Vesy13.Services.Hardware;
+using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
@@ -85,7 +87,7 @@ public partial class ServiceForm : Form
     {
         var pts = ReadGridPoints();
         if (pts.Count < 2) { MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-        var (k, b) = CalibrationService.CalculateLsq(pts);
+        var (k, b) = CalibrationCalculator.CalculateLsq(pts);
         _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
         _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
     }
