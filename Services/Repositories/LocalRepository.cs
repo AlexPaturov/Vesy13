@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Dapper;
 using Npgsql;
 using Vesy13.Models;
 
@@ -28,9 +29,8 @@ public class LocalRepository
         {
             await using var conn = new NpgsqlConnection(ConnStr);
             await conn.OpenAsync();
-            const string sql = "SELECT profile FROM calibration_config WHERE id = 1";
-            await using var cmd = new NpgsqlCommand(sql, conn);
-            var json = (string?)await cmd.ExecuteScalarAsync();
+            var json = await conn.QueryFirstOrDefaultAsync<string>(
+                "SELECT profile FROM calibration_config WHERE id = 1");
             if (!string.IsNullOrWhiteSpace(json) && json != "{}")
                 Profile = JsonSerializer.Deserialize<CalibrationProfile>(json) ?? new CalibrationProfile();
         }
@@ -49,13 +49,11 @@ public class LocalRepository
         var json = JsonSerializer.Serialize(Profile, JsonOpts);
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-        const string sql = @"
+        await conn.ExecuteAsync(@"
 INSERT INTO calibration_config (id, profile, updated_at)
 VALUES (1, @profile::jsonb, NOW())
-ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()";
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("profile", json);
-        await cmd.ExecuteNonQueryAsync();
+ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()",
+            new { profile = json });
     }
 
     /// <summary>
@@ -67,21 +65,20 @@ ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()";
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-
-        const string sql = @"
+        await conn.ExecuteAsync(@"
 INSERT INTO wagon_weighing (train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode)
-VALUES (@trainTime, @wagonTime, @wagonNum, @bogie1, @bogie2, @total, @direction, @mode)";
-
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("trainTime", record.TrainTime);
-        cmd.Parameters.AddWithValue("wagonTime",  record.WagonTime);
-        cmd.Parameters.AddWithValue("wagonNum",   record.Number);
-        cmd.Parameters.AddWithValue("bogie1",     (decimal)record.Bogie1);
-        cmd.Parameters.AddWithValue("bogie2",     (decimal)record.Bogie2);
-        cmd.Parameters.AddWithValue("total",      (decimal)record.Total);
-        cmd.Parameters.AddWithValue("direction",  record.Direction);
-        cmd.Parameters.AddWithValue("mode",       mode);
-        await cmd.ExecuteNonQueryAsync();
+VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @mode)",
+            new
+            {
+                record.TrainTime,
+                record.WagonTime,
+                record.Number,
+                Bogie1    = (decimal)record.Bogie1,
+                Bogie2    = (decimal)record.Bogie2,
+                Total     = (decimal)record.Total,
+                record.Direction,
+                mode,
+            });
     }
 
     /// <summary>
@@ -90,33 +87,21 @@ VALUES (@trainTime, @wagonTime, @wagonNum, @bogie1, @bogie2, @total, @direction,
     /// </summary>
     public async Task<List<LocalWagon>> GetPendingAsync()
     {
-        var rows = new List<LocalWagon>();
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-
-        const string sql = @"
-SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, direction, mode
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+SELECT id,
+       train_time              AS TrainTime,
+       wagon_time              AS WagonTime,
+       wagon_num               AS Number,
+       CAST(bogie1 AS float8)  AS Bogie1,
+       CAST(bogie2 AS float8)  AS Bogie2,
+       COALESCE(direction, '') AS Direction,
+       mode                    AS Mode
 FROM wagon_weighing
 WHERE transferred = false
-ORDER BY wagon_time DESC";
-
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        await using var rdr = await cmd.ExecuteReaderAsync();
-        while (await rdr.ReadAsync())
-        {
-            rows.Add(new LocalWagon(
-                Number:    rdr.GetInt32(3),
-                TrainTime: rdr.GetDateTime(1),
-                WagonTime: rdr.GetDateTime(2),
-                Bogie1:    (double)rdr.GetDecimal(4),
-                Bogie2:    (double)rdr.GetDecimal(5),
-                Direction: rdr.IsDBNull(6) ? "" : rdr.GetString(6))
-            {
-                Id   = rdr.GetInt32(0),
-                Mode = rdr.GetString(7),
-            });
-        }
-        return rows;
+ORDER BY wagon_time DESC");
+        return rows.ToList();
     }
 
     /// <summary>
@@ -127,10 +112,9 @@ ORDER BY wagon_time DESC";
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-        const string sql = "UPDATE wagon_weighing SET transferred = true WHERE id = @id";
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("id", id);
-        await cmd.ExecuteNonQueryAsync();
+        await conn.ExecuteAsync(
+            "UPDATE wagon_weighing SET transferred = true WHERE id = @id",
+            new { id });
     }
 
     /// <summary>
@@ -139,33 +123,21 @@ ORDER BY wagon_time DESC";
     /// </summary>
     public async Task<List<LocalWagon>> GetTransferredAsync()
     {
-        var rows = new List<LocalWagon>();
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-
-        const string sql = @"
-SELECT id, train_time, wagon_time, wagon_num, bogie1, bogie2, direction, mode
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+SELECT id,
+       train_time              AS TrainTime,
+       wagon_time              AS WagonTime,
+       wagon_num               AS Number,
+       CAST(bogie1 AS float8)  AS Bogie1,
+       CAST(bogie2 AS float8)  AS Bogie2,
+       COALESCE(direction, '') AS Direction,
+       mode                    AS Mode
 FROM wagon_weighing
 WHERE transferred = true
 ORDER BY wagon_time DESC
-LIMIT 200";
-
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        await using var rdr = await cmd.ExecuteReaderAsync();
-        while (await rdr.ReadAsync())
-        {
-            rows.Add(new LocalWagon(
-                Number:    rdr.GetInt32(3),
-                TrainTime: rdr.GetDateTime(1),
-                WagonTime: rdr.GetDateTime(2),
-                Bogie1:    (double)rdr.GetDecimal(4),
-                Bogie2:    (double)rdr.GetDecimal(5),
-                Direction: rdr.IsDBNull(6) ? "" : rdr.GetString(6))
-            {
-                Id   = rdr.GetInt32(0),
-                Mode = rdr.GetString(7),
-            });
-        }
-        return rows;
+LIMIT 200");
+        return rows.ToList();
     }
 }

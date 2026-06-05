@@ -1,5 +1,5 @@
+using Dapper;
 using FirebirdSql.Data.FirebirdClient;
-using System.Data;
 using Vesy13.Models;
 
 namespace Vesty13.Services.Repositories;
@@ -45,28 +45,26 @@ public class FactoryRepository
 
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
-
-        string sql = $@"
+        await conn.ExecuteAsync($@"
 INSERT INTO {table}
     (DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, VESY, NPP, REJVZVESH, POTR, PLAT)
 VALUES
-    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat)";
-
-        await using var cmd = new FbCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@dt",        row.WagonTime.Date);
-        cmd.Parameters.AddWithValue("@vr",        row.WagonTime.TimeOfDay);
-        cmd.Parameters.AddWithValue("@nvag",      nvag);
-        cmd.Parameters.AddWithValue("@ndok",      ndok.HasValue ? (object)ndok.Value : DBNull.Value);
-        cmd.Parameters.AddWithValue("@gruz",      gruzFinal);
-        cmd.Parameters.AddWithValue("@brutto",    brutto);
-        cmd.Parameters.AddWithValue("@tarbrs",    tarBrs.HasValue ? (object)tarBrs.Value : DBNull.Value);
-        cmd.Parameters.AddWithValue("@tardok",    tarDok.HasValue ? (object)tarDok.Value : DBNull.Value);
-        cmd.Parameters.AddWithValue("@netto",     netto.HasValue  ? (object)netto.Value  : DBNull.Value);
-        cmd.Parameters.AddWithValue("@npp",       (short)row.Number);
-        cmd.Parameters.AddWithValue("@rejvzvesh", row.Mode);
-        cmd.Parameters.AddWithValue("@potr",      (object?)potr ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("@plat",      (object?)plat ?? DBNull.Value);
-        await cmd.ExecuteNonQueryAsync();
+    (@dt, @vr, @nvag, @ndok, @gruz, @brutto, @tarbrs, @tardok, @netto, 13, @npp, @rejvzvesh, @potr, @plat)",
+            new {
+                dt        = row.WagonTime.Date,
+                vr        = row.WagonTime.TimeOfDay,
+                nvag,
+                ndok,
+                gruz      = gruzFinal,
+                brutto,
+                tarbrs    = tarBrs,
+                tardok    = tarDok,
+                netto,
+                npp       = (short)row.Number,
+                rejvzvesh = row.Mode,
+                potr,
+                plat,
+            });
     }
 
     /// <summary>
@@ -96,25 +94,13 @@ VALUES
     {
         await using var conn = new FbConnection(ConnStr);
         await conn.OpenAsync();
-
-        string sql = $@"
+        await conn.ExecuteAsync($@"
 UPDATE {table} SET
     NVAG=@nvag, NDOK=@ndok, GRUZ=@gruz,
     TAR_BRS=@tarbrs, TAR_DOK=@tardok, NETTO=@netto,
     POTR=@potr, PLAT=@plat
-WHERE ID=@id";
-
-        await using var cmd = new FbCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@id",     id);
-        cmd.Parameters.AddWithValue("@nvag",   nvag);
-        cmd.Parameters.AddWithValue("@ndok",   ndok.HasValue ? (object)ndok.Value : DBNull.Value);
-        cmd.Parameters.AddWithValue("@gruz",   (object?)gruz   ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("@tarbrs", tarBrs.HasValue ? (object)tarBrs.Value : DBNull.Value);
-        cmd.Parameters.AddWithValue("@tardok", tarDok.HasValue ? (object)tarDok.Value : DBNull.Value);
-        cmd.Parameters.AddWithValue("@netto",  netto.HasValue  ? (object)netto.Value  : DBNull.Value);
-        cmd.Parameters.AddWithValue("@potr",   (object?)potr   ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("@plat",   (object?)plat   ?? DBNull.Value);
-        await cmd.ExecuteNonQueryAsync();
+WHERE ID=@id",
+            new { id, nvag, ndok, gruz, tarbrs = tarBrs, tardok = tarDok, netto, potr, plat });
     }
 
     /// <summary>

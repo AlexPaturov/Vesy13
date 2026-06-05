@@ -138,8 +138,14 @@ public partial class StaticWeighingForm : Form
         {
             int      bogie2    = ActiveCode(_lastFrame);
             DateTime wagonTime = DateTime.Now;
-            var      record    = new WagonRecord(_wagonNumber, _trainStartTime!.Value,
-                                     wagonTime, ToTonnes(_bogie1Code), ToTonnes(bogie2), "");
+            var record = new LocalWagon
+            {
+                Number    = _wagonNumber,
+                TrainTime = _trainStartTime!.Value,
+                WagonTime = wagonTime,
+                Bogie1    = ToTonnes(_bogie1Code),
+                Bogie2    = ToTonnes(bogie2),
+            };
             AddToGrid(record);
             SaveAsync(record);
             _state              = WeighState.Idle;
@@ -180,7 +186,7 @@ public partial class StaticWeighingForm : Form
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
     }
 
-    private void AddToGrid(WagonRecord r)
+    private void AddToGrid(LocalWagon r)
     {
         _grid.Rows.Insert(0, r.Number.ToString(),
             r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"),
@@ -189,7 +195,7 @@ public partial class StaticWeighingForm : Form
             _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
     }
 
-    private async void SaveAsync(WagonRecord record)
+    private async void SaveAsync(LocalWagon record)
     {
         try   { await _db.SaveWagonAsync(record, "СТАТИКА"); }
         catch (Exception ex)
