@@ -43,6 +43,24 @@ public partial class DynamicWeighingForm : Form
         return false;
     }
 
+    private void ApplyFonts()
+    {
+        _gbDir.Font       = UiFonts.Body;
+        _rbPlus.Font      = UiFonts.Medium;
+        _rbMinus.Font     = UiFonts.Medium;
+        _lblChannel.Font  = UiFonts.Medium;
+        _lblValue.Font    = UiFonts.Display;
+        _lblUnit.Font     = UiFonts.UnitLabel;
+        _lblStatus.Font   = UiFonts.Medium;
+        _btnWeigh.Font    = UiFonts.WeighButton;
+        _btnZero.Font     = UiFonts.Medium;
+        _btnFinish.Font   = UiFonts.Medium;
+        _grid.Font        = UiFonts.GridBody;
+        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
+        _btnBack.Font     = UiFonts.Small;
+        _lblConn.Font     = UiFonts.Body;
+    }
+
     private void SetupGridColumns()
     {
         _grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -68,6 +86,7 @@ public partial class DynamicWeighingForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        ApplyFonts();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
         SetupGridColumns();
