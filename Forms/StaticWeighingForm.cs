@@ -38,15 +38,23 @@ public partial class StaticWeighingForm : Form
 
     private void SetupGridColumns()
     {
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "№",            Width = 38,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.1",        Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.2",        Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон",        Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время вагона", Width = 100, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Дата состава", Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время состава",Width = 100, SortMode = DataGridViewColumnSortMode.NotSortable });
-    }
+        _grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+        DataGridViewTextBoxColumn Col(string header, float fillWeight) => new()
+        {
+            HeaderText = header,
+            FillWeight = fillWeight,
+            SortMode   = DataGridViewColumnSortMode.NotSortable,
+        };
+
+        _grid.Columns.Add(Col("№", 45));
+        _grid.Columns.Add(Col("Тел.1", 75));
+        _grid.Columns.Add(Col("Тел.2", 75));
+        _grid.Columns.Add(Col("Вагон", 75));
+        _grid.Columns.Add(Col("Время вагона", 140));
+        _grid.Columns.Add(Col("Дата состава", 130));
+        _grid.Columns.Add(Col("Время состава", 140));
+    }
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
     protected override void OnLoad(EventArgs e)

@@ -45,16 +45,24 @@ public partial class DynamicWeighingForm : Form
 
     private void SetupGridColumns()
     {
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Напр.",         Width = 52,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "№",             Width = 38,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.1",         Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тел.2",         Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон",         Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время вагона",  Width = 80,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Дата состава",  Width = 90,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время состава", Width = 80,  SortMode = DataGridViewColumnSortMode.NotSortable });
-    }
+        _grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+        DataGridViewTextBoxColumn Col(string header, float fillWeight) => new()
+        {
+            HeaderText = header,
+            FillWeight = fillWeight,
+            SortMode   = DataGridViewColumnSortMode.NotSortable,
+        };
+
+        _grid.Columns.Add(Col("Напр.", 50));
+        _grid.Columns.Add(Col("№", 45));
+        _grid.Columns.Add(Col("Тел.1", 75));
+        _grid.Columns.Add(Col("Тел.2", 75));
+        _grid.Columns.Add(Col("Вагон", 75));
+        _grid.Columns.Add(Col("Время вагона", 120));
+        _grid.Columns.Add(Col("Дата состава", 120));
+        _grid.Columns.Add(Col("Время состава", 120));
+    }
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
     protected override void OnLoad(EventArgs e)
