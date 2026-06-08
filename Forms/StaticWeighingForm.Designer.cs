@@ -4,139 +4,197 @@ partial class StaticWeighingForm
 {
     private void InitializeComponent()
     {
-        _lblChannel   = new Label();
-        _pnlDisplay   = new Panel();
-        _lblValue     = new Label();
-        _lblUnit      = new Label();
-        _lblStatus    = new Label();
-        _btnWeigh     = new Button();
-        _btnZero      = new Button();
-        _btnFinish    = new Button();
-        _grid         = new DataGridView();
+        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+        _lblChannel = new Label();
+        _pnlDisplay = new Panel();
+        _lblValue = new Label();
+        _lblUnit = new Label();
+        _lblStatus = new Label();
+        _btnWeigh = new Button();
+        _btnZero = new Button();
+        _btnFinish = new Button();
+        _grid = new DataGridView();
         _pnlStatusBar = new Panel();
-        _btnBack      = new Button();
-        _dotConn      = new Panel();
-        _lblConn      = new Label();
-
+        _btnBack = new Button();
+        _dotConn = new Panel();
+        _lblConn = new Label();
         _pnlDisplay.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatusBar.SuspendLayout();
         SuspendLayout();
-
-        // ── _lblChannel (top area 0–34) ───────────────────────────────────────
-        _lblChannel.Location  = new Point(8, 10);
-        _lblChannel.AutoSize  = true;
-        _lblChannel.Font      = new Font("Segoe UI", 10F);
+        // 
+        // _lblChannel
+        // 
+        _lblChannel.AutoSize = true;
+        _lblChannel.Font = new Font("Segoe UI", 10F);
         _lblChannel.ForeColor = Color.FromArgb(80, 80, 80);
-
-        // ── Display panel (topY = 34) ─────────────────────────────────────────
-        _lblValue.Text      = "—";
-        _lblValue.Font      = new Font("Courier New", 60F, FontStyle.Bold);
-        _lblValue.ForeColor = Color.DimGray;
-        _lblValue.TextAlign = ContentAlignment.MiddleRight;
-        _lblValue.Bounds    = new Rectangle(8, 4, 450, 106);
-        _lblValue.AutoSize  = false;
-
-        _lblUnit.Text      = "т";
-        _lblUnit.Font      = new Font("Segoe UI", 20F);
-        _lblUnit.ForeColor = Color.Gray;
-        _lblUnit.TextAlign = ContentAlignment.BottomLeft;
-        _lblUnit.Bounds    = new Rectangle(462, 60, 60, 62);
-        _lblUnit.AutoSize  = false;
-
-        _lblStatus.Text      = "Готов к взвешиванию  —  Тележка 1";
-        _lblStatus.Font      = new Font("Segoe UI", 10F);
-        _lblStatus.ForeColor = Color.Silver;
-        _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
-        _lblStatus.Bounds    = new Rectangle(8, 118, 528, 34);
-        _lblStatus.AutoSize  = false;
-
-        _pnlDisplay.Location  = new Point(8, 34);
-        _pnlDisplay.Size      = new Size(544, 158);
+        _lblChannel.Location = new Point(8, 10);
+        _lblChannel.Name = "_lblChannel";
+        _lblChannel.Size = new Size(0, 19);
+        _lblChannel.TabIndex = 0;
+        // 
+        // _pnlDisplay
+        // 
+        _pnlDisplay.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         _pnlDisplay.BackColor = Color.Black;
         _pnlDisplay.Controls.Add(_lblValue);
         _pnlDisplay.Controls.Add(_lblUnit);
         _pnlDisplay.Controls.Add(_lblStatus);
-
-        // ── _btnWeigh (y = 34+158+6 = 198) ───────────────────────────────────
-        _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
-        _btnWeigh.Location  = new Point(8, 198);
-        _btnWeigh.Size      = new Size(544, 54);
-        _btnWeigh.Font      = new Font("Segoe UI", 14F, FontStyle.Bold);
-        _btnWeigh.FlatStyle = FlatStyle.Flat;
+        _pnlDisplay.Location = new Point(8, 34);
+        _pnlDisplay.Name = "_pnlDisplay";
+        _pnlDisplay.Size = new Size(617, 158);
+        _pnlDisplay.TabIndex = 1;
+        // 
+        // _lblValue
+        // 
+        _lblValue.Font = new Font("Courier New", 60F, FontStyle.Bold);
+        _lblValue.ForeColor = Color.DimGray;
+        _lblValue.Location = new Point(8, 4);
+        _lblValue.Name = "_lblValue";
+        _lblValue.Size = new Size(450, 106);
+        _lblValue.TabIndex = 0;
+        _lblValue.Text = "—";
+        _lblValue.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblUnit
+        // 
+        _lblUnit.Font = new Font("Segoe UI", 20F);
+        _lblUnit.ForeColor = Color.Gray;
+        _lblUnit.Location = new Point(462, 60);
+        _lblUnit.Name = "_lblUnit";
+        _lblUnit.Size = new Size(60, 62);
+        _lblUnit.TabIndex = 1;
+        _lblUnit.Text = "т";
+        _lblUnit.TextAlign = ContentAlignment.BottomLeft;
+        // 
+        // _lblStatus
+        // 
+        _lblStatus.Font = new Font("Segoe UI", 10F);
+        _lblStatus.ForeColor = Color.Silver;
+        _lblStatus.Location = new Point(8, 118);
+        _lblStatus.Name = "_lblStatus";
+        _lblStatus.Size = new Size(528, 34);
+        _lblStatus.TabIndex = 2;
+        _lblStatus.Text = "Готов к взвешиванию  —  Тележка 1";
+        _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // _btnWeigh
+        // 
+        _btnWeigh.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
+        _btnWeigh.FlatStyle = FlatStyle.Flat;
+        _btnWeigh.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
         _btnWeigh.ForeColor = Color.White;
-        _btnWeigh.Click    += BtnWeigh_Click;
-
-        // ── y = 198+54+4 = 256 ────────────────────────────────────────────────
-        _btnZero.Text      = "Ноль";
-        _btnZero.Location  = new Point(8, 256);
-        _btnZero.Size      = new Size(100, 32);
-        _btnZero.Font      = new Font("Segoe UI", 10F);
+        _btnWeigh.Location = new Point(8, 198);
+        _btnWeigh.Name = "_btnWeigh";
+        _btnWeigh.Size = new Size(617, 54);
+        _btnWeigh.TabIndex = 2;
+        _btnWeigh.Text = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
+        _btnWeigh.UseVisualStyleBackColor = false;
+        _btnWeigh.Click += BtnWeigh_Click;
+        // 
+        // _btnZero
+        // 
         _btnZero.FlatStyle = FlatStyle.Flat;
-        _btnZero.Click    += BtnZero_Click;
-
-        _btnFinish.Text      = "Завершить состав";
-        _btnFinish.Location  = new Point(116, 256);
-        _btnFinish.Size      = new Size(244, 32);
-        _btnFinish.Font      = new Font("Segoe UI", 10F);
-        _btnFinish.FlatStyle = FlatStyle.Flat;
+        _btnZero.Font = new Font("Segoe UI", 10F);
+        _btnZero.Location = new Point(8, 256);
+        _btnZero.Name = "_btnZero";
+        _btnZero.Size = new Size(100, 32);
+        _btnZero.TabIndex = 3;
+        _btnZero.Text = "Ноль";
+        _btnZero.Click += BtnZero_Click;
+        // 
+        // _btnFinish
+        // 
         _btnFinish.BackColor = Color.FromArgb(120, 40, 0);
+        _btnFinish.FlatStyle = FlatStyle.Flat;
+        _btnFinish.Font = new Font("Segoe UI", 10F);
         _btnFinish.ForeColor = Color.White;
-        _btnFinish.Click    += BtnFinish_Click;
-
-        // ── _grid (y = 256+32+6 = 294) ────────────────────────────────────────
-        _grid.Location                              = new Point(8, 294);
-        _grid.Size                                  = new Size(544, 248);
-        _grid.ReadOnly                              = true;
-        _grid.AllowUserToAddRows                    = false;
-        _grid.AllowUserToDeleteRows                 = false;
-        _grid.AllowUserToResizeRows                 = false;
-        _grid.RowHeadersVisible                     = false;
-        _grid.SelectionMode                         = DataGridViewSelectionMode.FullRowSelect;
-        _grid.BackgroundColor                       = Color.White;
-        _grid.BorderStyle                           = BorderStyle.None;
-        _grid.Font                                  = new Font("Segoe UI", 9F);
-        _grid.ColumnHeadersHeightSizeMode           = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _grid.ColumnHeadersHeight                   = 28;
-        _grid.RowTemplate.Height                    = 22;
-        _grid.RowsDefaultCellStyle.BackColor            = Color.White;
-        _grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 245, 255);
-
-        // ── Status bar ────────────────────────────────────────────────────────
-        _btnBack.Text      = "← Назад";
-        _btnBack.Location  = new Point(8, 6);
-        _btnBack.Size      = new Size(80, 22);
-        _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font      = new Font("Segoe UI", 8F);
-        _btnBack.BackColor = Color.FromArgb(40, 70, 130);
-        _btnBack.ForeColor = Color.White;
-        _btnBack.FlatAppearance.BorderSize = 0;
-        _btnBack.Click    += BtnBack_Click;
-
-        _dotConn.Size      = new Size(10, 10);
-        _dotConn.Location  = new Point(100, 12);
-        _dotConn.BackColor = Color.Gray;
-
-        _lblConn.Text      = "АЦП: —";
-        _lblConn.Font      = new Font("Segoe UI", 9F);
-        _lblConn.ForeColor = Color.Silver;
-        _lblConn.Location  = new Point(116, 8);
-        _lblConn.AutoSize  = true;
-
-        _pnlStatusBar.Dock      = DockStyle.Bottom;
-        _pnlStatusBar.Height    = 34;
+        _btnFinish.Location = new Point(116, 256);
+        _btnFinish.Name = "_btnFinish";
+        _btnFinish.Size = new Size(244, 32);
+        _btnFinish.TabIndex = 4;
+        _btnFinish.Text = "Завершить состав";
+        _btnFinish.UseVisualStyleBackColor = false;
+        _btnFinish.Click += BtnFinish_Click;
+        // 
+        // _grid
+        // 
+        _grid.AllowUserToAddRows = false;
+        _grid.AllowUserToDeleteRows = false;
+        _grid.AllowUserToResizeRows = false;
+        dataGridViewCellStyle1.BackColor = Color.FromArgb(240, 245, 255);
+        _grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+        _grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        _grid.BackgroundColor = Color.White;
+        _grid.BorderStyle = BorderStyle.None;
+        _grid.ColumnHeadersHeight = 28;
+        _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _grid.Font = new Font("Segoe UI", 9F);
+        _grid.Location = new Point(8, 294);
+        _grid.Name = "_grid";
+        _grid.ReadOnly = true;
+        _grid.RowHeadersVisible = false;
+        dataGridViewCellStyle2.BackColor = Color.White;
+        _grid.RowsDefaultCellStyle = dataGridViewCellStyle2;
+        _grid.RowTemplate.Height = 22;
+        _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        _grid.Size = new Size(617, 295);
+        _grid.TabIndex = 5;
+        // 
+        // _pnlStatusBar
+        // 
         _pnlStatusBar.BackColor = Color.FromArgb(18, 32, 65);
         _pnlStatusBar.Controls.Add(_btnBack);
         _pnlStatusBar.Controls.Add(_dotConn);
         _pnlStatusBar.Controls.Add(_lblConn);
-
-        // ── Form ──────────────────────────────────────────────────────────────
-        Text          = "Взвешивание — Статика";
-        ClientSize    = new Size(560, 584);
-        StartPosition = FormStartPosition.CenterScreen;
-        KeyPreview    = true;
-        BackColor     = Color.FromArgb(240, 242, 245);
+        _pnlStatusBar.Dock = DockStyle.Bottom;
+        _pnlStatusBar.Location = new Point(0, 595);
+        _pnlStatusBar.Name = "_pnlStatusBar";
+        _pnlStatusBar.Size = new Size(633, 34);
+        _pnlStatusBar.TabIndex = 6;
+        // 
+        // _btnBack
+        // 
+        _btnBack.BackColor = Color.FromArgb(40, 70, 130);
+        _btnBack.FlatAppearance.BorderSize = 0;
+        _btnBack.FlatStyle = FlatStyle.Flat;
+        _btnBack.Font = new Font("Segoe UI", 8F);
+        _btnBack.ForeColor = Color.White;
+        _btnBack.Location = new Point(8, 6);
+        _btnBack.Name = "_btnBack";
+        _btnBack.Size = new Size(80, 22);
+        _btnBack.TabIndex = 0;
+        _btnBack.Text = "← Назад";
+        _btnBack.UseVisualStyleBackColor = false;
+        _btnBack.Click += BtnBack_Click;
+        // 
+        // _dotConn
+        // 
+        _dotConn.BackColor = Color.Gray;
+        _dotConn.Location = new Point(100, 12);
+        _dotConn.Name = "_dotConn";
+        _dotConn.Size = new Size(10, 10);
+        _dotConn.TabIndex = 1;
+        // 
+        // _lblConn
+        // 
+        _lblConn.AutoSize = true;
+        _lblConn.Font = new Font("Segoe UI", 9F);
+        _lblConn.ForeColor = Color.Silver;
+        _lblConn.Location = new Point(116, 8);
+        _lblConn.Name = "_lblConn";
+        _lblConn.Size = new Size(51, 15);
+        _lblConn.TabIndex = 2;
+        _lblConn.Text = "АЦП: —";
+        // 
+        // StaticWeighingForm
+        // 
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
+        BackColor = Color.FromArgb(240, 242, 245);
+        ClientSize = new Size(633, 629);
         Controls.Add(_lblChannel);
         Controls.Add(_pnlDisplay);
         Controls.Add(_btnWeigh);
@@ -144,14 +202,17 @@ partial class StaticWeighingForm
         Controls.Add(_btnFinish);
         Controls.Add(_grid);
         Controls.Add(_pnlStatusBar);
-
+        KeyPreview = true;
+        MaximumSize = new Size(649, 10000);
+        Name = "StaticWeighingForm";
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "Взвешивание — Статика";
         _pnlDisplay.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         _pnlStatusBar.ResumeLayout(false);
         _pnlStatusBar.PerformLayout();
-        AutoScaleDimensions = new SizeF(7F, 15F);
-        AutoScaleMode = AutoScaleMode.Font;
         ResumeLayout(false);
+        PerformLayout();
     }
 
     private Label         _lblChannel;
