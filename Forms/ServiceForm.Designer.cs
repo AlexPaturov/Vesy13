@@ -63,6 +63,7 @@ partial class ServiceForm
         _lblLiveAdcD      = new Label();
         _lblSecPlus       = new Label();
         _lblKPlusEquals   = new Label();
+        _txtKPlus         = new TextBox();
         _lblAutoCalcPlus  = new Label();
         _lblCodePlusCap   = new Label();
         _txtCodePlus      = new TextBox();
@@ -72,6 +73,7 @@ partial class ServiceForm
         _btnCalcPlus      = new Button();
         _lblSecMinus      = new Label();
         _lblKMinusEquals  = new Label();
+        _txtKMinus        = new TextBox();
         _lblAutoCalcMinus = new Label();
         _lblCodeMinusCap  = new Label();
         _txtCodeMinus     = new TextBox();
@@ -79,6 +81,7 @@ partial class ServiceForm
         _lblMassMinusCap  = new Label();
         _txtMassMinus     = new TextBox();
         _btnCalcMinus     = new Button();
+        _lblFormulaD      = new Label();
         _btnCalibDynSave  = new Button();
 
         // Settings tab
@@ -93,6 +96,7 @@ partial class ServiceForm
         _lblDynWinCap        = new Label();
         _txtDynWindow        = new TextBox();
         _lblBogieTimeoutCap  = new Label();
+        _txtBogieTimeout     = new TextBox();
         _lblPasswordCap      = new Label();
         _txtNewPassword      = new TextBox();
         _btnSaveSettings     = new Button();
@@ -401,12 +405,6 @@ partial class ServiceForm
         _tabCalibS.Controls.Add(_dgvCalib);
         _tabCalibS.Controls.Add(_btnAddRow);
         _tabCalibS.Controls.Add(_btnDelRow);
-        _tabCalibS.Controls.Add(_lblKEquals);
-        _tabCalibS.Controls.Add(_txtK);
-        _tabCalibS.Controls.Add(_lblBEquals);
-        _tabCalibS.Controls.Add(_txtB);
-        _tabCalibS.Controls.Add(_lblFormula);
-        _tabCalibS.Controls.Add(_btnLsq);
         _tabCalibS.Controls.Add(_btnCalibSave);
 
         // ── Tab: Калибровка Динамика ──────────────────────────────────────────
@@ -434,6 +432,11 @@ partial class ServiceForm
         _lblKPlusEquals.Font      = UiFonts.Medium;
         _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
 
+        _txtKPlus.Location  = new Point(72, 68);
+        _txtKPlus.Size      = new Size(160, 26);
+        _txtKPlus.Font      = UiFonts.MonoSmall;
+        _txtKPlus.BackColor = UiColors.InputBack;
+        _txtKPlus.ForeColor = UiColors.InputFore;
 
         _lblAutoCalcPlus.Text      = "Авторасчёт:";
         _lblAutoCalcPlus.Location  = new Point(20, 104);
@@ -499,6 +502,11 @@ partial class ServiceForm
         _lblKMinusEquals.Font      = UiFonts.Medium;
         _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
 
+        _txtKMinus.Location  = new Point(72, 248);
+        _txtKMinus.Size      = new Size(160, 26);
+        _txtKMinus.Font      = UiFonts.MonoSmall;
+        _txtKMinus.BackColor = UiColors.InputBack;
+        _txtKMinus.ForeColor = UiColors.InputFore;
 
         _lblAutoCalcMinus.Text      = "Авторасчёт:";
         _lblAutoCalcMinus.Location  = new Point(20, 284);
@@ -552,6 +560,11 @@ partial class ServiceForm
         _btnCalcMinus.FlatAppearance.BorderSize = 0;
         _btnCalcMinus.Click    += BtnCalcMinus_Click;
 
+        _lblFormulaD.Text      = "Масса = K × Код АЦП";
+        _lblFormulaD.Location  = new Point(20, 400);
+        _lblFormulaD.AutoSize  = true;
+        _lblFormulaD.Font      = UiFonts.Body;
+        _lblFormulaD.ForeColor = UiColors.TextMuted;
 
         _btnCalibDynSave.Text      = "Применить и сохранить";
         _btnCalibDynSave.Location  = new Point(20, 430);
@@ -570,6 +583,7 @@ partial class ServiceForm
         _tabCalibD.Controls.Add(_lblLiveAdcD);
         _tabCalibD.Controls.Add(_lblSecPlus);
         _tabCalibD.Controls.Add(_lblKPlusEquals);
+        _tabCalibD.Controls.Add(_txtKPlus);
         _tabCalibD.Controls.Add(_lblAutoCalcPlus);
         _tabCalibD.Controls.Add(_lblCodePlusCap);
         _tabCalibD.Controls.Add(_txtCodePlus);
@@ -579,6 +593,7 @@ partial class ServiceForm
         _tabCalibD.Controls.Add(_btnCalcPlus);
         _tabCalibD.Controls.Add(_lblSecMinus);
         _tabCalibD.Controls.Add(_lblKMinusEquals);
+        _tabCalibD.Controls.Add(_txtKMinus);
         _tabCalibD.Controls.Add(_lblAutoCalcMinus);
         _tabCalibD.Controls.Add(_lblCodeMinusCap);
         _tabCalibD.Controls.Add(_txtCodeMinus);
@@ -586,6 +601,7 @@ partial class ServiceForm
         _tabCalibD.Controls.Add(_lblMassMinusCap);
         _tabCalibD.Controls.Add(_txtMassMinus);
         _tabCalibD.Controls.Add(_btnCalcMinus);
+        _tabCalibD.Controls.Add(_lblFormulaD);
         _tabCalibD.Controls.Add(_btnCalibDynSave);
 
         // ── Tab: Настройки ────────────────────────────────────────────────────
@@ -657,6 +673,11 @@ partial class ServiceForm
         _lblBogieTimeoutCap.Font      = UiFonts.Medium;
         _lblBogieTimeoutCap.ForeColor = UiColors.TextPrimary;
 
+        _txtBogieTimeout.Text      = "3000";
+        _txtBogieTimeout.Location  = new Point(220, 196);
+        _txtBogieTimeout.Size      = new Size(200, 24);
+        _txtBogieTimeout.BackColor = UiColors.InputBack;
+        _txtBogieTimeout.ForeColor = UiColors.InputFore;
 
         _lblPasswordCap.Text      = "Новый пароль:";
         _lblPasswordCap.Location  = new Point(20, 236);
@@ -693,6 +714,7 @@ partial class ServiceForm
         _tabSett.Controls.Add(_lblDynWinCap);
         _tabSett.Controls.Add(_txtDynWindow);
         _tabSett.Controls.Add(_lblBogieTimeoutCap);
+        _tabSett.Controls.Add(_txtBogieTimeout);
         _tabSett.Controls.Add(_lblPasswordCap);
         _tabSett.Controls.Add(_txtNewPassword);
         _tabSett.Controls.Add(_btnSaveSettings);
@@ -810,6 +832,9 @@ partial class ServiceForm
     private TextBox _txtMassMinus;
     private Button  _btnCalcMinus;
     private Button  _btnCalibDynSave;
+    private TextBox _txtKPlus;
+    private TextBox _txtKMinus;
+    private Label   _lblFormulaD;
 
     private Label    _lblPortCap;
     private ComboBox _cmbSettPort;
@@ -822,6 +847,7 @@ partial class ServiceForm
     private Label    _lblDynWinCap;
     private TextBox  _txtDynWindow;
     private Label    _lblBogieTimeoutCap;
+    private TextBox  _txtBogieTimeout;
     private Label    _lblPasswordCap;
     private TextBox  _txtNewPassword;
     private Button   _btnSaveSettings;

@@ -358,8 +358,9 @@ public partial class ServiceForm : Form
 
     private void LoadCalibPoints() => _ = LoadCalibPointsAsync();
 
-    private IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> ReadGridPoints()
+    private List<(int AdcCode, decimal Mass, bool IsActive)> ReadGridPoints()
     {
+        var result = new List<(int, decimal, bool)>();
         foreach (DataGridViewRow row in _dgvCalib.Rows)
         {
             if (!int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
@@ -367,8 +368,9 @@ public partial class ServiceForm : Form
             if (!decimal.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
                 continue;
             bool active = row.Cells[2].Value is true;
-            yield return (code, mass, active);
+            result.Add((code, mass, active));
         }
+        return result;
     }
 
     private void UpdateLiveAdcLabel()
