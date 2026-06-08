@@ -35,13 +35,13 @@ partial class MainForm
         // ── Header ────────────────────────────────────────────────────────────
         _lblTitle.Text      = "ВЕСЫ №13";
         _lblTitle.Font      = new Font("Segoe UI", 22F, FontStyle.Bold);
-        _lblTitle.ForeColor = Color.White;
+        _lblTitle.ForeColor = Forms.UiColors.TextOnDark;
         _lblTitle.TextAlign = ContentAlignment.MiddleCenter;
         _lblTitle.Dock      = DockStyle.Fill;
 
         _pnlHeader.Dock      = DockStyle.Top;
         _pnlHeader.Height    = 100;
-        _pnlHeader.BackColor = Color.FromArgb(25, 45, 90);
+        _pnlHeader.BackColor = Forms.UiColors.HeaderBar;
         _pnlHeader.Controls.Add(_lblTitle);
 
         // ── Menu buttons ──────────────────────────────────────────────────────
@@ -50,10 +50,10 @@ partial class MainForm
         _btnStatic.Font      = new Font("Segoe UI", 13F);
         _btnStatic.FlatStyle = FlatStyle.Flat;
         _btnStatic.Margin    = new Padding(0, 5, 0, 5);
-        _btnStatic.BackColor = Color.FromArgb(25, 45, 90);
-        _btnStatic.ForeColor = Color.White;
+        _btnStatic.BackColor = Forms.UiColors.HeaderBar;
+        _btnStatic.ForeColor = Forms.UiColors.TextOnDark;
         _btnStatic.Cursor    = Cursors.Hand;
-        _btnStatic.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+        _btnStatic.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnStatic.Click    += BtnStatic_Click;
 
         _btnDynamic.Text      = "Взвешивание — Динамика";
@@ -61,10 +61,10 @@ partial class MainForm
         _btnDynamic.Font      = new Font("Segoe UI", 13F);
         _btnDynamic.FlatStyle = FlatStyle.Flat;
         _btnDynamic.Margin    = new Padding(0, 5, 0, 5);
-        _btnDynamic.BackColor = Color.FromArgb(25, 45, 90);
-        _btnDynamic.ForeColor = Color.White;
+        _btnDynamic.BackColor = Forms.UiColors.HeaderBar;
+        _btnDynamic.ForeColor = Forms.UiColors.TextOnDark;
         _btnDynamic.Cursor    = Cursors.Hand;
-        _btnDynamic.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+        _btnDynamic.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnDynamic.Click    += BtnDynamic_Click;
 
         _btnService.Text      = "Сервис";
@@ -72,10 +72,10 @@ partial class MainForm
         _btnService.Font      = new Font("Segoe UI", 13F);
         _btnService.FlatStyle = FlatStyle.Flat;
         _btnService.Margin    = new Padding(0, 5, 0, 5);
-        _btnService.BackColor = Color.FromArgb(25, 45, 90);
-        _btnService.ForeColor = Color.White;
+        _btnService.BackColor = Forms.UiColors.HeaderBar;
+        _btnService.ForeColor = Forms.UiColors.TextOnDark;
         _btnService.Cursor    = Cursors.Hand;
-        _btnService.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+        _btnService.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnService.Click    += BtnService_Click;
 
         _btnCorrections.Text      = "Корректировки";
@@ -83,10 +83,10 @@ partial class MainForm
         _btnCorrections.Font      = new Font("Segoe UI", 13F);
         _btnCorrections.FlatStyle = FlatStyle.Flat;
         _btnCorrections.Margin    = new Padding(0, 5, 0, 5);
-        _btnCorrections.BackColor = Color.FromArgb(25, 45, 90);
-        _btnCorrections.ForeColor = Color.White;
+        _btnCorrections.BackColor = Forms.UiColors.HeaderBar;
+        _btnCorrections.ForeColor = Forms.UiColors.TextOnDark;
         _btnCorrections.Cursor    = Cursors.Hand;
-        _btnCorrections.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+        _btnCorrections.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnCorrections.Click    += BtnCorrections_Click;
 
         _btnPrint.Text      = "Печать отвесной";
@@ -94,10 +94,10 @@ partial class MainForm
         _btnPrint.Font      = new Font("Segoe UI", 13F);
         _btnPrint.FlatStyle = FlatStyle.Flat;
         _btnPrint.Margin    = new Padding(0, 5, 0, 5);
-        _btnPrint.BackColor = Color.FromArgb(25, 45, 90);
-        _btnPrint.ForeColor = Color.White;
+        _btnPrint.BackColor = Forms.UiColors.HeaderBar;
+        _btnPrint.ForeColor = Forms.UiColors.TextOnDark;
         _btnPrint.Cursor    = Cursors.Hand;
-        _btnPrint.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+        _btnPrint.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnPrint.Click    += BtnPrint_Click;
 
         _btnLogs.Text      = "Просмотр логов";
@@ -105,10 +105,10 @@ partial class MainForm
         _btnLogs.Font      = new Font("Segoe UI", 13F);
         _btnLogs.FlatStyle = FlatStyle.Flat;
         _btnLogs.Margin    = new Padding(0, 5, 0, 5);
-        _btnLogs.BackColor = Color.FromArgb(25, 45, 90);
-        _btnLogs.ForeColor = Color.White;
+        _btnLogs.BackColor = Forms.UiColors.HeaderBar;
+        _btnLogs.ForeColor = Forms.UiColors.TextOnDark;
         _btnLogs.Cursor    = Cursors.Hand;
-        _btnLogs.FlatAppearance.BorderColor = Color.FromArgb(50, 80, 140);
+        _btnLogs.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnLogs.Click    += BtnLogs_Click;
 
         _pnlMenu.Dock        = DockStyle.Fill;
@@ -132,11 +132,11 @@ partial class MainForm
         // ── Status bar ────────────────────────────────────────────────────────
         _dotConn.Size      = new Size(10, 10);
         _dotConn.Location  = new Point(10, 13);
-        _dotConn.BackColor = Color.Gray;
+        _dotConn.BackColor = Forms.UiColors.Disconnected;
 
         _lblConn.Text      = "АЦП: отключён";
         _lblConn.Font      = new Font("Segoe UI", 9F);
-        _lblConn.ForeColor = Color.Silver;
+        _lblConn.ForeColor = Forms.UiColors.TextOnDarkMuted;
         _lblConn.Location  = new Point(26, 9);
         _lblConn.AutoSize  = true;
 
@@ -146,14 +146,14 @@ partial class MainForm
         _btnConn.Location  = new Point(272, 7);
         _btnConn.Font      = new Font("Segoe UI", 8F);
         _btnConn.FlatStyle = FlatStyle.Flat;
-        _btnConn.BackColor = Color.FromArgb(40, 70, 130);
-        _btnConn.ForeColor = Color.White;
+        _btnConn.BackColor = Forms.UiColors.NavigationAction;
+        _btnConn.ForeColor = Forms.UiColors.TextOnDark;
         _btnConn.FlatAppearance.BorderSize = 0;
         _btnConn.Click    += BtnConn_Click;
 
         _pnlStatus.Dock      = DockStyle.Bottom;
         _pnlStatus.Height    = 36;
-        _pnlStatus.BackColor = Color.FromArgb(18, 32, 65);
+        _pnlStatus.BackColor = Forms.UiColors.StatusBar;
         _pnlStatus.Padding   = new Padding(8, 0, 8, 0);
         _pnlStatus.Controls.Add(_dotConn);
         _pnlStatus.Controls.Add(_lblConn);
@@ -166,7 +166,7 @@ partial class MainForm
         StartPosition   = FormStartPosition.CenterScreen;
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox     = false;
-        BackColor       = Color.FromArgb(240, 242, 245);
+        BackColor       = Forms.UiColors.AppBackground;
         Controls.Add(_pnlMenu);
         Controls.Add(_pnlHeader);
         Controls.Add(_pnlStatus);

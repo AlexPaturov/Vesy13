@@ -78,7 +78,7 @@ public partial class LogsForm : Form
                 r.ProcessId?.ToString() ?? "");
 
             if (r.Keywords?.Contains("Failure") == true)
-                _grid.Rows[idx].DefaultCellStyle.BackColor = Color.FromArgb(255, 220, 220);
+                _grid.Rows[idx].DefaultCellStyle.BackColor = UiColors.GridAlertRow;
         }
     }
 

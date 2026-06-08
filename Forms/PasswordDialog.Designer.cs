@@ -35,8 +35,8 @@ partial class PasswordDialog
         _btnOk.Location  = new Point(80, 90);
         _btnOk.Size      = new Size(80, 30);
         _btnOk.FlatStyle = FlatStyle.Flat;
-        _btnOk.BackColor = Color.FromArgb(25, 45, 90);
-        _btnOk.ForeColor = Color.White;
+        _btnOk.BackColor = UiColors.HeaderBar;
+        _btnOk.ForeColor = UiColors.TextOnDark;
         _btnOk.Click    += BtnOk_Click;
 
         _btnCancel.Text         = "Отмена";

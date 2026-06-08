@@ -42,7 +42,7 @@ partial class LogsForm
         // ── Filter panel ──────────────────────────────────────────────────────
         _pnlFilter.Dock        = DockStyle.Top;
         _pnlFilter.Height      = 50;
-        _pnlFilter.BackColor   = Color.FromArgb(30, 45, 80);
+        _pnlFilter.BackColor   = UiColors.HeaderBar;
         _pnlFilter.Padding     = new Padding(4, 0, 4, 0);
 
         _lblFrom.AutoSize  = false;
@@ -50,7 +50,7 @@ partial class LogsForm
         _lblFrom.Height    = 20;
         _lblFrom.Location  = new Point(10, 15);
         _lblFrom.Text      = "С:";
-        _lblFrom.ForeColor = Color.White;
+        _lblFrom.ForeColor = UiColors.TextOnDark;
         _lblFrom.Font      = new Font("Segoe UI", 9f);
         _lblFrom.TextAlign = ContentAlignment.MiddleLeft;
 
@@ -65,7 +65,7 @@ partial class LogsForm
         _lblTo.Height    = 20;
         _lblTo.Location  = new Point(203, 15);
         _lblTo.Text      = "—";
-        _lblTo.ForeColor = Color.White;
+        _lblTo.ForeColor = UiColors.TextOnDark;
         _lblTo.Font      = new Font("Segoe UI", 9f);
         _lblTo.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -79,8 +79,8 @@ partial class LogsForm
         _btnFind.Size      = new Size(90, 26);
         _btnFind.Text      = "Найти";
         _btnFind.FlatStyle = FlatStyle.Flat;
-        _btnFind.BackColor = Color.FromArgb(0, 100, 180);
-        _btnFind.ForeColor = Color.White;
+        _btnFind.BackColor = UiColors.InfoAction;
+        _btnFind.ForeColor = UiColors.TextOnDark;
         _btnFind.Font      = new Font("Segoe UI", 9f);
         _btnFind.Click    += BtnFind_Click;
 
@@ -103,29 +103,29 @@ partial class LogsForm
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.ColumnHeadersHeight     = 26;
         _grid.RowTemplate.Height      = 22;
-        _grid.BackgroundColor         = Color.FromArgb(240, 243, 250);
-        _grid.GridColor               = Color.FromArgb(200, 210, 230);
+        _grid.BackgroundColor         = UiColors.AppBackground;
+        _grid.GridColor               = UiColors.GridLine;
         _grid.BorderStyle             = BorderStyle.None;
-        _grid.ColumnHeadersDefaultCellStyle.BackColor   = Color.FromArgb(18, 32, 65);
-        _grid.ColumnHeadersDefaultCellStyle.ForeColor   = Color.White;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor   = UiColors.StatusBar;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor   = UiColors.TextOnDark;
         _grid.ColumnHeadersDefaultCellStyle.Font        = new Font("Segoe UI", 8.5f, FontStyle.Bold);
         _grid.ColumnHeadersDefaultCellStyle.Alignment   = DataGridViewContentAlignment.MiddleLeft;
         _grid.DefaultCellStyle.Font                     = new Font("Segoe UI", 8.5f);
-        _grid.DefaultCellStyle.SelectionBackColor       = Color.FromArgb(160, 185, 220);
-        _grid.DefaultCellStyle.SelectionForeColor       = Color.Black;
+        _grid.DefaultCellStyle.SelectionBackColor       = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor       = UiColors.GridSelectionText;
         _grid.EnableHeadersVisualStyles                 = false;
 
         // ── Status panel ──────────────────────────────────────────────────────
         _pnlStatus.Dock      = DockStyle.Bottom;
         _pnlStatus.Height    = 40;
-        _pnlStatus.BackColor = Color.FromArgb(18, 32, 65);
+        _pnlStatus.BackColor = UiColors.StatusBar;
 
         _btnBack.Location  = new Point(8, 7);
         _btnBack.Size      = new Size(90, 26);
         _btnBack.Text      = "← Назад";
         _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.BackColor = Color.FromArgb(60, 80, 120);
-        _btnBack.ForeColor = Color.White;
+        _btnBack.BackColor = UiColors.NavigationAction;
+        _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.Font      = new Font("Segoe UI", 9f);
         _btnBack.Click    += BtnBack_Click;
 

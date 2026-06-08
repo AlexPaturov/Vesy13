@@ -78,10 +78,10 @@ partial class CorrectionsForm
         ((System.ComponentModel.ISupportInitialize)_gridDone).BeginInit();
         _pnlStatus.SuspendLayout();
         SuspendLayout();
-        // 
+        //
         // _pnlTop
-        // 
-        _pnlTop.BackColor = Color.FromArgb(215, 225, 248);
+        //
+        _pnlTop.BackColor = UiColors.FilterBar;
         _pnlTop.Controls.Add(label3);
         _pnlTop.Controls.Add(tbCex);
         _pnlTop.Controls.Add(label2);
@@ -123,48 +123,48 @@ partial class CorrectionsForm
         _pnlTop.Name = "_pnlTop";
         _pnlTop.Size = new Size(1264, 168);
         _pnlTop.TabIndex = 0;
-        // 
+        //
         // label2
-        // 
+        //
         label2.AutoSize = true;
         label2.Font = new Font("Segoe UI", 9F);
-        label2.ForeColor = Color.FromArgb(60, 60, 80);
+        label2.ForeColor = UiColors.TextMuted;
         label2.Location = new Point(851, 38);
         label2.Name = "label2";
         label2.Size = new Size(94, 20);
         label2.TabIndex = 32;
         label2.Text = "Плательщик";
-        // 
+        //
         // lblpotr
-        // 
+        //
         lblpotr.AutoSize = true;
         lblpotr.Font = new Font("Segoe UI", 9F);
-        lblpotr.ForeColor = Color.FromArgb(60, 60, 80);
+        lblpotr.ForeColor = UiColors.TextMuted;
         lblpotr.Location = new Point(845, 11);
         lblpotr.Name = "lblpotr";
         lblpotr.Size = new Size(100, 20);
         lblpotr.TabIndex = 31;
         lblpotr.Text = "Потребитель";
-        // 
+        //
         // _tbPlat
-        // 
+        //
         _tbPlat.Font = new Font("Segoe UI", 9F);
         _tbPlat.Location = new Point(954, 33);
         _tbPlat.Name = "_tbPlat";
         _tbPlat.Size = new Size(233, 27);
         _tbPlat.TabIndex = 30;
-        // 
+        //
         // _tbPotr
-        // 
+        //
         _tbPotr.Font = new Font("Segoe UI", 9F);
         _tbPotr.Location = new Point(954, 5);
         _tbPotr.Name = "_tbPotr";
         _tbPotr.Size = new Size(232, 27);
         _tbPotr.TabIndex = 29;
-        // 
+        //
         // _pnlLeft
-        // 
-        _pnlLeft.BackColor = Color.FromArgb(190, 162, 38);
+        //
+        _pnlLeft.BackColor = UiColors.PendingAction;
         _pnlLeft.Controls.Add(_lblVidVzv);
         _pnlLeft.Controls.Add(_rbGpri);
         _pnlLeft.Controls.Add(_rbGras);
@@ -172,36 +172,36 @@ partial class CorrectionsForm
         _pnlLeft.Name = "_pnlLeft";
         _pnlLeft.Size = new Size(142, 98);
         _pnlLeft.TabIndex = 0;
-        // 
+        //
         // _lblVidVzv
-        // 
+        //
         _lblVidVzv.AutoSize = true;
         _lblVidVzv.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblVidVzv.ForeColor = Color.White;
+        _lblVidVzv.ForeColor = UiColors.TextOnDark;
         _lblVidVzv.Location = new Point(2, 5);
         _lblVidVzv.Name = "_lblVidVzv";
         _lblVidVzv.Size = new Size(140, 20);
         _lblVidVzv.TabIndex = 0;
         _lblVidVzv.Text = "Вид взвешивания";
-        // 
+        //
         // _rbGpri
-        // 
+        //
         _rbGpri.AutoSize = true;
         _rbGpri.Checked = true;
         _rbGpri.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-        _rbGpri.ForeColor = Color.White;
+        _rbGpri.ForeColor = UiColors.TextOnDark;
         _rbGpri.Location = new Point(6, 29);
         _rbGpri.Name = "_rbGpri";
         _rbGpri.Size = new Size(96, 27);
         _rbGpri.TabIndex = 1;
         _rbGpri.TabStop = true;
         _rbGpri.Text = "Приход";
-        // 
+        //
         // _rbGras
-        // 
+        //
         _rbGras.AutoSize = true;
         _rbGras.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-        _rbGras.ForeColor = Color.White;
+        _rbGras.ForeColor = UiColors.TextOnDark;
         _rbGras.Location = new Point(6, 59);
         _rbGras.Name = "_rbGras";
         _rbGras.Size = new Size(88, 27);
@@ -210,7 +210,7 @@ partial class CorrectionsForm
         //
         // _pnlMode
         //
-        _pnlMode.BackColor = Color.FromArgb(60, 100, 170);
+        _pnlMode.BackColor = UiColors.InfoAction;
         _pnlMode.Controls.Add(_lblVidMode);
         _pnlMode.Controls.Add(_rbBrutto);
         _pnlMode.Controls.Add(_rbTara);
@@ -223,7 +223,7 @@ partial class CorrectionsForm
         //
         _lblVidMode.AutoSize = true;
         _lblVidMode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblVidMode.ForeColor = Color.White;
+        _lblVidMode.ForeColor = UiColors.TextOnDark;
         _lblVidMode.Location = new Point(2, 3);
         _lblVidMode.Name = "_lblVidMode";
         _lblVidMode.Size = new Size(100, 20);
@@ -235,7 +235,7 @@ partial class CorrectionsForm
         _rbBrutto.AutoSize = true;
         _rbBrutto.Checked = true;
         _rbBrutto.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-        _rbBrutto.ForeColor = Color.White;
+        _rbBrutto.ForeColor = UiColors.TextOnDark;
         _rbBrutto.Location = new Point(6, 22);
         _rbBrutto.Name = "_rbBrutto";
         _rbBrutto.Size = new Size(90, 27);
@@ -247,7 +247,7 @@ partial class CorrectionsForm
         //
         _rbTara.AutoSize = true;
         _rbTara.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-        _rbTara.ForeColor = Color.White;
+        _rbTara.ForeColor = UiColors.TextOnDark;
         _rbTara.Location = new Point(6, 44);
         _rbTara.Name = "_rbTara";
         _rbTara.Size = new Size(72, 27);
@@ -257,12 +257,12 @@ partial class CorrectionsForm
         //
         // _btnSave
         //
-        _btnSave.BackColor = Color.FromArgb(0, 90, 160);
+        _btnSave.BackColor = UiColors.InfoAction;
         _btnSave.Enabled = false;
         _btnSave.FlatAppearance.BorderSize = 0;
         _btnSave.FlatStyle = FlatStyle.Flat;
         _btnSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-        _btnSave.ForeColor = Color.White;
+        _btnSave.ForeColor = UiColors.TextOnDark;
         _btnSave.Location = new Point(148, 128);
         _btnSave.Name = "_btnSave";
         _btnSave.Size = new Size(240, 32);
@@ -276,216 +276,216 @@ partial class CorrectionsForm
         //
         _lblDateCap.AutoSize = true;
         _lblDateCap.Font = new Font("Segoe UI", 9F);
-        _lblDateCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblDateCap.ForeColor = UiColors.TextMuted;
         _lblDateCap.Location = new Point(148, 11);
         _lblDateCap.Name = "_lblDateCap";
         _lblDateCap.Size = new Size(44, 20);
         _lblDateCap.TabIndex = 1;
         _lblDateCap.Text = "Дата:";
-        // 
+        //
         // _lblDt
-        // 
+        //
         _lblDt.AutoSize = true;
         _lblDt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblDt.ForeColor = Color.FromArgb(20, 20, 80);
+        _lblDt.ForeColor = UiColors.TextPrimary;
         _lblDt.Location = new Point(198, 11);
         _lblDt.Name = "_lblDt";
         _lblDt.Size = new Size(24, 20);
         _lblDt.TabIndex = 2;
         _lblDt.Text = "—";
-        // 
+        //
         // _lblTimeCap
-        // 
+        //
         _lblTimeCap.AutoSize = true;
         _lblTimeCap.Font = new Font("Segoe UI", 9F);
-        _lblTimeCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblTimeCap.ForeColor = UiColors.TextMuted;
         _lblTimeCap.Location = new Point(321, 11);
         _lblTimeCap.Name = "_lblTimeCap";
         _lblTimeCap.Size = new Size(57, 20);
         _lblTimeCap.TabIndex = 3;
         _lblTimeCap.Text = "Время:";
-        // 
+        //
         // _lblVr
-        // 
+        //
         _lblVr.AutoSize = true;
         _lblVr.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblVr.ForeColor = Color.FromArgb(20, 20, 80);
+        _lblVr.ForeColor = UiColors.TextPrimary;
         _lblVr.Location = new Point(384, 11);
         _lblVr.Name = "_lblVr";
         _lblVr.Size = new Size(24, 20);
         _lblVr.TabIndex = 4;
         _lblVr.Text = "—";
-        // 
+        //
         // _lblNppCap
-        // 
+        //
         _lblNppCap.AutoSize = true;
         _lblNppCap.Font = new Font("Segoe UI", 9F);
-        _lblNppCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNppCap.ForeColor = UiColors.TextMuted;
         _lblNppCap.Location = new Point(504, 11);
         _lblNppCap.Name = "_lblNppCap";
         _lblNppCap.Size = new Size(53, 20);
         _lblNppCap.TabIndex = 5;
         _lblNppCap.Text = "№п/п:";
-        // 
+        //
         // _lblNpp
-        // 
+        //
         _lblNpp.AutoSize = true;
         _lblNpp.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblNpp.ForeColor = Color.FromArgb(20, 20, 80);
+        _lblNpp.ForeColor = UiColors.TextPrimary;
         _lblNpp.Location = new Point(563, 11);
         _lblNpp.Name = "_lblNpp";
         _lblNpp.Size = new Size(24, 20);
         _lblNpp.TabIndex = 6;
         _lblNpp.Text = "—";
-        // 
+        //
         // _lblModeCap
-        // 
+        //
         _lblModeCap.AutoSize = true;
         _lblModeCap.Font = new Font("Segoe UI", 9F);
-        _lblModeCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblModeCap.ForeColor = UiColors.TextMuted;
         _lblModeCap.Location = new Point(672, 11);
         _lblModeCap.Name = "_lblModeCap";
         _lblModeCap.Size = new Size(59, 20);
         _lblModeCap.TabIndex = 7;
         _lblModeCap.Text = "Режим:";
-        // 
+        //
         // _lblMode
-        // 
+        //
         _lblMode.AutoSize = true;
         _lblMode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblMode.ForeColor = Color.FromArgb(20, 20, 80);
+        _lblMode.ForeColor = UiColors.TextPrimary;
         _lblMode.Location = new Point(737, 11);
         _lblMode.Name = "_lblMode";
         _lblMode.Size = new Size(24, 20);
         _lblMode.TabIndex = 8;
         _lblMode.Text = "—";
-        // 
+        //
         // _lblNvagCap
-        // 
+        //
         _lblNvagCap.AutoSize = true;
         _lblNvagCap.Font = new Font("Segoe UI", 9F);
-        _lblNvagCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNvagCap.ForeColor = UiColors.TextMuted;
         _lblNvagCap.Location = new Point(151, 42);
         _lblNvagCap.Name = "_lblNvagCap";
         _lblNvagCap.Size = new Size(81, 20);
         _lblNvagCap.TabIndex = 9;
         _lblNvagCap.Text = "№ вагона:";
-        // 
+        //
         // _txtNvag
-        // 
+        //
         _txtNvag.Font = new Font("Segoe UI", 9F);
         _txtNvag.Location = new Point(235, 38);
         _txtNvag.Name = "_txtNvag";
         _txtNvag.Size = new Size(170, 27);
         _txtNvag.TabIndex = 10;
         _txtNvag.Leave += TxtNvag_Leave;
-        // 
+        //
         // _lblDirCap
-        // 
+        //
         _lblDirCap.AutoSize = true;
         _lblDirCap.Font = new Font("Segoe UI", 9F);
-        _lblDirCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblDirCap.ForeColor = UiColors.TextMuted;
         _lblDirCap.Location = new Point(625, 41);
         _lblDirCap.Name = "_lblDirCap";
         _lblDirCap.Size = new Size(107, 20);
         _lblDirCap.TabIndex = 11;
         _lblDirCap.Text = "Направление:";
-        // 
+        //
         // _lblDir
-        // 
+        //
         _lblDir.AutoSize = true;
         _lblDir.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblDir.ForeColor = Color.FromArgb(20, 20, 80);
+        _lblDir.ForeColor = UiColors.TextPrimary;
         _lblDir.Location = new Point(738, 41);
         _lblDir.Name = "_lblDir";
         _lblDir.Size = new Size(24, 20);
         _lblDir.TabIndex = 12;
         _lblDir.Text = "—";
-        // 
+        //
         // _lblGruzCap
-        // 
+        //
         _lblGruzCap.AutoSize = true;
         _lblGruzCap.Font = new Font("Segoe UI", 9F);
-        _lblGruzCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblGruzCap.ForeColor = UiColors.TextMuted;
         _lblGruzCap.Location = new Point(190, 68);
         _lblGruzCap.Name = "_lblGruzCap";
         _lblGruzCap.Size = new Size(42, 20);
         _lblGruzCap.TabIndex = 13;
         _lblGruzCap.Text = "Груз:";
-        // 
+        //
         // _txtGruz
-        // 
+        //
         _txtGruz.Font = new Font("Segoe UI", 9F);
         _txtGruz.Location = new Point(235, 65);
         _txtGruz.Name = "_txtGruz";
         _txtGruz.Size = new Size(270, 27);
         _txtGruz.TabIndex = 14;
-        // 
+        //
         // _lblNdokCap
-        // 
+        //
         _lblNdokCap.AutoSize = true;
         _lblNdokCap.Font = new Font("Segoe UI", 9F);
-        _lblNdokCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNdokCap.ForeColor = UiColors.TextMuted;
         _lblNdokCap.Location = new Point(626, 69);
         _lblNdokCap.Name = "_lblNdokCap";
         _lblNdokCap.Size = new Size(106, 20);
         _lblNdokCap.TabIndex = 15;
         _lblNdokCap.Text = "№ документа:";
-        // 
+        //
         // _txtNdok
-        // 
+        //
         _txtNdok.Font = new Font("Segoe UI", 9F);
         _txtNdok.Location = new Point(737, 65);
         _txtNdok.Name = "_txtNdok";
         _txtNdok.Size = new Size(130, 27);
         _txtNdok.TabIndex = 16;
-        // 
+        //
         // _lblBruttoCap
-        // 
+        //
         _lblBruttoCap.AutoSize = true;
         _lblBruttoCap.Font = new Font("Segoe UI", 9F);
-        _lblBruttoCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblBruttoCap.ForeColor = UiColors.TextMuted;
         _lblBruttoCap.Location = new Point(148, 96);
         _lblBruttoCap.Name = "_lblBruttoCap";
         _lblBruttoCap.Size = new Size(58, 20);
         _lblBruttoCap.TabIndex = 17;
         _lblBruttoCap.Text = "Брутто:";
-        // 
+        //
         // _lblBrutto
-        // 
+        //
         _lblBrutto.AutoSize = true;
         _lblBrutto.Font = new Font("Courier New", 10F, FontStyle.Bold);
-        _lblBrutto.ForeColor = Color.FromArgb(20, 20, 80);
+        _lblBrutto.ForeColor = UiColors.TextPrimary;
         _lblBrutto.Location = new Point(212, 96);
         _lblBrutto.Name = "_lblBrutto";
         _lblBrutto.Size = new Size(19, 20);
         _lblBrutto.TabIndex = 18;
         _lblBrutto.Text = "—";
-        // 
+        //
         // _lblBruttoUnit
-        // 
+        //
         _lblBruttoUnit.AutoSize = true;
         _lblBruttoUnit.Font = new Font("Segoe UI", 9F);
-        _lblBruttoUnit.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblBruttoUnit.ForeColor = UiColors.TextMuted;
         _lblBruttoUnit.Location = new Point(282, 96);
         _lblBruttoUnit.Name = "_lblBruttoUnit";
         _lblBruttoUnit.Size = new Size(15, 20);
         _lblBruttoUnit.TabIndex = 19;
         _lblBruttoUnit.Text = "т";
-        // 
+        //
         // _lblTarCap
-        // 
+        //
         _lblTarCap.AutoSize = true;
         _lblTarCap.Font = new Font("Segoe UI", 9F);
-        _lblTarCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblTarCap.ForeColor = UiColors.TextMuted;
         _lblTarCap.Location = new Point(306, 96);
         _lblTarCap.Name = "_lblTarCap";
         _lblTarCap.Size = new Size(45, 20);
         _lblTarCap.TabIndex = 20;
         _lblTarCap.Text = "Тара:";
-        // 
+        //
         // _cmbTar
-        // 
+        //
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbTar.Font = new Font("Segoe UI", 9F);
         _cmbTar.Location = new Point(352, 94);
@@ -493,48 +493,48 @@ partial class CorrectionsForm
         _cmbTar.Size = new Size(284, 28);
         _cmbTar.TabIndex = 21;
         _cmbTar.SelectedIndexChanged += CmbTar_SelectedIndexChanged;
-        // 
+        //
         // _lblNettoCap
-        // 
+        //
         _lblNettoCap.AutoSize = true;
         _lblNettoCap.Font = new Font("Segoe UI", 9F);
-        _lblNettoCap.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNettoCap.ForeColor = UiColors.TextMuted;
         _lblNettoCap.Location = new Point(646, 97);
         _lblNettoCap.Name = "_lblNettoCap";
         _lblNettoCap.Size = new Size(52, 20);
         _lblNettoCap.TabIndex = 23;
         _lblNettoCap.Text = "Нетто:";
-        // 
+        //
         // _lblNetto
-        // 
+        //
         _lblNetto.AutoSize = true;
         _lblNetto.Font = new Font("Courier New", 10F, FontStyle.Bold);
-        _lblNetto.ForeColor = Color.FromArgb(0, 110, 30);
+        _lblNetto.ForeColor = UiColors.PrimaryAction;
         _lblNetto.Location = new Point(710, 97);
         _lblNetto.Name = "_lblNetto";
         _lblNetto.Size = new Size(19, 20);
         _lblNetto.TabIndex = 24;
         _lblNetto.Text = "—";
-        // 
+        //
         // _lblNettoUnit
-        // 
+        //
         _lblNettoUnit.AutoSize = true;
         _lblNettoUnit.Font = new Font("Segoe UI", 9F);
-        _lblNettoUnit.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNettoUnit.ForeColor = UiColors.TextMuted;
         _lblNettoUnit.Location = new Point(759, 97);
         _lblNettoUnit.Name = "_lblNettoUnit";
         _lblNettoUnit.Size = new Size(15, 20);
         _lblNettoUnit.TabIndex = 25;
         _lblNettoUnit.Text = "т";
-        // 
+        //
         // _btnTransfer
-        // 
-        _btnTransfer.BackColor = Color.FromArgb(0, 120, 40);
+        //
+        _btnTransfer.BackColor = UiColors.PrimaryAction;
         _btnTransfer.Enabled = false;
         _btnTransfer.FlatAppearance.BorderSize = 0;
         _btnTransfer.FlatStyle = FlatStyle.Flat;
         _btnTransfer.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-        _btnTransfer.ForeColor = Color.White;
+        _btnTransfer.ForeColor = UiColors.TextOnDark;
         _btnTransfer.Location = new Point(148, 128);
         _btnTransfer.Name = "_btnTransfer";
         _btnTransfer.Size = new Size(240, 32);
@@ -542,9 +542,9 @@ partial class CorrectionsForm
         _btnTransfer.Text = "Перенести";
         _btnTransfer.UseVisualStyleBackColor = false;
         _btnTransfer.Click += BtnTransfer_Click;
-        // 
+        //
         // _btnClear
-        // 
+        //
         _btnClear.FlatStyle = FlatStyle.Flat;
         _btnClear.Font = new Font("Segoe UI", 9F);
         _btnClear.Location = new Point(402, 128);
@@ -553,9 +553,9 @@ partial class CorrectionsForm
         _btnClear.TabIndex = 27;
         _btnClear.Text = "Очистить";
         _btnClear.Click += BtnClear_Click;
-        // 
+        //
         // _btnRefresh
-        // 
+        //
         _btnRefresh.FlatStyle = FlatStyle.Flat;
         _btnRefresh.Font = new Font("Segoe UI", 9F);
         _btnRefresh.Location = new Point(526, 128);
@@ -564,38 +564,38 @@ partial class CorrectionsForm
         _btnRefresh.TabIndex = 28;
         _btnRefresh.Text = "Обновить";
         _btnRefresh.Click += BtnRefresh_Click;
-        // 
+        //
         // _split
-        // 
-        _split.BackColor = Color.FromArgb(18, 32, 65);
+        //
+        _split.BackColor = UiColors.StatusBar;
         _split.Dock = DockStyle.Fill;
         _split.FixedPanel = FixedPanel.Panel1;
         _split.Location = new Point(0, 168);
         _split.Name = "_split";
-        // 
+        //
         // _split.Panel1
-        // 
+        //
         _split.Panel1.Controls.Add(_gridPend);
         _split.Panel1.Controls.Add(_lblHeaderPend);
         _split.Panel1MinSize = 563;
-        // 
+        //
         // _split.Panel2
-        // 
+        //
         _split.Panel2.Controls.Add(_gridDone);
         _split.Panel2.Controls.Add(_lblHeaderDone);
         _split.Panel2MinSize = 280;
         _split.Size = new Size(1264, 458);
         _split.SplitterDistance = 563;
         _split.TabIndex = 1;
-        // 
+        //
         // _gridPend
-        // 
+        //
         _gridPend.AllowUserToAddRows = false;
         _gridPend.AllowUserToDeleteRows = false;
         _gridPend.AllowUserToResizeRows = false;
-        dataGridViewCellStyle9.BackColor = Color.FromArgb(242, 246, 255);
+        dataGridViewCellStyle9.BackColor = UiColors.GridAlternateRow;
         _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
-        _gridPend.BackgroundColor = Color.White;
+        _gridPend.BackgroundColor = UiColors.Surface;
         _gridPend.BorderStyle = BorderStyle.None;
         _gridPend.ColumnHeadersHeight = 26;
         _gridPend.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -607,35 +607,35 @@ partial class CorrectionsForm
         _gridPend.ReadOnly = true;
         _gridPend.RowHeadersVisible = false;
         _gridPend.RowHeadersWidth = 51;
-        dataGridViewCellStyle10.BackColor = Color.White;
+        dataGridViewCellStyle10.BackColor = UiColors.Surface;
         _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle10;
         _gridPend.RowTemplate.Height = 22;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridPend.Size = new Size(563, 434);
         _gridPend.TabIndex = 0;
         _gridPend.SelectionChanged += GridPend_SelectionChanged;
-        // 
+        //
         // _lblHeaderPend
-        // 
-        _lblHeaderPend.BackColor = Color.FromArgb(25, 45, 90);
+        //
+        _lblHeaderPend.BackColor = UiColors.GridHeaderDarkBack;
         _lblHeaderPend.Dock = DockStyle.Top;
         _lblHeaderPend.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblHeaderPend.ForeColor = Color.White;
+        _lblHeaderPend.ForeColor = UiColors.TextOnDark;
         _lblHeaderPend.Location = new Point(0, 0);
         _lblHeaderPend.Name = "_lblHeaderPend";
         _lblHeaderPend.Size = new Size(563, 24);
         _lblHeaderPend.TabIndex = 1;
         _lblHeaderPend.Text = "  Не перенесённые";
         _lblHeaderPend.TextAlign = ContentAlignment.MiddleLeft;
-        // 
+        //
         // _gridDone
-        // 
+        //
         _gridDone.AllowUserToAddRows = false;
         _gridDone.AllowUserToDeleteRows = false;
         _gridDone.AllowUserToResizeRows = false;
-        dataGridViewCellStyle11.BackColor = Color.FromArgb(242, 246, 255);
+        dataGridViewCellStyle11.BackColor = UiColors.GridAlternateRow;
         _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
-        _gridDone.BackgroundColor = Color.White;
+        _gridDone.BackgroundColor = UiColors.Surface;
         _gridDone.BorderStyle = BorderStyle.None;
         _gridDone.ColumnHeadersHeight = 26;
         _gridDone.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -647,44 +647,44 @@ partial class CorrectionsForm
         _gridDone.ReadOnly = true;
         _gridDone.RowHeadersVisible = false;
         _gridDone.RowHeadersWidth = 51;
-        dataGridViewCellStyle12.BackColor = Color.White;
+        dataGridViewCellStyle12.BackColor = UiColors.Surface;
         _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle12;
         _gridDone.RowTemplate.Height = 22;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridDone.Size = new Size(697, 434);
         _gridDone.TabIndex = 0;
         _gridDone.SelectionChanged += GridDone_SelectionChanged;
-        // 
+        //
         // _lblHeaderDone
-        // 
-        _lblHeaderDone.BackColor = Color.FromArgb(25, 45, 90);
+        //
+        _lblHeaderDone.BackColor = UiColors.GridHeaderDarkBack;
         _lblHeaderDone.Dock = DockStyle.Top;
         _lblHeaderDone.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _lblHeaderDone.ForeColor = Color.White;
+        _lblHeaderDone.ForeColor = UiColors.TextOnDark;
         _lblHeaderDone.Location = new Point(0, 0);
         _lblHeaderDone.Name = "_lblHeaderDone";
         _lblHeaderDone.Size = new Size(697, 24);
         _lblHeaderDone.TabIndex = 1;
         _lblHeaderDone.Text = "  Перенесённые";
         _lblHeaderDone.TextAlign = ContentAlignment.MiddleLeft;
-        // 
+        //
         // _pnlStatus
-        // 
-        _pnlStatus.BackColor = Color.FromArgb(18, 32, 65);
+        //
+        _pnlStatus.BackColor = UiColors.StatusBar;
         _pnlStatus.Controls.Add(_btnBack);
         _pnlStatus.Dock = DockStyle.Bottom;
         _pnlStatus.Location = new Point(0, 626);
         _pnlStatus.Name = "_pnlStatus";
         _pnlStatus.Size = new Size(1264, 34);
         _pnlStatus.TabIndex = 2;
-        // 
+        //
         // _btnBack
-        // 
-        _btnBack.BackColor = Color.FromArgb(40, 70, 130);
+        //
+        _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.FlatAppearance.BorderSize = 0;
         _btnBack.FlatStyle = FlatStyle.Flat;
         _btnBack.Font = new Font("Segoe UI", 8F);
-        _btnBack.ForeColor = Color.White;
+        _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.Location = new Point(8, 4);
         _btnBack.Name = "_btnBack";
         _btnBack.Size = new Size(90, 26);
@@ -692,30 +692,30 @@ partial class CorrectionsForm
         _btnBack.Text = "← Назад";
         _btnBack.UseVisualStyleBackColor = false;
         _btnBack.Click += BtnBack_Click;
-        // 
+        //
         // tbCex
-        // 
+        //
         tbCex.Font = new Font("Segoe UI", 9F);
         tbCex.Location = new Point(954, 61);
         tbCex.MaxLength = 3;
         tbCex.Name = "tbCex";
         tbCex.Size = new Size(233, 27);
         tbCex.TabIndex = 33;
-        // 
+        //
         // label3
-        // 
+        //
         label3.AutoSize = true;
         label3.Font = new Font("Segoe UI", 9F);
-        label3.ForeColor = Color.FromArgb(60, 60, 80);
+        label3.ForeColor = UiColors.TextMuted;
         label3.Location = new Point(910, 65);
         label3.Name = "label3";
         label3.Size = new Size(35, 20);
         label3.TabIndex = 34;
         label3.Text = "Цех";
-        // 
+        //
         // CorrectionsForm
-        // 
-        BackColor = Color.FromArgb(240, 242, 245);
+        //
+        BackColor = UiColors.AppBackground;
         ClientSize = new Size(1264, 660);
         Controls.Add(_split);
         Controls.Add(_pnlTop);

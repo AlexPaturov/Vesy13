@@ -183,21 +183,21 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            AppendLog($"ОШИБКА: {ex.Message}", Color.Red);
+            AppendLog($"ОШИБКА: {ex.Message}", UiColors.Error);
             AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04", selectedPort);
         }
     }
 
     private void UpdateMonitorConn(bool connected)
     {
-        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
+        _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
         _lblConn.Text      = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
-        _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Gray;
+        _lblConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
         _btnConn.Text      = connected ? "Отключить" : "Подключить";
-        _btnConn.BackColor = connected ? Color.FromArgb(120, 40, 0) : Color.FromArgb(0, 100, 50);
+        _btnConn.BackColor = connected ? UiColors.DangerAction : UiColors.PrimaryAction;
         _cmbPort.Enabled   = !connected;
         AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
-            connected ? Color.LimeGreen : Color.Gray);
+            connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
@@ -217,22 +217,22 @@ public partial class ServiceForm : Form
             _lastCh1          = frame.Ch1;
             _lblCh0.Text      = frame.Ch0.ToString();
             _lblCh1.Text      = frame.Ch1.ToString();
-            _lblCh0.ForeColor = Color.DodgerBlue;
-            _lblCh1.ForeColor = Color.DodgerBlue;
+            _lblCh0.ForeColor = UiColors.Info;
+            _lblCh1.ForeColor = UiColors.Info;
             UpdateLiveAdcLabel();
         }
         else
         {
-            _lblCh0.ForeColor = Color.Red;
-            _lblCh1.ForeColor = Color.Red;
+            _lblCh0.ForeColor = UiColors.Error;
+            _lblCh1.ForeColor = UiColors.Error;
         }
         if (!_chkLog.Checked) return;
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
         string time  = DateTime.Now.ToString("HH:mm:ss.fff");
         if (frame.Valid)
-            AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", Color.LightGray);
+            AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", UiColors.LogText);
         else
-            AppendLog($"{time}  [{bytes}]  INVALID ({raw.Length} байт)", Color.OrangeRed);
+            AppendLog($"{time}  [{bytes}]  INVALID ({raw.Length} байт)", UiColors.Warning);
     }
 
     private void AppendLog(string text, Color color)
@@ -355,7 +355,7 @@ public partial class ServiceForm : Form
         {
             _adminUnlocked      = false;
             _btnAdmin.Text      = "🔒 Войти как администратор";
-            _btnAdmin.BackColor = Color.FromArgb(80, 60, 20);
+            _btnAdmin.BackColor = UiColors.AdminLocked;
             SetAdminTabs(false);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "выход из режима администратора");
         }
@@ -365,7 +365,7 @@ public partial class ServiceForm : Form
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
             _adminUnlocked      = true;
             _btnAdmin.Text      = "🔓 Выйти из режима администратора";
-            _btnAdmin.BackColor = Color.FromArgb(20, 80, 30);
+            _btnAdmin.BackColor = UiColors.AdminUnlocked;
             SetAdminTabs(true);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "вход в режим администратора");
         }

@@ -413,7 +413,7 @@ public partial class CorrectionsForm : Form
                 r.Cells["PLAT"   ].Value = transfer.Plat;
                 r.Cells["VESY"   ].Value = "13";
                 r.Cells["CEX"    ].Value = transfer.Cex > 0 ? transfer.Cex.ToString() : "";
-                r.DefaultCellStyle.ForeColor = Color.FromArgb(0, 100, 30);
+                r.DefaultCellStyle.ForeColor = UiColors.PrimaryAction;
             }
             ClearTopPanel();
         }

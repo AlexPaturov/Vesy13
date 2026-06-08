@@ -48,7 +48,7 @@ partial class PrintForm
         SuspendLayout();
 
         // ── _pnlTop ──────────────────────────────────────────────────────────
-        _pnlTop.BackColor = Color.FromArgb(215, 225, 248);
+        _pnlTop.BackColor = UiColors.FilterBar;
         _pnlTop.Controls.Add(_rbGpri);
         _pnlTop.Controls.Add(_rbGras);
         _pnlTop.Controls.Add(_lblDateFrom);
@@ -95,7 +95,7 @@ partial class PrintForm
         // ── _lblDateFrom ─────────────────────────────────────────────────────
         _lblDateFrom.AutoSize = true;
         _lblDateFrom.Font = new Font("Segoe UI", 9F);
-        _lblDateFrom.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblDateFrom.ForeColor = UiColors.TextMuted;
         _lblDateFrom.Location = new Point(260, 14);
         _lblDateFrom.Name = "_lblDateFrom";
         _lblDateFrom.TabIndex = 2;
@@ -112,7 +112,7 @@ partial class PrintForm
         // ── _lblDateTo ───────────────────────────────────────────────────────
         _lblDateTo.AutoSize = true;
         _lblDateTo.Font = new Font("Segoe UI", 9F);
-        _lblDateTo.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblDateTo.ForeColor = UiColors.TextMuted;
         _lblDateTo.Location = new Point(446, 14);
         _lblDateTo.Name = "_lblDateTo";
         _lblDateTo.TabIndex = 4;
@@ -129,7 +129,7 @@ partial class PrintForm
         // ── _lblGruz ─────────────────────────────────────────────────────────
         _lblGruz.AutoSize = true;
         _lblGruz.Font = new Font("Segoe UI", 9F);
-        _lblGruz.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblGruz.ForeColor = UiColors.TextMuted;
         _lblGruz.Location = new Point(613, 14);
         _lblGruz.Name = "_lblGruz";
         _lblGruz.TabIndex = 6;
@@ -145,7 +145,7 @@ partial class PrintForm
         // ── _lblNvag ─────────────────────────────────────────────────────────
         _lblNvag.AutoSize = true;
         _lblNvag.Font = new Font("Segoe UI", 9F);
-        _lblNvag.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNvag.ForeColor = UiColors.TextMuted;
         _lblNvag.Location = new Point(873, 14);
         _lblNvag.Name = "_lblNvag";
         _lblNvag.TabIndex = 8;
@@ -161,7 +161,7 @@ partial class PrintForm
         // ── _lblPotr ─────────────────────────────────────────────────────────
         _lblPotr.AutoSize = true;
         _lblPotr.Font = new Font("Segoe UI", 9F);
-        _lblPotr.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblPotr.ForeColor = UiColors.TextMuted;
         _lblPotr.Location = new Point(10, 52);
         _lblPotr.Name = "_lblPotr";
         _lblPotr.TabIndex = 10;
@@ -177,7 +177,7 @@ partial class PrintForm
         // ── _lblNdok ─────────────────────────────────────────────────────────
         _lblNdok.AutoSize = true;
         _lblNdok.Font = new Font("Segoe UI", 9F);
-        _lblNdok.ForeColor = Color.FromArgb(60, 60, 80);
+        _lblNdok.ForeColor = UiColors.TextMuted;
         _lblNdok.Location = new Point(320, 52);
         _lblNdok.Name = "_lblNdok";
         _lblNdok.TabIndex = 12;
@@ -193,7 +193,7 @@ partial class PrintForm
         // ── _chkPotr ─────────────────────────────────────────────────────────
         _chkPotr.AutoSize = true;
         _chkPotr.Font = new Font("Segoe UI", 9F);
-        _chkPotr.ForeColor = Color.FromArgb(40, 40, 70);
+        _chkPotr.ForeColor = UiColors.TextPrimary;
         _chkPotr.Location = new Point(555, 50);
         _chkPotr.Name = "_chkPotr";
         _chkPotr.Size = new Size(220, 24);
@@ -201,11 +201,11 @@ partial class PrintForm
         _chkPotr.Text = "Печатать грузополучателя";
 
         // ── _btnFind ─────────────────────────────────────────────────────────
-        _btnFind.BackColor = Color.FromArgb(0, 100, 60);
+        _btnFind.BackColor = UiColors.PrimaryAction;
         _btnFind.FlatAppearance.BorderSize = 0;
         _btnFind.FlatStyle = FlatStyle.Flat;
         _btnFind.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _btnFind.ForeColor = Color.White;
+        _btnFind.ForeColor = UiColors.TextOnDark;
         _btnFind.Location = new Point(10, 82);
         _btnFind.Name = "_btnFind";
         _btnFind.Size = new Size(100, 26);
@@ -215,11 +215,11 @@ partial class PrintForm
         _btnFind.Click += BtnFind_Click;
 
         // ── _btnClearFilters ─────────────────────────────────────────────────
-        _btnClearFilters.BackColor = Color.FromArgb(100, 100, 110);
+        _btnClearFilters.BackColor = UiColors.NeutralAction;
         _btnClearFilters.FlatAppearance.BorderSize = 0;
         _btnClearFilters.FlatStyle = FlatStyle.Flat;
         _btnClearFilters.Font = new Font("Segoe UI", 9F);
-        _btnClearFilters.ForeColor = Color.White;
+        _btnClearFilters.ForeColor = UiColors.TextOnDark;
         _btnClearFilters.Location = new Point(120, 82);
         _btnClearFilters.Name = "_btnClearFilters";
         _btnClearFilters.Size = new Size(150, 26);
@@ -232,7 +232,7 @@ partial class PrintForm
         _grid.AllowUserToAddRows = false;
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeRows = false;
-        _grid.BackgroundColor = Color.White;
+        _grid.BackgroundColor = UiColors.Surface;
         _grid.BorderStyle = BorderStyle.None;
         _grid.ColumnHeadersHeight = 26;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -248,7 +248,7 @@ partial class PrintForm
         _grid.TabIndex = 1;
 
         // ── _pnlStatus ────────────────────────────────────────────────────────
-        _pnlStatus.BackColor = Color.FromArgb(18, 32, 65);
+        _pnlStatus.BackColor = UiColors.StatusBar;
         _pnlStatus.Controls.Add(_lblSlipNum);
         _pnlStatus.Controls.Add(_txtSlipNum);
         _pnlStatus.Controls.Add(_lblFrom);
@@ -266,7 +266,7 @@ partial class PrintForm
         // ── _lblSlipNum ──────────────────────────────────────────────────────
         _lblSlipNum.AutoSize = true;
         _lblSlipNum.Font = new Font("Segoe UI", 9F);
-        _lblSlipNum.ForeColor = Color.FromArgb(200, 210, 230);
+        _lblSlipNum.ForeColor = UiColors.TextOnDarkMuted;
         _lblSlipNum.Location = new Point(10, 13);
         _lblSlipNum.Name = "_lblSlipNum";
         _lblSlipNum.TabIndex = 0;
@@ -282,7 +282,7 @@ partial class PrintForm
         // ── _lblFrom ─────────────────────────────────────────────────────────
         _lblFrom.AutoSize = true;
         _lblFrom.Font = new Font("Segoe UI", 9F);
-        _lblFrom.ForeColor = Color.FromArgb(200, 210, 230);
+        _lblFrom.ForeColor = UiColors.TextOnDarkMuted;
         _lblFrom.Location = new Point(260, 13);
         _lblFrom.Name = "_lblFrom";
         _lblFrom.TabIndex = 2;
@@ -298,7 +298,7 @@ partial class PrintForm
         // ── _lblTo ───────────────────────────────────────────────────────────
         _lblTo.AutoSize = true;
         _lblTo.Font = new Font("Segoe UI", 9F);
-        _lblTo.ForeColor = Color.FromArgb(200, 210, 230);
+        _lblTo.ForeColor = UiColors.TextOnDarkMuted;
         _lblTo.Location = new Point(578, 13);
         _lblTo.Name = "_lblTo";
         _lblTo.TabIndex = 4;
@@ -312,11 +312,11 @@ partial class PrintForm
         _txtTo.TabIndex = 5;
 
         // ── _btnPreview ──────────────────────────────────────────────────────
-        _btnPreview.BackColor = Color.FromArgb(0, 90, 160);
+        _btnPreview.BackColor = UiColors.InfoAction;
         _btnPreview.FlatAppearance.BorderSize = 0;
         _btnPreview.FlatStyle = FlatStyle.Flat;
         _btnPreview.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _btnPreview.ForeColor = Color.White;
+        _btnPreview.ForeColor = UiColors.TextOnDark;
         _btnPreview.Location = new Point(884, 9);
         _btnPreview.Name = "_btnPreview";
         _btnPreview.Size = new Size(170, 26);
@@ -326,11 +326,11 @@ partial class PrintForm
         _btnPreview.Click += BtnPreview_Click;
 
         // ── _btnBack ─────────────────────────────────────────────────────────
-        _btnBack.BackColor = Color.FromArgb(40, 70, 130);
+        _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.FlatAppearance.BorderSize = 0;
         _btnBack.FlatStyle = FlatStyle.Flat;
         _btnBack.Font = new Font("Segoe UI", 8F);
-        _btnBack.ForeColor = Color.White;
+        _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.Location = new Point(1064, 9);
         _btnBack.Name = "_btnBack";
         _btnBack.Size = new Size(90, 26);
@@ -342,7 +342,7 @@ partial class PrintForm
         // ── Form ──────────────────────────────────────────────────────────────
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        BackColor = Color.FromArgb(240, 242, 245);
+        BackColor = UiColors.AppBackground;
         ClientSize = new Size(1264, 670);
         Controls.Add(_grid);
         Controls.Add(_pnlTop);

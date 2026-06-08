@@ -62,7 +62,7 @@ public partial class MainForm : Form
     private void UpdateConn(bool connected)
     {
         if (InvokeRequired) { BeginInvoke(() => UpdateConn(connected)); return; }
-        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
+        _dotConn.BackColor = connected ? Forms.UiColors.PrimaryAction : Forms.UiColors.Disconnected;
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         _btnConn.Text      = connected ? "Отключить" : "Подключить";
     }
