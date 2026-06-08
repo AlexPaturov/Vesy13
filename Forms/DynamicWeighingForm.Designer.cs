@@ -33,7 +33,7 @@ partial class DynamicWeighingForm
         // 
         _gbDir.Controls.Add(_rbPlus);
         _gbDir.Controls.Add(_rbMinus);
-        _gbDir.Font = new Font("Segoe UI", 12F);
+        _gbDir.Font = UiFonts.Body;
         _gbDir.ForeColor = Color.FromArgb(232, 237, 245);
         _gbDir.Location = new Point(8, 8);
         _gbDir.Name = "_gbDir";
@@ -46,7 +46,7 @@ partial class DynamicWeighingForm
         // 
         _rbPlus.AutoSize = true;
         _rbPlus.Checked = true;
-        _rbPlus.Font = new Font("Segoe UI", 10F);
+        _rbPlus.Font = UiFonts.Medium;
         _rbPlus.ForeColor = Color.FromArgb(232, 237, 245);
         _rbPlus.Location = new Point(12, 20);
         _rbPlus.Name = "_rbPlus";
@@ -58,7 +58,7 @@ partial class DynamicWeighingForm
         // _rbMinus
         // 
         _rbMinus.AutoSize = true;
-        _rbMinus.Font = new Font("Segoe UI", 10F);
+        _rbMinus.Font = UiFonts.Medium;
         _rbMinus.ForeColor = Color.FromArgb(232, 237, 245);
         _rbMinus.Location = new Point(130, 20);
         _rbMinus.Name = "_rbMinus";
@@ -69,7 +69,7 @@ partial class DynamicWeighingForm
         // _lblChannel
         // 
         _lblChannel.AutoSize = true;
-        _lblChannel.Font = new Font("Segoe UI", 10F);
+        _lblChannel.Font = UiFonts.Medium;
         _lblChannel.ForeColor = Color.FromArgb(122, 138, 158);
         _lblChannel.Location = new Point(336, 22);
         _lblChannel.Name = "_lblChannel";
@@ -90,7 +90,7 @@ partial class DynamicWeighingForm
         // 
         // _lblValue
         // 
-        _lblValue.Font = new Font("Courier New", 60F, FontStyle.Bold);
+        _lblValue.Font = UiFonts.Display;
         _lblValue.ForeColor = Color.FromArgb(90, 96, 112);
         _lblValue.Location = new Point(8, 4);
         _lblValue.Name = "_lblValue";
@@ -101,7 +101,7 @@ partial class DynamicWeighingForm
         // 
         // _lblUnit
         // 
-        _lblUnit.Font = new Font("Segoe UI", 20F);
+        _lblUnit.Font = UiFonts.UnitLabel;
         _lblUnit.ForeColor = Color.FromArgb(90, 96, 112);
         _lblUnit.Location = new Point(462, 60);
         _lblUnit.Name = "_lblUnit";
@@ -112,7 +112,7 @@ partial class DynamicWeighingForm
         // 
         // _lblStatus
         // 
-        _lblStatus.Font = new Font("Segoe UI", 10F);
+        _lblStatus.Font = UiFonts.Medium;
         _lblStatus.ForeColor = Color.FromArgb(138, 154, 181);
         _lblStatus.Location = new Point(8, 118);
         _lblStatus.Name = "_lblStatus";
@@ -126,7 +126,7 @@ partial class DynamicWeighingForm
         _btnWeigh.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         _btnWeigh.BackColor = Color.FromArgb(46, 155, 94);
         _btnWeigh.FlatStyle = FlatStyle.Flat;
-        _btnWeigh.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+        _btnWeigh.Font = UiFonts.WeighButton;
         _btnWeigh.ForeColor = Color.FromArgb(232, 237, 245);
         _btnWeigh.Location = new Point(8, 230);
         _btnWeigh.Name = "_btnWeigh";
@@ -140,7 +140,7 @@ partial class DynamicWeighingForm
         // 
         _btnZero.BackColor = Color.FromArgb(58, 74, 94);
         _btnZero.FlatStyle = FlatStyle.Flat;
-        _btnZero.Font = new Font("Segoe UI", 10F);
+        _btnZero.Font = UiFonts.Medium;
         _btnZero.ForeColor = Color.FromArgb(232, 237, 245);
         _btnZero.Location = new Point(8, 288);
         _btnZero.Name = "_btnZero";
@@ -154,7 +154,7 @@ partial class DynamicWeighingForm
         // 
         _btnFinish.BackColor = Color.FromArgb(179, 58, 26);
         _btnFinish.FlatStyle = FlatStyle.Flat;
-        _btnFinish.Font = new Font("Segoe UI", 10F);
+        _btnFinish.Font = UiFonts.Medium;
         _btnFinish.ForeColor = Color.FromArgb(232, 237, 245);
         _btnFinish.Location = new Point(116, 288);
         _btnFinish.Name = "_btnFinish";
@@ -178,7 +178,7 @@ partial class DynamicWeighingForm
         _grid.BackgroundColor = Color.FromArgb(37, 43, 53);
         _grid.BorderStyle = BorderStyle.None;
         dataGridViewCellStyle2.BackColor = Color.FromArgb(26, 34, 53);
-        dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        dataGridViewCellStyle2.Font = UiFonts.GridHeader;
         dataGridViewCellStyle2.ForeColor = Color.FromArgb(232, 237, 245);
         dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(26, 34, 53);
         dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(232, 237, 245);
@@ -186,7 +186,7 @@ partial class DynamicWeighingForm
         _grid.ColumnHeadersHeight = 40;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.EnableHeadersVisualStyles = false;
-        _grid.Font = new Font("Segoe UI", 9F);
+        _grid.Font = UiFonts.GridBody;
         _grid.GridColor = Color.FromArgb(58, 68, 88);
         _grid.Location = new Point(8, 326);
         _grid.Name = "_grid";
@@ -219,7 +219,7 @@ partial class DynamicWeighingForm
         _btnBack.BackColor = Color.FromArgb(42, 61, 106);
         _btnBack.FlatAppearance.BorderSize = 0;
         _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = new Font("Segoe UI", 8F);
+        _btnBack.Font = UiFonts.Small;
         _btnBack.ForeColor = Color.FromArgb(232, 237, 245);
         _btnBack.Location = new Point(8, 6);
         _btnBack.Name = "_btnBack";
@@ -240,7 +240,7 @@ partial class DynamicWeighingForm
         // _lblConn
         // 
         _lblConn.AutoSize = true;
-        _lblConn.Font = new Font("Segoe UI", 12F);
+        _lblConn.Font = UiFonts.Body;
         _lblConn.ForeColor = Color.FromArgb(138, 154, 181);
         _lblConn.Location = new Point(116, 8);
         _lblConn.Name = "_lblConn";
