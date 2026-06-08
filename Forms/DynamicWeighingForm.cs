@@ -17,8 +17,6 @@ public partial class DynamicWeighingForm : Form
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
     private DateTime?  _trainStartTime;
-    private const int RepeatPressLockMs = 2000;
-
     private int        _wagonNumber;
     private int        _bogie1Code;
     private SimA04Frame   _lastFrame;
@@ -189,15 +187,6 @@ public partial class DynamicWeighingForm : Form
             _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
         }
         UpdateButtonStates();
-        LockWeighButtonAfterAcceptedPress();
-    }
-
-    private async void LockWeighButtonAfterAcceptedPress()
-    {
-        _btnWeigh.Enabled = false;
-        await Task.Delay(RepeatPressLockMs);
-        if (!IsDisposed)
-            _btnWeigh.Enabled = true;
     }
 
     private void OnZeroClick() => MessageBox.Show("Ноль установлен (в разработке)", "Ноль", MessageBoxButtons.OK, MessageBoxIcon.Information);
