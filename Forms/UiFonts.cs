@@ -19,7 +19,7 @@ internal static class UiFonts
 
     // ── Grid ──────────────────────────────────────────────────────────────────
     public static readonly Font GridBody   = new("Segoe UI",  9F);
-    public static readonly Font GridHeader = new("Segoe UI",  9F, FontStyle.Bold);
+    public static readonly Font GridHeader = new("Segoe UI", 12F, FontStyle.Bold);
 
     // ── Monospace ─────────────────────────────────────────────────────────────
     public static readonly Font MonoSmall      = new("Courier New",  9F);
