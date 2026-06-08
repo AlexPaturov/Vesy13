@@ -560,7 +560,7 @@ partial class CorrectionsForm
         _btnClear.BackColor = UiColors.NeutralAction;
         _btnClear.FlatStyle = FlatStyle.Flat;
         _btnClear.Font = UiFonts.Body;
-        _btnClear.ForeColor = UiColors.TextOnDark;
+        _btnClear.ForeColor = UiColors.TextPrimary;
         _btnClear.Location = new Point(402, 128);
         _btnClear.Name = "_btnClear";
         _btnClear.Size = new Size(110, 32);
@@ -574,7 +574,7 @@ partial class CorrectionsForm
         _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
         _btnRefresh.Font = UiFonts.Body;
-        _btnRefresh.ForeColor = UiColors.TextOnDark;
+        _btnRefresh.ForeColor = UiColors.TextPrimary;
         _btnRefresh.Location = new Point(526, 128);
         _btnRefresh.Name = "_btnRefresh";
         _btnRefresh.Size = new Size(110, 32);

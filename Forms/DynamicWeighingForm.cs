@@ -59,6 +59,9 @@ public partial class DynamicWeighingForm : Form
         _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
         _btnBack.Font     = UiFonts.Small;
         _lblConn.Font     = UiFonts.Body;
+        _btnZero.BackColor = UiColors.NeutralAction;
+        _btnZero.ForeColor = UiColors.TextPrimary;
+        _btnBack.BackColor = UiColors.NavigationAction;
     }
 
     private void SetupGridColumns()

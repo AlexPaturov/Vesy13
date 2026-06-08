@@ -37,7 +37,7 @@ partial class MainForm
         // ── Header ────────────────────────────────────────────────────────────
         _lblTitle.Text      = "ВЕСЫ №13";
         _lblTitle.Font      = UiFonts.Title;
-        _lblTitle.ForeColor = Forms.UiColors.TextOnDark;
+        _lblTitle.ForeColor = Forms.UiColors.TextPrimary;
         _lblTitle.TextAlign = ContentAlignment.MiddleCenter;
         _lblTitle.Dock      = DockStyle.Fill;
 
@@ -52,11 +52,11 @@ partial class MainForm
         _btnStatic.Font      = UiFonts.NavButton;
         _btnStatic.FlatStyle = FlatStyle.Flat;
         _btnStatic.Margin    = new Padding(0, 5, 0, 5);
-        _btnStatic.BackColor = Forms.UiColors.HeaderBar;
+        _btnStatic.BackColor = Forms.UiColors.NavigationAction;
         _btnStatic.ForeColor = Forms.UiColors.TextOnDark;
         _btnStatic.UseVisualStyleBackColor = false;
         _btnStatic.Cursor    = Cursors.Hand;
-        _btnStatic.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
+        _btnStatic.FlatAppearance.BorderSize = 0;
         _btnStatic.Click    += BtnStatic_Click;
 
         _btnDynamic.Text      = "Взвешивание — Динамика";
@@ -64,11 +64,11 @@ partial class MainForm
         _btnDynamic.Font      = UiFonts.NavButton;
         _btnDynamic.FlatStyle = FlatStyle.Flat;
         _btnDynamic.Margin    = new Padding(0, 5, 0, 5);
-        _btnDynamic.BackColor = Forms.UiColors.HeaderBar;
+        _btnDynamic.BackColor = Forms.UiColors.NavigationAction;
         _btnDynamic.ForeColor = Forms.UiColors.TextOnDark;
         _btnDynamic.UseVisualStyleBackColor = false;
         _btnDynamic.Cursor    = Cursors.Hand;
-        _btnDynamic.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
+        _btnDynamic.FlatAppearance.BorderSize = 0;
         _btnDynamic.Click    += BtnDynamic_Click;
 
         _btnService.Text      = "Сервис";
@@ -76,11 +76,11 @@ partial class MainForm
         _btnService.Font      = UiFonts.NavButton;
         _btnService.FlatStyle = FlatStyle.Flat;
         _btnService.Margin    = new Padding(0, 5, 0, 5);
-        _btnService.BackColor = Forms.UiColors.HeaderBar;
+        _btnService.BackColor = Forms.UiColors.NavigationAction;
         _btnService.ForeColor = Forms.UiColors.TextOnDark;
         _btnService.UseVisualStyleBackColor = false;
         _btnService.Cursor    = Cursors.Hand;
-        _btnService.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
+        _btnService.FlatAppearance.BorderSize = 0;
         _btnService.Click    += BtnService_Click;
 
         _btnCorrections.Text      = "Корректировки";
@@ -88,11 +88,11 @@ partial class MainForm
         _btnCorrections.Font      = UiFonts.NavButton;
         _btnCorrections.FlatStyle = FlatStyle.Flat;
         _btnCorrections.Margin    = new Padding(0, 5, 0, 5);
-        _btnCorrections.BackColor = Forms.UiColors.HeaderBar;
+        _btnCorrections.BackColor = Forms.UiColors.NavigationAction;
         _btnCorrections.ForeColor = Forms.UiColors.TextOnDark;
         _btnCorrections.UseVisualStyleBackColor = false;
         _btnCorrections.Cursor    = Cursors.Hand;
-        _btnCorrections.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
+        _btnCorrections.FlatAppearance.BorderSize = 0;
         _btnCorrections.Click    += BtnCorrections_Click;
 
         _btnPrint.Text      = "Печать отвесной";
@@ -100,11 +100,11 @@ partial class MainForm
         _btnPrint.Font      = UiFonts.NavButton;
         _btnPrint.FlatStyle = FlatStyle.Flat;
         _btnPrint.Margin    = new Padding(0, 5, 0, 5);
-        _btnPrint.BackColor = Forms.UiColors.HeaderBar;
+        _btnPrint.BackColor = Forms.UiColors.NavigationAction;
         _btnPrint.ForeColor = Forms.UiColors.TextOnDark;
         _btnPrint.UseVisualStyleBackColor = false;
         _btnPrint.Cursor    = Cursors.Hand;
-        _btnPrint.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
+        _btnPrint.FlatAppearance.BorderSize = 0;
         _btnPrint.Click    += BtnPrint_Click;
 
         _btnLogs.Text      = "Просмотр логов";
@@ -112,11 +112,11 @@ partial class MainForm
         _btnLogs.Font      = UiFonts.NavButton;
         _btnLogs.FlatStyle = FlatStyle.Flat;
         _btnLogs.Margin    = new Padding(0, 5, 0, 5);
-        _btnLogs.BackColor = Forms.UiColors.HeaderBar;
+        _btnLogs.BackColor = Forms.UiColors.NavigationAction;
         _btnLogs.ForeColor = Forms.UiColors.TextOnDark;
         _btnLogs.UseVisualStyleBackColor = false;
         _btnLogs.Cursor    = Cursors.Hand;
-        _btnLogs.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
+        _btnLogs.FlatAppearance.BorderSize = 0;
         _btnLogs.Click    += BtnLogs_Click;
 
         _pnlMenu.Dock        = DockStyle.Fill;
@@ -144,7 +144,7 @@ partial class MainForm
 
         _lblConn.Text      = "АЦП: отключён";
         _lblConn.Font      = UiFonts.Body;
-        _lblConn.ForeColor = Forms.UiColors.TextOnDarkMuted;
+        _lblConn.ForeColor = Forms.UiColors.TextMuted;
         _lblConn.Location  = new Point(26, 9);
         _lblConn.AutoSize  = true;
 

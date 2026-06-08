@@ -199,7 +199,7 @@ partial class ServiceForm
         _btnPortRefresh.FlatStyle = FlatStyle.Flat;
         _btnPortRefresh.Font      = UiFonts.SubHeader;
         _btnPortRefresh.BackColor = UiColors.NeutralAction;
-        _btnPortRefresh.ForeColor = UiColors.TextOnDark;
+        _btnPortRefresh.ForeColor = UiColors.TextPrimary;
         _btnPortRefresh.UseVisualStyleBackColor = false;
         _btnPortRefresh.Click    += BtnPortRefresh_Click;
 
@@ -270,7 +270,7 @@ partial class ServiceForm
         _btnClearLog.FlatStyle = FlatStyle.Flat;
         _btnClearLog.Font      = UiFonts.Body;
         _btnClearLog.BackColor = UiColors.NeutralAction;
-        _btnClearLog.ForeColor = UiColors.TextOnDark;
+        _btnClearLog.ForeColor = UiColors.TextPrimary;
         _btnClearLog.UseVisualStyleBackColor = false;
         _btnClearLog.Click    += BtnClearLog_Click;
 
@@ -332,8 +332,8 @@ partial class ServiceForm
         _btnCapture.Size      = new Size(110, 28);
         _btnCapture.FlatStyle = FlatStyle.Flat;
         _btnCapture.Font      = UiFonts.Body;
-        _btnCapture.BackColor = UiColors.HeaderBar;
-        _btnCapture.ForeColor = UiColors.TextOnDark;
+        _btnCapture.BackColor = UiColors.NeutralAction;
+        _btnCapture.ForeColor = UiColors.TextPrimary;
         _btnCapture.UseVisualStyleBackColor = false;
         _btnCapture.FlatAppearance.BorderSize = 0;
         _btnCapture.Click    += BtnCapture_Click;
@@ -370,7 +370,7 @@ partial class ServiceForm
         _btnAddRow.FlatStyle = FlatStyle.Flat;
         _btnAddRow.Font      = UiFonts.Body;
         _btnAddRow.BackColor = UiColors.NeutralAction;
-        _btnAddRow.ForeColor = UiColors.TextOnDark;
+        _btnAddRow.ForeColor = UiColors.TextPrimary;
         _btnAddRow.UseVisualStyleBackColor = false;
         _btnAddRow.Click    += BtnAddRow_Click;
 
@@ -380,7 +380,7 @@ partial class ServiceForm
         _btnDelRow.FlatStyle = FlatStyle.Flat;
         _btnDelRow.Font      = UiFonts.Body;
         _btnDelRow.BackColor = UiColors.NeutralAction;
-        _btnDelRow.ForeColor = UiColors.TextOnDark;
+        _btnDelRow.ForeColor = UiColors.TextPrimary;
         _btnDelRow.UseVisualStyleBackColor = false;
         _btnDelRow.Click    += BtnDelRow_Click;
 

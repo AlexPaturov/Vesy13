@@ -50,7 +50,7 @@ partial class LogsForm
         _lblFrom.Height    = 20;
         _lblFrom.Location  = new Point(10, 15);
         _lblFrom.Text      = "С:";
-        _lblFrom.ForeColor = UiColors.TextOnDark;
+        _lblFrom.ForeColor = UiColors.TextPrimary;
         _lblFrom.Font      = UiFonts.Body;
         _lblFrom.TextAlign = ContentAlignment.MiddleLeft;
 
@@ -65,7 +65,7 @@ partial class LogsForm
         _lblTo.Height    = 20;
         _lblTo.Location  = new Point(203, 15);
         _lblTo.Text      = "—";
-        _lblTo.ForeColor = UiColors.TextOnDark;
+        _lblTo.ForeColor = UiColors.TextPrimary;
         _lblTo.Font      = UiFonts.Body;
         _lblTo.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -107,15 +107,19 @@ partial class LogsForm
         _grid.BackgroundColor         = UiColors.AppBackground;
         _grid.GridColor               = UiColors.GridLine;
         _grid.BorderStyle             = BorderStyle.None;
-        _grid.ColumnHeadersDefaultCellStyle.BackColor   = UiColors.StatusBar;
-        _grid.ColumnHeadersDefaultCellStyle.ForeColor   = UiColors.TextOnDark;
-        _grid.ColumnHeadersDefaultCellStyle.Font        = UiFonts.GridHeader;
-        _grid.ColumnHeadersDefaultCellStyle.Alignment   = DataGridViewContentAlignment.MiddleLeft;
-        _grid.DefaultCellStyle.Font                     = UiFonts.GridBody;
-        _grid.DefaultCellStyle.ForeColor                = UiColors.TextPrimary;
-        _grid.DefaultCellStyle.SelectionBackColor       = UiColors.GridSelectionBack;
-        _grid.DefaultCellStyle.SelectionForeColor       = UiColors.GridSelectionText;
-        _grid.EnableHeadersVisualStyles                 = false;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor          = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor          = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.Font               = UiFonts.GridHeader;
+        _grid.ColumnHeadersDefaultCellStyle.Alignment          = DataGridViewContentAlignment.MiddleLeft;
+        _grid.DefaultCellStyle.BackColor                       = UiColors.AppBackground;
+        _grid.DefaultCellStyle.Font                            = UiFonts.GridBody;
+        _grid.DefaultCellStyle.ForeColor                       = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.SelectionBackColor              = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor              = UiColors.GridSelectionText;
+        _grid.AlternatingRowsDefaultCellStyle.BackColor        = UiColors.GridAlternateRow;
+        _grid.EnableHeadersVisualStyles                        = false;
 
         // ── Status panel ──────────────────────────────────────────────────────
         _pnlStatus.Dock      = DockStyle.Bottom;

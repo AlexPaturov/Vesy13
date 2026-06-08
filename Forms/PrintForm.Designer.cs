@@ -229,7 +229,7 @@ partial class PrintForm
         _btnClearFilters.FlatAppearance.BorderSize = 0;
         _btnClearFilters.FlatStyle = FlatStyle.Flat;
         _btnClearFilters.Font = UiFonts.Body;
-        _btnClearFilters.ForeColor = UiColors.TextOnDark;
+        _btnClearFilters.ForeColor = UiColors.TextPrimary;
         _btnClearFilters.Location = new Point(120, 82);
         _btnClearFilters.Name = "_btnClearFilters";
         _btnClearFilters.Size = new Size(150, 26);
