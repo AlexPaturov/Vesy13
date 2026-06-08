@@ -22,9 +22,40 @@ public partial class PrintForm : Form
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
+    private void ApplyFonts()
+    {
+        _rbGpri.Font          = UiFonts.BodyBold;
+        _rbGras.Font          = UiFonts.BodyBold;
+        _lblDateFrom.Font     = UiFonts.Body;
+        _dtpFrom.Font         = UiFonts.Body;
+        _lblDateTo.Font       = UiFonts.Body;
+        _dtpTo.Font           = UiFonts.Body;
+        _lblGruz.Font         = UiFonts.Body;
+        _txtGruz.Font         = UiFonts.Body;
+        _lblNvag.Font         = UiFonts.Body;
+        _txtNvag.Font         = UiFonts.Body;
+        _lblPotr.Font         = UiFonts.Body;
+        _txtPotr.Font         = UiFonts.Body;
+        _lblNdok.Font         = UiFonts.Body;
+        _txtNdok.Font         = UiFonts.Body;
+        _chkPotr.Font         = UiFonts.Body;
+        _btnFind.Font         = UiFonts.BodyBold;
+        _btnClearFilters.Font = UiFonts.Body;
+        _grid.Font            = UiFonts.GridBody;
+        _lblSlipNum.Font      = UiFonts.Body;
+        _txtSlipNum.Font      = UiFonts.Body;
+        _lblFrom.Font         = UiFonts.Body;
+        _txtFrom.Font         = UiFonts.Body;
+        _lblTo.Font           = UiFonts.Body;
+        _txtTo.Font           = UiFonts.Body;
+        _btnPreview.Font      = UiFonts.BodyBold;
+        _btnBack.Font         = UiFonts.Small;
+    }
+
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        ApplyFonts();
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
         SetupGridColumns();
         _dtpFrom.Value = DateTime.Today.AddDays(-7);

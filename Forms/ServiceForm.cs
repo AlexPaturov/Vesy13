@@ -33,11 +33,88 @@ public partial class ServiceForm : Form
         InitializeComponent();
     }
 
+    private void ApplyFonts()
+    {
+        // Channel tab
+        _btnAdmin.Font        = UiFonts.Body;
+        _lblChannelTitle.Font = UiFonts.SubHeaderBold;
+        _rbMain.Font          = UiFonts.NavButton;
+        _rbBackup.Font        = UiFonts.NavButton;
+        _lblChannelNote.Font  = UiFonts.Body;
+        // Monitor tab
+        _cmbPort.Font         = UiFonts.Medium;
+        _btnConn.Font         = UiFonts.Body;
+        _btnPortRefresh.Font  = UiFonts.SubHeader;
+        _lblConn.Font         = UiFonts.Body;
+        _lblRate.Font         = UiFonts.Body;
+        _lblCh0Cap.Font       = UiFonts.Body;
+        _lblCh0.Font          = UiFonts.MonitorDisplay;
+        _lblCh1Cap.Font       = UiFonts.Body;
+        _lblCh1.Font          = UiFonts.MonitorDisplay;
+        _chkLog.Font          = UiFonts.Body;
+        _btnClearLog.Font     = UiFonts.Body;
+        _rtbLog.Font          = UiFonts.MonoSmall;
+        // CalibStatic tab
+        _rbCh0Calib.Font      = UiFonts.SubHeader;
+        _rbCh1Calib.Font      = UiFonts.SubHeader;
+        _lblLiveAdcCap.Font   = UiFonts.Body;
+        _lblLiveAdc.Font      = UiFonts.MonoLiveAdc;
+        _btnCapture.Font      = UiFonts.Body;
+        _dgvCalib.Font        = UiFonts.GridBody;
+        _btnAddRow.Font       = UiFonts.Body;
+        _btnDelRow.Font       = UiFonts.Body;
+        _lblKEquals.Font      = UiFonts.Medium;
+        _txtK.Font            = UiFonts.Mono;
+        _lblBEquals.Font      = UiFonts.Medium;
+        _txtB.Font            = UiFonts.Mono;
+        _lblFormula.Font      = UiFonts.Body;
+        _btnLsq.Font          = UiFonts.Medium;
+        _btnCalibSave.Font    = UiFonts.Medium;
+        // CalibDynamic tab
+        _lblLiveAdcCapD.Font  = UiFonts.Body;
+        _lblLiveAdcD.Font     = UiFonts.MonoLiveAdc;
+        _lblSecPlus.Font      = UiFonts.BodyBold;
+        _lblKPlusEquals.Font  = UiFonts.Medium;
+        _txtKPlus.Font        = UiFonts.Mono;
+        _lblAutoCalcPlus.Font = UiFonts.Body;
+        _lblCodePlusCap.Font  = UiFonts.Body;
+        _txtCodePlus.Font     = UiFonts.MonoSmall;
+        _btnCapPlus.Font      = UiFonts.Small;
+        _lblMassPlusCap.Font  = UiFonts.Body;
+        _txtMassPlus.Font     = UiFonts.MonoSmall;
+        _btnCalcPlus.Font     = UiFonts.Body;
+        _lblSecMinus.Font     = UiFonts.BodyBold;
+        _lblKMinusEquals.Font = UiFonts.Medium;
+        _txtKMinus.Font       = UiFonts.Mono;
+        _lblAutoCalcMinus.Font= UiFonts.Body;
+        _lblCodeMinusCap.Font = UiFonts.Body;
+        _txtCodeMinus.Font    = UiFonts.MonoSmall;
+        _btnCapMinus.Font     = UiFonts.Small;
+        _lblMassMinusCap.Font = UiFonts.Body;
+        _txtMassMinus.Font    = UiFonts.MonoSmall;
+        _btnCalcMinus.Font    = UiFonts.Body;
+        _lblFormulaD.Font     = UiFonts.Body;
+        _btnCalibDynSave.Font = UiFonts.Medium;
+        // Settings tab
+        _lblPortCap.Font         = UiFonts.Medium;
+        _lblNpvCap.Font          = UiFonts.Medium;
+        _lblDiscCap.Font         = UiFonts.Medium;
+        _lblZeroCap.Font         = UiFonts.Medium;
+        _lblDynWinCap.Font       = UiFonts.Medium;
+        _lblBogieTimeoutCap.Font = UiFonts.Medium;
+        _lblPasswordCap.Font     = UiFonts.Medium;
+        _btnSaveSettings.Font    = UiFonts.Medium;
+        // General
+        _tabs.Font    = UiFonts.Medium;
+        _btnBack.Font = UiFonts.Small;
+    }
+
     // ── Lifecycle ───────────────────────────────────────────────────────────
 
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        ApplyFonts();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
         _sim.RawFrameReceived  += OnRawFrame;

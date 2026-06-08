@@ -26,9 +26,23 @@ public partial class MainForm : Form
 
     // ── Lifecycle ───────────────────────────────────────────────────────────
 
+    private void ApplyFonts()
+    {
+        _lblTitle.Font       = Forms.UiFonts.Title;
+        _btnStatic.Font      = Forms.UiFonts.NavButton;
+        _btnDynamic.Font     = Forms.UiFonts.NavButton;
+        _btnService.Font     = Forms.UiFonts.NavButton;
+        _btnCorrections.Font = Forms.UiFonts.NavButton;
+        _btnPrint.Font       = Forms.UiFonts.NavButton;
+        _btnLogs.Font        = Forms.UiFonts.NavButton;
+        _lblConn.Font        = Forms.UiFonts.Body;
+        _btnConn.Font        = Forms.UiFonts.Small;
+    }
+
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        ApplyFonts();
         if (DesignMode || _sim is null) return;
         _sim.ConnectionChanged += Adc_ConnectionChanged;
         UpdateConn(_sim.IsConnected);

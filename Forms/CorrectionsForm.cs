@@ -56,6 +56,55 @@ public partial class CorrectionsForm : Form
         AddFirebirdGridColumns(_gridDone);
     }
 
+    private void ApplyFonts()
+    {
+        label2.Font         = UiFonts.Body;
+        lblpotr.Font        = UiFonts.Body;
+        _tbPlat.Font        = UiFonts.Body;
+        _tbPotr.Font        = UiFonts.Body;
+        _lblVidVzv.Font     = UiFonts.BodyBold;
+        _rbGpri.Font        = UiFonts.MediumBold;
+        _rbGras.Font        = UiFonts.MediumBold;
+        _lblVidMode.Font    = UiFonts.BodyBold;
+        _rbBrutto.Font      = UiFonts.MediumBold;
+        _rbTara.Font        = UiFonts.MediumBold;
+        _btnSave.Font       = UiFonts.MediumBold;
+        _lblDateCap.Font    = UiFonts.Body;
+        _lblDt.Font         = UiFonts.BodyBold;
+        _lblTimeCap.Font    = UiFonts.Body;
+        _lblVr.Font         = UiFonts.BodyBold;
+        _lblNppCap.Font     = UiFonts.Body;
+        _lblNpp.Font        = UiFonts.BodyBold;
+        _lblModeCap.Font    = UiFonts.Body;
+        _lblMode.Font       = UiFonts.BodyBold;
+        _lblNvagCap.Font    = UiFonts.Body;
+        _txtNvag.Font       = UiFonts.Body;
+        _lblDirCap.Font     = UiFonts.Body;
+        _lblDir.Font        = UiFonts.BodyBold;
+        _lblGruzCap.Font    = UiFonts.Body;
+        _txtGruz.Font       = UiFonts.Body;
+        _lblNdokCap.Font    = UiFonts.Body;
+        _txtNdok.Font       = UiFonts.Body;
+        _lblBruttoCap.Font  = UiFonts.Body;
+        _lblBrutto.Font     = UiFonts.MonoBold;
+        _lblBruttoUnit.Font = UiFonts.Body;
+        _lblTarCap.Font     = UiFonts.Body;
+        _cmbTar.Font        = UiFonts.Body;
+        _lblNettoCap.Font   = UiFonts.Body;
+        _lblNetto.Font      = UiFonts.MonoBold;
+        _lblNettoUnit.Font  = UiFonts.Body;
+        _btnTransfer.Font   = UiFonts.MediumBold;
+        _btnClear.Font      = UiFonts.Body;
+        _btnRefresh.Font    = UiFonts.Body;
+        _gridPend.Font      = UiFonts.GridBody;
+        _lblHeaderPend.Font = UiFonts.BodyBold;
+        _gridDone.Font      = UiFonts.GridBody;
+        _lblHeaderDone.Font = UiFonts.BodyBold;
+        _btnBack.Font       = UiFonts.Small;
+        tbCex.Font          = UiFonts.Body;
+        label3.Font         = UiFonts.Body;
+    }
+
     // ── Grid columns ────────────────────────────────────────────────────────
 
     private static void AddPendingGridColumns(DataGridView g)
@@ -115,6 +164,7 @@ public partial class CorrectionsForm : Form
     protected override async void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        ApplyFonts();
         if (DesignMode || _ldb is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();

@@ -9,6 +9,13 @@ public partial class PasswordDialog : Form
         InitializeComponent();
     }
 
+    protected override void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+        _lblPrompt.Font   = UiFonts.Medium;
+        _txtPassword.Font = UiFonts.SubHeader;
+    }
+
     private void TxtPassword_KeyDown(object? sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Enter) TryAccept();

@@ -17,9 +17,20 @@ public partial class LogsForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        ApplyFonts();
         SetupGrid();
         _dtpFrom.Value = DateTime.Today;
         _dtpTo.Value   = DateTime.Now;
+    }
+
+    private void ApplyFonts()
+    {
+        _lblFrom.Font = UiFonts.Body;
+        _lblTo.Font   = UiFonts.Body;
+        _btnFind.Font = UiFonts.Body;
+        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
+        _grid.DefaultCellStyle.Font              = UiFonts.GridBody;
+        _btnBack.Font = UiFonts.Small;
     }
 
     private void SetupGrid()
