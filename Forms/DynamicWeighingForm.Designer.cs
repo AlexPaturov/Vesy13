@@ -85,7 +85,7 @@ partial class DynamicWeighingForm
         _pnlDisplay.Controls.Add(_lblStatus);
         _pnlDisplay.Location = new Point(8, 66);
         _pnlDisplay.Name = "_pnlDisplay";
-        _pnlDisplay.Size = new Size(617, 158);
+        _pnlDisplay.Size = new Size(673, 158);
         _pnlDisplay.TabIndex = 2;
         // 
         // _lblValue
@@ -116,7 +116,7 @@ partial class DynamicWeighingForm
         _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Location = new Point(8, 118);
         _lblStatus.Name = "_lblStatus";
-        _lblStatus.Size = new Size(528, 34);
+        _lblStatus.Size = new Size(584, 34);
         _lblStatus.TabIndex = 2;
         _lblStatus.Text = "Готов к взвешиванию  —  Тележка 1";
         _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
@@ -130,7 +130,7 @@ partial class DynamicWeighingForm
         _btnWeigh.ForeColor = UiColors.TextOnDark;
         _btnWeigh.Location = new Point(8, 230);
         _btnWeigh.Name = "_btnWeigh";
-        _btnWeigh.Size = new Size(617, 54);
+        _btnWeigh.Size = new Size(673, 54);
         _btnWeigh.TabIndex = 3;
         _btnWeigh.Text = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.UseVisualStyleBackColor = false;
@@ -199,7 +199,7 @@ partial class DynamicWeighingForm
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle2;
         _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _grid.Size = new Size(617, 261);
+        _grid.Size = new Size(673, 261);
         _grid.TabIndex = 6;
         // 
         // _pnlStatusBar
@@ -211,7 +211,7 @@ partial class DynamicWeighingForm
         _pnlStatusBar.Dock = DockStyle.Bottom;
         _pnlStatusBar.Location = new Point(0, 595);
         _pnlStatusBar.Name = "_pnlStatusBar";
-        _pnlStatusBar.Size = new Size(633, 34);
+        _pnlStatusBar.Size = new Size(689, 34);
         _pnlStatusBar.TabIndex = 7;
         // 
         // _btnBack
