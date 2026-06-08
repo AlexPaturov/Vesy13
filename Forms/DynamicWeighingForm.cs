@@ -78,6 +78,29 @@ public partial class DynamicWeighingForm : Form
         UpdateButtonStates();
     }
 
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        if (!DesignMode && _sim is not null)
+        {
+            if (_state == WeighState.Bogie1Captured)
+            {
+                if (MessageBox.Show(
+                    "Взвешивание вагона не завершено — зафиксирована только тележка 1.\nЗамер тележки 1 будет потерян. Выйти?",
+                    "Незавершённый вагон", MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            else if (_wagonNumber > 0)
+            {
+                HandleFinish(silent: true);
+            }
+        }
+        base.OnFormClosing(e);
+    }
+
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
         if (!DesignMode && _sim is not null)
@@ -199,10 +222,10 @@ public partial class DynamicWeighingForm : Form
 
     private void OnZeroClick() => MessageBox.Show("Ноль установлен (в разработке)", "Ноль", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-    private void HandleFinish()
+    private void HandleFinish(bool silent = false)
     {
         if (_wagonNumber == 0) return;
-        if (MessageBox.Show($"Завершить состав?\nВзвешено вагонов: {_wagonNumber}",
+        if (!silent && MessageBox.Show($"Завершить состав?\nВзвешено вагонов: {_wagonNumber}",
                 "Завершить состав", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
 
         int finishedCount   = _wagonNumber;
