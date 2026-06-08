@@ -76,6 +76,7 @@ partial class PrintForm
         _rbGpri.AutoSize = true;
         _rbGpri.Checked = true;
         _rbGpri.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _rbGpri.ForeColor = UiColors.TextPrimary;
         _rbGpri.Location = new Point(10, 10);
         _rbGpri.Name = "_rbGpri";
         _rbGpri.Size = new Size(110, 24);
@@ -86,6 +87,7 @@ partial class PrintForm
         // ── _rbGras ──────────────────────────────────────────────────────────
         _rbGras.AutoSize = true;
         _rbGras.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _rbGras.ForeColor = UiColors.TextPrimary;
         _rbGras.Location = new Point(135, 10);
         _rbGras.Name = "_rbGras";
         _rbGras.Size = new Size(110, 24);
@@ -137,6 +139,8 @@ partial class PrintForm
 
         // ── _txtGruz ─────────────────────────────────────────────────────────
         _txtGruz.Font = new Font("Segoe UI", 9F);
+        _txtGruz.BackColor = UiColors.InputBack;
+        _txtGruz.ForeColor = UiColors.InputFore;
         _txtGruz.Location = new Point(648, 9);
         _txtGruz.Name = "_txtGruz";
         _txtGruz.Size = new Size(210, 27);
@@ -153,6 +157,8 @@ partial class PrintForm
 
         // ── _txtNvag ─────────────────────────────────────────────────────────
         _txtNvag.Font = new Font("Segoe UI", 9F);
+        _txtNvag.BackColor = UiColors.InputBack;
+        _txtNvag.ForeColor = UiColors.InputFore;
         _txtNvag.Location = new Point(920, 9);
         _txtNvag.Name = "_txtNvag";
         _txtNvag.Size = new Size(160, 27);
@@ -169,6 +175,8 @@ partial class PrintForm
 
         // ── _txtPotr ─────────────────────────────────────────────────────────
         _txtPotr.Font = new Font("Segoe UI", 9F);
+        _txtPotr.BackColor = UiColors.InputBack;
+        _txtPotr.ForeColor = UiColors.InputFore;
         _txtPotr.Location = new Point(98, 47);
         _txtPotr.Name = "_txtPotr";
         _txtPotr.Size = new Size(210, 27);
@@ -185,6 +193,8 @@ partial class PrintForm
 
         // ── _txtNdok ─────────────────────────────────────────────────────────
         _txtNdok.Font = new Font("Segoe UI", 9F);
+        _txtNdok.BackColor = UiColors.InputBack;
+        _txtNdok.ForeColor = UiColors.InputFore;
         _txtNdok.Location = new Point(408, 47);
         _txtNdok.Name = "_txtNdok";
         _txtNdok.Size = new Size(130, 27);
@@ -234,8 +244,17 @@ partial class PrintForm
         _grid.AllowUserToResizeRows = false;
         _grid.BackgroundColor = UiColors.Surface;
         _grid.BorderStyle = BorderStyle.None;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _grid.ColumnHeadersHeight = 26;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _grid.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _grid.EnableHeadersVisualStyles = false;
+        _grid.GridColor = UiColors.GridLine;
         _grid.Dock = DockStyle.Fill;
         _grid.Font = new Font("Segoe UI", 9F);
         _grid.MultiSelect = false;
@@ -274,6 +293,8 @@ partial class PrintForm
 
         // ── _txtSlipNum ──────────────────────────────────────────────────────
         _txtSlipNum.Font = new Font("Segoe UI", 9F);
+        _txtSlipNum.BackColor = UiColors.InputBack;
+        _txtSlipNum.ForeColor = UiColors.InputFore;
         _txtSlipNum.Location = new Point(128, 9);
         _txtSlipNum.Name = "_txtSlipNum";
         _txtSlipNum.Size = new Size(120, 27);
@@ -290,6 +311,8 @@ partial class PrintForm
 
         // ── _txtFrom ─────────────────────────────────────────────────────────
         _txtFrom.Font = new Font("Segoe UI", 9F);
+        _txtFrom.BackColor = UiColors.InputBack;
+        _txtFrom.ForeColor = UiColors.InputFore;
         _txtFrom.Location = new Point(316, 9);
         _txtFrom.Name = "_txtFrom";
         _txtFrom.Size = new Size(250, 27);
@@ -306,6 +329,8 @@ partial class PrintForm
 
         // ── _txtTo ───────────────────────────────────────────────────────────
         _txtTo.Font = new Font("Segoe UI", 9F);
+        _txtTo.BackColor = UiColors.InputBack;
+        _txtTo.ForeColor = UiColors.InputFore;
         _txtTo.Location = new Point(618, 9);
         _txtTo.Name = "_txtTo";
         _txtTo.Size = new Size(250, 27);

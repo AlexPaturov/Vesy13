@@ -149,6 +149,8 @@ partial class CorrectionsForm
         // _tbPlat
         //
         _tbPlat.Font = new Font("Segoe UI", 9F);
+        _tbPlat.BackColor = UiColors.InputBack;
+        _tbPlat.ForeColor = UiColors.InputFore;
         _tbPlat.Location = new Point(954, 33);
         _tbPlat.Name = "_tbPlat";
         _tbPlat.Size = new Size(233, 27);
@@ -157,6 +159,8 @@ partial class CorrectionsForm
         // _tbPotr
         //
         _tbPotr.Font = new Font("Segoe UI", 9F);
+        _tbPotr.BackColor = UiColors.InputBack;
+        _tbPotr.ForeColor = UiColors.InputFore;
         _tbPotr.Location = new Point(954, 5);
         _tbPotr.Name = "_tbPotr";
         _tbPotr.Size = new Size(232, 27);
@@ -374,6 +378,8 @@ partial class CorrectionsForm
         // _txtNvag
         //
         _txtNvag.Font = new Font("Segoe UI", 9F);
+        _txtNvag.BackColor = UiColors.InputBack;
+        _txtNvag.ForeColor = UiColors.InputFore;
         _txtNvag.Location = new Point(235, 38);
         _txtNvag.Name = "_txtNvag";
         _txtNvag.Size = new Size(170, 27);
@@ -416,6 +422,8 @@ partial class CorrectionsForm
         // _txtGruz
         //
         _txtGruz.Font = new Font("Segoe UI", 9F);
+        _txtGruz.BackColor = UiColors.InputBack;
+        _txtGruz.ForeColor = UiColors.InputFore;
         _txtGruz.Location = new Point(235, 65);
         _txtGruz.Name = "_txtGruz";
         _txtGruz.Size = new Size(270, 27);
@@ -435,6 +443,8 @@ partial class CorrectionsForm
         // _txtNdok
         //
         _txtNdok.Font = new Font("Segoe UI", 9F);
+        _txtNdok.BackColor = UiColors.InputBack;
+        _txtNdok.ForeColor = UiColors.InputFore;
         _txtNdok.Location = new Point(737, 65);
         _txtNdok.Name = "_txtNdok";
         _txtNdok.Size = new Size(130, 27);
@@ -488,6 +498,8 @@ partial class CorrectionsForm
         //
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbTar.Font = new Font("Segoe UI", 9F);
+        _cmbTar.BackColor = UiColors.InputBack;
+        _cmbTar.ForeColor = UiColors.InputFore;
         _cmbTar.Location = new Point(352, 94);
         _cmbTar.Name = "_cmbTar";
         _cmbTar.Size = new Size(284, 28);
@@ -545,24 +557,30 @@ partial class CorrectionsForm
         //
         // _btnClear
         //
+        _btnClear.BackColor = UiColors.NeutralAction;
         _btnClear.FlatStyle = FlatStyle.Flat;
         _btnClear.Font = new Font("Segoe UI", 9F);
+        _btnClear.ForeColor = UiColors.TextOnDark;
         _btnClear.Location = new Point(402, 128);
         _btnClear.Name = "_btnClear";
         _btnClear.Size = new Size(110, 32);
         _btnClear.TabIndex = 27;
         _btnClear.Text = "Очистить";
+        _btnClear.UseVisualStyleBackColor = false;
         _btnClear.Click += BtnClear_Click;
         //
         // _btnRefresh
         //
+        _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
         _btnRefresh.Font = new Font("Segoe UI", 9F);
+        _btnRefresh.ForeColor = UiColors.TextOnDark;
         _btnRefresh.Location = new Point(526, 128);
         _btnRefresh.Name = "_btnRefresh";
         _btnRefresh.Size = new Size(110, 32);
         _btnRefresh.TabIndex = 28;
         _btnRefresh.Text = "Обновить";
+        _btnRefresh.UseVisualStyleBackColor = false;
         _btnRefresh.Click += BtnRefresh_Click;
         //
         // _split
@@ -594,11 +612,20 @@ partial class CorrectionsForm
         _gridPend.AllowUserToDeleteRows = false;
         _gridPend.AllowUserToResizeRows = false;
         dataGridViewCellStyle9.BackColor = UiColors.GridAlternateRow;
+        dataGridViewCellStyle9.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle9.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle9.SelectionForeColor = UiColors.GridSelectionText;
         _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
         _gridPend.BackgroundColor = UiColors.Surface;
         _gridPend.BorderStyle = BorderStyle.None;
+        _gridPend.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _gridPend.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _gridPend.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _gridPend.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _gridPend.ColumnHeadersHeight = 26;
         _gridPend.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _gridPend.EnableHeadersVisualStyles = false;
+        _gridPend.GridColor = UiColors.GridLine;
         _gridPend.Dock = DockStyle.Fill;
         _gridPend.Font = new Font("Segoe UI", 9F);
         _gridPend.Location = new Point(0, 24);
@@ -608,6 +635,9 @@ partial class CorrectionsForm
         _gridPend.RowHeadersVisible = false;
         _gridPend.RowHeadersWidth = 51;
         dataGridViewCellStyle10.BackColor = UiColors.Surface;
+        dataGridViewCellStyle10.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle10.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle10.SelectionForeColor = UiColors.GridSelectionText;
         _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle10;
         _gridPend.RowTemplate.Height = 22;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -634,11 +664,20 @@ partial class CorrectionsForm
         _gridDone.AllowUserToDeleteRows = false;
         _gridDone.AllowUserToResizeRows = false;
         dataGridViewCellStyle11.BackColor = UiColors.GridAlternateRow;
+        dataGridViewCellStyle11.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle11.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle11.SelectionForeColor = UiColors.GridSelectionText;
         _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
         _gridDone.BackgroundColor = UiColors.Surface;
         _gridDone.BorderStyle = BorderStyle.None;
+        _gridDone.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _gridDone.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _gridDone.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _gridDone.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _gridDone.ColumnHeadersHeight = 26;
         _gridDone.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _gridDone.EnableHeadersVisualStyles = false;
+        _gridDone.GridColor = UiColors.GridLine;
         _gridDone.Dock = DockStyle.Fill;
         _gridDone.Font = new Font("Segoe UI", 9F);
         _gridDone.Location = new Point(0, 24);
@@ -648,6 +687,9 @@ partial class CorrectionsForm
         _gridDone.RowHeadersVisible = false;
         _gridDone.RowHeadersWidth = 51;
         dataGridViewCellStyle12.BackColor = UiColors.Surface;
+        dataGridViewCellStyle12.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle12.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle12.SelectionForeColor = UiColors.GridSelectionText;
         _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle12;
         _gridDone.RowTemplate.Height = 22;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -696,6 +738,8 @@ partial class CorrectionsForm
         // tbCex
         //
         tbCex.Font = new Font("Segoe UI", 9F);
+        tbCex.BackColor = UiColors.InputBack;
+        tbCex.ForeColor = UiColors.InputFore;
         tbCex.Location = new Point(954, 61);
         tbCex.MaxLength = 3;
         tbCex.Name = "tbCex";

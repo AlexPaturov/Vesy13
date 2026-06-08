@@ -52,6 +52,7 @@ partial class MainForm
         _btnStatic.Margin    = new Padding(0, 5, 0, 5);
         _btnStatic.BackColor = Forms.UiColors.HeaderBar;
         _btnStatic.ForeColor = Forms.UiColors.TextOnDark;
+        _btnStatic.UseVisualStyleBackColor = false;
         _btnStatic.Cursor    = Cursors.Hand;
         _btnStatic.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnStatic.Click    += BtnStatic_Click;
@@ -63,6 +64,7 @@ partial class MainForm
         _btnDynamic.Margin    = new Padding(0, 5, 0, 5);
         _btnDynamic.BackColor = Forms.UiColors.HeaderBar;
         _btnDynamic.ForeColor = Forms.UiColors.TextOnDark;
+        _btnDynamic.UseVisualStyleBackColor = false;
         _btnDynamic.Cursor    = Cursors.Hand;
         _btnDynamic.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnDynamic.Click    += BtnDynamic_Click;
@@ -74,6 +76,7 @@ partial class MainForm
         _btnService.Margin    = new Padding(0, 5, 0, 5);
         _btnService.BackColor = Forms.UiColors.HeaderBar;
         _btnService.ForeColor = Forms.UiColors.TextOnDark;
+        _btnService.UseVisualStyleBackColor = false;
         _btnService.Cursor    = Cursors.Hand;
         _btnService.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnService.Click    += BtnService_Click;
@@ -85,6 +88,7 @@ partial class MainForm
         _btnCorrections.Margin    = new Padding(0, 5, 0, 5);
         _btnCorrections.BackColor = Forms.UiColors.HeaderBar;
         _btnCorrections.ForeColor = Forms.UiColors.TextOnDark;
+        _btnCorrections.UseVisualStyleBackColor = false;
         _btnCorrections.Cursor    = Cursors.Hand;
         _btnCorrections.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnCorrections.Click    += BtnCorrections_Click;
@@ -96,6 +100,7 @@ partial class MainForm
         _btnPrint.Margin    = new Padding(0, 5, 0, 5);
         _btnPrint.BackColor = Forms.UiColors.HeaderBar;
         _btnPrint.ForeColor = Forms.UiColors.TextOnDark;
+        _btnPrint.UseVisualStyleBackColor = false;
         _btnPrint.Cursor    = Cursors.Hand;
         _btnPrint.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnPrint.Click    += BtnPrint_Click;
@@ -107,6 +112,7 @@ partial class MainForm
         _btnLogs.Margin    = new Padding(0, 5, 0, 5);
         _btnLogs.BackColor = Forms.UiColors.HeaderBar;
         _btnLogs.ForeColor = Forms.UiColors.TextOnDark;
+        _btnLogs.UseVisualStyleBackColor = false;
         _btnLogs.Cursor    = Cursors.Hand;
         _btnLogs.FlatAppearance.BorderColor = Forms.UiColors.ButtonBorder;
         _btnLogs.Click    += BtnLogs_Click;
@@ -148,6 +154,7 @@ partial class MainForm
         _btnConn.FlatStyle = FlatStyle.Flat;
         _btnConn.BackColor = Forms.UiColors.NavigationAction;
         _btnConn.ForeColor = Forms.UiColors.TextOnDark;
+        _btnConn.UseVisualStyleBackColor = false;
         _btnConn.FlatAppearance.BorderSize = 0;
         _btnConn.Click    += BtnConn_Click;
 

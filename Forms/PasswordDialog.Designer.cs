@@ -20,15 +20,18 @@ partial class PasswordDialog
 
         SuspendLayout();
 
-        _lblPrompt.Text     = "Введите пароль:";
-        _lblPrompt.Location = new Point(20, 20);
-        _lblPrompt.AutoSize = true;
-        _lblPrompt.Font     = new Font("Segoe UI", 10F);
+        _lblPrompt.Text      = "Введите пароль:";
+        _lblPrompt.Location  = new Point(20, 20);
+        _lblPrompt.AutoSize  = true;
+        _lblPrompt.Font      = new Font("Segoe UI", 10F);
+        _lblPrompt.ForeColor = UiColors.TextPrimary;
 
         _txtPassword.Location              = new Point(20, 46);
         _txtPassword.Width                 = 260;
         _txtPassword.UseSystemPasswordChar = true;
         _txtPassword.Font                  = new Font("Segoe UI", 11F);
+        _txtPassword.BackColor             = UiColors.InputBack;
+        _txtPassword.ForeColor             = UiColors.InputFore;
         _txtPassword.KeyDown              += TxtPassword_KeyDown;
 
         _btnOk.Text      = "Войти";
@@ -37,14 +40,19 @@ partial class PasswordDialog
         _btnOk.FlatStyle = FlatStyle.Flat;
         _btnOk.BackColor = UiColors.HeaderBar;
         _btnOk.ForeColor = UiColors.TextOnDark;
+        _btnOk.UseVisualStyleBackColor = false;
         _btnOk.Click    += BtnOk_Click;
 
         _btnCancel.Text         = "Отмена";
         _btnCancel.Location     = new Point(170, 90);
         _btnCancel.Size         = new Size(80, 30);
         _btnCancel.FlatStyle    = FlatStyle.Flat;
+        _btnCancel.BackColor    = UiColors.NeutralAction;
+        _btnCancel.ForeColor    = UiColors.TextOnDark;
+        _btnCancel.UseVisualStyleBackColor = false;
         _btnCancel.DialogResult = DialogResult.Cancel;
 
+        BackColor       = UiColors.AppBackground;
         Text            = "Сервисный режим";
         ClientSize      = new Size(300, 140);
         FormBorderStyle = FormBorderStyle.FixedDialog;

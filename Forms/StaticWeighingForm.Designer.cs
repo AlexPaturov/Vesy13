@@ -97,13 +97,16 @@ partial class StaticWeighingForm
         // 
         // _btnZero
         // 
+        _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.FlatStyle = FlatStyle.Flat;
         _btnZero.Font = new Font("Segoe UI", 10F);
+        _btnZero.ForeColor = UiColors.TextOnDark;
         _btnZero.Location = new Point(8, 256);
         _btnZero.Name = "_btnZero";
         _btnZero.Size = new Size(100, 32);
         _btnZero.TabIndex = 3;
         _btnZero.Text = "Ноль";
+        _btnZero.UseVisualStyleBackColor = false;
         _btnZero.Click += BtnZero_Click;
         // 
         // _btnFinish
@@ -126,6 +129,9 @@ partial class StaticWeighingForm
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeRows = false;
         dataGridViewCellStyle1.BackColor = UiColors.GridAlternateRow;
+        dataGridViewCellStyle1.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle1.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle1.SelectionForeColor = UiColors.GridSelectionText;
         _grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
         _grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _grid.BackgroundColor = UiColors.Surface;
@@ -140,11 +146,15 @@ partial class StaticWeighingForm
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.EnableHeadersVisualStyles = false;
         _grid.Font = new Font("Segoe UI", 9F);
+        _grid.GridColor = UiColors.GridLine;
         _grid.Location = new Point(8, 294);
         _grid.Name = "_grid";
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
         dataGridViewCellStyle2.BackColor = UiColors.Surface;
+        dataGridViewCellStyle2.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle2.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle2.SelectionForeColor = UiColors.GridSelectionText;
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle2;
         _grid.RowTemplate.Height = 22;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;

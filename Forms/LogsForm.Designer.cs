@@ -81,6 +81,7 @@ partial class LogsForm
         _btnFind.FlatStyle = FlatStyle.Flat;
         _btnFind.BackColor = UiColors.InfoAction;
         _btnFind.ForeColor = UiColors.TextOnDark;
+        _btnFind.UseVisualStyleBackColor = false;
         _btnFind.Font      = new Font("Segoe UI", 9f);
         _btnFind.Click    += BtnFind_Click;
 
@@ -111,6 +112,7 @@ partial class LogsForm
         _grid.ColumnHeadersDefaultCellStyle.Font        = new Font("Segoe UI", 8.5f, FontStyle.Bold);
         _grid.ColumnHeadersDefaultCellStyle.Alignment   = DataGridViewContentAlignment.MiddleLeft;
         _grid.DefaultCellStyle.Font                     = new Font("Segoe UI", 8.5f);
+        _grid.DefaultCellStyle.ForeColor                = UiColors.TextPrimary;
         _grid.DefaultCellStyle.SelectionBackColor       = UiColors.GridSelectionBack;
         _grid.DefaultCellStyle.SelectionForeColor       = UiColors.GridSelectionText;
         _grid.EnableHeadersVisualStyles                 = false;
@@ -126,6 +128,7 @@ partial class LogsForm
         _btnBack.FlatStyle = FlatStyle.Flat;
         _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.ForeColor = UiColors.TextOnDark;
+        _btnBack.UseVisualStyleBackColor = false;
         _btnBack.Font      = new Font("Segoe UI", 9f);
         _btnBack.Click    += BtnBack_Click;
 
@@ -134,6 +137,7 @@ partial class LogsForm
         // ── Form ──────────────────────────────────────────────────────────────
         AutoScaleDimensions = new SizeF(7f, 15f);
         AutoScaleMode       = AutoScaleMode.Font;
+        BackColor           = UiColors.AppBackground;
         ClientSize          = new Size(1264, 670);
         Text                = "Просмотр логов";
         StartPosition       = FormStartPosition.CenterScreen;

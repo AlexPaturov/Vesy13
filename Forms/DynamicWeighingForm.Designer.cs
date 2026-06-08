@@ -34,6 +34,7 @@ partial class DynamicWeighingForm
         _gbDir.Controls.Add(_rbPlus);
         _gbDir.Controls.Add(_rbMinus);
         _gbDir.Font = new Font("Segoe UI", 9F);
+        _gbDir.ForeColor = UiColors.TextPrimary;
         _gbDir.Location = new Point(8, 8);
         _gbDir.Name = "_gbDir";
         _gbDir.Size = new Size(320, 50);
@@ -46,6 +47,7 @@ partial class DynamicWeighingForm
         _rbPlus.AutoSize = true;
         _rbPlus.Checked = true;
         _rbPlus.Font = new Font("Segoe UI", 10F);
+        _rbPlus.ForeColor = UiColors.TextPrimary;
         _rbPlus.Location = new Point(12, 20);
         _rbPlus.Name = "_rbPlus";
         _rbPlus.Size = new Size(61, 23);
@@ -57,6 +59,7 @@ partial class DynamicWeighingForm
         // 
         _rbMinus.AutoSize = true;
         _rbMinus.Font = new Font("Segoe UI", 10F);
+        _rbMinus.ForeColor = UiColors.TextPrimary;
         _rbMinus.Location = new Point(130, 20);
         _rbMinus.Name = "_rbMinus";
         _rbMinus.Size = new Size(58, 23);
@@ -135,13 +138,16 @@ partial class DynamicWeighingForm
         // 
         // _btnZero
         // 
+        _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.FlatStyle = FlatStyle.Flat;
         _btnZero.Font = new Font("Segoe UI", 10F);
+        _btnZero.ForeColor = UiColors.TextOnDark;
         _btnZero.Location = new Point(8, 288);
         _btnZero.Name = "_btnZero";
         _btnZero.Size = new Size(100, 32);
         _btnZero.TabIndex = 4;
         _btnZero.Text = "Ноль";
+        _btnZero.UseVisualStyleBackColor = false;
         _btnZero.Click += BtnZero_Click;
         // 
         // _btnFinish
@@ -164,6 +170,9 @@ partial class DynamicWeighingForm
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeRows = false;
         dataGridViewCellStyle1.BackColor = UiColors.GridAlternateRow;
+        dataGridViewCellStyle1.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle1.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle1.SelectionForeColor = UiColors.GridSelectionText;
         _grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
         _grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _grid.BackgroundColor = UiColors.Surface;
@@ -178,11 +187,15 @@ partial class DynamicWeighingForm
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.EnableHeadersVisualStyles = false;
         _grid.Font = new Font("Segoe UI", 9F);
+        _grid.GridColor = UiColors.GridLine;
         _grid.Location = new Point(8, 326);
         _grid.Name = "_grid";
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
         dataGridViewCellStyle2.BackColor = UiColors.Surface;
+        dataGridViewCellStyle2.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle2.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle2.SelectionForeColor = UiColors.GridSelectionText;
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle2;
         _grid.RowTemplate.Height = 22;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
