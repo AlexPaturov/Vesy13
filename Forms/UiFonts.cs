@@ -6,8 +6,8 @@ internal static class UiFonts
 {
     // ── General UI ────────────────────────────────────────────────────────────
     public static readonly Font Small         = new("Segoe UI",  8F);
-    public static readonly Font Body          = new("Segoe UI",  9F);
-    public static readonly Font BodyBold      = new("Segoe UI",  9F, FontStyle.Bold);
+    public static readonly Font Body          = new("Segoe UI", 12F);
+    public static readonly Font BodyBold      = new("Segoe UI", 12F, FontStyle.Bold);
     public static readonly Font Medium        = new("Segoe UI", 10F);
     public static readonly Font MediumBold    = new("Segoe UI", 10F, FontStyle.Bold);
     public static readonly Font SubHeader     = new("Segoe UI", 11F);
