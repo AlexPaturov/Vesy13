@@ -6,6 +6,7 @@ partial class DynamicWeighingForm
     {
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
         _gbDir = new GroupBox();
         _rbPlus = new RadioButton();
         _rbMinus = new RadioButton();
@@ -167,8 +168,15 @@ partial class DynamicWeighingForm
         _grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _grid.BackgroundColor = Color.White;
         _grid.BorderStyle = BorderStyle.None;
-        _grid.ColumnHeadersHeight = 28;
+        dataGridViewCellStyle3.BackColor = Color.FromArgb(230, 236, 245);
+        dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        dataGridViewCellStyle3.ForeColor = Color.FromArgb(35, 45, 65);
+        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(230, 236, 245);
+        dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(35, 45, 65);
+        _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+        _grid.ColumnHeadersHeight = 34;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _grid.EnableHeadersVisualStyles = false;
         _grid.Font = new Font("Segoe UI", 9F);
         _grid.Location = new Point(8, 326);
         _grid.Name = "_grid";
