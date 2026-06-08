@@ -112,6 +112,7 @@ public partial class ServiceForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
         _sim.RawFrameReceived  += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
+        _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _rateTimer.Start();
         _rbMain.Checked   = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
@@ -349,14 +350,34 @@ public partial class ServiceForm : Form
         foreach (var p in pts)
         {
             int row = _dgvCalib.Rows.Add();
-            _dgvCalib.Rows[row].Tag          = p.Id;
+            _dgvCalib.Rows[row].Tag            = p.Id;
             _dgvCalib.Rows[row].Cells[0].Value = p.AdcCode;
             _dgvCalib.Rows[row].Cells[1].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
             _dgvCalib.Rows[row].Cells[2].Value = p.IsActive;
+            if (p.AdcCode != 0)
+                _dgvCalib.Rows[row].Cells[3].Value =
+                    ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
         }
     }
 
     private void LoadCalibPoints() => _ = LoadCalibPointsAsync();
+
+    private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex < 0 || (e.ColumnIndex != 0 && e.ColumnIndex != 1)) return;
+        RefreshCalibK(e.RowIndex);
+    }
+
+    private void RefreshCalibK(int rowIndex)
+    {
+        var row = _dgvCalib.Rows[rowIndex];
+        if (int.TryParse(row.Cells[0].Value?.ToString(), out int code) &&
+            double.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
+            code != 0)
+            row.Cells[3].Value = (mass / code * 65535).ToString("F4", CultureInfo.InvariantCulture);
+        else
+            row.Cells[3].Value = "";
+    }
 
     private List<(int AdcCode, decimal Mass, bool IsActive)> ReadGridPoints()
     {
