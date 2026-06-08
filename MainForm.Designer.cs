@@ -1,3 +1,5 @@
+using Vesy13.Forms;
+
 namespace Vesy13;
 
 partial class MainForm
