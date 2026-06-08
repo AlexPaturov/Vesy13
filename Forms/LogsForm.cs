@@ -30,7 +30,6 @@ public partial class LogsForm : Form
         _btnFind.Font = UiFonts.Body;
         _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
         _grid.DefaultCellStyle.Font              = UiFonts.GridBody;
-        _btnBack.Font = UiFonts.Small;
     }
 
     private void SetupGrid()
@@ -93,5 +92,4 @@ public partial class LogsForm : Form
         }
     }
 
-    private void BtnBack_Click(object? sender, EventArgs e) => Close();
 }

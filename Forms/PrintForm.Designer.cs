@@ -40,7 +40,6 @@ partial class PrintForm
         _lblTo           = new Label();
         _txtTo           = new TextBox();
         _btnPreview      = new Button();
-        _btnBack         = new Button();
 
         _pnlTop.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
@@ -275,7 +274,6 @@ partial class PrintForm
         _pnlStatus.Controls.Add(_lblTo);
         _pnlStatus.Controls.Add(_txtTo);
         _pnlStatus.Controls.Add(_btnPreview);
-        _pnlStatus.Controls.Add(_btnBack);
         _pnlStatus.Dock = DockStyle.Bottom;
         _pnlStatus.Location = new Point(0, 626);
         _pnlStatus.Name = "_pnlStatus";
@@ -350,19 +348,6 @@ partial class PrintForm
         _btnPreview.UseVisualStyleBackColor = false;
         _btnPreview.Click += BtnPreview_Click;
 
-        // ── _btnBack ─────────────────────────────────────────────────────────
-        _btnBack.BackColor = UiColors.NavigationAction;
-        _btnBack.FlatAppearance.BorderSize = 0;
-        _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = UiFonts.Small;
-        _btnBack.ForeColor = UiColors.TextOnDark;
-        _btnBack.Location = new Point(1064, 9);
-        _btnBack.Name = "_btnBack";
-        _btnBack.Size = new Size(90, 26);
-        _btnBack.TabIndex = 7;
-        _btnBack.Text = "← Назад";
-        _btnBack.UseVisualStyleBackColor = false;
-        _btnBack.Click += BtnBack_Click;
 
         // ── Form ──────────────────────────────────────────────────────────────
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -412,5 +397,4 @@ partial class PrintForm
     private Label         _lblTo;
     private TextBox       _txtTo;
     private Button        _btnPreview;
-    private Button        _btnBack;
 }

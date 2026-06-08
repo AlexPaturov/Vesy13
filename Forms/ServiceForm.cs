@@ -106,7 +106,6 @@ public partial class ServiceForm : Form
         _btnSaveSettings.Font    = UiFonts.Medium;
         // General
         _tabs.Font    = UiFonts.Medium;
-        _btnBack.Font = UiFonts.Small;
     }
 
     // ── Lifecycle ───────────────────────────────────────────────────────────
@@ -142,7 +141,6 @@ public partial class ServiceForm : Form
 
     // ── Designer event handlers ─────────────────────────────────────────────
 
-    private void BtnBack_Click(object? sender, EventArgs e)         => Close();
     private void BtnPortRefresh_Click(object? sender, EventArgs e)  => RefreshPorts();
     private void BtnClearLog_Click(object? sender, EventArgs e)     => _rtbLog.Clear();
     private void BtnDelRow_Click(object? sender, EventArgs e)

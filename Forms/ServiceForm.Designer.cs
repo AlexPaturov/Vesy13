@@ -23,7 +23,6 @@ partial class ServiceForm
         _tabCalibD       = new TabPage();
         _tabSett         = new TabPage();
         _pnlStatus       = new Panel();
-        _btnBack         = new Button();
 
         // Channel tab
         _lblChannelTitle = new Label();
@@ -782,21 +781,10 @@ partial class ServiceForm
         _tabs.TabPages.Add(_tabSett);
 
         // ── Status panel ──────────────────────────────────────────────────────
-        _btnBack.Text      = "← Назад";
-        _btnBack.Location  = new Point(8, 6);
-        _btnBack.Size      = new Size(80, 22);
-        _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font      = UiFonts.Small;
-        _btnBack.BackColor = UiColors.NavigationAction;
-        _btnBack.ForeColor = UiColors.TextOnDark;
-        _btnBack.UseVisualStyleBackColor = false;
-        _btnBack.FlatAppearance.BorderSize = 0;
-        _btnBack.Click    += BtnBack_Click;
 
         _pnlStatus.Dock      = DockStyle.Bottom;
-        _pnlStatus.Height    = 34;
+        _pnlStatus.Height    = 4;
         _pnlStatus.BackColor = UiColors.StatusBar;
-        _pnlStatus.Controls.Add(_btnBack);
 
         // ── Timer ──────────────────────────────────────────────────────────────
         _rateTimer.Tick += RateTimer_Tick;
@@ -841,7 +829,6 @@ partial class ServiceForm
     private TabPage     _tabCalibD;
     private TabPage     _tabSett;
     private Panel       _pnlStatus;
-    private Button      _btnBack;
 
     private Label       _lblChannelTitle;
     private RadioButton _rbMain;

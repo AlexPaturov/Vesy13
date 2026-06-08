@@ -20,7 +20,6 @@ partial class DynamicWeighingForm
         _btnFinish = new Button();
         _grid = new DataGridView();
         _pnlStatusBar = new Panel();
-        _btnBack = new Button();
         _dotConn = new Panel();
         _lblConn = new Label();
         _gbDir.SuspendLayout();
@@ -205,29 +204,15 @@ partial class DynamicWeighingForm
         // _pnlStatusBar
         // 
         _pnlStatusBar.BackColor = Color.FromArgb(26, 31, 40);
-        _pnlStatusBar.Controls.Add(_btnBack);
         _pnlStatusBar.Controls.Add(_dotConn);
         _pnlStatusBar.Controls.Add(_lblConn);
         _pnlStatusBar.Dock = DockStyle.Bottom;
         _pnlStatusBar.Location = new Point(0, 595);
         _pnlStatusBar.Name = "_pnlStatusBar";
-        _pnlStatusBar.Size = new Size(673, 34);
+        _pnlStatusBar.Size = new Size(673, 28);
         _pnlStatusBar.TabIndex = 7;
         // 
-        // _btnBack
         // 
-        _btnBack.BackColor = Color.FromArgb(42, 61, 106);
-        _btnBack.FlatAppearance.BorderSize = 0;
-        _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = UiFonts.Small;
-        _btnBack.ForeColor = Color.FromArgb(232, 237, 245);
-        _btnBack.Location = new Point(8, 6);
-        _btnBack.Name = "_btnBack";
-        _btnBack.Size = new Size(80, 22);
-        _btnBack.TabIndex = 0;
-        _btnBack.Text = "← Назад";
-        _btnBack.UseVisualStyleBackColor = false;
-        _btnBack.Click += BtnBack_Click;
         // 
         // _dotConn
         // 
@@ -290,7 +275,6 @@ partial class DynamicWeighingForm
     private Button        _btnFinish;
     private DataGridView  _grid;
     private Panel         _pnlStatusBar;
-    private Button        _btnBack;
     private Panel         _dotConn;
     private Label         _lblConn;
 }

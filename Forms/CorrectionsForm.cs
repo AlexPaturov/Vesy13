@@ -100,7 +100,6 @@ public partial class CorrectionsForm : Form
         _lblHeaderPend.Font = UiFonts.BodyBold;
         _gridDone.Font      = UiFonts.GridBody;
         _lblHeaderDone.Font = UiFonts.BodyBold;
-        _btnBack.Font       = UiFonts.Small;
         tbCex.Font          = UiFonts.Body;
         label3.Font         = UiFonts.Body;
     }
@@ -265,8 +264,6 @@ public partial class CorrectionsForm : Form
         }
     }
     private void BtnClear_Click(object? sender, EventArgs e)     => ClearTopPanel();
-    private void BtnBack_Click(object? sender, EventArgs e)      => Close();
-
     private async void BtnRefresh_Click(object? sender, EventArgs e)
     {
         if (_ldb is null) return;

@@ -49,7 +49,6 @@ public partial class PrintForm : Form
         _lblTo.Font           = UiFonts.Body;
         _txtTo.Font           = UiFonts.Body;
         _btnPreview.Font      = UiFonts.BodyBold;
-        _btnBack.Font         = UiFonts.Small;
     }
 
     protected override void OnLoad(EventArgs e)
@@ -176,8 +175,6 @@ public partial class PrintForm : Form
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
         _dtpTo.Value   = DateTime.Today;
     }
-
-    private void BtnBack_Click(object? sender, EventArgs e) => Close();
 
     // ── Helpers ────────────────────────────────────────────────────────────
 

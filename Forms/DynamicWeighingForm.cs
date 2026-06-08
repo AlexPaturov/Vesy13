@@ -57,11 +57,9 @@ public partial class DynamicWeighingForm : Form
         _btnFinish.Font   = UiFonts.Medium;
         _grid.Font        = UiFonts.GridBody;
         _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
-        _btnBack.Font     = UiFonts.Small;
         _lblConn.Font     = UiFonts.Body;
         _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.ForeColor = UiColors.TextPrimary;
-        _btnBack.BackColor = UiColors.NavigationAction;
     }
 
     private void SetupGridColumns()
@@ -149,7 +147,6 @@ public partial class DynamicWeighingForm : Form
     private void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
     private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
     private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
-    private void BtnBack_Click(object? sender, EventArgs e)   => Close();
 
     // ── ADC events ─────────────────────────────────────────────────────────
 

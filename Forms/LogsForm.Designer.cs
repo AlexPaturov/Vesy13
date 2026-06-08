@@ -12,7 +12,6 @@ partial class LogsForm
     private Button              _btnFind   = null!;
     private DataGridView        _grid      = null!;
     private Panel               _pnlStatus = null!;
-    private Button              _btnBack   = null!;
 
     protected override void Dispose(bool disposing)
     {
@@ -32,7 +31,6 @@ partial class LogsForm
         _btnFind   = new Button();
         _grid      = new DataGridView();
         _pnlStatus = new Panel();
-        _btnBack   = new Button();
 
         SuspendLayout();
         _pnlFilter.SuspendLayout();
@@ -123,20 +121,10 @@ partial class LogsForm
 
         // ── Status panel ──────────────────────────────────────────────────────
         _pnlStatus.Dock      = DockStyle.Bottom;
-        _pnlStatus.Height    = 40;
+        _pnlStatus.Height    = 4;
         _pnlStatus.BackColor = UiColors.StatusBar;
 
-        _btnBack.Location  = new Point(8, 7);
-        _btnBack.Size      = new Size(90, 26);
-        _btnBack.Text      = "← Назад";
-        _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.BackColor = UiColors.NavigationAction;
-        _btnBack.ForeColor = UiColors.TextOnDark;
-        _btnBack.UseVisualStyleBackColor = false;
-        _btnBack.Font      = UiFonts.Body;
-        _btnBack.Click    += BtnBack_Click;
 
-        _pnlStatus.Controls.Add(_btnBack);
 
         // ── Form ──────────────────────────────────────────────────────────────
         AutoScaleDimensions = new SizeF(7f, 15f);

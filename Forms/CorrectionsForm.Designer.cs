@@ -64,7 +64,6 @@ partial class CorrectionsForm
         _gridDone = new DataGridView();
         _lblHeaderDone = new Label();
         _pnlStatus = new Panel();
-        _btnBack = new Button();
         tbCex = new TextBox();
         label3 = new Label();
         _pnlTop.SuspendLayout();
@@ -713,27 +712,13 @@ partial class CorrectionsForm
         // _pnlStatus
         //
         _pnlStatus.BackColor = UiColors.StatusBar;
-        _pnlStatus.Controls.Add(_btnBack);
         _pnlStatus.Dock = DockStyle.Bottom;
         _pnlStatus.Location = new Point(0, 626);
         _pnlStatus.Name = "_pnlStatus";
-        _pnlStatus.Size = new Size(1264, 34);
+        _pnlStatus.Size = new Size(1264, 4);
         _pnlStatus.TabIndex = 2;
         //
-        // _btnBack
         //
-        _btnBack.BackColor = UiColors.NavigationAction;
-        _btnBack.FlatAppearance.BorderSize = 0;
-        _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = UiFonts.Small;
-        _btnBack.ForeColor = UiColors.TextOnDark;
-        _btnBack.Location = new Point(8, 4);
-        _btnBack.Name = "_btnBack";
-        _btnBack.Size = new Size(90, 26);
-        _btnBack.TabIndex = 0;
-        _btnBack.Text = "← Назад";
-        _btnBack.UseVisualStyleBackColor = false;
-        _btnBack.Click += BtnBack_Click;
         //
         // tbCex
         //
@@ -824,7 +809,6 @@ partial class CorrectionsForm
     private DataGridView   _gridPend;
     private Label          _lblHeaderDone;
     private DataGridView   _gridDone;
-    private Button         _btnBack;
     private Label          label2;
     private Label          lblpotr;
     private TextBox        _tbPlat;
