@@ -102,8 +102,8 @@ partial class LogsForm
         _grid.SelectionMode           = DataGridViewSelectionMode.FullRowSelect;
         _grid.AutoSizeColumnsMode     = DataGridViewAutoSizeColumnsMode.None;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _grid.ColumnHeadersHeight     = 26;
-        _grid.RowTemplate.Height      = 22;
+        _grid.ColumnHeadersHeight     = 32;
+        _grid.RowTemplate.Height      = 28;
         _grid.BackgroundColor         = UiColors.AppBackground;
         _grid.GridColor               = UiColors.GridLine;
         _grid.BorderStyle             = BorderStyle.None;

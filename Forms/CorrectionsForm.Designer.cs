@@ -622,7 +622,7 @@ partial class CorrectionsForm
         _gridPend.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
         _gridPend.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
         _gridPend.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
-        _gridPend.ColumnHeadersHeight = 26;
+        _gridPend.ColumnHeadersHeight = 32;
         _gridPend.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _gridPend.EnableHeadersVisualStyles = false;
         _gridPend.GridColor = UiColors.GridLine;
@@ -639,7 +639,7 @@ partial class CorrectionsForm
         dataGridViewCellStyle10.SelectionBackColor = UiColors.GridSelectionBack;
         dataGridViewCellStyle10.SelectionForeColor = UiColors.GridSelectionText;
         _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle10;
-        _gridPend.RowTemplate.Height = 22;
+        _gridPend.RowTemplate.Height = 28;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridPend.Size = new Size(563, 434);
         _gridPend.TabIndex = 0;
@@ -674,7 +674,7 @@ partial class CorrectionsForm
         _gridDone.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
         _gridDone.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
         _gridDone.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
-        _gridDone.ColumnHeadersHeight = 26;
+        _gridDone.ColumnHeadersHeight = 32;
         _gridDone.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _gridDone.EnableHeadersVisualStyles = false;
         _gridDone.GridColor = UiColors.GridLine;
@@ -691,7 +691,7 @@ partial class CorrectionsForm
         dataGridViewCellStyle12.SelectionBackColor = UiColors.GridSelectionBack;
         dataGridViewCellStyle12.SelectionForeColor = UiColors.GridSelectionText;
         _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle12;
-        _gridDone.RowTemplate.Height = 22;
+        _gridDone.RowTemplate.Height = 28;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridDone.Size = new Size(697, 434);
         _gridDone.TabIndex = 0;

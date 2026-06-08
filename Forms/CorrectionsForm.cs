@@ -62,14 +62,14 @@ public partial class CorrectionsForm : Form
     {
         DataGridViewTextBoxColumn Col(string header, int width) =>
             new() { HeaderText = header, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };
-        g.Columns.Add(Col("Дата",     84));
-        g.Columns.Add(Col("Время",    66));
-        g.Columns.Add(Col("№",        36));
-        g.Columns.Add(Col("Тел.1 т",  74));
-        g.Columns.Add(Col("Тел.2 т",  74));
-        g.Columns.Add(Col("T1+T2 т",  78));
-        g.Columns.Add(Col("Режим",    90));
-        g.Columns.Add(Col("Напр.",    60));
+        g.Columns.Add(Col("Дата",     110));
+        g.Columns.Add(Col("Время",    88));
+        g.Columns.Add(Col("№",        48));
+        g.Columns.Add(Col("Тел.1 т",  100));
+        g.Columns.Add(Col("Тел.2 т",  100));
+        g.Columns.Add(Col("T1+T2 т",  104));
+        g.Columns.Add(Col("Режим",    120));
+        g.Columns.Add(Col("Напр.",    80));
     }
 
     private static void AddFirebirdGridColumns(DataGridView g)
@@ -86,28 +86,28 @@ public partial class CorrectionsForm : Form
 
     private static int ColumnWidth(string key) => key switch
     {
-        "DT"          => 90,
-        "VR"          => 70,
-        "NVAG"        => 110,
-        "NDOK"        => 100,
-        "GRUZ"        => 120,
-        "BRUTTO"      => 70,
-        "TAR_BRS"     => 70,
-        "TAR_DOK"     => 70,
-        "NETTO"       => 70,
-        "NET_DOK"     => 70,
-        "MUSOR"       => 60,
-        "CEX"         => 55,
-        "TARIF"       => 60,
-        "POTR"        => 100,
-        "PLAT"        => 100,
-        "SKOR"        => 65,
-        "VESY"        => 50,
-        "TN"          => 60,
-        "NPP"         => 55,
-        "N_TEPLOVOZ"  => 120,
-        "POGRESHNOST" => 85,
-        _             => 80,
+        "DT"          => 120,
+        "VR"          => 95,
+        "NVAG"        => 145,
+        "NDOK"        => 135,
+        "GRUZ"        => 160,
+        "BRUTTO"      => 95,
+        "TAR_BRS"     => 95,
+        "TAR_DOK"     => 95,
+        "NETTO"       => 95,
+        "NET_DOK"     => 95,
+        "MUSOR"       => 80,
+        "CEX"         => 75,
+        "TARIF"       => 80,
+        "POTR"        => 135,
+        "PLAT"        => 135,
+        "SKOR"        => 85,
+        "VESY"        => 65,
+        "TN"          => 80,
+        "NPP"         => 75,
+        "N_TEPLOVOZ"  => 160,
+        "POGRESHNOST" => 115,
+        _             => 105,
     };
 
     // ── Загрузка данных ──────────────────────────────────────────────────────

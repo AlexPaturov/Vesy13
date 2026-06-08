@@ -248,7 +248,7 @@ partial class PrintForm
         _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
         _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
         _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
-        _grid.ColumnHeadersHeight = 26;
+        _grid.ColumnHeadersHeight = 32;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
         _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
@@ -262,7 +262,7 @@ partial class PrintForm
         _grid.ReadOnly = false;
         _grid.RowHeadersVisible = false;
         _grid.RowHeadersWidth = 51;
-        _grid.RowTemplate.Height = 22;
+        _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _grid.TabIndex = 1;
 

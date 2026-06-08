@@ -183,7 +183,7 @@ partial class DynamicWeighingForm
         dataGridViewCellStyle3.SelectionBackColor = UiColors.GridHeaderBack;
         dataGridViewCellStyle3.SelectionForeColor = UiColors.GridHeaderText;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-        _grid.ColumnHeadersHeight = 34;
+        _grid.ColumnHeadersHeight = 40;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.EnableHeadersVisualStyles = false;
         _grid.Font = UiFonts.GridBody;
@@ -197,7 +197,7 @@ partial class DynamicWeighingForm
         dataGridViewCellStyle2.SelectionBackColor = UiColors.GridSelectionBack;
         dataGridViewCellStyle2.SelectionForeColor = UiColors.GridSelectionText;
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle2;
-        _grid.RowTemplate.Height = 22;
+        _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _grid.Size = new Size(617, 261);
         _grid.TabIndex = 6;

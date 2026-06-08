@@ -354,15 +354,15 @@ partial class ServiceForm
         _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
         _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _dgvCalib.ColumnHeadersHeightSizeMode   = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _dgvCalib.ColumnHeadersHeight           = 28;
+        _dgvCalib.ColumnHeadersHeight           = 34;
         _dgvCalib.DefaultCellStyle.ForeColor    = UiColors.TextPrimary;
         _dgvCalib.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
         _dgvCalib.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
         _dgvCalib.EnableHeadersVisualStyles     = false;
         _dgvCalib.GridColor                     = UiColors.GridLine;
-        _dgvCalib.RowTemplate.Height            = 24;
-        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Код АЦП",   Width = 140, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Масса (т)", Width = 140, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _dgvCalib.RowTemplate.Height            = 30;
+        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Код АЦП",   Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Масса (т)", Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
 
         _btnAddRow.Text      = "Добавить строку";
         _btnAddRow.Location  = new Point(20, 282);
