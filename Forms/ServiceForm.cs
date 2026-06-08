@@ -63,6 +63,12 @@ public partial class ServiceForm : Form
         _dgvCalib.Font        = UiFonts.GridBody;
         _btnAddRow.Font       = UiFonts.Body;
         _btnDelRow.Font       = UiFonts.Body;
+        _lblKEquals.Font      = UiFonts.Medium;
+        _txtK.Font            = UiFonts.Mono;
+        _lblBEquals.Font      = UiFonts.Medium;
+        _txtB.Font            = UiFonts.Mono;
+        _lblFormula.Font      = UiFonts.Body;
+        _btnLsq.Font          = UiFonts.Medium;
         _btnCalibSave.Font    = UiFonts.Medium;
         // CalibDynamic tab
         _lblLiveAdcCapD.Font  = UiFonts.Body;
@@ -160,6 +166,19 @@ public partial class ServiceForm : Form
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
         _dgvCalib.BeginEdit(true);
     }
+    private void BtnLsq_Click(object? sender, EventArgs e)
+    {
+        var pts = ReadGridPoints();
+        if (pts.Count < 2)
+        {
+            MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        var (k, b) = CalibrationCalculator.CalculateLsq(pts);
+        _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
+        _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
+    }
+
     private void BtnCapPlus_Click(object? sender, EventArgs e)
     {
         int code = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;

@@ -33,6 +33,22 @@ public static class CalibrationCalculator
         return 0;
     }
 
+    public static (double K, double B) CalculateLsq(IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> points)
+    {
+        var list = points.ToList();
+        int n = list.Count;
+        if (n < 2) return (0, 0);
+        double sumX  = list.Sum(p => (double)p.AdcCode);
+        double sumY  = list.Sum(p => (double)p.Mass);
+        double sumXY = list.Sum(p => (double)p.AdcCode * (double)p.Mass);
+        double sumX2 = list.Sum(p => (double)p.AdcCode * (double)p.AdcCode);
+        double denom = n * sumX2 - sumX * sumX;
+        if (denom == 0) return (0, 0);
+        double k = (n * sumXY - sumX * sumY) / denom;
+        double b = (sumY - k * sumX) / n;
+        return (k, b);
+    }
+
     public static double ConvertDynamic(DynamicCalib calib, int adcCode, string direction)
         => (direction.StartsWith("→") ? calib.KPlus : calib.KMinus) * adcCode;
 

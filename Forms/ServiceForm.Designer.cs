@@ -56,6 +56,12 @@ partial class ServiceForm
         _dgvCalib        = new DataGridView();
         _btnAddRow       = new Button();
         _btnDelRow       = new Button();
+        _lblKEquals      = new Label();
+        _txtK            = new TextBox();
+        _lblBEquals      = new Label();
+        _txtB            = new TextBox();
+        _lblFormula      = new Label();
+        _btnLsq          = new Button();
         _btnCalibSave    = new Button();
 
         // CalibDynamic tab
@@ -380,14 +386,51 @@ partial class ServiceForm
         _btnDelRow.UseVisualStyleBackColor = false;
         _btnDelRow.Click    += BtnDelRow_Click;
 
+        _lblKEquals.Text      = "k  =";
+        _lblKEquals.Location  = new Point(20, 444);
+        _lblKEquals.AutoSize  = true;
+        _lblKEquals.Font      = UiFonts.Medium;
+        _lblKEquals.ForeColor = UiColors.TextPrimary;
 
+        _txtK.Text      = "0";
+        _txtK.Location  = new Point(56, 440);
+        _txtK.Size      = new Size(130, 26);
+        _txtK.Font      = UiFonts.Mono;
+        _txtK.BackColor = UiColors.InputBack;
+        _txtK.ForeColor = UiColors.InputFore;
 
+        _lblBEquals.Text      = "b  =";
+        _lblBEquals.Location  = new Point(204, 444);
+        _lblBEquals.AutoSize  = true;
+        _lblBEquals.Font      = UiFonts.Medium;
+        _lblBEquals.ForeColor = UiColors.TextPrimary;
 
+        _txtB.Text      = "0";
+        _txtB.Location  = new Point(240, 440);
+        _txtB.Size      = new Size(130, 26);
+        _txtB.Font      = UiFonts.Mono;
+        _txtB.BackColor = UiColors.InputBack;
+        _txtB.ForeColor = UiColors.InputFore;
 
+        _lblFormula.Text      = "Масса = k × Код + b";
+        _lblFormula.Location  = new Point(20, 476);
+        _lblFormula.AutoSize  = true;
+        _lblFormula.Font      = UiFonts.Body;
+        _lblFormula.ForeColor = UiColors.TextMuted;
 
+        _btnLsq.Text      = "Рассчитать МНК";
+        _btnLsq.Location  = new Point(240, 470);
+        _btnLsq.Size      = new Size(180, 34);
+        _btnLsq.FlatStyle = FlatStyle.Flat;
+        _btnLsq.Font      = UiFonts.Medium;
+        _btnLsq.BackColor = UiColors.SecondaryAction;
+        _btnLsq.ForeColor = UiColors.TextOnDark;
+        _btnLsq.UseVisualStyleBackColor = false;
+        _btnLsq.FlatAppearance.BorderSize = 0;
+        _btnLsq.Click    += BtnLsq_Click;
 
         _btnCalibSave.Text      = "Применить и сохранить";
-        _btnCalibSave.Location  = new Point(20, 444);
+        _btnCalibSave.Location  = new Point(20, 514);
         _btnCalibSave.Size      = new Size(460, 34);
         _btnCalibSave.FlatStyle = FlatStyle.Flat;
         _btnCalibSave.Font      = UiFonts.Medium;
@@ -407,6 +450,12 @@ partial class ServiceForm
         _tabCalibS.Controls.Add(_dgvCalib);
         _tabCalibS.Controls.Add(_btnAddRow);
         _tabCalibS.Controls.Add(_btnDelRow);
+        _tabCalibS.Controls.Add(_lblKEquals);
+        _tabCalibS.Controls.Add(_txtK);
+        _tabCalibS.Controls.Add(_lblBEquals);
+        _tabCalibS.Controls.Add(_txtB);
+        _tabCalibS.Controls.Add(_lblFormula);
+        _tabCalibS.Controls.Add(_btnLsq);
         _tabCalibS.Controls.Add(_btnCalibSave);
 
         // ── Tab: Калибровка Динамика ──────────────────────────────────────────
@@ -811,6 +860,12 @@ partial class ServiceForm
     private DataGridView _dgvCalib;
     private Button       _btnAddRow;
     private Button       _btnDelRow;
+    private Label        _lblKEquals;
+    private TextBox      _txtK;
+    private Label        _lblBEquals;
+    private TextBox      _txtB;
+    private Label        _lblFormula;
+    private Button       _btnLsq;
     private Button       _btnCalibSave;
 
     private Label   _lblLiveAdcCapD;
