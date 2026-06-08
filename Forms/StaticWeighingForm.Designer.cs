@@ -28,7 +28,7 @@ partial class StaticWeighingForm
         // _lblChannel
         // 
         _lblChannel.AutoSize = true;
-        _lblChannel.Font = new Font("Segoe UI", 10F);
+        _lblChannel.Font = UiFonts.Medium;
         _lblChannel.ForeColor = UiColors.TextMuted;
         _lblChannel.Location = new Point(8, 10);
         _lblChannel.Name = "_lblChannel";
@@ -49,7 +49,7 @@ partial class StaticWeighingForm
         // 
         // _lblValue
         // 
-        _lblValue.Font = new Font("Courier New", 60F, FontStyle.Bold);
+        _lblValue.Font = UiFonts.Display;
         _lblValue.ForeColor = UiColors.Disconnected;
         _lblValue.Location = new Point(8, 4);
         _lblValue.Name = "_lblValue";
@@ -60,7 +60,7 @@ partial class StaticWeighingForm
         // 
         // _lblUnit
         // 
-        _lblUnit.Font = new Font("Segoe UI", 20F);
+        _lblUnit.Font = UiFonts.UnitLabel;
         _lblUnit.ForeColor = UiColors.Disconnected;
         _lblUnit.Location = new Point(462, 60);
         _lblUnit.Name = "_lblUnit";
@@ -71,7 +71,7 @@ partial class StaticWeighingForm
         // 
         // _lblStatus
         // 
-        _lblStatus.Font = new Font("Segoe UI", 10F);
+        _lblStatus.Font = UiFonts.Medium;
         _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Location = new Point(8, 118);
         _lblStatus.Name = "_lblStatus";
@@ -85,7 +85,7 @@ partial class StaticWeighingForm
         _btnWeigh.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         _btnWeigh.BackColor = UiColors.PrimaryAction;
         _btnWeigh.FlatStyle = FlatStyle.Flat;
-        _btnWeigh.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+        _btnWeigh.Font = UiFonts.WeighButton;
         _btnWeigh.ForeColor = UiColors.TextOnDark;
         _btnWeigh.Location = new Point(8, 198);
         _btnWeigh.Name = "_btnWeigh";
@@ -99,7 +99,7 @@ partial class StaticWeighingForm
         // 
         _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.FlatStyle = FlatStyle.Flat;
-        _btnZero.Font = new Font("Segoe UI", 10F);
+        _btnZero.Font = UiFonts.Medium;
         _btnZero.ForeColor = UiColors.TextOnDark;
         _btnZero.Location = new Point(8, 256);
         _btnZero.Name = "_btnZero";
@@ -113,7 +113,7 @@ partial class StaticWeighingForm
         // 
         _btnFinish.BackColor = UiColors.DangerAction;
         _btnFinish.FlatStyle = FlatStyle.Flat;
-        _btnFinish.Font = new Font("Segoe UI", 10F);
+        _btnFinish.Font = UiFonts.Medium;
         _btnFinish.ForeColor = UiColors.TextOnDark;
         _btnFinish.Location = new Point(116, 256);
         _btnFinish.Name = "_btnFinish";
@@ -137,7 +137,7 @@ partial class StaticWeighingForm
         _grid.BackgroundColor = UiColors.Surface;
         _grid.BorderStyle = BorderStyle.None;
         dataGridViewCellStyle3.BackColor = UiColors.GridHeaderBack;
-        dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        dataGridViewCellStyle3.Font = UiFonts.GridHeader;
         dataGridViewCellStyle3.ForeColor = UiColors.GridHeaderText;
         dataGridViewCellStyle3.SelectionBackColor = UiColors.GridHeaderBack;
         dataGridViewCellStyle3.SelectionForeColor = UiColors.GridHeaderText;
@@ -145,7 +145,7 @@ partial class StaticWeighingForm
         _grid.ColumnHeadersHeight = 34;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.EnableHeadersVisualStyles = false;
-        _grid.Font = new Font("Segoe UI", 9F);
+        _grid.Font = UiFonts.GridBody;
         _grid.GridColor = UiColors.GridLine;
         _grid.Location = new Point(8, 294);
         _grid.Name = "_grid";
@@ -178,7 +178,7 @@ partial class StaticWeighingForm
         _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.FlatAppearance.BorderSize = 0;
         _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = new Font("Segoe UI", 8F);
+        _btnBack.Font = UiFonts.Small;
         _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.Location = new Point(8, 6);
         _btnBack.Name = "_btnBack";
@@ -199,7 +199,7 @@ partial class StaticWeighingForm
         // _lblConn
         // 
         _lblConn.AutoSize = true;
-        _lblConn.Font = new Font("Segoe UI", 9F);
+        _lblConn.Font = UiFonts.Body;
         _lblConn.ForeColor = UiColors.TextOnDarkMuted;
         _lblConn.Location = new Point(116, 8);
         _lblConn.Name = "_lblConn";

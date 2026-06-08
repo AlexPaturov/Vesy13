@@ -128,7 +128,7 @@ partial class ServiceForm
         _btnAdmin.Location  = new Point(440, 8);
         _btnAdmin.Size      = new Size(270, 28);
         _btnAdmin.FlatStyle = FlatStyle.Flat;
-        _btnAdmin.Font      = new Font("Segoe UI", 9F);
+        _btnAdmin.Font      = UiFonts.Body;
         _btnAdmin.BackColor = UiColors.AdminLocked;
         _btnAdmin.ForeColor = UiColors.TextOnDark;
         _btnAdmin.UseVisualStyleBackColor = false;
@@ -139,28 +139,28 @@ partial class ServiceForm
         _lblChannelTitle.Text      = "Выбор активного канала";
         _lblChannelTitle.Location  = new Point(20, 16);
         _lblChannelTitle.AutoSize  = true;
-        _lblChannelTitle.Font      = new Font("Segoe UI", 11F, FontStyle.Bold);
+        _lblChannelTitle.Font      = UiFonts.SubHeaderBold;
         _lblChannelTitle.ForeColor = UiColors.TextPrimary;
 
         _rbMain.Text      = "Основной  —  CH0";
         _rbMain.Location  = new Point(20, 52);
         _rbMain.AutoSize  = true;
         _rbMain.Checked   = true;
-        _rbMain.Font      = new Font("Segoe UI", 13F);
+        _rbMain.Font      = UiFonts.NavButton;
         _rbMain.ForeColor = UiColors.TextPrimary;
         _rbMain.CheckedChanged += RbMain_CheckedChanged;
 
         _rbBackup.Text      = "Резервный  —  CH1";
         _rbBackup.Location  = new Point(20, 90);
         _rbBackup.AutoSize  = true;
-        _rbBackup.Font      = new Font("Segoe UI", 13F);
+        _rbBackup.Font      = UiFonts.NavButton;
         _rbBackup.ForeColor = UiColors.TextPrimary;
         _rbBackup.CheckedChanged += RbBackup_CheckedChanged;
 
         _lblChannelNote.Text      = "Изменение канала применяется немедленно и не требует пароля.";
         _lblChannelNote.Location  = new Point(20, 136);
         _lblChannelNote.AutoSize  = true;
-        _lblChannelNote.Font      = new Font("Segoe UI", 9F);
+        _lblChannelNote.Font      = UiFonts.Body;
         _lblChannelNote.ForeColor = UiColors.Disconnected;
 
         _tabChannel.Text = "Канал";
@@ -174,7 +174,7 @@ partial class ServiceForm
         _cmbPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbPort.Location      = new Point(10, 12);
         _cmbPort.Width         = 90;
-        _cmbPort.Font          = new Font("Segoe UI", 10F);
+        _cmbPort.Font          = UiFonts.Medium;
         _cmbPort.BackColor     = UiColors.InputBack;
         _cmbPort.ForeColor     = UiColors.InputFore;
 
@@ -186,7 +186,7 @@ partial class ServiceForm
         _btnConn.Location  = new Point(124, 8);
         _btnConn.Size      = new Size(110, 28);
         _btnConn.FlatStyle = FlatStyle.Flat;
-        _btnConn.Font      = new Font("Segoe UI", 9F);
+        _btnConn.Font      = UiFonts.Body;
         _btnConn.BackColor = UiColors.PrimaryAction;
         _btnConn.ForeColor = UiColors.TextOnDark;
         _btnConn.UseVisualStyleBackColor = false;
@@ -197,7 +197,7 @@ partial class ServiceForm
         _btnPortRefresh.Location  = new Point(242, 8);
         _btnPortRefresh.Size      = new Size(30, 28);
         _btnPortRefresh.FlatStyle = FlatStyle.Flat;
-        _btnPortRefresh.Font      = new Font("Segoe UI", 11F);
+        _btnPortRefresh.Font      = UiFonts.SubHeader;
         _btnPortRefresh.BackColor = UiColors.NeutralAction;
         _btnPortRefresh.ForeColor = UiColors.TextOnDark;
         _btnPortRefresh.UseVisualStyleBackColor = false;
@@ -206,26 +206,26 @@ partial class ServiceForm
         _lblConn.Text      = "Нет подключения";
         _lblConn.Location  = new Point(280, 14);
         _lblConn.AutoSize  = true;
-        _lblConn.Font      = new Font("Segoe UI", 9F);
+        _lblConn.Font      = UiFonts.Body;
         _lblConn.ForeColor = UiColors.Disconnected;
 
         _lblRate.Text      = "— фр/с";
         _lblRate.Anchor    = AnchorStyles.Top | AnchorStyles.Right;
         _lblRate.Location  = new Point(590, 14);
         _lblRate.AutoSize  = true;
-        _lblRate.Font      = new Font("Segoe UI", 9F);
+        _lblRate.Font      = UiFonts.Body;
         _lblRate.ForeColor = UiColors.Disconnected;
 
         _lblCh0Cap.Text      = "CH0 — Основной";
         _lblCh0Cap.Location  = new Point(8, 6);
         _lblCh0Cap.AutoSize  = true;
-        _lblCh0Cap.Font      = new Font("Segoe UI", 9F);
+        _lblCh0Cap.Font      = UiFonts.Body;
         _lblCh0Cap.ForeColor = UiColors.TextOnDarkMuted;
 
         _lblCh0.Text      = "—";
         _lblCh0.Location  = new Point(8, 28);
         _lblCh0.Size      = new Size(324, 90);
-        _lblCh0.Font      = new Font("Courier New", 48F, FontStyle.Bold);
+        _lblCh0.Font      = UiFonts.MonitorDisplay;
         _lblCh0.ForeColor = UiColors.Disconnected;
         _lblCh0.TextAlign = ContentAlignment.MiddleRight;
         _lblCh0.AutoSize  = false;
@@ -239,13 +239,13 @@ partial class ServiceForm
         _lblCh1Cap.Text      = "CH1 — Резервный";
         _lblCh1Cap.Location  = new Point(8, 6);
         _lblCh1Cap.AutoSize  = true;
-        _lblCh1Cap.Font      = new Font("Segoe UI", 9F);
+        _lblCh1Cap.Font      = UiFonts.Body;
         _lblCh1Cap.ForeColor = UiColors.TextOnDarkMuted;
 
         _lblCh1.Text      = "—";
         _lblCh1.Location  = new Point(8, 28);
         _lblCh1.Size      = new Size(324, 90);
-        _lblCh1.Font      = new Font("Courier New", 48F, FontStyle.Bold);
+        _lblCh1.Font      = UiFonts.MonitorDisplay;
         _lblCh1.ForeColor = UiColors.Disconnected;
         _lblCh1.TextAlign = ContentAlignment.MiddleRight;
         _lblCh1.AutoSize  = false;
@@ -259,7 +259,7 @@ partial class ServiceForm
         _chkLog.Text     = "Лог активен";
         _chkLog.Location = new Point(10, 198);
         _chkLog.AutoSize = true;
-        _chkLog.Font     = new Font("Segoe UI", 9F);
+        _chkLog.Font     = UiFonts.Body;
         _chkLog.ForeColor = UiColors.TextPrimary;
         _chkLog.Checked  = true;
 
@@ -268,7 +268,7 @@ partial class ServiceForm
         _btnClearLog.Location  = new Point(600, 194);
         _btnClearLog.Size      = new Size(80, 24);
         _btnClearLog.FlatStyle = FlatStyle.Flat;
-        _btnClearLog.Font      = new Font("Segoe UI", 9F);
+        _btnClearLog.Font      = UiFonts.Body;
         _btnClearLog.BackColor = UiColors.NeutralAction;
         _btnClearLog.ForeColor = UiColors.TextOnDark;
         _btnClearLog.UseVisualStyleBackColor = false;
@@ -280,7 +280,7 @@ partial class ServiceForm
         _rtbLog.ReadOnly   = true;
         _rtbLog.BackColor  = UiColors.LogBackground;
         _rtbLog.ForeColor  = UiColors.LogText;
-        _rtbLog.Font       = new Font("Courier New", 9F);
+        _rtbLog.Font       = UiFonts.MonoSmall;
         _rtbLog.DetectUrls = false;
         _rtbLog.ScrollBars = RichTextBoxScrollBars.Vertical;
         _rtbLog.WordWrap   = false;
@@ -304,34 +304,34 @@ partial class ServiceForm
         _rbCh0Calib.Location  = new Point(20, 16);
         _rbCh0Calib.AutoSize  = true;
         _rbCh0Calib.Checked   = true;
-        _rbCh0Calib.Font      = new Font("Segoe UI", 11F);
+        _rbCh0Calib.Font      = UiFonts.SubHeader;
         _rbCh0Calib.ForeColor = UiColors.TextPrimary;
         _rbCh0Calib.CheckedChanged += RbCh0Calib_CheckedChanged;
 
         _rbCh1Calib.Text      = "CH1 — Резервный";
         _rbCh1Calib.Location  = new Point(220, 16);
         _rbCh1Calib.AutoSize  = true;
-        _rbCh1Calib.Font      = new Font("Segoe UI", 11F);
+        _rbCh1Calib.Font      = UiFonts.SubHeader;
         _rbCh1Calib.ForeColor = UiColors.TextPrimary;
         _rbCh1Calib.CheckedChanged += RbCh1Calib_CheckedChanged;
 
         _lblLiveAdcCap.Text      = "Текущий код АЦП:";
         _lblLiveAdcCap.Location  = new Point(20, 54);
         _lblLiveAdcCap.AutoSize  = true;
-        _lblLiveAdcCap.Font      = new Font("Segoe UI", 9F);
+        _lblLiveAdcCap.Font      = UiFonts.Body;
         _lblLiveAdcCap.ForeColor = UiColors.Disconnected;
 
         _lblLiveAdc.Text      = "—";
         _lblLiveAdc.Location  = new Point(165, 50);
         _lblLiveAdc.AutoSize  = true;
-        _lblLiveAdc.Font      = new Font("Courier New", 13F, FontStyle.Bold);
+        _lblLiveAdc.Font      = UiFonts.MonoLiveAdc;
         _lblLiveAdc.ForeColor = UiColors.Info;
 
         _btnCapture.Text      = "Захватить";
         _btnCapture.Location  = new Point(290, 46);
         _btnCapture.Size      = new Size(110, 28);
         _btnCapture.FlatStyle = FlatStyle.Flat;
-        _btnCapture.Font      = new Font("Segoe UI", 9F);
+        _btnCapture.Font      = UiFonts.Body;
         _btnCapture.BackColor = UiColors.HeaderBar;
         _btnCapture.ForeColor = UiColors.TextOnDark;
         _btnCapture.UseVisualStyleBackColor = false;
@@ -340,7 +340,7 @@ partial class ServiceForm
 
         _dgvCalib.Location                      = new Point(20, 82);
         _dgvCalib.Size                          = new Size(380, 190);
-        _dgvCalib.Font                          = new Font("Segoe UI", 10F);
+        _dgvCalib.Font                          = UiFonts.GridBody;
         _dgvCalib.AllowUserToAddRows            = false;
         _dgvCalib.AllowUserToDeleteRows         = false;
         _dgvCalib.AllowUserToResizeRows         = false;
@@ -368,7 +368,7 @@ partial class ServiceForm
         _btnAddRow.Location  = new Point(20, 282);
         _btnAddRow.Size      = new Size(160, 28);
         _btnAddRow.FlatStyle = FlatStyle.Flat;
-        _btnAddRow.Font      = new Font("Segoe UI", 9F);
+        _btnAddRow.Font      = UiFonts.Body;
         _btnAddRow.BackColor = UiColors.NeutralAction;
         _btnAddRow.ForeColor = UiColors.TextOnDark;
         _btnAddRow.UseVisualStyleBackColor = false;
@@ -378,7 +378,7 @@ partial class ServiceForm
         _btnDelRow.Location  = new Point(190, 282);
         _btnDelRow.Size      = new Size(170, 28);
         _btnDelRow.FlatStyle = FlatStyle.Flat;
-        _btnDelRow.Font      = new Font("Segoe UI", 9F);
+        _btnDelRow.Font      = UiFonts.Body;
         _btnDelRow.BackColor = UiColors.NeutralAction;
         _btnDelRow.ForeColor = UiColors.TextOnDark;
         _btnDelRow.UseVisualStyleBackColor = false;
@@ -387,40 +387,40 @@ partial class ServiceForm
         _lblKEquals.Text      = "k  =";
         _lblKEquals.Location  = new Point(20, 326);
         _lblKEquals.AutoSize  = true;
-        _lblKEquals.Font      = new Font("Segoe UI", 10F);
+        _lblKEquals.Font      = UiFonts.Medium;
         _lblKEquals.ForeColor = UiColors.TextPrimary;
 
         _txtK.Text      = "0";
         _txtK.Location  = new Point(56, 322);
         _txtK.Size      = new Size(150, 26);
-        _txtK.Font      = new Font("Courier New", 10F);
+        _txtK.Font      = UiFonts.Mono;
         _txtK.BackColor = UiColors.InputBack;
         _txtK.ForeColor = UiColors.InputFore;
 
         _lblBEquals.Text      = "b  =";
         _lblBEquals.Location  = new Point(224, 326);
         _lblBEquals.AutoSize  = true;
-        _lblBEquals.Font      = new Font("Segoe UI", 10F);
+        _lblBEquals.Font      = UiFonts.Medium;
         _lblBEquals.ForeColor = UiColors.TextPrimary;
 
         _txtB.Text      = "0";
         _txtB.Location  = new Point(260, 322);
         _txtB.Size      = new Size(150, 26);
-        _txtB.Font      = new Font("Courier New", 10F);
+        _txtB.Font      = UiFonts.Mono;
         _txtB.BackColor = UiColors.InputBack;
         _txtB.ForeColor = UiColors.InputFore;
 
         _lblFormula.Text      = "Масса = k × Код + b";
         _lblFormula.Location  = new Point(20, 358);
         _lblFormula.AutoSize  = true;
-        _lblFormula.Font      = new Font("Segoe UI", 9F);
+        _lblFormula.Font      = UiFonts.Body;
         _lblFormula.ForeColor = UiColors.Disconnected;
 
         _btnLsq.Text      = "Рассчитать МНК";
         _btnLsq.Location  = new Point(20, 388);
         _btnLsq.Size      = new Size(180, 34);
         _btnLsq.FlatStyle = FlatStyle.Flat;
-        _btnLsq.Font      = new Font("Segoe UI", 10F);
+        _btnLsq.Font      = UiFonts.Medium;
         _btnLsq.BackColor = UiColors.SecondaryAction;
         _btnLsq.ForeColor = UiColors.TextOnDark;
         _btnLsq.UseVisualStyleBackColor = false;
@@ -431,7 +431,7 @@ partial class ServiceForm
         _btnCalibSave.Location  = new Point(212, 388);
         _btnCalibSave.Size      = new Size(220, 34);
         _btnCalibSave.FlatStyle = FlatStyle.Flat;
-        _btnCalibSave.Font      = new Font("Segoe UI", 10F);
+        _btnCalibSave.Font      = UiFonts.Medium;
         _btnCalibSave.BackColor = UiColors.PrimaryAction;
         _btnCalibSave.ForeColor = UiColors.TextOnDark;
         _btnCalibSave.UseVisualStyleBackColor = false;
@@ -460,49 +460,49 @@ partial class ServiceForm
         _lblLiveAdcCapD.Text      = "Текущий код АЦП:";
         _lblLiveAdcCapD.Location  = new Point(20, 16);
         _lblLiveAdcCapD.AutoSize  = true;
-        _lblLiveAdcCapD.Font      = new Font("Segoe UI", 9F);
+        _lblLiveAdcCapD.Font      = UiFonts.Body;
         _lblLiveAdcCapD.ForeColor = UiColors.Disconnected;
 
         _lblLiveAdcD.Text      = "—";
         _lblLiveAdcD.Location  = new Point(165, 12);
         _lblLiveAdcD.AutoSize  = true;
-        _lblLiveAdcD.Font      = new Font("Courier New", 13F, FontStyle.Bold);
+        _lblLiveAdcD.Font      = UiFonts.MonoLiveAdc;
         _lblLiveAdcD.ForeColor = UiColors.Info;
 
         _lblSecPlus.Text      = "── Направление  →  ──────────────────";
         _lblSecPlus.Location  = new Point(20, 44);
         _lblSecPlus.AutoSize  = true;
-        _lblSecPlus.Font      = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblSecPlus.Font      = UiFonts.BodyBold;
         _lblSecPlus.ForeColor = UiColors.TextSection;
 
         _lblKPlusEquals.Text      = "K→  =";
         _lblKPlusEquals.Location  = new Point(20, 72);
         _lblKPlusEquals.AutoSize  = true;
-        _lblKPlusEquals.Font      = new Font("Segoe UI", 10F);
+        _lblKPlusEquals.Font      = UiFonts.Medium;
         _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
 
         _txtKPlus.Text      = "0";
         _txtKPlus.Location  = new Point(72, 68);
         _txtKPlus.Size      = new Size(160, 26);
-        _txtKPlus.Font      = new Font("Courier New", 10F);
+        _txtKPlus.Font      = UiFonts.Mono;
         _txtKPlus.BackColor = UiColors.InputBack;
         _txtKPlus.ForeColor = UiColors.InputFore;
 
         _lblAutoCalcPlus.Text      = "Авторасчёт:";
         _lblAutoCalcPlus.Location  = new Point(20, 104);
         _lblAutoCalcPlus.AutoSize  = true;
-        _lblAutoCalcPlus.Font      = new Font("Segoe UI", 9F);
+        _lblAutoCalcPlus.Font      = UiFonts.Body;
         _lblAutoCalcPlus.ForeColor = UiColors.Disconnected;
 
         _lblCodePlusCap.Text      = "Код АЦП:";
         _lblCodePlusCap.Location  = new Point(36, 126);
         _lblCodePlusCap.AutoSize  = true;
-        _lblCodePlusCap.Font      = new Font("Segoe UI", 9F);
+        _lblCodePlusCap.Font      = UiFonts.Body;
         _lblCodePlusCap.ForeColor = UiColors.TextPrimary;
 
         _txtCodePlus.Location  = new Point(160, 122);
         _txtCodePlus.Size      = new Size(120, 24);
-        _txtCodePlus.Font      = new Font("Courier New", 9F);
+        _txtCodePlus.Font      = UiFonts.MonoSmall;
         _txtCodePlus.BackColor = UiColors.InputBack;
         _txtCodePlus.ForeColor = UiColors.InputFore;
 
@@ -510,7 +510,7 @@ partial class ServiceForm
         _btnCapPlus.Location  = new Point(288, 120);
         _btnCapPlus.Size      = new Size(100, 26);
         _btnCapPlus.FlatStyle = FlatStyle.Flat;
-        _btnCapPlus.Font      = new Font("Segoe UI", 8F);
+        _btnCapPlus.Font      = UiFonts.Small;
         _btnCapPlus.BackColor = UiColors.HeaderBar;
         _btnCapPlus.ForeColor = UiColors.TextOnDark;
         _btnCapPlus.UseVisualStyleBackColor = false;
@@ -520,12 +520,12 @@ partial class ServiceForm
         _lblMassPlusCap.Text      = "Эталон (т):";
         _lblMassPlusCap.Location  = new Point(36, 154);
         _lblMassPlusCap.AutoSize  = true;
-        _lblMassPlusCap.Font      = new Font("Segoe UI", 9F);
+        _lblMassPlusCap.Font      = UiFonts.Body;
         _lblMassPlusCap.ForeColor = UiColors.TextPrimary;
 
         _txtMassPlus.Location  = new Point(160, 150);
         _txtMassPlus.Size      = new Size(120, 24);
-        _txtMassPlus.Font      = new Font("Courier New", 9F);
+        _txtMassPlus.Font      = UiFonts.MonoSmall;
         _txtMassPlus.BackColor = UiColors.InputBack;
         _txtMassPlus.ForeColor = UiColors.InputFore;
 
@@ -533,7 +533,7 @@ partial class ServiceForm
         _btnCalcPlus.Location  = new Point(36, 182);
         _btnCalcPlus.Size      = new Size(180, 30);
         _btnCalcPlus.FlatStyle = FlatStyle.Flat;
-        _btnCalcPlus.Font      = new Font("Segoe UI", 9F);
+        _btnCalcPlus.Font      = UiFonts.Body;
         _btnCalcPlus.BackColor = UiColors.SecondaryAction;
         _btnCalcPlus.ForeColor = UiColors.TextOnDark;
         _btnCalcPlus.UseVisualStyleBackColor = false;
@@ -543,37 +543,37 @@ partial class ServiceForm
         _lblSecMinus.Text      = "── Направление  ←  ──────────────────";
         _lblSecMinus.Location  = new Point(20, 224);
         _lblSecMinus.AutoSize  = true;
-        _lblSecMinus.Font      = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblSecMinus.Font      = UiFonts.BodyBold;
         _lblSecMinus.ForeColor = UiColors.TextSection;
 
         _lblKMinusEquals.Text      = "K←  =";
         _lblKMinusEquals.Location  = new Point(20, 252);
         _lblKMinusEquals.AutoSize  = true;
-        _lblKMinusEquals.Font      = new Font("Segoe UI", 10F);
+        _lblKMinusEquals.Font      = UiFonts.Medium;
         _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
 
         _txtKMinus.Text      = "0";
         _txtKMinus.Location  = new Point(72, 248);
         _txtKMinus.Size      = new Size(160, 26);
-        _txtKMinus.Font      = new Font("Courier New", 10F);
+        _txtKMinus.Font      = UiFonts.Mono;
         _txtKMinus.BackColor = UiColors.InputBack;
         _txtKMinus.ForeColor = UiColors.InputFore;
 
         _lblAutoCalcMinus.Text      = "Авторасчёт:";
         _lblAutoCalcMinus.Location  = new Point(20, 284);
         _lblAutoCalcMinus.AutoSize  = true;
-        _lblAutoCalcMinus.Font      = new Font("Segoe UI", 9F);
+        _lblAutoCalcMinus.Font      = UiFonts.Body;
         _lblAutoCalcMinus.ForeColor = UiColors.Disconnected;
 
         _lblCodeMinusCap.Text      = "Код АЦП:";
         _lblCodeMinusCap.Location  = new Point(36, 306);
         _lblCodeMinusCap.AutoSize  = true;
-        _lblCodeMinusCap.Font      = new Font("Segoe UI", 9F);
+        _lblCodeMinusCap.Font      = UiFonts.Body;
         _lblCodeMinusCap.ForeColor = UiColors.TextPrimary;
 
         _txtCodeMinus.Location  = new Point(160, 302);
         _txtCodeMinus.Size      = new Size(120, 24);
-        _txtCodeMinus.Font      = new Font("Courier New", 9F);
+        _txtCodeMinus.Font      = UiFonts.MonoSmall;
         _txtCodeMinus.BackColor = UiColors.InputBack;
         _txtCodeMinus.ForeColor = UiColors.InputFore;
 
@@ -581,7 +581,7 @@ partial class ServiceForm
         _btnCapMinus.Location  = new Point(288, 300);
         _btnCapMinus.Size      = new Size(100, 26);
         _btnCapMinus.FlatStyle = FlatStyle.Flat;
-        _btnCapMinus.Font      = new Font("Segoe UI", 8F);
+        _btnCapMinus.Font      = UiFonts.Small;
         _btnCapMinus.BackColor = UiColors.HeaderBar;
         _btnCapMinus.ForeColor = UiColors.TextOnDark;
         _btnCapMinus.UseVisualStyleBackColor = false;
@@ -591,12 +591,12 @@ partial class ServiceForm
         _lblMassMinusCap.Text      = "Эталон (т):";
         _lblMassMinusCap.Location  = new Point(36, 334);
         _lblMassMinusCap.AutoSize  = true;
-        _lblMassMinusCap.Font      = new Font("Segoe UI", 9F);
+        _lblMassMinusCap.Font      = UiFonts.Body;
         _lblMassMinusCap.ForeColor = UiColors.TextPrimary;
 
         _txtMassMinus.Location  = new Point(160, 330);
         _txtMassMinus.Size      = new Size(120, 24);
-        _txtMassMinus.Font      = new Font("Courier New", 9F);
+        _txtMassMinus.Font      = UiFonts.MonoSmall;
         _txtMassMinus.BackColor = UiColors.InputBack;
         _txtMassMinus.ForeColor = UiColors.InputFore;
 
@@ -604,7 +604,7 @@ partial class ServiceForm
         _btnCalcMinus.Location  = new Point(36, 362);
         _btnCalcMinus.Size      = new Size(180, 30);
         _btnCalcMinus.FlatStyle = FlatStyle.Flat;
-        _btnCalcMinus.Font      = new Font("Segoe UI", 9F);
+        _btnCalcMinus.Font      = UiFonts.Body;
         _btnCalcMinus.BackColor = UiColors.SecondaryAction;
         _btnCalcMinus.ForeColor = UiColors.TextOnDark;
         _btnCalcMinus.UseVisualStyleBackColor = false;
@@ -614,14 +614,14 @@ partial class ServiceForm
         _lblFormulaD.Text      = "Масса = K × Код";
         _lblFormulaD.Location  = new Point(20, 406);
         _lblFormulaD.AutoSize  = true;
-        _lblFormulaD.Font      = new Font("Segoe UI", 9F);
+        _lblFormulaD.Font      = UiFonts.Body;
         _lblFormulaD.ForeColor = UiColors.Disconnected;
 
         _btnCalibDynSave.Text      = "Применить и сохранить";
         _btnCalibDynSave.Location  = new Point(20, 430);
         _btnCalibDynSave.Size      = new Size(220, 34);
         _btnCalibDynSave.FlatStyle = FlatStyle.Flat;
-        _btnCalibDynSave.Font      = new Font("Segoe UI", 10F);
+        _btnCalibDynSave.Font      = UiFonts.Medium;
         _btnCalibDynSave.BackColor = UiColors.PrimaryAction;
         _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
         _btnCalibDynSave.UseVisualStyleBackColor = false;
@@ -659,7 +659,7 @@ partial class ServiceForm
         _lblPortCap.Text      = "COM-порт:";
         _lblPortCap.Location  = new Point(20, 20);
         _lblPortCap.AutoSize  = true;
-        _lblPortCap.Font      = new Font("Segoe UI", 10F);
+        _lblPortCap.Font      = UiFonts.Medium;
         _lblPortCap.ForeColor = UiColors.TextPrimary;
 
         _cmbSettPort.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -671,7 +671,7 @@ partial class ServiceForm
         _lblNpvCap.Text      = "НПВ (т):";
         _lblNpvCap.Location  = new Point(20, 56);
         _lblNpvCap.AutoSize  = true;
-        _lblNpvCap.Font      = new Font("Segoe UI", 10F);
+        _lblNpvCap.Font      = UiFonts.Medium;
         _lblNpvCap.ForeColor = UiColors.TextPrimary;
 
         _txtNpv.Text      = "150";
@@ -683,7 +683,7 @@ partial class ServiceForm
         _lblDiscCap.Text      = "Дискретность:";
         _lblDiscCap.Location  = new Point(20, 92);
         _lblDiscCap.AutoSize  = true;
-        _lblDiscCap.Font      = new Font("Segoe UI", 10F);
+        _lblDiscCap.Font      = UiFonts.Medium;
         _lblDiscCap.ForeColor = UiColors.TextPrimary;
 
         _cmbDisc.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -697,7 +697,7 @@ partial class ServiceForm
         _lblZeroCap.Text      = "Лимит нуля (% НПВ):";
         _lblZeroCap.Location  = new Point(20, 128);
         _lblZeroCap.AutoSize  = true;
-        _lblZeroCap.Font      = new Font("Segoe UI", 10F);
+        _lblZeroCap.Font      = UiFonts.Medium;
         _lblZeroCap.ForeColor = UiColors.TextPrimary;
 
         _txtZeroLimit.Text      = "1";
@@ -709,7 +709,7 @@ partial class ServiceForm
         _lblDynWinCap.Text      = "Окно Динамики (мс):";
         _lblDynWinCap.Location  = new Point(20, 164);
         _lblDynWinCap.AutoSize  = true;
-        _lblDynWinCap.Font      = new Font("Segoe UI", 10F);
+        _lblDynWinCap.Font      = UiFonts.Medium;
         _lblDynWinCap.ForeColor = UiColors.TextPrimary;
 
         _txtDynWindow.Text      = "1500";
@@ -721,7 +721,7 @@ partial class ServiceForm
         _lblBogieTimeoutCap.Text      = "Таймаут тележек (мс):";
         _lblBogieTimeoutCap.Location  = new Point(20, 200);
         _lblBogieTimeoutCap.AutoSize  = true;
-        _lblBogieTimeoutCap.Font      = new Font("Segoe UI", 10F);
+        _lblBogieTimeoutCap.Font      = UiFonts.Medium;
         _lblBogieTimeoutCap.ForeColor = UiColors.TextPrimary;
 
         _txtBogieTimeout.Text      = "30000";
@@ -733,7 +733,7 @@ partial class ServiceForm
         _lblPasswordCap.Text      = "Новый пароль:";
         _lblPasswordCap.Location  = new Point(20, 236);
         _lblPasswordCap.AutoSize  = true;
-        _lblPasswordCap.Font      = new Font("Segoe UI", 10F);
+        _lblPasswordCap.Font      = UiFonts.Medium;
         _lblPasswordCap.ForeColor = UiColors.TextPrimary;
 
         _txtNewPassword.Location              = new Point(220, 232);
@@ -749,7 +749,7 @@ partial class ServiceForm
         _btnSaveSettings.BackColor = UiColors.HeaderBar;
         _btnSaveSettings.ForeColor = UiColors.TextOnDark;
         _btnSaveSettings.UseVisualStyleBackColor = false;
-        _btnSaveSettings.Font      = new Font("Segoe UI", 10F);
+        _btnSaveSettings.Font      = UiFonts.Medium;
         _btnSaveSettings.Click    += BtnSaveSettings_Click;
 
         _tabSett.Text = "Настройки";
@@ -774,7 +774,7 @@ partial class ServiceForm
         _tabs.Location = new Point(0, 44);
         _tabs.Anchor   = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _tabs.Size     = new Size(720, 480);
-        _tabs.Font     = new Font("Segoe UI", 10F);
+        _tabs.Font     = UiFonts.Medium;
         _tabs.TabPages.Add(_tabChannel);
         _tabs.TabPages.Add(_tabMonitor);
         _tabs.TabPages.Add(_tabCalibS);
@@ -786,7 +786,7 @@ partial class ServiceForm
         _btnBack.Location  = new Point(8, 6);
         _btnBack.Size      = new Size(80, 22);
         _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font      = new Font("Segoe UI", 8F);
+        _btnBack.Font      = UiFonts.Small;
         _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.UseVisualStyleBackColor = false;

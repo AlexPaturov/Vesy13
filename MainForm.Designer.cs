@@ -34,7 +34,7 @@ partial class MainForm
 
         // ── Header ────────────────────────────────────────────────────────────
         _lblTitle.Text      = "ВЕСЫ №13";
-        _lblTitle.Font      = new Font("Segoe UI", 22F, FontStyle.Bold);
+        _lblTitle.Font      = UiFonts.Title;
         _lblTitle.ForeColor = Forms.UiColors.TextOnDark;
         _lblTitle.TextAlign = ContentAlignment.MiddleCenter;
         _lblTitle.Dock      = DockStyle.Fill;
@@ -47,7 +47,7 @@ partial class MainForm
         // ── Menu buttons ──────────────────────────────────────────────────────
         _btnStatic.Text      = "Взвешивание — Статика";
         _btnStatic.Dock      = DockStyle.Fill;
-        _btnStatic.Font      = new Font("Segoe UI", 13F);
+        _btnStatic.Font      = UiFonts.NavButton;
         _btnStatic.FlatStyle = FlatStyle.Flat;
         _btnStatic.Margin    = new Padding(0, 5, 0, 5);
         _btnStatic.BackColor = Forms.UiColors.HeaderBar;
@@ -59,7 +59,7 @@ partial class MainForm
 
         _btnDynamic.Text      = "Взвешивание — Динамика";
         _btnDynamic.Dock      = DockStyle.Fill;
-        _btnDynamic.Font      = new Font("Segoe UI", 13F);
+        _btnDynamic.Font      = UiFonts.NavButton;
         _btnDynamic.FlatStyle = FlatStyle.Flat;
         _btnDynamic.Margin    = new Padding(0, 5, 0, 5);
         _btnDynamic.BackColor = Forms.UiColors.HeaderBar;
@@ -71,7 +71,7 @@ partial class MainForm
 
         _btnService.Text      = "Сервис";
         _btnService.Dock      = DockStyle.Fill;
-        _btnService.Font      = new Font("Segoe UI", 13F);
+        _btnService.Font      = UiFonts.NavButton;
         _btnService.FlatStyle = FlatStyle.Flat;
         _btnService.Margin    = new Padding(0, 5, 0, 5);
         _btnService.BackColor = Forms.UiColors.HeaderBar;
@@ -83,7 +83,7 @@ partial class MainForm
 
         _btnCorrections.Text      = "Корректировки";
         _btnCorrections.Dock      = DockStyle.Fill;
-        _btnCorrections.Font      = new Font("Segoe UI", 13F);
+        _btnCorrections.Font      = UiFonts.NavButton;
         _btnCorrections.FlatStyle = FlatStyle.Flat;
         _btnCorrections.Margin    = new Padding(0, 5, 0, 5);
         _btnCorrections.BackColor = Forms.UiColors.HeaderBar;
@@ -95,7 +95,7 @@ partial class MainForm
 
         _btnPrint.Text      = "Печать отвесной";
         _btnPrint.Dock      = DockStyle.Fill;
-        _btnPrint.Font      = new Font("Segoe UI", 13F);
+        _btnPrint.Font      = UiFonts.NavButton;
         _btnPrint.FlatStyle = FlatStyle.Flat;
         _btnPrint.Margin    = new Padding(0, 5, 0, 5);
         _btnPrint.BackColor = Forms.UiColors.HeaderBar;
@@ -107,7 +107,7 @@ partial class MainForm
 
         _btnLogs.Text      = "Просмотр логов";
         _btnLogs.Dock      = DockStyle.Fill;
-        _btnLogs.Font      = new Font("Segoe UI", 13F);
+        _btnLogs.Font      = UiFonts.NavButton;
         _btnLogs.FlatStyle = FlatStyle.Flat;
         _btnLogs.Margin    = new Padding(0, 5, 0, 5);
         _btnLogs.BackColor = Forms.UiColors.HeaderBar;
@@ -141,7 +141,7 @@ partial class MainForm
         _dotConn.BackColor = Forms.UiColors.Disconnected;
 
         _lblConn.Text      = "АЦП: отключён";
-        _lblConn.Font      = new Font("Segoe UI", 9F);
+        _lblConn.Font      = UiFonts.Body;
         _lblConn.ForeColor = Forms.UiColors.TextOnDarkMuted;
         _lblConn.Location  = new Point(26, 9);
         _lblConn.AutoSize  = true;
@@ -150,7 +150,7 @@ partial class MainForm
         _btnConn.Size      = new Size(90, 22);
         _btnConn.Anchor    = AnchorStyles.Right | AnchorStyles.Top;
         _btnConn.Location  = new Point(272, 7);
-        _btnConn.Font      = new Font("Segoe UI", 8F);
+        _btnConn.Font      = UiFonts.Small;
         _btnConn.FlatStyle = FlatStyle.Flat;
         _btnConn.BackColor = Forms.UiColors.NavigationAction;
         _btnConn.ForeColor = Forms.UiColors.TextOnDark;

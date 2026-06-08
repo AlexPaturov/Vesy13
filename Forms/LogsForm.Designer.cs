@@ -51,7 +51,7 @@ partial class LogsForm
         _lblFrom.Location  = new Point(10, 15);
         _lblFrom.Text      = "С:";
         _lblFrom.ForeColor = UiColors.TextOnDark;
-        _lblFrom.Font      = new Font("Segoe UI", 9f);
+        _lblFrom.Font      = UiFonts.Body;
         _lblFrom.TextAlign = ContentAlignment.MiddleLeft;
 
         _dtpFrom.Location     = new Point(32, 12);
@@ -66,7 +66,7 @@ partial class LogsForm
         _lblTo.Location  = new Point(203, 15);
         _lblTo.Text      = "—";
         _lblTo.ForeColor = UiColors.TextOnDark;
-        _lblTo.Font      = new Font("Segoe UI", 9f);
+        _lblTo.Font      = UiFonts.Body;
         _lblTo.TextAlign = ContentAlignment.MiddleCenter;
 
         _dtpTo.Location     = new Point(218, 12);
@@ -82,7 +82,7 @@ partial class LogsForm
         _btnFind.BackColor = UiColors.InfoAction;
         _btnFind.ForeColor = UiColors.TextOnDark;
         _btnFind.UseVisualStyleBackColor = false;
-        _btnFind.Font      = new Font("Segoe UI", 9f);
+        _btnFind.Font      = UiFonts.Body;
         _btnFind.Click    += BtnFind_Click;
 
         _pnlFilter.Controls.Add(_lblFrom);
@@ -109,9 +109,9 @@ partial class LogsForm
         _grid.BorderStyle             = BorderStyle.None;
         _grid.ColumnHeadersDefaultCellStyle.BackColor   = UiColors.StatusBar;
         _grid.ColumnHeadersDefaultCellStyle.ForeColor   = UiColors.TextOnDark;
-        _grid.ColumnHeadersDefaultCellStyle.Font        = new Font("Segoe UI", 8.5f, FontStyle.Bold);
+        _grid.ColumnHeadersDefaultCellStyle.Font        = UiFonts.GridHeader;
         _grid.ColumnHeadersDefaultCellStyle.Alignment   = DataGridViewContentAlignment.MiddleLeft;
-        _grid.DefaultCellStyle.Font                     = new Font("Segoe UI", 8.5f);
+        _grid.DefaultCellStyle.Font                     = UiFonts.GridBody;
         _grid.DefaultCellStyle.ForeColor                = UiColors.TextPrimary;
         _grid.DefaultCellStyle.SelectionBackColor       = UiColors.GridSelectionBack;
         _grid.DefaultCellStyle.SelectionForeColor       = UiColors.GridSelectionText;
@@ -129,7 +129,7 @@ partial class LogsForm
         _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.UseVisualStyleBackColor = false;
-        _btnBack.Font      = new Font("Segoe UI", 9f);
+        _btnBack.Font      = UiFonts.Body;
         _btnBack.Click    += BtnBack_Click;
 
         _pnlStatus.Controls.Add(_btnBack);

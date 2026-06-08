@@ -23,13 +23,13 @@ partial class PasswordDialog
         _lblPrompt.Text      = "Введите пароль:";
         _lblPrompt.Location  = new Point(20, 20);
         _lblPrompt.AutoSize  = true;
-        _lblPrompt.Font      = new Font("Segoe UI", 10F);
+        _lblPrompt.Font      = UiFonts.Medium;
         _lblPrompt.ForeColor = UiColors.TextPrimary;
 
         _txtPassword.Location              = new Point(20, 46);
         _txtPassword.Width                 = 260;
         _txtPassword.UseSystemPasswordChar = true;
-        _txtPassword.Font                  = new Font("Segoe UI", 11F);
+        _txtPassword.Font                  = UiFonts.SubHeader;
         _txtPassword.BackColor             = UiColors.InputBack;
         _txtPassword.ForeColor             = UiColors.InputFore;
         _txtPassword.KeyDown              += TxtPassword_KeyDown;

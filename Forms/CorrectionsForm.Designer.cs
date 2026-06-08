@@ -127,7 +127,7 @@ partial class CorrectionsForm
         // label2
         //
         label2.AutoSize = true;
-        label2.Font = new Font("Segoe UI", 9F);
+        label2.Font = UiFonts.Body;
         label2.ForeColor = UiColors.TextMuted;
         label2.Location = new Point(851, 38);
         label2.Name = "label2";
@@ -138,7 +138,7 @@ partial class CorrectionsForm
         // lblpotr
         //
         lblpotr.AutoSize = true;
-        lblpotr.Font = new Font("Segoe UI", 9F);
+        lblpotr.Font = UiFonts.Body;
         lblpotr.ForeColor = UiColors.TextMuted;
         lblpotr.Location = new Point(845, 11);
         lblpotr.Name = "lblpotr";
@@ -148,7 +148,7 @@ partial class CorrectionsForm
         //
         // _tbPlat
         //
-        _tbPlat.Font = new Font("Segoe UI", 9F);
+        _tbPlat.Font = UiFonts.Body;
         _tbPlat.BackColor = UiColors.InputBack;
         _tbPlat.ForeColor = UiColors.InputFore;
         _tbPlat.Location = new Point(954, 33);
@@ -158,7 +158,7 @@ partial class CorrectionsForm
         //
         // _tbPotr
         //
-        _tbPotr.Font = new Font("Segoe UI", 9F);
+        _tbPotr.Font = UiFonts.Body;
         _tbPotr.BackColor = UiColors.InputBack;
         _tbPotr.ForeColor = UiColors.InputFore;
         _tbPotr.Location = new Point(954, 5);
@@ -180,7 +180,7 @@ partial class CorrectionsForm
         // _lblVidVzv
         //
         _lblVidVzv.AutoSize = true;
-        _lblVidVzv.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblVidVzv.Font = UiFonts.BodyBold;
         _lblVidVzv.ForeColor = UiColors.TextOnDark;
         _lblVidVzv.Location = new Point(2, 5);
         _lblVidVzv.Name = "_lblVidVzv";
@@ -192,7 +192,7 @@ partial class CorrectionsForm
         //
         _rbGpri.AutoSize = true;
         _rbGpri.Checked = true;
-        _rbGpri.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _rbGpri.Font = UiFonts.MediumBold;
         _rbGpri.ForeColor = UiColors.TextOnDark;
         _rbGpri.Location = new Point(6, 29);
         _rbGpri.Name = "_rbGpri";
@@ -204,7 +204,7 @@ partial class CorrectionsForm
         // _rbGras
         //
         _rbGras.AutoSize = true;
-        _rbGras.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _rbGras.Font = UiFonts.MediumBold;
         _rbGras.ForeColor = UiColors.TextOnDark;
         _rbGras.Location = new Point(6, 59);
         _rbGras.Name = "_rbGras";
@@ -226,7 +226,7 @@ partial class CorrectionsForm
         // _lblVidMode
         //
         _lblVidMode.AutoSize = true;
-        _lblVidMode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblVidMode.Font = UiFonts.BodyBold;
         _lblVidMode.ForeColor = UiColors.TextOnDark;
         _lblVidMode.Location = new Point(2, 3);
         _lblVidMode.Name = "_lblVidMode";
@@ -238,7 +238,7 @@ partial class CorrectionsForm
         //
         _rbBrutto.AutoSize = true;
         _rbBrutto.Checked = true;
-        _rbBrutto.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _rbBrutto.Font = UiFonts.MediumBold;
         _rbBrutto.ForeColor = UiColors.TextOnDark;
         _rbBrutto.Location = new Point(6, 22);
         _rbBrutto.Name = "_rbBrutto";
@@ -250,7 +250,7 @@ partial class CorrectionsForm
         // _rbTara
         //
         _rbTara.AutoSize = true;
-        _rbTara.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _rbTara.Font = UiFonts.MediumBold;
         _rbTara.ForeColor = UiColors.TextOnDark;
         _rbTara.Location = new Point(6, 44);
         _rbTara.Name = "_rbTara";
@@ -265,7 +265,7 @@ partial class CorrectionsForm
         _btnSave.Enabled = false;
         _btnSave.FlatAppearance.BorderSize = 0;
         _btnSave.FlatStyle = FlatStyle.Flat;
-        _btnSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _btnSave.Font = UiFonts.MediumBold;
         _btnSave.ForeColor = UiColors.TextOnDark;
         _btnSave.Location = new Point(148, 128);
         _btnSave.Name = "_btnSave";
@@ -279,7 +279,7 @@ partial class CorrectionsForm
         // _lblDateCap
         //
         _lblDateCap.AutoSize = true;
-        _lblDateCap.Font = new Font("Segoe UI", 9F);
+        _lblDateCap.Font = UiFonts.Body;
         _lblDateCap.ForeColor = UiColors.TextMuted;
         _lblDateCap.Location = new Point(148, 11);
         _lblDateCap.Name = "_lblDateCap";
@@ -290,7 +290,7 @@ partial class CorrectionsForm
         // _lblDt
         //
         _lblDt.AutoSize = true;
-        _lblDt.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblDt.Font = UiFonts.BodyBold;
         _lblDt.ForeColor = UiColors.TextPrimary;
         _lblDt.Location = new Point(198, 11);
         _lblDt.Name = "_lblDt";
@@ -301,7 +301,7 @@ partial class CorrectionsForm
         // _lblTimeCap
         //
         _lblTimeCap.AutoSize = true;
-        _lblTimeCap.Font = new Font("Segoe UI", 9F);
+        _lblTimeCap.Font = UiFonts.Body;
         _lblTimeCap.ForeColor = UiColors.TextMuted;
         _lblTimeCap.Location = new Point(321, 11);
         _lblTimeCap.Name = "_lblTimeCap";
@@ -312,7 +312,7 @@ partial class CorrectionsForm
         // _lblVr
         //
         _lblVr.AutoSize = true;
-        _lblVr.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblVr.Font = UiFonts.BodyBold;
         _lblVr.ForeColor = UiColors.TextPrimary;
         _lblVr.Location = new Point(384, 11);
         _lblVr.Name = "_lblVr";
@@ -323,7 +323,7 @@ partial class CorrectionsForm
         // _lblNppCap
         //
         _lblNppCap.AutoSize = true;
-        _lblNppCap.Font = new Font("Segoe UI", 9F);
+        _lblNppCap.Font = UiFonts.Body;
         _lblNppCap.ForeColor = UiColors.TextMuted;
         _lblNppCap.Location = new Point(504, 11);
         _lblNppCap.Name = "_lblNppCap";
@@ -334,7 +334,7 @@ partial class CorrectionsForm
         // _lblNpp
         //
         _lblNpp.AutoSize = true;
-        _lblNpp.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblNpp.Font = UiFonts.BodyBold;
         _lblNpp.ForeColor = UiColors.TextPrimary;
         _lblNpp.Location = new Point(563, 11);
         _lblNpp.Name = "_lblNpp";
@@ -345,7 +345,7 @@ partial class CorrectionsForm
         // _lblModeCap
         //
         _lblModeCap.AutoSize = true;
-        _lblModeCap.Font = new Font("Segoe UI", 9F);
+        _lblModeCap.Font = UiFonts.Body;
         _lblModeCap.ForeColor = UiColors.TextMuted;
         _lblModeCap.Location = new Point(672, 11);
         _lblModeCap.Name = "_lblModeCap";
@@ -356,7 +356,7 @@ partial class CorrectionsForm
         // _lblMode
         //
         _lblMode.AutoSize = true;
-        _lblMode.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblMode.Font = UiFonts.BodyBold;
         _lblMode.ForeColor = UiColors.TextPrimary;
         _lblMode.Location = new Point(737, 11);
         _lblMode.Name = "_lblMode";
@@ -367,7 +367,7 @@ partial class CorrectionsForm
         // _lblNvagCap
         //
         _lblNvagCap.AutoSize = true;
-        _lblNvagCap.Font = new Font("Segoe UI", 9F);
+        _lblNvagCap.Font = UiFonts.Body;
         _lblNvagCap.ForeColor = UiColors.TextMuted;
         _lblNvagCap.Location = new Point(151, 42);
         _lblNvagCap.Name = "_lblNvagCap";
@@ -377,7 +377,7 @@ partial class CorrectionsForm
         //
         // _txtNvag
         //
-        _txtNvag.Font = new Font("Segoe UI", 9F);
+        _txtNvag.Font = UiFonts.Body;
         _txtNvag.BackColor = UiColors.InputBack;
         _txtNvag.ForeColor = UiColors.InputFore;
         _txtNvag.Location = new Point(235, 38);
@@ -389,7 +389,7 @@ partial class CorrectionsForm
         // _lblDirCap
         //
         _lblDirCap.AutoSize = true;
-        _lblDirCap.Font = new Font("Segoe UI", 9F);
+        _lblDirCap.Font = UiFonts.Body;
         _lblDirCap.ForeColor = UiColors.TextMuted;
         _lblDirCap.Location = new Point(625, 41);
         _lblDirCap.Name = "_lblDirCap";
@@ -400,7 +400,7 @@ partial class CorrectionsForm
         // _lblDir
         //
         _lblDir.AutoSize = true;
-        _lblDir.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblDir.Font = UiFonts.BodyBold;
         _lblDir.ForeColor = UiColors.TextPrimary;
         _lblDir.Location = new Point(738, 41);
         _lblDir.Name = "_lblDir";
@@ -411,7 +411,7 @@ partial class CorrectionsForm
         // _lblGruzCap
         //
         _lblGruzCap.AutoSize = true;
-        _lblGruzCap.Font = new Font("Segoe UI", 9F);
+        _lblGruzCap.Font = UiFonts.Body;
         _lblGruzCap.ForeColor = UiColors.TextMuted;
         _lblGruzCap.Location = new Point(190, 68);
         _lblGruzCap.Name = "_lblGruzCap";
@@ -421,7 +421,7 @@ partial class CorrectionsForm
         //
         // _txtGruz
         //
-        _txtGruz.Font = new Font("Segoe UI", 9F);
+        _txtGruz.Font = UiFonts.Body;
         _txtGruz.BackColor = UiColors.InputBack;
         _txtGruz.ForeColor = UiColors.InputFore;
         _txtGruz.Location = new Point(235, 65);
@@ -432,7 +432,7 @@ partial class CorrectionsForm
         // _lblNdokCap
         //
         _lblNdokCap.AutoSize = true;
-        _lblNdokCap.Font = new Font("Segoe UI", 9F);
+        _lblNdokCap.Font = UiFonts.Body;
         _lblNdokCap.ForeColor = UiColors.TextMuted;
         _lblNdokCap.Location = new Point(626, 69);
         _lblNdokCap.Name = "_lblNdokCap";
@@ -442,7 +442,7 @@ partial class CorrectionsForm
         //
         // _txtNdok
         //
-        _txtNdok.Font = new Font("Segoe UI", 9F);
+        _txtNdok.Font = UiFonts.Body;
         _txtNdok.BackColor = UiColors.InputBack;
         _txtNdok.ForeColor = UiColors.InputFore;
         _txtNdok.Location = new Point(737, 65);
@@ -453,7 +453,7 @@ partial class CorrectionsForm
         // _lblBruttoCap
         //
         _lblBruttoCap.AutoSize = true;
-        _lblBruttoCap.Font = new Font("Segoe UI", 9F);
+        _lblBruttoCap.Font = UiFonts.Body;
         _lblBruttoCap.ForeColor = UiColors.TextMuted;
         _lblBruttoCap.Location = new Point(148, 96);
         _lblBruttoCap.Name = "_lblBruttoCap";
@@ -464,7 +464,7 @@ partial class CorrectionsForm
         // _lblBrutto
         //
         _lblBrutto.AutoSize = true;
-        _lblBrutto.Font = new Font("Courier New", 10F, FontStyle.Bold);
+        _lblBrutto.Font = UiFonts.MonoBold;
         _lblBrutto.ForeColor = UiColors.TextPrimary;
         _lblBrutto.Location = new Point(212, 96);
         _lblBrutto.Name = "_lblBrutto";
@@ -475,7 +475,7 @@ partial class CorrectionsForm
         // _lblBruttoUnit
         //
         _lblBruttoUnit.AutoSize = true;
-        _lblBruttoUnit.Font = new Font("Segoe UI", 9F);
+        _lblBruttoUnit.Font = UiFonts.Body;
         _lblBruttoUnit.ForeColor = UiColors.TextMuted;
         _lblBruttoUnit.Location = new Point(282, 96);
         _lblBruttoUnit.Name = "_lblBruttoUnit";
@@ -486,7 +486,7 @@ partial class CorrectionsForm
         // _lblTarCap
         //
         _lblTarCap.AutoSize = true;
-        _lblTarCap.Font = new Font("Segoe UI", 9F);
+        _lblTarCap.Font = UiFonts.Body;
         _lblTarCap.ForeColor = UiColors.TextMuted;
         _lblTarCap.Location = new Point(306, 96);
         _lblTarCap.Name = "_lblTarCap";
@@ -497,7 +497,7 @@ partial class CorrectionsForm
         // _cmbTar
         //
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbTar.Font = new Font("Segoe UI", 9F);
+        _cmbTar.Font = UiFonts.Body;
         _cmbTar.BackColor = UiColors.InputBack;
         _cmbTar.ForeColor = UiColors.InputFore;
         _cmbTar.Location = new Point(352, 94);
@@ -509,7 +509,7 @@ partial class CorrectionsForm
         // _lblNettoCap
         //
         _lblNettoCap.AutoSize = true;
-        _lblNettoCap.Font = new Font("Segoe UI", 9F);
+        _lblNettoCap.Font = UiFonts.Body;
         _lblNettoCap.ForeColor = UiColors.TextMuted;
         _lblNettoCap.Location = new Point(646, 97);
         _lblNettoCap.Name = "_lblNettoCap";
@@ -520,7 +520,7 @@ partial class CorrectionsForm
         // _lblNetto
         //
         _lblNetto.AutoSize = true;
-        _lblNetto.Font = new Font("Courier New", 10F, FontStyle.Bold);
+        _lblNetto.Font = UiFonts.MonoBold;
         _lblNetto.ForeColor = UiColors.PrimaryAction;
         _lblNetto.Location = new Point(710, 97);
         _lblNetto.Name = "_lblNetto";
@@ -531,7 +531,7 @@ partial class CorrectionsForm
         // _lblNettoUnit
         //
         _lblNettoUnit.AutoSize = true;
-        _lblNettoUnit.Font = new Font("Segoe UI", 9F);
+        _lblNettoUnit.Font = UiFonts.Body;
         _lblNettoUnit.ForeColor = UiColors.TextMuted;
         _lblNettoUnit.Location = new Point(759, 97);
         _lblNettoUnit.Name = "_lblNettoUnit";
@@ -545,7 +545,7 @@ partial class CorrectionsForm
         _btnTransfer.Enabled = false;
         _btnTransfer.FlatAppearance.BorderSize = 0;
         _btnTransfer.FlatStyle = FlatStyle.Flat;
-        _btnTransfer.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _btnTransfer.Font = UiFonts.MediumBold;
         _btnTransfer.ForeColor = UiColors.TextOnDark;
         _btnTransfer.Location = new Point(148, 128);
         _btnTransfer.Name = "_btnTransfer";
@@ -559,7 +559,7 @@ partial class CorrectionsForm
         //
         _btnClear.BackColor = UiColors.NeutralAction;
         _btnClear.FlatStyle = FlatStyle.Flat;
-        _btnClear.Font = new Font("Segoe UI", 9F);
+        _btnClear.Font = UiFonts.Body;
         _btnClear.ForeColor = UiColors.TextOnDark;
         _btnClear.Location = new Point(402, 128);
         _btnClear.Name = "_btnClear";
@@ -573,7 +573,7 @@ partial class CorrectionsForm
         //
         _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
-        _btnRefresh.Font = new Font("Segoe UI", 9F);
+        _btnRefresh.Font = UiFonts.Body;
         _btnRefresh.ForeColor = UiColors.TextOnDark;
         _btnRefresh.Location = new Point(526, 128);
         _btnRefresh.Name = "_btnRefresh";
@@ -627,7 +627,7 @@ partial class CorrectionsForm
         _gridPend.EnableHeadersVisualStyles = false;
         _gridPend.GridColor = UiColors.GridLine;
         _gridPend.Dock = DockStyle.Fill;
-        _gridPend.Font = new Font("Segoe UI", 9F);
+        _gridPend.Font = UiFonts.GridBody;
         _gridPend.Location = new Point(0, 24);
         _gridPend.MultiSelect = false;
         _gridPend.Name = "_gridPend";
@@ -649,7 +649,7 @@ partial class CorrectionsForm
         //
         _lblHeaderPend.BackColor = UiColors.GridHeaderDarkBack;
         _lblHeaderPend.Dock = DockStyle.Top;
-        _lblHeaderPend.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblHeaderPend.Font = UiFonts.BodyBold;
         _lblHeaderPend.ForeColor = UiColors.TextOnDark;
         _lblHeaderPend.Location = new Point(0, 0);
         _lblHeaderPend.Name = "_lblHeaderPend";
@@ -679,7 +679,7 @@ partial class CorrectionsForm
         _gridDone.EnableHeadersVisualStyles = false;
         _gridDone.GridColor = UiColors.GridLine;
         _gridDone.Dock = DockStyle.Fill;
-        _gridDone.Font = new Font("Segoe UI", 9F);
+        _gridDone.Font = UiFonts.GridBody;
         _gridDone.Location = new Point(0, 24);
         _gridDone.MultiSelect = false;
         _gridDone.Name = "_gridDone";
@@ -701,7 +701,7 @@ partial class CorrectionsForm
         //
         _lblHeaderDone.BackColor = UiColors.GridHeaderDarkBack;
         _lblHeaderDone.Dock = DockStyle.Top;
-        _lblHeaderDone.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _lblHeaderDone.Font = UiFonts.BodyBold;
         _lblHeaderDone.ForeColor = UiColors.TextOnDark;
         _lblHeaderDone.Location = new Point(0, 0);
         _lblHeaderDone.Name = "_lblHeaderDone";
@@ -725,7 +725,7 @@ partial class CorrectionsForm
         _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.FlatAppearance.BorderSize = 0;
         _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = new Font("Segoe UI", 8F);
+        _btnBack.Font = UiFonts.Small;
         _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.Location = new Point(8, 4);
         _btnBack.Name = "_btnBack";
@@ -737,7 +737,7 @@ partial class CorrectionsForm
         //
         // tbCex
         //
-        tbCex.Font = new Font("Segoe UI", 9F);
+        tbCex.Font = UiFonts.Body;
         tbCex.BackColor = UiColors.InputBack;
         tbCex.ForeColor = UiColors.InputFore;
         tbCex.Location = new Point(954, 61);
@@ -749,7 +749,7 @@ partial class CorrectionsForm
         // label3
         //
         label3.AutoSize = true;
-        label3.Font = new Font("Segoe UI", 9F);
+        label3.Font = UiFonts.Body;
         label3.ForeColor = UiColors.TextMuted;
         label3.Location = new Point(910, 65);
         label3.Name = "label3";

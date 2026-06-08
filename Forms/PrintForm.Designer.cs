@@ -75,7 +75,7 @@ partial class PrintForm
         // ── _rbGpri ──────────────────────────────────────────────────────────
         _rbGpri.AutoSize = true;
         _rbGpri.Checked = true;
-        _rbGpri.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _rbGpri.Font = UiFonts.BodyBold;
         _rbGpri.ForeColor = UiColors.TextPrimary;
         _rbGpri.Location = new Point(10, 10);
         _rbGpri.Name = "_rbGpri";
@@ -86,7 +86,7 @@ partial class PrintForm
 
         // ── _rbGras ──────────────────────────────────────────────────────────
         _rbGras.AutoSize = true;
-        _rbGras.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _rbGras.Font = UiFonts.BodyBold;
         _rbGras.ForeColor = UiColors.TextPrimary;
         _rbGras.Location = new Point(135, 10);
         _rbGras.Name = "_rbGras";
@@ -96,7 +96,7 @@ partial class PrintForm
 
         // ── _lblDateFrom ─────────────────────────────────────────────────────
         _lblDateFrom.AutoSize = true;
-        _lblDateFrom.Font = new Font("Segoe UI", 9F);
+        _lblDateFrom.Font = UiFonts.Body;
         _lblDateFrom.ForeColor = UiColors.TextMuted;
         _lblDateFrom.Location = new Point(260, 14);
         _lblDateFrom.Name = "_lblDateFrom";
@@ -104,7 +104,7 @@ partial class PrintForm
         _lblDateFrom.Text = "Дата с:";
 
         // ── _dtpFrom ─────────────────────────────────────────────────────────
-        _dtpFrom.Font = new Font("Segoe UI", 9F);
+        _dtpFrom.Font = UiFonts.Body;
         _dtpFrom.Format = DateTimePickerFormat.Short;
         _dtpFrom.Location = new Point(308, 9);
         _dtpFrom.Name = "_dtpFrom";
@@ -113,7 +113,7 @@ partial class PrintForm
 
         // ── _lblDateTo ───────────────────────────────────────────────────────
         _lblDateTo.AutoSize = true;
-        _lblDateTo.Font = new Font("Segoe UI", 9F);
+        _lblDateTo.Font = UiFonts.Body;
         _lblDateTo.ForeColor = UiColors.TextMuted;
         _lblDateTo.Location = new Point(446, 14);
         _lblDateTo.Name = "_lblDateTo";
@@ -121,7 +121,7 @@ partial class PrintForm
         _lblDateTo.Text = "по:";
 
         // ── _dtpTo ───────────────────────────────────────────────────────────
-        _dtpTo.Font = new Font("Segoe UI", 9F);
+        _dtpTo.Font = UiFonts.Body;
         _dtpTo.Format = DateTimePickerFormat.Short;
         _dtpTo.Location = new Point(468, 9);
         _dtpTo.Name = "_dtpTo";
@@ -130,7 +130,7 @@ partial class PrintForm
 
         // ── _lblGruz ─────────────────────────────────────────────────────────
         _lblGruz.AutoSize = true;
-        _lblGruz.Font = new Font("Segoe UI", 9F);
+        _lblGruz.Font = UiFonts.Body;
         _lblGruz.ForeColor = UiColors.TextMuted;
         _lblGruz.Location = new Point(613, 14);
         _lblGruz.Name = "_lblGruz";
@@ -138,7 +138,7 @@ partial class PrintForm
         _lblGruz.Text = "Груз:";
 
         // ── _txtGruz ─────────────────────────────────────────────────────────
-        _txtGruz.Font = new Font("Segoe UI", 9F);
+        _txtGruz.Font = UiFonts.Body;
         _txtGruz.BackColor = UiColors.InputBack;
         _txtGruz.ForeColor = UiColors.InputFore;
         _txtGruz.Location = new Point(648, 9);
@@ -148,7 +148,7 @@ partial class PrintForm
 
         // ── _lblNvag ─────────────────────────────────────────────────────────
         _lblNvag.AutoSize = true;
-        _lblNvag.Font = new Font("Segoe UI", 9F);
+        _lblNvag.Font = UiFonts.Body;
         _lblNvag.ForeColor = UiColors.TextMuted;
         _lblNvag.Location = new Point(873, 14);
         _lblNvag.Name = "_lblNvag";
@@ -156,7 +156,7 @@ partial class PrintForm
         _lblNvag.Text = "Вагон:";
 
         // ── _txtNvag ─────────────────────────────────────────────────────────
-        _txtNvag.Font = new Font("Segoe UI", 9F);
+        _txtNvag.Font = UiFonts.Body;
         _txtNvag.BackColor = UiColors.InputBack;
         _txtNvag.ForeColor = UiColors.InputFore;
         _txtNvag.Location = new Point(920, 9);
@@ -166,7 +166,7 @@ partial class PrintForm
 
         // ── _lblPotr ─────────────────────────────────────────────────────────
         _lblPotr.AutoSize = true;
-        _lblPotr.Font = new Font("Segoe UI", 9F);
+        _lblPotr.Font = UiFonts.Body;
         _lblPotr.ForeColor = UiColors.TextMuted;
         _lblPotr.Location = new Point(10, 52);
         _lblPotr.Name = "_lblPotr";
@@ -174,7 +174,7 @@ partial class PrintForm
         _lblPotr.Text = "Получатель:";
 
         // ── _txtPotr ─────────────────────────────────────────────────────────
-        _txtPotr.Font = new Font("Segoe UI", 9F);
+        _txtPotr.Font = UiFonts.Body;
         _txtPotr.BackColor = UiColors.InputBack;
         _txtPotr.ForeColor = UiColors.InputFore;
         _txtPotr.Location = new Point(98, 47);
@@ -184,7 +184,7 @@ partial class PrintForm
 
         // ── _lblNdok ─────────────────────────────────────────────────────────
         _lblNdok.AutoSize = true;
-        _lblNdok.Font = new Font("Segoe UI", 9F);
+        _lblNdok.Font = UiFonts.Body;
         _lblNdok.ForeColor = UiColors.TextMuted;
         _lblNdok.Location = new Point(320, 52);
         _lblNdok.Name = "_lblNdok";
@@ -192,7 +192,7 @@ partial class PrintForm
         _lblNdok.Text = "№ отвесной:";
 
         // ── _txtNdok ─────────────────────────────────────────────────────────
-        _txtNdok.Font = new Font("Segoe UI", 9F);
+        _txtNdok.Font = UiFonts.Body;
         _txtNdok.BackColor = UiColors.InputBack;
         _txtNdok.ForeColor = UiColors.InputFore;
         _txtNdok.Location = new Point(408, 47);
@@ -202,7 +202,7 @@ partial class PrintForm
 
         // ── _chkPotr ─────────────────────────────────────────────────────────
         _chkPotr.AutoSize = true;
-        _chkPotr.Font = new Font("Segoe UI", 9F);
+        _chkPotr.Font = UiFonts.Body;
         _chkPotr.ForeColor = UiColors.TextPrimary;
         _chkPotr.Location = new Point(555, 50);
         _chkPotr.Name = "_chkPotr";
@@ -214,7 +214,7 @@ partial class PrintForm
         _btnFind.BackColor = UiColors.PrimaryAction;
         _btnFind.FlatAppearance.BorderSize = 0;
         _btnFind.FlatStyle = FlatStyle.Flat;
-        _btnFind.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _btnFind.Font = UiFonts.BodyBold;
         _btnFind.ForeColor = UiColors.TextOnDark;
         _btnFind.Location = new Point(10, 82);
         _btnFind.Name = "_btnFind";
@@ -228,7 +228,7 @@ partial class PrintForm
         _btnClearFilters.BackColor = UiColors.NeutralAction;
         _btnClearFilters.FlatAppearance.BorderSize = 0;
         _btnClearFilters.FlatStyle = FlatStyle.Flat;
-        _btnClearFilters.Font = new Font("Segoe UI", 9F);
+        _btnClearFilters.Font = UiFonts.Body;
         _btnClearFilters.ForeColor = UiColors.TextOnDark;
         _btnClearFilters.Location = new Point(120, 82);
         _btnClearFilters.Name = "_btnClearFilters";
@@ -256,7 +256,7 @@ partial class PrintForm
         _grid.EnableHeadersVisualStyles = false;
         _grid.GridColor = UiColors.GridLine;
         _grid.Dock = DockStyle.Fill;
-        _grid.Font = new Font("Segoe UI", 9F);
+        _grid.Font = UiFonts.GridBody;
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
         _grid.ReadOnly = false;
@@ -284,7 +284,7 @@ partial class PrintForm
 
         // ── _lblSlipNum ──────────────────────────────────────────────────────
         _lblSlipNum.AutoSize = true;
-        _lblSlipNum.Font = new Font("Segoe UI", 9F);
+        _lblSlipNum.Font = UiFonts.Body;
         _lblSlipNum.ForeColor = UiColors.TextOnDarkMuted;
         _lblSlipNum.Location = new Point(10, 13);
         _lblSlipNum.Name = "_lblSlipNum";
@@ -292,7 +292,7 @@ partial class PrintForm
         _lblSlipNum.Text = "Номер отвесной:";
 
         // ── _txtSlipNum ──────────────────────────────────────────────────────
-        _txtSlipNum.Font = new Font("Segoe UI", 9F);
+        _txtSlipNum.Font = UiFonts.Body;
         _txtSlipNum.BackColor = UiColors.InputBack;
         _txtSlipNum.ForeColor = UiColors.InputFore;
         _txtSlipNum.Location = new Point(128, 9);
@@ -302,7 +302,7 @@ partial class PrintForm
 
         // ── _lblFrom ─────────────────────────────────────────────────────────
         _lblFrom.AutoSize = true;
-        _lblFrom.Font = new Font("Segoe UI", 9F);
+        _lblFrom.Font = UiFonts.Body;
         _lblFrom.ForeColor = UiColors.TextOnDarkMuted;
         _lblFrom.Location = new Point(260, 13);
         _lblFrom.Name = "_lblFrom";
@@ -310,7 +310,7 @@ partial class PrintForm
         _lblFrom.Text = "Откуда:";
 
         // ── _txtFrom ─────────────────────────────────────────────────────────
-        _txtFrom.Font = new Font("Segoe UI", 9F);
+        _txtFrom.Font = UiFonts.Body;
         _txtFrom.BackColor = UiColors.InputBack;
         _txtFrom.ForeColor = UiColors.InputFore;
         _txtFrom.Location = new Point(316, 9);
@@ -320,7 +320,7 @@ partial class PrintForm
 
         // ── _lblTo ───────────────────────────────────────────────────────────
         _lblTo.AutoSize = true;
-        _lblTo.Font = new Font("Segoe UI", 9F);
+        _lblTo.Font = UiFonts.Body;
         _lblTo.ForeColor = UiColors.TextOnDarkMuted;
         _lblTo.Location = new Point(578, 13);
         _lblTo.Name = "_lblTo";
@@ -328,7 +328,7 @@ partial class PrintForm
         _lblTo.Text = "Куда:";
 
         // ── _txtTo ───────────────────────────────────────────────────────────
-        _txtTo.Font = new Font("Segoe UI", 9F);
+        _txtTo.Font = UiFonts.Body;
         _txtTo.BackColor = UiColors.InputBack;
         _txtTo.ForeColor = UiColors.InputFore;
         _txtTo.Location = new Point(618, 9);
@@ -340,7 +340,7 @@ partial class PrintForm
         _btnPreview.BackColor = UiColors.InfoAction;
         _btnPreview.FlatAppearance.BorderSize = 0;
         _btnPreview.FlatStyle = FlatStyle.Flat;
-        _btnPreview.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _btnPreview.Font = UiFonts.BodyBold;
         _btnPreview.ForeColor = UiColors.TextOnDark;
         _btnPreview.Location = new Point(884, 9);
         _btnPreview.Name = "_btnPreview";
@@ -354,7 +354,7 @@ partial class PrintForm
         _btnBack.BackColor = UiColors.NavigationAction;
         _btnBack.FlatAppearance.BorderSize = 0;
         _btnBack.FlatStyle = FlatStyle.Flat;
-        _btnBack.Font = new Font("Segoe UI", 8F);
+        _btnBack.Font = UiFonts.Small;
         _btnBack.ForeColor = UiColors.TextOnDark;
         _btnBack.Location = new Point(1064, 9);
         _btnBack.Name = "_btnBack";
