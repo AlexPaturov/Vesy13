@@ -111,7 +111,7 @@ public partial class StaticWeighingForm : Form
         if (_state == WeighState.Idle)
         {
             _lblValue.Text      = ToTonnes(ActiveCode(frame)).ToString("F2");
-            _lblValue.ForeColor = _sim.IsConnected ? Color.LimeGreen : Color.DimGray;
+            _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
         }
     }
 
@@ -127,10 +127,10 @@ public partial class StaticWeighingForm : Form
 
     private void UpdateConn(bool connected)
     {
-        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Gray;
+        _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
-            _lblValue.ForeColor = connected ? Color.LimeGreen : Color.DimGray;
+            _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
     }
 
     private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
@@ -150,10 +150,10 @@ public partial class StaticWeighingForm : Form
             _bogie1Code         = ActiveCode(_lastFrame);
             _state              = WeighState.Bogie1Captured;
             _lblValue.Text      = ToTonnes(_bogie1Code).ToString("F2");
-            _lblValue.ForeColor = Color.Yellow;
+            _lblValue.ForeColor = UiColors.PendingAction;
             _lblStatus.Text     = "Тележка 1 зафиксирована  —  Ожидание тележки 2";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
-            _btnWeigh.BackColor = Color.FromArgb(180, 100, 0);
+            _btnWeigh.BackColor = UiColors.PendingAction;
         }
         else
         {
@@ -175,10 +175,10 @@ public partial class StaticWeighingForm : Form
                 "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
             _lblValue.Text      = record.Total.ToString("F2");
-            _lblValue.ForeColor = Color.Cyan;
+            _lblValue.ForeColor = UiColors.Info;
             _lblStatus.Text     = $"Вагон №{_wagonNumber}: {record.Total:F2} т  —  Готов к следующему";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
-            _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
+            _btnWeigh.BackColor = UiColors.PrimaryAction;
         }
         UpdateButtonStates();
     }
@@ -199,10 +199,10 @@ public partial class StaticWeighingForm : Form
         _state              = WeighState.Idle;
         _grid.Rows.Clear();
         _lblValue.Text      = "—";
-        _lblValue.ForeColor = _sim.IsConnected ? Color.LimeGreen : Color.DimGray;
+        _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
         _lblStatus.Text     = "Готов к взвешиванию  —  Тележка 1";
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
-        _btnWeigh.BackColor = Color.FromArgb(0, 130, 0);
+        _btnWeigh.BackColor = UiColors.PrimaryAction;
         AuditLogger.Action(AuditLogger.TrainFinished,
             "Train", $"СТАТИКА вагонов={finishedCount}", "PostgreSQL");
         UpdateButtonStates();
