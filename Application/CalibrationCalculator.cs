@@ -4,35 +4,42 @@ using Vesy13.Services.Hardware;
 namespace Vesy13.Application;
 
 /// <summary>
-/// Пересчёт кода АЦП в тонны по сохранённому профилю калибровки.
-/// CalculateLsq реализует метод наименьших квадратов для подгонки коэффициентов K и B.
+/// Пересчёт кода АЦП в тонны по набору калибровочных точек.
+/// Использует кусочно-линейную интерполяцию по активным точкам канала,
+/// отсортированным по возрастанию кода АЦП.
 /// </summary>
 public static class CalibrationCalculator
 {
-    public static double Convert(CalibrationProfile profile, int adcCode, ActiveChannel channel)
-        => channel == ActiveChannel.Main
-            ? profile.Ch0.Convert(adcCode)
-            : profile.Ch1.Convert(adcCode);
-
-    public static double ConvertDynamic(CalibrationProfile profile, int adcCode, string direction)
-        => (direction.StartsWith("→") ? profile.Dynamic.KPlus : profile.Dynamic.KMinus) * adcCode;
-
-    public static (double k, double b) CalculateLsq(IList<CalibrationPoint> points)
+    public static double Convert(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
     {
-        int n = points.Count;
-        if (n < 2) return (0, 0);
+        int ch = channel == ActiveChannel.Main ? 0 : 1;
+        var active = points
+            .Where(p => p.Channel == ch && p.IsActive)
+            .OrderBy(p => p.AdcCode)
+            .ToList();
 
-        double sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-        foreach (var p in points)
-        {
-            sumX  += p.AdcCode;
-            sumY  += p.MassTonnes;
-            sumXY += (double)p.AdcCode * p.MassTonnes;
-            sumXX += (double)p.AdcCode * p.AdcCode;
-        }
-        double denom = n * sumXX - sumX * sumX;
-        double k     = denom != 0 ? (n * sumXY - sumX * sumY) / denom : 0;
-        double b     = (sumY - k * sumX) / n;
-        return (k, b);
+        if (active.Count == 0) return 0;
+        if (active.Count == 1) return (double)active[0].Mass;
+
+        if (adcCode <= active[0].AdcCode)
+            return Interp(active[0], active[1], adcCode);
+        if (adcCode >= active[^1].AdcCode)
+            return Interp(active[^2], active[^1], adcCode);
+
+        for (int i = 0; i < active.Count - 1; i++)
+            if (adcCode >= active[i].AdcCode && adcCode <= active[i + 1].AdcCode)
+                return Interp(active[i], active[i + 1], adcCode);
+
+        return 0;
+    }
+
+    public static double ConvertDynamic(DynamicCalib calib, int adcCode, string direction)
+        => (direction.StartsWith("→") ? calib.KPlus : calib.KMinus) * adcCode;
+
+    private static double Interp(CalibPoint p1, CalibPoint p2, int x)
+    {
+        if (p2.AdcCode == p1.AdcCode) return (double)p1.Mass;
+        double t = (double)(x - p1.AdcCode) / (p2.AdcCode - p1.AdcCode);
+        return (double)p1.Mass + t * ((double)p2.Mass - (double)p1.Mass);
     }
 }

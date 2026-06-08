@@ -56,12 +56,6 @@ partial class ServiceForm
         _dgvCalib        = new DataGridView();
         _btnAddRow       = new Button();
         _btnDelRow       = new Button();
-        _lblKEquals      = new Label();
-        _txtK            = new TextBox();
-        _lblBEquals      = new Label();
-        _txtB            = new TextBox();
-        _lblFormula      = new Label();
-        _btnLsq          = new Button();
         _btnCalibSave    = new Button();
 
         // CalibDynamic tab
@@ -69,7 +63,6 @@ partial class ServiceForm
         _lblLiveAdcD      = new Label();
         _lblSecPlus       = new Label();
         _lblKPlusEquals   = new Label();
-        _txtKPlus         = new TextBox();
         _lblAutoCalcPlus  = new Label();
         _lblCodePlusCap   = new Label();
         _txtCodePlus      = new TextBox();
@@ -79,7 +72,6 @@ partial class ServiceForm
         _btnCalcPlus      = new Button();
         _lblSecMinus      = new Label();
         _lblKMinusEquals  = new Label();
-        _txtKMinus        = new TextBox();
         _lblAutoCalcMinus = new Label();
         _lblCodeMinusCap  = new Label();
         _txtCodeMinus     = new TextBox();
@@ -87,7 +79,6 @@ partial class ServiceForm
         _lblMassMinusCap  = new Label();
         _txtMassMinus     = new TextBox();
         _btnCalcMinus     = new Button();
-        _lblFormulaD      = new Label();
         _btnCalibDynSave  = new Button();
 
         // Settings tab
@@ -102,7 +93,6 @@ partial class ServiceForm
         _lblDynWinCap        = new Label();
         _txtDynWindow        = new TextBox();
         _lblBogieTimeoutCap  = new Label();
-        _txtBogieTimeout     = new TextBox();
         _lblPasswordCap      = new Label();
         _txtNewPassword      = new TextBox();
         _btnSaveSettings     = new Button();
@@ -338,7 +328,7 @@ partial class ServiceForm
         _btnCapture.Click    += BtnCapture_Click;
 
         _dgvCalib.Location                      = new Point(20, 82);
-        _dgvCalib.Size                          = new Size(380, 190);
+        _dgvCalib.Size                          = new Size(460, 310);
         _dgvCalib.Font                          = UiFonts.GridBody;
         _dgvCalib.AllowUserToAddRows            = false;
         _dgvCalib.AllowUserToDeleteRows         = false;
@@ -361,10 +351,11 @@ partial class ServiceForm
         _dgvCalib.GridColor                     = UiColors.GridLine;
         _dgvCalib.RowTemplate.Height            = 30;
         _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Код АЦП",   Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Масса (т)", Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _dgvCalib.Columns.Add(new DataGridViewTextBoxColumn  { HeaderText = "Масса (т)", Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _dgvCalib.Columns.Add(new DataGridViewCheckBoxColumn { HeaderText = "Вкл",       Width = 80,  SortMode = DataGridViewColumnSortMode.NotSortable, FalseValue = false, TrueValue = true });
 
         _btnAddRow.Text      = "Добавить строку";
-        _btnAddRow.Location  = new Point(20, 282);
+        _btnAddRow.Location  = new Point(20, 402);
         _btnAddRow.Size      = new Size(160, 28);
         _btnAddRow.FlatStyle = FlatStyle.Flat;
         _btnAddRow.Font      = UiFonts.Body;
@@ -374,7 +365,7 @@ partial class ServiceForm
         _btnAddRow.Click    += BtnAddRow_Click;
 
         _btnDelRow.Text      = "Удалить выбранную";
-        _btnDelRow.Location  = new Point(190, 282);
+        _btnDelRow.Location  = new Point(190, 402);
         _btnDelRow.Size      = new Size(170, 28);
         _btnDelRow.FlatStyle = FlatStyle.Flat;
         _btnDelRow.Font      = UiFonts.Body;
@@ -383,52 +374,15 @@ partial class ServiceForm
         _btnDelRow.UseVisualStyleBackColor = false;
         _btnDelRow.Click    += BtnDelRow_Click;
 
-        _lblKEquals.Text      = "k  =";
-        _lblKEquals.Location  = new Point(20, 326);
-        _lblKEquals.AutoSize  = true;
-        _lblKEquals.Font      = UiFonts.Medium;
-        _lblKEquals.ForeColor = UiColors.TextPrimary;
 
-        _txtK.Text      = "0";
-        _txtK.Location  = new Point(56, 322);
-        _txtK.Size      = new Size(150, 26);
-        _txtK.Font      = UiFonts.Mono;
-        _txtK.BackColor = UiColors.InputBack;
-        _txtK.ForeColor = UiColors.InputFore;
 
-        _lblBEquals.Text      = "b  =";
-        _lblBEquals.Location  = new Point(224, 326);
-        _lblBEquals.AutoSize  = true;
-        _lblBEquals.Font      = UiFonts.Medium;
-        _lblBEquals.ForeColor = UiColors.TextPrimary;
 
-        _txtB.Text      = "0";
-        _txtB.Location  = new Point(260, 322);
-        _txtB.Size      = new Size(150, 26);
-        _txtB.Font      = UiFonts.Mono;
-        _txtB.BackColor = UiColors.InputBack;
-        _txtB.ForeColor = UiColors.InputFore;
 
-        _lblFormula.Text      = "Масса = k × Код + b";
-        _lblFormula.Location  = new Point(20, 358);
-        _lblFormula.AutoSize  = true;
-        _lblFormula.Font      = UiFonts.Body;
-        _lblFormula.ForeColor = UiColors.Disconnected;
 
-        _btnLsq.Text      = "Рассчитать МНК";
-        _btnLsq.Location  = new Point(20, 388);
-        _btnLsq.Size      = new Size(180, 34);
-        _btnLsq.FlatStyle = FlatStyle.Flat;
-        _btnLsq.Font      = UiFonts.Medium;
-        _btnLsq.BackColor = UiColors.SecondaryAction;
-        _btnLsq.ForeColor = UiColors.TextOnDark;
-        _btnLsq.UseVisualStyleBackColor = false;
-        _btnLsq.FlatAppearance.BorderSize = 0;
-        _btnLsq.Click    += BtnLsq_Click;
 
         _btnCalibSave.Text      = "Применить и сохранить";
-        _btnCalibSave.Location  = new Point(212, 388);
-        _btnCalibSave.Size      = new Size(220, 34);
+        _btnCalibSave.Location  = new Point(20, 444);
+        _btnCalibSave.Size      = new Size(460, 34);
         _btnCalibSave.FlatStyle = FlatStyle.Flat;
         _btnCalibSave.Font      = UiFonts.Medium;
         _btnCalibSave.BackColor = UiColors.PrimaryAction;
@@ -480,12 +434,6 @@ partial class ServiceForm
         _lblKPlusEquals.Font      = UiFonts.Medium;
         _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
 
-        _txtKPlus.Text      = "0";
-        _txtKPlus.Location  = new Point(72, 68);
-        _txtKPlus.Size      = new Size(160, 26);
-        _txtKPlus.Font      = UiFonts.Mono;
-        _txtKPlus.BackColor = UiColors.InputBack;
-        _txtKPlus.ForeColor = UiColors.InputFore;
 
         _lblAutoCalcPlus.Text      = "Авторасчёт:";
         _lblAutoCalcPlus.Location  = new Point(20, 104);
@@ -551,12 +499,6 @@ partial class ServiceForm
         _lblKMinusEquals.Font      = UiFonts.Medium;
         _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
 
-        _txtKMinus.Text      = "0";
-        _txtKMinus.Location  = new Point(72, 248);
-        _txtKMinus.Size      = new Size(160, 26);
-        _txtKMinus.Font      = UiFonts.Mono;
-        _txtKMinus.BackColor = UiColors.InputBack;
-        _txtKMinus.ForeColor = UiColors.InputFore;
 
         _lblAutoCalcMinus.Text      = "Авторасчёт:";
         _lblAutoCalcMinus.Location  = new Point(20, 284);
@@ -610,11 +552,6 @@ partial class ServiceForm
         _btnCalcMinus.FlatAppearance.BorderSize = 0;
         _btnCalcMinus.Click    += BtnCalcMinus_Click;
 
-        _lblFormulaD.Text      = "Масса = K × Код";
-        _lblFormulaD.Location  = new Point(20, 406);
-        _lblFormulaD.AutoSize  = true;
-        _lblFormulaD.Font      = UiFonts.Body;
-        _lblFormulaD.ForeColor = UiColors.Disconnected;
 
         _btnCalibDynSave.Text      = "Применить и сохранить";
         _btnCalibDynSave.Location  = new Point(20, 430);
@@ -633,7 +570,6 @@ partial class ServiceForm
         _tabCalibD.Controls.Add(_lblLiveAdcD);
         _tabCalibD.Controls.Add(_lblSecPlus);
         _tabCalibD.Controls.Add(_lblKPlusEquals);
-        _tabCalibD.Controls.Add(_txtKPlus);
         _tabCalibD.Controls.Add(_lblAutoCalcPlus);
         _tabCalibD.Controls.Add(_lblCodePlusCap);
         _tabCalibD.Controls.Add(_txtCodePlus);
@@ -643,7 +579,6 @@ partial class ServiceForm
         _tabCalibD.Controls.Add(_btnCalcPlus);
         _tabCalibD.Controls.Add(_lblSecMinus);
         _tabCalibD.Controls.Add(_lblKMinusEquals);
-        _tabCalibD.Controls.Add(_txtKMinus);
         _tabCalibD.Controls.Add(_lblAutoCalcMinus);
         _tabCalibD.Controls.Add(_lblCodeMinusCap);
         _tabCalibD.Controls.Add(_txtCodeMinus);
@@ -651,7 +586,6 @@ partial class ServiceForm
         _tabCalibD.Controls.Add(_lblMassMinusCap);
         _tabCalibD.Controls.Add(_txtMassMinus);
         _tabCalibD.Controls.Add(_btnCalcMinus);
-        _tabCalibD.Controls.Add(_lblFormulaD);
         _tabCalibD.Controls.Add(_btnCalibDynSave);
 
         // ── Tab: Настройки ────────────────────────────────────────────────────
@@ -723,11 +657,6 @@ partial class ServiceForm
         _lblBogieTimeoutCap.Font      = UiFonts.Medium;
         _lblBogieTimeoutCap.ForeColor = UiColors.TextPrimary;
 
-        _txtBogieTimeout.Text      = "30000";
-        _txtBogieTimeout.Location  = new Point(220, 196);
-        _txtBogieTimeout.Size      = new Size(200, 24);
-        _txtBogieTimeout.BackColor = UiColors.InputBack;
-        _txtBogieTimeout.ForeColor = UiColors.InputFore;
 
         _lblPasswordCap.Text      = "Новый пароль:";
         _lblPasswordCap.Location  = new Point(20, 236);
@@ -764,7 +693,6 @@ partial class ServiceForm
         _tabSett.Controls.Add(_lblDynWinCap);
         _tabSett.Controls.Add(_txtDynWindow);
         _tabSett.Controls.Add(_lblBogieTimeoutCap);
-        _tabSett.Controls.Add(_txtBogieTimeout);
         _tabSett.Controls.Add(_lblPasswordCap);
         _tabSett.Controls.Add(_txtNewPassword);
         _tabSett.Controls.Add(_btnSaveSettings);
@@ -859,19 +787,12 @@ partial class ServiceForm
     private DataGridView _dgvCalib;
     private Button       _btnAddRow;
     private Button       _btnDelRow;
-    private Label        _lblKEquals;
-    private TextBox      _txtK;
-    private Label        _lblBEquals;
-    private TextBox      _txtB;
-    private Label        _lblFormula;
-    private Button       _btnLsq;
     private Button       _btnCalibSave;
 
     private Label   _lblLiveAdcCapD;
     private Label   _lblLiveAdcD;
     private Label   _lblSecPlus;
     private Label   _lblKPlusEquals;
-    private TextBox _txtKPlus;
     private Label   _lblAutoCalcPlus;
     private Label   _lblCodePlusCap;
     private TextBox _txtCodePlus;
@@ -881,7 +802,6 @@ partial class ServiceForm
     private Button  _btnCalcPlus;
     private Label   _lblSecMinus;
     private Label   _lblKMinusEquals;
-    private TextBox _txtKMinus;
     private Label   _lblAutoCalcMinus;
     private Label   _lblCodeMinusCap;
     private TextBox _txtCodeMinus;
@@ -889,7 +809,6 @@ partial class ServiceForm
     private Label   _lblMassMinusCap;
     private TextBox _txtMassMinus;
     private Button  _btnCalcMinus;
-    private Label   _lblFormulaD;
     private Button  _btnCalibDynSave;
 
     private Label    _lblPortCap;
@@ -903,7 +822,6 @@ partial class ServiceForm
     private Label    _lblDynWinCap;
     private TextBox  _txtDynWindow;
     private Label    _lblBogieTimeoutCap;
-    private TextBox  _txtBogieTimeout;
     private Label    _lblPasswordCap;
     private TextBox  _txtNewPassword;
     private Button   _btnSaveSettings;

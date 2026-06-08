@@ -63,12 +63,6 @@ public partial class ServiceForm : Form
         _dgvCalib.Font        = UiFonts.GridBody;
         _btnAddRow.Font       = UiFonts.Body;
         _btnDelRow.Font       = UiFonts.Body;
-        _lblKEquals.Font      = UiFonts.Medium;
-        _txtK.Font            = UiFonts.Mono;
-        _lblBEquals.Font      = UiFonts.Medium;
-        _txtB.Font            = UiFonts.Mono;
-        _lblFormula.Font      = UiFonts.Body;
-        _btnLsq.Font          = UiFonts.Medium;
         _btnCalibSave.Font    = UiFonts.Medium;
         // CalibDynamic tab
         _lblLiveAdcCapD.Font  = UiFonts.Body;
@@ -151,6 +145,7 @@ public partial class ServiceForm : Form
     private void BtnAddRow_Click(object? sender, EventArgs e)
     {
         int row = _dgvCalib.Rows.Add();
+        _dgvCalib.Rows[row].Cells[2].Value = true;
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[0];
         _dgvCalib.BeginEdit(true);
     }
@@ -160,16 +155,9 @@ public partial class ServiceForm : Form
         if (code == 0) return;
         int row = _dgvCalib.Rows.Add();
         _dgvCalib.Rows[row].Cells[0].Value = code;
+        _dgvCalib.Rows[row].Cells[2].Value = true;
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
         _dgvCalib.BeginEdit(true);
-    }
-    private void BtnLsq_Click(object? sender, EventArgs e)
-    {
-        var pts = ReadGridPoints();
-        if (pts.Count < 2) { MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-        var (k, b) = CalibrationCalculator.CalculateLsq(pts);
-        _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
-        _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
     }
     private void BtnCapPlus_Click(object? sender, EventArgs e)
     {
@@ -329,52 +317,58 @@ public partial class ServiceForm : Form
 
     private async void BtnCalibSave_Click(object? sender, EventArgs e)
     {
-        if (!double.TryParse(_txtK.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double k) ||
-            !double.TryParse(_txtB.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double b))
+        var pts = ReadGridPoints();
+        if (pts.Count == 0)
         {
-            MessageBox.Show("Некорректные значения k или b.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Нет точек для сохранения.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
-        var ch    = _calibUseCh0 ? _calib.Profile.Ch0 : _calib.Profile.Ch1;
-        ch.K      = k;
-        ch.B      = b;
-        ch.Points = ReadGridPoints();
+        int channel = _calibUseCh0 ? 0 : 1;
         try
         {
-            await _calib.SaveAsync();
+            await _calib.SaveCalibPointsAsync(channel, pts);
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             AuditLogger.Action(AuditLogger.CalibrationSaved,
-                "CalibProfile", $"static ch={(_calibUseCh0 ? "CH0" : "CH1")}");
+                "calibration_points", $"ch={(_calibUseCh0 ? "CH0" : "CH1")} rows={pts.Count}");
+            await LoadCalibPointsAsync();
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "static", "PostgreSQL", ex.Message);
+            AuditLogger.Error(AuditLogger.ErrorDb, "calibration_points", "static", "PostgreSQL", ex.Message);
             MessageBox.Show("Не удалось сохранить калибровку.\nОбратитесь к администратору.",
                 "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    private void LoadCalibPoints()
+    private async Task LoadCalibPointsAsync()
     {
         if (_dgvCalib == null || _calib is null) return;
+        int channel = _calibUseCh0 ? 0 : 1;
+        var pts = await _calib.GetCalibPointsAsync(channel);
         _dgvCalib.Rows.Clear();
-        var ch = _calibUseCh0 ? _calib.Profile.Ch0 : _calib.Profile.Ch1;
-        foreach (var p in ch.Points)
-            _dgvCalib.Rows.Add(p.AdcCode, p.MassTonnes.ToString("G8", CultureInfo.InvariantCulture));
-        _txtK.Text = ch.K.ToString("G8", CultureInfo.InvariantCulture);
-        _txtB.Text = ch.B.ToString("G8", CultureInfo.InvariantCulture);
+        foreach (var p in pts)
+        {
+            int row = _dgvCalib.Rows.Add();
+            _dgvCalib.Rows[row].Tag          = p.Id;
+            _dgvCalib.Rows[row].Cells[0].Value = p.AdcCode;
+            _dgvCalib.Rows[row].Cells[1].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
+            _dgvCalib.Rows[row].Cells[2].Value = p.IsActive;
+        }
     }
 
-    private List<CalibrationPoint> ReadGridPoints()
+    private void LoadCalibPoints() => _ = LoadCalibPointsAsync();
+
+    private IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> ReadGridPoints()
     {
-        var pts = new List<CalibrationPoint>();
         foreach (DataGridViewRow row in _dgvCalib.Rows)
         {
-            if (int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code) &&
-                double.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double mass))
-                pts.Add(new CalibrationPoint { AdcCode = code, MassTonnes = mass });
+            if (!int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
+                continue;
+            if (!decimal.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
+                continue;
+            bool active = row.Cells[2].Value is true;
+            yield return (code, mass, active);
         }
-        return pts;
     }
 
     private void UpdateLiveAdcLabel()
@@ -398,11 +392,9 @@ public partial class ServiceForm : Form
             MessageBox.Show("Некорректные значения K→ или K←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
-        _calib.Profile.Dynamic.KPlus  = kp;
-        _calib.Profile.Dynamic.KMinus = km;
         try
         {
-            await _calib.SaveAsync();
+            await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
             MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             AuditLogger.Action(AuditLogger.CalibrationSaved,
                 "CalibProfile", $"dynamic kp={kp:G4} km={km:G4}");
@@ -418,8 +410,8 @@ public partial class ServiceForm : Form
     private void LoadCalibDynamic()
     {
         if (_calib is null) return;
-        _txtKPlus .Text = _calib.Profile.Dynamic.KPlus .ToString("G8", CultureInfo.InvariantCulture);
-        _txtKMinus.Text = _calib.Profile.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
+        _txtKPlus .Text = _calib.Dynamic.KPlus .ToString("G8", CultureInfo.InvariantCulture);
+        _txtKMinus.Text = _calib.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
     }
 
     // ── Admin ────────────────────────────────────────────────────────────────

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Dapper;
 using Npgsql;
 using Vesy13.Models;
@@ -7,59 +6,114 @@ namespace Vesy13.Services.Repositories;
 
 /// <summary>
 /// Репозиторий локальной PostgreSQL-базы (scale_db).
-/// Хранит профиль калибровки и журнал взвешиваний вагонов.
+/// Хранит калибровочные точки и журнал взвешиваний вагонов.
 /// </summary>
 public class LocalRepository
 {
     private const string ConnStr =
         "Host=localhost;Port=5432;Database=scale_db;Username=scale_user;Password=fluffyBunny";
 
-    private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = false };
+    /// <summary>Кэш всех калибровочных точек. Обновляется после каждого сохранения.</summary>
+    public IReadOnlyList<CalibPoint> CalibPoints { get; private set; } = [];
 
-    /// <summary>Текущий профиль калибровки. Заполняется после <see cref="LoadAsync"/>.</summary>
-    public CalibrationProfile Profile { get; private set; } = new();
+    /// <summary>Коэффициенты динамической калибровки.</summary>
+    public DynamicCalib Dynamic { get; private set; } = new();
 
-    /// <summary>
-    /// Загружает профиль калибровки из таблицы <c>calibration_config</c>.
-    /// При отсутствии записи или ошибке подключения оставляет профиль по умолчанию.
-    /// </summary>
+    // ── Load ───────────────────────────────────────────────────────────────
+
     public async Task LoadAsync()
     {
         try
         {
             await using var conn = new NpgsqlConnection(ConnStr);
             await conn.OpenAsync();
-            var json = await conn.QueryFirstOrDefaultAsync<string>(
-                "SELECT profile FROM calibration_config WHERE id = 1");
-            if (!string.IsNullOrWhiteSpace(json) && json != "{}")
-                Profile = JsonSerializer.Deserialize<CalibrationProfile>(json) ?? new CalibrationProfile();
+
+            var pts = await conn.QueryAsync<CalibPoint>(@"
+                SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive
+                FROM calibration_points
+                ORDER BY channel, adc_code");
+            CalibPoints = pts.ToList().AsReadOnly();
+
+            var dyn = await conn.QueryFirstOrDefaultAsync<DynamicCalib>(@"
+                SELECT k_plus AS KPlus, k_minus AS KMinus
+                FROM calibration_dynamic WHERE id = 1");
+            Dynamic = dyn ?? new DynamicCalib();
         }
         catch
         {
-            Profile = new CalibrationProfile();
+            CalibPoints = [];
+            Dynamic     = new DynamicCalib();
         }
     }
 
-    /// <summary>
-    /// Сохраняет текущий <see cref="Profile"/> в таблицу <c>calibration_config</c>.
-    /// Использует INSERT … ON CONFLICT UPDATE, поэтому запись всегда одна (id = 1).
-    /// </summary>
-    public async Task SaveAsync()
+    // ── Calibration points ─────────────────────────────────────────────────
+
+    /// <summary>Возвращает все точки указанного канала из БД.</summary>
+    public async Task<List<CalibPoint>> GetCalibPointsAsync(int channel)
     {
-        var json = JsonSerializer.Serialize(Profile, JsonOpts);
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-        await conn.ExecuteAsync(@"
-            INSERT INTO calibration_config (id, profile, updated_at)
-            VALUES (1, @profile::jsonb, NOW())
-            ON CONFLICT (id) DO UPDATE SET profile = EXCLUDED.profile, updated_at = NOW()",
-            new { profile = json });
+        var pts = await conn.QueryAsync<CalibPoint>(@"
+            SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive
+            FROM calibration_points
+            WHERE channel = @channel
+            ORDER BY adc_code",
+            new { channel });
+        return pts.ToList();
     }
 
     /// <summary>
-    /// Сохраняет взвешивание вагона в таблицу <c>wagon_weighing</c>.
+    /// Заменяет все точки канала на переданный набор (DELETE + INSERT в транзакции).
+    /// После коммита обновляет кэш <see cref="CalibPoints"/>.
     /// </summary>
-    /// <param name="record">Данные вагона: тележки, время, номер в составе.</param>
+    public async Task SaveCalibPointsAsync(int channel, IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> points)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
+        await conn.ExecuteAsync(
+            "DELETE FROM calibration_points WHERE channel = @channel",
+            new { channel }, tx);
+
+        foreach (var p in points)
+            await conn.ExecuteAsync(@"
+                INSERT INTO calibration_points (channel, adc_code, mass, is_active)
+                VALUES (@channel, @AdcCode, @Mass, @IsActive)",
+                new { channel, p.AdcCode, p.Mass, p.IsActive }, tx);
+
+        await tx.CommitAsync();
+        await ReloadCacheAsync(conn);
+    }
+
+    /// <summary>Переключает флаг активности одной точки и обновляет кэш.</summary>
+    public async Task SetActiveAsync(int id, bool isActive)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        await conn.ExecuteAsync(
+            "UPDATE calibration_points SET is_active = @isActive WHERE id = @id",
+            new { id, isActive });
+        await ReloadCacheAsync(conn);
+    }
+
+    // ── Dynamic calibration ────────────────────────────────────────────────
+
+    public async Task SaveDynamicCalibAsync(DynamicCalib calib)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        await conn.ExecuteAsync(@"
+            INSERT INTO calibration_dynamic (id, k_plus, k_minus, updated_at)
+            VALUES (1, @KPlus, @KMinus, NOW())
+            ON CONFLICT (id) DO UPDATE
+            SET k_plus = EXCLUDED.k_plus, k_minus = EXCLUDED.k_minus, updated_at = NOW()",
+            new { calib.KPlus, calib.KMinus });
+        Dynamic = calib;
+    }
+
+    // ── Wagon weighing ─────────────────────────────────────────────────────
+
     public async Task SaveWagonAsync(LocalWagon record)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
@@ -80,10 +134,6 @@ public class LocalRepository
             });
     }
 
-    /// <summary>
-    /// Возвращает записи из <c>wagon_weighing</c>, ещё не перенесённые в Firebird
-    /// (<c>transferred = false</c>), отсортированные по убыванию времени взвешивания.
-    /// </summary>
     public async Task<List<LocalWagon>> GetPendingAsync()
     {
         await using var conn = new NpgsqlConnection(ConnStr);
@@ -103,10 +153,6 @@ public class LocalRepository
         return rows.ToList();
     }
 
-    /// <summary>
-    /// Отмечает запись как перенесённую в Firebird (<c>transferred = true</c>).
-    /// </summary>
-    /// <param name="id">Первичный ключ записи в <c>wagon_weighing</c>.</param>
     public async Task MarkTransferredAsync(int id)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
@@ -116,10 +162,6 @@ public class LocalRepository
             new { id });
     }
 
-    /// <summary>
-    /// Возвращает последние 200 записей из <c>wagon_weighing</c> с флагом
-    /// <c>transferred = true</c>, отсортированных по убыванию времени взвешивания.
-    /// </summary>
     public async Task<List<LocalWagon>> GetTransferredAsync()
     {
         await using var conn = new NpgsqlConnection(ConnStr);
@@ -138,5 +180,16 @@ public class LocalRepository
             ORDER BY wagon_time DESC
             LIMIT 200");
         return rows.ToList();
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+
+    private async Task ReloadCacheAsync(NpgsqlConnection conn)
+    {
+        var pts = await conn.QueryAsync<CalibPoint>(@"
+            SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive
+            FROM calibration_points
+            ORDER BY channel, adc_code");
+        CalibPoints = pts.ToList().AsReadOnly();
     }
 }

@@ -34,7 +34,7 @@ public partial class StaticWeighingForm : Form
     }
 
     private double ToTonnes(int adcCode) =>
-        CalibrationCalculator.Convert(_ldb.Profile, adcCode, _sim.Channel);
+        CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel);
 
     private void ApplyFonts()
     {

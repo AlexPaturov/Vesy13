@@ -34,7 +34,7 @@ public partial class DynamicWeighingForm : Form
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
-    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Profile, adcCode, GetDirection());
+    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
 
     private bool ValidateBeforeWeigh()
     {
