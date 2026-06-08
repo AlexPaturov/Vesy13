@@ -263,7 +263,7 @@ partial class DynamicWeighingForm
         Controls.Add(_grid);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;
-        MaximumSize = new Size(649, 10000);
+        MaximumSize = new Size(669, 10000);
         Name = "DynamicWeighingForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Взвешивание — Динамика";
