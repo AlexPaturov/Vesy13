@@ -253,7 +253,7 @@ partial class DynamicWeighingForm
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = UiColors.AppBackground;
-        ClientSize = new Size(633, 629);
+        ClientSize = new Size(689, 629);
         Controls.Add(_gbDir);
         Controls.Add(_lblChannel);
         Controls.Add(_pnlDisplay);
@@ -263,7 +263,7 @@ partial class DynamicWeighingForm
         Controls.Add(_grid);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;
-        MaximumSize = new Size(669, 10000);
+        MaximumSize = new Size(689, 10000);
         Name = "DynamicWeighingForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Взвешивание — Динамика";
