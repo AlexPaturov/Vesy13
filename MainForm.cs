@@ -26,23 +26,43 @@ public partial class MainForm : Form
 
     // ── Lifecycle ───────────────────────────────────────────────────────────
 
-    private void ApplyFonts()
+    private void ApplyTheme()
     {
+        BackColor = Forms.UiColors.AppBackground;
+        _pnlHeader.BackColor = Forms.UiColors.HeaderBar;
+        _pnlStatus.BackColor = Forms.UiColors.StatusBar;
+
         _lblTitle.Font       = Forms.UiFonts.Title;
+        _lblTitle.ForeColor  = Forms.UiColors.TextPrimary;
         _btnStatic.Font      = Forms.UiFonts.NavButton;
+        _btnStatic.BackColor = Forms.UiColors.NavigationAction;
+        _btnStatic.ForeColor = Forms.UiColors.TextOnDark;
         _btnDynamic.Font     = Forms.UiFonts.NavButton;
+        _btnDynamic.BackColor = Forms.UiColors.NavigationAction;
+        _btnDynamic.ForeColor = Forms.UiColors.TextOnDark;
         _btnService.Font     = Forms.UiFonts.NavButton;
+        _btnService.BackColor = Forms.UiColors.NavigationAction;
+        _btnService.ForeColor = Forms.UiColors.TextOnDark;
         _btnCorrections.Font = Forms.UiFonts.NavButton;
+        _btnCorrections.BackColor = Forms.UiColors.NavigationAction;
+        _btnCorrections.ForeColor = Forms.UiColors.TextOnDark;
         _btnPrint.Font       = Forms.UiFonts.NavButton;
+        _btnPrint.BackColor = Forms.UiColors.NavigationAction;
+        _btnPrint.ForeColor = Forms.UiColors.TextOnDark;
         _btnLogs.Font        = Forms.UiFonts.NavButton;
+        _btnLogs.BackColor = Forms.UiColors.NavigationAction;
+        _btnLogs.ForeColor = Forms.UiColors.TextOnDark;
         _lblConn.Font        = Forms.UiFonts.Body;
+        _lblConn.ForeColor   = Forms.UiColors.TextMuted;
         _btnConn.Font        = Forms.UiFonts.Small;
+        _btnConn.BackColor   = Forms.UiColors.NavigationAction;
+        _btnConn.ForeColor   = Forms.UiColors.TextOnDark;
     }
 
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        ApplyFonts();
+        ApplyTheme();
         if (DesignMode || _sim is null) return;
         _sim.ConnectionChanged += Adc_ConnectionChanged;
         UpdateConn(_sim.IsConnected);

@@ -25,6 +25,7 @@ partial class MainForm
         _btnPrint      = new Button();
         _btnLogs       = new Button();
         _pnlStatus    = new Panel();
+        _statusLayout = new TableLayoutPanel();
         _dotConn      = new Panel();
         _lblConn      = new Label();
         _btnConn      = new Button();
@@ -32,18 +33,17 @@ partial class MainForm
         _pnlHeader.SuspendLayout();
         _pnlMenu.SuspendLayout();
         _pnlStatus.SuspendLayout();
+        _statusLayout.SuspendLayout();
         SuspendLayout();
 
         // ── Header ────────────────────────────────────────────────────────────
         _lblTitle.Text      = "ВЕСЫ №13";
         _lblTitle.Font      = UiFonts.Title;
-        _lblTitle.ForeColor = Forms.UiColors.TextPrimary;
         _lblTitle.TextAlign = ContentAlignment.MiddleCenter;
         _lblTitle.Dock      = DockStyle.Fill;
 
         _pnlHeader.Dock      = DockStyle.Top;
         _pnlHeader.Height    = 100;
-        _pnlHeader.BackColor = Forms.UiColors.HeaderBar;
         _pnlHeader.Controls.Add(_lblTitle);
 
         // ── Menu buttons ──────────────────────────────────────────────────────
@@ -52,8 +52,6 @@ partial class MainForm
         _btnStatic.Font      = UiFonts.NavButton;
         _btnStatic.FlatStyle = FlatStyle.Flat;
         _btnStatic.Margin    = new Padding(0, 5, 0, 5);
-        _btnStatic.BackColor = Forms.UiColors.NavigationAction;
-        _btnStatic.ForeColor = Forms.UiColors.TextOnDark;
         _btnStatic.UseVisualStyleBackColor = false;
         _btnStatic.Cursor    = Cursors.Hand;
         _btnStatic.FlatAppearance.BorderSize = 0;
@@ -64,8 +62,6 @@ partial class MainForm
         _btnDynamic.Font      = UiFonts.NavButton;
         _btnDynamic.FlatStyle = FlatStyle.Flat;
         _btnDynamic.Margin    = new Padding(0, 5, 0, 5);
-        _btnDynamic.BackColor = Forms.UiColors.NavigationAction;
-        _btnDynamic.ForeColor = Forms.UiColors.TextOnDark;
         _btnDynamic.UseVisualStyleBackColor = false;
         _btnDynamic.Cursor    = Cursors.Hand;
         _btnDynamic.FlatAppearance.BorderSize = 0;
@@ -76,8 +72,6 @@ partial class MainForm
         _btnService.Font      = UiFonts.NavButton;
         _btnService.FlatStyle = FlatStyle.Flat;
         _btnService.Margin    = new Padding(0, 5, 0, 5);
-        _btnService.BackColor = Forms.UiColors.NavigationAction;
-        _btnService.ForeColor = Forms.UiColors.TextOnDark;
         _btnService.UseVisualStyleBackColor = false;
         _btnService.Cursor    = Cursors.Hand;
         _btnService.FlatAppearance.BorderSize = 0;
@@ -88,8 +82,6 @@ partial class MainForm
         _btnCorrections.Font      = UiFonts.NavButton;
         _btnCorrections.FlatStyle = FlatStyle.Flat;
         _btnCorrections.Margin    = new Padding(0, 5, 0, 5);
-        _btnCorrections.BackColor = Forms.UiColors.NavigationAction;
-        _btnCorrections.ForeColor = Forms.UiColors.TextOnDark;
         _btnCorrections.UseVisualStyleBackColor = false;
         _btnCorrections.Cursor    = Cursors.Hand;
         _btnCorrections.FlatAppearance.BorderSize = 0;
@@ -100,8 +92,6 @@ partial class MainForm
         _btnPrint.Font      = UiFonts.NavButton;
         _btnPrint.FlatStyle = FlatStyle.Flat;
         _btnPrint.Margin    = new Padding(0, 5, 0, 5);
-        _btnPrint.BackColor = Forms.UiColors.NavigationAction;
-        _btnPrint.ForeColor = Forms.UiColors.TextOnDark;
         _btnPrint.UseVisualStyleBackColor = false;
         _btnPrint.Cursor    = Cursors.Hand;
         _btnPrint.FlatAppearance.BorderSize = 0;
@@ -112,8 +102,6 @@ partial class MainForm
         _btnLogs.Font      = UiFonts.NavButton;
         _btnLogs.FlatStyle = FlatStyle.Flat;
         _btnLogs.Margin    = new Padding(0, 5, 0, 5);
-        _btnLogs.BackColor = Forms.UiColors.NavigationAction;
-        _btnLogs.ForeColor = Forms.UiColors.TextOnDark;
         _btnLogs.UseVisualStyleBackColor = false;
         _btnLogs.Cursor    = Cursors.Hand;
         _btnLogs.FlatAppearance.BorderSize = 0;
@@ -138,35 +126,39 @@ partial class MainForm
         _pnlMenu.Controls.Add(_btnLogs,        0, 5);
 
         // ── Status bar ────────────────────────────────────────────────────────
+        _statusLayout.ColumnCount = 4;
+        _statusLayout.RowCount = 1;
+        _statusLayout.Dock = DockStyle.Fill;
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 18F));
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        _statusLayout.Controls.Add(_dotConn, 0, 0);
+        _statusLayout.Controls.Add(_lblConn, 1, 0);
+        _statusLayout.Controls.Add(_btnConn, 3, 0);
+
         _dotConn.Size      = new Size(10, 10);
-        _dotConn.Location  = new Point(10, 13);
-        _dotConn.BackColor = Forms.UiColors.Disconnected;
+        _dotConn.Anchor    = AnchorStyles.Left;
+        _dotConn.Margin    = new Padding(4, 13, 4, 0);
 
         _lblConn.Text      = "АЦП: отключён";
-        _lblConn.Font      = UiFonts.Body;
-        _lblConn.ForeColor = Forms.UiColors.TextMuted;
-        _lblConn.Location  = new Point(26, 9);
         _lblConn.AutoSize  = true;
+        _lblConn.Anchor    = AnchorStyles.Left;
+        _lblConn.Margin    = new Padding(0, 9, 0, 0);
 
         _btnConn.Text      = "Подключить";
         _btnConn.Size      = new Size(90, 22);
-        _btnConn.Anchor    = AnchorStyles.Right | AnchorStyles.Top;
-        _btnConn.Location  = new Point(272, 7);
-        _btnConn.Font      = UiFonts.Small;
+        _btnConn.Anchor    = AnchorStyles.Right;
+        _btnConn.Margin    = new Padding(6, 7, 0, 0);
         _btnConn.FlatStyle = FlatStyle.Flat;
-        _btnConn.BackColor = Forms.UiColors.NavigationAction;
-        _btnConn.ForeColor = Forms.UiColors.TextOnDark;
         _btnConn.UseVisualStyleBackColor = false;
         _btnConn.FlatAppearance.BorderSize = 0;
         _btnConn.Click    += BtnConn_Click;
 
         _pnlStatus.Dock      = DockStyle.Bottom;
         _pnlStatus.Height    = 36;
-        _pnlStatus.BackColor = Forms.UiColors.StatusBar;
         _pnlStatus.Padding   = new Padding(8, 0, 8, 0);
-        _pnlStatus.Controls.Add(_dotConn);
-        _pnlStatus.Controls.Add(_lblConn);
-        _pnlStatus.Controls.Add(_btnConn);
+        _pnlStatus.Controls.Add(_statusLayout);
 
         // ── Form ──────────────────────────────────────────────────────────────
         Text            = "Весы №13";
@@ -182,6 +174,7 @@ partial class MainForm
 
         _pnlHeader.ResumeLayout(false);
         _pnlMenu.ResumeLayout(false);
+        _statusLayout.ResumeLayout(false);
         _pnlStatus.ResumeLayout(false);
         _pnlStatus.PerformLayout();
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -199,6 +192,7 @@ partial class MainForm
     private Button          _btnPrint;
     private Button          _btnLogs;
     private Panel           _pnlStatus;
+    private TableLayoutPanel _statusLayout;
     private Panel           _dotConn;
     private Label           _lblConn;
     private Button          _btnConn;
