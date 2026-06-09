@@ -80,7 +80,6 @@ partial class CorrectionsForm
         //
         // _pnlTop
         //
-        _pnlTop.BackColor = UiColors.FilterBar;
         _pnlTop.Controls.Add(label3);
         _pnlTop.Controls.Add(tbCex);
         _pnlTop.Controls.Add(label2);
@@ -126,8 +125,6 @@ partial class CorrectionsForm
         // label2
         //
         label2.AutoSize = true;
-        label2.Font = UiFonts.Body;
-        label2.ForeColor = UiColors.TextMuted;
         label2.Location = new Point(851, 38);
         label2.Name = "label2";
         label2.Size = new Size(94, 20);
@@ -137,8 +134,6 @@ partial class CorrectionsForm
         // lblpotr
         //
         lblpotr.AutoSize = true;
-        lblpotr.Font = UiFonts.Body;
-        lblpotr.ForeColor = UiColors.TextMuted;
         lblpotr.Location = new Point(845, 11);
         lblpotr.Name = "lblpotr";
         lblpotr.Size = new Size(100, 20);
@@ -147,9 +142,6 @@ partial class CorrectionsForm
         //
         // _tbPlat
         //
-        _tbPlat.Font = UiFonts.Body;
-        _tbPlat.BackColor = UiColors.InputBack;
-        _tbPlat.ForeColor = UiColors.InputFore;
         _tbPlat.Location = new Point(954, 33);
         _tbPlat.Name = "_tbPlat";
         _tbPlat.Size = new Size(233, 27);
@@ -157,9 +149,6 @@ partial class CorrectionsForm
         //
         // _tbPotr
         //
-        _tbPotr.Font = UiFonts.Body;
-        _tbPotr.BackColor = UiColors.InputBack;
-        _tbPotr.ForeColor = UiColors.InputFore;
         _tbPotr.Location = new Point(954, 5);
         _tbPotr.Name = "_tbPotr";
         _tbPotr.Size = new Size(232, 27);
@@ -167,7 +156,6 @@ partial class CorrectionsForm
         //
         // _pnlLeft
         //
-        _pnlLeft.BackColor = UiColors.PendingAction;
         _pnlLeft.Controls.Add(_lblVidVzv);
         _pnlLeft.Controls.Add(_rbGpri);
         _pnlLeft.Controls.Add(_rbGras);
@@ -179,8 +167,6 @@ partial class CorrectionsForm
         // _lblVidVzv
         //
         _lblVidVzv.AutoSize = true;
-        _lblVidVzv.Font = UiFonts.BodyBold;
-        _lblVidVzv.ForeColor = UiColors.TextOnDark;
         _lblVidVzv.Location = new Point(2, 5);
         _lblVidVzv.Name = "_lblVidVzv";
         _lblVidVzv.Size = new Size(140, 20);
@@ -191,8 +177,6 @@ partial class CorrectionsForm
         //
         _rbGpri.AutoSize = true;
         _rbGpri.Checked = true;
-        _rbGpri.Font = UiFonts.MediumBold;
-        _rbGpri.ForeColor = UiColors.TextOnDark;
         _rbGpri.Location = new Point(6, 29);
         _rbGpri.Name = "_rbGpri";
         _rbGpri.Size = new Size(96, 27);
@@ -203,8 +187,6 @@ partial class CorrectionsForm
         // _rbGras
         //
         _rbGras.AutoSize = true;
-        _rbGras.Font = UiFonts.MediumBold;
-        _rbGras.ForeColor = UiColors.TextOnDark;
         _rbGras.Location = new Point(6, 59);
         _rbGras.Name = "_rbGras";
         _rbGras.Size = new Size(88, 27);
@@ -213,7 +195,6 @@ partial class CorrectionsForm
         //
         // _pnlMode
         //
-        _pnlMode.BackColor = UiColors.InfoAction;
         _pnlMode.Controls.Add(_lblVidMode);
         _pnlMode.Controls.Add(_rbBrutto);
         _pnlMode.Controls.Add(_rbTara);
@@ -225,8 +206,6 @@ partial class CorrectionsForm
         // _lblVidMode
         //
         _lblVidMode.AutoSize = true;
-        _lblVidMode.Font = UiFonts.BodyBold;
-        _lblVidMode.ForeColor = UiColors.TextOnDark;
         _lblVidMode.Location = new Point(2, 3);
         _lblVidMode.Name = "_lblVidMode";
         _lblVidMode.Size = new Size(100, 20);
@@ -237,8 +216,6 @@ partial class CorrectionsForm
         //
         _rbBrutto.AutoSize = true;
         _rbBrutto.Checked = true;
-        _rbBrutto.Font = UiFonts.MediumBold;
-        _rbBrutto.ForeColor = UiColors.TextOnDark;
         _rbBrutto.Location = new Point(6, 22);
         _rbBrutto.Name = "_rbBrutto";
         _rbBrutto.Size = new Size(90, 27);
@@ -249,8 +226,6 @@ partial class CorrectionsForm
         // _rbTara
         //
         _rbTara.AutoSize = true;
-        _rbTara.Font = UiFonts.MediumBold;
-        _rbTara.ForeColor = UiColors.TextOnDark;
         _rbTara.Location = new Point(6, 44);
         _rbTara.Name = "_rbTara";
         _rbTara.Size = new Size(72, 27);
@@ -260,12 +235,9 @@ partial class CorrectionsForm
         //
         // _btnSave
         //
-        _btnSave.BackColor = UiColors.InfoAction;
         _btnSave.Enabled = false;
         _btnSave.FlatAppearance.BorderSize = 0;
         _btnSave.FlatStyle = FlatStyle.Flat;
-        _btnSave.Font = UiFonts.MediumBold;
-        _btnSave.ForeColor = UiColors.TextOnDark;
         _btnSave.Location = new Point(148, 128);
         _btnSave.Name = "_btnSave";
         _btnSave.Size = new Size(240, 32);
@@ -278,8 +250,6 @@ partial class CorrectionsForm
         // _lblDateCap
         //
         _lblDateCap.AutoSize = true;
-        _lblDateCap.Font = UiFonts.Body;
-        _lblDateCap.ForeColor = UiColors.TextMuted;
         _lblDateCap.Location = new Point(148, 11);
         _lblDateCap.Name = "_lblDateCap";
         _lblDateCap.Size = new Size(44, 20);
@@ -289,8 +259,6 @@ partial class CorrectionsForm
         // _lblDt
         //
         _lblDt.AutoSize = true;
-        _lblDt.Font = UiFonts.BodyBold;
-        _lblDt.ForeColor = UiColors.TextPrimary;
         _lblDt.Location = new Point(198, 11);
         _lblDt.Name = "_lblDt";
         _lblDt.Size = new Size(24, 20);
@@ -300,8 +268,6 @@ partial class CorrectionsForm
         // _lblTimeCap
         //
         _lblTimeCap.AutoSize = true;
-        _lblTimeCap.Font = UiFonts.Body;
-        _lblTimeCap.ForeColor = UiColors.TextMuted;
         _lblTimeCap.Location = new Point(321, 11);
         _lblTimeCap.Name = "_lblTimeCap";
         _lblTimeCap.Size = new Size(57, 20);
@@ -311,8 +277,6 @@ partial class CorrectionsForm
         // _lblVr
         //
         _lblVr.AutoSize = true;
-        _lblVr.Font = UiFonts.BodyBold;
-        _lblVr.ForeColor = UiColors.TextPrimary;
         _lblVr.Location = new Point(384, 11);
         _lblVr.Name = "_lblVr";
         _lblVr.Size = new Size(24, 20);
@@ -322,8 +286,6 @@ partial class CorrectionsForm
         // _lblNppCap
         //
         _lblNppCap.AutoSize = true;
-        _lblNppCap.Font = UiFonts.Body;
-        _lblNppCap.ForeColor = UiColors.TextMuted;
         _lblNppCap.Location = new Point(504, 11);
         _lblNppCap.Name = "_lblNppCap";
         _lblNppCap.Size = new Size(53, 20);
@@ -333,8 +295,6 @@ partial class CorrectionsForm
         // _lblNpp
         //
         _lblNpp.AutoSize = true;
-        _lblNpp.Font = UiFonts.BodyBold;
-        _lblNpp.ForeColor = UiColors.TextPrimary;
         _lblNpp.Location = new Point(563, 11);
         _lblNpp.Name = "_lblNpp";
         _lblNpp.Size = new Size(24, 20);
@@ -344,8 +304,6 @@ partial class CorrectionsForm
         // _lblModeCap
         //
         _lblModeCap.AutoSize = true;
-        _lblModeCap.Font = UiFonts.Body;
-        _lblModeCap.ForeColor = UiColors.TextMuted;
         _lblModeCap.Location = new Point(672, 11);
         _lblModeCap.Name = "_lblModeCap";
         _lblModeCap.Size = new Size(59, 20);
@@ -355,8 +313,6 @@ partial class CorrectionsForm
         // _lblMode
         //
         _lblMode.AutoSize = true;
-        _lblMode.Font = UiFonts.BodyBold;
-        _lblMode.ForeColor = UiColors.TextPrimary;
         _lblMode.Location = new Point(737, 11);
         _lblMode.Name = "_lblMode";
         _lblMode.Size = new Size(24, 20);
@@ -366,8 +322,6 @@ partial class CorrectionsForm
         // _lblNvagCap
         //
         _lblNvagCap.AutoSize = true;
-        _lblNvagCap.Font = UiFonts.Body;
-        _lblNvagCap.ForeColor = UiColors.TextMuted;
         _lblNvagCap.Location = new Point(151, 42);
         _lblNvagCap.Name = "_lblNvagCap";
         _lblNvagCap.Size = new Size(81, 20);
@@ -376,9 +330,6 @@ partial class CorrectionsForm
         //
         // _txtNvag
         //
-        _txtNvag.Font = UiFonts.Body;
-        _txtNvag.BackColor = UiColors.InputBack;
-        _txtNvag.ForeColor = UiColors.InputFore;
         _txtNvag.Location = new Point(235, 38);
         _txtNvag.Name = "_txtNvag";
         _txtNvag.Size = new Size(170, 27);
@@ -388,8 +339,6 @@ partial class CorrectionsForm
         // _lblDirCap
         //
         _lblDirCap.AutoSize = true;
-        _lblDirCap.Font = UiFonts.Body;
-        _lblDirCap.ForeColor = UiColors.TextMuted;
         _lblDirCap.Location = new Point(625, 41);
         _lblDirCap.Name = "_lblDirCap";
         _lblDirCap.Size = new Size(107, 20);
@@ -399,8 +348,6 @@ partial class CorrectionsForm
         // _lblDir
         //
         _lblDir.AutoSize = true;
-        _lblDir.Font = UiFonts.BodyBold;
-        _lblDir.ForeColor = UiColors.TextPrimary;
         _lblDir.Location = new Point(738, 41);
         _lblDir.Name = "_lblDir";
         _lblDir.Size = new Size(24, 20);
@@ -410,8 +357,6 @@ partial class CorrectionsForm
         // _lblGruzCap
         //
         _lblGruzCap.AutoSize = true;
-        _lblGruzCap.Font = UiFonts.Body;
-        _lblGruzCap.ForeColor = UiColors.TextMuted;
         _lblGruzCap.Location = new Point(190, 68);
         _lblGruzCap.Name = "_lblGruzCap";
         _lblGruzCap.Size = new Size(42, 20);
@@ -420,9 +365,6 @@ partial class CorrectionsForm
         //
         // _txtGruz
         //
-        _txtGruz.Font = UiFonts.Body;
-        _txtGruz.BackColor = UiColors.InputBack;
-        _txtGruz.ForeColor = UiColors.InputFore;
         _txtGruz.Location = new Point(235, 65);
         _txtGruz.Name = "_txtGruz";
         _txtGruz.Size = new Size(270, 27);
@@ -431,8 +373,6 @@ partial class CorrectionsForm
         // _lblNdokCap
         //
         _lblNdokCap.AutoSize = true;
-        _lblNdokCap.Font = UiFonts.Body;
-        _lblNdokCap.ForeColor = UiColors.TextMuted;
         _lblNdokCap.Location = new Point(626, 69);
         _lblNdokCap.Name = "_lblNdokCap";
         _lblNdokCap.Size = new Size(106, 20);
@@ -441,9 +381,6 @@ partial class CorrectionsForm
         //
         // _txtNdok
         //
-        _txtNdok.Font = UiFonts.Body;
-        _txtNdok.BackColor = UiColors.InputBack;
-        _txtNdok.ForeColor = UiColors.InputFore;
         _txtNdok.Location = new Point(737, 65);
         _txtNdok.Name = "_txtNdok";
         _txtNdok.Size = new Size(130, 27);
@@ -452,8 +389,6 @@ partial class CorrectionsForm
         // _lblBruttoCap
         //
         _lblBruttoCap.AutoSize = true;
-        _lblBruttoCap.Font = UiFonts.Body;
-        _lblBruttoCap.ForeColor = UiColors.TextMuted;
         _lblBruttoCap.Location = new Point(148, 96);
         _lblBruttoCap.Name = "_lblBruttoCap";
         _lblBruttoCap.Size = new Size(58, 20);
@@ -463,8 +398,6 @@ partial class CorrectionsForm
         // _lblBrutto
         //
         _lblBrutto.AutoSize = true;
-        _lblBrutto.Font = UiFonts.MonoBold;
-        _lblBrutto.ForeColor = UiColors.TextPrimary;
         _lblBrutto.Location = new Point(212, 96);
         _lblBrutto.Name = "_lblBrutto";
         _lblBrutto.Size = new Size(19, 20);
@@ -474,8 +407,6 @@ partial class CorrectionsForm
         // _lblBruttoUnit
         //
         _lblBruttoUnit.AutoSize = true;
-        _lblBruttoUnit.Font = UiFonts.Body;
-        _lblBruttoUnit.ForeColor = UiColors.TextMuted;
         _lblBruttoUnit.Location = new Point(282, 96);
         _lblBruttoUnit.Name = "_lblBruttoUnit";
         _lblBruttoUnit.Size = new Size(15, 20);
@@ -485,8 +416,6 @@ partial class CorrectionsForm
         // _lblTarCap
         //
         _lblTarCap.AutoSize = true;
-        _lblTarCap.Font = UiFonts.Body;
-        _lblTarCap.ForeColor = UiColors.TextMuted;
         _lblTarCap.Location = new Point(306, 96);
         _lblTarCap.Name = "_lblTarCap";
         _lblTarCap.Size = new Size(45, 20);
@@ -496,9 +425,6 @@ partial class CorrectionsForm
         // _cmbTar
         //
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbTar.Font = UiFonts.Body;
-        _cmbTar.BackColor = UiColors.InputBack;
-        _cmbTar.ForeColor = UiColors.InputFore;
         _cmbTar.Location = new Point(352, 94);
         _cmbTar.Name = "_cmbTar";
         _cmbTar.Size = new Size(284, 28);
@@ -508,8 +434,6 @@ partial class CorrectionsForm
         // _lblNettoCap
         //
         _lblNettoCap.AutoSize = true;
-        _lblNettoCap.Font = UiFonts.Body;
-        _lblNettoCap.ForeColor = UiColors.TextMuted;
         _lblNettoCap.Location = new Point(646, 97);
         _lblNettoCap.Name = "_lblNettoCap";
         _lblNettoCap.Size = new Size(52, 20);
@@ -519,8 +443,6 @@ partial class CorrectionsForm
         // _lblNetto
         //
         _lblNetto.AutoSize = true;
-        _lblNetto.Font = UiFonts.MonoBold;
-        _lblNetto.ForeColor = UiColors.PrimaryAction;
         _lblNetto.Location = new Point(710, 97);
         _lblNetto.Name = "_lblNetto";
         _lblNetto.Size = new Size(19, 20);
@@ -530,8 +452,6 @@ partial class CorrectionsForm
         // _lblNettoUnit
         //
         _lblNettoUnit.AutoSize = true;
-        _lblNettoUnit.Font = UiFonts.Body;
-        _lblNettoUnit.ForeColor = UiColors.TextMuted;
         _lblNettoUnit.Location = new Point(759, 97);
         _lblNettoUnit.Name = "_lblNettoUnit";
         _lblNettoUnit.Size = new Size(15, 20);
@@ -540,12 +460,9 @@ partial class CorrectionsForm
         //
         // _btnTransfer
         //
-        _btnTransfer.BackColor = UiColors.PrimaryAction;
         _btnTransfer.Enabled = false;
         _btnTransfer.FlatAppearance.BorderSize = 0;
         _btnTransfer.FlatStyle = FlatStyle.Flat;
-        _btnTransfer.Font = UiFonts.MediumBold;
-        _btnTransfer.ForeColor = UiColors.TextOnDark;
         _btnTransfer.Location = new Point(148, 128);
         _btnTransfer.Name = "_btnTransfer";
         _btnTransfer.Size = new Size(240, 32);
@@ -556,10 +473,7 @@ partial class CorrectionsForm
         //
         // _btnClear
         //
-        _btnClear.BackColor = UiColors.NeutralAction;
         _btnClear.FlatStyle = FlatStyle.Flat;
-        _btnClear.Font = UiFonts.Body;
-        _btnClear.ForeColor = UiColors.TextPrimary;
         _btnClear.Location = new Point(402, 128);
         _btnClear.Name = "_btnClear";
         _btnClear.Size = new Size(110, 32);
@@ -570,10 +484,7 @@ partial class CorrectionsForm
         //
         // _btnRefresh
         //
-        _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
-        _btnRefresh.Font = UiFonts.Body;
-        _btnRefresh.ForeColor = UiColors.TextPrimary;
         _btnRefresh.Location = new Point(526, 128);
         _btnRefresh.Name = "_btnRefresh";
         _btnRefresh.Size = new Size(110, 32);
@@ -584,7 +495,6 @@ partial class CorrectionsForm
         //
         // _split
         //
-        _split.BackColor = UiColors.StatusBar;
         _split.Dock = DockStyle.Fill;
         _split.FixedPanel = FixedPanel.Panel1;
         _split.Location = new Point(0, 168);
@@ -610,33 +520,20 @@ partial class CorrectionsForm
         _gridPend.AllowUserToAddRows = false;
         _gridPend.AllowUserToDeleteRows = false;
         _gridPend.AllowUserToResizeRows = false;
-        dataGridViewCellStyle9.BackColor = UiColors.GridAlternateRow;
-        dataGridViewCellStyle9.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle9.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle9.SelectionForeColor = UiColors.GridSelectionText;
         _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
         _gridPend.BackgroundColor = UiColors.Surface;
         _gridPend.BorderStyle = BorderStyle.None;
-        _gridPend.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
-        _gridPend.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _gridPend.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
-        _gridPend.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _gridPend.ColumnHeadersHeight = 32;
         _gridPend.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _gridPend.EnableHeadersVisualStyles = false;
         _gridPend.GridColor = UiColors.GridLine;
         _gridPend.Dock = DockStyle.Fill;
-        _gridPend.Font = UiFonts.GridBody;
         _gridPend.Location = new Point(0, 24);
         _gridPend.MultiSelect = false;
         _gridPend.Name = "_gridPend";
         _gridPend.ReadOnly = true;
         _gridPend.RowHeadersVisible = false;
         _gridPend.RowHeadersWidth = 51;
-        dataGridViewCellStyle10.BackColor = UiColors.Surface;
-        dataGridViewCellStyle10.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle10.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle10.SelectionForeColor = UiColors.GridSelectionText;
         _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle10;
         _gridPend.RowTemplate.Height = 28;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -646,10 +543,7 @@ partial class CorrectionsForm
         //
         // _lblHeaderPend
         //
-        _lblHeaderPend.BackColor = UiColors.GridHeaderDarkBack;
         _lblHeaderPend.Dock = DockStyle.Top;
-        _lblHeaderPend.Font = UiFonts.BodyBold;
-        _lblHeaderPend.ForeColor = UiColors.TextOnDark;
         _lblHeaderPend.Location = new Point(0, 0);
         _lblHeaderPend.Name = "_lblHeaderPend";
         _lblHeaderPend.Size = new Size(563, 24);
@@ -662,33 +556,20 @@ partial class CorrectionsForm
         _gridDone.AllowUserToAddRows = false;
         _gridDone.AllowUserToDeleteRows = false;
         _gridDone.AllowUserToResizeRows = false;
-        dataGridViewCellStyle11.BackColor = UiColors.GridAlternateRow;
-        dataGridViewCellStyle11.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle11.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle11.SelectionForeColor = UiColors.GridSelectionText;
         _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
         _gridDone.BackgroundColor = UiColors.Surface;
         _gridDone.BorderStyle = BorderStyle.None;
-        _gridDone.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
-        _gridDone.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _gridDone.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
-        _gridDone.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _gridDone.ColumnHeadersHeight = 32;
         _gridDone.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _gridDone.EnableHeadersVisualStyles = false;
         _gridDone.GridColor = UiColors.GridLine;
         _gridDone.Dock = DockStyle.Fill;
-        _gridDone.Font = UiFonts.GridBody;
         _gridDone.Location = new Point(0, 24);
         _gridDone.MultiSelect = false;
         _gridDone.Name = "_gridDone";
         _gridDone.ReadOnly = true;
         _gridDone.RowHeadersVisible = false;
         _gridDone.RowHeadersWidth = 51;
-        dataGridViewCellStyle12.BackColor = UiColors.Surface;
-        dataGridViewCellStyle12.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle12.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle12.SelectionForeColor = UiColors.GridSelectionText;
         _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle12;
         _gridDone.RowTemplate.Height = 28;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -698,10 +579,7 @@ partial class CorrectionsForm
         //
         // _lblHeaderDone
         //
-        _lblHeaderDone.BackColor = UiColors.GridHeaderDarkBack;
         _lblHeaderDone.Dock = DockStyle.Top;
-        _lblHeaderDone.Font = UiFonts.BodyBold;
-        _lblHeaderDone.ForeColor = UiColors.TextOnDark;
         _lblHeaderDone.Location = new Point(0, 0);
         _lblHeaderDone.Name = "_lblHeaderDone";
         _lblHeaderDone.Size = new Size(697, 24);
@@ -711,7 +589,6 @@ partial class CorrectionsForm
         //
         // _pnlStatus
         //
-        _pnlStatus.BackColor = UiColors.StatusBar;
         _pnlStatus.Dock = DockStyle.Bottom;
         _pnlStatus.Location = new Point(0, 626);
         _pnlStatus.Name = "_pnlStatus";
@@ -722,9 +599,6 @@ partial class CorrectionsForm
         //
         // tbCex
         //
-        tbCex.Font = UiFonts.Body;
-        tbCex.BackColor = UiColors.InputBack;
-        tbCex.ForeColor = UiColors.InputFore;
         tbCex.Location = new Point(954, 61);
         tbCex.MaxLength = 3;
         tbCex.Name = "tbCex";
@@ -734,8 +608,6 @@ partial class CorrectionsForm
         // label3
         //
         label3.AutoSize = true;
-        label3.Font = UiFonts.Body;
-        label3.ForeColor = UiColors.TextMuted;
         label3.Location = new Point(910, 65);
         label3.Name = "label3";
         label3.Size = new Size(35, 20);
@@ -744,7 +616,6 @@ partial class CorrectionsForm
         //
         // CorrectionsForm
         //
-        BackColor = UiColors.AppBackground;
         ClientSize = new Size(1264, 660);
         Controls.Add(_split);
         Controls.Add(_pnlTop);
