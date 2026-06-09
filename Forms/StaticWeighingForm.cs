@@ -36,20 +36,48 @@ public partial class StaticWeighingForm : Form
     private double ToTonnes(int adcCode) =>
         CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel);
 
-    private void ApplyFonts()
+    private void ApplyTheme()
     {
+        BackColor = UiColors.AppBackground;
+        _layoutMain.BackColor = UiColors.AppBackground;
+        _pnlActions.BackColor = UiColors.AppBackground;
         _lblChannel.Font  = UiFonts.Medium;
+        _lblChannel.ForeColor = UiColors.TextMuted;
+        _pnlDisplay.BackColor = UiColors.DisplayBackground;
         _lblValue.Font    = UiFonts.Display;
+        _lblValue.ForeColor = UiColors.TextOnDarkMuted;
         _lblUnit.Font     = UiFonts.UnitLabel;
+        _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Font   = UiFonts.Medium;
+        _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
         _btnWeigh.Font    = UiFonts.WeighButton;
+        _btnWeigh.BackColor = UiColors.PrimaryAction;
+        _btnWeigh.ForeColor = UiColors.TextOnDark;
         _btnZero.Font     = UiFonts.Medium;
-        _btnFinish.Font   = UiFonts.Medium;
-        _grid.Font        = UiFonts.GridBody;
-        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
-        _lblConn.Font     = UiFonts.Body;
         _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.ForeColor = UiColors.TextPrimary;
+        _btnFinish.Font   = UiFonts.Medium;
+        _btnFinish.BackColor = UiColors.DangerAction;
+        _btnFinish.ForeColor = UiColors.TextOnDark;
+        _grid.Font        = UiFonts.GridBody;
+        _grid.BackgroundColor = UiColors.Surface;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
+        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
+        _grid.DefaultCellStyle.BackColor = UiColors.Surface;
+        _grid.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _grid.AlternatingRowsDefaultCellStyle.BackColor = UiColors.GridAlternateRow;
+        _grid.AlternatingRowsDefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _grid.GridColor = UiColors.GridLine;
+        _pnlStatusBar.BackColor = UiColors.StatusBar;
+        _dotConn.BackColor = UiColors.Disconnected;
+        _lblConn.Font = UiFonts.Body;
+        _lblConn.ForeColor = UiColors.TextMuted;
     }
 
     private void SetupGridColumns()
@@ -76,7 +104,7 @@ public partial class StaticWeighingForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        ApplyFonts();
+        ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "StaticWeighingForm");
         SetupGridColumns();

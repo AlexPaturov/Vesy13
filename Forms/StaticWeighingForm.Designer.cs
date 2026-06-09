@@ -8,6 +8,7 @@ partial class StaticWeighingForm
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
         _lblChannel = new Label();
+        _layoutMain = new TableLayoutPanel();
         _pnlDisplay = new Panel();
         _lblValue = new Label();
         _lblUnit = new Label();
@@ -16,10 +17,13 @@ partial class StaticWeighingForm
         _btnZero = new Button();
         _btnFinish = new Button();
         _grid = new DataGridView();
+        _pnlActions = new Panel();
         _pnlStatusBar = new Panel();
         _dotConn = new Panel();
         _lblConn = new Label();
+        _layoutMain.SuspendLayout();
         _pnlDisplay.SuspendLayout();
+        _pnlActions.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatusBar.SuspendLayout();
         SuspendLayout();
@@ -27,29 +31,50 @@ partial class StaticWeighingForm
         // _lblChannel
         // 
         _lblChannel.AutoSize = true;
+        _lblChannel.Dock = DockStyle.Fill;
         _lblChannel.Font = UiFonts.Medium;
-        _lblChannel.ForeColor = Color.FromArgb(122, 138, 158);
-        _lblChannel.Location = new Point(8, 10);
+        _lblChannel.ForeColor = UiColors.TextMuted;
+        _lblChannel.Margin = new Padding(0, 0, 0, 6);
         _lblChannel.Name = "_lblChannel";
-        _lblChannel.Size = new Size(0, 19);
+        _lblChannel.Size = new Size(657, 19);
         _lblChannel.TabIndex = 0;
+        // 
+        // _layoutMain
+        // 
+        _layoutMain.ColumnCount = 1;
+        _layoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _layoutMain.Controls.Add(_lblChannel, 0, 0);
+        _layoutMain.Controls.Add(_pnlDisplay, 0, 1);
+        _layoutMain.Controls.Add(_pnlActions, 0, 2);
+        _layoutMain.Controls.Add(_grid, 0, 3);
+        _layoutMain.Dock = DockStyle.Fill;
+        _layoutMain.Location = new Point(0, 0);
+        _layoutMain.Name = "_layoutMain";
+        _layoutMain.Padding = new Padding(8, 8, 8, 8);
+        _layoutMain.RowCount = 4;
+        _layoutMain.RowStyles.Add(new RowStyle());
+        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 158F));
+        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _layoutMain.Size = new Size(673, 629);
+        _layoutMain.TabIndex = 0;
         // 
         // _pnlDisplay
         // 
-        _pnlDisplay.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        _pnlDisplay.BackColor = Color.FromArgb(5, 8, 12);
+        _pnlDisplay.BackColor = UiColors.DisplayBackground;
         _pnlDisplay.Controls.Add(_lblValue);
         _pnlDisplay.Controls.Add(_lblUnit);
         _pnlDisplay.Controls.Add(_lblStatus);
-        _pnlDisplay.Location = new Point(8, 34);
+        _pnlDisplay.Dock = DockStyle.Fill;
+        _pnlDisplay.Margin = new Padding(0, 0, 0, 8);
         _pnlDisplay.Name = "_pnlDisplay";
-        _pnlDisplay.Size = new Size(655, 158);
+        _pnlDisplay.Size = new Size(657, 158);
         _pnlDisplay.TabIndex = 1;
         // 
         // _lblValue
         // 
         _lblValue.Font = UiFonts.Display;
-        _lblValue.ForeColor = Color.FromArgb(90, 96, 112);
+        _lblValue.ForeColor = UiColors.TextOnDarkMuted;
         _lblValue.Location = new Point(8, 4);
         _lblValue.Name = "_lblValue";
         _lblValue.Size = new Size(450, 106);
@@ -60,7 +85,7 @@ partial class StaticWeighingForm
         // _lblUnit
         // 
         _lblUnit.Font = UiFonts.UnitLabel;
-        _lblUnit.ForeColor = Color.FromArgb(90, 96, 112);
+        _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
         _lblUnit.Location = new Point(462, 60);
         _lblUnit.Name = "_lblUnit";
         _lblUnit.Size = new Size(60, 62);
@@ -71,7 +96,7 @@ partial class StaticWeighingForm
         // _lblStatus
         // 
         _lblStatus.Font = UiFonts.Medium;
-        _lblStatus.ForeColor = Color.FromArgb(138, 154, 181);
+        _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Location = new Point(8, 118);
         _lblStatus.Name = "_lblStatus";
         _lblStatus.Size = new Size(584, 34);
@@ -79,16 +104,27 @@ partial class StaticWeighingForm
         _lblStatus.Text = "Готов к взвешиванию  —  Тележка 1";
         _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
         // 
+        // _pnlActions
+        // 
+        _pnlActions.Controls.Add(_btnWeigh);
+        _pnlActions.Controls.Add(_btnZero);
+        _pnlActions.Controls.Add(_btnFinish);
+        _pnlActions.Dock = DockStyle.Fill;
+        _pnlActions.Margin = new Padding(0, 0, 0, 8);
+        _pnlActions.Name = "_pnlActions";
+        _pnlActions.Size = new Size(657, 96);
+        _pnlActions.TabIndex = 2;
+        // 
         // _btnWeigh
         // 
         _btnWeigh.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        _btnWeigh.BackColor = Color.FromArgb(46, 155, 94);
+        _btnWeigh.BackColor = UiColors.PrimaryAction;
         _btnWeigh.FlatStyle = FlatStyle.Flat;
         _btnWeigh.Font = UiFonts.WeighButton;
-        _btnWeigh.ForeColor = Color.FromArgb(232, 237, 245);
-        _btnWeigh.Location = new Point(8, 198);
+        _btnWeigh.ForeColor = UiColors.TextOnDark;
+        _btnWeigh.Location = new Point(0, 0);
         _btnWeigh.Name = "_btnWeigh";
-        _btnWeigh.Size = new Size(655, 54);
+        _btnWeigh.Size = new Size(657, 54);
         _btnWeigh.TabIndex = 2;
         _btnWeigh.Text = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.UseVisualStyleBackColor = false;
@@ -96,11 +132,11 @@ partial class StaticWeighingForm
         // 
         // _btnZero
         // 
-        _btnZero.BackColor = Color.FromArgb(58, 74, 94);
+        _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.FlatStyle = FlatStyle.Flat;
         _btnZero.Font = UiFonts.Medium;
-        _btnZero.ForeColor = Color.FromArgb(232, 237, 245);
-        _btnZero.Location = new Point(8, 256);
+        _btnZero.ForeColor = UiColors.TextPrimary;
+        _btnZero.Location = new Point(0, 58);
         _btnZero.Name = "_btnZero";
         _btnZero.Size = new Size(100, 32);
         _btnZero.TabIndex = 3;
@@ -110,11 +146,11 @@ partial class StaticWeighingForm
         // 
         // _btnFinish
         // 
-        _btnFinish.BackColor = Color.FromArgb(179, 58, 26);
+        _btnFinish.BackColor = UiColors.DangerAction;
         _btnFinish.FlatStyle = FlatStyle.Flat;
         _btnFinish.Font = UiFonts.Medium;
-        _btnFinish.ForeColor = Color.FromArgb(232, 237, 245);
-        _btnFinish.Location = new Point(116, 256);
+        _btnFinish.ForeColor = UiColors.TextOnDark;
+        _btnFinish.Location = new Point(108, 58);
         _btnFinish.Name = "_btnFinish";
         _btnFinish.Size = new Size(244, 32);
         _btnFinish.TabIndex = 4;
@@ -127,42 +163,42 @@ partial class StaticWeighingForm
         _grid.AllowUserToAddRows = false;
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeRows = false;
-        dataGridViewCellStyle1.BackColor = Color.FromArgb(42, 48, 64);
-        dataGridViewCellStyle1.ForeColor = Color.FromArgb(232, 237, 245);
-        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(46, 82, 128);
-        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(232, 237, 245);
+        dataGridViewCellStyle1.BackColor = UiColors.GridAlternateRow;
+        dataGridViewCellStyle1.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle1.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle1.SelectionForeColor = UiColors.GridSelectionText;
         _grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-        _grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        _grid.BackgroundColor = Color.FromArgb(37, 43, 53);
+        _grid.BackgroundColor = UiColors.Surface;
         _grid.BorderStyle = BorderStyle.None;
-        dataGridViewCellStyle2.BackColor = Color.FromArgb(26, 34, 53);
+        dataGridViewCellStyle2.BackColor = UiColors.GridHeaderBack;
         dataGridViewCellStyle2.Font = UiFonts.GridHeader;
-        dataGridViewCellStyle2.ForeColor = Color.FromArgb(232, 237, 245);
-        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(26, 34, 53);
-        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(232, 237, 245);
+        dataGridViewCellStyle2.ForeColor = UiColors.GridHeaderText;
+        dataGridViewCellStyle2.SelectionBackColor = UiColors.GridHeaderBack;
+        dataGridViewCellStyle2.SelectionForeColor = UiColors.GridHeaderText;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
         _grid.ColumnHeadersHeight = 40;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _grid.Dock = DockStyle.Fill;
         _grid.EnableHeadersVisualStyles = false;
         _grid.Font = UiFonts.GridBody;
-        _grid.GridColor = Color.FromArgb(58, 68, 88);
-        _grid.Location = new Point(8, 294);
+        _grid.GridColor = UiColors.GridLine;
+        _grid.Location = new Point(8, 270);
         _grid.Name = "_grid";
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
-        dataGridViewCellStyle3.BackColor = Color.FromArgb(37, 43, 53);
-        dataGridViewCellStyle3.ForeColor = Color.FromArgb(232, 237, 245);
-        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(46, 82, 128);
-        dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(232, 237, 245);
+        dataGridViewCellStyle3.BackColor = UiColors.GridAlternateRow;
+        dataGridViewCellStyle3.ForeColor = UiColors.TextPrimary;
+        dataGridViewCellStyle3.SelectionBackColor = UiColors.GridSelectionBack;
+        dataGridViewCellStyle3.SelectionForeColor = UiColors.GridSelectionText;
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle3;
         _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _grid.Size = new Size(655, 295);
+        _grid.Size = new Size(657, 351);
         _grid.TabIndex = 5;
         // 
         // _pnlStatusBar
         // 
-        _pnlStatusBar.BackColor = Color.FromArgb(26, 31, 40);
+        _pnlStatusBar.BackColor = UiColors.StatusBar;
         _pnlStatusBar.Controls.Add(_dotConn);
         _pnlStatusBar.Controls.Add(_lblConn);
         _pnlStatusBar.Dock = DockStyle.Bottom;
@@ -175,7 +211,7 @@ partial class StaticWeighingForm
         // 
         // _dotConn
         // 
-        _dotConn.BackColor = Color.FromArgb(90, 96, 112);
+        _dotConn.BackColor = UiColors.Disconnected;
         _dotConn.Location = new Point(100, 12);
         _dotConn.Name = "_dotConn";
         _dotConn.Size = new Size(10, 10);
@@ -185,7 +221,7 @@ partial class StaticWeighingForm
         // 
         _lblConn.AutoSize = true;
         _lblConn.Font = UiFonts.Body;
-        _lblConn.ForeColor = Color.FromArgb(138, 154, 181);
+        _lblConn.ForeColor = UiColors.TextMuted;
         _lblConn.Location = new Point(116, 8);
         _lblConn.Name = "_lblConn";
         _lblConn.Size = new Size(66, 21);
@@ -196,21 +232,19 @@ partial class StaticWeighingForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        BackColor = Color.FromArgb(27, 31, 36);
+        BackColor = UiColors.AppBackground;
         ClientSize = new Size(673, 629);
-        Controls.Add(_lblChannel);
-        Controls.Add(_pnlDisplay);
-        Controls.Add(_btnWeigh);
-        Controls.Add(_btnZero);
-        Controls.Add(_btnFinish);
-        Controls.Add(_grid);
+        Controls.Add(_layoutMain);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;
         MaximumSize = new Size(689, 10000);
         Name = "StaticWeighingForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Взвешивание — Статика";
+        _layoutMain.ResumeLayout(false);
+        _layoutMain.PerformLayout();
         _pnlDisplay.ResumeLayout(false);
+        _pnlActions.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         _pnlStatusBar.ResumeLayout(false);
         _pnlStatusBar.PerformLayout();
@@ -219,6 +253,7 @@ partial class StaticWeighingForm
     }
 
     private Label         _lblChannel;
+    private TableLayoutPanel _layoutMain;
     private Panel         _pnlDisplay;
     private Label         _lblValue;
     private Label         _lblUnit;
@@ -227,6 +262,7 @@ partial class StaticWeighingForm
     private Button        _btnZero;
     private Button        _btnFinish;
     private DataGridView  _grid;
+    private Panel         _pnlActions;
     private Panel         _pnlStatusBar;
     private Panel         _dotConn;
     private Label         _lblConn;
