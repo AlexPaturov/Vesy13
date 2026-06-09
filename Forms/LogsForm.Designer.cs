@@ -48,7 +48,6 @@ partial class LogsForm
         _lblFrom.Height    = 20;
         _lblFrom.Location  = new Point(10, 15);
         _lblFrom.Text      = "С:";
-        _lblFrom.ForeColor = UiColors.TextPrimary;
         _lblFrom.Font      = UiFonts.Body;
         _lblFrom.TextAlign = ContentAlignment.MiddleLeft;
 
@@ -63,7 +62,6 @@ partial class LogsForm
         _lblTo.Height    = 20;
         _lblTo.Location  = new Point(203, 15);
         _lblTo.Text      = "—";
-        _lblTo.ForeColor = UiColors.TextPrimary;
         _lblTo.Font      = UiFonts.Body;
         _lblTo.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -77,9 +75,6 @@ partial class LogsForm
         _btnFind.Size      = new Size(90, 26);
         _btnFind.Text      = "Найти";
         _btnFind.FlatStyle = FlatStyle.Flat;
-        _btnFind.BackColor = UiColors.InfoAction;
-        _btnFind.ForeColor = UiColors.TextOnDark;
-        _btnFind.UseVisualStyleBackColor = false;
         _btnFind.Font      = UiFonts.Body;
         _btnFind.Click    += BtnFind_Click;
 
@@ -107,8 +102,6 @@ partial class LogsForm
         _grid.BorderStyle             = BorderStyle.None;
         _grid.ColumnHeadersDefaultCellStyle.BackColor          = UiColors.GridHeaderBack;
         _grid.ColumnHeadersDefaultCellStyle.ForeColor          = UiColors.GridHeaderText;
-        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
-        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _grid.ColumnHeadersDefaultCellStyle.Font               = UiFonts.GridHeader;
         _grid.ColumnHeadersDefaultCellStyle.Alignment          = DataGridViewContentAlignment.MiddleLeft;
         _grid.DefaultCellStyle.BackColor                       = UiColors.AppBackground;
@@ -122,7 +115,6 @@ partial class LogsForm
         // ── Status panel ──────────────────────────────────────────────────────
         _pnlStatus.Dock      = DockStyle.Bottom;
         _pnlStatus.Height    = 4;
-        _pnlStatus.BackColor = UiColors.StatusBar;
 
 
 

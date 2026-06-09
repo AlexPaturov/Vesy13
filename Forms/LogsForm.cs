@@ -17,19 +17,38 @@ public partial class LogsForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        ApplyFonts();
+        ApplyTheme();
         SetupGrid();
         _dtpFrom.Value = DateTime.Today;
         _dtpTo.Value   = DateTime.Now;
     }
 
-    private void ApplyFonts()
+    private void ApplyTheme()
     {
+        BackColor = UiColors.AppBackground;
+        _pnlFilter.BackColor = UiColors.FilterBar;
+        _pnlStatus.BackColor = UiColors.StatusBar;
+
         _lblFrom.Font = UiFonts.Body;
+        _lblFrom.ForeColor = UiColors.TextPrimary;
         _lblTo.Font   = UiFonts.Body;
+        _lblTo.ForeColor = UiColors.TextPrimary;
         _btnFind.Font = UiFonts.Body;
+        _btnFind.BackColor = UiColors.InfoAction;
+        _btnFind.ForeColor = UiColors.TextOnDark;
         _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _grid.DefaultCellStyle.Font              = UiFonts.GridBody;
+        _grid.DefaultCellStyle.BackColor          = UiColors.AppBackground;
+        _grid.DefaultCellStyle.ForeColor         = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _grid.AlternatingRowsDefaultCellStyle.BackColor = UiColors.GridAlternateRow;
+        _grid.BackgroundColor = UiColors.AppBackground;
+        _grid.GridColor = UiColors.GridLine;
     }
 
     private void SetupGrid()
