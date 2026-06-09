@@ -22,39 +22,90 @@ public partial class PrintForm : Form
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
-    private void ApplyFonts()
+    private void ApplyTheme()
     {
+        BackColor = UiColors.AppBackground;
+        _pnlTop.BackColor = UiColors.FilterBar;
+        _pnlStatus.BackColor = UiColors.StatusBar;
         _rbGpri.Font          = UiFonts.BodyBold;
+        _rbGpri.ForeColor     = UiColors.TextPrimary;
         _rbGras.Font          = UiFonts.BodyBold;
+        _rbGras.ForeColor     = UiColors.TextPrimary;
         _lblDateFrom.Font     = UiFonts.Body;
+        _lblDateFrom.ForeColor = UiColors.TextMuted;
         _dtpFrom.Font         = UiFonts.Body;
+        _dtpFrom.BackColor    = UiColors.InputBack;
+        _dtpFrom.ForeColor    = UiColors.InputFore;
         _lblDateTo.Font       = UiFonts.Body;
+        _lblDateTo.ForeColor   = UiColors.TextMuted;
         _dtpTo.Font           = UiFonts.Body;
+        _dtpTo.BackColor      = UiColors.InputBack;
+        _dtpTo.ForeColor      = UiColors.InputFore;
         _lblGruz.Font         = UiFonts.Body;
+        _lblGruz.ForeColor    = UiColors.TextMuted;
         _txtGruz.Font         = UiFonts.Body;
+        _txtGruz.BackColor    = UiColors.InputBack;
+        _txtGruz.ForeColor    = UiColors.InputFore;
         _lblNvag.Font         = UiFonts.Body;
+        _lblNvag.ForeColor    = UiColors.TextMuted;
         _txtNvag.Font         = UiFonts.Body;
+        _txtNvag.BackColor    = UiColors.InputBack;
+        _txtNvag.ForeColor    = UiColors.InputFore;
         _lblPotr.Font         = UiFonts.Body;
+        _lblPotr.ForeColor    = UiColors.TextMuted;
         _txtPotr.Font         = UiFonts.Body;
+        _txtPotr.BackColor    = UiColors.InputBack;
+        _txtPotr.ForeColor    = UiColors.InputFore;
         _lblNdok.Font         = UiFonts.Body;
+        _lblNdok.ForeColor    = UiColors.TextMuted;
         _txtNdok.Font         = UiFonts.Body;
+        _txtNdok.BackColor    = UiColors.InputBack;
+        _txtNdok.ForeColor    = UiColors.InputFore;
         _chkPotr.Font         = UiFonts.Body;
+        _chkPotr.ForeColor    = UiColors.TextPrimary;
         _btnFind.Font         = UiFonts.BodyBold;
+        _btnFind.BackColor    = UiColors.PrimaryAction;
+        _btnFind.ForeColor    = UiColors.TextOnDark;
         _btnClearFilters.Font = UiFonts.Body;
+        _btnClearFilters.BackColor = UiColors.NeutralAction;
+        _btnClearFilters.ForeColor = UiColors.TextPrimary;
         _grid.Font            = UiFonts.GridBody;
+        _grid.BackgroundColor = UiColors.Surface;
+        _grid.BorderStyle     = BorderStyle.None;
+        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
+        _grid.DefaultCellStyle.BackColor = UiColors.Surface;
+        _grid.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _grid.GridColor = UiColors.GridLine;
         _lblSlipNum.Font      = UiFonts.Body;
+        _lblSlipNum.ForeColor  = UiColors.TextOnDarkMuted;
         _txtSlipNum.Font      = UiFonts.Body;
+        _txtSlipNum.BackColor = UiColors.InputBack;
+        _txtSlipNum.ForeColor = UiColors.InputFore;
         _lblFrom.Font         = UiFonts.Body;
+        _lblFrom.ForeColor     = UiColors.TextOnDarkMuted;
         _txtFrom.Font         = UiFonts.Body;
+        _txtFrom.BackColor    = UiColors.InputBack;
+        _txtFrom.ForeColor    = UiColors.InputFore;
         _lblTo.Font           = UiFonts.Body;
+        _lblTo.ForeColor      = UiColors.TextOnDarkMuted;
         _txtTo.Font           = UiFonts.Body;
+        _txtTo.BackColor      = UiColors.InputBack;
+        _txtTo.ForeColor      = UiColors.InputFore;
         _btnPreview.Font      = UiFonts.BodyBold;
+        _btnPreview.BackColor = UiColors.InfoAction;
+        _btnPreview.ForeColor = UiColors.TextOnDark;
     }
 
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        ApplyFonts();
+        ApplyTheme();
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
         SetupGridColumns();
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
