@@ -19,6 +19,7 @@ partial class StaticWeighingForm
         _grid = new DataGridView();
         _pnlActions = new Panel();
         _pnlStatusBar = new Panel();
+        _statusLayout = new TableLayoutPanel();
         _dotConn = new Panel();
         _lblConn = new Label();
         _layoutMain.SuspendLayout();
@@ -26,6 +27,7 @@ partial class StaticWeighingForm
         _pnlActions.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatusBar.SuspendLayout();
+        _statusLayout.SuspendLayout();
         SuspendLayout();
         // 
         // _lblChannel
@@ -199,20 +201,33 @@ partial class StaticWeighingForm
         // _pnlStatusBar
         // 
         _pnlStatusBar.BackColor = UiColors.StatusBar;
-        _pnlStatusBar.Controls.Add(_dotConn);
-        _pnlStatusBar.Controls.Add(_lblConn);
+        _pnlStatusBar.Controls.Add(_statusLayout);
         _pnlStatusBar.Dock = DockStyle.Bottom;
         _pnlStatusBar.Location = new Point(0, 595);
         _pnlStatusBar.Name = "_pnlStatusBar";
         _pnlStatusBar.Size = new Size(673, 28);
         _pnlStatusBar.TabIndex = 6;
         // 
+        // _statusLayout
         // 
+        _statusLayout.ColumnCount = 2;
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 18F));
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _statusLayout.Dock = DockStyle.Fill;
+        _statusLayout.Location = new Point(0, 0);
+        _statusLayout.Name = "_statusLayout";
+        _statusLayout.RowCount = 1;
+        _statusLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _statusLayout.Size = new Size(673, 28);
+        _statusLayout.TabIndex = 0;
+        _statusLayout.Controls.Add(_dotConn, 0, 0);
+        _statusLayout.Controls.Add(_lblConn, 1, 0);
         // 
         // _dotConn
         // 
         _dotConn.BackColor = UiColors.Disconnected;
-        _dotConn.Location = new Point(100, 12);
+        _dotConn.Dock = DockStyle.Fill;
+        _dotConn.Margin = new Padding(4, 9, 4, 9);
         _dotConn.Name = "_dotConn";
         _dotConn.Size = new Size(10, 10);
         _dotConn.TabIndex = 1;
@@ -222,9 +237,10 @@ partial class StaticWeighingForm
         _lblConn.AutoSize = true;
         _lblConn.Font = UiFonts.Body;
         _lblConn.ForeColor = UiColors.TextMuted;
-        _lblConn.Location = new Point(116, 8);
+        _lblConn.Dock = DockStyle.Fill;
+        _lblConn.Margin = new Padding(0, 3, 0, 0);
         _lblConn.Name = "_lblConn";
-        _lblConn.Size = new Size(66, 21);
+        _lblConn.Size = new Size(655, 25);
         _lblConn.TabIndex = 2;
         _lblConn.Text = "АЦП: —";
         // 
@@ -246,6 +262,7 @@ partial class StaticWeighingForm
         _pnlDisplay.ResumeLayout(false);
         _pnlActions.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
+        _statusLayout.ResumeLayout(false);
         _pnlStatusBar.ResumeLayout(false);
         _pnlStatusBar.PerformLayout();
         ResumeLayout(false);
@@ -264,6 +281,7 @@ partial class StaticWeighingForm
     private DataGridView  _grid;
     private Panel         _pnlActions;
     private Panel         _pnlStatusBar;
+    private TableLayoutPanel _statusLayout;
     private Panel         _dotConn;
     private Label         _lblConn;
 }

@@ -14,7 +14,7 @@ public partial class CorrectionsForm : Form
     private FactoryRepository? _fdb;
 
     private LocalWagon? _selected;
-    private GpriGras?         _selectedFb;
+    private GpriGras? _selectedFb;
 
     public static readonly Dictionary<string, string> GpGridChapters = new()
     {
@@ -60,97 +60,97 @@ public partial class CorrectionsForm : Form
     {
         BackColor = UiColors.AppBackground;
         _pnlTop.BackColor = UiColors.FilterBar;
-        _pnlLeft.BackColor = UiColors.PendingAction;
-        _pnlMode.BackColor = UiColors.InfoAction;
+        _pnlTopData.BackColor = UiColors.FilterBar;
+        _pnlTopActions.BackColor = UiColors.FilterBar;
         _pnlStatus.BackColor = UiColors.StatusBar;
 
-        label2.Font         = UiFonts.Body;
-        label2.ForeColor    = UiColors.TextMuted;
-        lblpotr.Font        = UiFonts.Body;
-        lblpotr.ForeColor   = UiColors.TextMuted;
-        _tbPlat.Font        = UiFonts.Body;
-        _tbPlat.BackColor   = UiColors.InputBack;
-        _tbPlat.ForeColor   = UiColors.InputFore;
-        _tbPotr.Font        = UiFonts.Body;
-        _tbPotr.BackColor   = UiColors.InputBack;
-        _tbPotr.ForeColor   = UiColors.InputFore;
-        _lblVidVzv.Font     = UiFonts.BodyBold;
-        _lblVidVzv.ForeColor = UiColors.TextOnDark;
-        _rbGpri.Font        = UiFonts.MediumBold;
-        _rbGpri.ForeColor   = UiColors.TextOnDark;
-        _rbGras.Font        = UiFonts.MediumBold;
-        _rbGras.ForeColor   = UiColors.TextOnDark;
-        _lblVidMode.Font    = UiFonts.BodyBold;
-        _lblVidMode.ForeColor = UiColors.TextOnDark;
-        _rbBrutto.Font      = UiFonts.MediumBold;
-        _rbBrutto.ForeColor = UiColors.TextOnDark;
-        _rbTara.Font        = UiFonts.MediumBold;
-        _rbTara.ForeColor   = UiColors.TextOnDark;
-        _btnSave.Font       = UiFonts.MediumBold;
-        _btnSave.BackColor  = UiColors.InfoAction;
-        _btnSave.ForeColor  = UiColors.TextOnDark;
-        _lblDateCap.Font    = UiFonts.Body;
+        label2.Font = UiFonts.Body;
+        label2.ForeColor = UiColors.TextMuted;
+        lblpotr.Font = UiFonts.Body;
+        lblpotr.ForeColor = UiColors.TextMuted;
+        _tbPlat.Font = UiFonts.Body;
+        _tbPlat.BackColor = UiColors.InputBack;
+        _tbPlat.ForeColor = UiColors.InputFore;
+        _tbPotr.Font = UiFonts.Body;
+        _tbPotr.BackColor = UiColors.InputBack;
+        _tbPotr.ForeColor = UiColors.InputFore;
+        _lblVidVzv.Font = UiFonts.Body;
+        _lblVidVzv.ForeColor = UiColors.TextMuted;
+        _rbGpri.Font = UiFonts.Body;
+        _rbGpri.ForeColor = UiColors.TextPrimary;
+        _rbGras.Font = UiFonts.Body;
+        _rbGras.ForeColor = UiColors.TextPrimary;
+        _lblVidMode.Font = UiFonts.Body;
+        _lblVidMode.ForeColor = UiColors.TextMuted;
+        _rbBrutto.Font = UiFonts.Body;
+        _rbBrutto.ForeColor = UiColors.TextPrimary;
+        _rbTara.Font = UiFonts.Body;
+        _rbTara.ForeColor = UiColors.TextPrimary;
+        _btnSave.Font = UiFonts.MediumBold;
+        _btnSave.BackColor = UiColors.InfoAction;
+        _btnSave.ForeColor = UiColors.TextOnDark;
+        _lblDateCap.Font = UiFonts.Body;
         _lblDateCap.ForeColor = UiColors.TextMuted;
-        _lblDt.Font         = UiFonts.BodyBold;
-        _lblDt.ForeColor    = UiColors.TextPrimary;
-        _lblTimeCap.Font    = UiFonts.Body;
+        _lblDt.Font = UiFonts.BodyBold;
+        _lblDt.ForeColor = UiColors.TextPrimary;
+        _lblTimeCap.Font = UiFonts.Body;
         _lblTimeCap.ForeColor = UiColors.TextMuted;
-        _lblVr.Font         = UiFonts.BodyBold;
-        _lblVr.ForeColor    = UiColors.TextPrimary;
-        _lblNppCap.Font     = UiFonts.Body;
+        _lblVr.Font = UiFonts.BodyBold;
+        _lblVr.ForeColor = UiColors.TextPrimary;
+        _lblNppCap.Font = UiFonts.Body;
         _lblNppCap.ForeColor = UiColors.TextMuted;
-        _lblNpp.Font        = UiFonts.BodyBold;
-        _lblNpp.ForeColor   = UiColors.TextPrimary;
-        _lblModeCap.Font    = UiFonts.Body;
+        _lblNpp.Font = UiFonts.BodyBold;
+        _lblNpp.ForeColor = UiColors.TextPrimary;
+        _lblModeCap.Font = UiFonts.Body;
         _lblModeCap.ForeColor = UiColors.TextMuted;
-        _lblMode.Font       = UiFonts.BodyBold;
-        _lblMode.ForeColor  = UiColors.TextPrimary;
-        _lblNvagCap.Font    = UiFonts.Body;
+        _lblMode.Font = UiFonts.BodyBold;
+        _lblMode.ForeColor = UiColors.TextPrimary;
+        _lblNvagCap.Font = UiFonts.Body;
         _lblNvagCap.ForeColor = UiColors.TextMuted;
-        _txtNvag.Font       = UiFonts.Body;
-        _txtNvag.BackColor  = UiColors.InputBack;
-        _txtNvag.ForeColor  = UiColors.InputFore;
-        _lblDirCap.Font     = UiFonts.Body;
+        _txtNvag.Font = UiFonts.Body;
+        _txtNvag.BackColor = UiColors.InputBack;
+        _txtNvag.ForeColor = UiColors.InputFore;
+        _lblDirCap.Font = UiFonts.Body;
         _lblDirCap.ForeColor = UiColors.TextMuted;
-        _lblDir.Font        = UiFonts.BodyBold;
-        _lblDir.ForeColor   = UiColors.TextPrimary;
-        _lblGruzCap.Font    = UiFonts.Body;
+        _lblDir.Font = UiFonts.BodyBold;
+        _lblDir.ForeColor = UiColors.TextPrimary;
+        _lblGruzCap.Font = UiFonts.Body;
         _lblGruzCap.ForeColor = UiColors.TextMuted;
-        _txtGruz.Font       = UiFonts.Body;
-        _txtGruz.BackColor  = UiColors.InputBack;
-        _txtGruz.ForeColor  = UiColors.InputFore;
-        _lblNdokCap.Font    = UiFonts.Body;
+        _txtGruz.Font = UiFonts.Body;
+        _txtGruz.BackColor = UiColors.InputBack;
+        _txtGruz.ForeColor = UiColors.InputFore;
+        _lblNdokCap.Font = UiFonts.Body;
         _lblNdokCap.ForeColor = UiColors.TextMuted;
-        _txtNdok.Font       = UiFonts.Body;
-        _txtNdok.BackColor  = UiColors.InputBack;
-        _txtNdok.ForeColor  = UiColors.InputFore;
-        _lblBruttoCap.Font  = UiFonts.Body;
+        _txtNdok.Font = UiFonts.Body;
+        _txtNdok.BackColor = UiColors.InputBack;
+        _txtNdok.ForeColor = UiColors.InputFore;
+        _lblBruttoCap.Font = UiFonts.Body;
         _lblBruttoCap.ForeColor = UiColors.TextMuted;
-        _lblBrutto.Font     = UiFonts.MonoBold;
+        _lblBrutto.Font = UiFonts.MonoBold;
         _lblBrutto.ForeColor = UiColors.TextPrimary;
         _lblBruttoUnit.Font = UiFonts.Body;
         _lblBruttoUnit.ForeColor = UiColors.TextMuted;
-        _lblTarCap.Font     = UiFonts.Body;
+        _lblTarCap.Font = UiFonts.Body;
         _lblTarCap.ForeColor = UiColors.TextMuted;
-        _cmbTar.Font        = UiFonts.Body;
-        _cmbTar.BackColor   = UiColors.InputBack;
-        _cmbTar.ForeColor   = UiColors.InputFore;
-        _lblNettoCap.Font   = UiFonts.Body;
+        _cmbTar.Font = UiFonts.Body;
+        _cmbTar.BackColor = UiColors.InputBack;
+        _cmbTar.ForeColor = UiColors.InputFore;
+        _lblNettoCap.Font = UiFonts.Body;
         _lblNettoCap.ForeColor = UiColors.TextMuted;
-        _lblNetto.Font      = UiFonts.MonoBold;
+        _lblNetto.Font = UiFonts.MonoBold;
         _lblNetto.ForeColor = UiColors.PrimaryAction;
-        _lblNettoUnit.Font  = UiFonts.Body;
+        _lblNettoUnit.Font = UiFonts.Body;
         _lblNettoUnit.ForeColor = UiColors.TextMuted;
-        _btnTransfer.Font   = UiFonts.MediumBold;
+        _btnTransfer.Font = UiFonts.MediumBold;
         _btnTransfer.BackColor = UiColors.PrimaryAction;
         _btnTransfer.ForeColor = UiColors.TextOnDark;
-        _btnClear.Font      = UiFonts.Body;
+        _btnClear.Font = UiFonts.Body;
         _btnClear.BackColor = UiColors.NeutralAction;
         _btnClear.ForeColor = UiColors.TextPrimary;
-        _btnRefresh.Font    = UiFonts.Body;
+        _btnRefresh.Font = UiFonts.Body;
         _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.ForeColor = UiColors.TextPrimary;
-        _gridPend.Font      = UiFonts.GridBody;
+        _gridPend.Font = UiFonts.GridBody;
         _gridPend.BackgroundColor = UiColors.Surface;
         _gridPend.DefaultCellStyle.BackColor = UiColors.Surface;
         _gridPend.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
@@ -163,7 +163,7 @@ public partial class CorrectionsForm : Form
         _gridPend.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _lblHeaderPend.Font = UiFonts.BodyBold;
         _lblHeaderPend.ForeColor = UiColors.TextOnDark;
-        _gridDone.Font      = UiFonts.GridBody;
+        _gridDone.Font = UiFonts.GridBody;
         _gridDone.BackgroundColor = UiColors.Surface;
         _gridDone.DefaultCellStyle.BackColor = UiColors.Surface;
         _gridDone.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
@@ -176,11 +176,11 @@ public partial class CorrectionsForm : Form
         _gridDone.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _lblHeaderDone.Font = UiFonts.BodyBold;
         _lblHeaderDone.ForeColor = UiColors.TextOnDark;
-        tbCex.Font          = UiFonts.Body;
-        tbCex.BackColor     = UiColors.InputBack;
-        tbCex.ForeColor     = UiColors.InputFore;
-        label3.Font         = UiFonts.Body;
-        label3.ForeColor    = UiColors.TextMuted;
+        tbCex.Font = UiFonts.Body;
+        tbCex.BackColor = UiColors.InputBack;
+        tbCex.ForeColor = UiColors.InputFore;
+        label3.Font = UiFonts.Body;
+        label3.ForeColor = UiColors.TextMuted;
     }
 
     // ── Grid columns ────────────────────────────────────────────────────────
@@ -189,14 +189,14 @@ public partial class CorrectionsForm : Form
     {
         DataGridViewTextBoxColumn Col(string header, int width) =>
             new() { HeaderText = header, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };
-        g.Columns.Add(Col("Дата",     110));
-        g.Columns.Add(Col("Время",    88));
-        g.Columns.Add(Col("№",        48));
-        g.Columns.Add(Col("Тел.1 т",  100));
-        g.Columns.Add(Col("Тел.2 т",  100));
-        g.Columns.Add(Col("T1+T2 т",  104));
-        g.Columns.Add(Col("Режим",    120));
-        g.Columns.Add(Col("Напр.",    80));
+        g.Columns.Add(Col("Дата", 110));
+        g.Columns.Add(Col("Время", 88));
+        g.Columns.Add(Col("№", 48));
+        g.Columns.Add(Col("Тел.1 т", 100));
+        g.Columns.Add(Col("Тел.2 т", 100));
+        g.Columns.Add(Col("T1+T2 т", 104));
+        g.Columns.Add(Col("Режим", 120));
+        g.Columns.Add(Col("Напр.", 80));
     }
 
     private static void AddFirebirdGridColumns(DataGridView g)
@@ -204,37 +204,37 @@ public partial class CorrectionsForm : Form
         foreach (var (key, header) in GpGridChapters)
             g.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name       = key,
+                Name = key,
                 HeaderText = header,
-                Width      = ColumnWidth(key),
-                SortMode   = DataGridViewColumnSortMode.NotSortable,
+                Width = ColumnWidth(key),
+                SortMode = DataGridViewColumnSortMode.NotSortable,
             });
     }
 
     private static int ColumnWidth(string key) => key switch
     {
-        "DT"          => 120,
-        "VR"          => 95,
-        "NVAG"        => 145,
-        "NDOK"        => 135,
-        "GRUZ"        => 160,
-        "BRUTTO"      => 95,
-        "TAR_BRS"     => 95,
-        "TAR_DOK"     => 95,
-        "NETTO"       => 95,
-        "NET_DOK"     => 95,
-        "MUSOR"       => 80,
-        "CEX"         => 75,
-        "TARIF"       => 80,
-        "POTR"        => 135,
-        "PLAT"        => 135,
-        "SKOR"        => 85,
-        "VESY"        => 65,
-        "TN"          => 80,
-        "NPP"         => 75,
-        "N_TEPLOVOZ"  => 160,
+        "DT" => 120,
+        "VR" => 95,
+        "NVAG" => 145,
+        "NDOK" => 135,
+        "GRUZ" => 160,
+        "BRUTTO" => 95,
+        "TAR_BRS" => 95,
+        "TAR_DOK" => 95,
+        "NETTO" => 95,
+        "NET_DOK" => 95,
+        "MUSOR" => 80,
+        "CEX" => 75,
+        "TARIF" => 80,
+        "POTR" => 135,
+        "PLAT" => 135,
+        "SKOR" => 85,
+        "VESY" => 65,
+        "TN" => 80,
+        "NPP" => 75,
+        "N_TEPLOVOZ" => 160,
         "POGRESHNOST" => 115,
-        _             => 105,
+        _ => 105,
     };
 
     // ── Загрузка данных ──────────────────────────────────────────────────────
@@ -303,20 +303,20 @@ public partial class CorrectionsForm : Form
         {
             int idx = g.Rows.Add();
             var row = g.Rows[idx];
-            row.Cells["DT"     ].Value = r.Dt.ToString("dd.MM.yyyy");
-            row.Cells["VR"     ].Value = r.Vr.ToString(@"hh\:mm\:ss");
-            row.Cells["NVAG"   ].Value = r.Nvag;
-            row.Cells["NDOK"   ].Value = r.Ndok;
-            row.Cells["GRUZ"   ].Value = r.Gruz;
-            row.Cells["BRUTTO" ].Value = r.Brutto.ToString("F2");
+            row.Cells["DT"].Value = r.Dt.ToString("dd.MM.yyyy");
+            row.Cells["VR"].Value = r.Vr.ToString(@"hh\:mm\:ss");
+            row.Cells["NVAG"].Value = r.Nvag;
+            row.Cells["NDOK"].Value = r.Ndok;
+            row.Cells["GRUZ"].Value = r.Gruz;
+            row.Cells["BRUTTO"].Value = r.Brutto.ToString("F2");
             row.Cells["TAR_BRS"].Value = r.TarBrs.HasValue ? r.TarBrs.Value.ToString("F2") : "";
             row.Cells["TAR_DOK"].Value = r.TarDok.HasValue ? r.TarDok.Value.ToString("F2") : "";
-            row.Cells["NETTO"  ].Value = r.Netto.HasValue  ? r.Netto.Value.ToString("F2")  : "";
-            row.Cells["POTR"   ].Value = r.Potr;
-            row.Cells["PLAT"   ].Value = r.Plat;
-            row.Cells["VESY"   ].Value = "13";
-            row.Cells["NPP"    ].Value = r.Npp;
-            row.Cells["CEX"    ].Value = r.Cex;
+            row.Cells["NETTO"].Value = r.Netto.HasValue ? r.Netto.Value.ToString("F2") : "";
+            row.Cells["POTR"].Value = r.Potr;
+            row.Cells["PLAT"].Value = r.Plat;
+            row.Cells["VESY"].Value = "13";
+            row.Cells["NPP"].Value = r.Npp;
+            row.Cells["CEX"].Value = r.Cex;
             row.Tag = r;
         }
     }
@@ -342,7 +342,7 @@ public partial class CorrectionsForm : Form
             // Firebird недоступен — комбо остаётся пустым, это допустимо
         }
     }
-    private void BtnClear_Click(object? sender, EventArgs e)     => ClearTopPanel();
+    private void BtnClear_Click(object? sender, EventArgs e) => ClearTopPanel();
     private async void BtnRefresh_Click(object? sender, EventArgs e)
     {
         if (_ldb is null) return;
@@ -360,17 +360,17 @@ public partial class CorrectionsForm : Form
 
         _selectedFb = null;
         _gridDone.ClearSelection();
-        _btnSave.Visible  = false;
+        _btnSave.Visible = false;
         _btnTransfer.Visible = true;
 
         _selected = _gridPend.SelectedRows[0].Tag as LocalWagon;
         if (_selected == null) return;
 
-        _lblDt    .Text = _selected.WagonTime.ToString("dd.MM.yyyy");
-        _lblVr    .Text = _selected.WagonTime.ToString("HH:mm:ss");
-        _lblNpp   .Text = _selected.Number.ToString();
-        _lblMode  .Text = _selected.Mode;
-        _lblDir   .Text = _selected.Direction;
+        _lblDt.Text = _selected.WagonTime.ToString("dd.MM.yyyy");
+        _lblVr.Text = _selected.WagonTime.ToString("HH:mm:ss");
+        _lblNpp.Text = _selected.Number.ToString();
+        _lblMode.Text = _selected.Mode;
+        _lblDir.Text = _selected.Direction;
         _lblBrutto.Text = _selected.Total.ToString("F2");
         _btnTransfer.Enabled = true;
         RecalcNetto();
@@ -392,7 +392,7 @@ public partial class CorrectionsForm : Form
     {
         if (_rbTara.Checked)
         {
-            _txtGruz.Text    = "Тара";
+            _txtGruz.Text = "Тара";
             _txtGruz.Enabled = false;
         }
         else
@@ -416,27 +416,27 @@ public partial class CorrectionsForm : Form
         if (fb == null) return;
 
         _selectedFb = fb;
-        _selected   = null;
+        _selected = null;
         _gridPend.ClearSelection();
 
-        _lblDt   .Text = fb.Dt.ToString("dd.MM.yyyy");
-        _lblVr   .Text = fb.Vr.ToString(@"hh\:mm\:ss");
-        _lblNpp  .Text = fb.Npp.ToString();
-        _lblMode .Text = "—";
-        _lblDir  .Text = "—";
+        _lblDt.Text = fb.Dt.ToString("dd.MM.yyyy");
+        _lblVr.Text = fb.Vr.ToString(@"hh\:mm\:ss");
+        _lblNpp.Text = fb.Npp.ToString();
+        _lblMode.Text = "—";
+        _lblDir.Text = "—";
         _lblBrutto.Text = fb.Brutto.ToString("F2");
 
         _txtNvag.Text = fb.Nvag;
         _txtNdok.Text = fb.Ndok?.ToString() ?? "";
-        _tbPotr .Text = fb.Potr;
-        _tbPlat .Text = fb.Plat;
-        tbCex   .Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
+        _tbPotr.Text = fb.Potr;
+        _tbPlat.Text = fb.Plat;
+        tbCex.Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
 
         _rbGpri.Checked = fb.Table == "GPRI";
         _rbGras.Checked = fb.Table == "GRAS";
 
         bool isTara = fb.Gruz.Trim() == "Тара";
-        _rbTara  .Checked = isTara;
+        _rbTara.Checked = isTara;
         _rbBrutto.Checked = !isTara;
 
         if (!isTara)
@@ -457,13 +457,13 @@ public partial class CorrectionsForm : Form
                     if (opt.Brutto == tarVal.Value) { _cmbTar.SelectedItem = opt; break; }
             }
         }
-        catch 
+        catch
         {
-        // todo
+            // todo
         }
 
-        _btnSave    .Visible = true;
-        _btnSave    .Enabled = true;
+        _btnSave.Visible = true;
+        _btnSave.Enabled = true;
         _btnTransfer.Visible = false;
         RecalcNetto();
     }
@@ -477,38 +477,38 @@ public partial class CorrectionsForm : Form
         string nvag = _txtNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
-            MessageBox.Show("Введите номер вагона (NVAG).", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning); 
+            MessageBox.Show("Введите номер вагона (NVAG).", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             _txtNvag.Focus();
             return;
         }
 
-        bool     isTara = _rbTara.Checked;
-        long?    ndok   = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
+        bool isTara = _rbTara.Checked;
+        long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         decimal? tarDok = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
-        string?  potr   = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
-        string?  plat   = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
-        decimal  total  = (decimal)_selected.Total;
+        string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
+        string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
+        decimal total = (decimal)_selected.Total;
 
         int cex = int.TryParse(tbCex.Text.Trim(), out int c) ? c : 0;
 
         var transfer = new GpriGras
         {
-            Table  = _rbGpri.Checked ? "GPRI" : "GRAS",
-            Dt     = _selected.WagonTime.Date,
-            Vr     = _selected.TrainTime.TimeOfDay,
+            Table = _rbGpri.Checked ? "GPRI" : "GRAS",
+            Dt = _selected.WagonTime.Date,
+            Vr = _selected.TrainTime.TimeOfDay,
             VR_PRV = _selected.WagonTime.TimeOfDay,
-            Nvag   = nvag,
-            Ndok   = ndok,
-            Gruz   = isTara ? "Тара" : _txtGruz.Text.Trim(),
-            Brutto = isTara ? 0m     : total,
-            TarBrs = isTara ? total  : null,
+            Nvag = nvag,
+            Ndok = ndok,
+            Gruz = isTara ? "Тара" : _txtGruz.Text.Trim(),
+            Brutto = isTara ? 0m : total,
+            TarBrs = isTara ? total : null,
             TarDok = tarDok,
-            Netto  = isTara ? null   : (tarDok.HasValue ? total - tarDok.Value : null),
-            Npp    = _selected.Number,
-            Mode   = _selected.Mode,
-            Potr   = potr ?? "",
-            Plat   = plat ?? "",
-            Cex    = cex,
+            Netto = isTara ? null : (tarDok.HasValue ? total - tarDok.Value : null),
+            Npp = _selected.Number,
+            Mode = _selected.Mode,
+            Potr = potr ?? "",
+            Plat = plat ?? "",
+            Cex = cex,
         };
 
         _btnTransfer.Enabled = false;
@@ -526,19 +526,19 @@ public partial class CorrectionsForm : Form
                 _gridPend.Rows.Remove(_gridPend.SelectedRows[0]);
                 _gridDone.Rows.Insert(0, 1);
                 var r = _gridDone.Rows[0];
-                r.Cells["DT"     ].Value = transfer.Dt.ToString("dd.MM.yyyy");
-                r.Cells["VR"     ].Value = transfer.Vr.ToString(@"hh\:mm\:ss");
-                r.Cells["NVAG"   ].Value = transfer.Nvag;
-                r.Cells["NDOK"   ].Value = transfer.Ndok?.ToString() ?? "";
-                r.Cells["GRUZ"   ].Value = transfer.Gruz;
-                r.Cells["BRUTTO" ].Value = transfer.Brutto.ToString("F2");
+                r.Cells["DT"].Value = transfer.Dt.ToString("dd.MM.yyyy");
+                r.Cells["VR"].Value = transfer.Vr.ToString(@"hh\:mm\:ss");
+                r.Cells["NVAG"].Value = transfer.Nvag;
+                r.Cells["NDOK"].Value = transfer.Ndok?.ToString() ?? "";
+                r.Cells["GRUZ"].Value = transfer.Gruz;
+                r.Cells["BRUTTO"].Value = transfer.Brutto.ToString("F2");
                 r.Cells["TAR_BRS"].Value = transfer.TarBrs?.ToString("F2") ?? "";
                 r.Cells["TAR_DOK"].Value = transfer.TarDok?.ToString("F2") ?? "";
-                r.Cells["NETTO"  ].Value = transfer.Netto?.ToString("F2")  ?? "";
-                r.Cells["POTR"   ].Value = transfer.Potr;
-                r.Cells["PLAT"   ].Value = transfer.Plat;
-                r.Cells["VESY"   ].Value = "13";
-                r.Cells["CEX"    ].Value = transfer.Cex > 0 ? transfer.Cex.ToString() : "";
+                r.Cells["NETTO"].Value = transfer.Netto?.ToString("F2") ?? "";
+                r.Cells["POTR"].Value = transfer.Potr;
+                r.Cells["PLAT"].Value = transfer.Plat;
+                r.Cells["VESY"].Value = "13";
+                r.Cells["CEX"].Value = transfer.Cex > 0 ? transfer.Cex.ToString() : "";
                 r.DefaultCellStyle.ForeColor = UiColors.PrimaryAction;
             }
             ClearTopPanel();
@@ -564,29 +564,29 @@ public partial class CorrectionsForm : Form
             return;
         }
 
-        bool     isTara = _rbTara.Checked;
-        long?    ndok   = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
+        bool isTara = _rbTara.Checked;
+        long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         decimal? tarDok = (!isTara && _cmbTar.SelectedItem is TaraOption taraOpt) ? taraOpt.Brutto : null;
-        string?  potr   = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
-        string?  plat   = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
+        string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
+        string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
 
         var updated = new GpriGras
         {
-            Id     = _selectedFb.Id,
-            Table  = _selectedFb.Table,
-            Dt     = _selectedFb.Dt,
-            Vr     = _selectedFb.Vr,
-            Nvag   = nvag,
-            Ndok   = ndok,
-            Gruz   = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? "" : _txtGruz.Text.Trim()),
+            Id = _selectedFb.Id,
+            Table = _selectedFb.Table,
+            Dt = _selectedFb.Dt,
+            Vr = _selectedFb.Vr,
+            Nvag = nvag,
+            Ndok = ndok,
+            Gruz = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? "" : _txtGruz.Text.Trim()),
             Brutto = _selectedFb.Brutto,
             TarBrs = isTara ? _selectedFb.Brutto : null,
             TarDok = tarDok,
-            Netto  = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
-            Npp    = _selectedFb.Npp,
-            Cex    = int.TryParse(tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
-            Potr   = potr ?? "",
-            Plat   = plat ?? "",
+            Netto = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
+            Npp = _selectedFb.Npp,
+            Cex = int.TryParse(tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
+            Potr = potr ?? "",
+            Plat = plat ?? "",
         };
 
         _btnSave.Enabled = false;
@@ -602,14 +602,14 @@ public partial class CorrectionsForm : Form
             if (_gridDone.SelectedRows.Count > 0)
             {
                 var r = _gridDone.SelectedRows[0];
-                r.Cells["NVAG"   ].Value = updated.Nvag;
-                r.Cells["NDOK"   ].Value = updated.Ndok?.ToString() ?? "";
-                r.Cells["GRUZ"   ].Value = updated.Gruz;
+                r.Cells["NVAG"].Value = updated.Nvag;
+                r.Cells["NDOK"].Value = updated.Ndok?.ToString() ?? "";
+                r.Cells["GRUZ"].Value = updated.Gruz;
                 r.Cells["TAR_BRS"].Value = updated.TarBrs?.ToString("F2") ?? "";
                 r.Cells["TAR_DOK"].Value = updated.TarDok?.ToString("F2") ?? "";
-                r.Cells["NETTO"  ].Value = updated.Netto?.ToString("F2")  ?? "";
-                r.Cells["POTR"   ].Value = updated.Potr;
-                r.Cells["PLAT"   ].Value = updated.Plat;
+                r.Cells["NETTO"].Value = updated.Netto?.ToString("F2") ?? "";
+                r.Cells["POTR"].Value = updated.Potr;
+                r.Cells["PLAT"].Value = updated.Plat;
             }
             ClearTopPanel();
         }
@@ -624,21 +624,22 @@ public partial class CorrectionsForm : Form
 
     private void ClearTopPanel()
     {
-        _selected   = null;
+        _selected = null;
         _selectedFb = null;
         _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = _lblDir.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
         _txtNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
-        _rbBrutto.Checked  = true;
+        _rbBrutto.Checked = true;
         _txtGruz.Clear();
-        _txtGruz.Enabled   = true;
-        _btnTransfer.Enabled  = false;
-        _btnTransfer.Visible  = true;
-        _btnSave    .Enabled  = false;
-        _btnSave    .Visible  = false;
+        _txtGruz.Enabled = true;
+        _btnTransfer.Enabled = false;
+        _btnTransfer.Visible = true;
+        _btnSave.Enabled = false;
+        _btnSave.Visible = false;
         _gridPend.ClearSelection();
         _gridDone.ClearSelection();
     }
+
 }
