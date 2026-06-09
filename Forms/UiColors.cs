@@ -4,7 +4,7 @@ namespace Vesy13.Forms;
 
 internal static class UiColors
 {
-    public static readonly Color AppBackground      = Color.FromArgb(0xFF, 0xFF, 0xFF);
+    public static readonly Color AppBackground      = Color.FromArgb(0xE6, 0xE6, 0xE6);
     public static readonly Color Surface            = Color.FromArgb(0xF5, 0xF5, 0xF7);
     public static readonly Color SurfaceMuted       = Color.FromArgb(0xEC, 0xEE, 0xF2);
     public static readonly Color DisplayBackground  = Color.FromArgb(5, 8, 12);
