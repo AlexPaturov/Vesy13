@@ -426,7 +426,7 @@ partial class CorrectionsForm
         tableLayoutPanel2.RowCount = 3;
         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 31F));
         tableLayoutPanel2.Size = new Size(593, 85);
         tableLayoutPanel2.TabIndex = 39;
         // 
@@ -452,7 +452,7 @@ partial class CorrectionsForm
         _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlNvagHost.Size = new Size(216, 27);
+        _pnlNvagHost.Size = new Size(216, 31);
         _pnlNvagHost.TabIndex = 11;
         // 
         // _lblNvagCap
