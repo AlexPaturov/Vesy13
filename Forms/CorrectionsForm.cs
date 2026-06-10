@@ -189,10 +189,10 @@ public partial class CorrectionsForm : Form
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             };
 
-        g.Columns.Add(Col("Дата", 135, 110));
-        g.Columns.Add(Col("Время", 125, 95));
+        g.Columns.Add(Col("Дата", 125, 100));
+        g.Columns.Add(Col("Время", 112, 88));
         g.Columns.Add(Col("№", 48, 48));
-        g.Columns.Add(Col("Вес", 104, 80));
+        g.Columns.Add(Col("Вес", 96, 74));
         g.Columns.Add(Col("Режим", 160, 110));
         g.Columns.Add(Col("Напр.", 80, 70));
     }
@@ -213,8 +213,8 @@ public partial class CorrectionsForm : Form
 
     private static int ColumnWidth(string key) => key switch
     {
-        "DT" => 140,
-        "VR" => 120,
+        "DT" => 132,
+        "VR" => 110,
         "NVAG" => 150,
         "GRUZ" => 180,
         "BRUTTO" => 95,
@@ -232,8 +232,8 @@ public partial class CorrectionsForm : Form
 
     private static int ColumnMinWidth(string key) => key switch
     {
-        "DT" => 110,
-        "VR" => 95,
+        "DT" => 102,
+        "VR" => 90,
         "NVAG" => 90,
         "GRUZ" => 120,
         "BRUTTO" => 80,
