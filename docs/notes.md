@@ -2,42 +2,47 @@
 
 Branch: `serviceform-designer-refactor`
 
-## Current workflow
-- User edits forms in Visual Studio designer.
-- I review the diff and current layout.
-- We agree the change.
+## Workflow
+- User makes the designer change in Visual Studio.
+- I review the current diff and layout.
+- We agree on the change.
 - Then I commit and push.
 
 ## Active focus
-- `CorrectionsForm` is the active form being adjusted.
-- Top area layout has been split into smaller panels.
-- `StaticWeighingForm` still has an uncommitted designer tweak.
+- `CorrectionsForm` is the active form.
+- Keep the layout work scoped to the grids and their surrounding container logic.
+- Treat the current grid layout as the baseline unless the user asks for a wider refactor.
+
+## CorrectionsForm rules
+- Grid columns should use explicit `Width` plus `MinimumWidth`.
+- Do not switch grid columns back to `Fill` unless the user explicitly asks for that behavior.
+- Keep `AllowUserToResizeColumns = true` for both grids.
+- Preserve operator control over the column widths; do not block manual resizing.
+- Use DPI only for initial sizing if needed, not as a hard override of operator-resizable widths.
+- Keep date/time/weight columns compact, but readable.
 
 ## Style rules
 - Keep fonts and colors centralized in `UiFonts` / `UiColors`.
 - Do not reintroduce local layout/style duplication in form logic.
 - Avoid touching unrelated user changes.
+- Prefer targeted layout fixes over broad rewrites.
 
 ## Files to leave alone unless explicitly requested
 - `ScaleListener/MainForm.cs`
 - `docs/rules.md`
 - `Vesy13.sln`
 
-### Conventional Commits
+## Conventional Commits
+Use conventional commit prefixes.
 
-Используем стандарт + добавили **`breaking:`** как тип верхнего уровня.
-Типы:
-
-```
-feat       — новая функциональность
-fix        — исправление бага
-breaking   — ломающее изменение (видно в git log сразу!)
-chore      — обслуживание
-docs       — документация
-refactor   — рефакторинг
-test       — тесты
-build      — сборка, Docker, CI
-ci         — GitHub Actions
-style      — форматирование
-perf       — производительность
-```
+- `feat` - new functionality
+- `fix` - bug fix
+- `chore` - maintenance
+- `docs` - documentation
+- `refactor` - refactor
+- `test` - tests
+- `build` - build, Docker, CI
+- `ci` - GitHub Actions
+- `style` - formatting
+- `perf` - performance
+- `breaking` - breaking change when needed
