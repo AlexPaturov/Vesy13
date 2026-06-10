@@ -25,7 +25,7 @@ partial class CorrectionsForm
         tableLayoutPanel7 = new TableLayoutPanel();
         label3 = new Label();
         lblpotr = new Label();
-        tbCex = new TextBox();
+        _tbCex = new TextBox();
         _tbPotr = new TextBox();
         tableLayoutPanel4 = new TableLayoutPanel();
         _rbGras = new RadioButton();
@@ -108,7 +108,7 @@ partial class CorrectionsForm
         // 
         _actionPanel.Controls.Add(tableLayoutPanel8);
         _actionPanel.Location = new Point(2, 187);
-        _actionPanel.Margin = new Padding(2);
+        _actionPanel.Margin = new Padding(2, 2, 2, 2);
         _actionPanel.Name = "_actionPanel";
         _actionPanel.Size = new Size(1260, 40);
         _actionPanel.TabIndex = 42;
@@ -128,7 +128,7 @@ partial class CorrectionsForm
         tableLayoutPanel8.Controls.Add(_btnSave, 1, 0);
         tableLayoutPanel8.Dock = DockStyle.Fill;
         tableLayoutPanel8.Location = new Point(0, 0);
-        tableLayoutPanel8.Margin = new Padding(2);
+        tableLayoutPanel8.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel8.Name = "tableLayoutPanel8";
         tableLayoutPanel8.RowCount = 1;
         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -207,7 +207,7 @@ partial class CorrectionsForm
         tableLayoutPanel5.Controls.Add(tableLayoutPanel6, 1, 1);
         tableLayoutPanel5.Dock = DockStyle.Top;
         tableLayoutPanel5.Location = new Point(0, 0);
-        tableLayoutPanel5.Margin = new Padding(2);
+        tableLayoutPanel5.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel5.Name = "tableLayoutPanel5";
         tableLayoutPanel5.RowCount = 2;
         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 49.4071159F));
@@ -223,11 +223,11 @@ partial class CorrectionsForm
         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70.66246F));
         tableLayoutPanel7.Controls.Add(label3, 0, 0);
         tableLayoutPanel7.Controls.Add(lblpotr, 0, 1);
-        tableLayoutPanel7.Controls.Add(tbCex, 1, 0);
+        tableLayoutPanel7.Controls.Add(_tbCex, 1, 0);
         tableLayoutPanel7.Controls.Add(_tbPotr, 1, 1);
         tableLayoutPanel7.Dock = DockStyle.Fill;
         tableLayoutPanel7.Location = new Point(817, 2);
-        tableLayoutPanel7.Margin = new Padding(2);
+        tableLayoutPanel7.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel7.Name = "tableLayoutPanel7";
         tableLayoutPanel7.RowCount = 2;
         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -259,23 +259,21 @@ partial class CorrectionsForm
         lblpotr.Text = "Потребитель";
         lblpotr.TextAlign = ContentAlignment.MiddleRight;
         // 
-        // tbCex
+        // _tbCex
         // 
-        tbCex.Dock = DockStyle.Fill;
-        tbCex.Location = new Point(134, 7);
-        tbCex.Margin = new Padding(3, 6, 3, 0);
-        tbCex.MaxLength = 3;
-        tbCex.Name = "tbCex";
-        tbCex.Size = new Size(307, 23);
-        tbCex.TabIndex = 33;
+        _tbCex.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbCex.Margin = new Padding(4, 0, 4, 0);
+        _tbCex.MaxLength = 3;
+        _tbCex.Name = "_tbCex";
+        _tbCex.Size = new Size(303, 23);
+        _tbCex.TabIndex = 33;
         // 
         // _tbPotr
         // 
-        _tbPotr.Dock = DockStyle.Fill;
-        _tbPotr.Location = new Point(134, 49);
-        _tbPotr.Margin = new Padding(3, 6, 3, 3);
+        _tbPotr.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbPotr.Margin = new Padding(4, 0, 4, 0);
         _tbPotr.Name = "_tbPotr";
-        _tbPotr.Size = new Size(307, 23);
+        _tbPotr.Size = new Size(303, 23);
         _tbPotr.TabIndex = 29;
         _tbPotr.TextAlign = HorizontalAlignment.Center;
         // 
@@ -289,7 +287,7 @@ partial class CorrectionsForm
         tableLayoutPanel4.Controls.Add(_rbGpri, 0, 0);
         tableLayoutPanel4.Dock = DockStyle.Fill;
         tableLayoutPanel4.Location = new Point(2, 2);
-        tableLayoutPanel4.Margin = new Padding(2);
+        tableLayoutPanel4.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel4.Name = "tableLayoutPanel4";
         tableLayoutPanel4.RowCount = 1;
         tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -333,7 +331,7 @@ partial class CorrectionsForm
         tableLayoutPanel1.Controls.Add(label2, 0, 0);
         tableLayoutPanel1.Dock = DockStyle.Fill;
         tableLayoutPanel1.Location = new Point(817, 91);
-        tableLayoutPanel1.Margin = new Padding(2);
+        tableLayoutPanel1.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel1.Name = "tableLayoutPanel1";
         tableLayoutPanel1.RowCount = 2;
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -360,9 +358,9 @@ partial class CorrectionsForm
         // _tbGruz
         // 
         _tbGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _tbGruz.Margin = new Padding(2, 0, 2, 0);
+        _tbGruz.Margin = new Padding(4, 0, 4, 0);
         _tbGruz.Name = "_tbGruz";
-        _tbGruz.Size = new Size(310, 23);
+        _tbGruz.Size = new Size(306, 23);
         _tbGruz.TabIndex = 14;
         // 
         // _lblGruzCap
@@ -417,7 +415,7 @@ partial class CorrectionsForm
         tableLayoutPanel2.Controls.Add(_lblTimeCap, 0, 1);
         tableLayoutPanel2.Dock = DockStyle.Fill;
         tableLayoutPanel2.Location = new Point(220, 2);
-        tableLayoutPanel2.Margin = new Padding(2);
+        tableLayoutPanel2.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel2.Name = "tableLayoutPanel2";
         tableLayoutPanel2.RowCount = 3;
         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
@@ -545,7 +543,7 @@ partial class CorrectionsForm
         tableLayoutPanel3.Controls.Add(_rbBrutto, 0, 0);
         tableLayoutPanel3.Dock = DockStyle.Fill;
         tableLayoutPanel3.Location = new Point(2, 91);
-        tableLayoutPanel3.Margin = new Padding(2);
+        tableLayoutPanel3.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel3.Name = "tableLayoutPanel3";
         tableLayoutPanel3.RowCount = 1;
         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -592,7 +590,7 @@ partial class CorrectionsForm
         tableLayoutPanel6.Controls.Add(_cmbTar, 1, 1);
         tableLayoutPanel6.Dock = DockStyle.Fill;
         tableLayoutPanel6.Location = new Point(220, 91);
-        tableLayoutPanel6.Margin = new Padding(2);
+        tableLayoutPanel6.Margin = new Padding(2, 2, 2, 2);
         tableLayoutPanel6.Name = "tableLayoutPanel6";
         tableLayoutPanel6.RowCount = 3;
         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
@@ -786,7 +784,7 @@ partial class CorrectionsForm
         Controls.Add(_split);
         Controls.Add(_pnlTop);
         Controls.Add(_pnlStatus);
-        MinimumSize = new Size(858, 553);
+        MinimumSize = new Size(856, 546);
         Name = "CorrectionsForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Корректировки — перенос в учётную систему";
@@ -863,7 +861,7 @@ partial class CorrectionsForm
     private Label label2;
     private Label lblpotr;
     private TextBox _tbPlat;
-    private TextBox tbCex;
+    private TextBox _tbCex;
     private TextBox _tbPotr;
     private Label label3;
     private TableLayoutPanel tableLayoutPanel6;

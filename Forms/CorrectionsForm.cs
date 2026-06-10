@@ -175,9 +175,9 @@ public partial class CorrectionsForm : Form
         _gridDone.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _lblHeaderDone.Font = UiFonts.BodyBold;
         _lblHeaderDone.ForeColor = UiColors.TextOnDark;
-        tbCex.Font = UiFonts.Body;
-        tbCex.BackColor = UiColors.InputBack;
-        tbCex.ForeColor = UiColors.InputFore;
+        _tbCex.Font = UiFonts.Body;
+        _tbCex.BackColor = UiColors.InputBack;
+        _tbCex.ForeColor = UiColors.InputFore;
         label3.Font = UiFonts.Body;
         label3.ForeColor = UiColors.TextMuted;
     }
@@ -427,7 +427,7 @@ public partial class CorrectionsForm : Form
         //_txtNdok.Text = fb.Ndok?.ToString() ?? "";
         _tbPotr.Text = fb.Potr;
         _tbPlat.Text = fb.Plat;
-        tbCex.Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
+        _tbCex.Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
 
         _rbGpri.Checked = fb.Table == "GPRI";
         _rbGras.Checked = fb.Table == "GRAS";
@@ -486,7 +486,7 @@ public partial class CorrectionsForm : Form
         string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
         decimal total = (decimal)_selected.Total;
 
-        int cex = int.TryParse(tbCex.Text.Trim(), out int c) ? c : 0;
+        int cex = int.TryParse(_tbCex.Text.Trim(), out int c) ? c : 0;
 
         var transfer = new GpriGras
         {
@@ -581,7 +581,7 @@ public partial class CorrectionsForm : Form
             TarDok = tarDok,
             Netto = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
             Npp = _selectedFb.Npp,
-            Cex = int.TryParse(tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
+            Cex = int.TryParse(_tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
             Potr = potr ?? "",
             Plat = plat ?? "",
         };
