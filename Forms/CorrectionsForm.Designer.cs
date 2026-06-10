@@ -58,6 +58,7 @@ partial class CorrectionsForm
         _lblBrutto = new Label();
         _lblBruttoCap = new Label();
         _cmbTar = new ComboBox();
+        _pnlTarHost = new TableLayoutPanel();
         _lblVidVzv = new Label();
         _lblVidMode = new Label();
         _split = new SplitContainer();
@@ -78,6 +79,7 @@ partial class CorrectionsForm
         _pnlNvagHost.SuspendLayout();
         tableLayoutPanel2.SuspendLayout();
         tableLayoutPanel3.SuspendLayout();
+        _pnlTarHost.SuspendLayout();
         tableLayoutPanel6.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_split).BeginInit();
         _split.Panel1.SuspendLayout();
@@ -609,14 +611,14 @@ partial class CorrectionsForm
         tableLayoutPanel6.Controls.Add(_lblTarCap, 0, 1);
         tableLayoutPanel6.Controls.Add(_lblBrutto, 1, 0);
         tableLayoutPanel6.Controls.Add(_lblBruttoCap, 0, 0);
-        tableLayoutPanel6.Controls.Add(_cmbTar, 1, 1);
+        tableLayoutPanel6.Controls.Add(_pnlTarHost, 1, 1);
         tableLayoutPanel6.Dock = DockStyle.Fill;
         tableLayoutPanel6.Location = new Point(220, 91);
         tableLayoutPanel6.Margin = new Padding(2);
         tableLayoutPanel6.Name = "tableLayoutPanel6";
         tableLayoutPanel6.RowCount = 3;
         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 31F));
         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
         tableLayoutPanel6.Size = new Size(593, 88);
         tableLayoutPanel6.TabIndex = 42;
@@ -678,13 +680,29 @@ partial class CorrectionsForm
         // 
         // _cmbTar
         // 
+        _cmbTar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _cmbTar.Margin = new Padding(4, 0, 4, 0);
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbTar.Location = new Point(151, 32);
-        _cmbTar.Margin = new Padding(3, 2, 3, 2);
         _cmbTar.Name = "_cmbTar";
-        _cmbTar.Size = new Size(438, 23);
+        _cmbTar.Size = new Size(430, 23);
         _cmbTar.TabIndex = 21;
         _cmbTar.SelectedIndexChanged += CmbTar_SelectedIndexChanged;
+        // 
+        // _pnlTarHost
+        // 
+        _pnlTarHost.ColumnCount = 1;
+        _pnlTarHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlTarHost.Controls.Add(_cmbTar, 0, 1);
+        _pnlTarHost.Dock = DockStyle.Fill;
+        _pnlTarHost.Location = new Point(151, 30);
+        _pnlTarHost.Margin = new Padding(0);
+        _pnlTarHost.Name = "_pnlTarHost";
+        _pnlTarHost.RowCount = 3;
+        _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTarHost.Size = new Size(438, 31);
+        _pnlTarHost.TabIndex = 22;
         // 
         // _lblVidVzv
         // 
@@ -831,6 +849,8 @@ partial class CorrectionsForm
         tableLayoutPanel3.PerformLayout();
         tableLayoutPanel6.ResumeLayout(false);
         tableLayoutPanel6.PerformLayout();
+        _pnlTarHost.ResumeLayout(false);
+        _pnlTarHost.PerformLayout();
         _split.Panel1.ResumeLayout(false);
         _split.Panel2.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_split).EndInit();
@@ -852,6 +872,7 @@ partial class CorrectionsForm
     private Label          _lblBrutto;
     private Label          _lblTarCap;
     private ComboBox       _cmbTar;
+    private TableLayoutPanel _pnlTarHost;
     private Label          _lblNettoCap;
     private Label          _lblNetto;
     private Button         _btnTransfer;
