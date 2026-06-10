@@ -20,7 +20,7 @@ public partial class CorrectionsForm : Form
     {
         { "DT",          "Дата взв."    },
         { "VR",          "Время взв."   },
-        { "NVAG",        "Ном. вагона"  },
+        { "NVAG",        "№ вагона"     },
         { "GRUZ",        "Груз"         },
         { "BRUTTO",      "Брутто"       },
         { "TAR_BRS",     "Тара факт"    },
@@ -203,20 +203,20 @@ public partial class CorrectionsForm : Form
 
     private static int ColumnWidth(string key) => key switch
     {
-        "DT" => 120,
-        "VR" => 95,
-        "NVAG" => 145,
-        "GRUZ" => 160,
+        "DT" => 140,
+        "VR" => 120,
+        "NVAG" => 150,
+        "GRUZ" => 180,
         "BRUTTO" => 95,
         "TAR_BRS" => 95,
         "NETTO" => 95,
         "CEX" => 75,
-        "POTR" => 135,
-        "PLAT" => 135,
-        "VESY" => 65,
+        "POTR" => 180,
+        "PLAT" => 180,
+        "VESY" => 74,
         "TN" => 80,
         "NPP" => 75,
-        "N_TEPLOVOZ" => 160,
+        "N_TEPLOVOZ" => 180,
         _ => 105,
     };
 
@@ -226,9 +226,23 @@ public partial class CorrectionsForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
+        if (!DesignMode && IsHandleCreated)
+            BeginInvoke(new Action(ApplyResponsiveSplit));
         if (DesignMode || _ldb is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();
+    }
+
+    private void ApplyResponsiveSplit()
+    {
+        if (IsDisposed || _split.IsDisposed || !IsHandleCreated) return;
+
+        const int baseDpi = 144;
+        const int baseDistance = 488;
+
+        int target = (int)Math.Round(baseDistance * (baseDpi / (double)DeviceDpi));
+        int maxDistance = Math.Max(_split.Panel1MinSize, _split.ClientSize.Width - _split.Panel2MinSize - _split.SplitterWidth);
+        _split.SplitterDistance = Math.Clamp(target, _split.Panel1MinSize, maxDistance);
     }
 
     private async Task LoadBothGridsAsync()
