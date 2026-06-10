@@ -22,3 +22,22 @@ Branch: `serviceform-designer-refactor`
 - `ScaleListener/MainForm.cs`
 - `docs/rules.md`
 - `Vesy13.sln`
+
+### Conventional Commits
+
+Используем стандарт + добавили **`breaking:`** как тип верхнего уровня.
+Типы:
+
+```
+feat       — новая функциональность
+fix        — исправление бага
+breaking   — ломающее изменение (видно в git log сразу!)
+chore      — обслуживание
+docs       — документация
+refactor   — рефакторинг
+test       — тесты
+build      — сборка, Docker, CI
+ci         — GitHub Actions
+style      — форматирование
+perf       — производительность
+```
