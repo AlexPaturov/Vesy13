@@ -31,8 +31,8 @@ partial class CorrectionsForm
         _rbGras = new RadioButton();
         _rbGpri = new RadioButton();
         tableLayoutPanel1 = new TableLayoutPanel();
-        _tbGruz = new TextBox();
         _pnlGruzHost = new TableLayoutPanel();
+        _tbGruz = new TextBox();
         _lblGruzCap = new Label();
         _tbPlat = new TextBox();
         label2 = new Label();
@@ -73,6 +73,7 @@ partial class CorrectionsForm
         tableLayoutPanel7.SuspendLayout();
         tableLayoutPanel4.SuspendLayout();
         tableLayoutPanel1.SuspendLayout();
+        _pnlGruzHost.SuspendLayout();
         tableLayoutPanel2.SuspendLayout();
         tableLayoutPanel3.SuspendLayout();
         tableLayoutPanel6.SuspendLayout();
@@ -340,29 +341,29 @@ partial class CorrectionsForm
         tableLayoutPanel1.Size = new Size(445, 88);
         tableLayoutPanel1.TabIndex = 38;
         // 
-        // _tbGruz
-        // 
-        _tbGruz.Anchor = AnchorStyles.None;
-        _tbGruz.Margin = Padding.Empty;
-        _tbGruz.Name = "_tbGruz";
-        _tbGruz.Size = new Size(308, 23);
-        _tbGruz.TabIndex = 14;
-        // 
         // _pnlGruzHost
         // 
         _pnlGruzHost.ColumnCount = 1;
         _pnlGruzHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         _pnlGruzHost.Controls.Add(_tbGruz, 0, 1);
         _pnlGruzHost.Dock = DockStyle.Fill;
-        _pnlGruzHost.Location = new Point(133, 44);
+        _pnlGruzHost.Location = new Point(130, 44);
         _pnlGruzHost.Margin = new Padding(0);
         _pnlGruzHost.Name = "_pnlGruzHost";
         _pnlGruzHost.RowCount = 3;
         _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _pnlGruzHost.RowStyles.Add(new RowStyle());
         _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlGruzHost.Size = new Size(308, 43);
+        _pnlGruzHost.Size = new Size(314, 43);
         _pnlGruzHost.TabIndex = 15;
+        // 
+        // _tbGruz
+        // 
+        _tbGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbGruz.Margin = new Padding(0);
+        _tbGruz.Name = "_tbGruz";
+        _tbGruz.Size = new Size(314, 23);
+        _tbGruz.TabIndex = 14;
         // 
         // _lblGruzCap
         // 
