@@ -189,12 +189,12 @@ public partial class CorrectionsForm : Form
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             };
 
-        g.Columns.Add(Col("Дата", 135, 110));
-        g.Columns.Add(Col("Время", 125, 95));
-        g.Columns.Add(Col("№", 48, 48));
-        g.Columns.Add(Col("Вес", 104, 80));
-        g.Columns.Add(Col("Режим", 160, 110));
-        g.Columns.Add(Col("Напр.", 80, 70));
+        g.Columns.Add(Col("Дата", 135, 95));
+        g.Columns.Add(Col("Время", 125, 82));
+        g.Columns.Add(Col("№", 48, 40));
+        g.Columns.Add(Col("Вес", 104, 68));
+        g.Columns.Add(Col("Режим", 160, 95));
+        g.Columns.Add(Col("Напр.", 80, 60));
     }
 
     private static void AddFirebirdGridColumns(DataGridView g)
