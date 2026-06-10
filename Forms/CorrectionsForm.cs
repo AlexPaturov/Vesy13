@@ -124,9 +124,9 @@ public partial class CorrectionsForm : Form
         _txtNvag.ForeColor = UiColors.InputFore;
         _lblGruzCap.Font = UiFonts.Body;
         _lblGruzCap.ForeColor = UiColors.TextMuted;
-        _txtGruz.Font = UiFonts.Body;
-        _txtGruz.BackColor = UiColors.InputBack;
-        _txtGruz.ForeColor = UiColors.InputFore;
+        _tbGruz.Font = UiFonts.Body;
+        _tbGruz.BackColor = UiColors.InputBack;
+        _tbGruz.ForeColor = UiColors.InputFore;
         _lblBruttoCap.Font = UiFonts.Body;
         _lblBruttoCap.ForeColor = UiColors.TextMuted;
         _lblBrutto.Font = UiFonts.MonoBold;
@@ -390,13 +390,13 @@ public partial class CorrectionsForm : Form
     {
         if (_rbTara.Checked)
         {
-            _txtGruz.Text = "Тара";
-            _txtGruz.Enabled = false;
+            _tbGruz.Text = "Тара";
+            _tbGruz.Enabled = false;
         }
         else
         {
-            if (_txtGruz.Text == "Тара") _txtGruz.Clear();
-            _txtGruz.Enabled = true;
+            if (_tbGruz.Text == "Тара") _tbGruz.Clear();
+            _tbGruz.Enabled = true;
         }
         RecalcNetto();
     }
@@ -437,7 +437,7 @@ public partial class CorrectionsForm : Form
         _rbBrutto.Checked = !isTara;
 
         if (!isTara)
-            _txtGruz.Text = fb.Gruz;
+            _tbGruz.Text = fb.Gruz;
 
         _cmbTar.Items.Clear();
         try
@@ -496,7 +496,7 @@ public partial class CorrectionsForm : Form
             VR_PRV = _selected.WagonTime.TimeOfDay,
             Nvag = nvag,
             //Ndok = ndok,
-            Gruz = isTara ? "Тара" : _txtGruz.Text.Trim(),
+            Gruz = isTara ? "Тара" : _tbGruz.Text.Trim(),
             Brutto = isTara ? 0m : total,
             TarBrs = isTara ? total : null,
             TarDok = tarDok,
@@ -575,7 +575,7 @@ public partial class CorrectionsForm : Form
             Vr = _selectedFb.Vr,
             Nvag = nvag,
             //Ndok = ndok,
-            Gruz = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? "" : _txtGruz.Text.Trim()),
+            Gruz = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_tbGruz.Text) ? "" : _tbGruz.Text.Trim()),
             Brutto = _selectedFb.Brutto,
             TarBrs = isTara ? _selectedFb.Brutto : null,
             TarDok = tarDok,
@@ -629,8 +629,8 @@ public partial class CorrectionsForm : Form
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
         _rbBrutto.Checked = true;
-        _txtGruz.Clear();
-        _txtGruz.Enabled = true;
+        _tbGruz.Clear();
+        _tbGruz.Enabled = true;
         _btnTransfer.Enabled = false;
         _btnTransfer.Visible = true;
         _btnSave.Enabled = false;
