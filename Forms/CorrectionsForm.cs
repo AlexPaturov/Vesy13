@@ -179,8 +179,15 @@ public partial class CorrectionsForm : Form
 
     private static void AddPendingGridColumns(DataGridView g)
     {
-        DataGridViewTextBoxColumn Col(string header, int width) =>
-            new() { HeaderText = header, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };
+        DataGridViewTextBoxColumn Col(string header, int fillWeight) =>
+            new()
+            {
+                HeaderText = header,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = fillWeight,
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+            };
+
         g.Columns.Add(Col("Дата", 135));
         g.Columns.Add(Col("Время", 125));
         g.Columns.Add(Col("№", 48));
@@ -196,7 +203,8 @@ public partial class CorrectionsForm : Form
             {
                 Name = key,
                 HeaderText = header,
-                Width = ColumnWidth(key),
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = ColumnWidth(key),
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             });
     }
@@ -226,42 +234,9 @@ public partial class CorrectionsForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
-        if (!DesignMode && IsHandleCreated)
-        {
-            ApplyGridScale();
-            BeginInvoke(new Action(ApplyResponsiveSplit));
-        }
         if (DesignMode || _ldb is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();
-    }
-
-    private void ApplyGridScale()
-    {
-        double scale = DeviceDpi / 144.0;
-        ScaleGrid(_gridPend, scale);
-        ScaleGrid(_gridDone, scale);
-    }
-
-    private static void ScaleGrid(DataGridView grid, double scale)
-    {
-        foreach (DataGridViewColumn column in grid.Columns)
-            column.Width = Math.Max(36, (int)Math.Round(column.Width * scale));
-
-        grid.ColumnHeadersHeight = Math.Max(28, (int)Math.Round(grid.ColumnHeadersHeight * scale));
-        grid.RowTemplate.Height = Math.Max(24, (int)Math.Round(grid.RowTemplate.Height * scale));
-    }
-
-    private void ApplyResponsiveSplit()
-    {
-        if (IsDisposed || _split.IsDisposed || !IsHandleCreated) return;
-
-        const int baseDpi = 144;
-        const int baseDistance = 488;
-
-        int target = (int)Math.Round(baseDistance * (baseDpi / (double)DeviceDpi));
-        int maxDistance = Math.Max(_split.Panel1MinSize, _split.ClientSize.Width - _split.Panel2MinSize - _split.SplitterWidth);
-        _split.SplitterDistance = Math.Clamp(target, _split.Panel1MinSize, maxDistance);
     }
 
     private async Task LoadBothGridsAsync()
