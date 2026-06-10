@@ -179,22 +179,22 @@ public partial class CorrectionsForm : Form
 
     private static void AddPendingGridColumns(DataGridView g)
     {
-        DataGridViewTextBoxColumn Col(string header, int width, int minWidth) =>
+        DataGridViewTextBoxColumn Col(string header, int fillWeight, int minWidth) =>
             new()
             {
                 HeaderText = header,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                Width = width,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = fillWeight,
                 MinimumWidth = minWidth,
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             };
 
-        g.Columns.Add(Col("Дата", 135, 95));
-        g.Columns.Add(Col("Время", 125, 82));
-        g.Columns.Add(Col("№", 48, 40));
-        g.Columns.Add(Col("Вес", 104, 68));
-        g.Columns.Add(Col("Режим", 160, 95));
-        g.Columns.Add(Col("Напр.", 80, 60));
+        g.Columns.Add(Col("Дата", 135, 110));
+        g.Columns.Add(Col("Время", 125, 95));
+        g.Columns.Add(Col("№", 48, 48));
+        g.Columns.Add(Col("Вес", 104, 80));
+        g.Columns.Add(Col("Режим", 160, 110));
+        g.Columns.Add(Col("Напр.", 80, 70));
     }
 
     private static void AddFirebirdGridColumns(DataGridView g)
@@ -204,8 +204,8 @@ public partial class CorrectionsForm : Form
             {
                 Name = key,
                 HeaderText = header,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                Width = ColumnWidth(key),
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = ColumnWidth(key),
                 MinimumWidth = ColumnMinWidth(key),
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             });
@@ -234,8 +234,8 @@ public partial class CorrectionsForm : Form
     {
         "DT" => 110,
         "VR" => 95,
-        "NVAG" => 110,
-        "GRUZ" => 130,
+        "NVAG" => 90,
+        "GRUZ" => 120,
         "BRUTTO" => 80,
         "TAR_BRS" => 80,
         "NETTO" => 80,
@@ -255,8 +255,6 @@ public partial class CorrectionsForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
-        _gridPend.AllowUserToResizeColumns = true;
-        _gridDone.AllowUserToResizeColumns = true;
         if (DesignMode || _ldb is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();
