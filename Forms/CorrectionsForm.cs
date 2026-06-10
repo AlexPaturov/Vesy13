@@ -21,24 +21,17 @@ public partial class CorrectionsForm : Form
         { "DT",          "Дата взв."    },
         { "VR",          "Время взв."   },
         { "NVAG",        "Ном. вагона"  },
-        { "NDOK",        "Ном. докум."  },
         { "GRUZ",        "Груз"         },
         { "BRUTTO",      "Брутто"       },
         { "TAR_BRS",     "Тара факт"    },
-        { "TAR_DOK",     "Тара док."    },
         { "NETTO",       "Нетто"        },
-        { "NET_DOK",     "Нетто док."   },
-        { "MUSOR",       "Мусор"        },
         { "CEX",         "Цех"          },
-        { "TARIF",       "Тариф"        },
         { "POTR",        "Поставщик"    },
         { "PLAT",        "Плательщик"   },
-        { "SKOR",        "Скорость"     },
         { "VESY",        "Весы"         },
         { "TN",          "Таб. ном."    },
         { "NPP",         "НПП"          },
         { "N_TEPLOVOZ",  "Ном. теплов." },
-        { "POGRESHNOST", "Погрешность"  },
     };
 
     public CorrectionsForm()
@@ -188,13 +181,11 @@ public partial class CorrectionsForm : Form
     {
         DataGridViewTextBoxColumn Col(string header, int width) =>
             new() { HeaderText = header, Width = width, SortMode = DataGridViewColumnSortMode.NotSortable };
-        g.Columns.Add(Col("Дата", 110));
-        g.Columns.Add(Col("Время", 88));
+        g.Columns.Add(Col("Дата", 135));
+        g.Columns.Add(Col("Время", 125));
         g.Columns.Add(Col("№", 48));
-        g.Columns.Add(Col("Тел.1 т", 100));
-        g.Columns.Add(Col("Тел.2 т", 100));
-        g.Columns.Add(Col("T1+T2 т", 104));
-        g.Columns.Add(Col("Режим", 120));
+        g.Columns.Add(Col("Вес", 104));
+        g.Columns.Add(Col("Режим", 160));
         g.Columns.Add(Col("Напр.", 80));
     }
 
@@ -215,24 +206,17 @@ public partial class CorrectionsForm : Form
         "DT" => 120,
         "VR" => 95,
         "NVAG" => 145,
-        "NDOK" => 135,
         "GRUZ" => 160,
         "BRUTTO" => 95,
         "TAR_BRS" => 95,
-        "TAR_DOK" => 95,
         "NETTO" => 95,
-        "NET_DOK" => 95,
-        "MUSOR" => 80,
         "CEX" => 75,
-        "TARIF" => 80,
         "POTR" => 135,
         "PLAT" => 135,
-        "SKOR" => 85,
         "VESY" => 65,
         "TN" => 80,
         "NPP" => 75,
         "N_TEPLOVOZ" => 160,
-        "POGRESHNOST" => 115,
         _ => 105,
     };
 
@@ -286,8 +270,6 @@ public partial class CorrectionsForm : Form
                 r.TrainTime.ToString("dd.MM.yyyy"),
                 r.TrainTime.ToString("HH:mm:ss"),
                 r.Number,
-                r.Bogie1.ToString("F2"),
-                r.Bogie2.ToString("F2"),
                 r.Total.ToString("F2"),
                 r.Mode,
                 r.Direction);
@@ -305,11 +287,9 @@ public partial class CorrectionsForm : Form
             row.Cells["DT"].Value = r.Dt.ToString("dd.MM.yyyy");
             row.Cells["VR"].Value = r.Vr.ToString(@"hh\:mm\:ss");
             row.Cells["NVAG"].Value = r.Nvag;
-            row.Cells["NDOK"].Value = r.Ndok;
             row.Cells["GRUZ"].Value = r.Gruz;
             row.Cells["BRUTTO"].Value = r.Brutto.ToString("F2");
             row.Cells["TAR_BRS"].Value = r.TarBrs.HasValue ? r.TarBrs.Value.ToString("F2") : "";
-            row.Cells["TAR_DOK"].Value = r.TarDok.HasValue ? r.TarDok.Value.ToString("F2") : "";
             row.Cells["NETTO"].Value = r.Netto.HasValue ? r.Netto.Value.ToString("F2") : "";
             row.Cells["POTR"].Value = r.Potr;
             row.Cells["PLAT"].Value = r.Plat;
@@ -424,7 +404,6 @@ public partial class CorrectionsForm : Form
         _lblBrutto.Text = fb.Brutto.ToString("F2");
 
         _tbNvag.Text = fb.Nvag;
-        //_txtNdok.Text = fb.Ndok?.ToString() ?? "";
         _tbPotr.Text = fb.Potr;
         _tbPlat.Text = fb.Plat;
         _tbCex.Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
@@ -480,7 +459,6 @@ public partial class CorrectionsForm : Form
         }
 
         bool isTara = _rbTara.Checked;
-        //long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         decimal? tarDok = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
         string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
         string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
@@ -495,11 +473,9 @@ public partial class CorrectionsForm : Form
             Vr = _selected.TrainTime.TimeOfDay,
             VR_PRV = _selected.WagonTime.TimeOfDay,
             Nvag = nvag,
-            //Ndok = ndok,
             Gruz = isTara ? "Тара" : _tbGruz.Text.Trim(),
             Brutto = isTara ? 0m : total,
             TarBrs = isTara ? total : null,
-            TarDok = tarDok,
             Netto = isTara ? null : (tarDok.HasValue ? total - tarDok.Value : null),
             Npp = _selected.Number,
             Mode = _selected.Mode,
@@ -526,11 +502,9 @@ public partial class CorrectionsForm : Form
                 r.Cells["DT"].Value = transfer.Dt.ToString("dd.MM.yyyy");
                 r.Cells["VR"].Value = transfer.Vr.ToString(@"hh\:mm\:ss");
                 r.Cells["NVAG"].Value = transfer.Nvag;
-                r.Cells["NDOK"].Value = transfer.Ndok?.ToString() ?? "";
                 r.Cells["GRUZ"].Value = transfer.Gruz;
                 r.Cells["BRUTTO"].Value = transfer.Brutto.ToString("F2");
                 r.Cells["TAR_BRS"].Value = transfer.TarBrs?.ToString("F2") ?? "";
-                r.Cells["TAR_DOK"].Value = transfer.TarDok?.ToString("F2") ?? "";
                 r.Cells["NETTO"].Value = transfer.Netto?.ToString("F2") ?? "";
                 r.Cells["POTR"].Value = transfer.Potr;
                 r.Cells["PLAT"].Value = transfer.Plat;
@@ -562,7 +536,6 @@ public partial class CorrectionsForm : Form
         }
 
         bool isTara = _rbTara.Checked;
-        //long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         decimal? tarDok = (!isTara && _cmbTar.SelectedItem is TaraOption taraOpt) ? taraOpt.Brutto : null;
         string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
         string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
@@ -574,11 +547,9 @@ public partial class CorrectionsForm : Form
             Dt = _selectedFb.Dt,
             Vr = _selectedFb.Vr,
             Nvag = nvag,
-            //Ndok = ndok,
             Gruz = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_tbGruz.Text) ? "" : _tbGruz.Text.Trim()),
             Brutto = _selectedFb.Brutto,
             TarBrs = isTara ? _selectedFb.Brutto : null,
-            TarDok = tarDok,
             Netto = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
             Npp = _selectedFb.Npp,
             Cex = int.TryParse(_tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
@@ -600,10 +571,8 @@ public partial class CorrectionsForm : Form
             {
                 var r = _gridDone.SelectedRows[0];
                 r.Cells["NVAG"].Value = updated.Nvag;
-                r.Cells["NDOK"].Value = updated.Ndok?.ToString() ?? "";
                 r.Cells["GRUZ"].Value = updated.Gruz;
                 r.Cells["TAR_BRS"].Value = updated.TarBrs?.ToString("F2") ?? "";
-                r.Cells["TAR_DOK"].Value = updated.TarDok?.ToString("F2") ?? "";
                 r.Cells["NETTO"].Value = updated.Netto?.ToString("F2") ?? "";
                 r.Cells["POTR"].Value = updated.Potr;
                 r.Cells["PLAT"].Value = updated.Plat;
@@ -625,7 +594,6 @@ public partial class CorrectionsForm : Form
         _selectedFb = null;
         _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
-        //_tbNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
         _rbBrutto.Checked = true;
