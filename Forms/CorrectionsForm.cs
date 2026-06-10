@@ -268,9 +268,10 @@ public partial class CorrectionsForm : Form
 
     private void ApplyGridDpiSizing()
     {
-        double scale = DeviceDpi / 96.0;
-        ScaleGrid(_gridPend, scale);
-        ScaleGrid(_gridDone, scale);
+        double dpiScale = DeviceDpi / 96.0;
+        double widthScale = dpiScale <= 1.0 ? 1.0 : 1.0 + ((dpiScale - 1.0) * 0.65);
+        ScaleGrid(_gridPend, widthScale);
+        ScaleGrid(_gridDone, widthScale);
     }
 
     private static void ScaleGrid(DataGridView grid, double scale)
