@@ -197,8 +197,8 @@ partial class CorrectionsForm
         // 
         tableLayoutPanel7.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
         tableLayoutPanel7.ColumnCount = 2;
-        tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.462925F));
-        tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 68.53707F));
+        tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.33754F));
+        tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70.66246F));
         tableLayoutPanel7.Controls.Add(label3, 0, 0);
         tableLayoutPanel7.Controls.Add(lblpotr, 0, 1);
         tableLayoutPanel7.Controls.Add(tbCex, 1, 0);
@@ -219,7 +219,7 @@ partial class CorrectionsForm
         label3.Location = new Point(3, 1);
         label3.Margin = new Padding(2, 0, 2, 0);
         label3.Name = "label3";
-        label3.Size = new Size(194, 70);
+        label3.Size = new Size(181, 70);
         label3.TabIndex = 34;
         label3.Text = "Цех";
         label3.TextAlign = ContentAlignment.MiddleRight;
@@ -231,28 +231,28 @@ partial class CorrectionsForm
         lblpotr.Location = new Point(1, 72);
         lblpotr.Margin = new Padding(0);
         lblpotr.Name = "lblpotr";
-        lblpotr.Size = new Size(198, 70);
+        lblpotr.Size = new Size(185, 70);
         lblpotr.TabIndex = 31;
         lblpotr.Text = "Потребитель";
         lblpotr.TextAlign = ContentAlignment.MiddleRight;
         // 
         // tbCex
         // 
-        tbCex.Anchor = AnchorStyles.None;
-        tbCex.Location = new Point(255, 20);
-        tbCex.Margin = new Padding(4, 5, 4, 5);
+        tbCex.Dock = DockStyle.Fill;
+        tbCex.Location = new Point(191, 17);
+        tbCex.Margin = new Padding(4, 16, 4, 0);
         tbCex.MaxLength = 3;
         tbCex.Name = "tbCex";
-        tbCex.Size = new Size(324, 31);
+        tbCex.Size = new Size(439, 31);
         tbCex.TabIndex = 33;
         // 
         // _tbPotr
         // 
-        _tbPotr.Anchor = AnchorStyles.None;
-        _tbPotr.Location = new Point(255, 91);
-        _tbPotr.Margin = new Padding(4, 5, 4, 5);
+        _tbPotr.Dock = DockStyle.Fill;
+        _tbPotr.Location = new Point(191, 88);
+        _tbPotr.Margin = new Padding(4, 16, 4, 5);
         _tbPotr.Name = "_tbPotr";
-        _tbPotr.Size = new Size(324, 31);
+        _tbPotr.Size = new Size(439, 31);
         _tbPotr.TabIndex = 29;
         _tbPotr.TextAlign = HorizontalAlignment.Center;
         // 
@@ -301,8 +301,8 @@ partial class CorrectionsForm
         // 
         tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
         tableLayoutPanel1.ColumnCount = 2;
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.5081959F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70.491806F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.1798115F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70.82019F));
         tableLayoutPanel1.Controls.Add(_txtGruz, 1, 1);
         tableLayoutPanel1.Controls.Add(_lblGruzCap, 0, 1);
         tableLayoutPanel1.Controls.Add(_tbPlat, 1, 0);
@@ -319,11 +319,11 @@ partial class CorrectionsForm
         // 
         // _txtGruz
         // 
-        _txtGruz.Anchor = AnchorStyles.None;
-        _txtGruz.Location = new Point(239, 94);
-        _txtGruz.Margin = new Padding(4, 5, 4, 5);
+        _txtGruz.Dock = DockStyle.Fill;
+        _txtGruz.Location = new Point(190, 90);
+        _txtGruz.Margin = new Padding(4, 16, 4, 5);
         _txtGruz.Name = "_txtGruz";
-        _txtGruz.Size = new Size(344, 31);
+        _txtGruz.Size = new Size(440, 31);
         _txtGruz.TabIndex = 14;
         // 
         // _lblGruzCap
@@ -333,18 +333,18 @@ partial class CorrectionsForm
         _lblGruzCap.Location = new Point(5, 74);
         _lblGruzCap.Margin = new Padding(4, 0, 4, 0);
         _lblGruzCap.Name = "_lblGruzCap";
-        _lblGruzCap.Size = new Size(178, 72);
+        _lblGruzCap.Size = new Size(176, 72);
         _lblGruzCap.TabIndex = 13;
-        _lblGruzCap.Text = "Груз:";
+        _lblGruzCap.Text = "Груз";
         _lblGruzCap.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _tbPlat
         // 
-        _tbPlat.Anchor = AnchorStyles.None;
-        _tbPlat.Location = new Point(239, 21);
-        _tbPlat.Margin = new Padding(4, 5, 4, 5);
+        _tbPlat.Dock = DockStyle.Fill;
+        _tbPlat.Location = new Point(190, 17);
+        _tbPlat.Margin = new Padding(4, 16, 4, 5);
         _tbPlat.Name = "_tbPlat";
-        _tbPlat.Size = new Size(344, 31);
+        _tbPlat.Size = new Size(440, 31);
         _tbPlat.TabIndex = 30;
         // 
         // label2
@@ -354,7 +354,7 @@ partial class CorrectionsForm
         label2.Location = new Point(1, 1);
         label2.Margin = new Padding(0);
         label2.Name = "label2";
-        label2.Size = new Size(186, 72);
+        label2.Size = new Size(184, 72);
         label2.TabIndex = 32;
         label2.Text = "Плательщик";
         label2.TextAlign = ContentAlignment.MiddleRight;
@@ -390,8 +390,8 @@ partial class CorrectionsForm
         // _txtNvag
         // 
         _txtNvag.Dock = DockStyle.Fill;
-        _txtNvag.Location = new Point(144, 100);
-        _txtNvag.Margin = new Padding(4, 5, 4, 5);
+        _txtNvag.Location = new Point(144, 99);
+        _txtNvag.Margin = new Padding(4, 4, 4, 2);
         _txtNvag.Name = "_txtNvag";
         _txtNvag.Size = new Size(302, 31);
         _txtNvag.TabIndex = 10;
@@ -626,8 +626,8 @@ partial class CorrectionsForm
         // 
         _cmbTar.Dock = DockStyle.Fill;
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbTar.Location = new Point(216, 54);
-        _cmbTar.Margin = new Padding(4, 5, 4, 5);
+        _cmbTar.Location = new Point(216, 52);
+        _cmbTar.Margin = new Padding(4, 3, 4, 4);
         _cmbTar.Name = "_cmbTar";
         _cmbTar.Size = new Size(626, 33);
         _cmbTar.TabIndex = 21;
