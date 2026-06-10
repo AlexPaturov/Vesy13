@@ -179,12 +179,12 @@ public partial class CorrectionsForm : Form
 
     private static void AddPendingGridColumns(DataGridView g)
     {
-        DataGridViewTextBoxColumn Col(string header, int fillWeight, int minWidth) =>
+        DataGridViewTextBoxColumn Col(string header, int width, int minWidth) =>
             new()
             {
                 HeaderText = header,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                FillWeight = fillWeight,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                Width = width,
                 MinimumWidth = minWidth,
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             };
@@ -204,8 +204,8 @@ public partial class CorrectionsForm : Form
             {
                 Name = key,
                 HeaderText = header,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                FillWeight = ColumnWidth(key),
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+                Width = ColumnWidth(key),
                 MinimumWidth = ColumnMinWidth(key),
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             });
@@ -255,10 +255,30 @@ public partial class CorrectionsForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
+        _gridPend.AllowUserToResizeColumns = true;
+        _gridDone.AllowUserToResizeColumns = true;
+        if (!DesignMode)
+        {
+            ApplyGridDpiSizing();
+        }
         if (DesignMode || _ldb is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();
     }
+
+    private void ApplyGridDpiSizing()
+    {
+        double scale = DeviceDpi / 96.0;
+        ScaleGrid(_gridPend, scale);
+        ScaleGrid(_gridDone, scale);
+    }
+
+    private static void ScaleGrid(DataGridView grid, double scale)
+    {
+        foreach (DataGridViewColumn column in grid.Columns)
+            column.Width = Math.Max(column.MinimumWidth, (int)Math.Round(column.Width * scale));
+    }
+
 
     private async Task LoadBothGridsAsync()
     {
