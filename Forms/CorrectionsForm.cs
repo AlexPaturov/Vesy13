@@ -59,8 +59,21 @@ public partial class CorrectionsForm : Form
     private void ApplyTheme()
     {
         BackColor = UiColors.AppBackground;
-        _pnlTop.BackColor = UiColors.FilterBar;
-        _pnlTopActions.BackColor = UiColors.FilterBar;
+        _pnlTop.BackColor = UiColors.AppBackground;
+        _pnlTopActions.BackColor = UiColors.Surface;
+        _actionPanel.BackColor = UiColors.SurfaceMuted;
+        tableLayoutPanel5.BackColor = UiColors.Surface;
+        tableLayoutPanel7.BackColor = UiColors.Surface;
+        tableLayoutPanel4.BackColor = UiColors.Surface;
+        tableLayoutPanel1.BackColor = UiColors.Surface;
+        tableLayoutPanel2.BackColor = UiColors.Surface;
+        tableLayoutPanel3.BackColor = UiColors.Surface;
+        tableLayoutPanel6.BackColor = UiColors.Surface;
+        tableLayoutPanel8.BackColor = UiColors.SurfaceMuted;
+        _split.Panel1.BackColor = UiColors.AppBackground;
+        _split.Panel2.BackColor = UiColors.AppBackground;
+        _lblHeaderPend.BackColor = UiColors.NavigationAction;
+        _lblHeaderDone.BackColor = UiColors.NavigationAction;
         _pnlStatus.BackColor = UiColors.StatusBar;
 
         label2.Font = UiFonts.Body;
@@ -137,8 +150,8 @@ public partial class CorrectionsForm : Form
         _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.ForeColor = UiColors.TextPrimary;
         _gridPend.Font = UiFonts.GridBody;
-        _gridPend.BackgroundColor = UiColors.Surface;
-        _gridPend.DefaultCellStyle.BackColor = UiColors.Surface;
+        _gridPend.BackgroundColor = UiColors.InputBack;
+        _gridPend.DefaultCellStyle.BackColor = UiColors.InputBack;
         _gridPend.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
         _gridPend.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
         _gridPend.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
@@ -150,8 +163,8 @@ public partial class CorrectionsForm : Form
         _lblHeaderPend.Font = UiFonts.BodyBold;
         _lblHeaderPend.ForeColor = UiColors.TextOnDark;
         _gridDone.Font = UiFonts.GridBody;
-        _gridDone.BackgroundColor = UiColors.Surface;
-        _gridDone.DefaultCellStyle.BackColor = UiColors.Surface;
+        _gridDone.BackgroundColor = UiColors.InputBack;
+        _gridDone.DefaultCellStyle.BackColor = UiColors.InputBack;
         _gridDone.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
         _gridDone.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
         _gridDone.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
