@@ -179,21 +179,22 @@ public partial class CorrectionsForm : Form
 
     private static void AddPendingGridColumns(DataGridView g)
     {
-        DataGridViewTextBoxColumn Col(string header, int fillWeight) =>
+        DataGridViewTextBoxColumn Col(string header, int fillWeight, int minWidth) =>
             new()
             {
                 HeaderText = header,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                 FillWeight = fillWeight,
+                MinimumWidth = minWidth,
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             };
 
-        g.Columns.Add(Col("Дата", 135));
-        g.Columns.Add(Col("Время", 125));
-        g.Columns.Add(Col("№", 48));
-        g.Columns.Add(Col("Вес", 104));
-        g.Columns.Add(Col("Режим", 160));
-        g.Columns.Add(Col("Напр.", 80));
+        g.Columns.Add(Col("Дата", 135, 110));
+        g.Columns.Add(Col("Время", 125, 95));
+        g.Columns.Add(Col("№", 48, 48));
+        g.Columns.Add(Col("Вес", 104, 80));
+        g.Columns.Add(Col("Режим", 160, 110));
+        g.Columns.Add(Col("Напр.", 80, 70));
     }
 
     private static void AddFirebirdGridColumns(DataGridView g)
@@ -205,6 +206,7 @@ public partial class CorrectionsForm : Form
                 HeaderText = header,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                 FillWeight = ColumnWidth(key),
+                MinimumWidth = ColumnMinWidth(key),
                 SortMode = DataGridViewColumnSortMode.NotSortable,
             });
     }
@@ -226,6 +228,25 @@ public partial class CorrectionsForm : Form
         "NPP" => 75,
         "N_TEPLOVOZ" => 180,
         _ => 105,
+    };
+
+    private static int ColumnMinWidth(string key) => key switch
+    {
+        "DT" => 110,
+        "VR" => 95,
+        "NVAG" => 90,
+        "GRUZ" => 120,
+        "BRUTTO" => 80,
+        "TAR_BRS" => 80,
+        "NETTO" => 80,
+        "CEX" => 60,
+        "POTR" => 120,
+        "PLAT" => 120,
+        "VESY" => 60,
+        "TN" => 70,
+        "NPP" => 70,
+        "N_TEPLOVOZ" => 120,
+        _ => 80,
     };
 
     // ── Загрузка данных ──────────────────────────────────────────────────────
