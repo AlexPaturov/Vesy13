@@ -14,12 +14,13 @@ partial class CorrectionsForm
     private void InitializeComponent()
     {
         _pnlTop = new Panel();
-        _pnlTopActionsLayout = new FlowLayoutPanel();
-        _btnSave = new Button();
+        _pnlTopActions = new Panel();
+        _actionPanel = new Panel();
+        tableLayoutPanel8 = new TableLayoutPanel();
         _btnTransfer = new Button();
         _btnClear = new Button();
         _btnRefresh = new Button();
-        _pnlTopActions = new Panel();
+        _btnSave = new Button();
         tableLayoutPanel5 = new TableLayoutPanel();
         tableLayoutPanel7 = new TableLayoutPanel();
         label3 = new Label();
@@ -64,8 +65,9 @@ partial class CorrectionsForm
         _lblHeaderDone = new Label();
         _pnlStatus = new Panel();
         _pnlTop.SuspendLayout();
-        _pnlTopActionsLayout.SuspendLayout();
         _pnlTopActions.SuspendLayout();
+        _actionPanel.SuspendLayout();
+        tableLayoutPanel8.SuspendLayout();
         tableLayoutPanel5.SuspendLayout();
         tableLayoutPanel7.SuspendLayout();
         tableLayoutPanel4.SuspendLayout();
@@ -83,55 +85,64 @@ partial class CorrectionsForm
         // 
         // _pnlTop
         // 
-        _pnlTop.Controls.Add(_pnlTopActionsLayout);
         _pnlTop.Controls.Add(_pnlTopActions);
         _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(0, 0);
         _pnlTop.Margin = new Padding(4, 5, 4, 5);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1806, 543);
+        _pnlTop.Size = new Size(1806, 406);
         _pnlTop.TabIndex = 0;
         // 
-        // _pnlTopActionsLayout
+        // _pnlTopActions
         // 
-        _pnlTopActionsLayout.AutoSize = true;
-        _pnlTopActionsLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        _pnlTopActionsLayout.Controls.Add(_btnSave);
-        _pnlTopActionsLayout.Controls.Add(_btnTransfer);
-        _pnlTopActionsLayout.Controls.Add(_btnClear);
-        _pnlTopActionsLayout.Controls.Add(_btnRefresh);
-        _pnlTopActionsLayout.Location = new Point(146, 440);
-        _pnlTopActionsLayout.Margin = new Padding(0);
-        _pnlTopActionsLayout.Name = "_pnlTopActionsLayout";
-        _pnlTopActionsLayout.Padding = new Padding(211, 7, 0, 7);
-        _pnlTopActionsLayout.Size = new Size(1271, 67);
-        _pnlTopActionsLayout.TabIndex = 0;
-        _pnlTopActionsLayout.WrapContents = false;
+        _pnlTopActions.Controls.Add(_actionPanel);
+        _pnlTopActions.Controls.Add(tableLayoutPanel5);
+        _pnlTopActions.Dock = DockStyle.Top;
+        _pnlTopActions.Location = new Point(0, 0);
+        _pnlTopActions.Margin = new Padding(4, 5, 4, 5);
+        _pnlTopActions.Name = "_pnlTopActions";
+        _pnlTopActions.Size = new Size(1806, 381);
+        _pnlTopActions.TabIndex = 2;
         // 
-        // _btnSave
+        // _actionPanel
         // 
-        _btnSave.Enabled = false;
-        _btnSave.FlatAppearance.BorderSize = 0;
-        _btnSave.FlatStyle = FlatStyle.Flat;
-        _btnSave.Location = new Point(211, 7);
-        _btnSave.Margin = new Padding(0, 0, 20, 0);
-        _btnSave.Name = "_btnSave";
-        _btnSave.Size = new Size(343, 53);
-        _btnSave.TabIndex = 36;
-        _btnSave.Text = "Сохранить";
-        _btnSave.UseVisualStyleBackColor = false;
-        _btnSave.Visible = false;
-        _btnSave.Click += BtnSave_Click;
+        _actionPanel.Controls.Add(tableLayoutPanel8);
+        _actionPanel.Location = new Point(3, 312);
+        _actionPanel.Name = "_actionPanel";
+        _actionPanel.Size = new Size(1800, 66);
+        _actionPanel.TabIndex = 42;
+        // 
+        // tableLayoutPanel8
+        // 
+        tableLayoutPanel8.ColumnCount = 6;
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.287002F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.79144F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.788126F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.597834F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.2678032F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.2678032F));
+        tableLayoutPanel8.Controls.Add(_btnTransfer, 2, 0);
+        tableLayoutPanel8.Controls.Add(_btnClear, 5, 0);
+        tableLayoutPanel8.Controls.Add(_btnRefresh, 4, 0);
+        tableLayoutPanel8.Controls.Add(_btnSave, 1, 0);
+        tableLayoutPanel8.Dock = DockStyle.Fill;
+        tableLayoutPanel8.Location = new Point(0, 0);
+        tableLayoutPanel8.Name = "tableLayoutPanel8";
+        tableLayoutPanel8.RowCount = 1;
+        tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tableLayoutPanel8.Size = new Size(1800, 66);
+        tableLayoutPanel8.TabIndex = 0;
         // 
         // _btnTransfer
         // 
+        _btnTransfer.Dock = DockStyle.Fill;
         _btnTransfer.Enabled = false;
         _btnTransfer.FlatAppearance.BorderSize = 0;
         _btnTransfer.FlatStyle = FlatStyle.Flat;
-        _btnTransfer.Location = new Point(574, 7);
-        _btnTransfer.Margin = new Padding(0, 0, 20, 0);
+        _btnTransfer.Location = new Point(615, 0);
+        _btnTransfer.Margin = new Padding(20, 0, 20, 0);
         _btnTransfer.Name = "_btnTransfer";
-        _btnTransfer.Size = new Size(343, 53);
+        _btnTransfer.Size = new Size(388, 66);
         _btnTransfer.TabIndex = 26;
         _btnTransfer.Text = "Перенести";
         _btnTransfer.UseVisualStyleBackColor = false;
@@ -139,11 +150,12 @@ partial class CorrectionsForm
         // 
         // _btnClear
         // 
+        _btnClear.Dock = DockStyle.Fill;
         _btnClear.FlatStyle = FlatStyle.Flat;
-        _btnClear.Location = new Point(937, 7);
-        _btnClear.Margin = new Padding(0, 0, 20, 0);
+        _btnClear.Location = new Point(1507, 0);
+        _btnClear.Margin = new Padding(20, 0, 20, 0);
         _btnClear.Name = "_btnClear";
-        _btnClear.Size = new Size(157, 53);
+        _btnClear.Size = new Size(273, 66);
         _btnClear.TabIndex = 27;
         _btnClear.Text = "Очистить";
         _btnClear.UseVisualStyleBackColor = false;
@@ -151,25 +163,32 @@ partial class CorrectionsForm
         // 
         // _btnRefresh
         // 
+        _btnRefresh.Dock = DockStyle.Fill;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
-        _btnRefresh.Location = new Point(1114, 7);
-        _btnRefresh.Margin = new Padding(0);
+        _btnRefresh.Location = new Point(1197, 0);
+        _btnRefresh.Margin = new Padding(20, 0, 20, 0);
         _btnRefresh.Name = "_btnRefresh";
-        _btnRefresh.Size = new Size(157, 53);
+        _btnRefresh.Size = new Size(270, 66);
         _btnRefresh.TabIndex = 28;
         _btnRefresh.Text = "Обновить";
         _btnRefresh.UseVisualStyleBackColor = false;
         _btnRefresh.Click += BtnRefresh_Click;
         // 
-        // _pnlTopActions
+        // _btnSave
         // 
-        _pnlTopActions.Controls.Add(tableLayoutPanel5);
-        _pnlTopActions.Dock = DockStyle.Top;
-        _pnlTopActions.Location = new Point(0, 0);
-        _pnlTopActions.Margin = new Padding(4, 5, 4, 5);
-        _pnlTopActions.Name = "_pnlTopActions";
-        _pnlTopActions.Size = new Size(1806, 305);
-        _pnlTopActions.TabIndex = 2;
+        _btnSave.Dock = DockStyle.Fill;
+        _btnSave.Enabled = false;
+        _btnSave.FlatAppearance.BorderSize = 0;
+        _btnSave.FlatStyle = FlatStyle.Flat;
+        _btnSave.Location = new Point(187, 0);
+        _btnSave.Margin = new Padding(20, 0, 20, 0);
+        _btnSave.Name = "_btnSave";
+        _btnSave.Size = new Size(388, 66);
+        _btnSave.TabIndex = 36;
+        _btnSave.Text = "Сохранить";
+        _btnSave.UseVisualStyleBackColor = false;
+        _btnSave.Visible = false;
+        _btnSave.Click += BtnSave_Click;
         // 
         // tableLayoutPanel5
         // 
@@ -651,7 +670,7 @@ partial class CorrectionsForm
         // 
         _split.Dock = DockStyle.Fill;
         _split.FixedPanel = FixedPanel.Panel1;
-        _split.Location = new Point(0, 543);
+        _split.Location = new Point(0, 406);
         _split.Margin = new Padding(4, 5, 4, 5);
         _split.Name = "_split";
         // 
@@ -666,7 +685,7 @@ partial class CorrectionsForm
         _split.Panel2.Controls.Add(_gridDone);
         _split.Panel2.Controls.Add(_lblHeaderDone);
         _split.Panel2MinSize = 280;
-        _split.Size = new Size(1806, 500);
+        _split.Size = new Size(1806, 427);
         _split.SplitterDistance = 804;
         _split.SplitterWidth = 6;
         _split.TabIndex = 1;
@@ -692,7 +711,7 @@ partial class CorrectionsForm
         _gridPend.RowHeadersWidth = 51;
         _gridPend.RowTemplate.Height = 28;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _gridPend.Size = new Size(804, 460);
+        _gridPend.Size = new Size(804, 387);
         _gridPend.TabIndex = 0;
         _gridPend.SelectionChanged += GridPend_SelectionChanged;
         // 
@@ -728,7 +747,7 @@ partial class CorrectionsForm
         _gridDone.RowHeadersWidth = 51;
         _gridDone.RowTemplate.Height = 28;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _gridDone.Size = new Size(996, 460);
+        _gridDone.Size = new Size(996, 387);
         _gridDone.TabIndex = 0;
         _gridDone.SelectionChanged += GridDone_SelectionChanged;
         // 
@@ -746,7 +765,7 @@ partial class CorrectionsForm
         // _pnlStatus
         // 
         _pnlStatus.Dock = DockStyle.Bottom;
-        _pnlStatus.Location = new Point(0, 1043);
+        _pnlStatus.Location = new Point(0, 833);
         _pnlStatus.Margin = new Padding(4, 5, 4, 5);
         _pnlStatus.Name = "_pnlStatus";
         _pnlStatus.Size = new Size(1806, 7);
@@ -756,7 +775,7 @@ partial class CorrectionsForm
         // 
         AutoScaleDimensions = new SizeF(10F, 25F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(1806, 1050);
+        ClientSize = new Size(1806, 840);
         Controls.Add(_split);
         Controls.Add(_pnlTop);
         Controls.Add(_pnlStatus);
@@ -766,9 +785,9 @@ partial class CorrectionsForm
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Корректировки — перенос в учётную систему";
         _pnlTop.ResumeLayout(false);
-        _pnlTop.PerformLayout();
-        _pnlTopActionsLayout.ResumeLayout(false);
         _pnlTopActions.ResumeLayout(false);
+        _actionPanel.ResumeLayout(false);
+        tableLayoutPanel8.ResumeLayout(false);
         tableLayoutPanel5.ResumeLayout(false);
         tableLayoutPanel7.ResumeLayout(false);
         tableLayoutPanel7.PerformLayout();
@@ -793,7 +812,6 @@ partial class CorrectionsForm
 
     private Panel          _pnlTop;
     private Panel          _pnlTopActions;
-    private FlowLayoutPanel _pnlTopActionsLayout;
     private Panel          _pnlStatus;
     private Label          _lblNvagCap;
     private TextBox        _txtNvag;
@@ -841,4 +859,6 @@ partial class CorrectionsForm
     private Label label3;
     private TableLayoutPanel tableLayoutPanel6;
     private TableLayoutPanel tableLayoutPanel7;
+    private Panel _actionPanel;
+    private TableLayoutPanel tableLayoutPanel8;
 }
