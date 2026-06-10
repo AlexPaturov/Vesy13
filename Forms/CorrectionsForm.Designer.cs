@@ -618,7 +618,7 @@ partial class CorrectionsForm
         tableLayoutPanel6.Name = "tableLayoutPanel6";
         tableLayoutPanel6.RowCount = 3;
         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 31F));
+        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
         tableLayoutPanel6.Size = new Size(593, 88);
         tableLayoutPanel6.TabIndex = 42;
@@ -681,7 +681,7 @@ partial class CorrectionsForm
         // _cmbTar
         // 
         _cmbTar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _cmbTar.Margin = new Padding(4, 0, 4, 0);
+        _cmbTar.Margin = new Padding(4, 0, 4, 4);
         _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbTar.Name = "_cmbTar";
         _cmbTar.Size = new Size(430, 23);
@@ -701,7 +701,7 @@ partial class CorrectionsForm
         _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlTarHost.Size = new Size(438, 31);
+        _pnlTarHost.Size = new Size(438, 34);
         _pnlTarHost.TabIndex = 22;
         // 
         // _lblVidVzv
