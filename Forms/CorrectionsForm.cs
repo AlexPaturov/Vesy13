@@ -119,9 +119,9 @@ public partial class CorrectionsForm : Form
         _lblMode.ForeColor = UiColors.TextPrimary;
         _lblNvagCap.Font = UiFonts.Body;
         _lblNvagCap.ForeColor = UiColors.TextMuted;
-        _txtNvag.Font = UiFonts.Body;
-        _txtNvag.BackColor = UiColors.InputBack;
-        _txtNvag.ForeColor = UiColors.InputFore;
+        _tbNvag.Font = UiFonts.Body;
+        _tbNvag.BackColor = UiColors.InputBack;
+        _tbNvag.ForeColor = UiColors.InputFore;
         _lblGruzCap.Font = UiFonts.Body;
         _lblGruzCap.ForeColor = UiColors.TextMuted;
         _tbGruz.Font = UiFonts.Body;
@@ -326,7 +326,7 @@ public partial class CorrectionsForm : Form
 
     private async void TxtNvag_Leave(object? sender, EventArgs e)
     {
-        string nvag = _txtNvag.Text.Trim();
+        string nvag = _tbNvag.Text.Trim();
         _cmbTar.Items.Clear();
         if (string.IsNullOrEmpty(nvag)) return;
         try
@@ -423,7 +423,7 @@ public partial class CorrectionsForm : Form
         _lblMode.Text = "—";
         _lblBrutto.Text = fb.Brutto.ToString("F2");
 
-        _txtNvag.Text = fb.Nvag;
+        _tbNvag.Text = fb.Nvag;
         //_txtNdok.Text = fb.Ndok?.ToString() ?? "";
         _tbPotr.Text = fb.Potr;
         _tbPlat.Text = fb.Plat;
@@ -471,11 +471,11 @@ public partial class CorrectionsForm : Form
     {
         if (_selected == null) return;
 
-        string nvag = _txtNvag.Text.Trim();
+        string nvag = _tbNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
             MessageBox.Show("Введите номер вагона (NVAG).", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            _txtNvag.Focus();
+            _tbNvag.Focus();
             return;
         }
 
@@ -553,11 +553,11 @@ public partial class CorrectionsForm : Form
     {
         if (_selectedFb == null) return;
 
-        string nvag = _txtNvag.Text.Trim();
+        string nvag = _tbNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
             MessageBox.Show("Введите номер вагона (NVAG).", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            _txtNvag.Focus();
+            _tbNvag.Focus();
             return;
         }
 
@@ -625,7 +625,7 @@ public partial class CorrectionsForm : Form
         _selectedFb = null;
         _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
-        //_txtNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
+        //_tbNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
         _rbBrutto.Checked = true;
