@@ -234,8 +234,8 @@ public partial class CorrectionsForm : Form
     {
         "DT" => 110,
         "VR" => 95,
-        "NVAG" => 90,
-        "GRUZ" => 120,
+        "NVAG" => 110,
+        "GRUZ" => 130,
         "BRUTTO" => 80,
         "TAR_BRS" => 80,
         "NETTO" => 80,
