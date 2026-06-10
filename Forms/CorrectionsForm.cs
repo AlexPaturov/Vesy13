@@ -227,10 +227,29 @@ public partial class CorrectionsForm : Form
         base.OnLoad(e);
         ApplyTheme();
         if (!DesignMode && IsHandleCreated)
+        {
+            ApplyGridScale();
             BeginInvoke(new Action(ApplyResponsiveSplit));
+        }
         if (DesignMode || _ldb is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
         await LoadBothGridsAsync();
+    }
+
+    private void ApplyGridScale()
+    {
+        double scale = DeviceDpi / 144.0;
+        ScaleGrid(_gridPend, scale);
+        ScaleGrid(_gridDone, scale);
+    }
+
+    private static void ScaleGrid(DataGridView grid, double scale)
+    {
+        foreach (DataGridViewColumn column in grid.Columns)
+            column.Width = Math.Max(36, (int)Math.Round(column.Width * scale));
+
+        grid.ColumnHeadersHeight = Math.Max(28, (int)Math.Round(grid.ColumnHeadersHeight * scale));
+        grid.RowTemplate.Height = Math.Max(24, (int)Math.Round(grid.RowTemplate.Height * scale));
     }
 
     private void ApplyResponsiveSplit()
