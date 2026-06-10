@@ -60,7 +60,6 @@ public partial class CorrectionsForm : Form
     {
         BackColor = UiColors.AppBackground;
         _pnlTop.BackColor = UiColors.FilterBar;
-        _pnlTopData.BackColor = UiColors.FilterBar;
         _pnlTopActions.BackColor = UiColors.FilterBar;
         _pnlStatus.BackColor = UiColors.StatusBar;
 
@@ -110,26 +109,15 @@ public partial class CorrectionsForm : Form
         _txtNvag.Font = UiFonts.Body;
         _txtNvag.BackColor = UiColors.InputBack;
         _txtNvag.ForeColor = UiColors.InputFore;
-        _lblDirCap.Font = UiFonts.Body;
-        _lblDirCap.ForeColor = UiColors.TextMuted;
-        _lblDir.Font = UiFonts.BodyBold;
-        _lblDir.ForeColor = UiColors.TextPrimary;
         _lblGruzCap.Font = UiFonts.Body;
         _lblGruzCap.ForeColor = UiColors.TextMuted;
         _txtGruz.Font = UiFonts.Body;
         _txtGruz.BackColor = UiColors.InputBack;
         _txtGruz.ForeColor = UiColors.InputFore;
-        _lblNdokCap.Font = UiFonts.Body;
-        _lblNdokCap.ForeColor = UiColors.TextMuted;
-        _txtNdok.Font = UiFonts.Body;
-        _txtNdok.BackColor = UiColors.InputBack;
-        _txtNdok.ForeColor = UiColors.InputFore;
         _lblBruttoCap.Font = UiFonts.Body;
         _lblBruttoCap.ForeColor = UiColors.TextMuted;
         _lblBrutto.Font = UiFonts.MonoBold;
         _lblBrutto.ForeColor = UiColors.TextPrimary;
-        _lblBruttoUnit.Font = UiFonts.Body;
-        _lblBruttoUnit.ForeColor = UiColors.TextMuted;
         _lblTarCap.Font = UiFonts.Body;
         _lblTarCap.ForeColor = UiColors.TextMuted;
         _cmbTar.Font = UiFonts.Body;
@@ -139,8 +127,6 @@ public partial class CorrectionsForm : Form
         _lblNettoCap.ForeColor = UiColors.TextMuted;
         _lblNetto.Font = UiFonts.MonoBold;
         _lblNetto.ForeColor = UiColors.PrimaryAction;
-        _lblNettoUnit.Font = UiFonts.Body;
-        _lblNettoUnit.ForeColor = UiColors.TextMuted;
         _btnTransfer.Font = UiFonts.MediumBold;
         _btnTransfer.BackColor = UiColors.PrimaryAction;
         _btnTransfer.ForeColor = UiColors.TextOnDark;
@@ -370,7 +356,6 @@ public partial class CorrectionsForm : Form
         _lblVr.Text = _selected.WagonTime.ToString("HH:mm:ss");
         _lblNpp.Text = _selected.Number.ToString();
         _lblMode.Text = _selected.Mode;
-        _lblDir.Text = _selected.Direction;
         _lblBrutto.Text = _selected.Total.ToString("F2");
         _btnTransfer.Enabled = true;
         RecalcNetto();
@@ -423,11 +408,10 @@ public partial class CorrectionsForm : Form
         _lblVr.Text = fb.Vr.ToString(@"hh\:mm\:ss");
         _lblNpp.Text = fb.Npp.ToString();
         _lblMode.Text = "—";
-        _lblDir.Text = "—";
         _lblBrutto.Text = fb.Brutto.ToString("F2");
 
         _txtNvag.Text = fb.Nvag;
-        _txtNdok.Text = fb.Ndok?.ToString() ?? "";
+        //_txtNdok.Text = fb.Ndok?.ToString() ?? "";
         _tbPotr.Text = fb.Potr;
         _tbPlat.Text = fb.Plat;
         tbCex.Text = fb.Cex > 0 ? fb.Cex.ToString() : "";
@@ -483,7 +467,7 @@ public partial class CorrectionsForm : Form
         }
 
         bool isTara = _rbTara.Checked;
-        long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
+        //long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         decimal? tarDok = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
         string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
         string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
@@ -498,7 +482,7 @@ public partial class CorrectionsForm : Form
             Vr = _selected.TrainTime.TimeOfDay,
             VR_PRV = _selected.WagonTime.TimeOfDay,
             Nvag = nvag,
-            Ndok = ndok,
+            //Ndok = ndok,
             Gruz = isTara ? "Тара" : _txtGruz.Text.Trim(),
             Brutto = isTara ? 0m : total,
             TarBrs = isTara ? total : null,
@@ -565,7 +549,7 @@ public partial class CorrectionsForm : Form
         }
 
         bool isTara = _rbTara.Checked;
-        long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
+        //long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long nd) ? nd : null;
         decimal? tarDok = (!isTara && _cmbTar.SelectedItem is TaraOption taraOpt) ? taraOpt.Brutto : null;
         string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
         string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
@@ -577,7 +561,7 @@ public partial class CorrectionsForm : Form
             Dt = _selectedFb.Dt,
             Vr = _selectedFb.Vr,
             Nvag = nvag,
-            Ndok = ndok,
+            //Ndok = ndok,
             Gruz = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_txtGruz.Text) ? "" : _txtGruz.Text.Trim()),
             Brutto = _selectedFb.Brutto,
             TarBrs = isTara ? _selectedFb.Brutto : null,
@@ -626,9 +610,9 @@ public partial class CorrectionsForm : Form
     {
         _selected = null;
         _selectedFb = null;
-        _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = _lblDir.Text = "—";
+        _lblDt.Text = _lblVr.Text = _lblNpp.Text = _lblMode.Text = "—";
         _lblBrutto.Text = _lblNetto.Text = "—";
-        _txtNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
+        //_txtNvag.Clear(); _txtNdok.Clear(); tbCex.Clear();
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
         _rbBrutto.Checked = true;
@@ -641,5 +625,4 @@ public partial class CorrectionsForm : Form
         _gridPend.ClearSelection();
         _gridDone.ClearSelection();
     }
-
 }
