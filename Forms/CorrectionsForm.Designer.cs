@@ -360,9 +360,9 @@ partial class CorrectionsForm
         // _tbGruz
         // 
         _tbGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _tbGruz.Margin = new Padding(0);
+        _tbGruz.Margin = new Padding(2, 0, 2, 0);
         _tbGruz.Name = "_tbGruz";
-        _tbGruz.Size = new Size(314, 23);
+        _tbGruz.Size = new Size(310, 23);
         _tbGruz.TabIndex = 14;
         // 
         // _lblGruzCap
