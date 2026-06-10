@@ -37,7 +37,8 @@ partial class CorrectionsForm
         _tbPlat = new TextBox();
         label2 = new Label();
         tableLayoutPanel2 = new TableLayoutPanel();
-        _txtNvag = new TextBox();
+        _tbNvag = new TextBox();
+        _pnlNvagHost = new TableLayoutPanel();
         _lblNvagCap = new Label();
         _lblMode = new Label();
         _lblDateCap = new Label();
@@ -74,6 +75,7 @@ partial class CorrectionsForm
         tableLayoutPanel4.SuspendLayout();
         tableLayoutPanel1.SuspendLayout();
         _pnlGruzHost.SuspendLayout();
+        _pnlNvagHost.SuspendLayout();
         tableLayoutPanel2.SuspendLayout();
         tableLayoutPanel3.SuspendLayout();
         tableLayoutPanel6.SuspendLayout();
@@ -106,6 +108,7 @@ partial class CorrectionsForm
         // 
         // _actionPanel
         // 
+        _actionPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         _actionPanel.Controls.Add(tableLayoutPanel8);
         _actionPanel.Location = new Point(2, 187);
         _actionPanel.Margin = new Padding(2);
@@ -262,18 +265,20 @@ partial class CorrectionsForm
         // _tbCex
         // 
         _tbCex.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbCex.Location = new Point(135, 10);
         _tbCex.Margin = new Padding(4, 0, 4, 0);
         _tbCex.MaxLength = 3;
         _tbCex.Name = "_tbCex";
-        _tbCex.Size = new Size(303, 23);
+        _tbCex.Size = new Size(305, 23);
         _tbCex.TabIndex = 33;
         // 
         // _tbPotr
         // 
         _tbPotr.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbPotr.Location = new Point(135, 52);
         _tbPotr.Margin = new Padding(4, 0, 4, 0);
         _tbPotr.Name = "_tbPotr";
-        _tbPotr.Size = new Size(303, 23);
+        _tbPotr.Size = new Size(305, 23);
         _tbPotr.TabIndex = 29;
         _tbPotr.TextAlign = HorizontalAlignment.Center;
         // 
@@ -358,6 +363,7 @@ partial class CorrectionsForm
         // _tbGruz
         // 
         _tbGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbGruz.Location = new Point(4, 10);
         _tbGruz.Margin = new Padding(4, 0, 4, 0);
         _tbGruz.Name = "_tbGruz";
         _tbGruz.Size = new Size(306, 23);
@@ -377,6 +383,7 @@ partial class CorrectionsForm
         // _tbPlat
         // 
         _tbPlat.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbPlat.Location = new Point(134, 10);
         _tbPlat.Margin = new Padding(4, 0, 4, 0);
         _tbPlat.Name = "_tbPlat";
         _tbPlat.Size = new Size(306, 23);
@@ -402,7 +409,7 @@ partial class CorrectionsForm
         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36.9976349F));
         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.68558F));
         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.12293F));
-        tableLayoutPanel2.Controls.Add(_txtNvag, 1, 2);
+        tableLayoutPanel2.Controls.Add(_pnlNvagHost, 1, 2);
         tableLayoutPanel2.Controls.Add(_lblNvagCap, 0, 2);
         tableLayoutPanel2.Controls.Add(_lblMode, 3, 1);
         tableLayoutPanel2.Controls.Add(_lblDateCap, 0, 0);
@@ -423,14 +430,30 @@ partial class CorrectionsForm
         tableLayoutPanel2.Size = new Size(593, 85);
         tableLayoutPanel2.TabIndex = 39;
         // 
-        // _txtNvag
+        // _tbNvag
         // 
-        _txtNvag.Location = new Point(101, 59);
-        _txtNvag.Margin = new Padding(3, 2, 3, 1);
-        _txtNvag.Name = "_txtNvag";
-        _txtNvag.Size = new Size(210, 23);
-        _txtNvag.TabIndex = 10;
-        _txtNvag.Leave += TxtNvag_Leave;
+        _tbNvag.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbNvag.Margin = new Padding(4, 0, 4, 0);
+        _tbNvag.Name = "_tbNvag";
+        _tbNvag.Size = new Size(208, 23);
+        _tbNvag.TabIndex = 10;
+        _tbNvag.Leave += TxtNvag_Leave;
+        // 
+        // _pnlNvagHost
+        // 
+        _pnlNvagHost.ColumnCount = 1;
+        _pnlNvagHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlNvagHost.Controls.Add(_tbNvag, 0, 1);
+        _pnlNvagHost.Dock = DockStyle.Fill;
+        _pnlNvagHost.Location = new Point(98, 57);
+        _pnlNvagHost.Margin = new Padding(0);
+        _pnlNvagHost.Name = "_pnlNvagHost";
+        _pnlNvagHost.RowCount = 3;
+        _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlNvagHost.Size = new Size(216, 27);
+        _pnlNvagHost.TabIndex = 11;
         // 
         // _lblNvagCap
         // 
@@ -802,6 +825,8 @@ partial class CorrectionsForm
         _pnlGruzHost.PerformLayout();
         tableLayoutPanel2.ResumeLayout(false);
         tableLayoutPanel2.PerformLayout();
+        _pnlNvagHost.ResumeLayout(false);
+        _pnlNvagHost.PerformLayout();
         tableLayoutPanel3.ResumeLayout(false);
         tableLayoutPanel3.PerformLayout();
         tableLayoutPanel6.ResumeLayout(false);
@@ -819,7 +844,8 @@ partial class CorrectionsForm
     private Panel          _pnlTopActions;
     private Panel          _pnlStatus;
     private Label          _lblNvagCap;
-    private TextBox        _txtNvag;
+    private TextBox        _tbNvag;
+    private TableLayoutPanel _pnlNvagHost;
     private Label          _lblGruzCap;
     private TextBox        _tbGruz;
     private Label          _lblBruttoCap;
