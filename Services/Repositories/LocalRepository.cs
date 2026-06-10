@@ -149,7 +149,7 @@ public class LocalRepository
                    mode                    AS Mode
             FROM wagon_weighing
             WHERE transferred = false
-            ORDER BY wagon_time DESC");
+            ORDER BY train_time ASC, wagon_time ASC, wagon_num ASC");
         return rows.ToList();
     }
 
