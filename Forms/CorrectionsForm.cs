@@ -328,23 +328,29 @@ public partial class CorrectionsForm : Form
     }
 
 
-    private async Task LoadBothGridsAsync()
+    private async Task<(int PendingCount, int DoneCount, bool HadError)> LoadBothGridsAsync()
     {
-        if (_ldb is null) return;
+        if (_ldb is null) return (0, 0, true);
 
         ClearTopPanel();
 
         bool trainMode = rbTrainMode.Checked;
+        int pendingCount = 0;
+        int doneCount = 0;
+        bool hadError = false;
+
         try
         {
             var pending = trainMode
                 ? await _ldb.GetPendingByTrainTimeAsync(SelectedContextTrainTime)
                 : await _ldb.GetPendingByDateAsync(SelectedContextDate);
+            pendingCount = pending.Count;
             FillPendingGrid(_gridPend, pending);
             _gridPend.ClearSelection();
         }
         catch (Exception ex)
         {
+            hadError = true;
             string op = trainMode ? "GetPendingByTrainTimeAsync" : "GetPendingByDateAsync";
             AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex.Message);
             MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных",
@@ -357,16 +363,20 @@ public partial class CorrectionsForm : Form
             var done = trainMode
                 ? await _fdb.GetByTrainTimeAsync(SelectedContextTrainTime)
                 : await _fdb.GetByDateAsync(SelectedContextDate);
+            doneCount = done.Count;
             FillDoneGrid(_gridDone, done);
             _gridDone.ClearSelection();
         }
         catch (Exception ex)
         {
+            hadError = true;
             string op = trainMode ? "GetByTrainTimeAsync" : "GetByDateAsync";
             AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", op, "Firebird", ex.Message);
             MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
+
+        return (pendingCount, doneCount, hadError);
     }
 
     private static void FillPendingGrid(DataGridView g, List<LocalWagon> rows)
@@ -433,7 +443,27 @@ public partial class CorrectionsForm : Form
     private async void BtnRefresh_Click(object? sender, EventArgs e)
     {
         if (_ldb is null) return;
-        await LoadBothGridsAsync();
+
+        string originalText = _btnRefresh.Text;
+        bool originalEnabled = _btnRefresh.Enabled;
+
+        _btnRefresh.Text = "Загрузка...";
+        _btnRefresh.Enabled = false;
+
+        try
+        {
+            var (pendingCount, doneCount, hadError) = await LoadBothGridsAsync();
+            if (!hadError && pendingCount == 0 && doneCount == 0)
+            {
+                MessageBox.Show("Нет вагонов за данный период.", "Обновление",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        finally
+        {
+            _btnRefresh.Text = originalText;
+            _btnRefresh.Enabled = originalEnabled;
+        }
     }
 
     private void GridPend_SelectionChanged(object? sender, EventArgs e)
