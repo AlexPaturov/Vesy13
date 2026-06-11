@@ -625,7 +625,6 @@ public partial class CorrectionsForm : Form
         _lblVr.Text = fb.Vr.ToString(@"hh\:mm\:ss");
         _lblNpp.Text = fb.Npp.ToString();
         _lblMode.Text = "—";
-        _lblBrutto.Text = fb.Brutto.ToString("F2");
 
         _tbNvag.Text = fb.Nvag;
         _tbPotr.Text = fb.Potr;
@@ -638,6 +637,7 @@ public partial class CorrectionsForm : Form
         bool isTara = fb.Gruz.Trim() == "Тара";
         _rbTara.Checked = isTara;
         _rbBrutto.Checked = !isTara;
+        _lblBrutto.Text = isTara ? "—" : fb.Brutto.ToString("F2");
 
         if (!isTara)
             _tbGruz.Text = fb.Gruz;
@@ -654,8 +654,24 @@ public partial class CorrectionsForm : Form
             decimal? tarVal = fb.TarDok ?? fb.TarBrs;
             if (tarVal.HasValue)
             {
+                TaraOption? selectedTar = null;
                 foreach (TaraOption opt in _cmbTar.Items)
-                    if (opt.Brutto == tarVal.Value) { _cmbTar.SelectedItem = opt; break; }
+                {
+                    if (opt.Brutto == tarVal.Value)
+                    {
+                        selectedTar = opt;
+                        break;
+                    }
+                }
+
+                if (selectedTar is null && isTara)
+                {
+                    selectedTar = new TaraOption(fb.Dt.Date.Add(fb.Vr), tarVal.Value, WeightOnly: true);
+                    _cmbTar.Items.Insert(0, selectedTar);
+                }
+
+                if (selectedTar is not null)
+                    _cmbTar.SelectedItem = selectedTar;
             }
         }
         catch (Exception ex)
