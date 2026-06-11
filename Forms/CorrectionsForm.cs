@@ -545,7 +545,9 @@ public partial class CorrectionsForm : Form
         }
 
         if (_selected == null) return;
-        _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt ? ((decimal)_selected.Total - opt.Brutto).ToString("F2") : _selected.Total.ToString("F2");
+        _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt
+            ? ((decimal)_selected.Total - opt.Brutto).ToString("F2")
+            : "—";
     }
 
     /// <summary>
@@ -821,6 +823,7 @@ public partial class CorrectionsForm : Form
         _cmbTar.SelectedIndex = -1;
         _localInjectedTareOption = null;
         _rbBrutto.Checked = true;
+        _tbNvag.Clear();
         _tbGruz.Clear();
         _tbGruz.Enabled = true;
         _btnTransfer.Enabled = false;
