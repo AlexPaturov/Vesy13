@@ -16,6 +16,8 @@ public partial class CorrectionsForm : Form
     private LocalWagon? _selected;
     private GpriGras? _selectedFb;
     private TaraOption? _localInjectedTareOption;
+    private string? _lastProcessedFirebirdIdKey;
+    private string? _lastProcessedFirebirdValueKey;
 
     public static readonly Dictionary<string, string> GpGridChapters = new()
     {
@@ -416,7 +418,7 @@ public partial class CorrectionsForm : Form
         row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
     }
 
-    private static void FillDoneGrid(DataGridView g, List<GpriGras> rows)
+    private void FillDoneGrid(DataGridView g, List<GpriGras> rows)
     {
         g.Rows.Clear();
         foreach (var r in rows)
@@ -436,7 +438,50 @@ public partial class CorrectionsForm : Form
             row.Cells["NPP"].Value = r.Npp;
             row.Cells["CEX"].Value = r.Cex;
             row.Tag = r;
+            ApplyDoneRowStyle(row, IsLastProcessedFirebirdRecord(r));
         }
+    }
+
+    private bool IsLastProcessedFirebirdRecord(GpriGras record) =>
+        (_lastProcessedFirebirdIdKey is not null && GetFirebirdIdKey(record) == _lastProcessedFirebirdIdKey) ||
+        (_lastProcessedFirebirdValueKey is not null && GetFirebirdValueKey(record) == _lastProcessedFirebirdValueKey);
+
+    private void RememberLastProcessedFirebirdRecord(GpriGras record)
+    {
+        _lastProcessedFirebirdIdKey = record.Id > 0 ? GetFirebirdIdKey(record) : null;
+        _lastProcessedFirebirdValueKey = GetFirebirdValueKey(record);
+    }
+
+    private static string GetFirebirdIdKey(GpriGras record) => $"id:{record.Table}:{record.Id}";
+
+    private static string GetFirebirdValueKey(GpriGras record)
+    {
+        var vr = new TimeSpan(record.Vr.Hours, record.Vr.Minutes, record.Vr.Seconds);
+        return $"value:{record.Table}:{record.Dt:yyyyMMdd}:{vr:c}:{record.Nvag.Trim()}:{record.Npp}:{record.Gruz.Trim()}";
+    }
+
+    private static void ApplyDoneRowStyle(DataGridViewRow row, bool processed)
+    {
+        if (!processed)
+        {
+            row.DefaultCellStyle.BackColor = UiColors.InputBack;
+            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            return;
+        }
+
+        var processedColor = ColorTranslator.FromHtml("#98FB98");
+        row.DefaultCellStyle.BackColor = processedColor;
+        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = processedColor;
+        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
+    }
+
+    private void ClearDoneRowStyles()
+    {
+        foreach (DataGridViewRow row in _gridDone.Rows)
+            ApplyDoneRowStyle(row, false);
     }
 
     // ── Обработчики ──────────────────────────────────────────────────────────
@@ -730,6 +775,7 @@ public partial class CorrectionsForm : Form
         {
             _fdb ??= new FactoryRepository();
             await _fdb.InsertAsync(transfer);
+            RememberLastProcessedFirebirdRecord(transfer);
             AuditLogger.Action(AuditLogger.RecordTransferred,
                 "FirebirdRecord", $"{transfer.Table} nvag={transfer.Nvag}",
                 "Firebird", _selected.Id.ToString());
@@ -807,22 +853,11 @@ public partial class CorrectionsForm : Form
         {
             _fdb ??= new FactoryRepository();
             await _fdb.UpdateAsync(updated);
+            RememberLastProcessedFirebirdRecord(updated);
             AuditLogger.Action(AuditLogger.RecordUpdated,
                 "FirebirdRecord", $"{updated.Table} nvag={updated.Nvag}",
                 "Firebird", updated.Id.ToString());
-
-            if (_gridDone.SelectedRows.Count > 0)
-            {
-                var r = _gridDone.SelectedRows[0];
-                r.Cells["NVAG"].Value = updated.Nvag;
-                r.Cells["GRUZ"].Value = updated.Gruz;
-                r.Cells["BRUTTO"].Value = updated.Brutto.ToString("F2");
-                r.Cells["TAR_BRS"].Value = updated.TarBrs?.ToString("F2") ?? "";
-                r.Cells["NETTO"].Value = updated.Netto?.ToString("F2") ?? "";
-                r.Cells["POTR"].Value = updated.Potr;
-                r.Cells["PLAT"].Value = updated.Plat;
-            }
-            ClearTopPanel();
+            await LoadBothGridsAsync();
         }
         catch (Exception ex)
         {

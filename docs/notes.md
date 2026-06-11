@@ -46,3 +46,10 @@ Use conventional commit prefixes.
 - `style` - formatting
 - `perf` - performance
 - `breaking` - breaking change when needed
+
+## Session Context
+- Active page: `Forms/CorrectionsForm.cs`.
+- Current business flow is stable: refresh loads both grids, transfer writes to Firebird then marks PostgreSQL transferred, save updates an existing Firebird row.
+- Right-grid processed-row highlight is in-memory only for the current window session and should stay limited to the single most recent processed record.
+- Left-grid transferred rows remain visible and are tinted `#FFDAB9`; processed right-grid rows are tinted `#98FB98`.
+- Keep avoiding extra database storage for session history and avoid reintroducing manual row insertion into the right grid.
