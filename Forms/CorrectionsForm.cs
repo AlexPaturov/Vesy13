@@ -632,6 +632,7 @@ public partial class CorrectionsForm : Form
             _tbGruz.Text = fb.Gruz;
 
         _cmbTar.Items.Clear();
+
         try
         {
             _fdb ??= new FactoryRepository();
@@ -646,9 +647,11 @@ public partial class CorrectionsForm : Form
                     if (opt.Brutto == tarVal.Value) { _cmbTar.SelectedItem = opt; break; }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // todo
+            AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", "GridDone_SelectionChanged", "Firebird", ex.Message);
+            MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         _btnSave.Visible = true;
