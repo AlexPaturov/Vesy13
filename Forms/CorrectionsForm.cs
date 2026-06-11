@@ -446,7 +446,7 @@ public partial class CorrectionsForm : Form
     private async void TxtNvag_Leave(object? sender, EventArgs e)
     {
         string nvag = _tbNvag.Text.Trim();
-        _cmbTar.Items.Clear();
+        _cmbTar.Items.Clear(); // не заходим если вышли в режиме тара
         if (string.IsNullOrEmpty(nvag)) return;
         try
         {
@@ -548,6 +548,9 @@ public partial class CorrectionsForm : Form
         _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt ? ((decimal)_selected.Total - opt.Brutto).ToString("F2") : _selected.Total.ToString("F2");
     }
 
+    /// <summary>
+    /// Applies the selected pending wagon weight to the visible fields based on the active mode.
+    /// </summary>
     private void ApplyLocalWeightPresentation()
     {
         if (_selected is null || _gridDone.SelectedRows.Count > 0)
