@@ -544,9 +544,18 @@ public partial class CorrectionsForm : Form
             return;
         }
 
-        if (_selected == null) return;
+        decimal? brutto = _selected is not null
+            ? (decimal)_selected.Total
+            : _selectedFb?.Brutto;
+
+        if (brutto is null)
+        {
+            _lblNetto.Text = "—";
+            return;
+        }
+
         _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt
-            ? ((decimal)_selected.Total - opt.Brutto).ToString("F2")
+            ? (brutto.Value - opt.Brutto).ToString("F2")
             : "—";
     }
 
