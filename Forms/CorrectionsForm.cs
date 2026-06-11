@@ -565,7 +565,7 @@ public partial class CorrectionsForm : Form
         if (_rbTara.Checked)
         {
             _lblBrutto.Text = "—";
-            _localInjectedTareOption = new TaraOption(_selected.WagonTime, (decimal)_selected.Total);
+            _localInjectedTareOption = new TaraOption(_selected.WagonTime, (decimal)_selected.Total, WeightOnly: true);
             _cmbTar.Items.Insert(0, _localInjectedTareOption);
             _cmbTar.SelectedItem = _localInjectedTareOption;
         }
