@@ -10,7 +10,7 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class CorrectionsForm : Form
 {
-    private readonly LocalRepository _ldb;
+    private LocalRepository? _ldb;
     private FactoryRepository? _fdb;
 
     private LocalWagon? _selected;
@@ -283,6 +283,7 @@ public partial class CorrectionsForm : Form
 
     private async Task LoadBothGridsAsync()
     {
+        if (_ldb is null) return;
         try
         {
             var pending = await _ldb.GetPendingAsync();
@@ -539,6 +540,7 @@ public partial class CorrectionsForm : Form
         {
             _fdb ??= new FactoryRepository();
             await _fdb.InsertAsync(transfer);
+            if (_ldb is null) return;
             await _ldb.MarkTransferredAsync(_selected.Id);
             AuditLogger.Action(AuditLogger.RecordTransferred,
                 "FirebirdRecord", $"{transfer.Table} nvag={transfer.Nvag}",
