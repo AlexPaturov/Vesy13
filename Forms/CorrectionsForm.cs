@@ -39,6 +39,8 @@ public partial class CorrectionsForm : Form
         InitializeComponent();
         AddPendingGridColumns(_gridPend);
         AddFirebirdGridColumns(_gridDone);
+        WireContextEvents();
+        InitializeContextUi();
     }
 
     public CorrectionsForm(LocalRepository ldb)
@@ -47,7 +49,36 @@ public partial class CorrectionsForm : Form
         InitializeComponent();
         AddPendingGridColumns(_gridPend);
         AddFirebirdGridColumns(_gridDone);
+        WireContextEvents();
+        InitializeContextUi();
     }
+
+    private void WireContextEvents()
+    {
+        rbTrainMode.CheckedChanged += ContextMode_CheckedChanged;
+        rbDayMode.CheckedChanged += ContextMode_CheckedChanged;
+    }
+
+    private void InitializeContextUi()
+    {
+        if (!rbTrainMode.Checked && !rbDayMode.Checked)
+            rbTrainMode.Checked = true;
+
+        UpdateContextUi();
+    }
+
+    private void ContextMode_CheckedChanged(object? sender, EventArgs e) => UpdateContextUi();
+
+    private void UpdateContextUi()
+    {
+        bool trainMode = rbTrainMode.Checked;
+        _dtpTrainTime.Enabled = trainMode;
+        label4.Enabled = trainMode;
+    }
+
+    private DateTime SelectedContextDate => _dtpTrainDate.Value.Date;
+
+    private DateTime SelectedContextTrainTime => SelectedContextDate.Add(_dtpTrainTime.Value.TimeOfDay);
 
     private void ApplyTheme()
     {
@@ -63,6 +94,8 @@ public partial class CorrectionsForm : Form
         tableLayoutPanel3.BackColor = UiColors.Surface;
         tableLayoutPanel6.BackColor = UiColors.Surface;
         tableLayoutPanel8.BackColor = UiColors.SurfaceMuted;
+        tableLayoutPanel9.BackColor = UiColors.Surface;
+        tabPanTrainTimeDayMode.BackColor = UiColors.SurfaceMuted;
         _split.Panel1.BackColor = UiColors.AppBackground;
         _split.Panel2.BackColor = UiColors.AppBackground;
         _lblHeaderPend.BackColor = UiColors.NavigationAction;
@@ -142,6 +175,20 @@ public partial class CorrectionsForm : Form
         _btnRefresh.Font = UiFonts.Body;
         _btnRefresh.BackColor = UiColors.NeutralAction;
         _btnRefresh.ForeColor = UiColors.TextPrimary;
+        labTrainDate.Font = UiFonts.Body;
+        labTrainDate.ForeColor = UiColors.TextMuted;
+        label4.Font = UiFonts.Body;
+        label4.ForeColor = UiColors.TextMuted;
+        rbTrainMode.Font = UiFonts.Body;
+        rbTrainMode.ForeColor = UiColors.TextPrimary;
+        rbDayMode.Font = UiFonts.Body;
+        rbDayMode.ForeColor = UiColors.TextPrimary;
+        _dtpTrainDate.Font = UiFonts.Body;
+        _dtpTrainDate.BackColor = UiColors.InputBack;
+        _dtpTrainDate.ForeColor = UiColors.InputFore;
+        _dtpTrainTime.Font = UiFonts.Body;
+        _dtpTrainTime.BackColor = UiColors.InputBack;
+        _dtpTrainTime.ForeColor = UiColors.InputFore;
         _gridPend.Font = UiFonts.GridBody;
         _gridPend.BackgroundColor = UiColors.InputBack;
         _gridPend.DefaultCellStyle.BackColor = UiColors.InputBack;
@@ -251,7 +298,7 @@ public partial class CorrectionsForm : Form
 
     // ── Загрузка данных ──────────────────────────────────────────────────────
 
-    protected override async void OnLoad(EventArgs e)
+    protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
         ApplyTheme();
@@ -261,9 +308,9 @@ public partial class CorrectionsForm : Form
         {
             ApplyGridDpiSizing();
         }
-        if (DesignMode || _ldb is null) return;
+        if (DesignMode) return;
+        UpdateContextUi();
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
-        await LoadBothGridsAsync();
     }
 
     private void ApplyGridDpiSizing()
@@ -284,15 +331,22 @@ public partial class CorrectionsForm : Form
     private async Task LoadBothGridsAsync()
     {
         if (_ldb is null) return;
+
+        ClearTopPanel();
+
+        bool trainMode = rbTrainMode.Checked;
         try
         {
-            var pending = await _ldb.GetPendingAsync();
+            var pending = trainMode
+                ? await _ldb.GetPendingByTrainTimeAsync(SelectedContextTrainTime)
+                : await _ldb.GetPendingByDateAsync(SelectedContextDate);
             FillPendingGrid(_gridPend, pending);
             _gridPend.ClearSelection();
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", "GetPendingAsync", "PostgreSQL", ex.Message);
+            string op = trainMode ? "GetPendingByTrainTimeAsync" : "GetPendingByDateAsync";
+            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex.Message);
             MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
@@ -300,13 +354,16 @@ public partial class CorrectionsForm : Form
         try
         {
             _fdb ??= new FactoryRepository();
-            var done = await _fdb.GetRecentAsync();
+            var done = trainMode
+                ? await _fdb.GetByTrainTimeAsync(SelectedContextTrainTime)
+                : await _fdb.GetByDateAsync(SelectedContextDate);
             FillDoneGrid(_gridDone, done);
             _gridDone.ClearSelection();
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", "GetRecentAsync", "Firebird", ex.Message);
+            string op = trainMode ? "GetByTrainTimeAsync" : "GetByDateAsync";
+            AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", op, "Firebird", ex.Message);
             MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
@@ -657,5 +714,6 @@ public partial class CorrectionsForm : Form
         _btnSave.Visible = false;
         _gridPend.ClearSelection();
         _gridDone.ClearSelection();
+        UpdateContextUi();
     }
 }

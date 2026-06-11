@@ -153,6 +153,49 @@ public class LocalRepository
         return rows.ToList();
     }
 
+
+    public async Task<List<LocalWagon>> GetPendingByTrainTimeAsync(DateTime trainTime)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode
+            FROM wagon_weighing
+            WHERE transferred = false
+              AND date_trunc('second', train_time) = date_trunc('second', @trainTime)
+            ORDER BY train_time ASC, wagon_num ASC",
+            new { trainTime });
+        return rows.ToList();
+    }
+
+    public async Task<List<LocalWagon>> GetPendingByDateAsync(DateTime date)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode
+            FROM wagon_weighing
+            WHERE transferred = false
+              AND train_time::date = @date
+            ORDER BY train_time ASC, wagon_num ASC",
+            new { date = date.Date });
+        return rows.ToList();
+    }
+
     public async Task MarkTransferredAsync(int id)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
