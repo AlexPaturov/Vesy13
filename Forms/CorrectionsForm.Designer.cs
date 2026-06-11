@@ -136,8 +136,8 @@ partial class CorrectionsForm
         // tableLayoutPanel8
         // 
         tableLayoutPanel8.ColumnCount = 7;
-        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7.66666651F));
-        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.2222214F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.611111F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.2777786F));
         tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.4444447F));
         tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.666667F));
         tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.11111F));
@@ -212,12 +212,12 @@ partial class CorrectionsForm
         tableLayoutPanel9.Controls.Add(labTrainDate, 0, 0);
         tableLayoutPanel9.Controls.Add(label4, 0, 1);
         tableLayoutPanel9.Dock = DockStyle.Fill;
-        tableLayoutPanel9.Location = new Point(141, 3);
+        tableLayoutPanel9.Location = new Point(158, 3);
         tableLayoutPanel9.Name = "tableLayoutPanel9";
         tableLayoutPanel9.RowCount = 2;
         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel9.Size = new Size(358, 106);
+        tableLayoutPanel9.Size = new Size(341, 106);
         tableLayoutPanel9.TabIndex = 37;
         // 
         // _pnlTrainDateHost
@@ -226,14 +226,14 @@ partial class CorrectionsForm
         _pnlTrainDateHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         _pnlTrainDateHost.Controls.Add(_dtpTrainDate, 0, 1);
         _pnlTrainDateHost.Dock = DockStyle.Fill;
-        _pnlTrainDateHost.Location = new Point(128, 1);
+        _pnlTrainDateHost.Location = new Point(122, 1);
         _pnlTrainDateHost.Margin = new Padding(0);
         _pnlTrainDateHost.Name = "_pnlTrainDateHost";
         _pnlTrainDateHost.RowCount = 3;
         _pnlTrainDateHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlTrainDateHost.RowStyles.Add(new RowStyle());
         _pnlTrainDateHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlTrainDateHost.Size = new Size(229, 51);
+        _pnlTrainDateHost.Size = new Size(218, 51);
         _pnlTrainDateHost.TabIndex = 37;
         // 
         // _dtpTrainDate
@@ -244,7 +244,7 @@ partial class CorrectionsForm
         _dtpTrainDate.Location = new Point(6, 10);
         _dtpTrainDate.Margin = new Padding(6, 0, 6, 0);
         _dtpTrainDate.Name = "_dtpTrainDate";
-        _dtpTrainDate.Size = new Size(217, 31);
+        _dtpTrainDate.Size = new Size(206, 31);
         _dtpTrainDate.TabIndex = 0;
         // 
         // _pnlTrainTimeHost
@@ -253,14 +253,14 @@ partial class CorrectionsForm
         _pnlTrainTimeHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         _pnlTrainTimeHost.Controls.Add(_dtpTrainTime, 0, 1);
         _pnlTrainTimeHost.Dock = DockStyle.Fill;
-        _pnlTrainTimeHost.Location = new Point(128, 53);
+        _pnlTrainTimeHost.Location = new Point(122, 53);
         _pnlTrainTimeHost.Margin = new Padding(0);
         _pnlTrainTimeHost.Name = "_pnlTrainTimeHost";
         _pnlTrainTimeHost.RowCount = 3;
         _pnlTrainTimeHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlTrainTimeHost.RowStyles.Add(new RowStyle());
         _pnlTrainTimeHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlTrainTimeHost.Size = new Size(229, 52);
+        _pnlTrainTimeHost.Size = new Size(218, 52);
         _pnlTrainTimeHost.TabIndex = 38;
         // 
         // _dtpTrainTime
@@ -272,7 +272,7 @@ partial class CorrectionsForm
         _dtpTrainTime.Margin = new Padding(6, 0, 6, 0);
         _dtpTrainTime.Name = "_dtpTrainTime";
         _dtpTrainTime.ShowUpDown = true;
-        _dtpTrainTime.Size = new Size(217, 31);
+        _dtpTrainTime.Size = new Size(206, 31);
         _dtpTrainTime.TabIndex = 1;
         // 
         // labTrainDate
@@ -282,7 +282,7 @@ partial class CorrectionsForm
         labTrainDate.Location = new Point(5, 1);
         labTrainDate.Margin = new Padding(4, 0, 4, 0);
         labTrainDate.Name = "labTrainDate";
-        labTrainDate.Size = new Size(118, 51);
+        labTrainDate.Size = new Size(112, 51);
         labTrainDate.TabIndex = 2;
         labTrainDate.Text = "Дата сост.";
         labTrainDate.TextAlign = ContentAlignment.MiddleRight;
@@ -294,7 +294,7 @@ partial class CorrectionsForm
         label4.Location = new Point(5, 53);
         label4.Margin = new Padding(4, 0, 4, 0);
         label4.Name = "label4";
-        label4.Size = new Size(118, 52);
+        label4.Size = new Size(112, 52);
         label4.TabIndex = 3;
         label4.Text = "Время сост.";
         label4.TextAlign = ContentAlignment.MiddleRight;
@@ -307,12 +307,13 @@ partial class CorrectionsForm
         tabPanTrainTimeDayMode.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         tabPanTrainTimeDayMode.Controls.Add(rbTrainMode, 0, 0);
         tabPanTrainTimeDayMode.Controls.Add(rbDayMode, 0, 1);
+        tabPanTrainTimeDayMode.Dock = DockStyle.Fill;
         tabPanTrainTimeDayMode.Location = new Point(3, 3);
         tabPanTrainTimeDayMode.Name = "tabPanTrainTimeDayMode";
         tabPanTrainTimeDayMode.RowCount = 2;
         tabPanTrainTimeDayMode.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         tabPanTrainTimeDayMode.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tabPanTrainTimeDayMode.Size = new Size(131, 105);
+        tabPanTrainTimeDayMode.Size = new Size(149, 106);
         tabPanTrainTimeDayMode.TabIndex = 38;
         // 
         // rbTrainMode
@@ -322,7 +323,7 @@ partial class CorrectionsForm
         rbTrainMode.Location = new Point(15, 4);
         rbTrainMode.Margin = new Padding(14, 3, 3, 3);
         rbTrainMode.Name = "rbTrainMode";
-        rbTrainMode.Size = new Size(112, 45);
+        rbTrainMode.Size = new Size(130, 45);
         rbTrainMode.TabIndex = 0;
         rbTrainMode.TabStop = true;
         rbTrainMode.Text = "Состав";
@@ -335,7 +336,7 @@ partial class CorrectionsForm
         rbDayMode.Location = new Point(15, 56);
         rbDayMode.Margin = new Padding(14, 3, 3, 3);
         rbDayMode.Name = "rbDayMode";
-        rbDayMode.Size = new Size(112, 45);
+        rbDayMode.Size = new Size(130, 46);
         rbDayMode.TabIndex = 1;
         rbDayMode.TabStop = true;
         rbDayMode.Text = "Сутки";
@@ -343,6 +344,7 @@ partial class CorrectionsForm
         // 
         // _btnRefresh
         // 
+        _btnRefresh.AutoSize = true;
         _btnRefresh.Dock = DockStyle.Fill;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
         _btnRefresh.Location = new Point(522, 20);
@@ -999,6 +1001,7 @@ partial class CorrectionsForm
         _pnlTopActions.ResumeLayout(false);
         _actionPanel.ResumeLayout(false);
         tableLayoutPanel8.ResumeLayout(false);
+        tableLayoutPanel8.PerformLayout();
         tableLayoutPanel9.ResumeLayout(false);
         tableLayoutPanel9.PerformLayout();
         _pnlTrainDateHost.ResumeLayout(false);
