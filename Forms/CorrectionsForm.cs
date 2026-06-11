@@ -342,8 +342,8 @@ public partial class CorrectionsForm : Form
         try
         {
             var pending = trainMode
-                ? await _ldb.GetPendingByTrainTimeAsync(SelectedContextTrainTime)
-                : await _ldb.GetPendingByDateAsync(SelectedContextDate);
+                ? await _ldb.GetAllByTrainTimeAsync(SelectedContextTrainTime)
+                : await _ldb.GetAllByDateAsync(SelectedContextDate);
             pendingCount = pending.Count;
             FillPendingGrid(_gridPend, pending);
             _gridPend.ClearSelection();
@@ -351,7 +351,7 @@ public partial class CorrectionsForm : Form
         catch (Exception ex)
         {
             hadError = true;
-            string op = trainMode ? "GetPendingByTrainTimeAsync" : "GetPendingByDateAsync";
+            string op = trainMode ? "GetAllByTrainTimeAsync" : "GetAllByDateAsync";
             AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex.Message);
             MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -391,8 +391,28 @@ public partial class CorrectionsForm : Form
                 r.Total.ToString("F2"),
                 r.Mode,
                 r.Direction);
-            g.Rows[idx].Tag = r;
+            var row = g.Rows[idx];
+            row.Tag = r;
+            ApplyPendingRowStyle(row, r.Transferred);
         }
+    }
+
+    private static void ApplyPendingRowStyle(DataGridViewRow row, bool transferred)
+    {
+        if (!transferred)
+        {
+            row.DefaultCellStyle.BackColor = UiColors.InputBack;
+            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            return;
+        }
+
+        var transferredColor = ColorTranslator.FromHtml("#FFDAB9");
+        row.DefaultCellStyle.BackColor = transferredColor;
+        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = transferredColor;
+        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
     }
 
     private static void FillDoneGrid(DataGridView g, List<GpriGras> rows)
@@ -475,13 +495,20 @@ public partial class CorrectionsForm : Form
             return;
         }
 
+        var selected = _gridPend.SelectedRows[0].Tag as LocalWagon;
+        if (selected == null) return;
+        if (selected.Transferred)
+        {
+            _gridPend.ClearSelection();
+            return;
+        }
+
         _selectedFb = null;
         _gridDone.ClearSelection();
         _btnSave.Visible = false;
         _btnTransfer.Visible = true;
 
-        _selected = _gridPend.SelectedRows[0].Tag as LocalWagon;
-        if (_selected == null) return;
+        _selected = selected;
 
         _lblDt.Text = _selected.WagonTime.ToString("dd.MM.yyyy");
         _lblVr.Text = _selected.WagonTime.ToString("HH:mm:ss");
@@ -635,7 +662,13 @@ public partial class CorrectionsForm : Form
 
             if (_gridPend.SelectedRows.Count > 0)
             {
-                _gridPend.Rows.Remove(_gridPend.SelectedRows[0]);
+                var row = _gridPend.SelectedRows[0];
+                if (row.Tag is LocalWagon selected)
+                {
+                    selected.Transferred = true;
+                    ApplyPendingRowStyle(row, true);
+                }
+
                 _gridDone.Rows.Insert(0, 1);
                 var r = _gridDone.Rows[0];
                 r.Cells["DT"].Value = transfer.Dt.ToString("dd.MM.yyyy");
