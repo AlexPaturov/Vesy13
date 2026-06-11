@@ -436,6 +436,7 @@ partial class CorrectionsForm
         _tbPotr.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _tbPotr.Location = new Point(193, 91);
         _tbPotr.Margin = new Padding(6, 0, 6, 0);
+        _tbPotr.MaxLength = 30;
         _tbPotr.Name = "_tbPotr";
         _tbPotr.Size = new Size(435, 31);
         _tbPotr.TabIndex = 29;
@@ -522,6 +523,7 @@ partial class CorrectionsForm
         _tbGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _tbGruz.Location = new Point(6, 20);
         _tbGruz.Margin = new Padding(6, 0, 6, 0);
+        _tbGruz.MaxLength = 20;
         _tbGruz.Name = "_tbGruz";
         _tbGruz.Size = new Size(436, 31);
         _tbGruz.TabIndex = 14;
@@ -543,6 +545,7 @@ partial class CorrectionsForm
         _tbPlat.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _tbPlat.Location = new Point(192, 21);
         _tbPlat.Margin = new Padding(6, 0, 6, 0);
+        _tbPlat.MaxLength = 30;
         _tbPlat.Name = "_tbPlat";
         _tbPlat.Size = new Size(436, 31);
         _tbPlat.TabIndex = 30;
@@ -608,6 +611,7 @@ partial class CorrectionsForm
         _tbNvag.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _tbNvag.Location = new Point(6, 11);
         _tbNvag.Margin = new Padding(6, 0, 6, 0);
+        _tbNvag.MaxLength = 10;
         _tbNvag.Name = "_tbNvag";
         _tbNvag.Size = new Size(298, 31);
         _tbNvag.TabIndex = 10;
