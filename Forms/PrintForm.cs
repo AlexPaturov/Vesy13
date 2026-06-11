@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using Vesy13.Application;
 using Vesy13.Models;
@@ -11,8 +12,13 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class PrintForm : Form
 {
-    private readonly FactoryRepository _fdb;
+    private FactoryRepository? _fdb;
     private List<GpriGras>             _records = [];
+
+    public PrintForm()
+    {
+        InitializeComponent();
+    }
 
     public PrintForm(FactoryRepository fdb)
     {
@@ -105,6 +111,7 @@ public partial class PrintForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
         ApplyTheme();
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
         SetupGridColumns();
@@ -148,6 +155,8 @@ public partial class PrintForm : Form
         var gruz  = NullIfEmpty(_txtGruz.Text);
         var potr  = NullIfEmpty(_txtPotr.Text);
         long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long n) ? n : null;
+
+        if (_fdb is null) return;
 
         _btnFind.Enabled = false;
         try
