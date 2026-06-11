@@ -775,7 +775,14 @@ public partial class CorrectionsForm : Form
         }
 
         bool isTara = _rbTara.Checked;
-        decimal? tarDok = (!isTara && _cmbTar.SelectedItem is TaraOption taraOpt) ? taraOpt.Brutto : null;
+        decimal? selectedTara = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
+        if (isTara && !selectedTara.HasValue)
+        {
+            MessageBox.Show("Выберите значение тары.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _cmbTar.Focus();
+            return;
+        }
+
         string? potr = string.IsNullOrWhiteSpace(_tbPotr.Text) ? null : _tbPotr.Text.Trim();
         string? plat = string.IsNullOrWhiteSpace(_tbPlat.Text) ? null : _tbPlat.Text.Trim();
 
@@ -787,9 +794,9 @@ public partial class CorrectionsForm : Form
             Vr = _selectedFb.Vr,
             Nvag = nvag,
             Gruz = isTara ? "Тара" : (string.IsNullOrWhiteSpace(_tbGruz.Text) ? "" : _tbGruz.Text.Trim()),
-            Brutto = _selectedFb.Brutto,
-            TarBrs = isTara ? _selectedFb.Brutto : null,
-            Netto = isTara ? null : (tarDok.HasValue ? _selectedFb.Brutto - tarDok.Value : null),
+            Brutto = isTara ? 0m : _selectedFb.Brutto,
+            TarBrs = isTara ? selectedTara : null,
+            Netto = isTara ? null : (selectedTara.HasValue ? _selectedFb.Brutto - selectedTara.Value : null),
             Npp = _selectedFb.Npp,
             Cex = int.TryParse(_tbCex.Text.Trim(), out int c) ? c : _selectedFb.Cex,
             Potr = potr ?? "",
@@ -811,6 +818,7 @@ public partial class CorrectionsForm : Form
                 var r = _gridDone.SelectedRows[0];
                 r.Cells["NVAG"].Value = updated.Nvag;
                 r.Cells["GRUZ"].Value = updated.Gruz;
+                r.Cells["BRUTTO"].Value = updated.Brutto.ToString("F2");
                 r.Cells["TAR_BRS"].Value = updated.TarBrs?.ToString("F2") ?? "";
                 r.Cells["NETTO"].Value = updated.Netto?.ToString("F2") ?? "";
                 r.Cells["POTR"].Value = updated.Potr;
