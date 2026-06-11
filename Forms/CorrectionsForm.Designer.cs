@@ -755,6 +755,7 @@ partial class CorrectionsForm
         _rbBrutto.TabIndex = 1;
         _rbBrutto.TabStop = true;
         _rbBrutto.Text = "Брутто";
+        _rbBrutto.CheckedChanged += RbTara_CheckedChanged;
         // 
         // tableLayoutPanel6
         // 
