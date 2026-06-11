@@ -499,6 +499,7 @@ public partial class CorrectionsForm : Form
         if (selected == null) return;
         if (selected.Transferred)
         {
+            ClearTopPanel();
             _gridPend.ClearSelection();
             return;
         }
