@@ -366,6 +366,9 @@ public class FactoryRepository
         await using var rdr = await cmd.ExecuteReaderAsync();
         while (await rdr.ReadAsync())
         {
+            if (rdr.IsDBNull(2))
+                continue;
+
             var dt    = rdr.GetDateTime(0);
             var vrRaw = rdr.IsDBNull(1) ? TimeSpan.Zero : rdr.GetValue(1) switch
             {

@@ -707,37 +707,9 @@ public partial class CorrectionsForm : Form
         {
             _fdb ??= new FactoryRepository();
             await _fdb.InsertAsync(transfer);
-            if (_ldb is null) return;
-            await _ldb.MarkTransferredAsync(_selected.Id);
             AuditLogger.Action(AuditLogger.RecordTransferred,
                 "FirebirdRecord", $"{transfer.Table} nvag={transfer.Nvag}",
                 "Firebird", _selected.Id.ToString());
-
-            if (_gridPend.SelectedRows.Count > 0)
-            {
-                var row = _gridPend.SelectedRows[0];
-                if (row.Tag is LocalWagon selected)
-                {
-                    selected.Transferred = true;
-                    ApplyPendingRowStyle(row, true);
-                }
-
-                _gridDone.Rows.Insert(0, 1);
-                var r = _gridDone.Rows[0];
-                r.Cells["DT"].Value = transfer.Dt.ToString("dd.MM.yyyy");
-                r.Cells["VR"].Value = transfer.Vr.ToString(@"hh\:mm\:ss");
-                r.Cells["NVAG"].Value = transfer.Nvag;
-                r.Cells["GRUZ"].Value = transfer.Gruz;
-                r.Cells["BRUTTO"].Value = transfer.Brutto.ToString("F2");
-                r.Cells["TAR_BRS"].Value = transfer.TarBrs?.ToString("F2") ?? "";
-                r.Cells["NETTO"].Value = transfer.Netto?.ToString("F2") ?? "";
-                r.Cells["POTR"].Value = transfer.Potr;
-                r.Cells["PLAT"].Value = transfer.Plat;
-                r.Cells["VESY"].Value = "13";
-                r.Cells["CEX"].Value = transfer.Cex > 0 ? transfer.Cex.ToString() : "";
-                r.DefaultCellStyle.ForeColor = UiColors.PrimaryAction;
-            }
-            ClearTopPanel();
         }
         catch (Exception ex)
         {
@@ -745,7 +717,24 @@ public partial class CorrectionsForm : Form
             MessageBox.Show("Не удалось перенести запись в систему учёта.\nОбратитесь к администратору.",
                 "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnTransfer.Enabled = true;
+            return;
         }
+
+        try
+        {
+            if (_ldb is null)
+                throw new InvalidOperationException("Local repository is not initialized.");
+
+            await _ldb.MarkTransferredAsync(_selected.Id);
+        }
+        catch (Exception ex)
+        {
+            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", "MarkTransferredAsync", "PostgreSQL", ex.Message);
+            MessageBox.Show("Запись перенесена в систему учёта, но локальная запись не помечена как переданная.\nОбновите список или обратитесь к администратору.",
+                "Локальная база", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        await LoadBothGridsAsync();
     }
 
     private async void BtnSave_Click(object? sender, EventArgs e)
