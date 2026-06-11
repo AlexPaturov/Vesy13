@@ -516,8 +516,6 @@ public partial class CorrectionsForm : Form
         _lblVr.Text = _selected.WagonTime.ToString("HH:mm:ss");
         _lblNpp.Text = _selected.Number.ToString();
         _lblMode.Text = _selected.Mode;
-        _lblBrutto.Text = _selected.Total.ToString("F2");
-
         _cmbTar.Items.Clear();
         try
         {
