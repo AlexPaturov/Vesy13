@@ -440,7 +440,7 @@ partial class CorrectionsForm
         _tbPotr.Name = "_tbPotr";
         _tbPotr.Size = new Size(435, 31);
         _tbPotr.TabIndex = 29;
-        _tbPotr.TextAlign = HorizontalAlignment.Center;
+        _tbPotr.TextAlign = HorizontalAlignment.Left;
         // 
         // tableLayoutPanel4
         // 
