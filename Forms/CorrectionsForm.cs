@@ -15,6 +15,7 @@ public partial class CorrectionsForm : Form
 
     private LocalWagon? _selected;
     private GpriGras? _selectedFb;
+    private TaraOption? _localInjectedTareOption;
 
     public static readonly Dictionary<string, string> GpGridChapters = new()
     {
@@ -530,13 +531,8 @@ public partial class CorrectionsForm : Form
             // Firebird недоступен — оставляем список пустым
         }
 
-        if (!_rbTara.Checked)
-        {
-            _cmbTar.SelectedIndex = -1;
-        }
-
-        _lblBrutto.Text = _selected.Total.ToString("F2");
         _btnTransfer.Enabled = true;
+        ApplyLocalWeightPresentation();
         RecalcNetto();
     }
 
@@ -552,6 +548,32 @@ public partial class CorrectionsForm : Form
         _lblNetto.Text = _cmbTar.SelectedItem is TaraOption opt ? ((decimal)_selected.Total - opt.Brutto).ToString("F2") : _selected.Total.ToString("F2");
     }
 
+    private void ApplyLocalWeightPresentation()
+    {
+        if (_selected is null || _gridDone.SelectedRows.Count > 0)
+            return;
+
+        if (_localInjectedTareOption is not null)
+        {
+            _cmbTar.Items.Remove(_localInjectedTareOption);
+            _localInjectedTareOption = null;
+        }
+
+        if (_rbTara.Checked)
+        {
+            _lblBrutto.Text = "—";
+            _localInjectedTareOption = new TaraOption(_selected.WagonTime, (decimal)_selected.Total);
+            _cmbTar.Items.Insert(0, _localInjectedTareOption);
+            _cmbTar.SelectedItem = _localInjectedTareOption;
+        }
+        else
+        {
+            _lblBrutto.Text = _selected.Total.ToString("F2");
+            if (_cmbTar.SelectedItem is TaraOption)
+                _cmbTar.SelectedIndex = -1;
+        }
+    }
+
     private void RbTara_CheckedChanged(object? sender, EventArgs e)
     {
         if (_rbTara.Checked)
@@ -564,6 +586,8 @@ public partial class CorrectionsForm : Form
             if (_tbGruz.Text == "Тара") _tbGruz.Clear();
             _tbGruz.Enabled = true;
         }
+
+        ApplyLocalWeightPresentation();
         RecalcNetto();
     }
 
@@ -789,6 +813,7 @@ public partial class CorrectionsForm : Form
         _lblBrutto.Text = _lblNetto.Text = "—";
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
+        _localInjectedTareOption = null;
         _rbBrutto.Checked = true;
         _tbGruz.Clear();
         _tbGruz.Enabled = true;
