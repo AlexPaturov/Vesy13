@@ -486,7 +486,7 @@ public partial class CorrectionsForm : Form
         }
     }
 
-    private void GridPend_SelectionChanged(object? sender, EventArgs e)
+    private async void GridPend_SelectionChanged(object? sender, EventArgs e)
     {
         if (_gridPend.SelectedRows.Count == 0)
         {
@@ -515,6 +515,26 @@ public partial class CorrectionsForm : Form
         _lblVr.Text = _selected.WagonTime.ToString("HH:mm:ss");
         _lblNpp.Text = _selected.Number.ToString();
         _lblMode.Text = _selected.Mode;
+        _lblBrutto.Text = _selected.Total.ToString("F2");
+
+        _cmbTar.Items.Clear();
+        try
+        {
+            _fdb ??= new FactoryRepository();
+            var options = await _fdb.GetTaraOptionsAsync(_selected.Number.ToString());
+            foreach (var opt in options)
+                _cmbTar.Items.Add(opt);
+        }
+        catch
+        {
+            // Firebird недоступен — оставляем список пустым
+        }
+
+        if (!_rbTara.Checked)
+        {
+            _cmbTar.SelectedIndex = -1;
+        }
+
         _lblBrutto.Text = _selected.Total.ToString("F2");
         _btnTransfer.Enabled = true;
         RecalcNetto();
