@@ -89,7 +89,7 @@ public class FactoryRepository
         await conn.OpenAsync();
 
         const string sql = @"
-            SELECT FIRST 200 ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
             FROM (
                 SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV FROM GPRI WHERE DT >= @cutoff
                 UNION ALL
@@ -139,10 +139,139 @@ public class FactoryRepository
         return result;
     }
 
+
+    public async Task<List<GpriGras>> GetByTrainTimeAsync(DateTime trainTime)
+    {
+        var result = new List<GpriGras>();
+        var date = trainTime.Date;
+        var time = trainTime.TimeOfDay;
+
+        await using var conn = new FbConnection(ConnStr);
+        await conn.OpenAsync();
+
+        const string sql = @"
+            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+            FROM (
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                FROM GPRI
+                WHERE DT = @date AND CAST(VR AS TIME) = CAST(@time AS TIME)
+                UNION ALL
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                FROM GRAS
+                WHERE DT = @date AND CAST(VR AS TIME) = CAST(@time AS TIME)
+            ) t
+            ORDER BY NPP, ID";
+
+        await using var cmd = new FbCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@date", date.Date);
+        cmd.Parameters.AddWithValue("@time", time);
+
+        await using var rdr = await cmd.ExecuteReaderAsync();
+        while (await rdr.ReadAsync())
+        {
+            var dt = rdr.GetDateTime(2);
+            var vrRaw = rdr.IsDBNull(3) ? TimeSpan.Zero : rdr.GetValue(3) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _ => TimeSpan.Zero,
+            };
+            var vrPrvRaw = rdr.IsDBNull(15) ? TimeSpan.Zero : rdr.GetValue(15) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _ => TimeSpan.Zero,
+            };
+            result.Add(new GpriGras
+            {
+                Id = Convert.ToInt32(rdr.GetValue(0)),
+                Table = rdr.GetString(1),
+                Dt = dt.Date,
+                Vr = vrRaw,
+                Nvag = rdr.IsDBNull(4) ? "" : rdr.GetString(4).Trim(),
+                Ndok = rdr.IsDBNull(5) ? null : Convert.ToInt64(rdr.GetValue(5)),
+                Gruz = rdr.IsDBNull(6) ? "" : rdr.GetString(6).Trim(),
+                Brutto = rdr.GetDecimal(7),
+                TarBrs = rdr.IsDBNull(8) ? null : rdr.GetDecimal(8),
+                TarDok = rdr.IsDBNull(9) ? null : rdr.GetDecimal(9),
+                Netto = rdr.IsDBNull(10) ? null : rdr.GetDecimal(10),
+                Npp = rdr.IsDBNull(11) ? 0 : Convert.ToInt32(rdr.GetValue(11)),
+                Potr = rdr.IsDBNull(12) ? "" : rdr.GetString(12).Trim(),
+                Plat = rdr.IsDBNull(13) ? "" : rdr.GetString(13).Trim(),
+                Cex = rdr.IsDBNull(14) ? 0 : Convert.ToInt32(rdr.GetValue(14)),
+                VR_PRV = vrPrvRaw,
+            });
+        }
+        return result;
+    }
+
+    public async Task<List<GpriGras>> GetByDateAsync(DateTime date)
+    {
+        var result = new List<GpriGras>();
+
+        await using var conn = new FbConnection(ConnStr);
+        await conn.OpenAsync();
+
+        const string sql = @"
+            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+            FROM (
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                FROM GPRI
+                WHERE DT = @date
+                UNION ALL
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                FROM GRAS
+                WHERE DT = @date
+            ) t
+            ORDER BY DT DESC, VR DESC, NPP, ID";
+
+        await using var cmd = new FbCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@date", date.Date);
+
+        await using var rdr = await cmd.ExecuteReaderAsync();
+        while (await rdr.ReadAsync())
+        {
+            var dt = rdr.GetDateTime(2);
+            var vrRaw = rdr.IsDBNull(3) ? TimeSpan.Zero : rdr.GetValue(3) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _ => TimeSpan.Zero,
+            };
+            var vrPrvRaw = rdr.IsDBNull(15) ? TimeSpan.Zero : rdr.GetValue(15) switch
+            {
+                TimeSpan ts => ts,
+                DateTime dv => dv.TimeOfDay,
+                _ => TimeSpan.Zero,
+            };
+            result.Add(new GpriGras
+            {
+                Id = Convert.ToInt32(rdr.GetValue(0)),
+                Table = rdr.GetString(1),
+                Dt = dt.Date,
+                Vr = vrRaw,
+                Nvag = rdr.IsDBNull(4) ? "" : rdr.GetString(4).Trim(),
+                Ndok = rdr.IsDBNull(5) ? null : Convert.ToInt64(rdr.GetValue(5)),
+                Gruz = rdr.IsDBNull(6) ? "" : rdr.GetString(6).Trim(),
+                Brutto = rdr.GetDecimal(7),
+                TarBrs = rdr.IsDBNull(8) ? null : rdr.GetDecimal(8),
+                TarDok = rdr.IsDBNull(9) ? null : rdr.GetDecimal(9),
+                Netto = rdr.IsDBNull(10) ? null : rdr.GetDecimal(10),
+                Npp = rdr.IsDBNull(11) ? 0 : Convert.ToInt32(rdr.GetValue(11)),
+                Potr = rdr.IsDBNull(12) ? "" : rdr.GetString(12).Trim(),
+                Plat = rdr.IsDBNull(13) ? "" : rdr.GetString(13).Trim(),
+                Cex = rdr.IsDBNull(14) ? 0 : Convert.ToInt32(rdr.GetValue(14)),
+                VR_PRV = vrPrvRaw,
+            });
+        }
+        return result;
+    }
+
     /// <summary>
     /// Возвращает записи из GPRI или GRAS по заданным фильтрам для печати отвесных.
     /// </summary>
     public async Task<List<GpriGras>> GetForPrintAsync(
+
         string table,
         DateTime dateFrom, DateTime dateTo,
         string? nvag, string? gruz, string? potr, long? ndok)
@@ -237,6 +366,9 @@ public class FactoryRepository
         await using var rdr = await cmd.ExecuteReaderAsync();
         while (await rdr.ReadAsync())
         {
+            if (rdr.IsDBNull(2))
+                continue;
+
             var dt    = rdr.GetDateTime(0);
             var vrRaw = rdr.IsDBNull(1) ? TimeSpan.Zero : rdr.GetValue(1) switch
             {

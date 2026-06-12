@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IO.Ports;
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -13,99 +14,229 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class ServiceForm : Form
 {
-    private SimA04Reader    _sim   = null!;
+    private SimA04Reader _sim = null!;
     private LocalRepository _calib = null!;
+    private SettingsService _settings = null!;
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
-    private int  _frameCount;
-    private int  _lastCh0;
-    private int  _lastCh1;
+    private int _frameCount;
+    private int _lastCh0;
+    private int _lastCh1;
 
     public ServiceForm()
     {
         InitializeComponent();
     }
 
-    public ServiceForm(SimA04Reader adc, LocalRepository calib)
+    public ServiceForm(SimA04Reader adc, LocalRepository calib, SettingsService settings)
     {
-        _sim   = adc;
+        _sim = adc;
         _calib = calib;
+        _settings = settings;
         InitializeComponent();
     }
 
-    private void ApplyFonts()
+    private void ApplyTheme()
     {
+        BackColor = UiColors.AppBackground;
+        _tabs.BackColor = UiColors.Surface;
+        _tabs.Font = UiFonts.Medium;
+
         // Channel tab
-        _btnAdmin.Font        = UiFonts.Body;
+        _btnAdmin.Font = UiFonts.Body;
+        _btnAdmin.BackColor = UiColors.AdminLocked;
+        _btnAdmin.ForeColor = UiColors.TextOnDark;
         _lblChannelTitle.Font = UiFonts.SubHeaderBold;
-        _rbMain.Font          = UiFonts.NavButton;
-        _rbBackup.Font        = UiFonts.NavButton;
-        _lblChannelNote.Font  = UiFonts.Body;
+        _lblChannelTitle.ForeColor = UiColors.TextPrimary;
+        _rbMain.Font = UiFonts.NavButton;
+        _rbMain.ForeColor = UiColors.TextPrimary;
+        _rbBackup.Font = UiFonts.NavButton;
+        _rbBackup.ForeColor = UiColors.TextPrimary;
+        _lblChannelNote.Font = UiFonts.Body;
+        _lblChannelNote.ForeColor = UiColors.Disconnected;
+        _tabChannel.BackColor = UiColors.Surface;
+
         // Monitor tab
-        _cmbPort.Font         = UiFonts.Medium;
-        _btnConn.Font         = UiFonts.Body;
-        _btnPortRefresh.Font  = UiFonts.SubHeader;
-        _lblConn.Font         = UiFonts.Body;
-        _lblRate.Font         = UiFonts.Body;
-        _lblCh0Cap.Font       = UiFonts.Body;
-        _lblCh0.Font          = UiFonts.MonitorDisplay;
-        _lblCh1Cap.Font       = UiFonts.Body;
-        _lblCh1.Font          = UiFonts.MonitorDisplay;
-        _chkLog.Font          = UiFonts.Body;
-        _btnClearLog.Font     = UiFonts.Body;
-        _rtbLog.Font          = UiFonts.MonoSmall;
+        _tabMonitor.BackColor = UiColors.Surface;
+        _cmbPort.Font = UiFonts.Medium;
+        _cmbPort.BackColor = UiColors.InputBack;
+        _cmbPort.ForeColor = UiColors.InputFore;
+        _btnConn.Font = UiFonts.Body;
+        _btnConn.BackColor = UiColors.PrimaryAction;
+        _btnConn.ForeColor = UiColors.TextOnDark;
+        _btnPortRefresh.Font = UiFonts.SubHeader;
+        _btnPortRefresh.BackColor = UiColors.NeutralAction;
+        _btnPortRefresh.ForeColor = UiColors.TextPrimary;
+        _lblConn.Font = UiFonts.Body;
+        _lblConn.ForeColor = UiColors.Disconnected;
+        _lblRate.Font = UiFonts.Body;
+        _lblRate.ForeColor = UiColors.Disconnected;
+        _lblCh0Cap.Font = UiFonts.Body;
+        _lblCh0Cap.ForeColor = UiColors.TextOnDarkMuted;
+        _lblCh0.Font = UiFonts.MonitorDisplay;
+        _lblCh0.ForeColor = UiColors.Disconnected;
+        _lblCh1Cap.Font = UiFonts.Body;
+        _lblCh1Cap.ForeColor = UiColors.TextOnDarkMuted;
+        _lblCh1.Font = UiFonts.MonitorDisplay;
+        _lblCh1.ForeColor = UiColors.Disconnected;
+        _chkLog.Font = UiFonts.Body;
+        _chkLog.ForeColor = UiColors.TextPrimary;
+        _btnClearLog.Font = UiFonts.Body;
+        _btnClearLog.BackColor = UiColors.NeutralAction;
+        _btnClearLog.ForeColor = UiColors.TextPrimary;
+        _rtbLog.Font = UiFonts.MonoSmall;
+        _rtbLog.BackColor = UiColors.LogBackground;
+        _rtbLog.ForeColor = UiColors.LogText;
+        _pnlCh0.BackColor = UiColors.MonitorBackground;
+        _pnlCh1.BackColor = UiColors.MonitorBackground;
+
         // CalibStatic tab
-        _rbCh0Calib.Font      = UiFonts.SubHeader;
-        _rbCh1Calib.Font      = UiFonts.SubHeader;
-        _lblLiveAdcCap.Font   = UiFonts.Body;
-        _lblLiveAdc.Font      = UiFonts.MonoLiveAdc;
-        _btnCapture.Font      = UiFonts.Body;
-        _dgvCalib.Font        = UiFonts.GridBody;
-        _btnAddRow.Font       = UiFonts.Body;
-        _btnDelRow.Font       = UiFonts.Body;
-        _lblKEquals.Font      = UiFonts.Medium;
-        _txtK.Font            = UiFonts.Mono;
-        _lblBEquals.Font      = UiFonts.Medium;
-        _txtB.Font            = UiFonts.Mono;
-        _lblFormula.Font      = UiFonts.Body;
-        _btnLsq.Font          = UiFonts.Medium;
-        _btnCalibSave.Font    = UiFonts.Medium;
+        _tabCalibS.BackColor = UiColors.Surface;
+        _pnlCalibS.BackColor = UiColors.Surface;
+        _pnlCalibSHead.BackColor = UiColors.Surface;
+        _pnlCalibSBody.BackColor = UiColors.Surface;
+        _rbCh0Calib.Font = UiFonts.SubHeader;
+        _rbCh0Calib.ForeColor = UiColors.TextPrimary;
+        _rbCh1Calib.Font = UiFonts.SubHeader;
+        _rbCh1Calib.ForeColor = UiColors.TextPrimary;
+        _lblLiveAdcCap.Font = UiFonts.Body;
+        _lblLiveAdcCap.ForeColor = UiColors.Disconnected;
+        _lblLiveAdc.Font = UiFonts.MonoLiveAdc;
+        _lblLiveAdc.ForeColor = UiColors.Info;
+        _btnCapture.Font = UiFonts.Body;
+        _btnCapture.BackColor = UiColors.NeutralAction;
+        _btnCapture.ForeColor = UiColors.TextPrimary;
+        _dgvCalib.Font = UiFonts.GridBody;
+        _dgvCalib.BackgroundColor = UiColors.Surface;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
+        _dgvCalib.DefaultCellStyle.BackColor = UiColors.Surface;
+        _dgvCalib.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _dgvCalib.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _dgvCalib.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _dgvCalib.GridColor = UiColors.GridLine;
+        _btnAddRow.Font = UiFonts.Body;
+        _btnAddRow.BackColor = UiColors.NeutralAction;
+        _btnAddRow.ForeColor = UiColors.TextPrimary;
+        _btnDelRow.Font = UiFonts.Body;
+        _btnDelRow.BackColor = UiColors.NeutralAction;
+        _btnDelRow.ForeColor = UiColors.TextPrimary;
+        _lblKEquals.Font = UiFonts.Medium;
+        _lblKEquals.ForeColor = UiColors.TextPrimary;
+        _txtK.Font = UiFonts.Mono;
+        _txtK.BackColor = UiColors.InputBack;
+        _txtK.ForeColor = UiColors.InputFore;
+        _lblBEquals.Font = UiFonts.Medium;
+        _lblBEquals.ForeColor = UiColors.TextPrimary;
+        _txtB.Font = UiFonts.Mono;
+        _txtB.BackColor = UiColors.InputBack;
+        _txtB.ForeColor = UiColors.InputFore;
+        _lblFormula.Font = UiFonts.Body;
+        _lblFormula.ForeColor = UiColors.TextMuted;
+        _btnLsq.Font = UiFonts.Medium;
+        _btnLsq.BackColor = UiColors.SecondaryAction;
+        _btnLsq.ForeColor = UiColors.TextOnDark;
+        _btnCalibSave.Font = UiFonts.Medium;
+        _btnCalibSave.BackColor = UiColors.PrimaryAction;
+        _btnCalibSave.ForeColor = UiColors.TextOnDark;
+
         // CalibDynamic tab
-        _lblLiveAdcCapD.Font  = UiFonts.Body;
-        _lblLiveAdcD.Font     = UiFonts.MonoLiveAdc;
-        _lblSecPlus.Font      = UiFonts.BodyBold;
-        _lblKPlusEquals.Font  = UiFonts.Medium;
-        _txtKPlus.Font        = UiFonts.Mono;
+        _tabCalibD.BackColor = UiColors.Surface;
+        _pnlCalibD.BackColor = UiColors.Surface;
+        _pnlCalibDHead.BackColor = UiColors.Surface;
+        _pnlCalibDBody.BackColor = UiColors.Surface;
+        _lblLiveAdcCapD.Font = UiFonts.Body;
+        _lblLiveAdcCapD.ForeColor = UiColors.Disconnected;
+        _lblLiveAdcD.Font = UiFonts.MonoLiveAdc;
+        _lblLiveAdcD.ForeColor = UiColors.Info;
+        _lblSecPlus.Font = UiFonts.BodyBold;
+        _lblSecPlus.ForeColor = UiColors.TextSection;
+        _lblKPlusEquals.Font = UiFonts.Medium;
+        _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
+        _txtKPlus.Font = UiFonts.Mono;
+        _txtKPlus.BackColor = UiColors.InputBack;
+        _txtKPlus.ForeColor = UiColors.InputFore;
         _lblAutoCalcPlus.Font = UiFonts.Body;
-        _lblCodePlusCap.Font  = UiFonts.Body;
-        _txtCodePlus.Font     = UiFonts.MonoSmall;
-        _btnCapPlus.Font      = UiFonts.Small;
-        _lblMassPlusCap.Font  = UiFonts.Body;
-        _txtMassPlus.Font     = UiFonts.MonoSmall;
-        _btnCalcPlus.Font     = UiFonts.Body;
-        _lblSecMinus.Font     = UiFonts.BodyBold;
+        _lblAutoCalcPlus.ForeColor = UiColors.Disconnected;
+        _lblCodePlusCap.Font = UiFonts.Body;
+        _lblCodePlusCap.ForeColor = UiColors.TextPrimary;
+        _txtCodePlus.Font = UiFonts.MonoSmall;
+        _txtCodePlus.BackColor = UiColors.InputBack;
+        _txtCodePlus.ForeColor = UiColors.InputFore;
+        _btnCapPlus.Font = UiFonts.Small;
+        _btnCapPlus.BackColor = UiColors.NeutralAction;
+        _btnCapPlus.ForeColor = UiColors.TextPrimary;
+        _lblMassPlusCap.Font = UiFonts.Body;
+        _lblMassPlusCap.ForeColor = UiColors.TextPrimary;
+        _txtMassPlus.Font = UiFonts.MonoSmall;
+        _txtMassPlus.BackColor = UiColors.InputBack;
+        _txtMassPlus.ForeColor = UiColors.InputFore;
+        _btnCalcPlus.Font = UiFonts.Body;
+        _btnCalcPlus.BackColor = UiColors.SecondaryAction;
+        _btnCalcPlus.ForeColor = UiColors.TextOnDark;
+        _lblSecMinus.Font = UiFonts.BodyBold;
+        _lblSecMinus.ForeColor = UiColors.TextSection;
         _lblKMinusEquals.Font = UiFonts.Medium;
-        _txtKMinus.Font       = UiFonts.Mono;
-        _lblAutoCalcMinus.Font= UiFonts.Body;
+        _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
+        _txtKMinus.Font = UiFonts.Mono;
+        _txtKMinus.BackColor = UiColors.InputBack;
+        _txtKMinus.ForeColor = UiColors.InputFore;
+        _lblAutoCalcMinus.Font = UiFonts.Body;
+        _lblAutoCalcMinus.ForeColor = UiColors.Disconnected;
         _lblCodeMinusCap.Font = UiFonts.Body;
-        _txtCodeMinus.Font    = UiFonts.MonoSmall;
-        _btnCapMinus.Font     = UiFonts.Small;
+        _lblCodeMinusCap.ForeColor = UiColors.TextPrimary;
+        _txtCodeMinus.Font = UiFonts.MonoSmall;
+        _txtCodeMinus.BackColor = UiColors.InputBack;
+        _txtCodeMinus.ForeColor = UiColors.InputFore;
+        _btnCapMinus.Font = UiFonts.Small;
+        _btnCapMinus.BackColor = UiColors.NeutralAction;
+        _btnCapMinus.ForeColor = UiColors.TextPrimary;
         _lblMassMinusCap.Font = UiFonts.Body;
-        _txtMassMinus.Font    = UiFonts.MonoSmall;
-        _btnCalcMinus.Font    = UiFonts.Body;
-        _lblFormulaD.Font     = UiFonts.Body;
+        _lblMassMinusCap.ForeColor = UiColors.TextPrimary;
+        _txtMassMinus.Font = UiFonts.MonoSmall;
+        _txtMassMinus.BackColor = UiColors.InputBack;
+        _txtMassMinus.ForeColor = UiColors.InputFore;
+        _btnCalcMinus.Font = UiFonts.Body;
+        _btnCalcMinus.BackColor = UiColors.SecondaryAction;
+        _btnCalcMinus.ForeColor = UiColors.TextOnDark;
+        _lblFormulaD.Font = UiFonts.Body;
+        _lblFormulaD.ForeColor = UiColors.TextMuted;
         _btnCalibDynSave.Font = UiFonts.Medium;
+        _btnCalibDynSave.BackColor = UiColors.PrimaryAction;
+        _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
+
         // Settings tab
-        _lblPortCap.Font         = UiFonts.Medium;
-        _lblNpvCap.Font          = UiFonts.Medium;
-        _lblDiscCap.Font         = UiFonts.Medium;
-        _lblZeroCap.Font         = UiFonts.Medium;
-        _lblDynWinCap.Font       = UiFonts.Medium;
-        _lblBogieTimeoutCap.Font = UiFonts.Medium;
-        _lblPasswordCap.Font     = UiFonts.Medium;
-        _btnSaveSettings.Font    = UiFonts.Medium;
-        // General
-        _tabs.Font    = UiFonts.Medium;
+        _tabSett.BackColor = UiColors.Surface;
+        _lblPortCap.Font = UiFonts.Medium;
+        _lblPortCap.ForeColor = UiColors.TextPrimary;
+        _cmbSettPort.Font = UiFonts.Body;
+        _cmbSettPort.BackColor = UiColors.InputBack;
+        _cmbSettPort.ForeColor = UiColors.InputFore;
+        _lblNpvCap.Font = UiFonts.Medium;
+        _lblNpvCap.ForeColor = UiColors.TextPrimary;
+        _txtNpv.Font = UiFonts.Body;
+        _txtNpv.BackColor = UiColors.InputBack;
+        _txtNpv.ForeColor = UiColors.InputFore;
+        _lblDiscCap.Font = UiFonts.Medium;
+        _lblDiscCap.ForeColor = UiColors.TextPrimary;
+        _cmbDisc.Font = UiFonts.Body;
+        _cmbDisc.BackColor = UiColors.InputBack;
+        _cmbDisc.ForeColor = UiColors.InputFore;
+        _lblZeroCap.Font = UiFonts.Medium;
+        _lblZeroCap.ForeColor = UiColors.TextPrimary;
+        _txtZeroLimit.Font = UiFonts.Body;
+        _txtZeroLimit.BackColor = UiColors.InputBack;
+        _txtZeroLimit.ForeColor = UiColors.InputFore;
+        _lblPasswordCap.Font = UiFonts.Medium;
+        _lblPasswordCap.ForeColor = UiColors.TextPrimary;
+        _txtNewPassword.Font = UiFonts.Body;
+        _txtNewPassword.BackColor = UiColors.InputBack;
+        _txtNewPassword.ForeColor = UiColors.InputFore;
+        _btnSaveSettings.Font = UiFonts.Medium;
+        _btnSaveSettings.BackColor = UiColors.PrimaryAction;
+        _btnSaveSettings.ForeColor = UiColors.TextOnDark;
     }
 
     // ── Lifecycle ───────────────────────────────────────────────────────────
@@ -113,16 +244,18 @@ public partial class ServiceForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        ApplyFonts();
+        ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
-        _sim.RawFrameReceived  += OnRawFrame;
+        _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
+        _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
-        _rbMain.Checked   = _sim.Channel == ActiveChannel.Main;
+        _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
+        LoadSettingsUi();
         LoadCalibPoints();
         LoadCalibDynamic();
         SetAdminTabs(false);
@@ -133,7 +266,7 @@ public partial class ServiceForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
-            _sim.RawFrameReceived  -= OnRawFrame;
+            _sim.RawFrameReceived -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
             _rateTimer.Stop();
         }
@@ -142,17 +275,17 @@ public partial class ServiceForm : Form
 
     // ── Designer event handlers ─────────────────────────────────────────────
 
-    private void BtnPortRefresh_Click(object? sender, EventArgs e)  => RefreshPorts();
-    private void BtnClearLog_Click(object? sender, EventArgs e)     => _rtbLog.Clear();
+    private void BtnPortRefresh_Click(object? sender, EventArgs e) => RefreshPorts();
+    private void BtnClearLog_Click(object? sender, EventArgs e) => _rtbLog.Clear();
     private void BtnDelRow_Click(object? sender, EventArgs e)
     {
-        if (_dgvCalib.SelectedRows.Count > 0)
-            _dgvCalib.Rows.Remove(_dgvCalib.SelectedRows[0]);
+        if (_dgvCalib.SelectedRows.Count == 0) return;
+        SetCalibRowActive(_dgvCalib.SelectedRows[0], false, DateTime.Now);
     }
     private void BtnAddRow_Click(object? sender, EventArgs e)
     {
         int row = _dgvCalib.Rows.Add();
-        _dgvCalib.Rows[row].Cells[2].Value = true;
+        SetCalibRowActive(_dgvCalib.Rows[row], true);
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[0];
         _dgvCalib.BeginEdit(true);
     }
@@ -162,19 +295,19 @@ public partial class ServiceForm : Form
         if (code == 0) return;
         int row = _dgvCalib.Rows.Add();
         _dgvCalib.Rows[row].Cells[0].Value = code;
-        _dgvCalib.Rows[row].Cells[2].Value = true;
+        SetCalibRowActive(_dgvCalib.Rows[row], true);
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
         _dgvCalib.BeginEdit(true);
     }
     private void BtnLsq_Click(object? sender, EventArgs e)
     {
-        var pts = ReadGridPoints();
+        var pts = ReadGridPoints().Where(p => p.IsActive).ToList();
         if (pts.Count < 2)
         {
             MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
-        var (k, b) = CalibrationCalculator.CalculateLsq(pts);
+        var (k, b) = CalibrationCalculator.CalculateLsq(pts.Select(p => (p.AdcCode, p.Mass, p.IsActive)));
         _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
         _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
     }
@@ -205,20 +338,29 @@ public partial class ServiceForm : Form
         else
             MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
-    private void BtnSaveSettings_Click(object? sender, EventArgs e) =>
-        MessageBox.Show("Сохранение настроек — в разработке.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void BtnSaveSettings_Click(object? sender, EventArgs e) => SaveSettingsFromUi();
 
     private void RbMain_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbMain.Checked && _sim is not null) _sim.Channel = ActiveChannel.Main;
+        if (_rbMain.Checked) SetActiveChannel(ActiveChannel.Main);
     }
     private void RbBackup_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbBackup.Checked && _sim is not null) _sim.Channel = ActiveChannel.Backup;
+        if (_rbBackup.Checked) SetActiveChannel(ActiveChannel.Backup);
+    }
+
+    private void SetActiveChannel(ActiveChannel channel)
+    {
+        if (_sim is null || _sim.Channel == channel) return;
+
+        ActiveChannel old = _sim.Channel;
+        _sim.Channel = channel;
+        AuditLogger.Action(AuditLogger.AdcChannelChanged,
+            "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
     }
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbCh0Calib.Checked) { _calibUseCh0 = true;  LoadCalibPoints(); UpdateLiveAdcLabel(); }
+        if (_rbCh0Calib.Checked) { _calibUseCh0 = true; LoadCalibPoints(); UpdateLiveAdcLabel(); }
     }
     private void RbCh1Calib_CheckedChanged(object? sender, EventArgs e)
     {
@@ -227,7 +369,75 @@ public partial class ServiceForm : Form
     private void RateTimer_Tick(object? sender, EventArgs e)
     {
         _lblRate.Text = $"{_frameCount} фр/с";
-        _frameCount   = 0;
+        _frameCount = 0;
+    }
+
+    private void LoadSettingsUi()
+    {
+        if (_settings is null) return;
+
+        SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
+        _txtNpv.Text = _settings.Current.MaxCapacityTonnes.ToString("G", CultureInfo.InvariantCulture);
+        SelectComboValue(_cmbDisc, FormatDiscretization(_settings.Current.WeightDiscretizationTonnes));
+        _txtZeroLimit.Text = _settings.Current.OperatorZeroLimitPercent.ToString("G", CultureInfo.InvariantCulture);
+        _txtNewPassword.Clear();
+    }
+
+    private void SaveSettingsFromUi()
+    {
+        if (_settings is null) return;
+
+        if (_cmbSettPort.SelectedItem is string portName)
+            _settings.Current.AdcPortName = portName;
+
+        if (!double.TryParse(_txtNpv.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out double npv) || npv <= 0)
+        {
+            MessageBox.Show("Введите корректное значение НПВ.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtNpv.Focus();
+            return;
+        }
+
+        if (!TryParseDiscretization(_cmbDisc.Text, out double discretization))
+        {
+            MessageBox.Show("Выберите корректную дискретность.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _cmbDisc.Focus();
+            return;
+        }
+
+        if (!double.TryParse(_txtZeroLimit.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out double zeroLimit) || zeroLimit < 0 || zeroLimit > _settings.Current.AdminZeroLimitPercent)
+        {
+            MessageBox.Show($"Лимит нуля должен быть от 0 до {_settings.Current.AdminZeroLimitPercent:G} % НПВ.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtZeroLimit.Focus();
+            return;
+        }
+
+        _settings.Current.MaxCapacityTonnes = npv;
+        _settings.Current.WeightDiscretizationTonnes = discretization;
+        _settings.Current.OperatorZeroLimitPercent = zeroLimit;
+
+        string newPassword = _txtNewPassword.Text;
+        if (!string.IsNullOrWhiteSpace(newPassword))
+            _settings.SetAdminPassword(newPassword);
+
+        _settings.Save();
+        _txtNewPassword.Clear();
+        AuditLogger.Action(AuditLogger.SettingsSaved, "Settings", "settings.json", "Vesy13", _settings.Path);
+        MessageBox.Show("Настройки сохранены.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private static void SelectComboValue(ComboBox combo, string value)
+    {
+        int idx = combo.Items.IndexOf(value);
+        if (idx >= 0)
+            combo.SelectedIndex = idx;
+    }
+
+    private static string FormatDiscretization(double value) => value.ToString("0.##", CultureInfo.InvariantCulture) + " т";
+
+    private static bool TryParseDiscretization(string text, out double value)
+    {
+        text = text.Replace("т", "", StringComparison.OrdinalIgnoreCase).Trim();
+        return double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && value > 0;
     }
 
     // ── Monitor ─────────────────────────────────────────────────────────────
@@ -246,7 +456,14 @@ public partial class ServiceForm : Form
         _btnConn.Enabled = ports.Length > 0;
 
         _cmbSettPort.Items.Clear();
-        if (ports.Length > 0) { _cmbSettPort.Items.AddRange(ports); _cmbSettPort.SelectedIndex = 0; }
+        if (!string.IsNullOrWhiteSpace(_settings.Current.AdcPortName))
+            _cmbSettPort.Items.Add(_settings.Current.AdcPortName);
+        foreach (string portName in ports)
+        {
+            if (!_cmbSettPort.Items.Contains(portName))
+                _cmbSettPort.Items.Add(portName);
+        }
+        SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
     }
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
@@ -274,11 +491,11 @@ public partial class ServiceForm : Form
     private void UpdateMonitorConn(bool connected)
     {
         _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _lblConn.Text      = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
+        _lblConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
         _lblConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _btnConn.Text      = connected ? "Отключить" : "Подключить";
+        _btnConn.Text = connected ? "Отключить" : "Подключить";
         _btnConn.BackColor = connected ? UiColors.DangerAction : UiColors.PrimaryAction;
-        _cmbPort.Enabled   = !connected;
+        _cmbPort.Enabled = !connected;
         AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
             connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
@@ -296,10 +513,10 @@ public partial class ServiceForm : Form
         _frameCount++;
         if (frame.Valid)
         {
-            _lastCh0          = frame.Ch0;
-            _lastCh1          = frame.Ch1;
-            _lblCh0.Text      = frame.Ch0.ToString();
-            _lblCh1.Text      = frame.Ch1.ToString();
+            _lastCh0 = frame.Ch0;
+            _lastCh1 = frame.Ch1;
+            _lblCh0.Text = frame.Ch0.ToString();
+            _lblCh1.Text = frame.Ch1.ToString();
             _lblCh0.ForeColor = UiColors.Info;
             _lblCh1.ForeColor = UiColors.Info;
             UpdateLiveAdcLabel();
@@ -311,7 +528,7 @@ public partial class ServiceForm : Form
         }
         if (!_chkLog.Checked) return;
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
-        string time  = DateTime.Now.ToString("HH:mm:ss.fff");
+        string time = DateTime.Now.ToString("HH:mm:ss.fff");
         if (frame.Valid)
             AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", UiColors.LogText);
         else
@@ -364,27 +581,37 @@ public partial class ServiceForm : Form
     {
         if (_dgvCalib == null || _calib is null) return;
         int channel = _calibUseCh0 ? 0 : 1;
-        var pts = await _calib.GetCalibPointsAsync(channel);
+        var pts = SortCalibPoints(await _calib.GetCalibPointsAsync(channel));
         _dgvCalib.Rows.Clear();
         foreach (var p in pts)
         {
             int row = _dgvCalib.Rows.Add();
-            _dgvCalib.Rows[row].Tag            = p.Id;
+            _dgvCalib.Rows[row].Tag = p;
             _dgvCalib.Rows[row].Cells[0].Value = p.AdcCode;
             _dgvCalib.Rows[row].Cells[1].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
             _dgvCalib.Rows[row].Cells[2].Value = p.IsActive;
             if (p.AdcCode != 0)
                 _dgvCalib.Rows[row].Cells[3].Value =
                     ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
+            ApplyCalibRowStyle(_dgvCalib.Rows[row]);
         }
     }
 
     private void LoadCalibPoints() => _ = LoadCalibPointsAsync();
 
+    private void DgvCalib_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
+    {
+        if (_dgvCalib.IsCurrentCellDirty)
+            _dgvCalib.CommitEdit(DataGridViewDataErrorContexts.Commit);
+    }
+
     private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
     {
-        if (e.RowIndex < 0 || (e.ColumnIndex != 0 && e.ColumnIndex != 1)) return;
-        RefreshCalibK(e.RowIndex);
+        if (e.RowIndex < 0) return;
+        if (e.ColumnIndex == 0 || e.ColumnIndex == 1)
+            RefreshCalibK(e.RowIndex);
+        if (e.ColumnIndex == 2)
+            SyncCalibRowActiveState(_dgvCalib.Rows[e.RowIndex]);
     }
 
     private void RefreshCalibK(int rowIndex)
@@ -398,19 +625,108 @@ public partial class ServiceForm : Form
             row.Cells[3].Value = "";
     }
 
-    private List<(int AdcCode, decimal Mass, bool IsActive)> ReadGridPoints()
+    private void SetCalibRowActive(DataGridViewRow row, bool isActive, DateTime? deletedAt = null)
     {
-        var result = new List<(int, decimal, bool)>();
+        row.Cells[2].Value = isActive;
+        var point = row.Tag as CalibPoint;
+        if (point is null && !isActive)
+        {
+            point = new CalibPoint();
+            row.Tag = point;
+        }
+        if (point is not null)
+        {
+            point.IsActive = isActive;
+            point.DeletedAt = isActive ? null : deletedAt ?? point.DeletedAt ?? DateTime.Now;
+        }
+        ApplyCalibRowStyle(row);
+    }
+
+    private void SyncCalibRowActiveState(DataGridViewRow row)
+    {
+        bool active = row.Cells[2].Value is true;
+        var point = row.Tag as CalibPoint;
+
+        if (point?.DeletedAt is not null && active)
+        {
+            row.Cells[2].Value = false;
+            point.IsActive = false;
+            ApplyCalibRowStyle(row);
+            return;
+        }
+
+        if (point is null && !active)
+        {
+            point = new CalibPoint();
+            row.Tag = point;
+        }
+
+        if (point is not null)
+        {
+            point.IsActive = active;
+            point.DeletedAt = active ? null : point.DeletedAt ?? DateTime.Now;
+        }
+
+        ApplyCalibRowStyle(row);
+    }
+
+    private static void ApplyCalibRowStyle(DataGridViewRow row)
+    {
+        bool active = row.Cells[2].Value is true;
+        if (active)
+        {
+            row.DefaultCellStyle.BackColor = UiColors.Surface;
+            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            row.ReadOnly = false;
+            return;
+        }
+
+        var deletedBack = Color.FromArgb(255, 228, 232);
+        row.DefaultCellStyle.BackColor = deletedBack;
+        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = deletedBack;
+        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
+        row.ReadOnly = true;
+    }
+
+    private List<CalibPoint> ReadGridPoints()
+    {
+        var result = new List<CalibPoint>();
+        int channel = _calibUseCh0 ? 0 : 1;
+
         foreach (DataGridViewRow row in _dgvCalib.Rows)
         {
             if (!int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
                 continue;
             if (!decimal.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
                 continue;
+
             bool active = row.Cells[2].Value is true;
-            result.Add((code, mass, active));
+            var existing = row.Tag as CalibPoint;
+            DateTime? deletedAt = existing?.DeletedAt ?? (active ? null : DateTime.Now);
+            active = active && deletedAt is null;
+            result.Add(new CalibPoint
+            {
+                Id = existing?.Id ?? 0,
+                Channel = channel,
+                AdcCode = code,
+                Mass = mass,
+                IsActive = active,
+                DeletedAt = deletedAt,
+            });
         }
-        return result;
+
+        return SortCalibPoints(result).ToList();
+    }
+
+    private static IEnumerable<CalibPoint> SortCalibPoints(IEnumerable<CalibPoint> points)
+    {
+        return points
+            .OrderBy(p => !p.IsActive)
+            .ThenByDescending(p => p.IsActive ? p.Mass : decimal.MinValue)
+            .ThenBy(p => p.AdcCode);
     }
 
     private void UpdateLiveAdcLabel()
@@ -428,7 +744,7 @@ public partial class ServiceForm : Form
 
     private async void BtnCalibDynSave_Click(object? sender, EventArgs e)
     {
-        if (!double.TryParse(_txtKPlus.Text,  NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
+        if (!double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
             !double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km))
         {
             MessageBox.Show("Некорректные значения K→ или K←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -452,7 +768,7 @@ public partial class ServiceForm : Form
     private void LoadCalibDynamic()
     {
         if (_calib is null) return;
-        _txtKPlus .Text = _calib.Dynamic.KPlus .ToString("G8", CultureInfo.InvariantCulture);
+        _txtKPlus.Text = _calib.Dynamic.KPlus.ToString("G8", CultureInfo.InvariantCulture);
         _txtKMinus.Text = _calib.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
     }
 
@@ -462,18 +778,18 @@ public partial class ServiceForm : Form
     {
         if (_adminUnlocked)
         {
-            _adminUnlocked      = false;
-            _btnAdmin.Text      = "🔒 Войти как администратор";
+            _adminUnlocked = false;
+            _btnAdmin.Text = "🔒 Войти как администратор";
             _btnAdmin.BackColor = UiColors.AdminLocked;
             SetAdminTabs(false);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "выход из режима администратора");
         }
         else
         {
-            using var dlg = new PasswordDialog();
+            using var dlg = new PasswordDialog(_settings);
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
-            _adminUnlocked      = true;
-            _btnAdmin.Text      = "🔓 Выйти из режима администратора";
+            _adminUnlocked = true;
+            _btnAdmin.Text = "🔓 Выйти из режима администратора";
             _btnAdmin.BackColor = UiColors.AdminUnlocked;
             SetAdminTabs(true);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "вход в режим администратора");
@@ -484,6 +800,6 @@ public partial class ServiceForm : Form
     {
         _tabCalibS.Enabled = enabled;
         _tabCalibD.Enabled = enabled;
-        _tabSett.Enabled   = enabled;
+        _tabSett.Enabled = enabled;
     }
 }

@@ -1,5 +1,6 @@
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -13,6 +14,7 @@ public partial class DynamicWeighingForm : Form
 {
     private SimA04Reader    _sim = null!;
     private LocalRepository _ldb  = null!;
+    private SettingsService _settings = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -20,21 +22,30 @@ public partial class DynamicWeighingForm : Form
     private int        _wagonNumber;
     private int        _bogie1Code;
     private SimA04Frame   _lastFrame;
+    private double     _zeroOffsetTonnes;
 
     public DynamicWeighingForm()
     {
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(SimA04Reader sim, LocalRepository ldb)
+    public DynamicWeighingForm(SimA04Reader sim, LocalRepository ldb, SettingsService settings)
     {
         _sim = sim;
         _ldb  = ldb;
+        _settings = settings;
         InitializeComponent();
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
-    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+
+    private double ReadRawTonnes(int adcCode) =>
+        CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+
+    private double ToTonnes(int adcCode) =>
+        WeightFormatter.RoundToDiscretization(
+            ReadRawTonnes(adcCode) - _zeroOffsetTonnes,
+            _settings.Current.WeightDiscretizationTonnes);
 
     private bool ValidateBeforeWeigh()
     {
@@ -43,23 +54,56 @@ public partial class DynamicWeighingForm : Form
         return false;
     }
 
-    private void ApplyFonts()
+    private void ApplyTheme()
     {
+        BackColor = UiColors.AppBackground;
+        _layoutMain.BackColor = UiColors.AppBackground;
+        _pnlTop.BackColor = UiColors.AppBackground;
+        _pnlActions.BackColor = UiColors.AppBackground;
+        _gbDir.BackColor = UiColors.Surface;
         _gbDir.Font       = UiFonts.Body;
+        _gbDir.ForeColor  = UiColors.TextPrimary;
         _rbPlus.Font      = UiFonts.Medium;
+        _rbPlus.ForeColor  = UiColors.TextPrimary;
         _rbMinus.Font     = UiFonts.Medium;
+        _rbMinus.ForeColor = UiColors.TextPrimary;
         _lblChannel.Font  = UiFonts.Medium;
+        _lblChannel.ForeColor = UiColors.TextMuted;
+        _pnlDisplay.BackColor = UiColors.DisplayBackground;
         _lblValue.Font    = UiFonts.Display;
+        _lblValue.ForeColor = UiColors.TextOnDarkMuted;
         _lblUnit.Font     = UiFonts.UnitLabel;
+        _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Font   = UiFonts.Medium;
+        _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
         _btnWeigh.Font    = UiFonts.WeighButton;
+        _btnWeigh.BackColor = UiColors.PrimaryAction;
+        _btnWeigh.ForeColor = UiColors.TextOnDark;
         _btnZero.Font     = UiFonts.Medium;
-        _btnFinish.Font   = UiFonts.Medium;
-        _grid.Font        = UiFonts.GridBody;
-        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
-        _lblConn.Font     = UiFonts.Body;
         _btnZero.BackColor = UiColors.NeutralAction;
         _btnZero.ForeColor = UiColors.TextPrimary;
+        _btnFinish.Font   = UiFonts.Medium;
+        _btnFinish.BackColor = UiColors.DangerAction;
+        _btnFinish.ForeColor = UiColors.TextOnDark;
+        _grid.Font        = UiFonts.GridBody;
+        _grid.BackgroundColor = UiColors.Surface;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
+        _grid.ColumnHeadersDefaultCellStyle.Font = UiFonts.GridHeader;
+        _grid.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
+        _grid.DefaultCellStyle.BackColor = UiColors.Surface;
+        _grid.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _grid.AlternatingRowsDefaultCellStyle.BackColor = UiColors.GridAlternateRow;
+        _grid.AlternatingRowsDefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _grid.GridColor = UiColors.GridLine;
+        _pnlStatusBar.BackColor = UiColors.StatusBar;
+        _dotConn.BackColor = UiColors.Disconnected;
+        _lblConn.Font     = UiFonts.Body;
+        _lblConn.ForeColor = UiColors.TextMuted;
     }
 
     private void SetupGridColumns()
@@ -87,7 +131,7 @@ public partial class DynamicWeighingForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        ApplyFonts();
+        ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
         SetupGridColumns();
@@ -179,7 +223,8 @@ public partial class DynamicWeighingForm : Form
 
     private void UpdateConn(bool connected)
     {
-        _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
+        _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
@@ -239,7 +284,23 @@ public partial class DynamicWeighingForm : Form
         UpdateButtonStates();
     }
 
-    private void OnZeroClick() => MessageBox.Show("Ноль установлен (в разработке)", "Ноль", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void OnZeroClick()
+    {
+        if (!ValidateBeforeWeigh()) return;
+
+        double current = ReadRawTonnes(ActiveCode(_lastFrame));
+        double limit = _settings.Current.OperatorZeroLimitTonnes;
+        if (Math.Abs(current) > limit)
+        {
+            MessageBox.Show($"Ноль можно установить только в пределах {limit:F2} т.", "Ноль",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        _zeroOffsetTonnes = current;
+        _lblValue.Text = ToTonnes(ActiveCode(_lastFrame)).ToString("F2");
+        AuditLogger.Action(AuditLogger.ZeroSet, "Zero", $"offset={_zeroOffsetTonnes:F2} limit={limit:F2}");
+    }
 
     private void HandleFinish(bool silent = false)
     {

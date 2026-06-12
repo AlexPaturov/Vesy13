@@ -13,794 +13,1048 @@ partial class CorrectionsForm
 
     private void InitializeComponent()
     {
-        DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
         _pnlTop = new Panel();
-        label2 = new Label();
-        lblpotr = new Label();
-        _tbPlat = new TextBox();
-        _tbPotr = new TextBox();
-        _pnlLeft = new Panel();
-        _lblVidVzv = new Label();
-        _rbGpri = new RadioButton();
-        _rbGras = new RadioButton();
-        _pnlMode = new Panel();
-        _lblVidMode = new Label();
-        _rbBrutto = new RadioButton();
-        _rbTara = new RadioButton();
-        _btnSave = new Button();
-        _lblDateCap = new Label();
-        _lblDt = new Label();
-        _lblTimeCap = new Label();
-        _lblVr = new Label();
-        _lblNppCap = new Label();
-        _lblNpp = new Label();
-        _lblModeCap = new Label();
-        _lblMode = new Label();
-        _lblNvagCap = new Label();
-        _txtNvag = new TextBox();
-        _lblDirCap = new Label();
-        _lblDir = new Label();
-        _lblGruzCap = new Label();
-        _txtGruz = new TextBox();
-        _lblNdokCap = new Label();
-        _txtNdok = new TextBox();
-        _lblBruttoCap = new Label();
-        _lblBrutto = new Label();
-        _lblBruttoUnit = new Label();
-        _lblTarCap = new Label();
-        _cmbTar = new ComboBox();
-        _lblNettoCap = new Label();
-        _lblNetto = new Label();
-        _lblNettoUnit = new Label();
-        _btnTransfer = new Button();
+        _pnlTopActions = new Panel();
+        _actionPanel = new Panel();
+        tableLayoutPanel8 = new TableLayoutPanel();
         _btnClear = new Button();
+        _btnTransfer = new Button();
+        _btnSave = new Button();
+        tableLayoutPanel9 = new TableLayoutPanel();
+        _pnlTrainDateHost = new TableLayoutPanel();
+        _dtpTrainDate = new DateTimePicker();
+        _pnlTrainTimeHost = new TableLayoutPanel();
+        _dtpTrainTime = new DateTimePicker();
+        labTrainDate = new Label();
+        label4 = new Label();
+        tabPanTrainTimeDayMode = new TableLayoutPanel();
+        rbTrainMode = new RadioButton();
+        rbDayMode = new RadioButton();
         _btnRefresh = new Button();
+        tableLayoutPanel5 = new TableLayoutPanel();
+        tableLayoutPanel7 = new TableLayoutPanel();
+        label3 = new Label();
+        lblpotr = new Label();
+        _tbCex = new TextBox();
+        _tbPotr = new TextBox();
+        tableLayoutPanel4 = new TableLayoutPanel();
+        _rbGras = new RadioButton();
+        _rbGpri = new RadioButton();
+        tableLayoutPanel1 = new TableLayoutPanel();
+        _pnlGruzHost = new TableLayoutPanel();
+        _tbGruz = new TextBox();
+        _lblGruzCap = new Label();
+        _tbPlat = new TextBox();
+        label2 = new Label();
+        tableLayoutPanel2 = new TableLayoutPanel();
+        _pnlNvagHost = new TableLayoutPanel();
+        _tbNvag = new TextBox();
+        _lblNvagCap = new Label();
+        _lblMode = new Label();
+        _lblDateCap = new Label();
+        _lblModeCap = new Label();
+        _lblVr = new Label();
+        _lblNpp = new Label();
+        _lblDt = new Label();
+        _lblNppCap = new Label();
+        _lblTimeCap = new Label();
+        tableLayoutPanel3 = new TableLayoutPanel();
+        _rbTara = new RadioButton();
+        _rbBrutto = new RadioButton();
+        tableLayoutPanel6 = new TableLayoutPanel();
+        _lblNetto = new Label();
+        _lblNettoCap = new Label();
+        _lblTarCap = new Label();
+        _lblBrutto = new Label();
+        _lblBruttoCap = new Label();
+        _pnlTarHost = new TableLayoutPanel();
+        _cmbTar = new ComboBox();
+        _lblVidVzv = new Label();
+        _lblVidMode = new Label();
         _split = new SplitContainer();
         _gridPend = new DataGridView();
         _lblHeaderPend = new Label();
         _gridDone = new DataGridView();
         _lblHeaderDone = new Label();
         _pnlStatus = new Panel();
-        tbCex = new TextBox();
-        label3 = new Label();
         _pnlTop.SuspendLayout();
-        _pnlLeft.SuspendLayout();
-        _pnlMode.SuspendLayout();
+        _pnlTopActions.SuspendLayout();
+        _actionPanel.SuspendLayout();
+        tableLayoutPanel8.SuspendLayout();
+        tableLayoutPanel9.SuspendLayout();
+        _pnlTrainDateHost.SuspendLayout();
+        _pnlTrainTimeHost.SuspendLayout();
+        tabPanTrainTimeDayMode.SuspendLayout();
+        tableLayoutPanel5.SuspendLayout();
+        tableLayoutPanel7.SuspendLayout();
+        tableLayoutPanel4.SuspendLayout();
+        tableLayoutPanel1.SuspendLayout();
+        _pnlGruzHost.SuspendLayout();
+        tableLayoutPanel2.SuspendLayout();
+        _pnlNvagHost.SuspendLayout();
+        tableLayoutPanel3.SuspendLayout();
+        tableLayoutPanel6.SuspendLayout();
+        _pnlTarHost.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_split).BeginInit();
         _split.Panel1.SuspendLayout();
         _split.Panel2.SuspendLayout();
         _split.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_gridPend).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_gridDone).BeginInit();
-        _pnlStatus.SuspendLayout();
         SuspendLayout();
-        //
+        // 
         // _pnlTop
-        //
-        _pnlTop.BackColor = UiColors.FilterBar;
-        _pnlTop.Controls.Add(label3);
-        _pnlTop.Controls.Add(tbCex);
-        _pnlTop.Controls.Add(label2);
-        _pnlTop.Controls.Add(lblpotr);
-        _pnlTop.Controls.Add(_tbPlat);
-        _pnlTop.Controls.Add(_tbPotr);
-        _pnlTop.Controls.Add(_pnlLeft);
-        _pnlTop.Controls.Add(_pnlMode);
-        _pnlTop.Controls.Add(_lblDateCap);
-        _pnlTop.Controls.Add(_lblDt);
-        _pnlTop.Controls.Add(_lblTimeCap);
-        _pnlTop.Controls.Add(_lblVr);
-        _pnlTop.Controls.Add(_lblNppCap);
-        _pnlTop.Controls.Add(_lblNpp);
-        _pnlTop.Controls.Add(_lblModeCap);
-        _pnlTop.Controls.Add(_lblMode);
-        _pnlTop.Controls.Add(_lblNvagCap);
-        _pnlTop.Controls.Add(_txtNvag);
-        _pnlTop.Controls.Add(_lblDirCap);
-        _pnlTop.Controls.Add(_lblDir);
-        _pnlTop.Controls.Add(_lblGruzCap);
-        _pnlTop.Controls.Add(_txtGruz);
-        _pnlTop.Controls.Add(_lblNdokCap);
-        _pnlTop.Controls.Add(_txtNdok);
-        _pnlTop.Controls.Add(_lblBruttoCap);
-        _pnlTop.Controls.Add(_lblBrutto);
-        _pnlTop.Controls.Add(_lblBruttoUnit);
-        _pnlTop.Controls.Add(_lblTarCap);
-        _pnlTop.Controls.Add(_cmbTar);
-        _pnlTop.Controls.Add(_lblNettoCap);
-        _pnlTop.Controls.Add(_lblNetto);
-        _pnlTop.Controls.Add(_lblNettoUnit);
-        _pnlTop.Controls.Add(_btnSave);
-        _pnlTop.Controls.Add(_btnTransfer);
-        _pnlTop.Controls.Add(_btnClear);
-        _pnlTop.Controls.Add(_btnRefresh);
+        // 
+        _pnlTop.Controls.Add(_pnlTopActions);
         _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(0, 0);
+        _pnlTop.Margin = new Padding(4, 5, 4, 5);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1264, 168);
+        _pnlTop.Size = new Size(1806, 467);
         _pnlTop.TabIndex = 0;
-        //
-        // label2
-        //
-        label2.AutoSize = true;
-        label2.Font = UiFonts.Body;
-        label2.ForeColor = UiColors.TextMuted;
-        label2.Location = new Point(851, 38);
-        label2.Name = "label2";
-        label2.Size = new Size(94, 20);
-        label2.TabIndex = 32;
-        label2.Text = "Плательщик";
-        //
-        // lblpotr
-        //
-        lblpotr.AutoSize = true;
-        lblpotr.Font = UiFonts.Body;
-        lblpotr.ForeColor = UiColors.TextMuted;
-        lblpotr.Location = new Point(845, 11);
-        lblpotr.Name = "lblpotr";
-        lblpotr.Size = new Size(100, 20);
-        lblpotr.TabIndex = 31;
-        lblpotr.Text = "Потребитель";
-        //
-        // _tbPlat
-        //
-        _tbPlat.Font = UiFonts.Body;
-        _tbPlat.BackColor = UiColors.InputBack;
-        _tbPlat.ForeColor = UiColors.InputFore;
-        _tbPlat.Location = new Point(954, 33);
-        _tbPlat.Name = "_tbPlat";
-        _tbPlat.Size = new Size(233, 27);
-        _tbPlat.TabIndex = 30;
-        //
-        // _tbPotr
-        //
-        _tbPotr.Font = UiFonts.Body;
-        _tbPotr.BackColor = UiColors.InputBack;
-        _tbPotr.ForeColor = UiColors.InputFore;
-        _tbPotr.Location = new Point(954, 5);
-        _tbPotr.Name = "_tbPotr";
-        _tbPotr.Size = new Size(232, 27);
-        _tbPotr.TabIndex = 29;
-        //
-        // _pnlLeft
-        //
-        _pnlLeft.BackColor = UiColors.PendingAction;
-        _pnlLeft.Controls.Add(_lblVidVzv);
-        _pnlLeft.Controls.Add(_rbGpri);
-        _pnlLeft.Controls.Add(_rbGras);
-        _pnlLeft.Location = new Point(0, 0);
-        _pnlLeft.Name = "_pnlLeft";
-        _pnlLeft.Size = new Size(142, 98);
-        _pnlLeft.TabIndex = 0;
-        //
-        // _lblVidVzv
-        //
-        _lblVidVzv.AutoSize = true;
-        _lblVidVzv.Font = UiFonts.BodyBold;
-        _lblVidVzv.ForeColor = UiColors.TextOnDark;
-        _lblVidVzv.Location = new Point(2, 5);
-        _lblVidVzv.Name = "_lblVidVzv";
-        _lblVidVzv.Size = new Size(140, 20);
-        _lblVidVzv.TabIndex = 0;
-        _lblVidVzv.Text = "Вид взвешивания";
-        //
-        // _rbGpri
-        //
-        _rbGpri.AutoSize = true;
-        _rbGpri.Checked = true;
-        _rbGpri.Font = UiFonts.MediumBold;
-        _rbGpri.ForeColor = UiColors.TextOnDark;
-        _rbGpri.Location = new Point(6, 29);
-        _rbGpri.Name = "_rbGpri";
-        _rbGpri.Size = new Size(96, 27);
-        _rbGpri.TabIndex = 1;
-        _rbGpri.TabStop = true;
-        _rbGpri.Text = "Приход";
-        //
-        // _rbGras
-        //
-        _rbGras.AutoSize = true;
-        _rbGras.Font = UiFonts.MediumBold;
-        _rbGras.ForeColor = UiColors.TextOnDark;
-        _rbGras.Location = new Point(6, 59);
-        _rbGras.Name = "_rbGras";
-        _rbGras.Size = new Size(88, 27);
-        _rbGras.TabIndex = 2;
-        _rbGras.Text = "Расход";
-        //
-        // _pnlMode
-        //
-        _pnlMode.BackColor = UiColors.InfoAction;
-        _pnlMode.Controls.Add(_lblVidMode);
-        _pnlMode.Controls.Add(_rbBrutto);
-        _pnlMode.Controls.Add(_rbTara);
-        _pnlMode.Location = new Point(0, 100);
-        _pnlMode.Name = "_pnlMode";
-        _pnlMode.Size = new Size(142, 66);
-        _pnlMode.TabIndex = 35;
-        //
-        // _lblVidMode
-        //
-        _lblVidMode.AutoSize = true;
-        _lblVidMode.Font = UiFonts.BodyBold;
-        _lblVidMode.ForeColor = UiColors.TextOnDark;
-        _lblVidMode.Location = new Point(2, 3);
-        _lblVidMode.Name = "_lblVidMode";
-        _lblVidMode.Size = new Size(100, 20);
-        _lblVidMode.TabIndex = 0;
-        _lblVidMode.Text = "Тип операции";
-        //
-        // _rbBrutto
-        //
-        _rbBrutto.AutoSize = true;
-        _rbBrutto.Checked = true;
-        _rbBrutto.Font = UiFonts.MediumBold;
-        _rbBrutto.ForeColor = UiColors.TextOnDark;
-        _rbBrutto.Location = new Point(6, 22);
-        _rbBrutto.Name = "_rbBrutto";
-        _rbBrutto.Size = new Size(90, 27);
-        _rbBrutto.TabIndex = 1;
-        _rbBrutto.TabStop = true;
-        _rbBrutto.Text = "Брутто";
-        //
-        // _rbTara
-        //
-        _rbTara.AutoSize = true;
-        _rbTara.Font = UiFonts.MediumBold;
-        _rbTara.ForeColor = UiColors.TextOnDark;
-        _rbTara.Location = new Point(6, 44);
-        _rbTara.Name = "_rbTara";
-        _rbTara.Size = new Size(72, 27);
-        _rbTara.TabIndex = 2;
-        _rbTara.Text = "Тара";
-        _rbTara.CheckedChanged += RbTara_CheckedChanged;
-        //
+        // 
+        // _pnlTopActions
+        // 
+        _pnlTopActions.Controls.Add(_actionPanel);
+        _pnlTopActions.Controls.Add(tableLayoutPanel5);
+        _pnlTopActions.Dock = DockStyle.Top;
+        _pnlTopActions.Location = new Point(0, 0);
+        _pnlTopActions.Margin = new Padding(4, 5, 4, 5);
+        _pnlTopActions.Name = "_pnlTopActions";
+        _pnlTopActions.Size = new Size(1806, 457);
+        _pnlTopActions.TabIndex = 2;
+        // 
+        // _actionPanel
+        // 
+        _actionPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        _actionPanel.Controls.Add(tableLayoutPanel8);
+        _actionPanel.Location = new Point(3, 325);
+        _actionPanel.Name = "_actionPanel";
+        _actionPanel.Size = new Size(1800, 112);
+        _actionPanel.TabIndex = 42;
+        // 
+        // tableLayoutPanel8
+        // 
+        tableLayoutPanel8.ColumnCount = 7;
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.611111F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.2777786F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.4444447F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.666667F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.11111F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.2222214F));
+        tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.6111107F));
+        tableLayoutPanel8.Controls.Add(_btnClear, 6, 0);
+        tableLayoutPanel8.Controls.Add(_btnTransfer, 5, 0);
+        tableLayoutPanel8.Controls.Add(_btnSave, 4, 0);
+        tableLayoutPanel8.Controls.Add(tableLayoutPanel9, 1, 0);
+        tableLayoutPanel8.Controls.Add(tabPanTrainTimeDayMode, 0, 0);
+        tableLayoutPanel8.Controls.Add(_btnRefresh, 2, 0);
+        tableLayoutPanel8.Dock = DockStyle.Fill;
+        tableLayoutPanel8.Location = new Point(0, 0);
+        tableLayoutPanel8.Name = "tableLayoutPanel8";
+        tableLayoutPanel8.RowCount = 1;
+        tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tableLayoutPanel8.Size = new Size(1800, 112);
+        tableLayoutPanel8.TabIndex = 0;
+        // 
+        // _btnClear
+        // 
+        _btnClear.Dock = DockStyle.Fill;
+        _btnClear.FlatStyle = FlatStyle.Flat;
+        _btnClear.Location = new Point(1628, 20);
+        _btnClear.Margin = new Padding(20);
+        _btnClear.Name = "_btnClear";
+        _btnClear.Size = new Size(152, 72);
+        _btnClear.TabIndex = 27;
+        _btnClear.Text = "Очистить";
+        _btnClear.UseVisualStyleBackColor = false;
+        _btnClear.Click += BtnClear_Click;
+        // 
+        // _btnTransfer
+        // 
+        _btnTransfer.Dock = DockStyle.Fill;
+        _btnTransfer.Enabled = false;
+        _btnTransfer.FlatAppearance.BorderSize = 0;
+        _btnTransfer.FlatStyle = FlatStyle.Flat;
+        _btnTransfer.Location = new Point(1264, 20);
+        _btnTransfer.Margin = new Padding(20);
+        _btnTransfer.Name = "_btnTransfer";
+        _btnTransfer.Size = new Size(324, 72);
+        _btnTransfer.TabIndex = 26;
+        _btnTransfer.Text = "Перенести";
+        _btnTransfer.UseVisualStyleBackColor = false;
+        _btnTransfer.Click += BtnTransfer_Click;
+        // 
         // _btnSave
-        //
-        _btnSave.BackColor = UiColors.InfoAction;
+        // 
+        _btnSave.Dock = DockStyle.Fill;
         _btnSave.Enabled = false;
         _btnSave.FlatAppearance.BorderSize = 0;
         _btnSave.FlatStyle = FlatStyle.Flat;
-        _btnSave.Font = UiFonts.MediumBold;
-        _btnSave.ForeColor = UiColors.TextOnDark;
-        _btnSave.Location = new Point(148, 128);
+        _btnSave.Location = new Point(884, 20);
+        _btnSave.Margin = new Padding(20);
         _btnSave.Name = "_btnSave";
-        _btnSave.Size = new Size(240, 32);
+        _btnSave.Size = new Size(340, 72);
         _btnSave.TabIndex = 36;
         _btnSave.Text = "Сохранить";
         _btnSave.UseVisualStyleBackColor = false;
         _btnSave.Visible = false;
         _btnSave.Click += BtnSave_Click;
-        //
-        // _lblDateCap
-        //
-        _lblDateCap.AutoSize = true;
-        _lblDateCap.Font = UiFonts.Body;
-        _lblDateCap.ForeColor = UiColors.TextMuted;
-        _lblDateCap.Location = new Point(148, 11);
-        _lblDateCap.Name = "_lblDateCap";
-        _lblDateCap.Size = new Size(44, 20);
-        _lblDateCap.TabIndex = 1;
-        _lblDateCap.Text = "Дата:";
-        //
-        // _lblDt
-        //
-        _lblDt.AutoSize = true;
-        _lblDt.Font = UiFonts.BodyBold;
-        _lblDt.ForeColor = UiColors.TextPrimary;
-        _lblDt.Location = new Point(198, 11);
-        _lblDt.Name = "_lblDt";
-        _lblDt.Size = new Size(24, 20);
-        _lblDt.TabIndex = 2;
-        _lblDt.Text = "—";
-        //
-        // _lblTimeCap
-        //
-        _lblTimeCap.AutoSize = true;
-        _lblTimeCap.Font = UiFonts.Body;
-        _lblTimeCap.ForeColor = UiColors.TextMuted;
-        _lblTimeCap.Location = new Point(321, 11);
-        _lblTimeCap.Name = "_lblTimeCap";
-        _lblTimeCap.Size = new Size(57, 20);
-        _lblTimeCap.TabIndex = 3;
-        _lblTimeCap.Text = "Время:";
-        //
-        // _lblVr
-        //
-        _lblVr.AutoSize = true;
-        _lblVr.Font = UiFonts.BodyBold;
-        _lblVr.ForeColor = UiColors.TextPrimary;
-        _lblVr.Location = new Point(384, 11);
-        _lblVr.Name = "_lblVr";
-        _lblVr.Size = new Size(24, 20);
-        _lblVr.TabIndex = 4;
-        _lblVr.Text = "—";
-        //
-        // _lblNppCap
-        //
-        _lblNppCap.AutoSize = true;
-        _lblNppCap.Font = UiFonts.Body;
-        _lblNppCap.ForeColor = UiColors.TextMuted;
-        _lblNppCap.Location = new Point(504, 11);
-        _lblNppCap.Name = "_lblNppCap";
-        _lblNppCap.Size = new Size(53, 20);
-        _lblNppCap.TabIndex = 5;
-        _lblNppCap.Text = "№п/п:";
-        //
-        // _lblNpp
-        //
-        _lblNpp.AutoSize = true;
-        _lblNpp.Font = UiFonts.BodyBold;
-        _lblNpp.ForeColor = UiColors.TextPrimary;
-        _lblNpp.Location = new Point(563, 11);
-        _lblNpp.Name = "_lblNpp";
-        _lblNpp.Size = new Size(24, 20);
-        _lblNpp.TabIndex = 6;
-        _lblNpp.Text = "—";
-        //
-        // _lblModeCap
-        //
-        _lblModeCap.AutoSize = true;
-        _lblModeCap.Font = UiFonts.Body;
-        _lblModeCap.ForeColor = UiColors.TextMuted;
-        _lblModeCap.Location = new Point(672, 11);
-        _lblModeCap.Name = "_lblModeCap";
-        _lblModeCap.Size = new Size(59, 20);
-        _lblModeCap.TabIndex = 7;
-        _lblModeCap.Text = "Режим:";
-        //
-        // _lblMode
-        //
-        _lblMode.AutoSize = true;
-        _lblMode.Font = UiFonts.BodyBold;
-        _lblMode.ForeColor = UiColors.TextPrimary;
-        _lblMode.Location = new Point(737, 11);
-        _lblMode.Name = "_lblMode";
-        _lblMode.Size = new Size(24, 20);
-        _lblMode.TabIndex = 8;
-        _lblMode.Text = "—";
-        //
-        // _lblNvagCap
-        //
-        _lblNvagCap.AutoSize = true;
-        _lblNvagCap.Font = UiFonts.Body;
-        _lblNvagCap.ForeColor = UiColors.TextMuted;
-        _lblNvagCap.Location = new Point(151, 42);
-        _lblNvagCap.Name = "_lblNvagCap";
-        _lblNvagCap.Size = new Size(81, 20);
-        _lblNvagCap.TabIndex = 9;
-        _lblNvagCap.Text = "№ вагона:";
-        //
-        // _txtNvag
-        //
-        _txtNvag.Font = UiFonts.Body;
-        _txtNvag.BackColor = UiColors.InputBack;
-        _txtNvag.ForeColor = UiColors.InputFore;
-        _txtNvag.Location = new Point(235, 38);
-        _txtNvag.Name = "_txtNvag";
-        _txtNvag.Size = new Size(170, 27);
-        _txtNvag.TabIndex = 10;
-        _txtNvag.Leave += TxtNvag_Leave;
-        //
-        // _lblDirCap
-        //
-        _lblDirCap.AutoSize = true;
-        _lblDirCap.Font = UiFonts.Body;
-        _lblDirCap.ForeColor = UiColors.TextMuted;
-        _lblDirCap.Location = new Point(625, 41);
-        _lblDirCap.Name = "_lblDirCap";
-        _lblDirCap.Size = new Size(107, 20);
-        _lblDirCap.TabIndex = 11;
-        _lblDirCap.Text = "Направление:";
-        //
-        // _lblDir
-        //
-        _lblDir.AutoSize = true;
-        _lblDir.Font = UiFonts.BodyBold;
-        _lblDir.ForeColor = UiColors.TextPrimary;
-        _lblDir.Location = new Point(738, 41);
-        _lblDir.Name = "_lblDir";
-        _lblDir.Size = new Size(24, 20);
-        _lblDir.TabIndex = 12;
-        _lblDir.Text = "—";
-        //
-        // _lblGruzCap
-        //
-        _lblGruzCap.AutoSize = true;
-        _lblGruzCap.Font = UiFonts.Body;
-        _lblGruzCap.ForeColor = UiColors.TextMuted;
-        _lblGruzCap.Location = new Point(190, 68);
-        _lblGruzCap.Name = "_lblGruzCap";
-        _lblGruzCap.Size = new Size(42, 20);
-        _lblGruzCap.TabIndex = 13;
-        _lblGruzCap.Text = "Груз:";
-        //
-        // _txtGruz
-        //
-        _txtGruz.Font = UiFonts.Body;
-        _txtGruz.BackColor = UiColors.InputBack;
-        _txtGruz.ForeColor = UiColors.InputFore;
-        _txtGruz.Location = new Point(235, 65);
-        _txtGruz.Name = "_txtGruz";
-        _txtGruz.Size = new Size(270, 27);
-        _txtGruz.TabIndex = 14;
-        //
-        // _lblNdokCap
-        //
-        _lblNdokCap.AutoSize = true;
-        _lblNdokCap.Font = UiFonts.Body;
-        _lblNdokCap.ForeColor = UiColors.TextMuted;
-        _lblNdokCap.Location = new Point(626, 69);
-        _lblNdokCap.Name = "_lblNdokCap";
-        _lblNdokCap.Size = new Size(106, 20);
-        _lblNdokCap.TabIndex = 15;
-        _lblNdokCap.Text = "№ документа:";
-        //
-        // _txtNdok
-        //
-        _txtNdok.Font = UiFonts.Body;
-        _txtNdok.BackColor = UiColors.InputBack;
-        _txtNdok.ForeColor = UiColors.InputFore;
-        _txtNdok.Location = new Point(737, 65);
-        _txtNdok.Name = "_txtNdok";
-        _txtNdok.Size = new Size(130, 27);
-        _txtNdok.TabIndex = 16;
-        //
-        // _lblBruttoCap
-        //
-        _lblBruttoCap.AutoSize = true;
-        _lblBruttoCap.Font = UiFonts.Body;
-        _lblBruttoCap.ForeColor = UiColors.TextMuted;
-        _lblBruttoCap.Location = new Point(148, 96);
-        _lblBruttoCap.Name = "_lblBruttoCap";
-        _lblBruttoCap.Size = new Size(58, 20);
-        _lblBruttoCap.TabIndex = 17;
-        _lblBruttoCap.Text = "Брутто:";
-        //
-        // _lblBrutto
-        //
-        _lblBrutto.AutoSize = true;
-        _lblBrutto.Font = UiFonts.MonoBold;
-        _lblBrutto.ForeColor = UiColors.TextPrimary;
-        _lblBrutto.Location = new Point(212, 96);
-        _lblBrutto.Name = "_lblBrutto";
-        _lblBrutto.Size = new Size(19, 20);
-        _lblBrutto.TabIndex = 18;
-        _lblBrutto.Text = "—";
-        //
-        // _lblBruttoUnit
-        //
-        _lblBruttoUnit.AutoSize = true;
-        _lblBruttoUnit.Font = UiFonts.Body;
-        _lblBruttoUnit.ForeColor = UiColors.TextMuted;
-        _lblBruttoUnit.Location = new Point(282, 96);
-        _lblBruttoUnit.Name = "_lblBruttoUnit";
-        _lblBruttoUnit.Size = new Size(15, 20);
-        _lblBruttoUnit.TabIndex = 19;
-        _lblBruttoUnit.Text = "т";
-        //
-        // _lblTarCap
-        //
-        _lblTarCap.AutoSize = true;
-        _lblTarCap.Font = UiFonts.Body;
-        _lblTarCap.ForeColor = UiColors.TextMuted;
-        _lblTarCap.Location = new Point(306, 96);
-        _lblTarCap.Name = "_lblTarCap";
-        _lblTarCap.Size = new Size(45, 20);
-        _lblTarCap.TabIndex = 20;
-        _lblTarCap.Text = "Тара:";
-        //
-        // _cmbTar
-        //
-        _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbTar.Font = UiFonts.Body;
-        _cmbTar.BackColor = UiColors.InputBack;
-        _cmbTar.ForeColor = UiColors.InputFore;
-        _cmbTar.Location = new Point(352, 94);
-        _cmbTar.Name = "_cmbTar";
-        _cmbTar.Size = new Size(284, 28);
-        _cmbTar.TabIndex = 21;
-        _cmbTar.SelectedIndexChanged += CmbTar_SelectedIndexChanged;
-        //
-        // _lblNettoCap
-        //
-        _lblNettoCap.AutoSize = true;
-        _lblNettoCap.Font = UiFonts.Body;
-        _lblNettoCap.ForeColor = UiColors.TextMuted;
-        _lblNettoCap.Location = new Point(646, 97);
-        _lblNettoCap.Name = "_lblNettoCap";
-        _lblNettoCap.Size = new Size(52, 20);
-        _lblNettoCap.TabIndex = 23;
-        _lblNettoCap.Text = "Нетто:";
-        //
-        // _lblNetto
-        //
-        _lblNetto.AutoSize = true;
-        _lblNetto.Font = UiFonts.MonoBold;
-        _lblNetto.ForeColor = UiColors.PrimaryAction;
-        _lblNetto.Location = new Point(710, 97);
-        _lblNetto.Name = "_lblNetto";
-        _lblNetto.Size = new Size(19, 20);
-        _lblNetto.TabIndex = 24;
-        _lblNetto.Text = "—";
-        //
-        // _lblNettoUnit
-        //
-        _lblNettoUnit.AutoSize = true;
-        _lblNettoUnit.Font = UiFonts.Body;
-        _lblNettoUnit.ForeColor = UiColors.TextMuted;
-        _lblNettoUnit.Location = new Point(759, 97);
-        _lblNettoUnit.Name = "_lblNettoUnit";
-        _lblNettoUnit.Size = new Size(15, 20);
-        _lblNettoUnit.TabIndex = 25;
-        _lblNettoUnit.Text = "т";
-        //
-        // _btnTransfer
-        //
-        _btnTransfer.BackColor = UiColors.PrimaryAction;
-        _btnTransfer.Enabled = false;
-        _btnTransfer.FlatAppearance.BorderSize = 0;
-        _btnTransfer.FlatStyle = FlatStyle.Flat;
-        _btnTransfer.Font = UiFonts.MediumBold;
-        _btnTransfer.ForeColor = UiColors.TextOnDark;
-        _btnTransfer.Location = new Point(148, 128);
-        _btnTransfer.Name = "_btnTransfer";
-        _btnTransfer.Size = new Size(240, 32);
-        _btnTransfer.TabIndex = 26;
-        _btnTransfer.Text = "Перенести";
-        _btnTransfer.UseVisualStyleBackColor = false;
-        _btnTransfer.Click += BtnTransfer_Click;
-        //
-        // _btnClear
-        //
-        _btnClear.BackColor = UiColors.NeutralAction;
-        _btnClear.FlatStyle = FlatStyle.Flat;
-        _btnClear.Font = UiFonts.Body;
-        _btnClear.ForeColor = UiColors.TextPrimary;
-        _btnClear.Location = new Point(402, 128);
-        _btnClear.Name = "_btnClear";
-        _btnClear.Size = new Size(110, 32);
-        _btnClear.TabIndex = 27;
-        _btnClear.Text = "Очистить";
-        _btnClear.UseVisualStyleBackColor = false;
-        _btnClear.Click += BtnClear_Click;
-        //
+        // 
+        // tableLayoutPanel9
+        // 
+        tableLayoutPanel9.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel9.ColumnCount = 2;
+        tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35.69405F));
+        tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 64.30595F));
+        tableLayoutPanel9.Controls.Add(_pnlTrainDateHost, 1, 0);
+        tableLayoutPanel9.Controls.Add(_pnlTrainTimeHost, 1, 1);
+        tableLayoutPanel9.Controls.Add(labTrainDate, 0, 0);
+        tableLayoutPanel9.Controls.Add(label4, 0, 1);
+        tableLayoutPanel9.Dock = DockStyle.Fill;
+        tableLayoutPanel9.Location = new Point(158, 3);
+        tableLayoutPanel9.Name = "tableLayoutPanel9";
+        tableLayoutPanel9.RowCount = 2;
+        tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel9.Size = new Size(341, 106);
+        tableLayoutPanel9.TabIndex = 37;
+        // 
+        // _pnlTrainDateHost
+        // 
+        _pnlTrainDateHost.ColumnCount = 1;
+        _pnlTrainDateHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlTrainDateHost.Controls.Add(_dtpTrainDate, 0, 1);
+        _pnlTrainDateHost.Dock = DockStyle.Fill;
+        _pnlTrainDateHost.Location = new Point(122, 1);
+        _pnlTrainDateHost.Margin = new Padding(0);
+        _pnlTrainDateHost.Name = "_pnlTrainDateHost";
+        _pnlTrainDateHost.RowCount = 3;
+        _pnlTrainDateHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTrainDateHost.RowStyles.Add(new RowStyle());
+        _pnlTrainDateHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTrainDateHost.Size = new Size(218, 51);
+        _pnlTrainDateHost.TabIndex = 37;
+        // 
+        // _dtpTrainDate
+        // 
+        _dtpTrainDate.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _dtpTrainDate.CustomFormat = "dd.MM.yyyy";
+        _dtpTrainDate.Format = DateTimePickerFormat.Custom;
+        _dtpTrainDate.Location = new Point(6, 10);
+        _dtpTrainDate.Margin = new Padding(6, 0, 6, 0);
+        _dtpTrainDate.Name = "_dtpTrainDate";
+        _dtpTrainDate.Size = new Size(206, 31);
+        _dtpTrainDate.TabIndex = 0;
+        // 
+        // _pnlTrainTimeHost
+        // 
+        _pnlTrainTimeHost.ColumnCount = 1;
+        _pnlTrainTimeHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlTrainTimeHost.Controls.Add(_dtpTrainTime, 0, 1);
+        _pnlTrainTimeHost.Dock = DockStyle.Fill;
+        _pnlTrainTimeHost.Location = new Point(122, 53);
+        _pnlTrainTimeHost.Margin = new Padding(0);
+        _pnlTrainTimeHost.Name = "_pnlTrainTimeHost";
+        _pnlTrainTimeHost.RowCount = 3;
+        _pnlTrainTimeHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTrainTimeHost.RowStyles.Add(new RowStyle());
+        _pnlTrainTimeHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTrainTimeHost.Size = new Size(218, 52);
+        _pnlTrainTimeHost.TabIndex = 38;
+        // 
+        // _dtpTrainTime
+        // 
+        _dtpTrainTime.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _dtpTrainTime.CustomFormat = "HH:mm:ss";
+        _dtpTrainTime.Format = DateTimePickerFormat.Custom;
+        _dtpTrainTime.Location = new Point(6, 10);
+        _dtpTrainTime.Margin = new Padding(6, 0, 6, 0);
+        _dtpTrainTime.Name = "_dtpTrainTime";
+        _dtpTrainTime.ShowUpDown = true;
+        _dtpTrainTime.Size = new Size(206, 31);
+        _dtpTrainTime.TabIndex = 1;
+        // 
+        // labTrainDate
+        // 
+        labTrainDate.AutoSize = true;
+        labTrainDate.Dock = DockStyle.Fill;
+        labTrainDate.Location = new Point(5, 1);
+        labTrainDate.Margin = new Padding(4, 0, 4, 0);
+        labTrainDate.Name = "labTrainDate";
+        labTrainDate.Size = new Size(112, 51);
+        labTrainDate.TabIndex = 2;
+        labTrainDate.Text = "Дата сост.";
+        labTrainDate.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // label4
+        // 
+        label4.AutoSize = true;
+        label4.Dock = DockStyle.Fill;
+        label4.Location = new Point(5, 53);
+        label4.Margin = new Padding(4, 0, 4, 0);
+        label4.Name = "label4";
+        label4.Size = new Size(112, 52);
+        label4.TabIndex = 3;
+        label4.Text = "Время сост.";
+        label4.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // tabPanTrainTimeDayMode
+        // 
+        tabPanTrainTimeDayMode.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tabPanTrainTimeDayMode.ColumnCount = 1;
+        tabPanTrainTimeDayMode.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tabPanTrainTimeDayMode.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tabPanTrainTimeDayMode.Controls.Add(rbTrainMode, 0, 0);
+        tabPanTrainTimeDayMode.Controls.Add(rbDayMode, 0, 1);
+        tabPanTrainTimeDayMode.Dock = DockStyle.Fill;
+        tabPanTrainTimeDayMode.Location = new Point(3, 3);
+        tabPanTrainTimeDayMode.Name = "tabPanTrainTimeDayMode";
+        tabPanTrainTimeDayMode.RowCount = 2;
+        tabPanTrainTimeDayMode.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tabPanTrainTimeDayMode.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tabPanTrainTimeDayMode.Size = new Size(149, 106);
+        tabPanTrainTimeDayMode.TabIndex = 38;
+        // 
+        // rbTrainMode
+        // 
+        rbTrainMode.AutoSize = true;
+        rbTrainMode.Dock = DockStyle.Fill;
+        rbTrainMode.Location = new Point(15, 4);
+        rbTrainMode.Margin = new Padding(14, 3, 3, 3);
+        rbTrainMode.Name = "rbTrainMode";
+        rbTrainMode.Size = new Size(130, 45);
+        rbTrainMode.TabIndex = 0;
+        rbTrainMode.TabStop = true;
+        rbTrainMode.Text = "Состав";
+        rbTrainMode.UseVisualStyleBackColor = true;
+        // 
+        // rbDayMode
+        // 
+        rbDayMode.AutoSize = true;
+        rbDayMode.Dock = DockStyle.Fill;
+        rbDayMode.Location = new Point(15, 56);
+        rbDayMode.Margin = new Padding(14, 3, 3, 3);
+        rbDayMode.Name = "rbDayMode";
+        rbDayMode.Size = new Size(130, 46);
+        rbDayMode.TabIndex = 1;
+        rbDayMode.TabStop = true;
+        rbDayMode.Text = "Сутки";
+        rbDayMode.UseVisualStyleBackColor = true;
+        // 
         // _btnRefresh
-        //
-        _btnRefresh.BackColor = UiColors.NeutralAction;
+        // 
+        _btnRefresh.AutoSize = true;
+        _btnRefresh.Dock = DockStyle.Fill;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
-        _btnRefresh.Font = UiFonts.Body;
-        _btnRefresh.ForeColor = UiColors.TextPrimary;
-        _btnRefresh.Location = new Point(526, 128);
+        _btnRefresh.Location = new Point(522, 20);
+        _btnRefresh.Margin = new Padding(20);
         _btnRefresh.Name = "_btnRefresh";
-        _btnRefresh.Size = new Size(110, 32);
+        _btnRefresh.Size = new Size(166, 72);
         _btnRefresh.TabIndex = 28;
         _btnRefresh.Text = "Обновить";
         _btnRefresh.UseVisualStyleBackColor = false;
         _btnRefresh.Click += BtnRefresh_Click;
-        //
+        // 
+        // tableLayoutPanel5
+        // 
+        tableLayoutPanel5.ColumnCount = 3;
+        tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.2757473F));
+        tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.23145F));
+        tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35.43743F));
+        tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+        tableLayoutPanel5.Controls.Add(tableLayoutPanel7, 2, 0);
+        tableLayoutPanel5.Controls.Add(tableLayoutPanel4, 0, 0);
+        tableLayoutPanel5.Controls.Add(tableLayoutPanel1, 2, 1);
+        tableLayoutPanel5.Controls.Add(tableLayoutPanel2, 1, 0);
+        tableLayoutPanel5.Controls.Add(tableLayoutPanel3, 0, 1);
+        tableLayoutPanel5.Controls.Add(tableLayoutPanel6, 1, 1);
+        tableLayoutPanel5.Dock = DockStyle.Top;
+        tableLayoutPanel5.Location = new Point(0, 0);
+        tableLayoutPanel5.Name = "tableLayoutPanel5";
+        tableLayoutPanel5.RowCount = 2;
+        tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 49.4071159F));
+        tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50.5928841F));
+        tableLayoutPanel5.Size = new Size(1806, 302);
+        tableLayoutPanel5.TabIndex = 41;
+        // 
+        // tableLayoutPanel7
+        // 
+        tableLayoutPanel7.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel7.ColumnCount = 2;
+        tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.33754F));
+        tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70.66246F));
+        tableLayoutPanel7.Controls.Add(label3, 0, 0);
+        tableLayoutPanel7.Controls.Add(lblpotr, 0, 1);
+        tableLayoutPanel7.Controls.Add(_tbCex, 1, 0);
+        tableLayoutPanel7.Controls.Add(_tbPotr, 1, 1);
+        tableLayoutPanel7.Dock = DockStyle.Fill;
+        tableLayoutPanel7.Location = new Point(1168, 3);
+        tableLayoutPanel7.Name = "tableLayoutPanel7";
+        tableLayoutPanel7.RowCount = 2;
+        tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel7.Size = new Size(635, 143);
+        tableLayoutPanel7.TabIndex = 43;
+        // 
+        // label3
+        // 
+        label3.AutoSize = true;
+        label3.Dock = DockStyle.Fill;
+        label3.Location = new Point(2, 1);
+        label3.Margin = new Padding(1, 0, 1, 0);
+        label3.Name = "label3";
+        label3.Size = new Size(183, 70);
+        label3.TabIndex = 34;
+        label3.Text = "Цех";
+        label3.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // lblpotr
+        // 
+        lblpotr.AutoSize = true;
+        lblpotr.Dock = DockStyle.Fill;
+        lblpotr.Location = new Point(1, 72);
+        lblpotr.Margin = new Padding(0);
+        lblpotr.Name = "lblpotr";
+        lblpotr.Size = new Size(185, 70);
+        lblpotr.TabIndex = 31;
+        lblpotr.Text = "Потребитель";
+        lblpotr.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _tbCex
+        // 
+        _tbCex.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbCex.Location = new Point(193, 20);
+        _tbCex.Margin = new Padding(6, 0, 6, 0);
+        _tbCex.MaxLength = 3;
+        _tbCex.Name = "_tbCex";
+        _tbCex.Size = new Size(435, 31);
+        _tbCex.TabIndex = 33;
+        // 
+        // _tbPotr
+        // 
+        _tbPotr.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbPotr.Location = new Point(193, 91);
+        _tbPotr.Margin = new Padding(6, 0, 6, 0);
+        _tbPotr.MaxLength = 30;
+        _tbPotr.Name = "_tbPotr";
+        _tbPotr.Size = new Size(435, 31);
+        _tbPotr.TabIndex = 29;
+        _tbPotr.TextAlign = HorizontalAlignment.Left;
+        // 
+        // tableLayoutPanel4
+        // 
+        tableLayoutPanel4.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel4.ColumnCount = 2;
+        tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel4.Controls.Add(_rbGras, 1, 0);
+        tableLayoutPanel4.Controls.Add(_rbGpri, 0, 0);
+        tableLayoutPanel4.Dock = DockStyle.Fill;
+        tableLayoutPanel4.Location = new Point(3, 3);
+        tableLayoutPanel4.Name = "tableLayoutPanel4";
+        tableLayoutPanel4.RowCount = 1;
+        tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel4.Size = new Size(306, 143);
+        tableLayoutPanel4.TabIndex = 41;
+        // 
+        // _rbGras
+        // 
+        _rbGras.AutoSize = true;
+        _rbGras.Dock = DockStyle.Fill;
+        _rbGras.Location = new Point(167, 6);
+        _rbGras.Margin = new Padding(14, 5, 4, 5);
+        _rbGras.Name = "_rbGras";
+        _rbGras.Size = new Size(134, 131);
+        _rbGras.TabIndex = 2;
+        _rbGras.Text = "Расход";
+        // 
+        // _rbGpri
+        // 
+        _rbGpri.AutoSize = true;
+        _rbGpri.Checked = true;
+        _rbGpri.Dock = DockStyle.Fill;
+        _rbGpri.Location = new Point(15, 6);
+        _rbGpri.Margin = new Padding(14, 5, 4, 5);
+        _rbGpri.Name = "_rbGpri";
+        _rbGpri.Size = new Size(133, 131);
+        _rbGpri.TabIndex = 1;
+        _rbGpri.TabStop = true;
+        _rbGpri.Text = "Приход";
+        // 
+        // tableLayoutPanel1
+        // 
+        tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel1.ColumnCount = 2;
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.1798115F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70.82019F));
+        tableLayoutPanel1.Controls.Add(_pnlGruzHost, 1, 1);
+        tableLayoutPanel1.Controls.Add(_lblGruzCap, 0, 1);
+        tableLayoutPanel1.Controls.Add(_tbPlat, 1, 0);
+        tableLayoutPanel1.Controls.Add(label2, 0, 0);
+        tableLayoutPanel1.Dock = DockStyle.Fill;
+        tableLayoutPanel1.Location = new Point(1168, 152);
+        tableLayoutPanel1.Name = "tableLayoutPanel1";
+        tableLayoutPanel1.RowCount = 2;
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.Size = new Size(635, 147);
+        tableLayoutPanel1.TabIndex = 38;
+        // 
+        // _pnlGruzHost
+        // 
+        _pnlGruzHost.ColumnCount = 1;
+        _pnlGruzHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlGruzHost.Controls.Add(_tbGruz, 0, 1);
+        _pnlGruzHost.Dock = DockStyle.Fill;
+        _pnlGruzHost.Location = new Point(186, 74);
+        _pnlGruzHost.Margin = new Padding(0);
+        _pnlGruzHost.Name = "_pnlGruzHost";
+        _pnlGruzHost.RowCount = 3;
+        _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlGruzHost.RowStyles.Add(new RowStyle());
+        _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlGruzHost.Size = new Size(448, 72);
+        _pnlGruzHost.TabIndex = 15;
+        // 
+        // _tbGruz
+        // 
+        _tbGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbGruz.Location = new Point(6, 20);
+        _tbGruz.Margin = new Padding(6, 0, 6, 0);
+        _tbGruz.MaxLength = 20;
+        _tbGruz.Name = "_tbGruz";
+        _tbGruz.Size = new Size(436, 31);
+        _tbGruz.TabIndex = 14;
+        // 
+        // _lblGruzCap
+        // 
+        _lblGruzCap.AutoSize = true;
+        _lblGruzCap.Dock = DockStyle.Fill;
+        _lblGruzCap.Location = new Point(5, 74);
+        _lblGruzCap.Margin = new Padding(4, 0, 4, 0);
+        _lblGruzCap.Name = "_lblGruzCap";
+        _lblGruzCap.Size = new Size(176, 72);
+        _lblGruzCap.TabIndex = 13;
+        _lblGruzCap.Text = "Груз";
+        _lblGruzCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _tbPlat
+        // 
+        _tbPlat.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbPlat.Location = new Point(192, 21);
+        _tbPlat.Margin = new Padding(6, 0, 6, 0);
+        _tbPlat.MaxLength = 30;
+        _tbPlat.Name = "_tbPlat";
+        _tbPlat.Size = new Size(436, 31);
+        _tbPlat.TabIndex = 30;
+        // 
+        // label2
+        // 
+        label2.AutoSize = true;
+        label2.Dock = DockStyle.Fill;
+        label2.Location = new Point(1, 1);
+        label2.Margin = new Padding(0);
+        label2.Name = "label2";
+        label2.Size = new Size(184, 72);
+        label2.TabIndex = 32;
+        label2.Text = "Плательщик";
+        label2.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // tableLayoutPanel2
+        // 
+        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel2.ColumnCount = 4;
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.4989948F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36.9976349F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.68558F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.12293F));
+        tableLayoutPanel2.Controls.Add(_pnlNvagHost, 1, 2);
+        tableLayoutPanel2.Controls.Add(_lblNvagCap, 0, 2);
+        tableLayoutPanel2.Controls.Add(_lblMode, 3, 1);
+        tableLayoutPanel2.Controls.Add(_lblDateCap, 0, 0);
+        tableLayoutPanel2.Controls.Add(_lblModeCap, 2, 1);
+        tableLayoutPanel2.Controls.Add(_lblVr, 1, 1);
+        tableLayoutPanel2.Controls.Add(_lblNpp, 3, 0);
+        tableLayoutPanel2.Controls.Add(_lblDt, 1, 0);
+        tableLayoutPanel2.Controls.Add(_lblNppCap, 2, 0);
+        tableLayoutPanel2.Controls.Add(_lblTimeCap, 0, 1);
+        tableLayoutPanel2.Dock = DockStyle.Fill;
+        tableLayoutPanel2.Location = new Point(315, 3);
+        tableLayoutPanel2.Name = "tableLayoutPanel2";
+        tableLayoutPanel2.RowCount = 3;
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+        tableLayoutPanel2.Size = new Size(847, 143);
+        tableLayoutPanel2.TabIndex = 39;
+        // 
+        // _pnlNvagHost
+        // 
+        _pnlNvagHost.ColumnCount = 1;
+        _pnlNvagHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlNvagHost.Controls.Add(_tbNvag, 0, 1);
+        _pnlNvagHost.Dock = DockStyle.Fill;
+        _pnlNvagHost.Location = new Point(140, 89);
+        _pnlNvagHost.Margin = new Padding(0);
+        _pnlNvagHost.Name = "_pnlNvagHost";
+        _pnlNvagHost.RowCount = 3;
+        _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlNvagHost.RowStyles.Add(new RowStyle());
+        _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlNvagHost.Size = new Size(310, 53);
+        _pnlNvagHost.TabIndex = 11;
+        // 
+        // _tbNvag
+        // 
+        _tbNvag.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _tbNvag.Location = new Point(6, 11);
+        _tbNvag.Margin = new Padding(6, 0, 6, 0);
+        _tbNvag.MaxLength = 10;
+        _tbNvag.Name = "_tbNvag";
+        _tbNvag.Size = new Size(298, 31);
+        _tbNvag.TabIndex = 10;
+        _tbNvag.Leave += TxtNvag_Leave;
+        // 
+        // _lblNvagCap
+        // 
+        _lblNvagCap.AutoSize = true;
+        _lblNvagCap.Dock = DockStyle.Fill;
+        _lblNvagCap.Location = new Point(5, 89);
+        _lblNvagCap.Margin = new Padding(4, 0, 4, 0);
+        _lblNvagCap.Name = "_lblNvagCap";
+        _lblNvagCap.Size = new Size(130, 53);
+        _lblNvagCap.TabIndex = 9;
+        _lblNvagCap.Text = "№ вагона";
+        _lblNvagCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblMode
+        // 
+        _lblMode.Dock = DockStyle.Fill;
+        _lblMode.Location = new Point(625, 45);
+        _lblMode.Margin = new Padding(0);
+        _lblMode.Name = "_lblMode";
+        _lblMode.Size = new Size(221, 43);
+        _lblMode.TabIndex = 8;
+        _lblMode.Text = "—";
+        _lblMode.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblDateCap
+        // 
+        _lblDateCap.Dock = DockStyle.Fill;
+        _lblDateCap.Location = new Point(1, 1);
+        _lblDateCap.Margin = new Padding(0);
+        _lblDateCap.Name = "_lblDateCap";
+        _lblDateCap.Size = new Size(138, 43);
+        _lblDateCap.TabIndex = 1;
+        _lblDateCap.Text = "Дата";
+        _lblDateCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblModeCap
+        // 
+        _lblModeCap.Dock = DockStyle.Fill;
+        _lblModeCap.Location = new Point(451, 45);
+        _lblModeCap.Margin = new Padding(0);
+        _lblModeCap.Name = "_lblModeCap";
+        _lblModeCap.Size = new Size(173, 43);
+        _lblModeCap.TabIndex = 7;
+        _lblModeCap.Text = "Режим";
+        _lblModeCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblVr
+        // 
+        _lblVr.Dock = DockStyle.Fill;
+        _lblVr.Location = new Point(140, 45);
+        _lblVr.Margin = new Padding(0);
+        _lblVr.Name = "_lblVr";
+        _lblVr.Size = new Size(310, 43);
+        _lblVr.TabIndex = 4;
+        _lblVr.Text = "—";
+        _lblVr.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblNpp
+        // 
+        _lblNpp.Dock = DockStyle.Fill;
+        _lblNpp.Location = new Point(625, 1);
+        _lblNpp.Margin = new Padding(0);
+        _lblNpp.Name = "_lblNpp";
+        _lblNpp.Size = new Size(221, 43);
+        _lblNpp.TabIndex = 6;
+        _lblNpp.Text = "—";
+        _lblNpp.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblDt
+        // 
+        _lblDt.Dock = DockStyle.Fill;
+        _lblDt.Location = new Point(140, 1);
+        _lblDt.Margin = new Padding(0);
+        _lblDt.Name = "_lblDt";
+        _lblDt.Padding = new Padding(0, 0, 0, 3);
+        _lblDt.Size = new Size(310, 43);
+        _lblDt.TabIndex = 2;
+        _lblDt.Text = "—";
+        _lblDt.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblNppCap
+        // 
+        _lblNppCap.Dock = DockStyle.Fill;
+        _lblNppCap.Location = new Point(451, 1);
+        _lblNppCap.Margin = new Padding(0);
+        _lblNppCap.Name = "_lblNppCap";
+        _lblNppCap.Size = new Size(173, 43);
+        _lblNppCap.TabIndex = 5;
+        _lblNppCap.Text = "№п/п";
+        _lblNppCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblTimeCap
+        // 
+        _lblTimeCap.Dock = DockStyle.Fill;
+        _lblTimeCap.Location = new Point(1, 45);
+        _lblTimeCap.Margin = new Padding(0);
+        _lblTimeCap.Name = "_lblTimeCap";
+        _lblTimeCap.Size = new Size(138, 43);
+        _lblTimeCap.TabIndex = 3;
+        _lblTimeCap.Text = "Время";
+        _lblTimeCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // tableLayoutPanel3
+        // 
+        tableLayoutPanel3.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel3.ColumnCount = 2;
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.Controls.Add(_rbTara, 1, 0);
+        tableLayoutPanel3.Controls.Add(_rbBrutto, 0, 0);
+        tableLayoutPanel3.Dock = DockStyle.Fill;
+        tableLayoutPanel3.Location = new Point(3, 152);
+        tableLayoutPanel3.Name = "tableLayoutPanel3";
+        tableLayoutPanel3.RowCount = 1;
+        tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.Size = new Size(306, 147);
+        tableLayoutPanel3.TabIndex = 40;
+        // 
+        // _rbTara
+        // 
+        _rbTara.AutoSize = true;
+        _rbTara.Dock = DockStyle.Fill;
+        _rbTara.Location = new Point(167, 6);
+        _rbTara.Margin = new Padding(14, 5, 4, 5);
+        _rbTara.Name = "_rbTara";
+        _rbTara.Size = new Size(134, 135);
+        _rbTara.TabIndex = 2;
+        _rbTara.Text = "Тара";
+        _rbTara.CheckedChanged += RbTara_CheckedChanged;
+        // 
+        // _rbBrutto
+        // 
+        _rbBrutto.AutoSize = true;
+        _rbBrutto.Checked = true;
+        _rbBrutto.Dock = DockStyle.Fill;
+        _rbBrutto.Location = new Point(15, 6);
+        _rbBrutto.Margin = new Padding(14, 5, 4, 5);
+        _rbBrutto.Name = "_rbBrutto";
+        _rbBrutto.Size = new Size(133, 135);
+        _rbBrutto.TabIndex = 1;
+        _rbBrutto.TabStop = true;
+        _rbBrutto.Text = "Брутто";
+        _rbBrutto.CheckedChanged += RbTara_CheckedChanged;
+        // 
+        // tableLayoutPanel6
+        // 
+        tableLayoutPanel6.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel6.ColumnCount = 2;
+        tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.89083F));
+        tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75.10917F));
+        tableLayoutPanel6.Controls.Add(_lblNetto, 1, 2);
+        tableLayoutPanel6.Controls.Add(_lblNettoCap, 0, 2);
+        tableLayoutPanel6.Controls.Add(_lblTarCap, 0, 1);
+        tableLayoutPanel6.Controls.Add(_lblBrutto, 1, 0);
+        tableLayoutPanel6.Controls.Add(_lblBruttoCap, 0, 0);
+        tableLayoutPanel6.Controls.Add(_pnlTarHost, 1, 1);
+        tableLayoutPanel6.Dock = DockStyle.Fill;
+        tableLayoutPanel6.Location = new Point(315, 152);
+        tableLayoutPanel6.Name = "tableLayoutPanel6";
+        tableLayoutPanel6.RowCount = 3;
+        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 57F));
+        tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        tableLayoutPanel6.Size = new Size(847, 147);
+        tableLayoutPanel6.TabIndex = 42;
+        // 
+        // _lblNetto
+        // 
+        _lblNetto.AutoSize = true;
+        _lblNetto.Dock = DockStyle.Fill;
+        _lblNetto.Location = new Point(216, 103);
+        _lblNetto.Margin = new Padding(4, 0, 4, 0);
+        _lblNetto.Name = "_lblNetto";
+        _lblNetto.Size = new Size(626, 43);
+        _lblNetto.TabIndex = 24;
+        _lblNetto.Text = "—";
+        _lblNetto.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblNettoCap
+        // 
+        _lblNettoCap.AutoSize = true;
+        _lblNettoCap.Dock = DockStyle.Fill;
+        _lblNettoCap.Location = new Point(5, 103);
+        _lblNettoCap.Margin = new Padding(4, 0, 4, 0);
+        _lblNettoCap.Name = "_lblNettoCap";
+        _lblNettoCap.Size = new Size(202, 43);
+        _lblNettoCap.TabIndex = 23;
+        _lblNettoCap.Text = "Нетто";
+        _lblNettoCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblTarCap
+        // 
+        _lblTarCap.AutoSize = true;
+        _lblTarCap.Dock = DockStyle.Fill;
+        _lblTarCap.Location = new Point(5, 45);
+        _lblTarCap.Margin = new Padding(4, 0, 4, 0);
+        _lblTarCap.Name = "_lblTarCap";
+        _lblTarCap.Size = new Size(202, 57);
+        _lblTarCap.TabIndex = 20;
+        _lblTarCap.Text = "Тара";
+        _lblTarCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblBrutto
+        // 
+        _lblBrutto.AutoSize = true;
+        _lblBrutto.Dock = DockStyle.Fill;
+        _lblBrutto.Location = new Point(216, 1);
+        _lblBrutto.Margin = new Padding(4, 0, 4, 0);
+        _lblBrutto.Name = "_lblBrutto";
+        _lblBrutto.Size = new Size(626, 43);
+        _lblBrutto.TabIndex = 18;
+        _lblBrutto.Text = "—";
+        _lblBrutto.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblBruttoCap
+        // 
+        _lblBruttoCap.AutoSize = true;
+        _lblBruttoCap.Dock = DockStyle.Fill;
+        _lblBruttoCap.Location = new Point(5, 1);
+        _lblBruttoCap.Margin = new Padding(4, 0, 4, 0);
+        _lblBruttoCap.Name = "_lblBruttoCap";
+        _lblBruttoCap.Size = new Size(202, 43);
+        _lblBruttoCap.TabIndex = 17;
+        _lblBruttoCap.Text = "Брутто";
+        _lblBruttoCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _pnlTarHost
+        // 
+        _pnlTarHost.ColumnCount = 1;
+        _pnlTarHost.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _pnlTarHost.Controls.Add(_cmbTar, 0, 1);
+        _pnlTarHost.Dock = DockStyle.Fill;
+        _pnlTarHost.Location = new Point(212, 45);
+        _pnlTarHost.Margin = new Padding(0);
+        _pnlTarHost.Name = "_pnlTarHost";
+        _pnlTarHost.RowCount = 3;
+        _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTarHost.RowStyles.Add(new RowStyle());
+        _pnlTarHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _pnlTarHost.Size = new Size(634, 57);
+        _pnlTarHost.TabIndex = 22;
+        // 
+        // _cmbTar
+        // 
+        _cmbTar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _cmbTar.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbTar.Location = new Point(6, 8);
+        _cmbTar.Margin = new Padding(6, 0, 6, 7);
+        _cmbTar.Name = "_cmbTar";
+        _cmbTar.Size = new Size(622, 33);
+        _cmbTar.TabIndex = 21;
+        _cmbTar.SelectedIndexChanged += CmbTar_SelectedIndexChanged;
+        // 
+        // _lblVidVzv
+        // 
+        _lblVidVzv.Location = new Point(0, 0);
+        _lblVidVzv.Name = "_lblVidVzv";
+        _lblVidVzv.Size = new Size(100, 23);
+        _lblVidVzv.TabIndex = 0;
+        // 
+        // _lblVidMode
+        // 
+        _lblVidMode.Location = new Point(0, 0);
+        _lblVidMode.Name = "_lblVidMode";
+        _lblVidMode.Size = new Size(100, 23);
+        _lblVidMode.TabIndex = 0;
+        // 
         // _split
-        //
-        _split.BackColor = UiColors.StatusBar;
+        // 
         _split.Dock = DockStyle.Fill;
         _split.FixedPanel = FixedPanel.Panel1;
-        _split.Location = new Point(0, 168);
+        _split.Location = new Point(0, 467);
+        _split.Margin = new Padding(4, 5, 4, 5);
         _split.Name = "_split";
-        //
+        // 
         // _split.Panel1
-        //
+        // 
         _split.Panel1.Controls.Add(_gridPend);
         _split.Panel1.Controls.Add(_lblHeaderPend);
-        _split.Panel1MinSize = 563;
-        //
+        _split.Panel1MinSize = 488;
+        // 
         // _split.Panel2
-        //
+        // 
         _split.Panel2.Controls.Add(_gridDone);
         _split.Panel2.Controls.Add(_lblHeaderDone);
         _split.Panel2MinSize = 280;
-        _split.Size = new Size(1264, 458);
-        _split.SplitterDistance = 563;
+        _split.Size = new Size(1806, 528);
+        _split.SplitterDistance = 697;
+        _split.SplitterWidth = 6;
         _split.TabIndex = 1;
-        //
+        // 
         // _gridPend
-        //
+        // 
         _gridPend.AllowUserToAddRows = false;
         _gridPend.AllowUserToDeleteRows = false;
         _gridPend.AllowUserToResizeRows = false;
-        dataGridViewCellStyle9.BackColor = UiColors.GridAlternateRow;
-        dataGridViewCellStyle9.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle9.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle9.SelectionForeColor = UiColors.GridSelectionText;
-        _gridPend.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
-        _gridPend.BackgroundColor = UiColors.Surface;
+        _gridPend.BackgroundColor = Color.FromArgb(245, 245, 247);
         _gridPend.BorderStyle = BorderStyle.None;
-        _gridPend.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
-        _gridPend.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _gridPend.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
-        _gridPend.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _gridPend.ColumnHeadersHeight = 32;
         _gridPend.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _gridPend.EnableHeadersVisualStyles = false;
-        _gridPend.GridColor = UiColors.GridLine;
         _gridPend.Dock = DockStyle.Fill;
-        _gridPend.Font = UiFonts.GridBody;
-        _gridPend.Location = new Point(0, 24);
+        _gridPend.EnableHeadersVisualStyles = false;
+        _gridPend.GridColor = Color.FromArgb(212, 216, 222);
+        _gridPend.Location = new Point(0, 40);
+        _gridPend.Margin = new Padding(4, 5, 4, 5);
         _gridPend.MultiSelect = false;
         _gridPend.Name = "_gridPend";
         _gridPend.ReadOnly = true;
         _gridPend.RowHeadersVisible = false;
         _gridPend.RowHeadersWidth = 51;
-        dataGridViewCellStyle10.BackColor = UiColors.Surface;
-        dataGridViewCellStyle10.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle10.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle10.SelectionForeColor = UiColors.GridSelectionText;
-        _gridPend.RowsDefaultCellStyle = dataGridViewCellStyle10;
         _gridPend.RowTemplate.Height = 28;
         _gridPend.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _gridPend.Size = new Size(563, 434);
+        _gridPend.Size = new Size(697, 488);
         _gridPend.TabIndex = 0;
         _gridPend.SelectionChanged += GridPend_SelectionChanged;
-        //
+        // 
         // _lblHeaderPend
-        //
-        _lblHeaderPend.BackColor = UiColors.GridHeaderDarkBack;
+        // 
         _lblHeaderPend.Dock = DockStyle.Top;
-        _lblHeaderPend.Font = UiFonts.BodyBold;
-        _lblHeaderPend.ForeColor = UiColors.TextOnDark;
         _lblHeaderPend.Location = new Point(0, 0);
+        _lblHeaderPend.Margin = new Padding(4, 0, 4, 0);
         _lblHeaderPend.Name = "_lblHeaderPend";
-        _lblHeaderPend.Size = new Size(563, 24);
+        _lblHeaderPend.Size = new Size(697, 40);
         _lblHeaderPend.TabIndex = 1;
         _lblHeaderPend.Text = "  Не перенесённые";
         _lblHeaderPend.TextAlign = ContentAlignment.MiddleLeft;
-        //
+        // 
         // _gridDone
-        //
+        // 
         _gridDone.AllowUserToAddRows = false;
         _gridDone.AllowUserToDeleteRows = false;
         _gridDone.AllowUserToResizeRows = false;
-        dataGridViewCellStyle11.BackColor = UiColors.GridAlternateRow;
-        dataGridViewCellStyle11.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle11.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle11.SelectionForeColor = UiColors.GridSelectionText;
-        _gridDone.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
-        _gridDone.BackgroundColor = UiColors.Surface;
+        _gridDone.BackgroundColor = Color.FromArgb(245, 245, 247);
         _gridDone.BorderStyle = BorderStyle.None;
-        _gridDone.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
-        _gridDone.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _gridDone.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
-        _gridDone.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _gridDone.ColumnHeadersHeight = 32;
         _gridDone.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _gridDone.EnableHeadersVisualStyles = false;
-        _gridDone.GridColor = UiColors.GridLine;
         _gridDone.Dock = DockStyle.Fill;
-        _gridDone.Font = UiFonts.GridBody;
-        _gridDone.Location = new Point(0, 24);
+        _gridDone.EnableHeadersVisualStyles = false;
+        _gridDone.GridColor = Color.FromArgb(212, 216, 222);
+        _gridDone.Location = new Point(0, 40);
+        _gridDone.Margin = new Padding(4, 5, 4, 5);
         _gridDone.MultiSelect = false;
         _gridDone.Name = "_gridDone";
         _gridDone.ReadOnly = true;
         _gridDone.RowHeadersVisible = false;
         _gridDone.RowHeadersWidth = 51;
-        dataGridViewCellStyle12.BackColor = UiColors.Surface;
-        dataGridViewCellStyle12.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle12.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle12.SelectionForeColor = UiColors.GridSelectionText;
-        _gridDone.RowsDefaultCellStyle = dataGridViewCellStyle12;
         _gridDone.RowTemplate.Height = 28;
         _gridDone.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _gridDone.Size = new Size(697, 434);
+        _gridDone.Size = new Size(1103, 488);
         _gridDone.TabIndex = 0;
         _gridDone.SelectionChanged += GridDone_SelectionChanged;
-        //
+        // 
         // _lblHeaderDone
-        //
-        _lblHeaderDone.BackColor = UiColors.GridHeaderDarkBack;
+        // 
         _lblHeaderDone.Dock = DockStyle.Top;
-        _lblHeaderDone.Font = UiFonts.BodyBold;
-        _lblHeaderDone.ForeColor = UiColors.TextOnDark;
         _lblHeaderDone.Location = new Point(0, 0);
+        _lblHeaderDone.Margin = new Padding(4, 0, 4, 0);
         _lblHeaderDone.Name = "_lblHeaderDone";
-        _lblHeaderDone.Size = new Size(697, 24);
+        _lblHeaderDone.Size = new Size(1103, 40);
         _lblHeaderDone.TabIndex = 1;
         _lblHeaderDone.Text = "  Перенесённые";
         _lblHeaderDone.TextAlign = ContentAlignment.MiddleLeft;
-        //
+        // 
         // _pnlStatus
-        //
-        _pnlStatus.BackColor = UiColors.StatusBar;
+        // 
         _pnlStatus.Dock = DockStyle.Bottom;
-        _pnlStatus.Location = new Point(0, 626);
+        _pnlStatus.Location = new Point(0, 995);
+        _pnlStatus.Margin = new Padding(4, 5, 4, 5);
         _pnlStatus.Name = "_pnlStatus";
-        _pnlStatus.Size = new Size(1264, 4);
+        _pnlStatus.Size = new Size(1806, 7);
         _pnlStatus.TabIndex = 2;
-        //
-        //
-        //
-        // tbCex
-        //
-        tbCex.Font = UiFonts.Body;
-        tbCex.BackColor = UiColors.InputBack;
-        tbCex.ForeColor = UiColors.InputFore;
-        tbCex.Location = new Point(954, 61);
-        tbCex.MaxLength = 3;
-        tbCex.Name = "tbCex";
-        tbCex.Size = new Size(233, 27);
-        tbCex.TabIndex = 33;
-        //
-        // label3
-        //
-        label3.AutoSize = true;
-        label3.Font = UiFonts.Body;
-        label3.ForeColor = UiColors.TextMuted;
-        label3.Location = new Point(910, 65);
-        label3.Name = "label3";
-        label3.Size = new Size(35, 20);
-        label3.TabIndex = 34;
-        label3.Text = "Цех";
-        //
+        // 
         // CorrectionsForm
-        //
-        BackColor = UiColors.AppBackground;
-        ClientSize = new Size(1264, 660);
+        // 
+        AutoScaleDimensions = new SizeF(10F, 25F);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(1806, 1002);
         Controls.Add(_split);
         Controls.Add(_pnlTop);
         Controls.Add(_pnlStatus);
-        MinimumSize = new Size(860, 560);
+        Margin = new Padding(4, 5, 4, 5);
+        MinimumSize = new Size(1211, 861);
         Name = "CorrectionsForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Корректировки — перенос в учётную систему";
         _pnlTop.ResumeLayout(false);
-        _pnlTop.PerformLayout();
-        _pnlLeft.ResumeLayout(false);
-        _pnlLeft.PerformLayout();
-        _pnlMode.ResumeLayout(false);
-        _pnlMode.PerformLayout();
+        _pnlTopActions.ResumeLayout(false);
+        _actionPanel.ResumeLayout(false);
+        tableLayoutPanel8.ResumeLayout(false);
+        tableLayoutPanel8.PerformLayout();
+        tableLayoutPanel9.ResumeLayout(false);
+        tableLayoutPanel9.PerformLayout();
+        _pnlTrainDateHost.ResumeLayout(false);
+        _pnlTrainTimeHost.ResumeLayout(false);
+        tabPanTrainTimeDayMode.ResumeLayout(false);
+        tabPanTrainTimeDayMode.PerformLayout();
+        tableLayoutPanel5.ResumeLayout(false);
+        tableLayoutPanel7.ResumeLayout(false);
+        tableLayoutPanel7.PerformLayout();
+        tableLayoutPanel4.ResumeLayout(false);
+        tableLayoutPanel4.PerformLayout();
+        tableLayoutPanel1.ResumeLayout(false);
+        tableLayoutPanel1.PerformLayout();
+        _pnlGruzHost.ResumeLayout(false);
+        _pnlGruzHost.PerformLayout();
+        tableLayoutPanel2.ResumeLayout(false);
+        tableLayoutPanel2.PerformLayout();
+        _pnlNvagHost.ResumeLayout(false);
+        _pnlNvagHost.PerformLayout();
+        tableLayoutPanel3.ResumeLayout(false);
+        tableLayoutPanel3.PerformLayout();
+        tableLayoutPanel6.ResumeLayout(false);
+        tableLayoutPanel6.PerformLayout();
+        _pnlTarHost.ResumeLayout(false);
         _split.Panel1.ResumeLayout(false);
         _split.Panel2.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_split).EndInit();
         _split.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_gridPend).EndInit();
         ((System.ComponentModel.ISupportInitialize)_gridDone).EndInit();
-        _pnlStatus.ResumeLayout(false);
-        AutoScaleDimensions = new SizeF(7F, 15F);
-        AutoScaleMode = AutoScaleMode.Font;
         ResumeLayout(false);
     }
 
     private Panel          _pnlTop;
-    private Panel          _pnlLeft;
+    private Panel          _pnlTopActions;
     private Panel          _pnlStatus;
-    private Label          _lblVidVzv;
-    private RadioButton    _rbGpri;
-    private RadioButton    _rbGras;
-    private Label          _lblDateCap;
-    private Label          _lblDt;
-    private Label          _lblTimeCap;
-    private Label          _lblVr;
-    private Label          _lblNppCap;
-    private Label          _lblNpp;
-    private Label          _lblModeCap;
-    private Label          _lblMode;
     private Label          _lblNvagCap;
-    private TextBox        _txtNvag;
-    private Label          _lblDirCap;
-    private Label          _lblDir;
+    private TextBox        _tbNvag;
+    private TableLayoutPanel _pnlNvagHost;
     private Label          _lblGruzCap;
-    private TextBox        _txtGruz;
-    private Label          _lblNdokCap;
-    private TextBox        _txtNdok;
+    private TextBox        _tbGruz;
     private Label          _lblBruttoCap;
     private Label          _lblBrutto;
-    private Label          _lblBruttoUnit;
     private Label          _lblTarCap;
     private ComboBox       _cmbTar;
+    private TableLayoutPanel _pnlTarHost;
     private Label          _lblNettoCap;
     private Label          _lblNetto;
-    private Label          _lblNettoUnit;
     private Button         _btnTransfer;
     private Button         _btnClear;
     private Button         _btnRefresh;
@@ -809,15 +1063,45 @@ partial class CorrectionsForm
     private DataGridView   _gridPend;
     private Label          _lblHeaderDone;
     private DataGridView   _gridDone;
-    private Label          label2;
-    private Label          lblpotr;
-    private TextBox        _tbPlat;
-    private TextBox        _tbPotr;
-    private Label          label3;
-    private TextBox        tbCex;
-    private Panel          _pnlMode;
     private Label          _lblVidMode;
-    private RadioButton    _rbBrutto;
-    private RadioButton    _rbTara;
+    private Label          _lblVidVzv;
     private Button         _btnSave;
+    private TableLayoutPanel tableLayoutPanel3;
+    private Label _lblMode;
+    private Label _lblModeCap;
+    private Label _lblNpp;
+    private Label _lblNppCap;
+    private TableLayoutPanel tableLayoutPanel4;
+    private RadioButton _rbTara;
+    private RadioButton _rbBrutto;
+    private RadioButton _rbGras;
+    private RadioButton _rbGpri;
+    private TableLayoutPanel tableLayoutPanel2;
+    private Label _lblDateCap;
+    private Label _lblVr;
+    private Label _lblDt;
+    private Label _lblTimeCap;
+    private TableLayoutPanel tableLayoutPanel5;
+    private TableLayoutPanel tableLayoutPanel1;
+    private TableLayoutPanel _pnlGruzHost;
+    private Label label2;
+    private Label lblpotr;
+    private TextBox _tbPlat;
+    private TextBox _tbCex;
+    private TextBox _tbPotr;
+    private Label label3;
+    private TableLayoutPanel tableLayoutPanel6;
+    private TableLayoutPanel tableLayoutPanel7;
+    private Panel _actionPanel;
+    private TableLayoutPanel tableLayoutPanel8;
+    private TableLayoutPanel tableLayoutPanel9;
+    private TableLayoutPanel _pnlTrainDateHost;
+    private TableLayoutPanel _pnlTrainTimeHost;
+    private DateTimePicker _dtpTrainDate;
+    private DateTimePicker _dtpTrainTime;
+    private Label labTrainDate;
+    private Label label4;
+    private TableLayoutPanel tabPanTrainTimeDayMode;
+    private RadioButton rbTrainMode;
+    private RadioButton rbDayMode;
 }

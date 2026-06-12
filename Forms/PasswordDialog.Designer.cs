@@ -24,7 +24,6 @@ partial class PasswordDialog
         _lblPrompt.Location  = new Point(20, 20);
         _lblPrompt.AutoSize  = true;
         _lblPrompt.Font      = UiFonts.Medium;
-        _lblPrompt.ForeColor = UiColors.TextPrimary;
 
         _txtPassword.Location              = new Point(20, 46);
         _txtPassword.Width                 = 260;
@@ -38,9 +37,6 @@ partial class PasswordDialog
         _btnOk.Location  = new Point(80, 90);
         _btnOk.Size      = new Size(80, 30);
         _btnOk.FlatStyle = FlatStyle.Flat;
-        _btnOk.BackColor = UiColors.HeaderBar;
-        _btnOk.ForeColor = UiColors.TextOnDark;
-        _btnOk.UseVisualStyleBackColor = false;
         _btnOk.Click    += BtnOk_Click;
 
         _btnCancel.Text         = "Отмена";
@@ -49,7 +45,6 @@ partial class PasswordDialog
         _btnCancel.FlatStyle    = FlatStyle.Flat;
         _btnCancel.BackColor    = UiColors.NeutralAction;
         _btnCancel.ForeColor    = UiColors.TextOnDark;
-        _btnCancel.UseVisualStyleBackColor = false;
         _btnCancel.DialogResult = DialogResult.Cancel;
 
         BackColor       = UiColors.AppBackground;

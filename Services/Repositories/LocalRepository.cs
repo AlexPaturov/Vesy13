@@ -29,7 +29,7 @@ public class LocalRepository
             await conn.OpenAsync();
 
             var pts = await conn.QueryAsync<CalibPoint>(@"
-                SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive
+                SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive, deleted_at AS DeletedAt
                 FROM calibration_points
                 ORDER BY channel, adc_code");
             CalibPoints = pts.ToList().AsReadOnly();
@@ -54,7 +54,13 @@ public class LocalRepository
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         var pts = await conn.QueryAsync<CalibPoint>(@"
-            SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive
+            SELECT
+                id,
+                channel,
+                adc_code AS AdcCode,
+                CAST(mass AS float8) AS Mass,
+                is_active AS IsActive,
+                deleted_at AS DeletedAt
             FROM calibration_points
             WHERE channel = @channel
             ORDER BY adc_code",
@@ -63,24 +69,40 @@ public class LocalRepository
     }
 
     /// <summary>
-    /// Заменяет все точки канала на переданный набор (DELETE + INSERT в транзакции).
-    /// После коммита обновляет кэш <see cref="CalibPoints"/>.
+    /// Сохраняет точки канала без физического удаления: существующие обновляются, новые добавляются.
+    /// Неактивные точки получают deleted_at как отметку мягкого удаления.
     /// </summary>
-    public async Task SaveCalibPointsAsync(int channel, IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> points)
+    public async Task SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
 
-        await conn.ExecuteAsync(
-            "DELETE FROM calibration_points WHERE channel = @channel",
-            new { channel }, tx);
-
         foreach (var p in points)
-            await conn.ExecuteAsync(@"
-                INSERT INTO calibration_points (channel, adc_code, mass, is_active)
-                VALUES (@channel, @AdcCode, @Mass, @IsActive)",
-                new { channel, p.AdcCode, p.Mass, p.IsActive }, tx);
+        {
+            DateTime? deletedAt = p.IsActive ? null : p.DeletedAt ?? DateTime.Now;
+            if (p.Id > 0)
+            {
+                await conn.ExecuteAsync(@"
+                    UPDATE calibration_points
+                    SET adc_code = @AdcCode,
+                        mass = @Mass,
+                        is_active = CASE WHEN deleted_at IS NOT NULL THEN FALSE ELSE @IsActive END,
+                        deleted_at = CASE
+                            WHEN deleted_at IS NOT NULL THEN deleted_at
+                            ELSE @DeletedAt
+                        END
+                    WHERE id = @Id AND channel = @channel",
+                    new { p.Id, channel, p.AdcCode, p.Mass, p.IsActive, DeletedAt = deletedAt }, tx);
+            }
+            else
+            {
+                await conn.ExecuteAsync(@"
+                    INSERT INTO calibration_points (channel, adc_code, mass, is_active, deleted_at)
+                    VALUES (@channel, @AdcCode, @Mass, @IsActive, @DeletedAt)",
+                    new { channel, p.AdcCode, p.Mass, p.IsActive, DeletedAt = deletedAt }, tx);
+            }
+        }
 
         await tx.CommitAsync();
         await ReloadCacheAsync(conn);
@@ -91,8 +113,15 @@ public class LocalRepository
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-        await conn.ExecuteAsync(
-            "UPDATE calibration_points SET is_active = @isActive WHERE id = @id",
+        await conn.ExecuteAsync(@"
+            UPDATE calibration_points
+            SET is_active = CASE WHEN deleted_at IS NOT NULL THEN FALSE ELSE @isActive END,
+                deleted_at = CASE
+                    WHEN deleted_at IS NOT NULL THEN deleted_at
+                    WHEN @isActive THEN NULL
+                    ELSE NOW()
+                END
+            WHERE id = @id",
             new { id, isActive });
         await ReloadCacheAsync(conn);
     }
@@ -146,10 +175,98 @@ public class LocalRepository
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
                    COALESCE(direction, '') AS Direction,
-                   mode                    AS Mode
+                   mode                    AS Mode,
+                   transferred             AS Transferred
             FROM wagon_weighing
             WHERE transferred = false
-            ORDER BY wagon_time DESC");
+            ORDER BY train_time ASC, wagon_num ASC");
+        return rows.ToList();
+    }
+
+
+    public async Task<List<LocalWagon>> GetAllByTrainTimeAsync(DateTime trainTime)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode,
+                   transferred             AS Transferred
+            FROM wagon_weighing
+            WHERE date_trunc('second', train_time) = date_trunc('second', @trainTime)
+            ORDER BY train_time ASC, wagon_num ASC",
+            new { trainTime });
+        return rows.ToList();
+    }
+
+    public async Task<List<LocalWagon>> GetAllByDateAsync(DateTime date)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode,
+                   transferred             AS Transferred
+            FROM wagon_weighing
+            WHERE train_time::date = @date
+            ORDER BY train_time ASC, wagon_num ASC",
+            new { date = date.Date });
+        return rows.ToList();
+    }
+
+    public async Task<List<LocalWagon>> GetPendingByTrainTimeAsync(DateTime trainTime)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode,
+                   transferred             AS Transferred
+            FROM wagon_weighing
+            WHERE transferred = false
+              AND date_trunc('second', train_time) = date_trunc('second', @trainTime)
+            ORDER BY train_time ASC, wagon_num ASC",
+            new { trainTime });
+        return rows.ToList();
+    }
+
+    public async Task<List<LocalWagon>> GetPendingByDateAsync(DateTime date)
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<LocalWagon>(@"
+            SELECT id,
+                   train_time              AS TrainTime,
+                   wagon_time              AS WagonTime,
+                   wagon_num               AS Number,
+                   CAST(bogie1 AS float8)  AS Bogie1,
+                   CAST(bogie2 AS float8)  AS Bogie2,
+                   COALESCE(direction, '') AS Direction,
+                   mode                    AS Mode,
+                   transferred             AS Transferred
+            FROM wagon_weighing
+            WHERE transferred = false
+              AND train_time::date = @date
+            ORDER BY train_time ASC, wagon_num ASC",
+            new { date = date.Date });
         return rows.ToList();
     }
 
@@ -174,7 +291,8 @@ public class LocalRepository
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
                    COALESCE(direction, '') AS Direction,
-                   mode                    AS Mode
+                   mode                    AS Mode,
+                   transferred             AS Transferred
             FROM wagon_weighing
             WHERE transferred = true
             ORDER BY wagon_time DESC
@@ -187,7 +305,7 @@ public class LocalRepository
     private async Task ReloadCacheAsync(NpgsqlConnection conn)
     {
         var pts = await conn.QueryAsync<CalibPoint>(@"
-            SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive
+            SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive, deleted_at AS DeletedAt
             FROM calibration_points
             ORDER BY channel, adc_code");
         CalibPoints = pts.ToList().AsReadOnly();

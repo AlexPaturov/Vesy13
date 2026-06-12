@@ -53,6 +53,8 @@ public class SimA04Reader : IDisposable
         };
         _port.DataReceived += OnDataReceived;
         _port.Open();
+        _port.DiscardInBuffer();
+        _port.DiscardOutBuffer();
 
         _frameTimer = new System.Threading.Timer(OnFrameTimer, null, Timeout.Infinite, Timeout.Infinite);
         _polling     = true;

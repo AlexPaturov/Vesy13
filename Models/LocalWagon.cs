@@ -14,5 +14,6 @@ public class LocalWagon
     public double   Bogie2    { get; set; }
     public string   Direction { get; set; } = "";
     public string   Mode      { get; set; } = "";
+    public bool     Transferred { get; set; }
     public double   Total     => Bogie1 + Bogie2;
 }

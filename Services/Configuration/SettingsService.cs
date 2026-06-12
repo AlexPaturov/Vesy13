@@ -1,0 +1,111 @@
+using System.Text.Json;
+
+namespace Vesy13.Services.Configuration;
+
+public sealed class SettingsService
+{
+    private const string DefaultAdminPassword = "vesy13fuck";
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
+    private readonly string _path;
+    private AppSettings _settings = new();
+
+    public SettingsService(string? path = null)
+    {
+        _path = path ?? System.IO.Path.Combine(AppContext.BaseDirectory, "settings.json");
+    }
+
+    public AppSettings Current => _settings;
+    public string Path => _path;
+
+    public void LoadOrCreate()
+    {
+        if (!File.Exists(_path))
+        {
+            _settings = CreateDefault();
+            Save();
+            return;
+        }
+
+        try
+        {
+            string json = File.ReadAllText(_path);
+            _settings = JsonSerializer.Deserialize<AppSettings>(json, JsonOptions) ?? CreateDefault();
+        }
+        catch
+        {
+            _settings = CreateDefault();
+            Save();
+            return;
+        }
+
+        if (EnsureDefaults(_settings))
+            Save();
+    }
+
+    public void Save() => File.WriteAllText(_path, JsonSerializer.Serialize(_settings, JsonOptions));
+
+    public bool VerifyAdminPassword(string password) =>
+        PasswordHasher.Verify(password, _settings.AdminPasswordHash, _settings.AdminPasswordSalt);
+
+    public void SetAdminPassword(string password)
+    {
+        var (hash, salt) = PasswordHasher.Create(password);
+        _settings.AdminPasswordHash = hash;
+        _settings.AdminPasswordSalt = salt;
+    }
+
+    private static AppSettings CreateDefault()
+    {
+        var settings = new AppSettings();
+        var (hash, salt) = PasswordHasher.Create(DefaultAdminPassword);
+        settings.AdminPasswordHash = hash;
+        settings.AdminPasswordSalt = salt;
+        return settings;
+    }
+
+    private static bool EnsureDefaults(AppSettings settings)
+    {
+        bool changed = false;
+
+        if (string.IsNullOrWhiteSpace(settings.AdcPortName))
+        {
+            settings.AdcPortName = "COM1";
+            changed = true;
+        }
+
+        if (settings.MaxCapacityTonnes <= 0)
+        {
+            settings.MaxCapacityTonnes = 140.0;
+            changed = true;
+        }
+
+        if (settings.WeightDiscretizationTonnes <= 0)
+        {
+            settings.WeightDiscretizationTonnes = 0.05;
+            changed = true;
+        }
+
+        if (settings.OperatorZeroLimitPercent <= 0)
+        {
+            settings.OperatorZeroLimitPercent = 2.0;
+            changed = true;
+        }
+
+        if (settings.AdminZeroLimitPercent <= 0)
+        {
+            settings.AdminZeroLimitPercent = 100.0;
+            changed = true;
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.AdminPasswordHash) || string.IsNullOrWhiteSpace(settings.AdminPasswordSalt))
+        {
+            var (hash, salt) = PasswordHasher.Create(DefaultAdminPassword);
+            settings.AdminPasswordHash = hash;
+            settings.AdminPasswordSalt = salt;
+            changed = true;
+        }
+
+        return changed;
+    }
+}
