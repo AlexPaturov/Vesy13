@@ -1,3 +1,4 @@
+using System.Text;
 using Vesy13.Models;
 using Vesy13.Services.Repositories;
 
@@ -19,8 +20,9 @@ public partial class LogsForm : Form
         base.OnLoad(e);
         ApplyTheme();
         SetupGrid();
+        btnCsvImport.Click += BtnCsvImport_Click;
         _dtpFrom.Value = DateTime.Today;
-        _dtpTo.Value   = DateTime.Now;
+        _dtpTo.Value = DateTime.Now;
     }
 
     private void ApplyTheme()
@@ -31,7 +33,7 @@ public partial class LogsForm : Form
 
         _lblFrom.Font = UiFonts.Body;
         _lblFrom.ForeColor = UiColors.TextPrimary;
-        _lblTo.Font   = UiFonts.Body;
+        _lblTo.Font = UiFonts.Body;
         _lblTo.ForeColor = UiColors.TextPrimary;
         _btnFind.Font = UiFonts.Body;
         _btnFind.BackColor = UiColors.InfoAction;
@@ -41,9 +43,9 @@ public partial class LogsForm : Form
         _grid.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
         _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
         _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
-        _grid.DefaultCellStyle.Font              = UiFonts.GridBody;
-        _grid.DefaultCellStyle.BackColor          = UiColors.AppBackground;
-        _grid.DefaultCellStyle.ForeColor         = UiColors.TextPrimary;
+        _grid.DefaultCellStyle.Font = UiFonts.GridBody;
+        _grid.DefaultCellStyle.BackColor = UiColors.AppBackground;
+        _grid.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
         _grid.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
         _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
         _grid.AlternatingRowsDefaultCellStyle.BackColor = UiColors.GridAlternateRow;
@@ -53,19 +55,18 @@ public partial class LogsForm : Form
 
     private void SetupGrid()
     {
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время",        Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "EventId",      Width = 75,  SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Результат",    Width = 130, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время", Width = 170, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "EventId", Width = 75, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Результат", Width = 130, SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Пользователь", Width = 150, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Домен",        Width = 115, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Сервис",       Width = 100, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тип объекта",  Width = 130, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Объект",       Width = 190, SortMode = DataGridViewColumnSortMode.NotSortable,
-                                                          AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Дескриптор",   Width = 105, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Компьютер",    Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "IP",           Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "PID",          Width = 65,  SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Домен", Width = 115, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Сервис", Width = 100, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тип объекта", Width = 130, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Объект", Width = 190, SortMode = DataGridViewColumnSortMode.NotSortable, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Дескриптор", Width = 105, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Компьютер", Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "IP", Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "PID", Width = 65, SortMode = DataGridViewColumnSortMode.NotSortable });
     }
 
     private async void BtnFind_Click(object? sender, EventArgs e)
@@ -78,7 +79,7 @@ public partial class LogsForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка загрузки логов:\n{ex.Message}", "Логи",
+            MessageBox.Show($"Ошибка загрузки логов:\r\n{ex.Message}", "Логи",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
@@ -111,4 +112,54 @@ public partial class LogsForm : Form
         }
     }
 
+    private void BtnCsvImport_Click(object? sender, EventArgs e)
+    {
+        if (_grid.Rows.Count == 0)
+        {
+            MessageBox.Show("Нет данных для выгрузки.", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        using var dlg = new SaveFileDialog
+        {
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            DefaultExt = "csv",
+            AddExtension = true,
+            FileName = $"logs_{DateTime.Now:yyyyMMdd_HHmmss}.csv",
+        };
+
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        try
+        {
+            using var stream = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write, FileShare.None);
+            using var writer = new StreamWriter(stream, new UTF8Encoding(true));
+
+            writer.WriteLine(string.Join(";", _grid.Columns.Cast<DataGridViewColumn>().Select(c => CsvEscape(c.HeaderText))));
+
+            foreach (DataGridViewRow row in _grid.Rows.Cast<DataGridViewRow>())
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                writer.WriteLine(string.Join(";", row.Cells.Cast<DataGridViewCell>().Select(c => CsvEscape(c.Value?.ToString() ?? string.Empty))));
+            }
+
+            writer.Flush();
+            MessageBox.Show("CSV-файл выгружен.", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Не удалось выгрузить CSV:\r\n{ex.Message}", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private static string CsvEscape(string value)
+    {
+        if (value.Contains('"') || value.Contains(';') || value.Contains('\r') || value.Contains('\n'))
+            return '"' + value.Replace("\"", "\"\"") + '"';
+
+        return value;
+    }
 }
