@@ -51,8 +51,14 @@ public partial class StaticWeighingForm : Form
         _lblValue.ForeColor = UiColors.TextOnDarkMuted;
         _lblUnit.Font     = UiFonts.UnitLabel;
         _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
-        _lblStatus.Font   = UiFonts.Medium;
-        _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Caption.Font = UiFonts.Body;
+        _lblBogie1Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Value.Font = UiFonts.Medium;
+        _lblBogie1Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Caption.Font = UiFonts.Body;
+        _lblBogie2Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Value.Font = UiFonts.Medium;
+        _lblBogie2Value.ForeColor = UiColors.TextOnDarkMuted;
         _btnWeigh.Font    = UiFonts.WeighButton;
         _btnWeigh.BackColor = UiColors.PrimaryAction;
         _btnWeigh.ForeColor = UiColors.TextOnDark;
@@ -195,14 +201,17 @@ public partial class StaticWeighingForm : Form
         }
 
         _lastFrame = frame;
-        if (_state == WeighState.Idle)
-        {
-            int code = ActiveCode(frame);
-            double tonnes = ToTonnes(code);
-            _lblValue.Text      = tonnes.ToString("F2");
-            _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
-            WriteCalcDiagnostic(frame, code, tonnes);
-        }
+        int code = ActiveCode(frame);
+        double tonnes = ToTonnes(code);
+        _lblValue.Text = tonnes.ToString("F2");
+        _lblValue.ForeColor = _sim.IsConnected
+            ? (_state == WeighState.Bogie1Captured ? UiColors.PendingAction : UiColors.PrimaryAction)
+            : UiColors.Disconnected;
+
+        if (_state == WeighState.Bogie1Captured)
+            SetBogieValue(_lblBogie2Value, tonnes);
+
+        WriteCalcDiagnostic(frame, code, tonnes);
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
@@ -227,6 +236,14 @@ public partial class StaticWeighingForm : Form
     private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
     private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
+
+    private static void SetBogieValue(Label label, double tonnes) => label.Text = $"{tonnes:F2} т";
+
+    private void ResetBogieValues()
+    {
+        _lblBogie1Value.Text = "—";
+        _lblBogie2Value.Text = "—";
+    }
 
     private int ActiveCalibPointCount()
     {
@@ -265,9 +282,9 @@ public partial class StaticWeighingForm : Form
                 _sim.PortName,
                 $"raw=[{_lastRawBytes}]");
             _state              = WeighState.Bogie1Captured;
-            _lblValue.Text      = bogie1Tonnes.ToString("F2");
+            SetBogieValue(_lblBogie1Value, bogie1Tonnes);
+            _lblBogie2Value.Text = "—";
             _lblValue.ForeColor = UiColors.PendingAction;
-            _lblStatus.Text     = "Тележка 1 зафиксирована  —  Ожидание тележки 2";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
             _btnWeigh.BackColor = UiColors.PendingAction;
         }
@@ -297,9 +314,10 @@ public partial class StaticWeighingForm : Form
                 "LocalWagon", $"вагон №{_wagonNumber} total={record.Total:F2}",
                 "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
+            SetBogieValue(_lblBogie1Value, bogie1Tonnes);
+            SetBogieValue(_lblBogie2Value, bogie2Tonnes);
             _lblValue.Text      = record.Total.ToString("F2");
             _lblValue.ForeColor = UiColors.Info;
-            _lblStatus.Text     = $"Вагон №{_wagonNumber}: {record.Total:F2} т  —  Готов к следующему";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
             _btnWeigh.BackColor = UiColors.PrimaryAction;
         }
@@ -323,7 +341,7 @@ public partial class StaticWeighingForm : Form
         _grid.Rows.Clear();
         _lblValue.Text      = "—";
         _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _lblStatus.Text     = "Готов к взвешиванию  —  Тележка 1";
+        ResetBogieValues();
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.BackColor = UiColors.PrimaryAction;
         AuditLogger.Action(AuditLogger.TrainFinished,
@@ -349,7 +367,12 @@ public partial class StaticWeighingForm : Form
 
     private async void SaveAsync(LocalWagon record)
     {
-        try   { await _ldb.SaveWagonAsync(record); }
+        try
+        {
+            await _ldb.SaveWagonAsync(record);
+            if (_state == WeighState.Idle && _wagonNumber == record.Number)
+                ResetBogieValues();
+        }
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb,

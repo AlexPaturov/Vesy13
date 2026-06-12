@@ -12,7 +12,10 @@ partial class StaticWeighingForm
         _pnlDisplay = new Panel();
         _lblValue = new Label();
         _lblUnit = new Label();
-        _lblStatus = new Label();
+        _lblBogie1Caption = new Label();
+        _lblBogie1Value = new Label();
+        _lblBogie2Caption = new Label();
+        _lblBogie2Value = new Label();
         _btnWeigh = new Button();
         _btnZero = new Button();
         _btnFinish = new Button();
@@ -66,7 +69,10 @@ partial class StaticWeighingForm
         _pnlDisplay.BackColor = UiColors.DisplayBackground;
         _pnlDisplay.Controls.Add(_lblValue);
         _pnlDisplay.Controls.Add(_lblUnit);
-        _pnlDisplay.Controls.Add(_lblStatus);
+        _pnlDisplay.Controls.Add(_lblBogie1Caption);
+        _pnlDisplay.Controls.Add(_lblBogie1Value);
+        _pnlDisplay.Controls.Add(_lblBogie2Caption);
+        _pnlDisplay.Controls.Add(_lblBogie2Value);
         _pnlDisplay.Dock = DockStyle.Fill;
         _pnlDisplay.Margin = new Padding(0, 0, 0, 8);
         _pnlDisplay.Name = "_pnlDisplay";
@@ -77,9 +83,9 @@ partial class StaticWeighingForm
         // 
         _lblValue.Font = UiFonts.Display;
         _lblValue.ForeColor = UiColors.TextOnDarkMuted;
-        _lblValue.Location = new Point(8, 4);
+        _lblValue.Location = new Point(0, 8);
         _lblValue.Name = "_lblValue";
-        _lblValue.Size = new Size(450, 106);
+        _lblValue.Size = new Size(360, 132);
         _lblValue.TabIndex = 0;
         _lblValue.Text = "—";
         _lblValue.TextAlign = ContentAlignment.MiddleRight;
@@ -88,23 +94,56 @@ partial class StaticWeighingForm
         // 
         _lblUnit.Font = UiFonts.UnitLabel;
         _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
-        _lblUnit.Location = new Point(462, 60);
+        _lblUnit.Location = new Point(364, 78);
         _lblUnit.Name = "_lblUnit";
-        _lblUnit.Size = new Size(60, 62);
+        _lblUnit.Size = new Size(46, 46);
         _lblUnit.TabIndex = 1;
         _lblUnit.Text = "т";
         _lblUnit.TextAlign = ContentAlignment.BottomLeft;
-        // 
-        // _lblStatus
-        // 
-        _lblStatus.Font = UiFonts.Medium;
-        _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
-        _lblStatus.Location = new Point(8, 118);
-        _lblStatus.Name = "_lblStatus";
-        _lblStatus.Size = new Size(584, 34);
-        _lblStatus.TabIndex = 2;
-        _lblStatus.Text = "Готов к взвешиванию  —  Тележка 1";
-        _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
+        //
+        // _lblBogie1Caption
+        //
+        _lblBogie1Caption.Font = UiFonts.Body;
+        _lblBogie1Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Caption.Location = new Point(462, 18);
+        _lblBogie1Caption.Name = "_lblBogie1Caption";
+        _lblBogie1Caption.Size = new Size(174, 20);
+        _lblBogie1Caption.TabIndex = 2;
+        _lblBogie1Caption.Text = "Тележка 1";
+        _lblBogie1Caption.TextAlign = ContentAlignment.MiddleRight;
+        //
+        // _lblBogie1Value
+        //
+        _lblBogie1Value.Font = UiFonts.Medium;
+        _lblBogie1Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Value.Location = new Point(462, 39);
+        _lblBogie1Value.Name = "_lblBogie1Value";
+        _lblBogie1Value.Size = new Size(174, 36);
+        _lblBogie1Value.TabIndex = 3;
+        _lblBogie1Value.Text = "—";
+        _lblBogie1Value.TextAlign = ContentAlignment.MiddleRight;
+        //
+        // _lblBogie2Caption
+        //
+        _lblBogie2Caption.Font = UiFonts.Body;
+        _lblBogie2Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Caption.Location = new Point(462, 84);
+        _lblBogie2Caption.Name = "_lblBogie2Caption";
+        _lblBogie2Caption.Size = new Size(174, 20);
+        _lblBogie2Caption.TabIndex = 4;
+        _lblBogie2Caption.Text = "Тележка 2";
+        _lblBogie2Caption.TextAlign = ContentAlignment.MiddleRight;
+        //
+        // _lblBogie2Value
+        //
+        _lblBogie2Value.Font = UiFonts.Medium;
+        _lblBogie2Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Value.Location = new Point(462, 105);
+        _lblBogie2Value.Name = "_lblBogie2Value";
+        _lblBogie2Value.Size = new Size(174, 36);
+        _lblBogie2Value.TabIndex = 5;
+        _lblBogie2Value.Text = "—";
+        _lblBogie2Value.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _pnlActions
         // 
@@ -274,7 +313,10 @@ partial class StaticWeighingForm
     private Panel         _pnlDisplay;
     private Label         _lblValue;
     private Label         _lblUnit;
-    private Label         _lblStatus;
+    private Label         _lblBogie1Caption;
+    private Label         _lblBogie1Value;
+    private Label         _lblBogie2Caption;
+    private Label         _lblBogie2Value;
     private Button        _btnWeigh;
     private Button        _btnZero;
     private Button        _btnFinish;
