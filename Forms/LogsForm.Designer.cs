@@ -25,17 +25,18 @@ partial class LogsForm
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
         _pnlFilter = new Panel();
+        tlpHead = new TableLayoutPanel();
+        btnCsvImport = new Button();
         _lblFrom = new Label();
-        _dtpFrom = new DateTimePicker();
-        _lblTo = new Label();
-        _dtpTo = new DateTimePicker();
         _btnFind = new Button();
+        _dtpTo = new DateTimePicker();
+        _lblTo = new Label();
+        _dtpFrom = new DateTimePicker();
         _grid = new DataGridView();
         _pnlStatus = new Panel();
-        tlpHead = new TableLayoutPanel();
         _pnlFilter.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         tlpHead.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         SuspendLayout();
         // 
         // _pnlFilter
@@ -48,8 +49,44 @@ partial class LogsForm
         _pnlFilter.Margin = new Padding(4, 5, 4, 5);
         _pnlFilter.Name = "_pnlFilter";
         _pnlFilter.Padding = new Padding(6, 0, 6, 0);
-        _pnlFilter.Size = new Size(1806, 184);
+        _pnlFilter.Size = new Size(1806, 92);
         _pnlFilter.TabIndex = 1;
+        // 
+        // tlpHead
+        // 
+        tlpHead.ColumnCount = 7;
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.06919646F));
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.5133924F));
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.743304F));
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.7366076F));
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.6339283F));
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.7455349F));
+        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.5022316F));
+        tlpHead.Controls.Add(btnCsvImport, 5, 0);
+        tlpHead.Controls.Add(_lblFrom, 0, 0);
+        tlpHead.Controls.Add(_btnFind, 4, 0);
+        tlpHead.Controls.Add(_dtpTo, 3, 0);
+        tlpHead.Controls.Add(_lblTo, 2, 0);
+        tlpHead.Controls.Add(_dtpFrom, 1, 0);
+        tlpHead.Dock = DockStyle.Fill;
+        tlpHead.Location = new Point(6, 0);
+        tlpHead.Name = "tlpHead";
+        tlpHead.RowCount = 1;
+        tlpHead.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tlpHead.Size = new Size(1792, 90);
+        tlpHead.TabIndex = 5;
+        // 
+        // btnCsvImport
+        // 
+        btnCsvImport.Dock = DockStyle.Fill;
+        btnCsvImport.FlatStyle = FlatStyle.Flat;
+        btnCsvImport.Font = new Font("Segoe UI", 12F);
+        btnCsvImport.Location = new Point(1036, 20);
+        btnCsvImport.Margin = new Padding(20);
+        btnCsvImport.Name = "btnCsvImport";
+        btnCsvImport.Size = new Size(278, 50);
+        btnCsvImport.TabIndex = 5;
+        btnCsvImport.Text = "Выгрузка в CSV";
         // 
         // _lblFrom
         // 
@@ -58,57 +95,57 @@ partial class LogsForm
         _lblFrom.Location = new Point(4, 0);
         _lblFrom.Margin = new Padding(4, 0, 4, 0);
         _lblFrom.Name = "_lblFrom";
-        _lblFrom.Size = new Size(219, 150);
+        _lblFrom.Size = new Size(47, 90);
         _lblFrom.TabIndex = 0;
         _lblFrom.Text = "С:";
         _lblFrom.TextAlign = ContentAlignment.MiddleLeft;
-        // 
-        // _dtpFrom
-        // 
-        _dtpFrom.Anchor = AnchorStyles.None;
-        _dtpFrom.CustomFormat = "dd.MM.yyyy HH:mm";
-        _dtpFrom.Format = DateTimePickerFormat.Custom;
-        _dtpFrom.Location = new Point(231, 59);
-        _dtpFrom.Margin = new Padding(4, 5, 4, 5);
-        _dtpFrom.Name = "_dtpFrom";
-        _dtpFrom.Size = new Size(219, 31);
-        _dtpFrom.TabIndex = 1;
-        // 
-        // _lblTo
-        // 
-        _lblTo.Dock = DockStyle.Fill;
-        _lblTo.Font = new Font("Segoe UI", 12F);
-        _lblTo.Location = new Point(458, 0);
-        _lblTo.Margin = new Padding(4, 0, 4, 0);
-        _lblTo.Name = "_lblTo";
-        _lblTo.Size = new Size(81, 150);
-        _lblTo.TabIndex = 2;
-        _lblTo.Text = "—";
-        _lblTo.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _dtpTo
-        // 
-        _dtpTo.Anchor = AnchorStyles.None;
-        _dtpTo.CustomFormat = "dd.MM.yyyy HH:mm";
-        _dtpTo.Format = DateTimePickerFormat.Custom;
-        _dtpTo.Location = new Point(607, 59);
-        _dtpTo.Margin = new Padding(4, 5, 4, 5);
-        _dtpTo.Name = "_dtpTo";
-        _dtpTo.Size = new Size(234, 31);
-        _dtpTo.TabIndex = 3;
         // 
         // _btnFind
         // 
         _btnFind.Dock = DockStyle.Fill;
         _btnFind.FlatStyle = FlatStyle.Flat;
         _btnFind.Font = new Font("Segoe UI", 12F);
-        _btnFind.Location = new Point(910, 5);
-        _btnFind.Margin = new Padding(4, 5, 4, 5);
+        _btnFind.Location = new Point(720, 20);
+        _btnFind.Margin = new Padding(20);
         _btnFind.Name = "_btnFind";
-        _btnFind.Size = new Size(220, 140);
+        _btnFind.Size = new Size(276, 50);
         _btnFind.TabIndex = 4;
         _btnFind.Text = "Найти";
         _btnFind.Click += BtnFind_Click;
+        // 
+        // _dtpTo
+        // 
+        _dtpTo.Anchor = AnchorStyles.None;
+        _dtpTo.CustomFormat = "dd.MM.yyyy HH:mm";
+        _dtpTo.Format = DateTimePickerFormat.Custom;
+        _dtpTo.Location = new Point(442, 29);
+        _dtpTo.Margin = new Padding(4, 5, 4, 5);
+        _dtpTo.Name = "_dtpTo";
+        _dtpTo.Size = new Size(233, 31);
+        _dtpTo.TabIndex = 3;
+        // 
+        // _lblTo
+        // 
+        _lblTo.Dock = DockStyle.Fill;
+        _lblTo.Font = new Font("Segoe UI", 12F);
+        _lblTo.Location = new Point(337, 0);
+        _lblTo.Margin = new Padding(4, 0, 4, 0);
+        _lblTo.Name = "_lblTo";
+        _lblTo.Size = new Size(77, 90);
+        _lblTo.TabIndex = 2;
+        _lblTo.Text = "—";
+        _lblTo.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // _dtpFrom
+        // 
+        _dtpFrom.Anchor = AnchorStyles.None;
+        _dtpFrom.CustomFormat = "dd.MM.yyyy HH:mm";
+        _dtpFrom.Format = DateTimePickerFormat.Custom;
+        _dtpFrom.Location = new Point(77, 29);
+        _dtpFrom.Margin = new Padding(4, 5, 4, 5);
+        _dtpFrom.Name = "_dtpFrom";
+        _dtpFrom.Size = new Size(233, 31);
+        _dtpFrom.TabIndex = 1;
         // 
         // _grid
         // 
@@ -136,9 +173,10 @@ partial class LogsForm
         dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(35, 49, 63);
         dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle3;
+        _grid.Dock = DockStyle.Fill;
         _grid.EnableHeadersVisualStyles = false;
         _grid.GridColor = Color.FromArgb(200, 208, 218);
-        _grid.Location = new Point(53, 293);
+        _grid.Location = new Point(0, 92);
         _grid.Margin = new Padding(4, 5, 4, 5);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
@@ -147,7 +185,7 @@ partial class LogsForm
         _grid.RowHeadersWidth = 62;
         _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _grid.Size = new Size(343, 250);
+        _grid.Size = new Size(1806, 951);
         _grid.TabIndex = 0;
         // 
         // _pnlStatus
@@ -159,32 +197,13 @@ partial class LogsForm
         _pnlStatus.Size = new Size(1806, 7);
         _pnlStatus.TabIndex = 2;
         // 
-        // tlpHead
-        // 
-        tlpHead.ColumnCount = 5;
-        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7.8483243F));
-        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.010582F));
-        tlpHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tlpHead.Controls.Add(_lblFrom, 0, 0);
-        tlpHead.Controls.Add(_btnFind, 4, 0);
-        tlpHead.Controls.Add(_dtpTo, 3, 0);
-        tlpHead.Controls.Add(_lblTo, 2, 0);
-        tlpHead.Controls.Add(_dtpFrom, 1, 0);
-        tlpHead.Location = new Point(-1, 3);
-        tlpHead.Name = "tlpHead";
-        tlpHead.RowCount = 1;
-        tlpHead.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tlpHead.Size = new Size(1134, 150);
-        tlpHead.TabIndex = 5;
-        // 
         // LogsForm
         // 
         AutoScaleDimensions = new SizeF(10F, 25F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.FromArgb(238, 241, 244);
         ClientSize = new Size(1806, 1050);
+        MinimumSize = new Size(1200, 1000);
         Controls.Add(_grid);
         Controls.Add(_pnlFilter);
         Controls.Add(_pnlStatus);
@@ -193,10 +212,11 @@ partial class LogsForm
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Просмотр логов";
         _pnlFilter.ResumeLayout(false);
-        ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         tlpHead.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         ResumeLayout(false);
     }
 
     private TableLayoutPanel tlpHead;
+    private Button btnCsvImport;
 }
