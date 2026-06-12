@@ -55,3 +55,12 @@ Use conventional commit prefixes.
 - After transfer and refresh, the left grid restores focus, scrolls to the just-transferred local row, and keeps that row selected for operator visibility.
 - Selecting a transferred left-grid row should not reopen transfer actions; the detail panel is cleared while the row selection stays visible.
 - Keep avoiding extra database storage for session history and avoid reintroducing manual row insertion into the right grid.
+
+## ADC COM port settings
+- Use local `settings.json` next to the application executable as the persistent source for workstation-level application settings.
+- If `settings.json` is missing, create it automatically with default values.
+- `settings.json` contains default values and is read by application modules that need configuration.
+- Users with the administrator password can configure and save the working ADC COM port from the settings UI.
+- `MainForm` automatic ADC connection reads the working port from `settings.json`, not from a hard-coded constant.
+- `ServiceForm` -> `Мониторинг`: existing COM-port behavior stays unchanged. This tab is a manual diagnostic/temporary connection tool for the shared `SimA04Reader`; it is not the persistent source of the working ADC port.
+- Keep the monitor combo/button logic separate from saved settings unless explicitly requested later.

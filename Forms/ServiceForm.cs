@@ -231,11 +231,6 @@ public partial class ServiceForm : Form
         _txtDynWindow.Font = UiFonts.Body;
         _txtDynWindow.BackColor = UiColors.InputBack;
         _txtDynWindow.ForeColor = UiColors.InputFore;
-        _lblBogieTimeoutCap.Font = UiFonts.Medium;
-        _lblBogieTimeoutCap.ForeColor = UiColors.TextPrimary;
-        _txtBogieTimeout.Font = UiFonts.Body;
-        _txtBogieTimeout.BackColor = UiColors.InputBack;
-        _txtBogieTimeout.ForeColor = UiColors.InputFore;
         _lblPasswordCap.Font = UiFonts.Medium;
         _lblPasswordCap.ForeColor = UiColors.TextPrimary;
         _txtNewPassword.Font = UiFonts.Body;

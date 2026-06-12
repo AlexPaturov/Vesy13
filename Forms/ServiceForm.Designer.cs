@@ -102,8 +102,6 @@ partial class ServiceForm
         _txtZeroLimit = new TextBox();
         _lblDynWinCap = new Label();
         _txtDynWindow = new TextBox();
-        _lblBogieTimeoutCap = new Label();
-        _txtBogieTimeout = new TextBox();
         _lblPasswordCap = new Label();
         _txtNewPassword = new TextBox();
         _btnSaveSettings = new Button();
@@ -1023,8 +1021,6 @@ partial class ServiceForm
         _tabSett.Controls.Add(_txtZeroLimit);
         _tabSett.Controls.Add(_lblDynWinCap);
         _tabSett.Controls.Add(_txtDynWindow);
-        _tabSett.Controls.Add(_lblBogieTimeoutCap);
-        _tabSett.Controls.Add(_txtBogieTimeout);
         _tabSett.Controls.Add(_lblPasswordCap);
         _tabSett.Controls.Add(_txtNewPassword);
         _tabSett.Controls.Add(_btnSaveSettings);
@@ -1131,52 +1127,34 @@ partial class ServiceForm
         _txtDynWindow.TabIndex = 9;
         _txtDynWindow.Text = "1500";
         //
-        // _lblBogieTimeoutCap
-        //
-        _lblBogieTimeoutCap.AutoSize = true;
-        _lblBogieTimeoutCap.Location = new Point(29, 333);
-        _lblBogieTimeoutCap.Margin = new Padding(4, 0, 4, 0);
-        _lblBogieTimeoutCap.Name = "_lblBogieTimeoutCap";
-        _lblBogieTimeoutCap.Size = new Size(188, 25);
-        _lblBogieTimeoutCap.TabIndex = 10;
-        _lblBogieTimeoutCap.Text = "Таймаут тележек (мс):";
-        //
-        // _txtBogieTimeout
-        //
-        _txtBogieTimeout.Location = new Point(314, 327);
-        _txtBogieTimeout.Margin = new Padding(4, 5, 4, 5);
-        _txtBogieTimeout.Name = "_txtBogieTimeout";
-        _txtBogieTimeout.Size = new Size(284, 31);
-        _txtBogieTimeout.TabIndex = 11;
-        _txtBogieTimeout.Text = "3000";
         //
         // _lblPasswordCap
         //
         _lblPasswordCap.AutoSize = true;
-        _lblPasswordCap.Location = new Point(29, 393);
+        _lblPasswordCap.Location = new Point(29, 333);
         _lblPasswordCap.Margin = new Padding(4, 0, 4, 0);
         _lblPasswordCap.Name = "_lblPasswordCap";
         _lblPasswordCap.Size = new Size(137, 25);
-        _lblPasswordCap.TabIndex = 12;
+        _lblPasswordCap.TabIndex = 10;
         _lblPasswordCap.Text = "Новый пароль:";
         //
         // _txtNewPassword
         //
-        _txtNewPassword.Location = new Point(314, 387);
+        _txtNewPassword.Location = new Point(314, 327);
         _txtNewPassword.Margin = new Padding(4, 5, 4, 5);
         _txtNewPassword.Name = "_txtNewPassword";
         _txtNewPassword.Size = new Size(284, 31);
-        _txtNewPassword.TabIndex = 13;
+        _txtNewPassword.TabIndex = 11;
         _txtNewPassword.UseSystemPasswordChar = true;
         //
         // _btnSaveSettings
         //
         _btnSaveSettings.FlatStyle = FlatStyle.Flat;
-        _btnSaveSettings.Location = new Point(29, 460);
+        _btnSaveSettings.Location = new Point(29, 400);
         _btnSaveSettings.Margin = new Padding(4, 5, 4, 5);
         _btnSaveSettings.Name = "_btnSaveSettings";
         _btnSaveSettings.Size = new Size(186, 57);
-        _btnSaveSettings.TabIndex = 14;
+        _btnSaveSettings.TabIndex = 12;
         _btnSaveSettings.Text = "Сохранить";
         _btnSaveSettings.UseVisualStyleBackColor = false;
         _btnSaveSettings.Click += BtnSaveSettings_Click;
@@ -1312,8 +1290,6 @@ partial class ServiceForm
     private TextBox  _txtZeroLimit;
     private Label    _lblDynWinCap;
     private TextBox  _txtDynWindow;
-    private Label    _lblBogieTimeoutCap;
-    private TextBox  _txtBogieTimeout;
     private Label    _lblPasswordCap;
     private TextBox  _txtNewPassword;
     private Button   _btnSaveSettings;
