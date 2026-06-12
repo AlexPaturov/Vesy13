@@ -52,4 +52,6 @@ Use conventional commit prefixes.
 - Current business flow is stable: refresh loads both grids, transfer writes to Firebird then marks PostgreSQL transferred, save updates an existing Firebird row.
 - Right-grid processed-row highlight is in-memory only for the current window session and should stay limited to the single most recent processed record.
 - Left-grid transferred rows remain visible and are tinted `#FFDAB9`; processed right-grid rows are tinted `#98FB98`.
+- After transfer and refresh, the left grid restores focus, scrolls to the just-transferred local row, and keeps that row selected for operator visibility.
+- Selecting a transferred left-grid row should not reopen transfer actions; the detail panel is cleared while the row selection stays visible.
 - Keep avoiding extra database storage for session history and avoid reintroducing manual row insertion into the right grid.
