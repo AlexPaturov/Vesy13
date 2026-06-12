@@ -418,6 +418,28 @@ public partial class CorrectionsForm : Form
         row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
     }
 
+    private void SelectPendingRowById(int id)
+    {
+        foreach (DataGridViewRow row in _gridPend.Rows)
+        {
+            if (row.Tag is not LocalWagon wagon || wagon.Id != id)
+                continue;
+
+            _gridPend.ClearSelection();
+            row.Selected = true;
+
+            var firstVisibleCell = row.Cells
+                .Cast<DataGridViewCell>()
+                .FirstOrDefault(cell => cell.OwningColumn?.Visible == true);
+            if (firstVisibleCell is not null)
+                _gridPend.CurrentCell = firstVisibleCell;
+
+            _gridPend.FirstDisplayedScrollingRowIndex = row.Index;
+            _gridPend.Focus();
+            return;
+        }
+    }
+
     private void FillDoneGrid(DataGridView g, List<GpriGras> rows)
     {
         g.Rows.Clear();
@@ -545,8 +567,7 @@ public partial class CorrectionsForm : Form
         if (selected == null) return;
         if (selected.Transferred)
         {
-            ClearTopPanel();
-            _gridPend.ClearSelection();
+            ClearTopPanel(clearGridSelection: false);
             return;
         }
 
@@ -736,6 +757,8 @@ public partial class CorrectionsForm : Form
     {
         if (_selected == null) return;
 
+        int transferredLocalId = _selected.Id;
+
         string nvag = _tbNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
@@ -804,6 +827,7 @@ public partial class CorrectionsForm : Form
         }
 
         await LoadBothGridsAsync();
+        SelectPendingRowById(transferredLocalId);
     }
 
     private async void BtnSave_Click(object? sender, EventArgs e)
@@ -868,7 +892,7 @@ public partial class CorrectionsForm : Form
         }
     }
 
-    private void ClearTopPanel()
+    private void ClearTopPanel(bool clearGridSelection = true)
     {
         _selected = null;
         _selectedFb = null;
@@ -885,8 +909,11 @@ public partial class CorrectionsForm : Form
         _btnTransfer.Visible = true;
         _btnSave.Enabled = false;
         _btnSave.Visible = false;
-        _gridPend.ClearSelection();
-        _gridDone.ClearSelection();
+        if (clearGridSelection)
+        {
+            _gridPend.ClearSelection();
+            _gridDone.ClearSelection();
+        }
         UpdateContextUi();
     }
 }
