@@ -20,6 +20,9 @@ public partial class StaticWeighingForm : Form
     private int        _wagonNumber;
     private int        _bogie1Code;
     private SimA04Frame   _lastFrame;
+    private DateTime   _lastRawDiagAt = DateTime.MinValue;
+    private DateTime   _lastCalcDiagAt = DateTime.MinValue;
+    private string     _lastRawBytes = "";
 
     public StaticWeighingForm()
     {
@@ -109,6 +112,7 @@ public partial class StaticWeighingForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "StaticWeighingForm");
         SetupGridColumns();
         _sim.FrameReceived     += OnFrame;
+        _sim.RawFrameReceived  += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
@@ -143,6 +147,7 @@ public partial class StaticWeighingForm : Form
         if (!DesignMode && _sim is not null)
         {
             _sim.FrameReceived     -= OnFrame;
+            _sim.RawFrameReceived  -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
         }
         base.OnFormClosed(e);
@@ -166,19 +171,37 @@ public partial class StaticWeighingForm : Form
 
     // ── ADC events ─────────────────────────────────────────────────────────
 
+    private void OnRawFrame(object? sender, byte[] raw)
+    {
+        _lastRawBytes = string.Join(" ", raw);
+        var now = DateTime.Now;
+        if ((now - _lastRawDiagAt).TotalSeconds < 1) return;
+        _lastRawDiagAt = now;
+
+        var frame = SimA04Frame.Parse(raw);
+        AuditLogger.Action(AuditLogger.AdcStaticRawFrame,
+            "StaticRawFrame",
+            $"len={raw.Length} valid={frame.Valid} bytes=[{_lastRawBytes}] ch0={frame.Ch0} ch1={frame.Ch1}",
+            _sim.PortName,
+            _sim.Channel.ToString());
+    }
+
     private void OnFrame(object? sender, SimA04Frame frame)
     {
-        if (InvokeRequired) 
-        { 
-            BeginInvoke(() => OnFrame(sender, frame)); 
-            return; 
+        if (InvokeRequired)
+        {
+            BeginInvoke(() => OnFrame(sender, frame));
+            return;
         }
 
         _lastFrame = frame;
         if (_state == WeighState.Idle)
         {
-            _lblValue.Text      = ToTonnes(ActiveCode(frame)).ToString("F2");
+            int code = ActiveCode(frame);
+            double tonnes = ToTonnes(code);
+            _lblValue.Text      = tonnes.ToString("F2");
             _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
+            WriteCalcDiagnostic(frame, code, tonnes);
         }
     }
 
@@ -194,7 +217,8 @@ public partial class StaticWeighingForm : Form
 
     private void UpdateConn(bool connected)
     {
-        _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
+        _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
@@ -203,6 +227,25 @@ public partial class StaticWeighingForm : Form
     private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
     private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
+
+    private int ActiveCalibPointCount()
+    {
+        int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
+        return _ldb.CalibPoints.Count(p => p.Channel == channel && p.IsActive);
+    }
+
+    private void WriteCalcDiagnostic(SimA04Frame frame, int activeCode, double tonnes)
+    {
+        var now = DateTime.Now;
+        if ((now - _lastCalcDiagAt).TotalSeconds < 1) return;
+        _lastCalcDiagAt = now;
+
+        AuditLogger.Action(AuditLogger.AdcStaticCalc,
+            "StaticCalc",
+            $"channel={_sim.Channel} activeCode={activeCode} tonnes={tonnes:F2} ch0={frame.Ch0} ch1={frame.Ch1} activeCalibPoints={ActiveCalibPointCount()}",
+            _sim.PortName,
+            $"raw=[{_lastRawBytes}]");
+    }
 
     // ── Weighing logic ─────────────────────────────────────────────────────
 
@@ -215,8 +258,14 @@ public partial class StaticWeighingForm : Form
             if (_wagonNumber == 1)
                 _trainStartTime = DateTime.Now;
             _bogie1Code         = ActiveCode(_lastFrame);
+            double bogie1Tonnes = ToTonnes(_bogie1Code);
+            AuditLogger.Action(AuditLogger.AdcStaticCalc,
+                "StaticWeighPress",
+                $"step=bogie1 channel={_sim.Channel} code={_bogie1Code} tonnes={bogie1Tonnes:F2} ch0={_lastFrame.Ch0} ch1={_lastFrame.Ch1} activeCalibPoints={ActiveCalibPointCount()}",
+                _sim.PortName,
+                $"raw=[{_lastRawBytes}]");
             _state              = WeighState.Bogie1Captured;
-            _lblValue.Text      = ToTonnes(_bogie1Code).ToString("F2");
+            _lblValue.Text      = bogie1Tonnes.ToString("F2");
             _lblValue.ForeColor = UiColors.PendingAction;
             _lblStatus.Text     = "Тележка 1 зафиксирована  —  Ожидание тележки 2";
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
@@ -225,14 +274,21 @@ public partial class StaticWeighingForm : Form
         else
         {
             int      bogie2    = ActiveCode(_lastFrame);
+            double   bogie2Tonnes = ToTonnes(bogie2);
+            double   bogie1Tonnes = ToTonnes(_bogie1Code);
+            AuditLogger.Action(AuditLogger.AdcStaticCalc,
+                "StaticWeighPress",
+                $"step=bogie2 channel={_sim.Channel} code={bogie2} tonnes={bogie2Tonnes:F2} ch0={_lastFrame.Ch0} ch1={_lastFrame.Ch1} activeCalibPoints={ActiveCalibPointCount()}",
+                _sim.PortName,
+                $"raw=[{_lastRawBytes}]");
             DateTime wagonTime = DateTime.Now;
             var record = new LocalWagon
             {
                 Number    = _wagonNumber,
                 TrainTime = _trainStartTime!.Value,
                 WagonTime = wagonTime,
-                Bogie1    = ToTonnes(_bogie1Code),
-                Bogie2    = ToTonnes(bogie2),
+                Bogie1    = bogie1Tonnes,
+                Bogie2    = bogie2Tonnes,
                 Mode      = "СТАТИКА",
             };
             AddToGrid(record);

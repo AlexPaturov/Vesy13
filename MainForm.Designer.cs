@@ -28,7 +28,6 @@ partial class MainForm
         _statusLayout = new TableLayoutPanel();
         _dotConn      = new Panel();
         _lblConn      = new Label();
-        _btnConn      = new Button();
 
         _pnlHeader.SuspendLayout();
         _pnlMenu.SuspendLayout();
@@ -126,16 +125,13 @@ partial class MainForm
         _pnlMenu.Controls.Add(_btnLogs,        0, 5);
 
         // ── Status bar ────────────────────────────────────────────────────────
-        _statusLayout.ColumnCount = 4;
+        _statusLayout.ColumnCount = 2;
         _statusLayout.RowCount = 1;
         _statusLayout.Dock = DockStyle.Fill;
         _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 18F));
         _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         _statusLayout.Controls.Add(_dotConn, 0, 0);
         _statusLayout.Controls.Add(_lblConn, 1, 0);
-        _statusLayout.Controls.Add(_btnConn, 3, 0);
 
         _dotConn.Size      = new Size(10, 10);
         _dotConn.Anchor    = AnchorStyles.Left;
@@ -145,15 +141,6 @@ partial class MainForm
         _lblConn.AutoSize  = true;
         _lblConn.Anchor    = AnchorStyles.Left;
         _lblConn.Margin    = new Padding(0, 9, 0, 0);
-
-        _btnConn.Text      = "Подключить";
-        _btnConn.Size      = new Size(90, 22);
-        _btnConn.Anchor    = AnchorStyles.Right;
-        _btnConn.Margin    = new Padding(6, 7, 0, 0);
-        _btnConn.FlatStyle = FlatStyle.Flat;
-        _btnConn.UseVisualStyleBackColor = false;
-        _btnConn.FlatAppearance.BorderSize = 0;
-        _btnConn.Click    += BtnConn_Click;
 
         _pnlStatus.Dock      = DockStyle.Bottom;
         _pnlStatus.Height    = 36;
@@ -195,5 +182,4 @@ partial class MainForm
     private TableLayoutPanel _statusLayout;
     private Panel           _dotConn;
     private Label           _lblConn;
-    private Button          _btnConn;
 }

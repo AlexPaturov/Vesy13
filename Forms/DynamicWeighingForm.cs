@@ -212,7 +212,8 @@ public partial class DynamicWeighingForm : Form
 
     private void UpdateConn(bool connected)
     {
-        _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
+        _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;

@@ -9,6 +9,8 @@ namespace Vesy13;
 /// </summary>
 public partial class MainForm : Form
 {
+    private const string DefaultAdcPort = "COM3";
+
     private SimA04Reader    _sim = null!;
     private LocalRepository _ldb = null!;
 
@@ -54,9 +56,6 @@ public partial class MainForm : Form
         _btnLogs.ForeColor = Forms.UiColors.TextOnDark;
         _lblConn.Font        = Forms.UiFonts.Body;
         _lblConn.ForeColor   = Forms.UiColors.TextMuted;
-        _btnConn.Font        = Forms.UiFonts.Small;
-        _btnConn.BackColor   = Forms.UiColors.NavigationAction;
-        _btnConn.ForeColor   = Forms.UiColors.TextOnDark;
     }
 
     protected override void OnLoad(EventArgs e)
@@ -65,6 +64,7 @@ public partial class MainForm : Form
         ApplyTheme();
         if (DesignMode || _sim is null) return;
         _sim.ConnectionChanged += Adc_ConnectionChanged;
+        EnsureAdcConnected(showError: false);
         UpdateConn(_sim.IsConnected);
     }
 
@@ -82,37 +82,64 @@ public partial class MainForm : Form
 
     private void Adc_ConnectionChanged(object? sender, bool connected) => UpdateConn(connected);
 
-    private void BtnConn_Click(object? sender, EventArgs e)
+    private bool EnsureAdcConnected(bool showError)
     {
-        if (_sim.IsConnected) { _sim.Close(); return; }
-        try   { _sim.Open("COM1"); }
+        if (_sim.IsConnected) return true;
+
+        try
+        {
+            _sim.Open(DefaultAdcPort);
+            return true;
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            UpdateConn(false);
+            if (showError)
+            {
+                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return false;
         }
+    }
+
+    private void CloseAdcIfConnected()
+    {
+        if (_sim.IsConnected)
+            _sim.Close();
     }
 
     private void UpdateConn(bool connected)
     {
         if (InvokeRequired) { BeginInvoke(() => UpdateConn(connected)); return; }
-        _dotConn.BackColor = connected ? Forms.UiColors.PrimaryAction : Forms.UiColors.Disconnected;
+        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
+        _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
-        _btnConn.Text      = connected ? "Отключить" : "Подключить";
     }
 
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_sim, _ldb));
-    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_sim, _ldb));
-    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb));
-    private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb));
-    private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()));
-    private void BtnLogs_Click(object? sender, EventArgs e)        => OpenForm(new Forms.LogsForm());
+    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_sim, _ldb), AdcMode.KeepOpen);
+    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_sim, _ldb), AdcMode.KeepOpen);
+    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb), AdcMode.CloseWhileOpen);
+    private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb), AdcMode.CloseWhileOpen);
+    private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()), AdcMode.CloseWhileOpen);
+    private void BtnLogs_Click(object? sender, EventArgs e)        => OpenForm(new Forms.LogsForm(), AdcMode.CloseWhileOpen);
 
-    private void OpenForm(Form form)
+    private enum AdcMode { KeepOpen, CloseWhileOpen }
+
+    private void OpenForm(Form form, AdcMode adcMode)
     {
-        form.FormClosed += (_, _) => Show();
+        if (adcMode == AdcMode.KeepOpen)
+            EnsureAdcConnected(showError: true);
+        else
+            CloseAdcIfConnected();
+
+        form.FormClosed += (_, _) =>
+        {
+            Show();
+            EnsureAdcConnected(showError: false);
+        };
         Hide();
         form.Show();
     }

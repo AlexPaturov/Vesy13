@@ -29,6 +29,8 @@ public static class AuditLogger
     public const int CalibrationSaved  = 1007;
     public const int AdcConnected      = 2001;
     public const int AdcDisconnected   = 2002;
+    public const int AdcStaticRawFrame = 2010;
+    public const int AdcStaticCalc     = 2011;
     public const int AdminLogin        = 2003;
     public const int AppStarted        = 2004;
     public const int ErrorDb           = 9001;
