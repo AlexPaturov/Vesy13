@@ -13,13 +13,13 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class ServiceForm : Form
 {
-    private SimA04Reader    _sim   = null!;
+    private SimA04Reader _sim = null!;
     private LocalRepository _calib = null!;
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
-    private int  _frameCount;
-    private int  _lastCh0;
-    private int  _lastCh1;
+    private int _frameCount;
+    private int _lastCh0;
+    private int _lastCh1;
 
     public ServiceForm()
     {
@@ -28,7 +28,7 @@ public partial class ServiceForm : Form
 
     public ServiceForm(SimA04Reader adc, LocalRepository calib)
     {
-        _sim   = adc;
+        _sim = adc;
         _calib = calib;
         InitializeComponent();
     }
@@ -254,11 +254,12 @@ public partial class ServiceForm : Form
         ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
-        _sim.RawFrameReceived  += OnRawFrame;
+        _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
+        _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
-        _rbMain.Checked   = _sim.Channel == ActiveChannel.Main;
+        _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
         LoadCalibPoints();
@@ -271,7 +272,7 @@ public partial class ServiceForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
-            _sim.RawFrameReceived  -= OnRawFrame;
+            _sim.RawFrameReceived -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
             _rateTimer.Stop();
         }
@@ -280,17 +281,17 @@ public partial class ServiceForm : Form
 
     // ── Designer event handlers ─────────────────────────────────────────────
 
-    private void BtnPortRefresh_Click(object? sender, EventArgs e)  => RefreshPorts();
-    private void BtnClearLog_Click(object? sender, EventArgs e)     => _rtbLog.Clear();
+    private void BtnPortRefresh_Click(object? sender, EventArgs e) => RefreshPorts();
+    private void BtnClearLog_Click(object? sender, EventArgs e) => _rtbLog.Clear();
     private void BtnDelRow_Click(object? sender, EventArgs e)
     {
-        if (_dgvCalib.SelectedRows.Count > 0)
-            _dgvCalib.Rows.Remove(_dgvCalib.SelectedRows[0]);
+        if (_dgvCalib.SelectedRows.Count == 0) return;
+        SetCalibRowActive(_dgvCalib.SelectedRows[0], false, DateTime.Now);
     }
     private void BtnAddRow_Click(object? sender, EventArgs e)
     {
         int row = _dgvCalib.Rows.Add();
-        _dgvCalib.Rows[row].Cells[2].Value = true;
+        SetCalibRowActive(_dgvCalib.Rows[row], true);
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[0];
         _dgvCalib.BeginEdit(true);
     }
@@ -300,19 +301,19 @@ public partial class ServiceForm : Form
         if (code == 0) return;
         int row = _dgvCalib.Rows.Add();
         _dgvCalib.Rows[row].Cells[0].Value = code;
-        _dgvCalib.Rows[row].Cells[2].Value = true;
+        SetCalibRowActive(_dgvCalib.Rows[row], true);
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
         _dgvCalib.BeginEdit(true);
     }
     private void BtnLsq_Click(object? sender, EventArgs e)
     {
-        var pts = ReadGridPoints();
+        var pts = ReadGridPoints().Where(p => p.IsActive).ToList();
         if (pts.Count < 2)
         {
             MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
-        var (k, b) = CalibrationCalculator.CalculateLsq(pts);
+        var (k, b) = CalibrationCalculator.CalculateLsq(pts.Select(p => (p.AdcCode, p.Mass, p.IsActive)));
         _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
         _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
     }
@@ -356,7 +357,7 @@ public partial class ServiceForm : Form
     }
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbCh0Calib.Checked) { _calibUseCh0 = true;  LoadCalibPoints(); UpdateLiveAdcLabel(); }
+        if (_rbCh0Calib.Checked) { _calibUseCh0 = true; LoadCalibPoints(); UpdateLiveAdcLabel(); }
     }
     private void RbCh1Calib_CheckedChanged(object? sender, EventArgs e)
     {
@@ -365,7 +366,7 @@ public partial class ServiceForm : Form
     private void RateTimer_Tick(object? sender, EventArgs e)
     {
         _lblRate.Text = $"{_frameCount} фр/с";
-        _frameCount   = 0;
+        _frameCount = 0;
     }
 
     // ── Monitor ─────────────────────────────────────────────────────────────
@@ -412,11 +413,11 @@ public partial class ServiceForm : Form
     private void UpdateMonitorConn(bool connected)
     {
         _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _lblConn.Text      = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
+        _lblConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
         _lblConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _btnConn.Text      = connected ? "Отключить" : "Подключить";
+        _btnConn.Text = connected ? "Отключить" : "Подключить";
         _btnConn.BackColor = connected ? UiColors.DangerAction : UiColors.PrimaryAction;
-        _cmbPort.Enabled   = !connected;
+        _cmbPort.Enabled = !connected;
         AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
             connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
@@ -434,10 +435,10 @@ public partial class ServiceForm : Form
         _frameCount++;
         if (frame.Valid)
         {
-            _lastCh0          = frame.Ch0;
-            _lastCh1          = frame.Ch1;
-            _lblCh0.Text      = frame.Ch0.ToString();
-            _lblCh1.Text      = frame.Ch1.ToString();
+            _lastCh0 = frame.Ch0;
+            _lastCh1 = frame.Ch1;
+            _lblCh0.Text = frame.Ch0.ToString();
+            _lblCh1.Text = frame.Ch1.ToString();
             _lblCh0.ForeColor = UiColors.Info;
             _lblCh1.ForeColor = UiColors.Info;
             UpdateLiveAdcLabel();
@@ -449,7 +450,7 @@ public partial class ServiceForm : Form
         }
         if (!_chkLog.Checked) return;
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
-        string time  = DateTime.Now.ToString("HH:mm:ss.fff");
+        string time = DateTime.Now.ToString("HH:mm:ss.fff");
         if (frame.Valid)
             AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", UiColors.LogText);
         else
@@ -502,27 +503,37 @@ public partial class ServiceForm : Form
     {
         if (_dgvCalib == null || _calib is null) return;
         int channel = _calibUseCh0 ? 0 : 1;
-        var pts = await _calib.GetCalibPointsAsync(channel);
+        var pts = SortCalibPoints(await _calib.GetCalibPointsAsync(channel));
         _dgvCalib.Rows.Clear();
         foreach (var p in pts)
         {
             int row = _dgvCalib.Rows.Add();
-            _dgvCalib.Rows[row].Tag            = p.Id;
+            _dgvCalib.Rows[row].Tag = p;
             _dgvCalib.Rows[row].Cells[0].Value = p.AdcCode;
             _dgvCalib.Rows[row].Cells[1].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
             _dgvCalib.Rows[row].Cells[2].Value = p.IsActive;
             if (p.AdcCode != 0)
                 _dgvCalib.Rows[row].Cells[3].Value =
                     ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
+            ApplyCalibRowStyle(_dgvCalib.Rows[row]);
         }
     }
 
     private void LoadCalibPoints() => _ = LoadCalibPointsAsync();
 
+    private void DgvCalib_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
+    {
+        if (_dgvCalib.IsCurrentCellDirty)
+            _dgvCalib.CommitEdit(DataGridViewDataErrorContexts.Commit);
+    }
+
     private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
     {
-        if (e.RowIndex < 0 || (e.ColumnIndex != 0 && e.ColumnIndex != 1)) return;
-        RefreshCalibK(e.RowIndex);
+        if (e.RowIndex < 0) return;
+        if (e.ColumnIndex == 0 || e.ColumnIndex == 1)
+            RefreshCalibK(e.RowIndex);
+        if (e.ColumnIndex == 2)
+            SyncCalibRowActiveState(_dgvCalib.Rows[e.RowIndex]);
     }
 
     private void RefreshCalibK(int rowIndex)
@@ -536,19 +547,108 @@ public partial class ServiceForm : Form
             row.Cells[3].Value = "";
     }
 
-    private List<(int AdcCode, decimal Mass, bool IsActive)> ReadGridPoints()
+    private void SetCalibRowActive(DataGridViewRow row, bool isActive, DateTime? deletedAt = null)
     {
-        var result = new List<(int, decimal, bool)>();
+        row.Cells[2].Value = isActive;
+        var point = row.Tag as CalibPoint;
+        if (point is null && !isActive)
+        {
+            point = new CalibPoint();
+            row.Tag = point;
+        }
+        if (point is not null)
+        {
+            point.IsActive = isActive;
+            point.DeletedAt = isActive ? null : deletedAt ?? point.DeletedAt ?? DateTime.Now;
+        }
+        ApplyCalibRowStyle(row);
+    }
+
+    private void SyncCalibRowActiveState(DataGridViewRow row)
+    {
+        bool active = row.Cells[2].Value is true;
+        var point = row.Tag as CalibPoint;
+
+        if (point?.DeletedAt is not null && active)
+        {
+            row.Cells[2].Value = false;
+            point.IsActive = false;
+            ApplyCalibRowStyle(row);
+            return;
+        }
+
+        if (point is null && !active)
+        {
+            point = new CalibPoint();
+            row.Tag = point;
+        }
+
+        if (point is not null)
+        {
+            point.IsActive = active;
+            point.DeletedAt = active ? null : point.DeletedAt ?? DateTime.Now;
+        }
+
+        ApplyCalibRowStyle(row);
+    }
+
+    private static void ApplyCalibRowStyle(DataGridViewRow row)
+    {
+        bool active = row.Cells[2].Value is true;
+        if (active)
+        {
+            row.DefaultCellStyle.BackColor = UiColors.Surface;
+            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            row.ReadOnly = false;
+            return;
+        }
+
+        var deletedBack = Color.FromArgb(255, 228, 232);
+        row.DefaultCellStyle.BackColor = deletedBack;
+        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = deletedBack;
+        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
+        row.ReadOnly = true;
+    }
+
+    private List<CalibPoint> ReadGridPoints()
+    {
+        var result = new List<CalibPoint>();
+        int channel = _calibUseCh0 ? 0 : 1;
+
         foreach (DataGridViewRow row in _dgvCalib.Rows)
         {
             if (!int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
                 continue;
             if (!decimal.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
                 continue;
+
             bool active = row.Cells[2].Value is true;
-            result.Add((code, mass, active));
+            var existing = row.Tag as CalibPoint;
+            DateTime? deletedAt = existing?.DeletedAt ?? (active ? null : DateTime.Now);
+            active = active && deletedAt is null;
+            result.Add(new CalibPoint
+            {
+                Id = existing?.Id ?? 0,
+                Channel = channel,
+                AdcCode = code,
+                Mass = mass,
+                IsActive = active,
+                DeletedAt = deletedAt,
+            });
         }
-        return result;
+
+        return SortCalibPoints(result).ToList();
+    }
+
+    private static IEnumerable<CalibPoint> SortCalibPoints(IEnumerable<CalibPoint> points)
+    {
+        return points
+            .OrderBy(p => !p.IsActive)
+            .ThenByDescending(p => p.IsActive ? p.Mass : decimal.MinValue)
+            .ThenBy(p => p.AdcCode);
     }
 
     private void UpdateLiveAdcLabel()
@@ -566,7 +666,7 @@ public partial class ServiceForm : Form
 
     private async void BtnCalibDynSave_Click(object? sender, EventArgs e)
     {
-        if (!double.TryParse(_txtKPlus.Text,  NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
+        if (!double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
             !double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km))
         {
             MessageBox.Show("Некорректные значения K→ или K←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -590,7 +690,7 @@ public partial class ServiceForm : Form
     private void LoadCalibDynamic()
     {
         if (_calib is null) return;
-        _txtKPlus .Text = _calib.Dynamic.KPlus .ToString("G8", CultureInfo.InvariantCulture);
+        _txtKPlus.Text = _calib.Dynamic.KPlus.ToString("G8", CultureInfo.InvariantCulture);
         _txtKMinus.Text = _calib.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
     }
 
@@ -600,8 +700,8 @@ public partial class ServiceForm : Form
     {
         if (_adminUnlocked)
         {
-            _adminUnlocked      = false;
-            _btnAdmin.Text      = "🔒 Войти как администратор";
+            _adminUnlocked = false;
+            _btnAdmin.Text = "🔒 Войти как администратор";
             _btnAdmin.BackColor = UiColors.AdminLocked;
             SetAdminTabs(false);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "выход из режима администратора");
@@ -610,8 +710,8 @@ public partial class ServiceForm : Form
         {
             using var dlg = new PasswordDialog();
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
-            _adminUnlocked      = true;
-            _btnAdmin.Text      = "🔓 Выйти из режима администратора";
+            _adminUnlocked = true;
+            _btnAdmin.Text = "🔓 Выйти из режима администратора";
             _btnAdmin.BackColor = UiColors.AdminUnlocked;
             SetAdminTabs(true);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "вход в режим администратора");
@@ -622,6 +722,6 @@ public partial class ServiceForm : Form
     {
         _tabCalibS.Enabled = enabled;
         _tabCalibD.Enabled = enabled;
-        _tabSett.Enabled   = enabled;
+        _tabSett.Enabled = enabled;
     }
 }

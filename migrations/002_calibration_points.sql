@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS calibration_points (
     channel    SMALLINT     NOT NULL CHECK (channel IN (0, 1)),
     adc_code   INTEGER      NOT NULL,
     mass       NUMERIC(6,2) NOT NULL CHECK (mass >= 0 AND mass <= 150),
-    is_active  BOOLEAN      NOT NULL DEFAULT TRUE
+    is_active  BOOLEAN      NOT NULL DEFAULT TRUE,
+    deleted_at TIMESTAMPTZ
 );
 
 CREATE TABLE IF NOT EXISTS calibration_dynamic (
