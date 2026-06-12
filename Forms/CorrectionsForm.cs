@@ -1,5 +1,6 @@
 using System.Globalization;
 using Vesy13.Models;
+using Vesy13.Services.Configuration;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
@@ -12,6 +13,7 @@ public partial class CorrectionsForm : Form
 {
     private LocalRepository? _ldb;
     private FactoryRepository? _fdb;
+    private SettingsService? _settings;
 
     private LocalWagon? _selected;
     private GpriGras? _selectedFb;
@@ -46,9 +48,10 @@ public partial class CorrectionsForm : Form
         InitializeContextUi();
     }
 
-    public CorrectionsForm(LocalRepository ldb)
+    public CorrectionsForm(LocalRepository ldb, SettingsService settings)
     {
         _ldb = ldb;
+        _settings = settings;
         InitializeComponent();
         AddPendingGridColumns(_gridPend);
         AddFirebirdGridColumns(_gridDone);
@@ -382,7 +385,7 @@ public partial class CorrectionsForm : Form
         return (pendingCount, doneCount, hadError);
     }
 
-    private static void FillPendingGrid(DataGridView g, List<LocalWagon> rows)
+    private void FillPendingGrid(DataGridView g, List<LocalWagon> rows)
     {
         g.Rows.Clear();
         foreach (var r in rows)
@@ -396,12 +399,24 @@ public partial class CorrectionsForm : Form
                 r.Direction);
             var row = g.Rows[idx];
             row.Tag = r;
-            ApplyPendingRowStyle(row, r.Transferred);
+            ApplyPendingRowStyle(row, r.Transferred, IsOverCapacity(r));
         }
     }
 
-    private static void ApplyPendingRowStyle(DataGridViewRow row, bool transferred)
+    private bool IsOverCapacity(LocalWagon wagon) =>
+        _settings is not null && wagon.Total > _settings.Current.MaxCapacityTonnes;
+
+    private static void ApplyPendingRowStyle(DataGridViewRow row, bool transferred, bool overCapacity)
     {
+        if (overCapacity)
+        {
+            row.DefaultCellStyle.BackColor = Color.Red;
+            row.DefaultCellStyle.ForeColor = Color.White;
+            row.DefaultCellStyle.SelectionBackColor = Color.Red;
+            row.DefaultCellStyle.SelectionForeColor = Color.White;
+            return;
+        }
+
         if (!transferred)
         {
             row.DefaultCellStyle.BackColor = UiColors.InputBack;
@@ -757,6 +772,16 @@ public partial class CorrectionsForm : Form
     {
         if (_selected == null) return;
 
+        if (IsOverCapacity(_selected))
+        {
+            MessageBox.Show("Превышен максимально допустимый порог взвешивания.", "Перенос",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            AuditLogger.Error(AuditLogger.ErrorGeneral, "LocalWagon",
+                $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
+            ClearTopPanel(clearGridSelection: false);
+            return;
+        }
+
         int transferredLocalId = _selected.Id;
 
         string nvag = _tbNvag.Text.Trim();
@@ -904,6 +929,9 @@ public partial class CorrectionsForm : Form
         _rbBrutto.Checked = true;
         _tbNvag.Clear();
         _tbGruz.Clear();
+        _tbPotr.Clear();
+        _tbPlat.Clear();
+        _tbCex.Clear();
         _tbGruz.Enabled = true;
         _btnTransfer.Enabled = false;
         _btnTransfer.Visible = true;

@@ -100,8 +100,6 @@ partial class ServiceForm
         _cmbDisc = new ComboBox();
         _lblZeroCap = new Label();
         _txtZeroLimit = new TextBox();
-        _lblDynWinCap = new Label();
-        _txtDynWindow = new TextBox();
         _lblPasswordCap = new Label();
         _txtNewPassword = new TextBox();
         _btnSaveSettings = new Button();
@@ -1019,8 +1017,6 @@ partial class ServiceForm
         _tabSett.Controls.Add(_cmbDisc);
         _tabSett.Controls.Add(_lblZeroCap);
         _tabSett.Controls.Add(_txtZeroLimit);
-        _tabSett.Controls.Add(_lblDynWinCap);
-        _tabSett.Controls.Add(_txtDynWindow);
         _tabSett.Controls.Add(_lblPasswordCap);
         _tabSett.Controls.Add(_txtNewPassword);
         _tabSett.Controls.Add(_btnSaveSettings);
@@ -1106,55 +1102,35 @@ partial class ServiceForm
         _txtZeroLimit.Name = "_txtZeroLimit";
         _txtZeroLimit.Size = new Size(284, 31);
         _txtZeroLimit.TabIndex = 7;
-        _txtZeroLimit.Text = "1";
-        //
-        // _lblDynWinCap
-        //
-        _lblDynWinCap.AutoSize = true;
-        _lblDynWinCap.Location = new Point(29, 273);
-        _lblDynWinCap.Margin = new Padding(4, 0, 4, 0);
-        _lblDynWinCap.Name = "_lblDynWinCap";
-        _lblDynWinCap.Size = new Size(184, 25);
-        _lblDynWinCap.TabIndex = 8;
-        _lblDynWinCap.Text = "Окно Динамики (мс):";
-        //
-        // _txtDynWindow
-        //
-        _txtDynWindow.Location = new Point(314, 267);
-        _txtDynWindow.Margin = new Padding(4, 5, 4, 5);
-        _txtDynWindow.Name = "_txtDynWindow";
-        _txtDynWindow.Size = new Size(284, 31);
-        _txtDynWindow.TabIndex = 9;
-        _txtDynWindow.Text = "1500";
-        //
+        _txtZeroLimit.Text = "2";
         //
         // _lblPasswordCap
         //
         _lblPasswordCap.AutoSize = true;
-        _lblPasswordCap.Location = new Point(29, 333);
+        _lblPasswordCap.Location = new Point(29, 273);
         _lblPasswordCap.Margin = new Padding(4, 0, 4, 0);
         _lblPasswordCap.Name = "_lblPasswordCap";
         _lblPasswordCap.Size = new Size(137, 25);
-        _lblPasswordCap.TabIndex = 10;
+        _lblPasswordCap.TabIndex = 8;
         _lblPasswordCap.Text = "Новый пароль:";
         //
         // _txtNewPassword
         //
-        _txtNewPassword.Location = new Point(314, 327);
+        _txtNewPassword.Location = new Point(314, 267);
         _txtNewPassword.Margin = new Padding(4, 5, 4, 5);
         _txtNewPassword.Name = "_txtNewPassword";
         _txtNewPassword.Size = new Size(284, 31);
-        _txtNewPassword.TabIndex = 11;
+        _txtNewPassword.TabIndex = 9;
         _txtNewPassword.UseSystemPasswordChar = true;
         //
         // _btnSaveSettings
         //
         _btnSaveSettings.FlatStyle = FlatStyle.Flat;
-        _btnSaveSettings.Location = new Point(29, 400);
+        _btnSaveSettings.Location = new Point(29, 340);
         _btnSaveSettings.Margin = new Padding(4, 5, 4, 5);
         _btnSaveSettings.Name = "_btnSaveSettings";
         _btnSaveSettings.Size = new Size(186, 57);
-        _btnSaveSettings.TabIndex = 12;
+        _btnSaveSettings.TabIndex = 10;
         _btnSaveSettings.Text = "Сохранить";
         _btnSaveSettings.UseVisualStyleBackColor = false;
         _btnSaveSettings.Click += BtnSaveSettings_Click;
@@ -1288,8 +1264,6 @@ partial class ServiceForm
     private ComboBox _cmbDisc;
     private Label    _lblZeroCap;
     private TextBox  _txtZeroLimit;
-    private Label    _lblDynWinCap;
-    private TextBox  _txtDynWindow;
     private Label    _lblPasswordCap;
     private TextBox  _txtNewPassword;
     private Button   _btnSaveSettings;

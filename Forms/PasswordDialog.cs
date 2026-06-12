@@ -1,11 +1,19 @@
+using Vesy13.Services.Configuration;
+
 namespace Vesy13.Forms;
 
 public partial class PasswordDialog : Form
 {
-    private const string DefaultPassword = "1234";
+    private SettingsService? _settings;
 
     public PasswordDialog()
     {
+        InitializeComponent();
+    }
+
+    public PasswordDialog(SettingsService settings)
+    {
+        _settings = settings;
         InitializeComponent();
     }
 
@@ -40,7 +48,7 @@ public partial class PasswordDialog : Form
 
     private void TryAccept()
     {
-        if (_txtPassword.Text == DefaultPassword)
+        if (_settings is not null && _settings.VerifyAdminPassword(_txtPassword.Text))
         {
             DialogResult = DialogResult.OK;
             Close();

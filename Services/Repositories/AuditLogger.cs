@@ -33,6 +33,9 @@ public static class AuditLogger
     public const int AdcStaticCalc     = 2011;
     public const int AdminLogin        = 2003;
     public const int AppStarted        = 2004;
+    public const int SettingsSaved     = 2005;
+    public const int AdcChannelChanged = 2006;
+    public const int ZeroSet           = 2007;
     public const int ErrorDb           = 9001;
     public const int ErrorAdc          = 9002;
     public const int ErrorPdf          = 9003;

@@ -1,3 +1,4 @@
+using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -9,20 +10,20 @@ namespace Vesy13;
 /// </summary>
 public partial class MainForm : Form
 {
-    private const string DefaultAdcPort = "COM3";
-
     private SimA04Reader    _sim = null!;
     private LocalRepository _ldb = null!;
+    private SettingsService _settings = null!;
 
     public MainForm()
     {
         InitializeComponent();
     }
 
-    public MainForm(SimA04Reader sim, LocalRepository ldb)
+    public MainForm(SimA04Reader sim, LocalRepository ldb, SettingsService settings)
     {
         _sim = sim;
         _ldb = ldb;
+        _settings = settings;
         InitializeComponent();
     }
 
@@ -88,7 +89,7 @@ public partial class MainForm : Form
 
         try
         {
-            _sim.Open(DefaultAdcPort);
+            _sim.Open(_settings.Current.AdcPortName);
             return true;
         }
         catch (Exception ex)
@@ -119,10 +120,10 @@ public partial class MainForm : Form
 
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_sim, _ldb), AdcMode.KeepOpen);
-    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_sim, _ldb), AdcMode.KeepOpen);
-    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb), AdcMode.CloseWhileOpen);
-    private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb), AdcMode.CloseWhileOpen);
+    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_sim, _ldb, _settings), AdcMode.KeepOpen);
+    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_sim, _ldb, _settings), AdcMode.KeepOpen);
+    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_sim, _ldb, _settings), AdcMode.CloseWhileOpen);
+    private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb, _settings), AdcMode.CloseWhileOpen);
     private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()), AdcMode.CloseWhileOpen);
     private void BtnLogs_Click(object? sender, EventArgs e)        => OpenForm(new Forms.LogsForm(), AdcMode.CloseWhileOpen);
 

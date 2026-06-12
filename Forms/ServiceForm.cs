@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IO.Ports;
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -15,6 +16,7 @@ public partial class ServiceForm : Form
 {
     private SimA04Reader _sim = null!;
     private LocalRepository _calib = null!;
+    private SettingsService _settings = null!;
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
     private int _frameCount;
@@ -26,10 +28,11 @@ public partial class ServiceForm : Form
         InitializeComponent();
     }
 
-    public ServiceForm(SimA04Reader adc, LocalRepository calib)
+    public ServiceForm(SimA04Reader adc, LocalRepository calib, SettingsService settings)
     {
         _sim = adc;
         _calib = calib;
+        _settings = settings;
         InitializeComponent();
     }
 
@@ -226,11 +229,6 @@ public partial class ServiceForm : Form
         _txtZeroLimit.Font = UiFonts.Body;
         _txtZeroLimit.BackColor = UiColors.InputBack;
         _txtZeroLimit.ForeColor = UiColors.InputFore;
-        _lblDynWinCap.Font = UiFonts.Medium;
-        _lblDynWinCap.ForeColor = UiColors.TextPrimary;
-        _txtDynWindow.Font = UiFonts.Body;
-        _txtDynWindow.BackColor = UiColors.InputBack;
-        _txtDynWindow.ForeColor = UiColors.InputFore;
         _lblPasswordCap.Font = UiFonts.Medium;
         _lblPasswordCap.ForeColor = UiColors.TextPrimary;
         _txtNewPassword.Font = UiFonts.Body;
@@ -257,6 +255,7 @@ public partial class ServiceForm : Form
         _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
+        LoadSettingsUi();
         LoadCalibPoints();
         LoadCalibDynamic();
         SetAdminTabs(false);
@@ -339,16 +338,25 @@ public partial class ServiceForm : Form
         else
             MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
-    private void BtnSaveSettings_Click(object? sender, EventArgs e) =>
-        MessageBox.Show("Сохранение настроек — в разработке.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void BtnSaveSettings_Click(object? sender, EventArgs e) => SaveSettingsFromUi();
 
     private void RbMain_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbMain.Checked && _sim is not null) _sim.Channel = ActiveChannel.Main;
+        if (_rbMain.Checked) SetActiveChannel(ActiveChannel.Main);
     }
     private void RbBackup_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbBackup.Checked && _sim is not null) _sim.Channel = ActiveChannel.Backup;
+        if (_rbBackup.Checked) SetActiveChannel(ActiveChannel.Backup);
+    }
+
+    private void SetActiveChannel(ActiveChannel channel)
+    {
+        if (_sim is null || _sim.Channel == channel) return;
+
+        ActiveChannel old = _sim.Channel;
+        _sim.Channel = channel;
+        AuditLogger.Action(AuditLogger.AdcChannelChanged,
+            "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
     }
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
     {
@@ -362,6 +370,74 @@ public partial class ServiceForm : Form
     {
         _lblRate.Text = $"{_frameCount} фр/с";
         _frameCount = 0;
+    }
+
+    private void LoadSettingsUi()
+    {
+        if (_settings is null) return;
+
+        SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
+        _txtNpv.Text = _settings.Current.MaxCapacityTonnes.ToString("G", CultureInfo.InvariantCulture);
+        SelectComboValue(_cmbDisc, FormatDiscretization(_settings.Current.WeightDiscretizationTonnes));
+        _txtZeroLimit.Text = _settings.Current.OperatorZeroLimitPercent.ToString("G", CultureInfo.InvariantCulture);
+        _txtNewPassword.Clear();
+    }
+
+    private void SaveSettingsFromUi()
+    {
+        if (_settings is null) return;
+
+        if (_cmbSettPort.SelectedItem is string portName)
+            _settings.Current.AdcPortName = portName;
+
+        if (!double.TryParse(_txtNpv.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out double npv) || npv <= 0)
+        {
+            MessageBox.Show("Введите корректное значение НПВ.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtNpv.Focus();
+            return;
+        }
+
+        if (!TryParseDiscretization(_cmbDisc.Text, out double discretization))
+        {
+            MessageBox.Show("Выберите корректную дискретность.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _cmbDisc.Focus();
+            return;
+        }
+
+        if (!double.TryParse(_txtZeroLimit.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out double zeroLimit) || zeroLimit < 0 || zeroLimit > _settings.Current.AdminZeroLimitPercent)
+        {
+            MessageBox.Show($"Лимит нуля должен быть от 0 до {_settings.Current.AdminZeroLimitPercent:G} % НПВ.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtZeroLimit.Focus();
+            return;
+        }
+
+        _settings.Current.MaxCapacityTonnes = npv;
+        _settings.Current.WeightDiscretizationTonnes = discretization;
+        _settings.Current.OperatorZeroLimitPercent = zeroLimit;
+
+        string newPassword = _txtNewPassword.Text;
+        if (!string.IsNullOrWhiteSpace(newPassword))
+            _settings.SetAdminPassword(newPassword);
+
+        _settings.Save();
+        _txtNewPassword.Clear();
+        AuditLogger.Action(AuditLogger.SettingsSaved, "Settings", "settings.json", "Vesy13", _settings.Path);
+        MessageBox.Show("Настройки сохранены.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private static void SelectComboValue(ComboBox combo, string value)
+    {
+        int idx = combo.Items.IndexOf(value);
+        if (idx >= 0)
+            combo.SelectedIndex = idx;
+    }
+
+    private static string FormatDiscretization(double value) => value.ToString("0.##", CultureInfo.InvariantCulture) + " т";
+
+    private static bool TryParseDiscretization(string text, out double value)
+    {
+        text = text.Replace("т", "", StringComparison.OrdinalIgnoreCase).Trim();
+        return double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && value > 0;
     }
 
     // ── Monitor ─────────────────────────────────────────────────────────────
@@ -380,7 +456,14 @@ public partial class ServiceForm : Form
         _btnConn.Enabled = ports.Length > 0;
 
         _cmbSettPort.Items.Clear();
-        if (ports.Length > 0) { _cmbSettPort.Items.AddRange(ports); _cmbSettPort.SelectedIndex = 0; }
+        if (!string.IsNullOrWhiteSpace(_settings.Current.AdcPortName))
+            _cmbSettPort.Items.Add(_settings.Current.AdcPortName);
+        foreach (string portName in ports)
+        {
+            if (!_cmbSettPort.Items.Contains(portName))
+                _cmbSettPort.Items.Add(portName);
+        }
+        SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
     }
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
@@ -703,7 +786,7 @@ public partial class ServiceForm : Form
         }
         else
         {
-            using var dlg = new PasswordDialog();
+            using var dlg = new PasswordDialog(_settings);
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
             _adminUnlocked = true;
             _btnAdmin.Text = "🔓 Выйти из режима администратора";

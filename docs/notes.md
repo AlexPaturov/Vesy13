@@ -59,8 +59,14 @@ Use conventional commit prefixes.
 ## ADC COM port settings
 - Use local `settings.json` next to the application executable as the persistent source for workstation-level application settings.
 - If `settings.json` is missing, create it automatically with default values.
+- Default values: ADC COM port `COM1`, max capacity (NPV) `140 t`, weight discretization `0.05 t`, operator zero limit `2%` of NPV, admin-configurable zero limit `100%` of NPV.
+- `settings.json` stores configurable values: ADC COM port, max capacity (NPV), weight discretization, zero settings, and administrator password hash data.
 - `settings.json` contains default values and is read by application modules that need configuration.
-- Users with the administrator password can configure and save the working ADC COM port from the settings UI.
+- Users with the administrator password can configure and save the working ADC COM port, NPV, discretization, and zero settings from the settings UI.
+- Saving a new working ADC COM port does not forcibly reconnect an already-open ADC session; the new value is applied on the next automatic connection.
 - `MainForm` automatic ADC connection reads the working port from `settings.json`, not from a hard-coded constant.
 - `ServiceForm` -> `Мониторинг`: existing COM-port behavior stays unchanged. This tab is a manual diagnostic/temporary connection tool for the shared `SimA04Reader`; it is not the persistent source of the working ADC port.
 - Keep the monitor combo/button logic separate from saved settings unless explicitly requested later.
+- Dynamic weighing collection window is an internal hard-coded algorithm parameter, not a user setting and not a `settings.json` value.
+- Weight discretization stays as a user setting in `settings.json`; apply it after weight calculation for displayed and saved mass values.
+- Administrator password is stored in `settings.json` only as PBKDF2 hash + salt; never store plaintext or reversible encrypted password. The initial default password is `vesy13fuck` and is written only as hash + salt.

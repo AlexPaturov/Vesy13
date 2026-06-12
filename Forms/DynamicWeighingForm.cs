@@ -1,5 +1,6 @@
 using Vesy13.Application;
 using Vesy13.Models;
+using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
@@ -13,6 +14,7 @@ public partial class DynamicWeighingForm : Form
 {
     private SimA04Reader    _sim = null!;
     private LocalRepository _ldb  = null!;
+    private SettingsService _settings = null!;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -20,21 +22,30 @@ public partial class DynamicWeighingForm : Form
     private int        _wagonNumber;
     private int        _bogie1Code;
     private SimA04Frame   _lastFrame;
+    private double     _zeroOffsetTonnes;
 
     public DynamicWeighingForm()
     {
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(SimA04Reader sim, LocalRepository ldb)
+    public DynamicWeighingForm(SimA04Reader sim, LocalRepository ldb, SettingsService settings)
     {
         _sim = sim;
         _ldb  = ldb;
+        _settings = settings;
         InitializeComponent();
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
-    private double ToTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+
+    private double ReadRawTonnes(int adcCode) =>
+        CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+
+    private double ToTonnes(int adcCode) =>
+        WeightFormatter.RoundToDiscretization(
+            ReadRawTonnes(adcCode) - _zeroOffsetTonnes,
+            _settings.Current.WeightDiscretizationTonnes);
 
     private bool ValidateBeforeWeigh()
     {
@@ -273,7 +284,23 @@ public partial class DynamicWeighingForm : Form
         UpdateButtonStates();
     }
 
-    private void OnZeroClick() => MessageBox.Show("Ноль установлен (в разработке)", "Ноль", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    private void OnZeroClick()
+    {
+        if (!ValidateBeforeWeigh()) return;
+
+        double current = ReadRawTonnes(ActiveCode(_lastFrame));
+        double limit = _settings.Current.OperatorZeroLimitTonnes;
+        if (Math.Abs(current) > limit)
+        {
+            MessageBox.Show($"Ноль можно установить только в пределах {limit:F2} т.", "Ноль",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        _zeroOffsetTonnes = current;
+        _lblValue.Text = ToTonnes(ActiveCode(_lastFrame)).ToString("F2");
+        AuditLogger.Action(AuditLogger.ZeroSet, "Zero", $"offset={_zeroOffsetTonnes:F2} limit={limit:F2}");
+    }
 
     private void HandleFinish(bool silent = false)
     {
