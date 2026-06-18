@@ -17,6 +17,11 @@ partial class DynamicWeighingForm
         _lblValue = new Label();
         _lblUnit = new Label();
         _lblStatus = new Label();
+        _lblBogie1Caption = new Label();
+        _lblBogie1Value = new Label();
+        _lblBogie2Caption = new Label();
+        _lblBogie2Value = new Label();
+        _lblTrainInfo = new Label();
         _btnWeigh = new Button();
         _btnZero = new Button();
         _btnFinish = new Button();
@@ -92,6 +97,7 @@ partial class DynamicWeighingForm
         _rbPlus.TabIndex = 0;
         _rbPlus.TabStop = true;
         _rbPlus.Text = "→ (+)";
+        _rbPlus.CheckedChanged += Direction_CheckedChanged;
         // 
         // _rbMinus
         // 
@@ -103,6 +109,7 @@ partial class DynamicWeighingForm
         _rbMinus.Size = new Size(58, 23);
         _rbMinus.TabIndex = 1;
         _rbMinus.Text = "← (–)";
+        _rbMinus.CheckedChanged += Direction_CheckedChanged;
         // 
         // _lblChannel
         // 
@@ -120,6 +127,11 @@ partial class DynamicWeighingForm
         // _pnlDisplay
         // 
         _pnlDisplay.BackColor = UiColors.DisplayBackground;
+        _pnlDisplay.Controls.Add(_lblTrainInfo);
+        _pnlDisplay.Controls.Add(_lblBogie2Value);
+        _pnlDisplay.Controls.Add(_lblBogie2Caption);
+        _pnlDisplay.Controls.Add(_lblBogie1Value);
+        _pnlDisplay.Controls.Add(_lblBogie1Caption);
         _pnlDisplay.Controls.Add(_lblValue);
         _pnlDisplay.Controls.Add(_lblUnit);
         _pnlDisplay.Controls.Add(_lblStatus);
@@ -157,11 +169,66 @@ partial class DynamicWeighingForm
         _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Location = new Point(8, 118);
         _lblStatus.Name = "_lblStatus";
-        _lblStatus.Size = new Size(584, 34);
+        _lblStatus.Size = new Size(500, 34);
         _lblStatus.TabIndex = 2;
         _lblStatus.Text = "Готов к взвешиванию  —  Тележка 1";
         _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
         // 
+        // _lblBogie1Caption
+        //
+        _lblBogie1Caption.Font = UiFonts.Body;
+        _lblBogie1Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Caption.Location = new Point(528, 16);
+        _lblBogie1Caption.Name = "_lblBogie1Caption";
+        _lblBogie1Caption.Size = new Size(112, 20);
+        _lblBogie1Caption.TabIndex = 3;
+        _lblBogie1Caption.Text = "Тележка 1";
+        _lblBogie1Caption.TextAlign = ContentAlignment.MiddleLeft;
+        //
+        // _lblBogie1Value
+        //
+        _lblBogie1Value.Font = UiFonts.Medium;
+        _lblBogie1Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Value.Location = new Point(528, 36);
+        _lblBogie1Value.Name = "_lblBogie1Value";
+        _lblBogie1Value.Size = new Size(112, 25);
+        _lblBogie1Value.TabIndex = 4;
+        _lblBogie1Value.Text = "—";
+        _lblBogie1Value.TextAlign = ContentAlignment.MiddleLeft;
+        //
+        // _lblBogie2Caption
+        //
+        _lblBogie2Caption.Font = UiFonts.Body;
+        _lblBogie2Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Caption.Location = new Point(528, 68);
+        _lblBogie2Caption.Name = "_lblBogie2Caption";
+        _lblBogie2Caption.Size = new Size(112, 20);
+        _lblBogie2Caption.TabIndex = 5;
+        _lblBogie2Caption.Text = "Тележка 2";
+        _lblBogie2Caption.TextAlign = ContentAlignment.MiddleLeft;
+        //
+        // _lblBogie2Value
+        //
+        _lblBogie2Value.Font = UiFonts.Medium;
+        _lblBogie2Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Value.Location = new Point(528, 88);
+        _lblBogie2Value.Name = "_lblBogie2Value";
+        _lblBogie2Value.Size = new Size(112, 25);
+        _lblBogie2Value.TabIndex = 6;
+        _lblBogie2Value.Text = "—";
+        _lblBogie2Value.TextAlign = ContentAlignment.MiddleLeft;
+        //
+        // _lblTrainInfo
+        //
+        _lblTrainInfo.Font = UiFonts.Body;
+        _lblTrainInfo.ForeColor = UiColors.TextOnDarkMuted;
+        _lblTrainInfo.Location = new Point(528, 118);
+        _lblTrainInfo.Name = "_lblTrainInfo";
+        _lblTrainInfo.Size = new Size(112, 34);
+        _lblTrainInfo.TabIndex = 7;
+        _lblTrainInfo.Text = "Состав: —";
+        _lblTrainInfo.TextAlign = ContentAlignment.MiddleLeft;
+        //
         // _pnlActions
         // 
         _pnlActions.Controls.Add(_btnWeigh);
@@ -338,6 +405,11 @@ partial class DynamicWeighingForm
     private Label         _lblValue;
     private Label         _lblUnit;
     private Label         _lblStatus;
+    private Label         _lblBogie1Caption;
+    private Label         _lblBogie1Value;
+    private Label         _lblBogie2Caption;
+    private Label         _lblBogie2Value;
+    private Label         _lblTrainInfo;
     private Button        _btnWeigh;
     private Button        _btnZero;
     private Button        _btnFinish;

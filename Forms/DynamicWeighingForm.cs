@@ -76,6 +76,16 @@ public partial class DynamicWeighingForm : Form
         _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
         _lblStatus.Font   = UiFonts.Medium;
         _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Caption.Font = UiFonts.Body;
+        _lblBogie1Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie1Value.Font = UiFonts.Medium;
+        _lblBogie1Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Caption.Font = UiFonts.Body;
+        _lblBogie2Caption.ForeColor = UiColors.TextOnDarkMuted;
+        _lblBogie2Value.Font = UiFonts.Medium;
+        _lblBogie2Value.ForeColor = UiColors.TextOnDarkMuted;
+        _lblTrainInfo.Font = UiFonts.Body;
+        _lblTrainInfo.ForeColor = UiColors.TextOnDarkMuted;
         _btnWeigh.Font    = UiFonts.WeighButton;
         _btnWeigh.BackColor = UiColors.PrimaryAction;
         _btnWeigh.ForeColor = UiColors.TextOnDark;
@@ -139,6 +149,8 @@ public partial class DynamicWeighingForm : Form
         _sim.ConnectionChanged += OnConnectionChanged;
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
+        ResetBogieValues();
+        UpdateTrainInfo();
         UpdateButtonStates();
     }
 
@@ -191,6 +203,7 @@ public partial class DynamicWeighingForm : Form
     private void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
     private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
     private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
+    private void Direction_CheckedChanged(object? sender, EventArgs e) => UpdateTrainInfo();
 
     // ── ADC events ─────────────────────────────────────────────────────────
 
@@ -207,6 +220,10 @@ public partial class DynamicWeighingForm : Form
         {
             _lblValue.Text      = ToTonnes(ActiveCode(frame)).ToString("F2");
             _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        }
+        else
+        {
+            SetBogieValue(_lblBogie2Value, ToTonnes(ActiveCode(frame)));
         }
     }
 
@@ -235,6 +252,29 @@ public partial class DynamicWeighingForm : Form
 
     private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
 
+    private static void SetBogieValue(Label label, double tonnes) => label.Text = $"{tonnes:F2} т";
+
+    private void ResetBogieValues()
+    {
+        _lblBogie1Value.Text = "—";
+        _lblBogie2Value.Text = "—";
+    }
+
+    private void UpdateTrainInfo()
+    {
+        string direction = GetDirection();
+        _lblTrainInfo.Text = _wagonNumber == 0
+            ? $"Состав: —\n{direction}"
+            : $"Состав: {_wagonNumber} ваг.\n{direction}";
+    }
+
+    private void UpdateDirectionControls()
+    {
+        bool enabled = _state == WeighState.Idle && _wagonNumber == 0;
+        _rbPlus.Enabled = enabled;
+        _rbMinus.Enabled = enabled;
+    }
+
     // ── Weighing logic ─────────────────────────────────────────────────────
 
     private void HandleWeighPress()
@@ -248,10 +288,14 @@ public partial class DynamicWeighingForm : Form
             if (_wagonNumber == 1)
                 _trainStartTime = DateTime.Now;
             _bogie1Code         = ActiveCode(_lastFrame);
+            double   bogie1Tonnes = ToTonnes(_bogie1Code);
             _state              = WeighState.Bogie1Captured;
-            _lblValue.Text      = ToTonnes(_bogie1Code).ToString("F2");
+            SetBogieValue(_lblBogie1Value, bogie1Tonnes);
+            _lblBogie2Value.Text = "—";
+            _lblValue.Text      = bogie1Tonnes.ToString("F2");
             _lblValue.ForeColor = UiColors.PendingAction;
-            _lblStatus.Text     = "Тележка 1 зафиксирована  —  Ожидание тележки 2";
+            _lblStatus.Text     = $"Вагон №{_wagonNumber}: тележка 1 зафиксирована  —  Ожидание тележки 2";
+            UpdateTrainInfo();
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
             _btnWeigh.BackColor = UiColors.PendingAction;
         }
@@ -275,9 +319,12 @@ public partial class DynamicWeighingForm : Form
                 "LocalWagon", $"вагон №{_wagonNumber} dir={record.Direction} total={record.Total:F2}",
                 "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
+            SetBogieValue(_lblBogie1Value, record.Bogie1);
+            SetBogieValue(_lblBogie2Value, record.Bogie2);
             _lblValue.Text      = record.Total.ToString("F2");
             _lblValue.ForeColor = UiColors.Info;
             _lblStatus.Text     = $"Вагон №{_wagonNumber}: {record.Total:F2} т  —  Готов к следующему";
+            UpdateTrainInfo();
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
             _btnWeigh.BackColor = UiColors.PrimaryAction;
         }
@@ -316,6 +363,8 @@ public partial class DynamicWeighingForm : Form
         _lblValue.Text      = "—";
         _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
         _lblStatus.Text     = "Готов к взвешиванию  —  Тележка 1";
+        ResetBogieValues();
+        UpdateTrainInfo();
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.BackColor = UiColors.PrimaryAction;
         AuditLogger.Action(AuditLogger.TrainFinished,
@@ -327,6 +376,7 @@ public partial class DynamicWeighingForm : Form
     {
         _btnZero.Enabled   = _state == WeighState.Idle;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
+        UpdateDirectionControls();
     }
 
     private void AddToGrid(LocalWagon r)
