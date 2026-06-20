@@ -62,13 +62,6 @@ public partial class PrintForm : Form
         _txtPotr.Font         = UiFonts.Body;
         _txtPotr.BackColor    = UiColors.InputBack;
         _txtPotr.ForeColor    = UiColors.InputFore;
-        _lblNdok.Font         = UiFonts.Body;
-        _lblNdok.ForeColor    = UiColors.TextMuted;
-        _txtNdok.Font         = UiFonts.Body;
-        _txtNdok.BackColor    = UiColors.InputBack;
-        _txtNdok.ForeColor    = UiColors.InputFore;
-        _chkPotr.Font         = UiFonts.Body;
-        _chkPotr.ForeColor    = UiColors.TextPrimary;
         _btnFind.Font         = UiFonts.BodyBold;
         _btnFind.BackColor    = UiColors.PrimaryAction;
         _btnFind.ForeColor    = UiColors.TextOnDark;
@@ -152,16 +145,14 @@ public partial class PrintForm : Form
         var nvag  = NullIfEmpty(_txtNvag.Text);
         var gruz  = NullIfEmpty(_txtGruz.Text);
         var potr  = NullIfEmpty(_txtPotr.Text);
-        long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long n) ? n : null;
+        //long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long n) ? n : null;
 
         if (_fdb is null) return;
 
         _btnFind.Enabled = false;
         try
         {
-            _records = await _fdb.GetForPrintAsync(
-                table, _dtpFrom.Value.Date, _dtpTo.Value.Date,
-                nvag, gruz, potr, ndok);
+            _records = await _fdb.GetForPrintAsync(table, _dtpFrom.Value.Date, _dtpTo.Value.Date, nvag, gruz, potr, null);
             LoadGrid();
         }
         catch (Exception ex)
@@ -198,8 +189,7 @@ public partial class PrintForm : Form
             _txtTo.Text.Trim(),
             _dtpFrom.Value.Date,
             _dtpTo.Value.Date,
-            _rbGpri.Checked ? "приход" : "расход",
-            _chkPotr.Checked);
+            _rbGpri.Checked ? "приход" : "расход");
 
         var tempPath = Path.Combine(Path.GetTempPath(), $"otves_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
 
@@ -229,7 +219,7 @@ public partial class PrintForm : Form
         _txtGruz.Clear();
         _txtNvag.Clear();
         _txtPotr.Clear();
-        _txtNdok.Clear();
+        //_txtNdok.Clear();
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
         _dtpTo.Value   = DateTime.Today;
     }

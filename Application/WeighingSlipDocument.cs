@@ -18,13 +18,12 @@ public sealed class WeighingSlipDocument : IDocument
     private readonly DateTime       _dateFrom;
     private readonly DateTime       _dateTo;
     private readonly string         _direction;
-    private readonly bool           _showPotr;
 
     public WeighingSlipDocument(
         List<GpriGras> records,
         string slipNumber, string from, string to,
         DateTime dateFrom, DateTime dateTo,
-        string direction, bool showPotr)
+        string direction)
     {
         _records    = records;
         _slipNumber = slipNumber;
@@ -33,7 +32,6 @@ public sealed class WeighingSlipDocument : IDocument
         _dateFrom   = dateFrom;
         _dateTo     = dateTo;
         _direction  = direction;
-        _showPotr   = showPotr;
     }
 
     public void Generate(string path) => this.GeneratePdf(path);
@@ -96,7 +94,7 @@ public sealed class WeighingSlipDocument : IDocument
                     cols.ConstantColumn(52);
                     cols.ConstantColumn(52);
                     cols.ConstantColumn(52);
-                    if (_showPotr) cols.RelativeColumn();
+                    //if (_showPotr) cols.RelativeColumn();
                 });
 
                 table.Header(h =>
@@ -112,7 +110,7 @@ public sealed class WeighingSlipDocument : IDocument
                     Hdr(h.Cell()).AlignRight().Text("Брутто").Bold().FontSize(8);
                     Hdr(h.Cell()).AlignRight().Text("Тара").Bold().FontSize(8);
                     Hdr(h.Cell()).AlignRight().Text("нетто").Bold().FontSize(8);
-                    if (_showPotr) Hdr(h.Cell()).Text("Потребитель").Bold().FontSize(8);
+                    //if (_showPotr) Hdr(h.Cell()).Text("Потребитель").Bold().FontSize(8);
                 });
 
                 for (int i = 0; i < _records.Count; i++)
@@ -130,7 +128,7 @@ public sealed class WeighingSlipDocument : IDocument
                     Row(table.Cell()).AlignRight().Text(r.Brutto.ToString("F2")).FontSize(8);
                     Row(table.Cell()).AlignRight().Text(r.TarBrs?.ToString("F2") ?? "0.00").FontSize(8);
                     Row(table.Cell()).AlignRight().Text(r.Netto?.ToString("F2") ?? "").FontSize(8);
-                    if (_showPotr) Row(table.Cell()).Text(r.Potr).FontSize(8);
+                    //if (_showPotr) Row(table.Cell()).Text(r.Potr).FontSize(8);
                 }
 
                 var totalBrutto = _records.Sum(r => r.Brutto);
@@ -141,7 +139,7 @@ public sealed class WeighingSlipDocument : IDocument
                 table.Cell().BorderTop(1).Padding(2).AlignRight().Text(totalBrutto.ToString("F2")).Bold().FontSize(8);
                 table.Cell().BorderTop(1).Padding(2).AlignRight().Text(totalTar.ToString("F2")).Bold().FontSize(8);
                 table.Cell().BorderTop(1).Padding(2).AlignRight().Text(totalNetto.ToString("F2")).Bold().FontSize(8);
-                if (_showPotr) table.Cell().BorderTop(1).Padding(2).Text("");
+                //if (_showPotr) table.Cell().BorderTop(1).Padding(2).Text("");
             });
         });
     }

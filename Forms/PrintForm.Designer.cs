@@ -13,19 +13,15 @@ partial class PrintForm
 
     private void InitializeComponent()
     {
-        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
         _layoutMain = new TableLayoutPanel();
         _pnlTop = new Panel();
         _pnlTopActions = new Panel();
         _btnFind = new Button();
-        _btnClearFilters = new Button();
         _pnlTopRow2 = new Panel();
         _lblPotr = new Label();
         _txtPotr = new TextBox();
-        _lblNdok = new Label();
-        _txtNdok = new TextBox();
-        _chkPotr = new CheckBox();
         _pnlTopRow1 = new Panel();
         tableLayoutPanel1 = new TableLayoutPanel();
         _rbGpri = new RadioButton();
@@ -51,9 +47,10 @@ partial class PrintForm
         _lblTo = new Label();
         _txtTo = new TextBox();
         _btnPreview = new Button();
+        tableLayoutPanel2 = new TableLayoutPanel();
+        _btnClearFilters = new Button();
         _layoutMain.SuspendLayout();
         _pnlTop.SuspendLayout();
-        _pnlTopActions.SuspendLayout();
         _pnlTopRow2.SuspendLayout();
         _pnlTopRow1.SuspendLayout();
         tableLayoutPanel1.SuspendLayout();
@@ -63,6 +60,7 @@ partial class PrintForm
         _pnlDateFromHost.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatus.SuspendLayout();
+        tableLayoutPanel2.SuspendLayout();
         SuspendLayout();
         // 
         // _layoutMain
@@ -96,8 +94,6 @@ partial class PrintForm
         // 
         // _pnlTopActions
         // 
-        _pnlTopActions.Controls.Add(_btnFind);
-        _pnlTopActions.Controls.Add(_btnClearFilters);
         _pnlTopActions.Location = new Point(0, 122);
         _pnlTopActions.Name = "_pnlTopActions";
         _pnlTopActions.Size = new Size(1264, 41);
@@ -107,7 +103,7 @@ partial class PrintForm
         // 
         _btnFind.FlatAppearance.BorderSize = 0;
         _btnFind.FlatStyle = FlatStyle.Flat;
-        _btnFind.Location = new Point(10, 6);
+        _btnFind.Location = new Point(872, 4);
         _btnFind.Name = "_btnFind";
         _btnFind.Size = new Size(100, 26);
         _btnFind.TabIndex = 15;
@@ -115,70 +111,32 @@ partial class PrintForm
         _btnFind.UseVisualStyleBackColor = false;
         _btnFind.Click += BtnFind_Click;
         // 
-        // _btnClearFilters
-        // 
-        _btnClearFilters.FlatAppearance.BorderSize = 0;
-        _btnClearFilters.FlatStyle = FlatStyle.Flat;
-        _btnClearFilters.Location = new Point(120, 6);
-        _btnClearFilters.Name = "_btnClearFilters";
-        _btnClearFilters.Size = new Size(150, 26);
-        _btnClearFilters.TabIndex = 16;
-        _btnClearFilters.Text = "Очистить фильтры";
-        _btnClearFilters.UseVisualStyleBackColor = false;
-        _btnClearFilters.Click += BtnClearFilters_Click;
-        // 
         // _pnlTopRow2
         // 
-        _pnlTopRow2.Controls.Add(_lblPotr);
-        _pnlTopRow2.Controls.Add(_txtPotr);
-        _pnlTopRow2.Controls.Add(_lblNdok);
-        _pnlTopRow2.Controls.Add(_txtNdok);
-        _pnlTopRow2.Controls.Add(_chkPotr);
-        _pnlTopRow2.Location = new Point(0, 90);
+        _pnlTopRow2.Controls.Add(tableLayoutPanel2);
+        _pnlTopRow2.Location = new Point(0, 51);
         _pnlTopRow2.Name = "_pnlTopRow2";
-        _pnlTopRow2.Size = new Size(1264, 34);
+        _pnlTopRow2.Size = new Size(1264, 85);
         _pnlTopRow2.TabIndex = 1;
         // 
         // _lblPotr
         // 
         _lblPotr.AutoSize = true;
-        _lblPotr.Location = new Point(10, 8);
+        _lblPotr.Dock = DockStyle.Fill;
+        _lblPotr.Location = new Point(4, 1);
         _lblPotr.Name = "_lblPotr";
-        _lblPotr.Size = new Size(76, 15);
+        _lblPotr.Size = new Size(103, 56);
         _lblPotr.TabIndex = 10;
         _lblPotr.Text = "Получатель:";
+        _lblPotr.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _txtPotr
         // 
-        _txtPotr.Location = new Point(98, 3);
+        _txtPotr.Anchor = AnchorStyles.None;
+        _txtPotr.Location = new Point(126, 17);
         _txtPotr.Name = "_txtPotr";
-        _txtPotr.Size = new Size(210, 23);
+        _txtPotr.Size = new Size(172, 23);
         _txtPotr.TabIndex = 11;
-        // 
-        // _lblNdok
-        // 
-        _lblNdok.AutoSize = true;
-        _lblNdok.Location = new Point(320, 8);
-        _lblNdok.Name = "_lblNdok";
-        _lblNdok.Size = new Size(77, 15);
-        _lblNdok.TabIndex = 12;
-        _lblNdok.Text = "№ отвесной:";
-        // 
-        // _txtNdok
-        // 
-        _txtNdok.Location = new Point(408, 3);
-        _txtNdok.Name = "_txtNdok";
-        _txtNdok.Size = new Size(130, 23);
-        _txtNdok.TabIndex = 13;
-        // 
-        // _chkPotr
-        // 
-        _chkPotr.AutoSize = true;
-        _chkPotr.Location = new Point(555, 6);
-        _chkPotr.Name = "_chkPotr";
-        _chkPotr.Size = new Size(173, 19);
-        _chkPotr.TabIndex = 14;
-        _chkPotr.Text = "Печатать грузополучателя";
         // 
         // _pnlTopRow1
         // 
@@ -217,7 +175,8 @@ partial class PrintForm
         tableLayoutPanel1.Name = "tableLayoutPanel1";
         tableLayoutPanel1.RowCount = 1;
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tableLayoutPanel1.Size = new Size(1264, 47);
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        tableLayoutPanel1.Size = new Size(1264, 49);
         tableLayoutPanel1.TabIndex = 10;
         // 
         // _rbGpri
@@ -227,7 +186,7 @@ partial class PrintForm
         _rbGpri.Dock = DockStyle.Fill;
         _rbGpri.Location = new Point(4, 4);
         _rbGpri.Name = "_rbGpri";
-        _rbGpri.Size = new Size(97, 39);
+        _rbGpri.Size = new Size(97, 41);
         _rbGpri.TabIndex = 0;
         _rbGpri.TabStop = true;
         _rbGpri.Text = "Приход";
@@ -245,13 +204,13 @@ partial class PrintForm
         _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlNvagHost.RowStyles.Add(new RowStyle());
         _pnlNvagHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlNvagHost.Size = new Size(213, 45);
+        _pnlNvagHost.Size = new Size(213, 47);
         _pnlNvagHost.TabIndex = 9;
         // 
         // _txtNvag
         // 
         _txtNvag.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _txtNvag.Location = new Point(6, 11);
+        _txtNvag.Location = new Point(6, 12);
         _txtNvag.Margin = new Padding(6, 0, 6, 0);
         _txtNvag.Name = "_txtNvag";
         _txtNvag.Size = new Size(201, 23);
@@ -263,7 +222,7 @@ partial class PrintForm
         _lblNvag.Dock = DockStyle.Fill;
         _lblNvag.Location = new Point(974, 1);
         _lblNvag.Name = "_lblNvag";
-        _lblNvag.Size = new Size(72, 45);
+        _lblNvag.Size = new Size(72, 47);
         _lblNvag.TabIndex = 8;
         _lblNvag.Text = "Вагон:";
         _lblNvag.TextAlign = ContentAlignment.MiddleRight;
@@ -281,13 +240,13 @@ partial class PrintForm
         _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlGruzHost.RowStyles.Add(new RowStyle());
         _pnlGruzHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlGruzHost.Size = new Size(219, 45);
+        _pnlGruzHost.Size = new Size(219, 47);
         _pnlGruzHost.TabIndex = 7;
         // 
         // _txtGruz
         // 
         _txtGruz.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _txtGruz.Location = new Point(6, 11);
+        _txtGruz.Location = new Point(6, 12);
         _txtGruz.Margin = new Padding(6, 0, 6, 0);
         _txtGruz.Name = "_txtGruz";
         _txtGruz.Size = new Size(207, 23);
@@ -299,7 +258,7 @@ partial class PrintForm
         _lblGruz.Dock = DockStyle.Fill;
         _lblGruz.Location = new Point(668, 1);
         _lblGruz.Name = "_lblGruz";
-        _lblGruz.Size = new Size(79, 45);
+        _lblGruz.Size = new Size(79, 47);
         _lblGruz.TabIndex = 6;
         _lblGruz.Text = "Груз:";
         _lblGruz.TextAlign = ContentAlignment.MiddleRight;
@@ -317,14 +276,14 @@ partial class PrintForm
         _pnlDateToHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlDateToHost.RowStyles.Add(new RowStyle());
         _pnlDateToHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlDateToHost.Size = new Size(159, 45);
+        _pnlDateToHost.Size = new Size(159, 47);
         _pnlDateToHost.TabIndex = 5;
         // 
         // _dtpTo
         // 
         _dtpTo.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _dtpTo.Format = DateTimePickerFormat.Short;
-        _dtpTo.Location = new Point(6, 11);
+        _dtpTo.Location = new Point(6, 12);
         _dtpTo.Margin = new Padding(6, 0, 6, 0);
         _dtpTo.Name = "_dtpTo";
         _dtpTo.Size = new Size(147, 23);
@@ -336,7 +295,7 @@ partial class PrintForm
         _lblDateTo.Dock = DockStyle.Fill;
         _lblDateTo.Location = new Point(435, 1);
         _lblDateTo.Name = "_lblDateTo";
-        _lblDateTo.Size = new Size(66, 45);
+        _lblDateTo.Size = new Size(66, 47);
         _lblDateTo.TabIndex = 4;
         _lblDateTo.Text = "по:";
         _lblDateTo.TextAlign = ContentAlignment.MiddleRight;
@@ -354,14 +313,14 @@ partial class PrintForm
         _pnlDateFromHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _pnlDateFromHost.RowStyles.Add(new RowStyle());
         _pnlDateFromHost.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _pnlDateFromHost.Size = new Size(153, 45);
+        _pnlDateFromHost.Size = new Size(153, 47);
         _pnlDateFromHost.TabIndex = 3;
         // 
         // _dtpFrom
         // 
         _dtpFrom.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _dtpFrom.Format = DateTimePickerFormat.Short;
-        _dtpFrom.Location = new Point(6, 11);
+        _dtpFrom.Location = new Point(6, 12);
         _dtpFrom.Margin = new Padding(6, 0, 6, 0);
         _dtpFrom.Name = "_dtpFrom";
         _dtpFrom.Size = new Size(141, 23);
@@ -373,7 +332,7 @@ partial class PrintForm
         _rbGras.Dock = DockStyle.Fill;
         _rbGras.Location = new Point(108, 4);
         _rbGras.Name = "_rbGras";
-        _rbGras.Size = new Size(85, 39);
+        _rbGras.Size = new Size(85, 41);
         _rbGras.TabIndex = 1;
         _rbGras.Text = "Расход";
         // 
@@ -383,7 +342,7 @@ partial class PrintForm
         _lblDateFrom.Dock = DockStyle.Fill;
         _lblDateFrom.Location = new Point(200, 1);
         _lblDateFrom.Name = "_lblDateFrom";
-        _lblDateFrom.Size = new Size(74, 45);
+        _lblDateFrom.Size = new Size(74, 47);
         _lblDateFrom.TabIndex = 2;
         _lblDateFrom.Text = "Дата с:";
         _lblDateFrom.TextAlign = ContentAlignment.MiddleRight;
@@ -395,24 +354,24 @@ partial class PrintForm
         _grid.AllowUserToResizeRows = false;
         _grid.BackgroundColor = Color.FromArgb(247, 249, 252);
         _grid.BorderStyle = BorderStyle.None;
-        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle1.BackColor = SystemColors.Control;
-        dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(221, 230, 240);
-        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(35, 49, 63);
-        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-        _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+        dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle5.BackColor = SystemColors.Control;
+        dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+        dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(221, 230, 240);
+        dataGridViewCellStyle5.SelectionForeColor = Color.FromArgb(35, 49, 63);
+        dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+        _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
         _grid.ColumnHeadersHeight = 32;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.BackColor = SystemColors.Window;
-        dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(35, 49, 63);
-        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-        _grid.DefaultCellStyle = dataGridViewCellStyle2;
+        dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle6.BackColor = SystemColors.Window;
+        dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle6.SelectionForeColor = Color.FromArgb(35, 49, 63);
+        dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+        _grid.DefaultCellStyle = dataGridViewCellStyle6;
         _grid.Dock = DockStyle.Fill;
         _grid.EnableHeadersVisualStyles = false;
         _grid.GridColor = Color.FromArgb(200, 208, 218);
@@ -501,6 +460,39 @@ partial class PrintForm
         _btnPreview.UseVisualStyleBackColor = false;
         _btnPreview.Click += BtnPreview_Click;
         // 
+        // tableLayoutPanel2
+        // 
+        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel2.ColumnCount = 5;
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.702532F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.0601273F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44.0664558F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.5854435F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.50633F));
+        tableLayoutPanel2.Controls.Add(_btnFind, 3, 0);
+        tableLayoutPanel2.Controls.Add(_txtPotr, 1, 0);
+        tableLayoutPanel2.Controls.Add(_btnClearFilters, 4, 0);
+        tableLayoutPanel2.Controls.Add(_lblPotr, 0, 0);
+        tableLayoutPanel2.Dock = DockStyle.Top;
+        tableLayoutPanel2.Location = new Point(0, 0);
+        tableLayoutPanel2.Name = "tableLayoutPanel2";
+        tableLayoutPanel2.RowCount = 1;
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tableLayoutPanel2.Size = new Size(1264, 58);
+        tableLayoutPanel2.TabIndex = 15;
+        // 
+        // _btnClearFilters
+        // 
+        _btnClearFilters.FlatAppearance.BorderSize = 0;
+        _btnClearFilters.FlatStyle = FlatStyle.Flat;
+        _btnClearFilters.Location = new Point(1069, 4);
+        _btnClearFilters.Name = "_btnClearFilters";
+        _btnClearFilters.Size = new Size(150, 26);
+        _btnClearFilters.TabIndex = 16;
+        _btnClearFilters.Text = "Очистить фильтры";
+        _btnClearFilters.UseVisualStyleBackColor = false;
+        _btnClearFilters.Click += BtnClearFilters_Click;
+        // 
         // PrintForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -514,9 +506,7 @@ partial class PrintForm
         Text = "Печать отвесных — Весы 13";
         _layoutMain.ResumeLayout(false);
         _pnlTop.ResumeLayout(false);
-        _pnlTopActions.ResumeLayout(false);
         _pnlTopRow2.ResumeLayout(false);
-        _pnlTopRow2.PerformLayout();
         _pnlTopRow1.ResumeLayout(false);
         tableLayoutPanel1.ResumeLayout(false);
         tableLayoutPanel1.PerformLayout();
@@ -529,6 +519,8 @@ partial class PrintForm
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         _pnlStatus.ResumeLayout(false);
         _pnlStatus.PerformLayout();
+        tableLayoutPanel2.ResumeLayout(false);
+        tableLayoutPanel2.PerformLayout();
         ResumeLayout(false);
     }
 
@@ -553,11 +545,7 @@ partial class PrintForm
     private TableLayoutPanel _pnlNvagHost;
     private Label         _lblPotr;
     private TextBox       _txtPotr;
-    private Label         _lblNdok;
-    private TextBox       _txtNdok;
-    private CheckBox      _chkPotr;
     private Button        _btnFind;
-    private Button        _btnClearFilters;
     private DataGridView  _grid;
     private Panel         _pnlStatus;
     private Label         _lblSlipNum;
@@ -568,4 +556,6 @@ partial class PrintForm
     private TextBox       _txtTo;
     private Button        _btnPreview;
     private TableLayoutPanel tableLayoutPanel1;
+    private TableLayoutPanel tableLayoutPanel2;
+    private Button _btnClearFilters;
 }
