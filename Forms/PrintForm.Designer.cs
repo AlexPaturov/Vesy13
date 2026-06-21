@@ -13,15 +13,16 @@ partial class PrintForm
 
     private void InitializeComponent()
     {
-        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         _layoutMain = new TableLayoutPanel();
         _pnlTop = new Panel();
-        _pnlTopActions = new Panel();
-        _btnFind = new Button();
         _pnlTopRow2 = new Panel();
-        _lblPotr = new Label();
+        tableLayoutPanel2 = new TableLayoutPanel();
+        _btnFind = new Button();
         _txtPotr = new TextBox();
+        _btnClearFilters = new Button();
+        _lblPotr = new Label();
         _pnlTopRow1 = new Panel();
         tableLayoutPanel1 = new TableLayoutPanel();
         _rbGpri = new RadioButton();
@@ -40,6 +41,7 @@ partial class PrintForm
         _lblDateFrom = new Label();
         _grid = new DataGridView();
         _pnlStatus = new Panel();
+        tableLayoutPanel3 = new TableLayoutPanel();
         _lblSlipNum = new Label();
         _txtSlipNum = new TextBox();
         _lblFrom = new Label();
@@ -47,11 +49,10 @@ partial class PrintForm
         _lblTo = new Label();
         _txtTo = new TextBox();
         _btnPreview = new Button();
-        tableLayoutPanel2 = new TableLayoutPanel();
-        _btnClearFilters = new Button();
         _layoutMain.SuspendLayout();
         _pnlTop.SuspendLayout();
         _pnlTopRow2.SuspendLayout();
+        tableLayoutPanel2.SuspendLayout();
         _pnlTopRow1.SuspendLayout();
         tableLayoutPanel1.SuspendLayout();
         _pnlNvagHost.SuspendLayout();
@@ -60,7 +61,7 @@ partial class PrintForm
         _pnlDateFromHost.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatus.SuspendLayout();
-        tableLayoutPanel2.SuspendLayout();
+        tableLayoutPanel3.SuspendLayout();
         SuspendLayout();
         // 
         // _layoutMain
@@ -83,41 +84,80 @@ partial class PrintForm
         // 
         // _pnlTop
         // 
-        _pnlTop.Controls.Add(_pnlTopActions);
         _pnlTop.Controls.Add(_pnlTopRow2);
         _pnlTop.Controls.Add(_pnlTopRow1);
         _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(3, 3);
+        _pnlTop.Margin = new Padding(3, 3, 3, 0);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1258, 169);
+        _pnlTop.Size = new Size(1258, 97);
         _pnlTop.TabIndex = 0;
         // 
-        // _pnlTopActions
+        // _pnlTopRow2
         // 
-        _pnlTopActions.Location = new Point(0, 122);
-        _pnlTopActions.Name = "_pnlTopActions";
-        _pnlTopActions.Size = new Size(1264, 41);
-        _pnlTopActions.TabIndex = 2;
+        _pnlTopRow2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        _pnlTopRow2.Controls.Add(tableLayoutPanel2);
+        _pnlTopRow2.Location = new Point(0, 51);
+        _pnlTopRow2.Name = "_pnlTopRow2";
+        _pnlTopRow2.Size = new Size(1264, 44);
+        _pnlTopRow2.TabIndex = 1;
+        // 
+        // tableLayoutPanel2
+        // 
+        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel2.ColumnCount = 5;
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.702532F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.0601273F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44.0664558F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.5854435F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.50633F));
+        tableLayoutPanel2.Controls.Add(_btnFind, 3, 0);
+        tableLayoutPanel2.Controls.Add(_txtPotr, 1, 0);
+        tableLayoutPanel2.Controls.Add(_btnClearFilters, 4, 0);
+        tableLayoutPanel2.Controls.Add(_lblPotr, 0, 0);
+        tableLayoutPanel2.Dock = DockStyle.Fill;
+        tableLayoutPanel2.Location = new Point(0, 0);
+        tableLayoutPanel2.Name = "tableLayoutPanel2";
+        tableLayoutPanel2.RowCount = 1;
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tableLayoutPanel2.Size = new Size(1264, 44);
+        tableLayoutPanel2.TabIndex = 15;
         // 
         // _btnFind
         // 
+        _btnFind.Dock = DockStyle.Fill;
         _btnFind.FlatAppearance.BorderSize = 0;
         _btnFind.FlatStyle = FlatStyle.Flat;
-        _btnFind.Location = new Point(872, 4);
+        _btnFind.Location = new Point(879, 3);
+        _btnFind.Margin = new Padding(10, 2, 10, 2);
         _btnFind.Name = "_btnFind";
-        _btnFind.Size = new Size(100, 26);
+        _btnFind.Size = new Size(176, 38);
         _btnFind.TabIndex = 15;
         _btnFind.Text = "Найти";
         _btnFind.UseVisualStyleBackColor = false;
         _btnFind.Click += BtnFind_Click;
         // 
-        // _pnlTopRow2
+        // _txtPotr
         // 
-        _pnlTopRow2.Controls.Add(tableLayoutPanel2);
-        _pnlTopRow2.Location = new Point(0, 51);
-        _pnlTopRow2.Name = "_pnlTopRow2";
-        _pnlTopRow2.Size = new Size(1264, 85);
-        _pnlTopRow2.TabIndex = 1;
+        _txtPotr.Anchor = AnchorStyles.None;
+        _txtPotr.Location = new Point(126, 10);
+        _txtPotr.Name = "_txtPotr";
+        _txtPotr.Size = new Size(172, 23);
+        _txtPotr.TabIndex = 11;
+        // 
+        // _btnClearFilters
+        // 
+        _btnClearFilters.Dock = DockStyle.Fill;
+        _btnClearFilters.FlatAppearance.BorderSize = 0;
+        _btnClearFilters.FlatStyle = FlatStyle.Flat;
+        _btnClearFilters.Location = new Point(1076, 5);
+        _btnClearFilters.Margin = new Padding(10, 4, 10, 4);
+        _btnClearFilters.Name = "_btnClearFilters";
+        _btnClearFilters.Size = new Size(177, 34);
+        _btnClearFilters.TabIndex = 16;
+        _btnClearFilters.Text = "Очистить фильтры";
+        _btnClearFilters.UseVisualStyleBackColor = false;
+        _btnClearFilters.Click += BtnClearFilters_Click;
         // 
         // _lblPotr
         // 
@@ -125,21 +165,14 @@ partial class PrintForm
         _lblPotr.Dock = DockStyle.Fill;
         _lblPotr.Location = new Point(4, 1);
         _lblPotr.Name = "_lblPotr";
-        _lblPotr.Size = new Size(103, 56);
+        _lblPotr.Size = new Size(103, 42);
         _lblPotr.TabIndex = 10;
         _lblPotr.Text = "Получатель:";
         _lblPotr.TextAlign = ContentAlignment.MiddleRight;
         // 
-        // _txtPotr
-        // 
-        _txtPotr.Anchor = AnchorStyles.None;
-        _txtPotr.Location = new Point(126, 17);
-        _txtPotr.Name = "_txtPotr";
-        _txtPotr.Size = new Size(172, 23);
-        _txtPotr.TabIndex = 11;
-        // 
         // _pnlTopRow1
         // 
+        _pnlTopRow1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         _pnlTopRow1.Controls.Add(tableLayoutPanel1);
         _pnlTopRow1.Location = new Point(0, 0);
         _pnlTopRow1.Name = "_pnlTopRow1";
@@ -170,7 +203,7 @@ partial class PrintForm
         tableLayoutPanel1.Controls.Add(_pnlDateFromHost, 3, 0);
         tableLayoutPanel1.Controls.Add(_rbGras, 1, 0);
         tableLayoutPanel1.Controls.Add(_lblDateFrom, 2, 0);
-        tableLayoutPanel1.Dock = DockStyle.Top;
+        tableLayoutPanel1.Dock = DockStyle.Fill;
         tableLayoutPanel1.Location = new Point(0, 0);
         tableLayoutPanel1.Name = "tableLayoutPanel1";
         tableLayoutPanel1.RowCount = 1;
@@ -354,144 +387,146 @@ partial class PrintForm
         _grid.AllowUserToResizeRows = false;
         _grid.BackgroundColor = Color.FromArgb(247, 249, 252);
         _grid.BorderStyle = BorderStyle.None;
-        dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle5.BackColor = SystemColors.Control;
-        dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-        dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(221, 230, 240);
-        dataGridViewCellStyle5.SelectionForeColor = Color.FromArgb(35, 49, 63);
-        dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-        _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle1.BackColor = SystemColors.Control;
+        dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(221, 230, 240);
+        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(35, 49, 63);
+        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+        _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
         _grid.ColumnHeadersHeight = 32;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle6.BackColor = SystemColors.Window;
-        dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        dataGridViewCellStyle6.SelectionForeColor = Color.FromArgb(35, 49, 63);
-        dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
-        _grid.DefaultCellStyle = dataGridViewCellStyle6;
+        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle2.BackColor = SystemColors.Window;
+        dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(35, 49, 63);
+        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+        _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
         _grid.EnableHeadersVisualStyles = false;
         _grid.GridColor = Color.FromArgb(200, 208, 218);
-        _grid.Location = new Point(3, 178);
+        _grid.Location = new Point(3, 102);
+        _grid.Margin = new Padding(3, 2, 3, 3);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
         _grid.RowHeadersVisible = false;
         _grid.RowHeadersWidth = 51;
         _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _grid.Size = new Size(1258, 439);
+        _grid.Size = new Size(1258, 515);
         _grid.TabIndex = 1;
         // 
         // _pnlStatus
         // 
-        _pnlStatus.Controls.Add(_lblSlipNum);
-        _pnlStatus.Controls.Add(_txtSlipNum);
-        _pnlStatus.Controls.Add(_lblFrom);
-        _pnlStatus.Controls.Add(_txtFrom);
-        _pnlStatus.Controls.Add(_lblTo);
-        _pnlStatus.Controls.Add(_txtTo);
-        _pnlStatus.Controls.Add(_btnPreview);
+        _pnlStatus.Controls.Add(tableLayoutPanel3);
         _pnlStatus.Dock = DockStyle.Bottom;
         _pnlStatus.Location = new Point(3, 623);
         _pnlStatus.Name = "_pnlStatus";
         _pnlStatus.Size = new Size(1258, 44);
         _pnlStatus.TabIndex = 2;
         // 
+        // tableLayoutPanel3
+        // 
+        tableLayoutPanel3.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel3.ColumnCount = 7;
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel3.Controls.Add(_lblSlipNum, 0, 0);
+        tableLayoutPanel3.Controls.Add(_txtSlipNum, 1, 0);
+        tableLayoutPanel3.Controls.Add(_lblFrom, 2, 0);
+        tableLayoutPanel3.Controls.Add(_txtFrom, 3, 0);
+        tableLayoutPanel3.Controls.Add(_lblTo, 4, 0);
+        tableLayoutPanel3.Controls.Add(_txtTo, 5, 0);
+        tableLayoutPanel3.Controls.Add(_btnPreview, 6, 0);
+        tableLayoutPanel3.Dock = DockStyle.Fill;
+        tableLayoutPanel3.Location = new Point(0, 0);
+        tableLayoutPanel3.Name = "tableLayoutPanel3";
+        tableLayoutPanel3.RowCount = 1;
+        tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tableLayoutPanel3.Size = new Size(1258, 44);
+        tableLayoutPanel3.TabIndex = 0;
+        // 
         // _lblSlipNum
         // 
         _lblSlipNum.AutoSize = true;
-        _lblSlipNum.Location = new Point(10, 13);
+        _lblSlipNum.Dock = DockStyle.Fill;
+        _lblSlipNum.Location = new Point(4, 1);
         _lblSlipNum.Name = "_lblSlipNum";
-        _lblSlipNum.Size = new Size(102, 15);
+        _lblSlipNum.Size = new Size(118, 42);
         _lblSlipNum.TabIndex = 0;
         _lblSlipNum.Text = "Номер отвесной:";
+        _lblSlipNum.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _txtSlipNum
         // 
-        _txtSlipNum.Location = new Point(128, 9);
+        _txtSlipNum.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _txtSlipNum.Location = new Point(132, 10);
+        _txtSlipNum.Margin = new Padding(6, 0, 6, 0);
         _txtSlipNum.Name = "_txtSlipNum";
-        _txtSlipNum.Size = new Size(120, 23);
+        _txtSlipNum.Size = new Size(138, 23);
         _txtSlipNum.TabIndex = 1;
         // 
         // _lblFrom
         // 
         _lblFrom.AutoSize = true;
-        _lblFrom.Location = new Point(260, 13);
+        _lblFrom.Dock = DockStyle.Fill;
+        _lblFrom.Location = new Point(280, 1);
         _lblFrom.Name = "_lblFrom";
-        _lblFrom.Size = new Size(48, 15);
+        _lblFrom.Size = new Size(81, 42);
         _lblFrom.TabIndex = 2;
         _lblFrom.Text = "Откуда:";
+        _lblFrom.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _txtFrom
         // 
-        _txtFrom.Location = new Point(316, 9);
+        _txtFrom.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _txtFrom.Location = new Point(371, 10);
+        _txtFrom.Margin = new Padding(6, 0, 6, 0);
         _txtFrom.Name = "_txtFrom";
-        _txtFrom.Size = new Size(250, 23);
+        _txtFrom.Size = new Size(263, 23);
         _txtFrom.TabIndex = 3;
         // 
         // _lblTo
         // 
         _lblTo.AutoSize = true;
-        _lblTo.Location = new Point(578, 13);
+        _lblTo.Dock = DockStyle.Fill;
+        _lblTo.Location = new Point(644, 1);
         _lblTo.Name = "_lblTo";
-        _lblTo.Size = new Size(35, 15);
+        _lblTo.Size = new Size(81, 42);
         _lblTo.TabIndex = 4;
         _lblTo.Text = "Куда:";
+        _lblTo.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _txtTo
         // 
-        _txtTo.Location = new Point(618, 9);
+        _txtTo.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _txtTo.Location = new Point(735, 10);
+        _txtTo.Margin = new Padding(6, 0, 6, 0);
         _txtTo.Name = "_txtTo";
-        _txtTo.Size = new Size(250, 23);
+        _txtTo.Size = new Size(263, 23);
         _txtTo.TabIndex = 5;
         // 
         // _btnPreview
         // 
+        _btnPreview.Dock = DockStyle.Fill;
         _btnPreview.FlatAppearance.BorderSize = 0;
         _btnPreview.FlatStyle = FlatStyle.Flat;
-        _btnPreview.Location = new Point(884, 9);
+        _btnPreview.Location = new Point(1015, 5);
+        _btnPreview.Margin = new Padding(10, 4, 10, 4);
         _btnPreview.Name = "_btnPreview";
-        _btnPreview.Size = new Size(170, 26);
+        _btnPreview.Size = new Size(232, 34);
         _btnPreview.TabIndex = 6;
         _btnPreview.Text = "Просмотр печати";
         _btnPreview.UseVisualStyleBackColor = false;
         _btnPreview.Click += BtnPreview_Click;
-        // 
-        // tableLayoutPanel2
-        // 
-        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-        tableLayoutPanel2.ColumnCount = 5;
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.702532F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.0601273F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44.0664558F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.5854435F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.50633F));
-        tableLayoutPanel2.Controls.Add(_btnFind, 3, 0);
-        tableLayoutPanel2.Controls.Add(_txtPotr, 1, 0);
-        tableLayoutPanel2.Controls.Add(_btnClearFilters, 4, 0);
-        tableLayoutPanel2.Controls.Add(_lblPotr, 0, 0);
-        tableLayoutPanel2.Dock = DockStyle.Top;
-        tableLayoutPanel2.Location = new Point(0, 0);
-        tableLayoutPanel2.Name = "tableLayoutPanel2";
-        tableLayoutPanel2.RowCount = 1;
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tableLayoutPanel2.Size = new Size(1264, 58);
-        tableLayoutPanel2.TabIndex = 15;
-        // 
-        // _btnClearFilters
-        // 
-        _btnClearFilters.FlatAppearance.BorderSize = 0;
-        _btnClearFilters.FlatStyle = FlatStyle.Flat;
-        _btnClearFilters.Location = new Point(1069, 4);
-        _btnClearFilters.Name = "_btnClearFilters";
-        _btnClearFilters.Size = new Size(150, 26);
-        _btnClearFilters.TabIndex = 16;
-        _btnClearFilters.Text = "Очистить фильтры";
-        _btnClearFilters.UseVisualStyleBackColor = false;
-        _btnClearFilters.Click += BtnClearFilters_Click;
         // 
         // PrintForm
         // 
@@ -507,6 +542,8 @@ partial class PrintForm
         _layoutMain.ResumeLayout(false);
         _pnlTop.ResumeLayout(false);
         _pnlTopRow2.ResumeLayout(false);
+        tableLayoutPanel2.ResumeLayout(false);
+        tableLayoutPanel2.PerformLayout();
         _pnlTopRow1.ResumeLayout(false);
         tableLayoutPanel1.ResumeLayout(false);
         tableLayoutPanel1.PerformLayout();
@@ -517,10 +554,9 @@ partial class PrintForm
         _pnlDateToHost.ResumeLayout(false);
         _pnlDateFromHost.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
+        tableLayoutPanel3.ResumeLayout(false);
+        tableLayoutPanel3.PerformLayout();
         _pnlStatus.ResumeLayout(false);
-        _pnlStatus.PerformLayout();
-        tableLayoutPanel2.ResumeLayout(false);
-        tableLayoutPanel2.PerformLayout();
         ResumeLayout(false);
     }
 
@@ -528,7 +564,6 @@ partial class PrintForm
     private Panel         _pnlTop;
     private Panel         _pnlTopRow1;
     private Panel         _pnlTopRow2;
-    private Panel         _pnlTopActions;
     private RadioButton   _rbGpri;
     private RadioButton   _rbGras;
     private Label         _lblDateFrom;
@@ -557,5 +592,6 @@ partial class PrintForm
     private Button        _btnPreview;
     private TableLayoutPanel tableLayoutPanel1;
     private TableLayoutPanel tableLayoutPanel2;
+    private TableLayoutPanel tableLayoutPanel3;
     private Button _btnClearFilters;
 }

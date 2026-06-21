@@ -13,7 +13,7 @@ namespace Vesy13.Forms;
 public partial class PrintForm : Form
 {
     private FactoryRepository? _fdb;
-    private List<GpriGras>             _records = [];
+    private List<GpriGras> _records = [];
 
     public PrintForm()
     {
@@ -82,17 +82,17 @@ public partial class PrintForm : Form
         _grid.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
         _grid.GridColor = UiColors.GridLine;
         _lblSlipNum.Font      = UiFonts.Body;
-        _lblSlipNum.ForeColor  = UiColors.TextOnDarkMuted;
+        _lblSlipNum.ForeColor  = UiColors.TextMuted;
         _txtSlipNum.Font      = UiFonts.Body;
         _txtSlipNum.BackColor = UiColors.InputBack;
         _txtSlipNum.ForeColor = UiColors.InputFore;
         _lblFrom.Font         = UiFonts.Body;
-        _lblFrom.ForeColor     = UiColors.TextOnDarkMuted;
+        _lblFrom.ForeColor     = UiColors.TextMuted;
         _txtFrom.Font         = UiFonts.Body;
         _txtFrom.BackColor    = UiColors.InputBack;
         _txtFrom.ForeColor    = UiColors.InputFore;
         _lblTo.Font           = UiFonts.Body;
-        _lblTo.ForeColor      = UiColors.TextOnDarkMuted;
+        _lblTo.ForeColor      = UiColors.TextMuted;
         _txtTo.Font           = UiFonts.Body;
         _txtTo.BackColor      = UiColors.InputBack;
         _txtTo.ForeColor      = UiColors.InputFore;
@@ -106,11 +106,11 @@ public partial class PrintForm : Form
         base.OnLoad(e);
         if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
         ApplyTheme();
-        AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
         SetupGridColumns();
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
         _dtpTo.Value   = DateTime.Today;
         _rbGpri.Checked = true;
+        AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
     }
 
     private void SetupGridColumns()
@@ -122,11 +122,11 @@ public partial class PrintForm : Form
             SortMode = DataGridViewColumnSortMode.NotSortable,
             ThreeState = false,
         });
+
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Дата",        Width = 115, SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Время",       Width = 85,  SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Вагон",       Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
-        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Груз",        Width = 210, SortMode = DataGridViewColumnSortMode.NotSortable,
-                                                          AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+        _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Груз",        Width = 210, SortMode = DataGridViewColumnSortMode.NotSortable, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Режим",       Width = 105, SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Брутто",      Width = 85,  SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Тара",        Width = 85,  SortMode = DataGridViewColumnSortMode.NotSortable });
@@ -145,7 +145,6 @@ public partial class PrintForm : Form
         var nvag  = NullIfEmpty(_txtNvag.Text);
         var gruz  = NullIfEmpty(_txtGruz.Text);
         var potr  = NullIfEmpty(_txtPotr.Text);
-        //long? ndok = long.TryParse(_txtNdok.Text.Trim(), out long n) ? n : null;
 
         if (_fdb is null) return;
 
@@ -158,8 +157,7 @@ public partial class PrintForm : Form
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdTable", table, "Firebird", ex.Message);
-            MessageBox.Show("Не удалось загрузить данные из системы учёта.\nОбратитесь к администратору.",
-                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось загрузить данные из системы учёта.\nОбратитесь к администратору.", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -171,8 +169,7 @@ public partial class PrintForm : Form
     {
         if (_records.Count == 0)
         {
-            MessageBox.Show("Сначала выполните поиск.", "Просмотр печати",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Сначала выполните поиск.", "Просмотр печати",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -198,15 +195,12 @@ public partial class PrintForm : Form
         {
             await Task.Run(() => doc.Generate(tempPath));
             Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
-            AuditLogger.Action(AuditLogger.SlipGenerated,
-                "WeighingSlip", $"№{_txtSlipNum.Text.Trim()} rows={toPrint.Count}",
-                "QuestPDF", tempPath);
+            AuditLogger.Action(AuditLogger.SlipGenerated, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()} rows={toPrint.Count}", "QuestPDF", tempPath);
         }
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorPdf, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()}", "QuestPDF", ex.Message);
-            MessageBox.Show("Не удалось сформировать PDF.\nОбратитесь к администратору.",
-                "Печать", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось сформировать PDF.\nОбратитесь к администратору.", "Печать", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -219,7 +213,6 @@ public partial class PrintForm : Form
         _txtGruz.Clear();
         _txtNvag.Clear();
         _txtPotr.Clear();
-        //_txtNdok.Clear();
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
         _dtpTo.Value   = DateTime.Today;
     }
@@ -248,6 +241,5 @@ public partial class PrintForm : Form
         }
     }
 
-    private static string? NullIfEmpty(string s) =>
-        string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+    private static string? NullIfEmpty(string s) => string.IsNullOrWhiteSpace(s) ? null : s.Trim();
 }
