@@ -209,7 +209,7 @@ public partial class DynamicWeighingForm : Form
 
     private bool EnsureAdcConnected(bool showError)
     {
-        if (_sim.IsConnected) return true;
+        if (_sim.IsPortOpen) return true;
 
         try
         {

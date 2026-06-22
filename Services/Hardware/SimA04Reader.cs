@@ -23,15 +23,21 @@ public class SimA04Reader : IDisposable
     /// <summary>Изменение состояния соединения: true — подключён, false — отключён.</summary>
     public event EventHandler<bool>?    ConnectionChanged;
 
+    private const int ConnectionTimeoutMs = 1000;
+
     private SerialPort?              _port;
     private readonly List<byte>      _buffer = new();
     private readonly object          _lock   = new();
     private System.Threading.Timer?  _frameTimer;
     private System.Threading.Timer?  _pollTimer;
     private volatile bool            _polling;
+    private DateTime                 _lastValidFrameAt = DateTime.MinValue;
     private byte                     _pollByte = 214;
 
-    /// <summary>Текущее состояние соединения с портом.</summary>
+    /// <summary>COM-порт открыт программой.</summary>
+    public bool          IsPortOpen    { get; private set; }
+
+    /// <summary>Контроллер АЦП отвечает валидными кадрами.</summary>
     public bool          IsConnected   { get; private set; }
 
     /// <summary>Имя COM-порта, переданного в <see cref="Open"/>.</summary>
@@ -58,10 +64,10 @@ public class SimA04Reader : IDisposable
         _port.DiscardOutBuffer();
 
         _frameTimer = new System.Threading.Timer(OnFrameTimer, null, Timeout.Infinite, Timeout.Infinite);
-        _pollTimer   = new System.Threading.Timer(OnPollTimer, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(200));
         _polling     = true;
-        IsConnected  = true;
-        ConnectionChanged?.Invoke(this, true);
+        IsPortOpen   = true;
+        SetConnected(false, force: true);
+        _pollTimer   = new System.Threading.Timer(OnPollTimer, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(200));
     }
 
     /// <summary>
@@ -78,8 +84,8 @@ public class SimA04Reader : IDisposable
         _port?.Close();
         _port?.Dispose();
         _port       = null;
-        IsConnected = false;
-        ConnectionChanged?.Invoke(this, false);
+        IsPortOpen = false;
+        SetConnected(false, force: true);
     }
 
     /// <summary>
@@ -120,13 +126,28 @@ public class SimA04Reader : IDisposable
 
         var frame = SimA04Frame.Parse(raw);
         if (frame.Valid)
+        {
+            _lastValidFrameAt = DateTime.UtcNow;
+            SetConnected(true);
             FrameReceived?.Invoke(this, frame);
+        }
     }
 
     private void OnPollTimer(object? state)
     {
         if (!_polling) return;
+
+        if (IsConnected && (DateTime.UtcNow - _lastValidFrameAt).TotalMilliseconds > ConnectionTimeoutMs)
+            SetConnected(false);
+
         Send(_pollByte);
+    }
+
+    private void SetConnected(bool connected, bool force = false)
+    {
+        if (!force && IsConnected == connected) return;
+        IsConnected = connected;
+        ConnectionChanged?.Invoke(this, connected);
     }
 
     /// <summary>Отправляет один байт в COM-порт. Ошибки записи не критичны — следующий цикл повторит.</summary>

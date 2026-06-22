@@ -468,7 +468,7 @@ public partial class ServiceForm : Form
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
     {
-        if (_sim.IsConnected)
+        if (_sim.IsPortOpen)
         {
             var port = _sim.PortName;
             _sim.Close();
@@ -491,11 +491,11 @@ public partial class ServiceForm : Form
     private void UpdateMonitorConn(bool connected)
     {
         _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _lblConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : "Нет подключения";
+        _lblConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : (_sim.IsPortOpen ? $"Порт открыт: {_sim.PortName}, нет ответа АЦП" : "Нет подключения");
         _lblConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _btnConn.Text = connected ? "Отключить" : "Подключить";
-        _btnConn.BackColor = connected ? UiColors.DangerAction : UiColors.PrimaryAction;
-        _cmbPort.Enabled = !connected;
+        _btnConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnConn.BackColor = _sim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _cmbPort.Enabled = !_sim.IsPortOpen;
         AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
             connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
