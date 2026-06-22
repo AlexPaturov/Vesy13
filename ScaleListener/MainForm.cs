@@ -18,6 +18,7 @@ public class MainForm : Form
     // ── Serial ────────────────────────────────────────────────────────────
     private readonly SerialPort _port;
     private readonly Random _rng = new();
+    private volatile bool _isShuttingDown;
 
     public MainForm()
     {
@@ -150,21 +151,32 @@ public class MainForm : Form
     {
         try
         {
-            while (_port.IsOpen && _port.BytesToRead > 0)
-            {
-                int raw = _port.ReadByte();
-                if (raw < 0) break;
-                byte b = (byte)raw;
+            if (_isShuttingDown || !_port.IsOpen)
+                return;
 
-                Invoke(() =>
-                {
-                    AppendMsg($"<< {b}");
-                    if (b == 214)
-                        SendStaticResponse();
-                });
-            }
+            int bytesToRead = _port.BytesToRead;
+            if (bytesToRead <= 0)
+                return;
+
+            var buf = new byte[bytesToRead];
+            _port.Read(buf, 0, bytesToRead);
+
+            BeginInvoke(() => HandleIncomingBytes(buf));
         }
         catch { /* порт закрылся во время чтения */ }
+    }
+
+    private void HandleIncomingBytes(byte[] buf)
+    {
+        if (_isShuttingDown || !_port.IsOpen)
+            return;
+
+        foreach (byte b in buf)
+        {
+            AppendMsg($"<< {b}");
+            if (b == 214)
+                SendStaticResponse();
+        }
     }
 
     private void SendStaticResponse()
@@ -233,6 +245,8 @@ public class MainForm : Form
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
+        _isShuttingDown = true;
+        _port.DataReceived -= Port_DataReceived;
         if (_port.IsOpen) _port.Close();
         base.OnFormClosing(e);
     }
