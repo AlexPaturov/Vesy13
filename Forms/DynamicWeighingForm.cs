@@ -144,6 +144,7 @@ public partial class DynamicWeighingForm : Form
         ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
+        _sim.ConnectionTimeoutMs = 1000;
         SetupGridColumns();
         _sim.FrameReceived     += OnFrame;
         _sim.ConnectionChanged += OnConnectionChanged;

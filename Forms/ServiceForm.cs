@@ -247,6 +247,7 @@ public partial class ServiceForm : Form
         ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
+        _sim.ConnectionTimeoutMs = 1000;
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;

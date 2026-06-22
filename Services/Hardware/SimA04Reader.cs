@@ -23,7 +23,7 @@ public class SimA04Reader : IDisposable
     /// <summary>Изменение состояния соединения: true — подключён, false — отключён.</summary>
     public event EventHandler<bool>?    ConnectionChanged;
 
-    private const int ConnectionTimeoutMs = 1000;
+    public int ConnectionTimeoutMs { get; set; } = 1000;
 
     private SerialPort?              _port;
     private readonly List<byte>      _buffer = new();

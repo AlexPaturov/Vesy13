@@ -125,6 +125,7 @@ public partial class StaticWeighingForm : Form
         ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "StaticWeighingForm");
+        _sim.ConnectionTimeoutMs = 2000;
         SetupGridColumns();
         _sim.FrameReceived     += OnFrame;
         _sim.RawFrameReceived  += OnRawFrame;
