@@ -129,6 +129,7 @@ public partial class StaticWeighingForm : Form
         _sim.FrameReceived     += OnFrame;
         _sim.RawFrameReceived  += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
+        EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
         UpdateButtonStates();
@@ -164,6 +165,7 @@ public partial class StaticWeighingForm : Form
             _sim.FrameReceived     -= OnFrame;
             _sim.RawFrameReceived  -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            _sim.Close();
         }
         base.OnFormClosed(e);
     }
@@ -183,6 +185,27 @@ public partial class StaticWeighingForm : Form
     private void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
     private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
     private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
+
+    private bool EnsureAdcConnected(bool showError)
+    {
+        if (_sim.IsConnected) return true;
+
+        try
+        {
+            _sim.Open(_settings.Current.AdcPortName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            UpdateConn(false);
+            if (showError)
+            {
+                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return false;
+        }
+    }
 
     // ── ADC events ─────────────────────────────────────────────────────────
 

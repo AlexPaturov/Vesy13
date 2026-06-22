@@ -24,15 +24,9 @@ partial class MainForm
         _btnCorrections = new Button();
         _btnPrint      = new Button();
         _btnLogs       = new Button();
-        _pnlStatus    = new Panel();
-        _statusLayout = new TableLayoutPanel();
-        _dotConn      = new Panel();
-        _lblConn      = new Label();
 
         _pnlHeader.SuspendLayout();
         _pnlMenu.SuspendLayout();
-        _pnlStatus.SuspendLayout();
-        _statusLayout.SuspendLayout();
         SuspendLayout();
 
         // ── Header ────────────────────────────────────────────────────────────
@@ -123,30 +117,6 @@ partial class MainForm
         _pnlMenu.Controls.Add(_btnCorrections, 0, 3);
         _pnlMenu.Controls.Add(_btnPrint,       0, 4);
         _pnlMenu.Controls.Add(_btnLogs,        0, 5);
-
-        // ── Status bar ────────────────────────────────────────────────────────
-        _statusLayout.ColumnCount = 2;
-        _statusLayout.RowCount = 1;
-        _statusLayout.Dock = DockStyle.Fill;
-        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 18F));
-        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _statusLayout.Controls.Add(_dotConn, 0, 0);
-        _statusLayout.Controls.Add(_lblConn, 1, 0);
-
-        _dotConn.Size      = new Size(10, 10);
-        _dotConn.Anchor    = AnchorStyles.Left;
-        _dotConn.Margin    = new Padding(4, 13, 4, 0);
-
-        _lblConn.Text      = "АЦП: отключён";
-        _lblConn.AutoSize  = true;
-        _lblConn.Anchor    = AnchorStyles.Left;
-        _lblConn.Margin    = new Padding(0, 9, 0, 0);
-
-        _pnlStatus.Dock      = DockStyle.Bottom;
-        _pnlStatus.Height    = 36;
-        _pnlStatus.Padding   = new Padding(8, 0, 8, 0);
-        _pnlStatus.Controls.Add(_statusLayout);
-
         // ── Form ──────────────────────────────────────────────────────────────
         Text            = "Весы №13";
         ClientSize      = new Size(380, 500);
@@ -157,13 +127,9 @@ partial class MainForm
         BackColor       = Forms.UiColors.AppBackground;
         Controls.Add(_pnlMenu);
         Controls.Add(_pnlHeader);
-        Controls.Add(_pnlStatus);
 
         _pnlHeader.ResumeLayout(false);
         _pnlMenu.ResumeLayout(false);
-        _statusLayout.ResumeLayout(false);
-        _pnlStatus.ResumeLayout(false);
-        _pnlStatus.PerformLayout();
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ResumeLayout(false);
@@ -178,8 +144,4 @@ partial class MainForm
     private Button          _btnCorrections;
     private Button          _btnPrint;
     private Button          _btnLogs;
-    private Panel           _pnlStatus;
-    private TableLayoutPanel _statusLayout;
-    private Panel           _dotConn;
-    private Label           _lblConn;
 }

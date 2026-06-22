@@ -147,6 +147,7 @@ public partial class DynamicWeighingForm : Form
         SetupGridColumns();
         _sim.FrameReceived     += OnFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
+        EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
         ResetBogieValues();
@@ -183,6 +184,7 @@ public partial class DynamicWeighingForm : Form
         {
             _sim.FrameReceived     -= OnFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            _sim.Close();
         }
 
         base.OnFormClosed(e);
@@ -204,6 +206,27 @@ public partial class DynamicWeighingForm : Form
     private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
     private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
     private void Direction_CheckedChanged(object? sender, EventArgs e) => UpdateTrainInfo();
+
+    private bool EnsureAdcConnected(bool showError)
+    {
+        if (_sim.IsConnected) return true;
+
+        try
+        {
+            _sim.Open(_settings.Current.AdcPortName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            UpdateConn(false);
+            if (showError)
+            {
+                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return false;
+        }
+    }
 
     // ── ADC events ─────────────────────────────────────────────────────────
 
