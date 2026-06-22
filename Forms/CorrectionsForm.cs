@@ -334,6 +334,14 @@ public partial class CorrectionsForm : Form
     }
 
 
+    /// <summary>
+    /// Перезагружает обе таблицы формы корректировок для выбранного контекста.
+    /// Левая таблица показывает все локальные записи PostgreSQL за выбранный состав или сутки,
+    /// включая уже помеченные как перенесенные; правая таблица показывает соответствующие записи Firebird.
+    /// Возвращаемый <c>PendingCount</c> поэтому означает количество локальных строк и сохраняет
+    /// историческое имя, <c>DoneCount</c> означает количество строк Firebird, а <c>HadError</c>
+    /// выставляется, если не удалось загрузить хотя бы один источник.
+    /// </summary>
     private async Task<(int PendingCount, int DoneCount, bool HadError)> LoadBothGridsAsync()
     {
         if (_ldb is null) return (0, 0, true);
@@ -359,8 +367,7 @@ public partial class CorrectionsForm : Form
             hadError = true;
             string op = trainMode ? "GetAllByTrainTimeAsync" : "GetAllByDateAsync";
             AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex.Message);
-            MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         try
@@ -378,8 +385,7 @@ public partial class CorrectionsForm : Form
             hadError = true;
             string op = trainMode ? "GetByTrainTimeAsync" : "GetByDateAsync";
             AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", op, "Firebird", ex.Message);
-            MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         return (pendingCount, doneCount, hadError);
