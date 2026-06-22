@@ -10,7 +10,7 @@ public enum ActiveChannel { Main, Backup }
 
 /// <summary>
 /// Драйвер COM-порта для АЦП «СИМ А04».
-/// Реализует цикл поллинга: отправляет запрос → ждёт 4-байтовый ответ → парсит фрейм → повторяет.
+/// Реализует цикл поллинга: регулярно отправляет запросы и разбирает 4-байтовые ответы.
 /// </summary>
 public class SimA04Reader : IDisposable
 {
@@ -27,6 +27,7 @@ public class SimA04Reader : IDisposable
     private readonly List<byte>      _buffer = new();
     private readonly object          _lock   = new();
     private System.Threading.Timer?  _frameTimer;
+    private System.Threading.Timer?  _pollTimer;
     private volatile bool            _polling;
     private byte                     _pollByte = 214;
 
@@ -57,9 +58,9 @@ public class SimA04Reader : IDisposable
         _port.DiscardOutBuffer();
 
         _frameTimer = new System.Threading.Timer(OnFrameTimer, null, Timeout.Infinite, Timeout.Infinite);
+        _pollTimer   = new System.Threading.Timer(OnPollTimer, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(200));
         _polling     = true;
         IsConnected  = true;
-        Send(_pollByte);
         ConnectionChanged?.Invoke(this, true);
     }
 
@@ -71,6 +72,8 @@ public class SimA04Reader : IDisposable
         _polling = false;
         _frameTimer?.Dispose();
         _frameTimer = null;
+        _pollTimer?.Dispose();
+        _pollTimer = null;
         lock (_lock) _buffer.Clear();
         _port?.Close();
         _port?.Dispose();
@@ -100,8 +103,8 @@ public class SimA04Reader : IDisposable
     }
 
     /// <summary>
-    /// Срабатывает через 20 мс после последнего байта: разбирает буфер,
-    /// публикует события и отправляет следующий poll-запрос.
+    /// Срабатывает через 20 мс после последнего байта: разбирает буфер
+    /// и публикует события с сырым и распарсенным фреймом.
     /// </summary>
     private void OnFrameTimer(object? state)
     {
@@ -118,9 +121,12 @@ public class SimA04Reader : IDisposable
         var frame = SimA04Frame.Parse(raw);
         if (frame.Valid)
             FrameReceived?.Invoke(this, frame);
+    }
 
-        if (_polling)
-            Send(_pollByte);
+    private void OnPollTimer(object? state)
+    {
+        if (!_polling) return;
+        Send(_pollByte);
     }
 
     /// <summary>Отправляет один байт в COM-порт. Ошибки записи не критичны — следующий цикл повторит.</summary>
