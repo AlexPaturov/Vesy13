@@ -1,11 +1,14 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11828.311 oobstable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13", "Vesy13.csproj", "{80F90AE2-D054-4E4E-AE4D-17446D97ACBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleListener", "ScaleListener\ScaleListener.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HzCounter", "HzCounter\HzCounter\HzCounter.csproj", "{872A8D88-2CF0-4D7B-A976-00DCF414354C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialProbe", "SerialProbe\SerialProbe\SerialProbe.csproj", "{EFFD7719-9C03-417B-A3A2-66A2156D973F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,5 +24,19 @@ Global
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B32CC501-BD5B-4AB2-8C05-81A1E13A5445}
 	EndGlobalSection
 EndGlobal
