@@ -6,7 +6,7 @@ namespace Vesy13.Services.Repositories;
 
 /// <summary>
 /// Репозиторий заводской базы Firebird (DC_OPER.FDB).
-/// Обеспечивает перенос и корректировку взвешиваний в таблицах GPRI и GRAS.
+/// Обеспечивает обработку и корректировку взвешиваний в таблицах GPRI и GRAS.
 /// </summary>
 public class FactoryRepository
 {
@@ -95,7 +95,7 @@ public class FactoryRepository
                 UNION ALL
                 SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV FROM GRAS WHERE DT >= @cutoff
             ) t
-            ORDER BY DT DESC, VR DESC";
+            ORDER BY DT1 DESC, VR1 DESC";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@cutoff", cutoff.Date);
@@ -160,7 +160,7 @@ public class FactoryRepository
                 FROM GRAS
                 WHERE DT = @date AND CAST(VR AS TIME) = CAST(@time AS TIME)
             ) t
-            ORDER BY NPP, ID";
+            ORDER BY DT1 DESC, VR1 DESC";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@date", date.Date);
@@ -223,7 +223,7 @@ public class FactoryRepository
                 FROM GRAS
                 WHERE DT = @date
             ) t
-            ORDER BY DT DESC, VR DESC, NPP, ID";
+            ORDER BY DT1 DESC, VR1 DESC";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@date", date.Date);
@@ -357,7 +357,7 @@ public class FactoryRepository
             SELECT DT, VR, tar_brs FROM GPRI WHERE NVAG = @nvag AND DT >= @cutoff
             UNION ALL
             SELECT DT, VR, tar_brs FROM GRAS WHERE NVAG = @nvag AND DT >= @cutoff
-            ORDER BY 1 DESC, 2 DESC";
+            ORDER BY DT DESC, VR DESC";   
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@nvag",   nvag);
