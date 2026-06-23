@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.6.11828.311 oobstable
+VisualStudioVersion = 18.6.11828.311
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13", "Vesy13.csproj", "{80F90AE2-D054-4E4E-AE4D-17446D97ACBC}"
 EndProject
@@ -9,6 +9,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HzCounter", "HzCounter\HzCounter\HzCounter.csproj", "{872A8D88-2CF0-4D7B-A976-00DCF414354C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialProbe", "SerialProbe\SerialProbe\SerialProbe.csproj", "{EFFD7719-9C03-417B-A3A2-66A2156D973F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticDumpDec", "StaticDumpDec\StaticDumpDec\StaticDumpDec.csproj", "{462EFC27-7A42-48FB-A4AB-1D5343329F6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

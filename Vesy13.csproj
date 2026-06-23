@@ -23,6 +23,21 @@
     <None Remove="ScaleListener\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="StaticDumpDec\**" />
+    <EmbeddedResource Remove="StaticDumpDec\**" />
+    <None Remove="StaticDumpDec\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="HzCounter\**" />
+    <EmbeddedResource Remove="HzCounter\**" />
+    <None Remove="HzCounter\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="SerialProbe\**" />
+    <EmbeddedResource Remove="SerialProbe\**" />
+    <None Remove="SerialProbe\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="docs\" />
   </ItemGroup>
 </Project>
