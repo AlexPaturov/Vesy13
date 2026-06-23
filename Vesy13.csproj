@@ -23,6 +23,11 @@
     <None Remove="ScaleListener\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="DynamicDumpDec\**" />
+    <EmbeddedResource Remove="DynamicDumpDec\**" />
+    <None Remove="DynamicDumpDec\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="StaticDumpDec\**" />
     <EmbeddedResource Remove="StaticDumpDec\**" />
     <None Remove="StaticDumpDec\**" />

@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialProbe", "SerialProbe\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticDumpDec", "StaticDumpDec\StaticDumpDec\StaticDumpDec.csproj", "{462EFC27-7A42-48FB-A4AB-1D5343329F6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDumpDec", "DynamicDumpDec\DynamicDumpDec\DynamicDumpDec.csproj", "{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
