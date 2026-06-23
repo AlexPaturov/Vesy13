@@ -19,7 +19,7 @@ internal class Program
     const string DEFAULT_PORT = "COM4";
     const int MEASURE_SECONDS = 30;   // время замера частоты
     const int CAPTURE_SECONDS = 120;  // время захвата сырого потока
-    const int PACKET_SIZE = 4;        // int32 little-endian
+    const int PACKET_SIZE = 4;        // CH0 UInt16 LE + CH1 UInt16 LE
     // ────────────────────────────────────────────────────────────
 
     static void Main(string[] args)
@@ -31,13 +31,13 @@ internal class Program
 
         // ── 1. Замер частоты ────────────────────────────────────
         Console.WriteLine($"[1/2] Замер частоты — {MEASURE_SECONDS} сек...");
-        var (bytesTotal, elapsedSec, corruptedPackets, totalPackets) =
+        var (bytesTotal, elapsedSec, tailBytes, totalPackets) =
             MeasureFrequency(portName, MEASURE_SECONDS);
 
         double bytesPerSec = bytesTotal / elapsedSec;
         double packetsPerSec = bytesPerSec / PACKET_SIZE;
-        double corruptRatio = totalPackets > 0
-            ? (double)corruptedPackets / totalPackets * 100.0
+        double tailRatio = bytesTotal > 0
+            ? (double)tailBytes / bytesTotal * 100.0
             : 0;
 
         Console.WriteLine();
@@ -47,7 +47,7 @@ internal class Program
         Console.WriteLine($"  Байт/сек:            {bytesPerSec:F1}");
         Console.WriteLine($"  Пакетов/сек (Hz):    {packetsPerSec:F2}");
         Console.WriteLine($"  Пакетов всего:       {totalPackets}");
-        Console.WriteLine($"  Битых пакетов:       {corruptedPackets} ({corruptRatio:F1}%)");
+        Console.WriteLine($"  Остаток байт:        {tailBytes} ({tailRatio:F1}%)");
         Console.WriteLine("──────────────────────────────────────────────");
         Console.WriteLine();
 
@@ -65,14 +65,12 @@ internal class Program
     }
 
     // ── Замер частоты ────────────────────────────────────────────
-    // Возвращает (bytesTotal, elapsedSec, corruptedPackets, totalPackets)
-    // "Битый" пакет — скользящее окно 4 байта не даёт кратность,
-    // считаем по простой эвристике: смотрим таймауты между байтами.
+    // Возвращает (bytesTotal, elapsedSec, tailBytes, totalPackets).
+    // Протокол не имеет checksum: из полного 4-байтового кадра всегда получается CH0/CH1.
     static (long, double, int, int) MeasureFrequency(
         string port, int seconds)
     {
         long bytesTotal = 0;
-        int corruptedPackets = 0;
         int totalPackets = 0;
 
         using var sp = OpenPort(port);
@@ -81,10 +79,7 @@ internal class Program
         // Буфер для скользящего окна
         var window = new byte[PACKET_SIZE];
         int windowPos = 0;
-        int consecutive = 0; // подряд валидных пакетов (для ресинка)
-
         var sw = Stopwatch.StartNew();
-
         while (sw.Elapsed.TotalSeconds < seconds)
         {
             if (sp.BytesToRead == 0)
@@ -105,25 +100,13 @@ internal class Program
                 totalPackets++;
                 windowPos = 0;
 
-                // Декодируем и проверяем на базовую вменяемость
-                int value = BitConverter.ToInt32(window, 0);
-
-                // Тут намеренно широкий диапазон — просто смотрим поток
-                // Реальный [min,max] подберёшь после анализа файла
-                if (value < -2_000_000 || value > 2_000_000)
-                {
-                    corruptedPackets++;
-                    consecutive = 0;
-                }
-                else
-                {
-                    consecutive++;
-                }
+                int ch0 = window[1] * 256 + window[0];
+                int ch1 = window[3] * 256 + window[2];
             }
         }
 
         sp.Close();
-        return (bytesTotal, sw.Elapsed.TotalSeconds, corruptedPackets, totalPackets);
+        return (bytesTotal, sw.Elapsed.TotalSeconds, windowPos, totalPackets);
     }
 
     // ── Захват сырого потока в файл ──────────────────────────────

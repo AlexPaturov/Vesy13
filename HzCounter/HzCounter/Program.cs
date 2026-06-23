@@ -12,7 +12,7 @@ namespace HzCounter;
 
 internal class Program
 {
-    const int PACKET_SIZE = 4;   // int32 little-endian
+    const int PACKET_SIZE = 4;   // CH0 UInt16 LE + CH1 UInt16 LE
     const int MEASURE_SECONDS = 30;  // время замера
     const int DEFAULT_BAUDRATE = 4800;
     const string DEFAULT_PORT = "COM4";
