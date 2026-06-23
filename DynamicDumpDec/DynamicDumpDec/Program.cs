@@ -20,23 +20,28 @@ internal static class Program
 
     private static int Main(string[] args)
     {
+        var exitCode = 0;
+
         if (!TryParseArgs(args, out var portName, out var packetCount))
         {
             PrintUsage();
+            WaitBeforeExit();
             return 2;
         }
 
         try
         {
             Dump(portName, packetCount);
-            return 0;
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"ERROR={ex.GetType().Name}");
             Console.Error.WriteLine($"MESSAGE={ex.Message}");
-            return 1;
+            exitCode = 1;
         }
+
+        WaitBeforeExit();
+        return exitCode;
     }
 
     private static void Dump(string portName, int packetCount)
@@ -150,5 +155,11 @@ internal static class Program
     private static void PrintUsage()
     {
         Console.Error.WriteLine("USAGE=DynamicDumpDec COM3 60");
+    }
+
+    private static void WaitBeforeExit()
+    {
+        Console.WriteLine("DONE=PRESS_ENTER_TO_EXIT");
+        Console.ReadLine();
     }
 }
