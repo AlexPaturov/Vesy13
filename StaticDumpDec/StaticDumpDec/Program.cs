@@ -20,6 +20,13 @@ internal static class Program
 
     private static int Main(string[] args)
     {
+        Console.WriteLine("Press Enter to continue...");
+
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter)
+        {
+        }
+
+
         if (!TryParseArgs(args, out var portName, out var packetCount))
         {
             PrintUsage();
@@ -109,6 +116,7 @@ internal static class Program
         Console.WriteLine($"CH1_MIN={ch1Min}");
         Console.WriteLine($"CH1_AVG={(ch1Sum / (double)index).ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"CH1_MAX={ch1Max}");
+        Console.ReadLine();
     }
 
     private static void ReadExact(SerialPort sp, byte[] buffer, int count)
