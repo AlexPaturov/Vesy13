@@ -9,10 +9,10 @@ namespace DynamicDumpDec;
 internal static class Program
 {
     private const int BaudRate = 4800;
-    private const int PacketSize = 4;
+    private const int BlockSize = 20;
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
-    private const int DefaultPacketCount = 60;
+    private const int DefaultBlockCount = 60;
     private const string DefaultPort = "COM3";
     private const string ModeName = "DYNAMIC";
     private const byte SetByte = 126;
@@ -23,12 +23,11 @@ internal static class Program
         var exitCode = 0;
 
         Console.WriteLine("Press Enter to continue...");
-
         while (Console.ReadKey(true).Key != ConsoleKey.Enter)
         {
         }
 
-        if (!TryParseArgs(args, out var portName, out var packetCount))
+        if (!TryParseArgs(args, out var portName, out var blockCount))
         {
             PrintUsage();
             WaitBeforeExit();
@@ -37,7 +36,7 @@ internal static class Program
 
         try
         {
-            Dump(portName, packetCount);
+            Dump(portName, blockCount);
         }
         catch (Exception ex)
         {
@@ -50,7 +49,7 @@ internal static class Program
         return exitCode;
     }
 
-    private static void Dump(string portName, int packetCount)
+    private static void Dump(string portName, int blockCount)
     {
         using var sp = new SerialPort
         {
@@ -69,57 +68,82 @@ internal static class Program
         sp.Write(new[] { SetByte }, 0, 1);
         Thread.Sleep(50);
 
-        PrintHeader(portName, packetCount);
+        PrintHeader(portName, blockCount);
 
-        var buffer = new byte[PacketSize];
+        var block = new byte[BlockSize];
         var bytesTotal = 0;
-        var ch0Min = int.MaxValue;
-        var ch0Max = int.MinValue;
-        var ch1Min = int.MaxValue;
-        var ch1Max = int.MinValue;
-        long ch0Sum = 0;
-        long ch1Sum = 0;
+        var aCh0Min = int.MaxValue;
+        var aCh0Max = int.MinValue;
+        var aCh1Min = int.MaxValue;
+        var aCh1Max = int.MinValue;
+        var bCh0Min = int.MaxValue;
+        var bCh0Max = int.MinValue;
+        var bCh1Min = int.MaxValue;
+        var bCh1Max = int.MinValue;
+        long aCh0Sum = 0;
+        long aCh1Sum = 0;
+        long bCh0Sum = 0;
+        long bCh1Sum = 0;
         var sw = Stopwatch.StartNew();
 
         sp.Write(new[] { ReqByte }, 0, 1);
 
-        for (var index = 0; index < packetCount; index++)
+        for (var index = 0; index < blockCount; index++)
         {
-            ReadExact(sp, buffer, PacketSize);
-            bytesTotal += PacketSize;
+            ReadExact(sp, block, BlockSize);
+            bytesTotal += BlockSize;
 
-            var ch0 = buffer[1] * 256 + buffer[0];
-            var ch1 = buffer[3] * 256 + buffer[2];
             var timeMs = (int)Math.Round(sw.Elapsed.TotalMilliseconds);
+            var aCh0 = ReadUInt16Le(block, 0);
+            var aCh1 = ReadUInt16Le(block, 2);
+            var bCh0 = ReadUInt16Le(block, 10);
+            var bCh1 = ReadUInt16Le(block, 12);
 
-            ch0Min = Math.Min(ch0Min, ch0);
-            ch0Max = Math.Max(ch0Max, ch0);
-            ch1Min = Math.Min(ch1Min, ch1);
-            ch1Max = Math.Max(ch1Max, ch1);
-            ch0Sum += ch0;
-            ch1Sum += ch1;
+            aCh0Min = Math.Min(aCh0Min, aCh0);
+            aCh0Max = Math.Max(aCh0Max, aCh0);
+            aCh1Min = Math.Min(aCh1Min, aCh1);
+            aCh1Max = Math.Max(aCh1Max, aCh1);
+            bCh0Min = Math.Min(bCh0Min, bCh0);
+            bCh0Max = Math.Max(bCh0Max, bCh0);
+            bCh1Min = Math.Min(bCh1Min, bCh1);
+            bCh1Max = Math.Max(bCh1Max, bCh1);
+            aCh0Sum += aCh0;
+            aCh1Sum += aCh1;
+            bCh0Sum += bCh0;
+            bCh1Sum += bCh1;
 
             Console.WriteLine(
-                $"{index:000} {timeMs:000000} {buffer[0]:000} {buffer[1]:000} {buffer[2]:000} {buffer[3]:000} {ch0:00000} {ch1:00000}");
+                $"{index:000} {timeMs:000000} {FormatBlock(block)} {aCh0:00000} {aCh1:00000} {bCh0:00000} {bCh1:00000}");
         }
 
         sw.Stop();
         var elapsedSec = Math.Max(sw.Elapsed.TotalSeconds, 0.001);
-        var hz = packetCount / elapsedSec;
+        var hz = blockCount / elapsedSec;
 
         Console.WriteLine("SUMMARY");
         Console.WriteLine($"BYTES={bytesTotal}");
-        Console.WriteLine($"PACKETS={packetCount}");
+        Console.WriteLine($"BLOCKS={blockCount}");
         Console.WriteLine("TAIL_BYTES=0");
         Console.WriteLine($"HZ={hz.ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"CH0_MIN={ch0Min}");
-        Console.WriteLine($"CH0_AVG={(ch0Sum / (double)packetCount).ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"CH0_MAX={ch0Max}");
-        Console.WriteLine($"CH1_MIN={ch1Min}");
-        Console.WriteLine($"CH1_AVG={(ch1Sum / (double)packetCount).ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"CH1_MAX={ch1Max}");
-        Console.ReadLine();
+        Console.WriteLine($"A_CH0_MIN={aCh0Min}");
+        Console.WriteLine($"A_CH0_AVG={(aCh0Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"A_CH0_MAX={aCh0Max}");
+        Console.WriteLine($"A_CH1_MIN={aCh1Min}");
+        Console.WriteLine($"A_CH1_AVG={(aCh1Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"A_CH1_MAX={aCh1Max}");
+        Console.WriteLine($"B_CH0_MIN={bCh0Min}");
+        Console.WriteLine($"B_CH0_AVG={(bCh0Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"B_CH0_MAX={bCh0Max}");
+        Console.WriteLine($"B_CH1_MIN={bCh1Min}");
+        Console.WriteLine($"B_CH1_AVG={(bCh1Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"B_CH1_MAX={bCh1Max}");
     }
+
+    private static int ReadUInt16Le(byte[] data, int offset)
+        => data[offset + 1] * 256 + data[offset];
+
+    private static string FormatBlock(byte[] data)
+        => string.Join(" ", Array.ConvertAll(data, b => b.ToString("000", CultureInfo.InvariantCulture)));
 
     private static void ReadExact(SerialPort sp, byte[] buffer, int count)
     {
@@ -132,28 +156,29 @@ internal static class Program
         }
     }
 
-    private static void PrintHeader(string portName, int packetCount)
+    private static void PrintHeader(string portName, int blockCount)
     {
         Console.WriteLine($"MODE={ModeName}");
         Console.WriteLine($"PORT={portName}");
         Console.WriteLine($"SET={SetByte}");
         Console.WriteLine($"REQ={ReqByte}");
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
-        Console.WriteLine($"PACKETS_TARGET={packetCount}");
-        Console.WriteLine($"PACKET_SIZE={PacketSize}");
-        Console.WriteLine("FORMAT=CH0_UINT16_LE_CH1_UINT16_LE");
-        Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 CH0 CH1");
+        Console.WriteLine($"BLOCKS_TARGET={blockCount}");
+        Console.WriteLine($"BLOCK_SIZE={BlockSize}");
+        Console.WriteLine("FORMAT=BLOCK20_UINT16_LE");
+        Console.WriteLine("A=BYTES_00_03  B=BYTES_10_13");
+        Console.WriteLine("IDX TIME_MS B00 B01 B02 B03 B04 B05 B06 B07 B08 B09 B10 B11 B12 B13 B14 B15 B16 B17 B18 B19 A_CH0 A_CH1 B_CH0 B_CH1");
     }
 
-    private static bool TryParseArgs(string[] args, out string portName, out int packetCount)
+    private static bool TryParseArgs(string[] args, out string portName, out int blockCount)
     {
         portName = args.Length >= 1 ? args[0].Trim() : DefaultPort;
-        packetCount = DefaultPacketCount;
+        blockCount = DefaultBlockCount;
 
         if (args.Length > 2)
             return false;
 
-        if (args.Length >= 2 && (!int.TryParse(args[1], out packetCount) || packetCount <= 0))
+        if (args.Length >= 2 && (!int.TryParse(args[1], out blockCount) || blockCount <= 0))
             return false;
 
         return !string.IsNullOrWhiteSpace(portName);
