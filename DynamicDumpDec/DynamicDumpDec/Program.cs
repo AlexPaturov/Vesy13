@@ -11,6 +11,7 @@ internal static class Program
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
     private const int DefaultSampleCount = 240;
+    private const int AuxOffset = 28;
     private const string DefaultPort = "COM3";
     private const string ModeName = "DYNAMIC";
     private const byte SetByte = 126;
@@ -69,7 +70,9 @@ internal static class Program
         PrintHeader(portName, sampleCount);
 
         var sample = new byte[SampleSize];
-        var bytesTotal = 0;
+        var sampleBytes = 0;
+        var rawBytes = 0;
+        var skippedBytes = 0;
         var ch0Min = int.MaxValue;
         var ch0Max = int.MinValue;
         var ch1Min = int.MaxValue;
@@ -84,10 +87,20 @@ internal static class Program
 
         sp.Write(new[] { ReqByte }, 0, 1);
 
-        for (var index = 0; index < sampleCount; index++)
+        for (var index = 0; index < sampleCount;)
         {
-            ReadExact(sp, sample, SampleSize);
-            bytesTotal += SampleSize;
+            AddByte(sample, ref sampleBytes, ReadByte(sp));
+            rawBytes++;
+
+            if (sampleBytes < SampleSize)
+                continue;
+
+            if (!IsValidSample(sample))
+            {
+                ShiftLeft(sample, ref sampleBytes);
+                skippedBytes++;
+                continue;
+            }
 
             var timeMs = (int)Math.Round(sw.Elapsed.TotalMilliseconds);
             var ch0 = ReadUInt16Le(sample, 0);
@@ -107,6 +120,9 @@ internal static class Program
 
             Console.WriteLine(
                 $"{index:000} {timeMs:000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
+
+            index++;
+            sampleBytes = 0;
         }
 
         sw.Stop();
@@ -114,8 +130,9 @@ internal static class Program
         var hz = sampleCount / elapsedSec;
 
         Console.WriteLine("SUMMARY");
-        Console.WriteLine($"BYTES={bytesTotal}");
+        Console.WriteLine($"RAW_BYTES={rawBytes}");
         Console.WriteLine($"SAMPLES={sampleCount}");
+        Console.WriteLine($"SKIPPED_BYTES={skippedBytes}");
         Console.WriteLine("TAIL_BYTES=0");
         Console.WriteLine($"HZ={hz.ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"CH0_MIN={ch0Min}");
@@ -128,6 +145,30 @@ internal static class Program
         Console.WriteLine($"AUX_AVG={(auxSum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"AUX_MAX={auxMax}");
         Console.WriteLine($"AUX_COUNTS={FormatAuxCounts(auxCounts)}");
+    }
+
+    private static void AddByte(byte[] sample, ref int sampleBytes, byte value)
+    {
+        sample[sampleBytes] = value;
+        sampleBytes++;
+    }
+
+    private static void ShiftLeft(byte[] sample, ref int sampleBytes)
+    {
+        for (var index = 1; index < sampleBytes; index++)
+            sample[index - 1] = sample[index];
+
+        sampleBytes--;
+    }
+
+    private static bool IsValidSample(byte[] sample)
+        => sample[4] == sample[0] + sample[2] + AuxOffset;
+
+    private static byte ReadByte(SerialPort sp)
+    {
+        var value = sp.ReadByte();
+        if (value < 0) throw new TimeoutException("COM read returned no data.");
+        return (byte)value;
     }
 
     private static int ReadUInt16Le(byte[] data, int offset)
@@ -148,17 +189,6 @@ internal static class Program
         return string.Join(",", parts);
     }
 
-    private static void ReadExact(SerialPort sp, byte[] buffer, int count)
-    {
-        var offset = 0;
-        while (offset < count)
-        {
-            var read = sp.Read(buffer, offset, count - offset);
-            if (read <= 0) throw new TimeoutException("COM read returned no data.");
-            offset += read;
-        }
-    }
-
     private static void PrintHeader(string portName, int sampleCount)
     {
         Console.WriteLine($"MODE={ModeName}");
@@ -168,6 +198,7 @@ internal static class Program
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
         Console.WriteLine($"SAMPLES_TARGET={sampleCount}");
         Console.WriteLine($"SAMPLE_SIZE={SampleSize}");
+        Console.WriteLine($"SYNC_RULE=AUX=B0+B2+{AuxOffset}");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
         Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX");
