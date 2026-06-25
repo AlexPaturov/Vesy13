@@ -7,7 +7,7 @@
 1. включает community-лицензию QuestPDF;
 2. инициализирует WinForms;
 3. загружает или создает `settings.json`;
-4. создает `SimA04ReaderStatic`;
+4. создает `SimA04ReaderStatic` и `SimA04ReaderDynamic`;
 5. загружает кэш калибровки из PostgreSQL через `LocalRepository`;
 6. инициализирует аудит;
 7. открывает `MainForm`.
@@ -41,7 +41,8 @@
 
 ### Services
 
-- `SimA04ReaderStatic` - драйвер COM-порта для АЦП; таймаут живой связи задается формой: `2000` мс в статике, `1000` мс в динамике и сервисе.
+- `SimA04ReaderStatic` - драйвер COM-порта для статического режима и сервисного мониторинга; таймаут живой связи задается формой: `2000` мс в статике, `1000` мс в сервисе.
+- `SimA04ReaderDynamic` - драйвер непрерывного 5-байтового потока для динамического режима; таймаут живой связи `1000` мс.
 - `SettingsService` - загрузка/создание/сохранение `settings.json`.
 - `PasswordHasher` - PBKDF2-SHA256 для пароля администратора.
 - `WeightFormatter` - округление веса по дискретности.
@@ -51,7 +52,8 @@
 
 ### Models
 
-- `SimA04Frame` - один 4-байтовый кадр АЦП с каналами `Ch0`, `Ch1`.
+- `SimA04Frame` - один 4-байтовый статический кадр АЦП с каналами `Ch0`, `Ch1`.
+- `SimA04DynamicSample` - один 5-байтовый динамический сэмпл с каналами `Ch0`, `Ch1` и `AUX`.
 - `CalibPoint`, `DynamicCalib` - калибровка.
 - `LocalWagon` - локальное взвешивание вагона.
 - `GpriGras` - запись заводских таблиц Firebird.
@@ -62,10 +64,9 @@
 
 ```text
 АЦП СИМ А04
-  -> SimA04ReaderStatic
-  -> SimA04Frame
+  -> SimA04ReaderStatic -> SimA04Frame -> StaticWeighingForm
+  -> SimA04ReaderDynamic -> SimA04DynamicSample -> DynamicWeighingForm
   -> CalibrationCalculator
-  -> StaticWeighingForm / DynamicWeighingForm
   -> LocalRepository.SaveWagonAsync
   -> PostgreSQL.wagon_weighing
   -> CorrectionsForm

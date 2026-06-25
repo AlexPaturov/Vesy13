@@ -14,11 +14,12 @@ static class Program
         ApplicationConfiguration.Initialize();
         var settings = new SettingsService();
         settings.LoadOrCreate();
-        using var sim = new SimA04ReaderStatic();
+        using var staticSim = new SimA04ReaderStatic();
+        using var dynamicSim = new SimA04ReaderDynamic();
         var       ldb = new LocalRepository();
         ldb.LoadAsync().GetAwaiter().GetResult();
         AuditLogger.Initialize();
         AuditLogger.Action(AuditLogger.AppStarted, "Application", "Vesy13");
-        System.Windows.Forms.Application.Run(new MainForm(sim, ldb, settings));
+        System.Windows.Forms.Application.Run(new MainForm(staticSim, dynamicSim, ldb, settings));
     }
 }

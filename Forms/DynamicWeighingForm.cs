@@ -12,7 +12,7 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class DynamicWeighingForm : Form
 {
-    private SimA04ReaderStatic    _sim = null!;
+    private SimA04ReaderDynamic  _sim = null!;
     private LocalRepository _ldb  = null!;
     private SettingsService _settings = null!;
 
@@ -21,7 +21,7 @@ public partial class DynamicWeighingForm : Form
     private DateTime?  _trainStartTime;
     private int        _wagonNumber;
     private int        _bogie1Code;
-    private SimA04Frame   _lastFrame;
+    private SimA04DynamicSample _lastSample;
     private double     _zeroOffsetTonnes;
 
     public DynamicWeighingForm()
@@ -29,7 +29,7 @@ public partial class DynamicWeighingForm : Form
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(SimA04ReaderStatic sim, LocalRepository ldb, SettingsService settings)
+    public DynamicWeighingForm(SimA04ReaderDynamic sim, LocalRepository ldb, SettingsService settings)
     {
         _sim = sim;
         _ldb  = ldb;
@@ -146,7 +146,7 @@ public partial class DynamicWeighingForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
         _sim.ConnectionTimeoutMs = 1000;
         SetupGridColumns();
-        _sim.FrameReceived     += OnFrame;
+        _sim.SampleReceived    += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
         EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
@@ -183,7 +183,7 @@ public partial class DynamicWeighingForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
-            _sim.FrameReceived     -= OnFrame;
+            _sim.SampleReceived    -= OnSample;
             _sim.ConnectionChanged -= OnConnectionChanged;
             _sim.Close();
         }
@@ -231,23 +231,23 @@ public partial class DynamicWeighingForm : Form
 
     // ── ADC events ─────────────────────────────────────────────────────────
 
-    private void OnFrame(object? sender, SimA04Frame frame)
+    private void OnSample(object? sender, SimA04DynamicSample sample)
     {
         if (InvokeRequired) 
         { 
-            BeginInvoke(() => OnFrame(sender, frame)); 
+            BeginInvoke(() => OnSample(sender, sample)); 
             return; 
         }
 
-        _lastFrame = frame;
+        _lastSample = sample;
         if (_state == WeighState.Idle)
         {
-            _lblValue.Text      = ToTonnes(ActiveCode(frame)).ToString("F2");
+            _lblValue.Text      = ToTonnes(ActiveCode(sample)).ToString("F2");
             _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
         }
         else
         {
-            SetBogieValue(_lblBogie2Value, ToTonnes(ActiveCode(frame)));
+            SetBogieValue(_lblBogie2Value, ToTonnes(ActiveCode(sample)));
         }
     }
 
@@ -274,7 +274,7 @@ public partial class DynamicWeighingForm : Form
     private void UpdateChannelLabel() =>
         _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
-    private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
+    private int ActiveCode(SimA04DynamicSample sample) => _sim.Channel == ActiveChannel.Main ? sample.Ch0 : sample.Ch1;
 
     private static void SetBogieValue(Label label, double tonnes) => label.Text = $"{tonnes:F2} т";
 
@@ -311,7 +311,7 @@ public partial class DynamicWeighingForm : Form
             _wagonNumber++;
             if (_wagonNumber == 1)
                 _trainStartTime = DateTime.Now;
-            _bogie1Code         = ActiveCode(_lastFrame);
+            _bogie1Code         = ActiveCode(_lastSample);
             double   bogie1Tonnes = ToTonnes(_bogie1Code);
             _state              = WeighState.Bogie1Captured;
             SetBogieValue(_lblBogie1Value, bogie1Tonnes);
@@ -325,7 +325,7 @@ public partial class DynamicWeighingForm : Form
         }
         else
         {
-            int      bogie2    = ActiveCode(_lastFrame);
+            int      bogie2    = ActiveCode(_lastSample);
             DateTime wagonTime = DateTime.Now;
             var record = new LocalWagon
             {
@@ -359,7 +359,7 @@ public partial class DynamicWeighingForm : Form
     {
         if (!ValidateBeforeWeigh()) return;
 
-        double current = ReadRawTonnes(ActiveCode(_lastFrame));
+        double current = ReadRawTonnes(ActiveCode(_lastSample));
         double limit = _settings.Current.OperatorZeroLimitTonnes;
         if (Math.Abs(current) > limit)
         {
@@ -369,7 +369,7 @@ public partial class DynamicWeighingForm : Form
         }
 
         _zeroOffsetTonnes = current;
-        _lblValue.Text = ToTonnes(ActiveCode(_lastFrame)).ToString("F2");
+        _lblValue.Text = ToTonnes(ActiveCode(_lastSample)).ToString("F2");
         AuditLogger.Action(AuditLogger.ZeroSet, "Zero", $"offset={_zeroOffsetTonnes:F2} limit={limit:F2}");
     }
 

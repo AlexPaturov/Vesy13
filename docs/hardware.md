@@ -2,9 +2,10 @@
 
 ## АЦП "СИМ А04"
 
-Основной драйвер находится в `Services/Hardware/SimA04ReaderStatic.cs`.
+Статический драйвер находится в `Services/Hardware/SimA04ReaderStatic.cs`.
+Динамический драйвер находится в `Services/Hardware/SimA04ReaderDynamic.cs`.
 
-Драйвер работает по циклу:
+Статический драйвер работает по циклу:
 
 1. открыть COM-порт;
 2. отправить один poll-байт;
@@ -78,6 +79,14 @@ CH1 = byte[3] * 256 + byte[2]
 - `ConnectionChanged` - изменение состояния COM-соединения.
 - `IsPortOpen` - COM-порт открыт программой.
 - `IsConnected` - за последнее время приходили валидные кадры от АЦП.
+
+## События `SimA04ReaderDynamic`
+
+- `SampleReceived` - валидный распарсенный 5-байтовый сэмпл.
+- `RawSampleReceived` - сырые 5 байт сэмпла.
+- `ConnectionChanged` - изменение состояния COM-соединения.
+- `IsPortOpen` - COM-порт открыт программой.
+- `IsConnected` - за последнее время приходили валидные сэмплы от АЦП.
 
 ## Статическая калибровка
 
