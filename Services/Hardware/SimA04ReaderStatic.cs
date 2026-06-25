@@ -41,7 +41,7 @@ public class SimA04ReaderStatic : IDisposable
     public bool          IsConnected   { get; private set; }
 
     /// <summary>Имя COM-порта, переданного в <see cref="Open"/>.</summary>
-    public string        PortName      { get; private set; } = "COM1";
+    public string        PortName      { get; private set; } = "COM3";
 
     /// <summary>Активный канал: Main → CH0, Backup → CH1.</summary>
     public ActiveChannel Channel       { get; set; } = ActiveChannel.Main;
@@ -50,7 +50,7 @@ public class SimA04ReaderStatic : IDisposable
     /// Открывает COM-порт, запускает цикл поллинга и генерирует <see cref="ConnectionChanged"/>.
     /// Параметры порта фиксированы протоколом АЦП: 4800 бод, чётность Even, 8 бит, 1 стоп-бит.
     /// </summary>
-    public void Open(string portName = "COM1")
+    public void Open(string portName = "COM3")
     {
         PortName = portName;
         _port = new SerialPort(portName, 4800, Parity.Even, 8, StopBits.One)

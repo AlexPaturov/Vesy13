@@ -4,7 +4,7 @@ namespace Vesy13.Services.Configuration;
 
 public sealed class AppSettings
 {
-    public string AdcPortName { get; set; } = "COM1";
+    public string AdcPortName { get; set; } = "COM3";
     public double MaxCapacityTonnes { get; set; } = 140.0;
     public double WeightDiscretizationTonnes { get; set; } = 0.05;
     public double OperatorZeroLimitPercent { get; set; } = 2.0;
