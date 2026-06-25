@@ -80,7 +80,7 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 
 ## Настройки COM-порта
 
-`SimA04Reader` открывает порт с фиксированными параметрами:
+`SimA04ReaderStatic` открывает порт с фиксированными параметрами:
 
 - скорость: `4800`;
 - parity: `Even`;

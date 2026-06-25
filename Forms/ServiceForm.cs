@@ -14,7 +14,7 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class ServiceForm : Form
 {
-    private SimA04Reader _sim = null!;
+    private SimA04ReaderStatic _sim = null!;
     private LocalRepository _calib = null!;
     private SettingsService _settings = null!;
     private bool _adminUnlocked;
@@ -28,7 +28,7 @@ public partial class ServiceForm : Form
         InitializeComponent();
     }
 
-    public ServiceForm(SimA04Reader adc, LocalRepository calib, SettingsService settings)
+    public ServiceForm(SimA04ReaderStatic adc, LocalRepository calib, SettingsService settings)
     {
         _sim = adc;
         _calib = calib;

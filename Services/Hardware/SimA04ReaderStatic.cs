@@ -12,7 +12,7 @@ public enum ActiveChannel { Main, Backup }
 /// Драйвер COM-порта для АЦП «СИМ А04».
 /// Реализует цикл поллинга: регулярно отправляет запросы и разбирает 4-байтовые ответы.
 /// </summary>
-public class SimA04Reader : IDisposable
+public class SimA04ReaderStatic : IDisposable
 {
     /// <summary>Распарсенный фрейм АЦП — CH0, CH1, флаг валидности.</summary>
     public event EventHandler<SimA04Frame>? FrameReceived;

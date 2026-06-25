@@ -10,7 +10,7 @@ namespace Vesy13;
 /// </summary>
 public partial class MainForm : Form
 {
-    private SimA04Reader    _sim = null!;
+    private SimA04ReaderStatic    _sim = null!;
     private LocalRepository _ldb = null!;
     private SettingsService _settings = null!;
 
@@ -19,7 +19,7 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
-    public MainForm(SimA04Reader sim, LocalRepository ldb, SettingsService settings)
+    public MainForm(SimA04ReaderStatic sim, LocalRepository ldb, SettingsService settings)
     {
         _sim = sim;
         _ldb = ldb;

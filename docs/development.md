@@ -84,7 +84,7 @@ docs/
 
 | Задача | Файлы |
 | --- | --- |
-| COM-порт и протокол АЦП | `Services/Hardware/SimA04Reader.cs`, `Models/SimA04Frame.cs` |
+| COM-порт и протокол АЦП | `Services/Hardware/SimA04ReaderStatic.cs`, `Models/SimA04Frame.cs` |
 | Статическое взвешивание | `Forms/StaticWeighingForm.cs` |
 | Динамическое взвешивание | `Forms/DynamicWeighingForm.cs` |
 | Калибровка и сервис | `Forms/ServiceForm.cs`, `Application/CalibrationCalculator.cs` |

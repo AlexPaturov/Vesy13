@@ -14,7 +14,7 @@ static class Program
         ApplicationConfiguration.Initialize();
         var settings = new SettingsService();
         settings.LoadOrCreate();
-        using var sim = new SimA04Reader();
+        using var sim = new SimA04ReaderStatic();
         var       ldb = new LocalRepository();
         ldb.LoadAsync().GetAwaiter().GetResult();
         AuditLogger.Initialize();

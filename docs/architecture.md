@@ -7,7 +7,7 @@
 1. включает community-лицензию QuestPDF;
 2. инициализирует WinForms;
 3. загружает или создает `settings.json`;
-4. создает `SimA04Reader`;
+4. создает `SimA04ReaderStatic`;
 5. загружает кэш калибровки из PostgreSQL через `LocalRepository`;
 6. инициализирует аудит;
 7. открывает `MainForm`.
@@ -41,7 +41,7 @@
 
 ### Services
 
-- `SimA04Reader` - драйвер COM-порта для АЦП; таймаут живой связи задается формой: `2000` мс в статике, `1000` мс в динамике и сервисе.
+- `SimA04ReaderStatic` - драйвер COM-порта для АЦП; таймаут живой связи задается формой: `2000` мс в статике, `1000` мс в динамике и сервисе.
 - `SettingsService` - загрузка/создание/сохранение `settings.json`.
 - `PasswordHasher` - PBKDF2-SHA256 для пароля администратора.
 - `WeightFormatter` - округление веса по дискретности.
@@ -62,7 +62,7 @@
 
 ```text
 АЦП СИМ А04
-  -> SimA04Reader
+  -> SimA04ReaderStatic
   -> SimA04Frame
   -> CalibrationCalculator
   -> StaticWeighingForm / DynamicWeighingForm

@@ -2,7 +2,7 @@
 
 ## АЦП "СИМ А04"
 
-Основной драйвер находится в `Services/Hardware/SimA04Reader.cs`.
+Основной драйвер находится в `Services/Hardware/SimA04ReaderStatic.cs`.
 
 Драйвер работает по циклу:
 
@@ -71,7 +71,7 @@ CH1 = byte[3] * 256 + byte[2]
 - `ActiveChannel.Main` - основной канал, `CH0`;
 - `ActiveChannel.Backup` - резервный канал, `CH1`.
 
-## События `SimA04Reader`
+## События `SimA04ReaderStatic`
 
 - `FrameReceived` - валидный распарсенный кадр.
 - `RawFrameReceived` - сырые байты, используются для диагностики в сервисной форме и аудите.
