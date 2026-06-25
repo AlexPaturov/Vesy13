@@ -15,6 +15,7 @@ public partial class DynamicWeighingForm : Form
     private SimA04ReaderDynamic  _sim = null!;
     private LocalRepository _ldb  = null!;
     private SettingsService _settings = null!;
+    private const int MaxAdcCode = 65535;
 
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
@@ -23,6 +24,7 @@ public partial class DynamicWeighingForm : Form
     private int        _bogie1Code;
     private SimA04DynamicSample _lastSample;
     private double     _zeroOffsetTonnes;
+    private readonly System.Windows.Forms.Timer _adcDiagTimer = new();
 
     public DynamicWeighingForm()
     {
@@ -35,12 +37,20 @@ public partial class DynamicWeighingForm : Form
         _ldb  = ldb;
         _settings = settings;
         InitializeComponent();
+        _adcDiagTimer.Interval = 500;
+        _adcDiagTimer.Tick += (_, _) => UpdateAdcDiagnostics();
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
 
-    private double ReadRawTonnes(int adcCode) =>
-        CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+    private double ReadRawTonnes(int adcCode)
+    {
+        double k = GetDirection().StartsWith("→") ? _ldb.Dynamic.KPlus : _ldb.Dynamic.KMinus;
+        if (Math.Abs(k) < double.Epsilon)
+            k = _settings.Current.MaxCapacityTonnes / MaxAdcCode;
+
+        return k * adcCode;
+    }
 
     private double ToTonnes(int adcCode) =>
         WeightFormatter.RoundToDiscretization(
@@ -148,6 +158,7 @@ public partial class DynamicWeighingForm : Form
         SetupGridColumns();
         _sim.SampleReceived    += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
+        _adcDiagTimer.Start();
         EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
@@ -183,6 +194,7 @@ public partial class DynamicWeighingForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
+            _adcDiagTimer.Stop();
             _sim.SampleReceived    -= OnSample;
             _sim.ConnectionChanged -= OnConnectionChanged;
             _sim.Close();
@@ -269,6 +281,23 @@ public partial class DynamicWeighingForm : Form
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        UpdateAdcDiagnostics();
+    }
+
+    private void UpdateAdcDiagnostics()
+    {
+        if (DesignMode || _sim is null) return;
+
+        if (!_sim.IsPortOpen)
+        {
+            _lblConn.Text = "АЦП: порт закрыт";
+            return;
+        }
+
+        var state = _sim.IsConnected
+            ? $"АЦП: {_sim.PortName}"
+            : $"АЦП: нет валидного потока ({_sim.PortName})";
+        _lblConn.Text = $"{state}  samples={_sim.SamplesReceived} raw={_sim.RawBytesReceived} skipped={_sim.SkippedBytes}";
     }
 
     private void UpdateChannelLabel() =>
