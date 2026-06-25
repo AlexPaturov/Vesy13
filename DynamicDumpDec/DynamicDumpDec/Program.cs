@@ -180,7 +180,7 @@ internal static class Program
     }
 
     private static bool IsValidSample(byte[] sample)
-        => sample[4] == sample[0] + sample[2] + AuxOffset;
+        => sample[4] == ((sample[0] + sample[2] + AuxOffset) & 0xFF);
 
     private static byte ReadByte(SerialPort sp)
     {
@@ -216,7 +216,7 @@ internal static class Program
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
         Console.WriteLine($"SAMPLES_TARGET={sampleCount}");
         Console.WriteLine($"SAMPLE_SIZE={SampleSize}");
-        Console.WriteLine($"SYNC_RULE=AUX=B0+B2+{AuxOffset}");
+        Console.WriteLine($"SYNC_RULE=AUX=(B0+B2+{AuxOffset})&0xFF");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
         Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX");
