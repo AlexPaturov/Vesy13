@@ -11,6 +11,8 @@ internal static class Program
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
     private const int DefaultSampleCount = 240;
+    private const int WarmupSampleCount = 2;
+    private const int AuxOffset = 28;
     private const string DefaultPort = "COM3";
     private const string ModeName = "DYNAMIC";
     private const byte SetByte = 126;
@@ -79,6 +81,10 @@ internal static class Program
         long ch0Sum = 0;
         long ch1Sum = 0;
         long auxSum = 0;
+        var auxOkCount = 0;
+        var auxBadCount = 0;
+        var auxOkAfterWarmupCount = 0;
+        var auxBadAfterWarmupCount = 0;
         var auxCounts = new int[256];
         var sw = Stopwatch.StartNew();
 
@@ -93,6 +99,9 @@ internal static class Program
             var ch0 = ReadUInt16Le(sample, 0);
             var ch1 = ReadUInt16Le(sample, 2);
             var aux = sample[4];
+            var auxExpected = sample[0] + sample[2] + AuxOffset;
+            var auxOk = aux == auxExpected;
+            var isWarmup = index < WarmupSampleCount;
 
             ch0Min = Math.Min(ch0Min, ch0);
             ch0Max = Math.Max(ch0Max, ch0);
@@ -104,9 +113,19 @@ internal static class Program
             ch1Sum += ch1;
             auxSum += aux;
             auxCounts[aux]++;
+            if (auxOk)
+            {
+                auxOkCount++;
+                if (!isWarmup) auxOkAfterWarmupCount++;
+            }
+            else
+            {
+                auxBadCount++;
+                if (!isWarmup) auxBadAfterWarmupCount++;
+            }
 
             Console.WriteLine(
-                $"{index:000} {timeMs:000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
+                $"{index:000} {timeMs:000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000} {auxExpected:000} {FormatBool(auxOk)} {FormatSampleKind(isWarmup)}");
         }
 
         sw.Stop();
@@ -128,6 +147,10 @@ internal static class Program
         Console.WriteLine($"AUX_AVG={(auxSum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"AUX_MAX={auxMax}");
         Console.WriteLine($"AUX_COUNTS={FormatAuxCounts(auxCounts)}");
+        Console.WriteLine($"AUX_OK_COUNT={auxOkCount}");
+        Console.WriteLine($"AUX_BAD_COUNT={auxBadCount}");
+        Console.WriteLine($"AUX_OK_AFTER_WARMUP={auxOkAfterWarmupCount}");
+        Console.WriteLine($"AUX_BAD_AFTER_WARMUP={auxBadAfterWarmupCount}");
     }
 
     private static int ReadUInt16Le(byte[] data, int offset)
@@ -135,6 +158,12 @@ internal static class Program
 
     private static string FormatSample(byte[] data)
         => string.Join(" ", Array.ConvertAll(data, b => b.ToString("000", CultureInfo.InvariantCulture)));
+
+    private static string FormatBool(bool value)
+        => value ? "OK" : "BAD";
+
+    private static string FormatSampleKind(bool isWarmup)
+        => isWarmup ? "WARMUP" : "DATA";
 
     private static string FormatAuxCounts(int[] counts)
     {
@@ -168,9 +197,11 @@ internal static class Program
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
         Console.WriteLine($"SAMPLES_TARGET={sampleCount}");
         Console.WriteLine($"SAMPLE_SIZE={SampleSize}");
+        Console.WriteLine($"WARMUP_SAMPLES={WarmupSampleCount}");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
-        Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX");
+        Console.WriteLine($"AUX_FORMULA=B0+B2+{AuxOffset}");
+        Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX AUX_EXPECTED AUX_OK KIND");
     }
 
     private static bool TryParseArgs(string[] args, out string portName, out int sampleCount)
