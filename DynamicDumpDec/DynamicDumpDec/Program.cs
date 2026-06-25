@@ -1,18 +1,16 @@
-using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Ports;
-using System.Threading;
 
 namespace DynamicDumpDec;
 
 internal static class Program
 {
     private const int BaudRate = 4800;
-    private const int BlockSize = 20;
+    private const int SampleSize = 5;
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
-    private const int DefaultBlockCount = 60;
+    private const int DefaultSampleCount = 240;
     private const string DefaultPort = "COM3";
     private const string ModeName = "DYNAMIC";
     private const byte SetByte = 126;
@@ -27,7 +25,7 @@ internal static class Program
         {
         }
 
-        if (!TryParseArgs(args, out var portName, out var blockCount))
+        if (!TryParseArgs(args, out var portName, out var sampleCount))
         {
             PrintUsage();
             WaitBeforeExit();
@@ -36,7 +34,7 @@ internal static class Program
 
         try
         {
-            Dump(portName, blockCount);
+            Dump(portName, sampleCount);
         }
         catch (Exception ex)
         {
@@ -49,7 +47,7 @@ internal static class Program
         return exitCode;
     }
 
-    private static void Dump(string portName, int blockCount)
+    private static void Dump(string portName, int sampleCount)
     {
         using var sp = new SerialPort
         {
@@ -68,82 +66,87 @@ internal static class Program
         sp.Write(new[] { SetByte }, 0, 1);
         Thread.Sleep(50);
 
-        PrintHeader(portName, blockCount);
+        PrintHeader(portName, sampleCount);
 
-        var block = new byte[BlockSize];
+        var sample = new byte[SampleSize];
         var bytesTotal = 0;
-        var aCh0Min = int.MaxValue;
-        var aCh0Max = int.MinValue;
-        var aCh1Min = int.MaxValue;
-        var aCh1Max = int.MinValue;
-        var bCh0Min = int.MaxValue;
-        var bCh0Max = int.MinValue;
-        var bCh1Min = int.MaxValue;
-        var bCh1Max = int.MinValue;
-        long aCh0Sum = 0;
-        long aCh1Sum = 0;
-        long bCh0Sum = 0;
-        long bCh1Sum = 0;
+        var ch0Min = int.MaxValue;
+        var ch0Max = int.MinValue;
+        var ch1Min = int.MaxValue;
+        var ch1Max = int.MinValue;
+        var auxMin = int.MaxValue;
+        var auxMax = int.MinValue;
+        long ch0Sum = 0;
+        long ch1Sum = 0;
+        long auxSum = 0;
+        var auxCounts = new int[256];
         var sw = Stopwatch.StartNew();
 
         sp.Write(new[] { ReqByte }, 0, 1);
 
-        for (var index = 0; index < blockCount; index++)
+        for (var index = 0; index < sampleCount; index++)
         {
-            ReadExact(sp, block, BlockSize);
-            bytesTotal += BlockSize;
+            ReadExact(sp, sample, SampleSize);
+            bytesTotal += SampleSize;
 
             var timeMs = (int)Math.Round(sw.Elapsed.TotalMilliseconds);
-            var aCh0 = ReadUInt16Le(block, 0);
-            var aCh1 = ReadUInt16Le(block, 2);
-            var bCh0 = ReadUInt16Le(block, 10);
-            var bCh1 = ReadUInt16Le(block, 12);
+            var ch0 = ReadUInt16Le(sample, 0);
+            var ch1 = ReadUInt16Le(sample, 2);
+            var aux = sample[4];
 
-            aCh0Min = Math.Min(aCh0Min, aCh0);
-            aCh0Max = Math.Max(aCh0Max, aCh0);
-            aCh1Min = Math.Min(aCh1Min, aCh1);
-            aCh1Max = Math.Max(aCh1Max, aCh1);
-            bCh0Min = Math.Min(bCh0Min, bCh0);
-            bCh0Max = Math.Max(bCh0Max, bCh0);
-            bCh1Min = Math.Min(bCh1Min, bCh1);
-            bCh1Max = Math.Max(bCh1Max, bCh1);
-            aCh0Sum += aCh0;
-            aCh1Sum += aCh1;
-            bCh0Sum += bCh0;
-            bCh1Sum += bCh1;
+            ch0Min = Math.Min(ch0Min, ch0);
+            ch0Max = Math.Max(ch0Max, ch0);
+            ch1Min = Math.Min(ch1Min, ch1);
+            ch1Max = Math.Max(ch1Max, ch1);
+            auxMin = Math.Min(auxMin, aux);
+            auxMax = Math.Max(auxMax, aux);
+            ch0Sum += ch0;
+            ch1Sum += ch1;
+            auxSum += aux;
+            auxCounts[aux]++;
 
             Console.WriteLine(
-                $"{index:000} {timeMs:000000} {FormatBlock(block)} {aCh0:00000} {aCh1:00000} {bCh0:00000} {bCh1:00000}");
+                $"{index:000} {timeMs:000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
         }
 
         sw.Stop();
         var elapsedSec = Math.Max(sw.Elapsed.TotalSeconds, 0.001);
-        var hz = blockCount / elapsedSec;
+        var hz = sampleCount / elapsedSec;
 
         Console.WriteLine("SUMMARY");
         Console.WriteLine($"BYTES={bytesTotal}");
-        Console.WriteLine($"BLOCKS={blockCount}");
+        Console.WriteLine($"SAMPLES={sampleCount}");
         Console.WriteLine("TAIL_BYTES=0");
         Console.WriteLine($"HZ={hz.ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"A_CH0_MIN={aCh0Min}");
-        Console.WriteLine($"A_CH0_AVG={(aCh0Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"A_CH0_MAX={aCh0Max}");
-        Console.WriteLine($"A_CH1_MIN={aCh1Min}");
-        Console.WriteLine($"A_CH1_AVG={(aCh1Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"A_CH1_MAX={aCh1Max}");
-        Console.WriteLine($"B_CH0_MIN={bCh0Min}");
-        Console.WriteLine($"B_CH0_AVG={(bCh0Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"B_CH0_MAX={bCh0Max}");
-        Console.WriteLine($"B_CH1_MIN={bCh1Min}");
-        Console.WriteLine($"B_CH1_AVG={(bCh1Sum / (double)blockCount).ToString("0.00", CultureInfo.InvariantCulture)}");
-        Console.WriteLine($"B_CH1_MAX={bCh1Max}");
+        Console.WriteLine($"CH0_MIN={ch0Min}");
+        Console.WriteLine($"CH0_AVG={(ch0Sum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"CH0_MAX={ch0Max}");
+        Console.WriteLine($"CH1_MIN={ch1Min}");
+        Console.WriteLine($"CH1_AVG={(ch1Sum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"CH1_MAX={ch1Max}");
+        Console.WriteLine($"AUX_MIN={auxMin}");
+        Console.WriteLine($"AUX_AVG={(auxSum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"AUX_MAX={auxMax}");
+        Console.WriteLine($"AUX_COUNTS={FormatAuxCounts(auxCounts)}");
     }
 
     private static int ReadUInt16Le(byte[] data, int offset)
         => data[offset + 1] * 256 + data[offset];
 
-    private static string FormatBlock(byte[] data)
+    private static string FormatSample(byte[] data)
         => string.Join(" ", Array.ConvertAll(data, b => b.ToString("000", CultureInfo.InvariantCulture)));
+
+    private static string FormatAuxCounts(int[] counts)
+    {
+        var parts = new List<string>();
+        for (var value = 0; value < counts.Length; value++)
+        {
+            if (counts[value] > 0)
+                parts.Add($"{value:000}:{counts[value]}");
+        }
+
+        return string.Join(",", parts);
+    }
 
     private static void ReadExact(SerialPort sp, byte[] buffer, int count)
     {
@@ -156,29 +159,29 @@ internal static class Program
         }
     }
 
-    private static void PrintHeader(string portName, int blockCount)
+    private static void PrintHeader(string portName, int sampleCount)
     {
         Console.WriteLine($"MODE={ModeName}");
         Console.WriteLine($"PORT={portName}");
         Console.WriteLine($"SET={SetByte}");
         Console.WriteLine($"REQ={ReqByte}");
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
-        Console.WriteLine($"BLOCKS_TARGET={blockCount}");
-        Console.WriteLine($"BLOCK_SIZE={BlockSize}");
-        Console.WriteLine("FORMAT=BLOCK20_UINT16_LE");
-        Console.WriteLine("A=BYTES_00_03  B=BYTES_10_13");
-        Console.WriteLine("IDX TIME_MS B00 B01 B02 B03 B04 B05 B06 B07 B08 B09 B10 B11 B12 B13 B14 B15 B16 B17 B18 B19 A_CH0 A_CH1 B_CH0 B_CH1");
+        Console.WriteLine($"SAMPLES_TARGET={sampleCount}");
+        Console.WriteLine($"SAMPLE_SIZE={SampleSize}");
+        Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
+        Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
+        Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX");
     }
 
-    private static bool TryParseArgs(string[] args, out string portName, out int blockCount)
+    private static bool TryParseArgs(string[] args, out string portName, out int sampleCount)
     {
         portName = args.Length >= 1 ? args[0].Trim() : DefaultPort;
-        blockCount = DefaultBlockCount;
+        sampleCount = DefaultSampleCount;
 
         if (args.Length > 2)
             return false;
 
-        if (args.Length >= 2 && (!int.TryParse(args[1], out blockCount) || blockCount <= 0))
+        if (args.Length >= 2 && (!int.TryParse(args[1], out sampleCount) || sampleCount <= 0))
             return false;
 
         return !string.IsNullOrWhiteSpace(portName);
@@ -186,7 +189,7 @@ internal static class Program
 
     private static void PrintUsage()
     {
-        Console.Error.WriteLine("USAGE=DynamicDumpDec COM3 60");
+        Console.Error.WriteLine("USAGE=DynamicDumpDec COM3 240");
     }
 
     private static void WaitBeforeExit()
