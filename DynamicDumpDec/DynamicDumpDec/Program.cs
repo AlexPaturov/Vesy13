@@ -14,8 +14,26 @@ internal static class Program
     private const int AuxOffset = 28;
     private const string DefaultPort = "COM3";
     private const string ModeName = "DYNAMIC";
-    private const byte SetByte = 126;
-    private const byte ReqByte = 254;
+
+    private const byte Avg1SetByte = 14;
+    private const byte Avg1ReqByte = 142;
+    private const byte Avg2SetByte = 30;
+    private const byte Avg2ReqByte = 158;
+    private const byte Avg4SetByte = 46;
+    private const byte Avg4ReqByte = 174;
+    private const byte Avg8SetByte = 62;
+    private const byte Avg8ReqByte = 190;
+    private const byte Avg16SetByte = 78;
+    private const byte Avg16ReqByte = 206;
+    private const byte Avg32SetByte = 94;
+    private const byte Avg32ReqByte = 222;
+    private const byte Avg64SetByte = 110;
+    private const byte Avg64ReqByte = 238;
+    private const byte Avg128SetByte = 126;
+    private const byte Avg128ReqByte = 254;
+
+    private const byte SetByte = Avg128SetByte;
+    private const byte ReqByte = Avg128ReqByte;
 
     private static int Main(string[] args)
     {
