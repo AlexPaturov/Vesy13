@@ -252,15 +252,11 @@ public partial class DynamicWeighingForm : Form
         }
 
         _lastSample = sample;
-        if (_state == WeighState.Idle)
-        {
-            _lblValue.Text      = ToTonnes(ActiveCode(sample)).ToString("F2");
-            _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        }
-        else
-        {
+        _lblValue.Text      = ToTonnes(ActiveCode(sample)).ToString("F2");
+        _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
+
+        if (_state == WeighState.Bogie1Captured)
             SetBogieValue(_lblBogie2Value, ToTonnes(ActiveCode(sample)));
-        }
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
@@ -372,8 +368,7 @@ public partial class DynamicWeighingForm : Form
                 "LocalWagon", $"вагон №{_wagonNumber} dir={record.Direction} total={record.Total:F2}",
                 "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
-            SetBogieValue(_lblBogie1Value, record.Bogie1);
-            SetBogieValue(_lblBogie2Value, record.Bogie2);
+            ResetBogieValues();
             _lblValue.Text      = record.Total.ToString("F2");
             _lblValue.ForeColor = UiColors.Info;
             _lblStatus.Text     = $"Вагон №{_wagonNumber}: {record.Total:F2} т  —  Готов к следующему";
