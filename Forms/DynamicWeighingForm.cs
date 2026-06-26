@@ -285,7 +285,7 @@ public partial class DynamicWeighingForm : Form
         var state = _sim.IsConnected
             ? $"АЦП: {_sim.PortName}"
             : $"АЦП: нет валидного потока ({_sim.PortName})";
-        _lblConn.Text = $"{state}  samples={_sim.SamplesReceived} raw={_sim.RawBytesReceived} skipped={_sim.SkippedBytes}";
+        _lblConn.Text = state;
     }
 
     private void UpdateChannelLabel() =>

@@ -86,7 +86,7 @@ partial class DynamicWeighingForm
         _lblChannel.AutoSize = true;
         _lblChannel.Font = new Font("Segoe UI", 10F);
         _lblChannel.ForeColor = Color.FromArgb(102, 112, 124);
-        _lblChannel.Location = new Point(582, 37);
+        _lblChannel.Location = new Point(630, 37);
         _lblChannel.Margin = new Padding(0);
         _lblChannel.Name = "_lblChannel";
         _lblChannel.Size = new Size(0, 28);
@@ -111,7 +111,7 @@ partial class DynamicWeighingForm
         _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 263F));
         _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 169F));
         _layoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _layoutMain.Size = new Size(1063, 1001);
+        _layoutMain.Size = new Size(1111, 1001);
         _layoutMain.TabIndex = 0;
         // 
         // _pnlTop
@@ -122,7 +122,7 @@ partial class DynamicWeighingForm
         _pnlTop.Location = new Point(11, 13);
         _pnlTop.Margin = new Padding(0, 0, 0, 13);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1041, 77);
+        _pnlTop.Size = new Size(1089, 77);
         _pnlTop.TabIndex = 1;
         // 
         // _pnlDisplay
@@ -137,7 +137,7 @@ partial class DynamicWeighingForm
         _pnlDisplay.Location = new Point(11, 103);
         _pnlDisplay.Margin = new Padding(0, 0, 0, 13);
         _pnlDisplay.Name = "_pnlDisplay";
-        _pnlDisplay.Size = new Size(1041, 250);
+        _pnlDisplay.Size = new Size(1089, 250);
         _pnlDisplay.TabIndex = 2;
         // 
         // _lblBogie2Value
@@ -145,7 +145,7 @@ partial class DynamicWeighingForm
         _lblBogie2Value.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie2Value.Font = new Font("Segoe UI", 10F);
         _lblBogie2Value.ForeColor = Color.FromArgb(215, 224, 234);
-        _lblBogie2Value.Location = new Point(864, 147);
+        _lblBogie2Value.Location = new Point(912, 147);
         _lblBogie2Value.Margin = new Padding(4, 0, 4, 0);
         _lblBogie2Value.Name = "_lblBogie2Value";
         _lblBogie2Value.Size = new Size(160, 42);
@@ -158,7 +158,7 @@ partial class DynamicWeighingForm
         _lblBogie2Caption.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie2Caption.Font = new Font("Segoe UI", 12F);
         _lblBogie2Caption.ForeColor = Color.FromArgb(215, 224, 234);
-        _lblBogie2Caption.Location = new Point(864, 113);
+        _lblBogie2Caption.Location = new Point(912, 113);
         _lblBogie2Caption.Margin = new Padding(4, 0, 4, 0);
         _lblBogie2Caption.Name = "_lblBogie2Caption";
         _lblBogie2Caption.Size = new Size(160, 33);
@@ -171,7 +171,7 @@ partial class DynamicWeighingForm
         _lblBogie1Value.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie1Value.Font = new Font("Segoe UI", 10F);
         _lblBogie1Value.ForeColor = Color.FromArgb(215, 224, 234);
-        _lblBogie1Value.Location = new Point(864, 60);
+        _lblBogie1Value.Location = new Point(912, 60);
         _lblBogie1Value.Margin = new Padding(4, 0, 4, 0);
         _lblBogie1Value.Name = "_lblBogie1Value";
         _lblBogie1Value.Size = new Size(160, 42);
@@ -184,7 +184,7 @@ partial class DynamicWeighingForm
         _lblBogie1Caption.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie1Caption.Font = new Font("Segoe UI", 12F);
         _lblBogie1Caption.ForeColor = Color.FromArgb(215, 224, 234);
-        _lblBogie1Caption.Location = new Point(864, 27);
+        _lblBogie1Caption.Location = new Point(912, 27);
         _lblBogie1Caption.Margin = new Padding(4, 0, 4, 0);
         _lblBogie1Caption.Name = "_lblBogie1Caption";
         _lblBogie1Caption.Size = new Size(160, 33);
@@ -213,7 +213,7 @@ partial class DynamicWeighingForm
         _pnlActions.Location = new Point(11, 366);
         _pnlActions.Margin = new Padding(0, 0, 0, 13);
         _pnlActions.Name = "_pnlActions";
-        _pnlActions.Size = new Size(1041, 156);
+        _pnlActions.Size = new Size(1089, 156);
         _pnlActions.TabIndex = 3;
         // 
         // _btnWeigh
@@ -226,7 +226,7 @@ partial class DynamicWeighingForm
         _btnWeigh.Location = new Point(0, 0);
         _btnWeigh.Margin = new Padding(4, 5, 4, 5);
         _btnWeigh.Name = "_btnWeigh";
-        _btnWeigh.Size = new Size(1041, 90);
+        _btnWeigh.Size = new Size(1089, 90);
         _btnWeigh.TabIndex = 3;
         _btnWeigh.Text = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.UseVisualStyleBackColor = false;
@@ -298,7 +298,7 @@ partial class DynamicWeighingForm
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle3;
         _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _grid.Size = new Size(1033, 443);
+        _grid.Size = new Size(1081, 443);
         _grid.TabIndex = 6;
         // 
         // _pnlStatusBar
@@ -309,7 +309,7 @@ partial class DynamicWeighingForm
         _pnlStatusBar.Location = new Point(0, 1001);
         _pnlStatusBar.Margin = new Padding(4, 5, 4, 5);
         _pnlStatusBar.Name = "_pnlStatusBar";
-        _pnlStatusBar.Size = new Size(1063, 47);
+        _pnlStatusBar.Size = new Size(1111, 47);
         _pnlStatusBar.TabIndex = 7;
         // 
         // _statusLayout
@@ -325,7 +325,7 @@ partial class DynamicWeighingForm
         _statusLayout.Name = "_statusLayout";
         _statusLayout.RowCount = 1;
         _statusLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _statusLayout.Size = new Size(1063, 47);
+        _statusLayout.Size = new Size(1111, 47);
         _statusLayout.TabIndex = 0;
         // 
         // _dotConn
@@ -347,7 +347,7 @@ partial class DynamicWeighingForm
         _lblConn.Location = new Point(26, 5);
         _lblConn.Margin = new Padding(0, 5, 0, 0);
         _lblConn.Name = "_lblConn";
-        _lblConn.Size = new Size(1037, 42);
+        _lblConn.Size = new Size(1085, 42);
         _lblConn.TabIndex = 2;
         _lblConn.Text = "АЦП: —";
         // 
@@ -356,7 +356,7 @@ partial class DynamicWeighingForm
         AutoScaleDimensions = new SizeF(10F, 25F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.FromArgb(238, 241, 244);
-        ClientSize = new Size(1063, 1048);
+        ClientSize = new Size(1111, 1048);
         Controls.Add(_layoutMain);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;
