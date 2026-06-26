@@ -361,7 +361,7 @@ public class FactoryRepository
             SELECT DT, VR, tar_brs FROM GPRI WHERE NVAG = @nvag AND DT >= @cutoff
             UNION ALL
             SELECT DT, VR, tar_brs FROM GRAS WHERE NVAG = @nvag AND DT >= @cutoff
-            ORDER BY DT DESC, VR DESC";   
+            ORDER BY 1 DESC, 2 DESC";
 
         await using var cmd = new FbCommand(sql, conn);
         cmd.Parameters.AddWithValue("@nvag",   nvag);
