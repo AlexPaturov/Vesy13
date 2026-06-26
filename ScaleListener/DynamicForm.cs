@@ -10,6 +10,7 @@ public class DynamicForm : Form
     private const byte ReqByte = 254;
     private const int AuxOffset = 28;
     private const int DefaultHz = 47;
+    private const int MaxLogLines = 500;
 
     private RichTextBox _log = null!;
     private Button _btnConnect = null!;
@@ -19,6 +20,7 @@ public class DynamicForm : Form
     private NumericUpDown _numTolerance = null!;
     private NumericUpDown _numHz = null!;
     private ComboBox _cmbScenario = null!;
+    private ComboBox _cmbPacketLog = null!;
     private Label _lblCode = null!;
     private Label _lblState = null!;
 
@@ -28,6 +30,7 @@ public class DynamicForm : Form
     private volatile bool _isShuttingDown;
     private bool _streaming;
     private int _sampleIndex;
+    private int _logLineCount;
 
     public DynamicForm()
     {
@@ -128,11 +131,29 @@ public class DynamicForm : Form
         _cmbScenario.SelectedIndex = 0;
         _cmbScenario.SelectedIndexChanged += (_, _) => UpdateCodePreview();
 
+        var lblPacketLog = new Label
+        {
+            Location = new Point(690, 12),
+            Size = new Size(35, 24),
+            Text = "Лог:",
+            TextAlign = ContentAlignment.MiddleLeft,
+        };
+
+        _cmbPacketLog = new ComboBox
+        {
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            Location = new Point(728, 10),
+            Size = new Size(124, 24),
+        };
+        _cmbPacketLog.Items.AddRange(new object[] { "Все", "Каждый 10-й" });
+        _cmbPacketLog.SelectedIndex = 1;
+        _cmbPacketLog.SelectedIndexChanged += (_, _) => UpdateStateLabel();
+
         _lblCode = new Label
         {
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(696, 12),
-            Size = new Size(156, 24),
+            Location = new Point(8, 42),
+            Size = new Size(844, 24),
             TextAlign = ContentAlignment.MiddleLeft,
         };
 
@@ -147,8 +168,8 @@ public class DynamicForm : Form
         _log = new RichTextBox
         {
             Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(8, 46),
-            Size = new Size(844, 430),
+            Location = new Point(8, 70),
+            Size = new Size(844, 406),
             ReadOnly = true,
             BackColor = Color.LightGray,
             Font = new Font("Courier New", 9.75f),
@@ -185,12 +206,12 @@ public class DynamicForm : Form
             Text = "Clear",
             FlatStyle = FlatStyle.Flat,
         };
-        _btnClear.Click += (_, _) => _log.Clear();
+        _btnClear.Click += (_, _) => ClearLog();
 
         Controls.AddRange(new Control[]
         {
             lblWeight, _numWeight, lblTolerance, _numTolerance, lblHz, _numHz,
-            lblScenario, _cmbScenario, _lblCode, _log, _btnConnect, _lblState,
+            lblScenario, _cmbScenario, lblPacketLog, _cmbPacketLog, _lblCode, _log, _btnConnect, _lblState,
             _btnStopStream, _btnClear
         });
 
@@ -308,8 +329,9 @@ public class DynamicForm : Form
         try
         {
             _port.Write(buf, 0, buf.Length);
-            AppendMsg($">> {string.Join(" ", buf)}  CH0={ch0} ({ch0Weight:F2} т)  CH1={ch1} ({ch1Weight:F2} т)", Color.DodgerBlue);
             _sampleIndex++;
+            if (_sampleIndex % PacketLogStep == 0)
+                AppendMsg($">> {string.Join(" ", buf)}  CH0={ch0} ({ch0Weight:F2} т)  CH1={ch1} ({ch1Weight:F2} т)", Color.DodgerBlue);
         }
         catch (Exception ex)
         {
@@ -378,10 +400,10 @@ public class DynamicForm : Form
 
     private void UpdateStateLabel()
     {
-        if (_lblState is null || _numHz is null || _cmbScenario is null)
+        if (_lblState is null || _numHz is null || _cmbScenario is null || _cmbPacketLog is null)
             return;
 
-        _lblState.Text = $"STREAM={(_streaming ? "ON" : "OFF")}  SET={SetByte}  REQ={ReqByte}  Hz={(int)_numHz.Value}  Scenario={_cmbScenario.Text}";
+        _lblState.Text = $"STREAM={(_streaming ? "ON" : "OFF")}  SET={SetByte}  REQ={ReqByte}  Hz={(int)_numHz.Value}  Scenario={_cmbScenario.Text}  Лог={_cmbPacketLog.Text}";
     }
 
     private void UpdateCodePreview()
@@ -396,11 +418,35 @@ public class DynamicForm : Form
 
     private void AppendMsg(string text, Color? color = null)
     {
+        if (_logLineCount >= MaxLogLines)
+        {
+            var endOfFirstLine = _log.Text.IndexOf('\n');
+            if (endOfFirstLine < 0)
+            {
+                ClearLog();
+            }
+            else
+            {
+                _log.Select(0, endOfFirstLine + 1);
+                _log.SelectedText = string.Empty;
+                _logLineCount--;
+            }
+        }
+
         var prev = _log.SelectionColor;
         _log.SelectionColor = color ?? prev;
         _log.AppendText(text + "\r\n");
+        _logLineCount++;
         _log.SelectionColor = prev;
         _log.ScrollToCaret();
+    }
+
+    private int PacketLogStep => _cmbPacketLog.SelectedIndex == 0 ? 1 : 10;
+
+    private void ClearLog()
+    {
+        _log.Clear();
+        _logLineCount = 0;
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
