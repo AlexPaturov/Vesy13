@@ -308,6 +308,7 @@ public partial class CorrectionsForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
+        _rbBrutto.Checked = true;
         _gridPend.AllowUserToResizeColumns = true;
         _gridDone.AllowUserToResizeColumns = true;
         if (!DesignMode)
@@ -932,7 +933,6 @@ public partial class CorrectionsForm : Form
         _cmbTar.Items.Clear();
         _cmbTar.SelectedIndex = -1;
         _localInjectedTareOption = null;
-        _rbBrutto.Checked = true;
         _tbNvag.Clear();
         _tbGruz.Clear();
         _tbPotr.Clear();
