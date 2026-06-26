@@ -37,6 +37,7 @@ public partial class DynamicWeighingForm : Form
     private long _lastLoggedUiReceived;
     private long _lastLoggedUiApplied;
     private long _lastDynamicDiagAt;
+    private bool _weighingStorageAvailable = true;
 
     public DynamicWeighingForm()
     {
@@ -134,6 +135,8 @@ public partial class DynamicWeighingForm : Form
         _dotConn.BackColor = UiColors.Disconnected;
         _lblConn.Font     = UiFonts.Body;
         _lblConn.ForeColor = UiColors.TextMuted;
+        _lblStorage.Font = UiFonts.Body;
+        _lblStorage.ForeColor = UiColors.TextMuted;
     }
 
     private void SetupGridColumns()
@@ -168,6 +171,7 @@ public partial class DynamicWeighingForm : Form
         SetupGridColumns();
         _sim.SampleReceived    += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
+        AuditLogger.QueueStatusChanged += OnAuditQueueStatusChanged;
         _adcDiagTimer.Start();
         EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
@@ -206,6 +210,7 @@ public partial class DynamicWeighingForm : Form
             _adcDiagTimer.Stop();
             _sim.SampleReceived    -= OnSample;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            AuditLogger.QueueStatusChanged -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
 
@@ -295,6 +300,18 @@ public partial class DynamicWeighingForm : Form
         UpdateConn(connected);
     }
 
+    private void OnAuditQueueStatusChanged(object? sender, AuditLogger.AuditQueueStatus status)
+    {
+        if (IsDisposed || Disposing) return;
+        if (InvokeRequired)
+        {
+            BeginInvoke(() => OnAuditQueueStatusChanged(sender, status));
+            return;
+        }
+
+        UpdateAdcDiagnostics();
+    }
+
     private void UpdateConn(bool connected)
     {
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
@@ -316,15 +333,18 @@ public partial class DynamicWeighingForm : Form
             _dotConn.BackColor = Color.Red;
             _lblConn.ForeColor = Color.Red;
             _lblConn.Text = "АЦП: порт закрыт";
+            UpdateStorageStatus();
             return;
         }
 
         var connected = _sim.IsConnected;
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
-        _lblConn.Text = connected
+        var adcState = connected
             ? $"АЦП: {_sim.PortName}"
             : $"АЦП: нет валидного потока ({_sim.PortName})";
+        _lblConn.Text = adcState;
+        UpdateStorageStatus();
     }
 
     private void WriteDynamicDiagnostics()
@@ -493,13 +513,33 @@ public partial class DynamicWeighingForm : Form
         try
         {
             await _ldb.SaveWagonAsync(record);
+            _weighingStorageAvailable = true;
+            UpdateAdcDiagnostics();
         }
         catch (Exception ex)
         {
+            _weighingStorageAvailable = false;
+            UpdateAdcDiagnostics();
             AuditLogger.Error(AuditLogger.ErrorDb,
                 "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
-            MessageBox.Show("Не удалось сохранить результат взвешивания.\nОбратитесь к администратору.",
-                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
+
+    private void UpdateStorageStatus()
+    {
+        var audit = AuditLogger.GetQueueStatus();
+        var messages = new List<string>();
+        if (!_weighingStorageAvailable)
+            messages.Add("Взвешивание: БД недоступна, запись не сохранена");
+
+        var hasError = !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
+        if (!audit.IsDatabaseAvailable)
+            messages.Add(string.Format("Журнал: БД недоступна; очередь {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
+        else if (audit.PendingCount > 0 || audit.DroppedCount > 0)
+            messages.Add(string.Format("Журнал: синхронизация {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
+
+        _lblStorage.Text = string.Join(" | ", messages);
+        _lblStorage.ForeColor = hasError ? Color.Red : UiColors.TextMuted;
+    }
+
 }

@@ -26,6 +26,7 @@ public partial class StaticWeighingForm : Form
     private DateTime   _lastRawDiagAt = DateTime.MinValue;
     private DateTime   _lastCalcDiagAt = DateTime.MinValue;
     private string     _lastRawBytes = "";
+    private bool       _weighingStorageAvailable = true;
 
     public StaticWeighingForm()
     {
@@ -96,6 +97,8 @@ public partial class StaticWeighingForm : Form
         _dotConn.BackColor = UiColors.Disconnected;
         _lblConn.Font = UiFonts.Body;
         _lblConn.ForeColor = UiColors.TextMuted;
+        _lblStorage.Font = UiFonts.Body;
+        _lblStorage.ForeColor = UiColors.TextMuted;
     }
 
     private void SetupGridColumns()
@@ -130,6 +133,7 @@ public partial class StaticWeighingForm : Form
         _sim.FrameReceived     += OnFrame;
         _sim.RawFrameReceived  += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
+        AuditLogger.QueueStatusChanged += OnAuditQueueStatusChanged;
         EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
@@ -166,6 +170,7 @@ public partial class StaticWeighingForm : Form
             _sim.FrameReceived     -= OnFrame;
             _sim.RawFrameReceived  -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            AuditLogger.QueueStatusChanged -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
         base.OnFormClosed(e);
@@ -261,9 +266,40 @@ public partial class StaticWeighingForm : Form
     {
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
-        _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
+        var adcState = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
+        _lblConn.Text = adcState;
+        UpdateStorageStatus();
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+    }
+
+    private void OnAuditQueueStatusChanged(object? sender, AuditLogger.AuditQueueStatus status)
+    {
+        if (IsDisposed || Disposing) return;
+        if (InvokeRequired)
+        {
+            BeginInvoke(() => OnAuditQueueStatusChanged(sender, status));
+            return;
+        }
+
+        UpdateConn(_sim.IsConnected);
+    }
+
+    private void UpdateStorageStatus()
+    {
+        var audit = AuditLogger.GetQueueStatus();
+        var messages = new List<string>();
+        if (!_weighingStorageAvailable)
+            messages.Add("Взвешивание: БД недоступна, запись не сохранена");
+
+        var hasError = !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
+        if (!audit.IsDatabaseAvailable)
+            messages.Add($"Журнал: БД недоступна; очередь {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
+        else if (audit.PendingCount > 0 || audit.DroppedCount > 0)
+            messages.Add($"Журнал: синхронизация {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
+
+        _lblStorage.Text = string.Join(" | ", messages);
+        _lblStorage.ForeColor = hasError ? Color.Red : UiColors.TextMuted;
     }
 
     private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
@@ -413,15 +449,17 @@ public partial class StaticWeighingForm : Form
         try
         {
             await _ldb.SaveWagonAsync(record);
+            _weighingStorageAvailable = true;
+            UpdateConn(_sim.IsConnected);
             if (_state == WeighState.Idle && _wagonNumber == record.Number)
                 ResetBogieValues();
         }
         catch (Exception ex)
         {
+            _weighingStorageAvailable = false;
+            UpdateConn(_sim.IsConnected);
             AuditLogger.Error(AuditLogger.ErrorDb,
                 "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
-            MessageBox.Show("Не удалось сохранить результат взвешивания.\nОбратитесь к администратору.",
-                "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

@@ -62,6 +62,24 @@ public static class AuditLogger
     private static int?    _pid;
     private static string? _pname;
 
+    public const int QueueCapacity = 30000;
+    private const int RetryDelayMs = 5000;
+    private const int DbTimeoutSeconds = 3;
+    private static readonly object QueueSync = new();
+    private static readonly LinkedList<AuditEntry> AuditQueue = new();
+    private static readonly SemaphoreSlim QueueSignal = new(0);
+    private static int _workerStarted;
+    private static int _databaseAvailable = 1;
+    private static long _droppedCount;
+
+    public readonly record struct AuditQueueStatus(bool IsDatabaseAvailable, int PendingCount, long DroppedCount);
+
+    private sealed record AuditEntry(
+        DateTime TimeCreated, int EventId, string Keywords,
+        string? ObjectServer, string? ObjectType, string? ObjectName, string? ObjectHandle);
+
+    public static event EventHandler<AuditQueueStatus>? QueueStatusChanged;
+
     // ── P/Invoke ──────────────────────────────────────────────────────────────
 
     [StructLayout(LayoutKind.Sequential)]
@@ -114,6 +132,7 @@ public static class AuditLogger
         }
         catch { /* AI unavailable — logger stays as no-op */ }
 
+        EnsureWorkerStarted();
         _ = EnsureTableAsync();
     }
 
@@ -126,6 +145,12 @@ public static class AuditLogger
     public static void Error(int eventId, string objectType, string objectName,
         string objectServer = "Vesy13", string? objectHandle = null)
         => Write(eventId, "Audit Failure", objectType, objectName, objectServer, objectHandle);
+
+    public static AuditQueueStatus GetQueueStatus()
+    {
+        lock (QueueSync)
+            return new AuditQueueStatus(Volatile.Read(ref _databaseAvailable) != 0, AuditQueue.Count, Interlocked.Read(ref _droppedCount));
+    }
 
     public static async Task<List<AuditRecord>> GetLogsAsync(DateTime from, DateTime to)
     {
@@ -166,33 +191,81 @@ public static class AuditLogger
     private static void Write(int eventId, string keywords,
         string? objectType, string? objectName, string? objectServer, string? objectHandle)
     {
-        var now = DateTime.UtcNow;
+        EnsureWorkerStarted();
+        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle);
 
-        try
+        lock (QueueSync)
         {
-            _log.ForContext("EventId",      eventId)
-                .ForContext("Keywords",     keywords)
-                .ForContext("ObjectServer", objectServer)
-                .ForContext("ObjectType",   objectType)
-                .ForContext("ObjectName",   objectName)
-                .ForContext("ObjectHandle", objectHandle)
-                .Information("[{EventId}] {Keywords} | {ObjectType} | {ObjectName}",
-                    eventId, keywords, objectType, objectName);
-        }
-        catch { }
+            if (AuditQueue.Count >= QueueCapacity)
+            {
+                AuditQueue.RemoveFirst();
+                Interlocked.Increment(ref _droppedCount);
+            }
 
-        _ = WriteToDbAsync(now, eventId, keywords, objectServer, objectType, objectName, objectHandle);
+            AuditQueue.AddLast(entry);
+        }
+
+        QueueSignal.Release();
+        PublishQueueStatus();
     }
 
-    private static async Task WriteToDbAsync(
-        DateTime timeCreated, int eventId, string keywords,
-        string? objectServer, string? objectType, string? objectName, string? objectHandle)
+    private static void EnsureWorkerStarted()
+    {
+        if (Interlocked.Exchange(ref _workerStarted, 1) != 0) return;
+        _ = Task.Run(ProcessQueueAsync);
+    }
+
+    private static async Task ProcessQueueAsync()
+    {
+        while (true)
+        {
+            await QueueSignal.WaitAsync();
+
+            AuditEntry entry;
+            lock (QueueSync)
+            {
+                if (AuditQueue.Count == 0) continue;
+                entry = AuditQueue.First!.Value;
+                AuditQueue.RemoveFirst();
+            }
+
+            PublishQueueStatus();
+            if (await TryWriteEntryAsync(entry))
+            {
+                Volatile.Write(ref _databaseAvailable, 1);
+                PublishQueueStatus();
+                continue;
+            }
+
+            Volatile.Write(ref _databaseAvailable, 0);
+            var requeued = false;
+            lock (QueueSync)
+            {
+                if (AuditQueue.Count < QueueCapacity)
+                {
+                    AuditQueue.AddFirst(entry);
+                    requeued = true;
+                }
+                else
+                {
+                    Interlocked.Increment(ref _droppedCount);
+                }
+            }
+
+            PublishQueueStatus();
+            if (requeued) QueueSignal.Release();
+            await Task.Delay(RetryDelayMs);
+        }
+    }
+
+    private static async Task<bool> TryWriteEntryAsync(AuditEntry entry)
     {
         try
         {
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(DbTimeoutSeconds));
             await using var conn = new NpgsqlConnection(ConnStr);
-            await conn.OpenAsync();
-            await conn.ExecuteAsync(@"
+            await conn.OpenAsync(timeout.Token);
+            await conn.ExecuteAsync(new CommandDefinition(@"
                 INSERT INTO audit_log (
                     time_created, event_id, keywords, computer,
                     subject_user_sid, subject_user_name, subject_domain_name, subject_logon_id,
@@ -204,25 +277,53 @@ public static class AuditLogger
                     @objectServer, @objectType, @objectName, @objectHandle,
                     @processId, @processName, @workstation, @ipAddress)",
                 new {
-                    timeCreated  = timeCreated,
-                    eventId      = eventId,
-                    keywords     = keywords,
-                    computer     = _computer,
-                    sid          = _sid,
-                    userName     = _userName,
-                    domainName   = _domainName,
-                    logonId      = _logonId,
-                    objectServer = objectServer,
-                    objectType   = objectType,
-                    objectName   = objectName,
-                    objectHandle = objectHandle,
-                    processId    = _pid,
-                    processName  = _pname,
-                    workstation  = _computer,
-                    ipAddress    = _ipAddress,
-                });
+                    timeCreated = entry.TimeCreated,
+                    eventId = entry.EventId,
+                    keywords = entry.Keywords,
+                    computer = _computer,
+                    sid = _sid,
+                    userName = _userName,
+                    domainName = _domainName,
+                    logonId = _logonId,
+                    objectServer = entry.ObjectServer,
+                    objectType = entry.ObjectType,
+                    objectName = entry.ObjectName,
+                    objectHandle = entry.ObjectHandle,
+                    processId = _pid,
+                    processName = _pname,
+                    workstation = _computer,
+                    ipAddress = _ipAddress,
+                }, cancellationToken: timeout.Token));
+
+            WriteToApplicationInsights(entry);
+            return true;
         }
-        catch { /* never throw from logger */ }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static void WriteToApplicationInsights(AuditEntry entry)
+    {
+        try
+        {
+            _log.ForContext("EventId", entry.EventId)
+                .ForContext("Keywords", entry.Keywords)
+                .ForContext("ObjectServer", entry.ObjectServer)
+                .ForContext("ObjectType", entry.ObjectType)
+                .ForContext("ObjectName", entry.ObjectName)
+                .ForContext("ObjectHandle", entry.ObjectHandle)
+                .Information("[{EventId}] {Keywords} | {ObjectType} | {ObjectName}",
+                    entry.EventId, entry.Keywords, entry.ObjectType, entry.ObjectName);
+        }
+        catch { }
+    }
+
+    private static void PublishQueueStatus()
+    {
+        try { QueueStatusChanged?.Invoke(null, GetQueueStatus()); }
+        catch { }
     }
 
     private static async Task EnsureTableAsync()

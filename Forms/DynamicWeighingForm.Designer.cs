@@ -28,6 +28,7 @@ partial class DynamicWeighingForm
         _statusLayout = new TableLayoutPanel();
         _dotConn = new Panel();
         _lblConn = new Label();
+        _lblStorage = new Label();
         _gbDir.SuspendLayout();
         _layoutMain.SuspendLayout();
         _pnlTop.SuspendLayout();
@@ -314,11 +315,13 @@ partial class DynamicWeighingForm
         // 
         // _statusLayout
         // 
-        _statusLayout.ColumnCount = 2;
+        _statusLayout.ColumnCount = 3;
         _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 26F));
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
         _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         _statusLayout.Controls.Add(_dotConn, 0, 0);
         _statusLayout.Controls.Add(_lblConn, 1, 0);
+        _statusLayout.Controls.Add(_lblStorage, 2, 0);
         _statusLayout.Dock = DockStyle.Fill;
         _statusLayout.Location = new Point(0, 0);
         _statusLayout.Margin = new Padding(4, 5, 4, 5);
@@ -350,7 +353,17 @@ partial class DynamicWeighingForm
         _lblConn.Size = new Size(1085, 42);
         _lblConn.TabIndex = 2;
         _lblConn.Text = "АЦП: —";
-        // 
+        // _lblStorage
+        _lblStorage.AutoSize = true;
+        _lblStorage.Dock = DockStyle.Fill;
+        _lblStorage.Font = new Font("Segoe UI", 12F);
+        _lblStorage.ForeColor = Color.Red;
+        _lblStorage.Location = new Point(226, 5);
+        _lblStorage.Margin = new Padding(0, 5, 0, 0);
+        _lblStorage.Name = "_lblStorage";
+        _lblStorage.Size = new Size(885, 42);
+        _lblStorage.TabIndex = 3;
+        _lblStorage.Text = "";
         // DynamicWeighingForm
         // 
         AutoScaleDimensions = new SizeF(10F, 25F);
@@ -400,4 +413,5 @@ partial class DynamicWeighingForm
     private TableLayoutPanel _statusLayout;
     private Panel         _dotConn;
     private Label         _lblConn;
+    private Label         _lblStorage;
 }
