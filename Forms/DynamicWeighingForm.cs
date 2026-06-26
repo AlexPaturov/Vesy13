@@ -25,6 +25,18 @@ public partial class DynamicWeighingForm : Form
     private SimA04DynamicSample _lastSample;
     private double     _zeroOffsetTonnes;
     private readonly System.Windows.Forms.Timer _adcDiagTimer = new();
+    private readonly object _sampleSync = new();
+    private SimA04DynamicSample _latestSample;
+    private long _latestSampleVersion;
+    private long _displayedSampleVersion;
+    private long _uiSamplesReceived;
+    private long _uiSamplesApplied;
+    private long _lastLoggedRawBytes;
+    private long _lastLoggedSamples;
+    private long _lastLoggedSkippedBytes;
+    private long _lastLoggedUiReceived;
+    private long _lastLoggedUiApplied;
+    private long _lastDynamicDiagAt;
 
     public DynamicWeighingForm()
     {
@@ -37,8 +49,12 @@ public partial class DynamicWeighingForm : Form
         _ldb  = ldb;
         _settings = settings;
         InitializeComponent();
-        _adcDiagTimer.Interval = 500;
-        _adcDiagTimer.Tick += (_, _) => UpdateAdcDiagnostics();
+        _adcDiagTimer.Interval = 100;
+        _adcDiagTimer.Tick += (_, _) =>
+        {
+            RefreshDisplayFromLatestSample();
+            UpdateAdcDiagnostics();
+        };
     }
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
@@ -148,7 +164,7 @@ public partial class DynamicWeighingForm : Form
         ApplyTheme();
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
-        _sim.ConnectionTimeoutMs = 1000;
+        _sim.ConnectionTimeoutMs = 5000;
         SetupGridColumns();
         _sim.SampleReceived    += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
@@ -237,14 +253,31 @@ public partial class DynamicWeighingForm : Form
 
     private void OnSample(object? sender, SimA04DynamicSample sample)
     {
-        if (InvokeRequired) 
-        { 
-            BeginInvoke(() => OnSample(sender, sample)); 
-            return; 
+        lock (_sampleSync)
+        {
+            _latestSample = sample;
+            _latestSampleVersion++;
         }
 
+        Interlocked.Increment(ref _uiSamplesReceived);
+    }
+
+    private void RefreshDisplayFromLatestSample()
+    {
+        SimA04DynamicSample sample;
+        long version;
+
+        lock (_sampleSync)
+        {
+            if (_latestSampleVersion == _displayedSampleVersion) return;
+            sample = _latestSample;
+            version = _latestSampleVersion;
+        }
+
+        _displayedSampleVersion = version;
+        Interlocked.Increment(ref _uiSamplesApplied);
         _lastSample = sample;
-        _lblValue.Text      = ToTonnes(ActiveCode(sample)).ToString("F2");
+        _lblValue.Text = ToTonnes(ActiveCode(sample)).ToString("F2");
         _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
 
         if (_state == WeighState.Bogie1Captured)
@@ -276,16 +309,56 @@ public partial class DynamicWeighingForm : Form
     {
         if (DesignMode || _sim is null) return;
 
+        WriteDynamicDiagnostics();
+
         if (!_sim.IsPortOpen)
         {
+            _dotConn.BackColor = Color.Red;
+            _lblConn.ForeColor = Color.Red;
             _lblConn.Text = "АЦП: порт закрыт";
             return;
         }
 
-        var state = _sim.IsConnected
+        var connected = _sim.IsConnected;
+        _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
+        _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
+        _lblConn.Text = connected
             ? $"АЦП: {_sim.PortName}"
             : $"АЦП: нет валидного потока ({_sim.PortName})";
-        _lblConn.Text = state;
+    }
+
+    private void WriteDynamicDiagnostics()
+    {
+        const long intervalMs = 5000;
+        var now = Environment.TickCount64;
+        if (_lastDynamicDiagAt != 0 && now - _lastDynamicDiagAt < intervalMs) return;
+
+        var elapsedMs = _lastDynamicDiagAt == 0 ? intervalMs : now - _lastDynamicDiagAt;
+        _lastDynamicDiagAt = now;
+
+        var rawBytes = _sim.RawBytesReceived;
+        var samples = _sim.SamplesReceived;
+        var skippedBytes = _sim.SkippedBytes;
+        var received = Interlocked.Read(ref _uiSamplesReceived);
+        var applied = Interlocked.Read(ref _uiSamplesApplied);
+
+        var rawBytesDelta = Delta(rawBytes, ref _lastLoggedRawBytes);
+        var samplesDelta = Delta(samples, ref _lastLoggedSamples);
+        var skippedBytesDelta = Delta(skippedBytes, ref _lastLoggedSkippedBytes);
+        var receivedDelta = Delta(received, ref _lastLoggedUiReceived);
+        var appliedDelta = Delta(applied, ref _lastLoggedUiApplied);
+
+        AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamic",
+            $"periodMs={elapsedMs}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedBytesDelta}; " +
+            $"uiReceived={receivedDelta}; uiApplied={appliedDelta}",
+            "SimA04", _sim.PortName);
+    }
+
+    private static long Delta(long current, ref long previous)
+    {
+        var delta = current >= previous ? current - previous : current;
+        previous = current;
+        return delta;
     }
 
     private void UpdateChannelLabel() =>
@@ -313,6 +386,7 @@ public partial class DynamicWeighingForm : Form
     private void HandleWeighPress()
     {
         if (!_btnWeigh.Enabled) return;
+        RefreshDisplayFromLatestSample();
         if (!ValidateBeforeWeigh()) return;
 
         if (_state == WeighState.Idle)
@@ -362,6 +436,7 @@ public partial class DynamicWeighingForm : Form
     private void OnZeroClick()
     {
         if (!ValidateBeforeWeigh()) return;
+        RefreshDisplayFromLatestSample();
 
         double current = ReadRawTonnes(ActiveCode(_lastSample));
         double limit = _settings.Current.OperatorZeroLimitTonnes;

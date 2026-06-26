@@ -12,12 +12,13 @@ public class SimA04ReaderDynamic : IDisposable
     private const byte SetByte = 126;
     private const byte ReqByte = 254;
     private const int SampleSize = 5;
+    private const int ReconnectIntervalMs = 5000;
 
     public event EventHandler<SimA04DynamicSample>? SampleReceived;
     public event EventHandler<byte[]>? RawSampleReceived;
     public event EventHandler<bool>? ConnectionChanged;
 
-    public int ConnectionTimeoutMs { get; set; } = 1000;
+    public int ConnectionTimeoutMs { get; set; } = 5000;
 
     private SerialPort? _port;
     private readonly byte[] _sample = new byte[SampleSize];
@@ -26,6 +27,8 @@ public class SimA04ReaderDynamic : IDisposable
     private volatile bool _streaming;
     private int _sampleBytes;
     private DateTime _lastValidSampleAt = DateTime.MinValue;
+    private DateTime _lastReconnectAttemptAt = DateTime.MinValue;
+    private int _reconnectInProgress;
 
     public bool IsPortOpen { get; private set; }
     public bool IsConnected { get; private set; }
@@ -60,9 +63,7 @@ public class SimA04ReaderDynamic : IDisposable
         _streaming = true;
         SetConnected(false, force: true);
         _watchdogTimer = new System.Threading.Timer(OnWatchdogTimer, null, TimeSpan.FromMilliseconds(200), TimeSpan.FromMilliseconds(200));
-        Send(SetByte);
-        Thread.Sleep(50);
-        Send(ReqByte);
+        RequestStream();
     }
 
     public void Close()
@@ -141,8 +142,29 @@ public class SimA04ReaderDynamic : IDisposable
     {
         if (!_streaming) return;
 
-        if (IsConnected && (DateTime.UtcNow - _lastValidSampleAt).TotalMilliseconds > ConnectionTimeoutMs)
+        var now = DateTime.UtcNow;
+        if (IsConnected && (now - _lastValidSampleAt).TotalMilliseconds > ConnectionTimeoutMs)
             SetConnected(false);
+
+        if (!IsConnected && (now - _lastReconnectAttemptAt).TotalMilliseconds >= ReconnectIntervalMs)
+            RequestStream();
+    }
+
+    private void RequestStream()
+    {
+        if (Interlocked.Exchange(ref _reconnectInProgress, 1) != 0) return;
+
+        try
+        {
+            _lastReconnectAttemptAt = DateTime.UtcNow;
+            Send(SetByte);
+            Thread.Sleep(50);
+            if (_streaming) Send(ReqByte);
+        }
+        finally
+        {
+            Volatile.Write(ref _reconnectInProgress, 0);
+        }
     }
 
     private void SetConnected(bool connected, bool force = false)
