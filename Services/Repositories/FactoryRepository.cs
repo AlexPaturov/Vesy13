@@ -89,11 +89,15 @@ public class FactoryRepository
         await conn.OpenAsync();
 
         const string sql = @"
-            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
             FROM (
-                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV FROM GPRI WHERE DT >= @cutoff
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1 
+                FROM GPRI 
+                WHERE DT >= @cutoff
                 UNION ALL
-                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV FROM GRAS WHERE DT >= @cutoff
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1 
+                FROM GRAS 
+                WHERE DT >= @cutoff
             ) t
             ORDER BY DT1 DESC, VR1 DESC";
 
@@ -150,13 +154,13 @@ public class FactoryRepository
         await conn.OpenAsync();
 
         const string sql = @"
-            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
             FROM (
-                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
                 FROM GPRI
                 WHERE DT = @date AND CAST(VR AS TIME) = CAST(@time AS TIME)
                 UNION ALL
-                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
                 FROM GRAS
                 WHERE DT = @date AND CAST(VR AS TIME) = CAST(@time AS TIME)
             ) t
@@ -213,13 +217,13 @@ public class FactoryRepository
         await conn.OpenAsync();
 
         const string sql = @"
-            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+            SELECT ID, SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
             FROM (
-                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                SELECT ID, 'GPRI' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
                 FROM GPRI
                 WHERE DT = @date
                 UNION ALL
-                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV
+                SELECT ID, 'GRAS' AS SRC, DT, VR, NVAG, NDOK, GRUZ, BRUTTO, TAR_BRS, TAR_DOK, NETTO, NPP, POTR, PLAT, CEX, VR_PRV, DT1, VR1
                 FROM GRAS
                 WHERE DT = @date
             ) t
