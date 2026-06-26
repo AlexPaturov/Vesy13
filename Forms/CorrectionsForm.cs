@@ -368,7 +368,7 @@ public partial class CorrectionsForm : Form
             hadError = true;
             string op = trainMode ? "GetAllByTrainTimeAsync" : "GetAllByDateAsync";
             AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex.Message);
-            MessageBox.Show("Не удалось загрузить список ожидающих взвешиваний.\nОбратитесь к администратору.", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Не удалось загрузить список не обработанных взвешиваний.\nОбратитесь к администратору.", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         try
@@ -565,8 +565,7 @@ public partial class CorrectionsForm : Form
             var (pendingCount, doneCount, hadError) = await LoadBothGridsAsync();
             if (!hadError && pendingCount == 0 && doneCount == 0)
             {
-                MessageBox.Show("Нет вагонов за данный период.", "Обновление",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Нет вагонов за данный период.", "Обновление", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         finally
@@ -781,10 +780,8 @@ public partial class CorrectionsForm : Form
 
         if (IsOverCapacity(_selected))
         {
-            MessageBox.Show("Превышен максимально допустимый порог взвешивания.", "Перенос",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            AuditLogger.Error(AuditLogger.ErrorGeneral, "LocalWagon",
-                $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
+            MessageBox.Show("Превышен максимально допустимый порог взвешивания.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            AuditLogger.Error(AuditLogger.ErrorGeneral, "LocalWagon", $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
             ClearTopPanel(clearGridSelection: false);
             return;
         }
@@ -794,7 +791,7 @@ public partial class CorrectionsForm : Form
         string nvag = _tbNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
-            MessageBox.Show("Введите номер вагона (NVAG).", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Введите номер вагона.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             _tbNvag.Focus();
             return;
         }
@@ -831,15 +828,12 @@ public partial class CorrectionsForm : Form
             _fdb ??= new FactoryRepository();
             await _fdb.InsertAsync(transfer);
             RememberLastProcessedFirebirdRecord(transfer);
-            AuditLogger.Action(AuditLogger.RecordTransferred,
-                "FirebirdRecord", $"{transfer.Table} nvag={transfer.Nvag}",
-                "Firebird", _selected.Id.ToString());
+            AuditLogger.Action(AuditLogger.RecordTransferred, "FirebirdRecord", $"{transfer.Table} nvag={transfer.Nvag}", "Firebird", _selected.Id.ToString());
         }
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", transfer.Table, "Firebird", ex.Message);
-            MessageBox.Show("Не удалось перенести запись в систему учёта.\nОбратитесь к администратору.",
-                "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось перенести запись в систему учёта.\nОбратитесь к администратору.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnTransfer.Enabled = true;
             return;
         }
@@ -869,7 +863,7 @@ public partial class CorrectionsForm : Form
         string nvag = _tbNvag.Text.Trim();
         if (string.IsNullOrEmpty(nvag))
         {
-            MessageBox.Show("Введите номер вагона (NVAG).", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Введите номер вагона", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             _tbNvag.Focus();
             return;
         }
@@ -878,7 +872,7 @@ public partial class CorrectionsForm : Form
         decimal? selectedTara = _cmbTar.SelectedItem is TaraOption taraOpt ? taraOpt.Brutto : null;
         if (isTara && !selectedTara.HasValue)
         {
-            MessageBox.Show("Выберите значение тары.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Выберите значение тары", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             _cmbTar.Focus();
             return;
         }
@@ -910,16 +904,13 @@ public partial class CorrectionsForm : Form
             _fdb ??= new FactoryRepository();
             await _fdb.UpdateAsync(updated);
             RememberLastProcessedFirebirdRecord(updated);
-            AuditLogger.Action(AuditLogger.RecordUpdated,
-                "FirebirdRecord", $"{updated.Table} nvag={updated.Nvag}",
-                "Firebird", updated.Id.ToString());
+            AuditLogger.Action(AuditLogger.RecordUpdated, "FirebirdRecord", $"{updated.Table} nvag={updated.Nvag}", "Firebird", updated.Id.ToString());
             await LoadBothGridsAsync();
         }
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", _selectedFb?.Table ?? "GPRI", "Firebird", ex.Message);
-            MessageBox.Show("Не удалось сохранить изменения в системе учёта.\nОбратитесь к администратору.",
-                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось сохранить изменения в системе учёта.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnSave.Enabled = true;
         }
     }
