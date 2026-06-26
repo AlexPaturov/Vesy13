@@ -14,32 +14,84 @@ partial class DynamicWeighingForm
         _layoutMain = new TableLayoutPanel();
         _pnlTop = new Panel();
         _pnlDisplay = new Panel();
-        _lblValue = new Label();
-        _lblUnit = new Label();
-        _lblStatus = new Label();
-        _lblBogie1Caption = new Label();
-        _lblBogie1Value = new Label();
-        _lblBogie2Caption = new Label();
         _lblBogie2Value = new Label();
-        _lblTrainInfo = new Label();
+        _lblBogie2Caption = new Label();
+        _lblBogie1Value = new Label();
+        _lblBogie1Caption = new Label();
+        _lblValue = new Label();
+        _pnlActions = new Panel();
         _btnWeigh = new Button();
         _btnZero = new Button();
         _btnFinish = new Button();
-        _pnlActions = new Panel();
         _grid = new DataGridView();
         _pnlStatusBar = new Panel();
         _statusLayout = new TableLayoutPanel();
         _dotConn = new Panel();
         _lblConn = new Label();
+        _gbDir.SuspendLayout();
         _layoutMain.SuspendLayout();
         _pnlTop.SuspendLayout();
-        _gbDir.SuspendLayout();
         _pnlDisplay.SuspendLayout();
         _pnlActions.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         _pnlStatusBar.SuspendLayout();
         _statusLayout.SuspendLayout();
         SuspendLayout();
+        // 
+        // _gbDir
+        // 
+        _gbDir.Controls.Add(_rbPlus);
+        _gbDir.Controls.Add(_rbMinus);
+        _gbDir.Dock = DockStyle.Left;
+        _gbDir.Font = new Font("Segoe UI", 12F);
+        _gbDir.ForeColor = Color.FromArgb(46, 58, 70);
+        _gbDir.Location = new Point(0, 0);
+        _gbDir.Margin = new Padding(4, 5, 4, 5);
+        _gbDir.Name = "_gbDir";
+        _gbDir.Padding = new Padding(4, 5, 4, 5);
+        _gbDir.Size = new Size(457, 77);
+        _gbDir.TabIndex = 0;
+        _gbDir.TabStop = false;
+        _gbDir.Text = "Направление движения состава";
+        // 
+        // _rbPlus
+        // 
+        _rbPlus.AutoSize = true;
+        _rbPlus.Checked = true;
+        _rbPlus.Font = new Font("Segoe UI", 10F);
+        _rbPlus.ForeColor = Color.FromArgb(46, 58, 70);
+        _rbPlus.Location = new Point(17, 37);
+        _rbPlus.Margin = new Padding(4, 5, 4, 5);
+        _rbPlus.Name = "_rbPlus";
+        _rbPlus.Size = new Size(85, 32);
+        _rbPlus.TabIndex = 0;
+        _rbPlus.TabStop = true;
+        _rbPlus.Text = "→ (+)";
+        // 
+        // _rbMinus
+        // 
+        _rbMinus.AutoSize = true;
+        _rbMinus.Font = new Font("Segoe UI", 10F);
+        _rbMinus.ForeColor = Color.FromArgb(46, 58, 70);
+        _rbMinus.Location = new Point(186, 37);
+        _rbMinus.Margin = new Padding(4, 5, 4, 5);
+        _rbMinus.Name = "_rbMinus";
+        _rbMinus.Size = new Size(81, 32);
+        _rbMinus.TabIndex = 1;
+        _rbMinus.Text = "← (–)";
+        // 
+        // _lblChannel
+        // 
+        _lblChannel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        _lblChannel.AutoSize = true;
+        _lblChannel.Font = new Font("Segoe UI", 10F);
+        _lblChannel.ForeColor = Color.FromArgb(102, 112, 124);
+        _lblChannel.Location = new Point(472, 37);
+        _lblChannel.Margin = new Padding(0);
+        _lblChannel.Name = "_lblChannel";
+        _lblChannel.Size = new Size(0, 28);
+        _lblChannel.TabIndex = 1;
+        _lblChannel.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _layoutMain
         // 
@@ -51,14 +103,15 @@ partial class DynamicWeighingForm
         _layoutMain.Controls.Add(_grid, 0, 3);
         _layoutMain.Dock = DockStyle.Fill;
         _layoutMain.Location = new Point(0, 0);
+        _layoutMain.Margin = new Padding(4, 5, 4, 5);
         _layoutMain.Name = "_layoutMain";
-        _layoutMain.Padding = new Padding(8, 8, 8, 8);
+        _layoutMain.Padding = new Padding(11, 13, 11, 13);
         _layoutMain.RowCount = 4;
-        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));
-        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 158F));
-        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 96F));
+        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
+        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 263F));
+        _layoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 160F));
         _layoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _layoutMain.Size = new Size(673, 629);
+        _layoutMain.Size = new Size(953, 1001);
         _layoutMain.TabIndex = 0;
         // 
         // _pnlTop
@@ -66,190 +119,110 @@ partial class DynamicWeighingForm
         _pnlTop.Controls.Add(_gbDir);
         _pnlTop.Controls.Add(_lblChannel);
         _pnlTop.Dock = DockStyle.Fill;
-        _pnlTop.Margin = new Padding(0, 0, 0, 8);
+        _pnlTop.Location = new Point(11, 13);
+        _pnlTop.Margin = new Padding(0, 0, 0, 13);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(657, 54);
+        _pnlTop.Size = new Size(931, 77);
         _pnlTop.TabIndex = 1;
-        // 
-        // _gbDir
-        // 
-        _gbDir.Controls.Add(_rbPlus);
-        _gbDir.Controls.Add(_rbMinus);
-        _gbDir.Dock = DockStyle.Left;
-        _gbDir.Font = UiFonts.Body;
-        _gbDir.ForeColor = UiColors.TextPrimary;
-        _gbDir.Location = new Point(0, 0);
-        _gbDir.Name = "_gbDir";
-        _gbDir.Size = new Size(320, 54);
-        _gbDir.TabIndex = 0;
-        _gbDir.TabStop = false;
-        _gbDir.Text = "Направление движения состава";
-        // 
-        // _rbPlus
-        // 
-        _rbPlus.AutoSize = true;
-        _rbPlus.Checked = true;
-        _rbPlus.Font = UiFonts.Medium;
-        _rbPlus.ForeColor = UiColors.TextPrimary;
-        _rbPlus.Location = new Point(12, 22);
-        _rbPlus.Name = "_rbPlus";
-        _rbPlus.Size = new Size(61, 23);
-        _rbPlus.TabIndex = 0;
-        _rbPlus.TabStop = true;
-        _rbPlus.Text = "→ (+)";
-        _rbPlus.CheckedChanged += Direction_CheckedChanged;
-        // 
-        // _rbMinus
-        // 
-        _rbMinus.AutoSize = true;
-        _rbMinus.Font = UiFonts.Medium;
-        _rbMinus.ForeColor = UiColors.TextPrimary;
-        _rbMinus.Location = new Point(130, 22);
-        _rbMinus.Name = "_rbMinus";
-        _rbMinus.Size = new Size(58, 23);
-        _rbMinus.TabIndex = 1;
-        _rbMinus.Text = "← (–)";
-        _rbMinus.CheckedChanged += Direction_CheckedChanged;
-        // 
-        // _lblChannel
-        // 
-        _lblChannel.AutoSize = true;
-        _lblChannel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        _lblChannel.Font = UiFonts.Medium;
-        _lblChannel.ForeColor = UiColors.TextMuted;
-        _lblChannel.Location = new Point(336, 22);
-        _lblChannel.Margin = new Padding(0);
-        _lblChannel.Name = "_lblChannel";
-        _lblChannel.Size = new Size(0, 19);
-        _lblChannel.TabIndex = 1;
-        _lblChannel.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _pnlDisplay
         // 
-        _pnlDisplay.BackColor = UiColors.DisplayBackground;
-        _pnlDisplay.Controls.Add(_lblTrainInfo);
+        _pnlDisplay.BackColor = Color.FromArgb(5, 8, 12);
         _pnlDisplay.Controls.Add(_lblBogie2Value);
         _pnlDisplay.Controls.Add(_lblBogie2Caption);
         _pnlDisplay.Controls.Add(_lblBogie1Value);
         _pnlDisplay.Controls.Add(_lblBogie1Caption);
         _pnlDisplay.Controls.Add(_lblValue);
-        _pnlDisplay.Controls.Add(_lblUnit);
-        _pnlDisplay.Controls.Add(_lblStatus);
         _pnlDisplay.Dock = DockStyle.Fill;
-        _pnlDisplay.Margin = new Padding(0, 0, 0, 8);
+        _pnlDisplay.Location = new Point(11, 103);
+        _pnlDisplay.Margin = new Padding(0, 0, 0, 13);
         _pnlDisplay.Name = "_pnlDisplay";
-        _pnlDisplay.Size = new Size(657, 158);
+        _pnlDisplay.Size = new Size(931, 250);
         _pnlDisplay.TabIndex = 2;
+        // 
+        // _lblBogie2Value
+        // 
+        _lblBogie2Value.Font = new Font("Segoe UI", 10F);
+        _lblBogie2Value.ForeColor = Color.FromArgb(215, 224, 234);
+        _lblBogie2Value.Location = new Point(754, 147);
+        _lblBogie2Value.Margin = new Padding(4, 0, 4, 0);
+        _lblBogie2Value.Name = "_lblBogie2Value";
+        _lblBogie2Value.Size = new Size(160, 42);
+        _lblBogie2Value.TabIndex = 6;
+        _lblBogie2Value.Text = "—";
+        _lblBogie2Value.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblBogie2Caption
+        // 
+        _lblBogie2Caption.Font = new Font("Segoe UI", 12F);
+        _lblBogie2Caption.ForeColor = Color.FromArgb(215, 224, 234);
+        _lblBogie2Caption.Location = new Point(754, 113);
+        _lblBogie2Caption.Margin = new Padding(4, 0, 4, 0);
+        _lblBogie2Caption.Name = "_lblBogie2Caption";
+        _lblBogie2Caption.Size = new Size(160, 33);
+        _lblBogie2Caption.TabIndex = 5;
+        _lblBogie2Caption.Text = "Тележка 2";
+        _lblBogie2Caption.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblBogie1Value
+        // 
+        _lblBogie1Value.Font = new Font("Segoe UI", 10F);
+        _lblBogie1Value.ForeColor = Color.FromArgb(215, 224, 234);
+        _lblBogie1Value.Location = new Point(754, 60);
+        _lblBogie1Value.Margin = new Padding(4, 0, 4, 0);
+        _lblBogie1Value.Name = "_lblBogie1Value";
+        _lblBogie1Value.Size = new Size(160, 42);
+        _lblBogie1Value.TabIndex = 4;
+        _lblBogie1Value.Text = "—";
+        _lblBogie1Value.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblBogie1Caption
+        // 
+        _lblBogie1Caption.Font = new Font("Segoe UI", 12F);
+        _lblBogie1Caption.ForeColor = Color.FromArgb(215, 224, 234);
+        _lblBogie1Caption.Location = new Point(754, 27);
+        _lblBogie1Caption.Margin = new Padding(4, 0, 4, 0);
+        _lblBogie1Caption.Name = "_lblBogie1Caption";
+        _lblBogie1Caption.Size = new Size(160, 33);
+        _lblBogie1Caption.TabIndex = 3;
+        _lblBogie1Caption.Text = "Тележка 1";
+        _lblBogie1Caption.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _lblValue
         // 
-        _lblValue.Font = UiFonts.Display;
-        _lblValue.ForeColor = UiColors.TextOnDarkMuted;
-        _lblValue.Location = new Point(8, 4);
+        _lblValue.Font = new Font("Courier New", 60F, FontStyle.Bold);
+        _lblValue.ForeColor = Color.FromArgb(215, 224, 234);
+        _lblValue.Location = new Point(11, 7);
+        _lblValue.Margin = new Padding(4, 0, 4, 0);
         _lblValue.Name = "_lblValue";
-        _lblValue.Size = new Size(450, 106);
+        _lblValue.Size = new Size(643, 177);
         _lblValue.TabIndex = 0;
         _lblValue.Text = "—";
         _lblValue.TextAlign = ContentAlignment.MiddleRight;
         // 
-        // _lblUnit
-        // 
-        _lblUnit.Font = UiFonts.UnitLabel;
-        _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
-        _lblUnit.Location = new Point(462, 60);
-        _lblUnit.Name = "_lblUnit";
-        _lblUnit.Size = new Size(60, 62);
-        _lblUnit.TabIndex = 1;
-        _lblUnit.Text = "т";
-        _lblUnit.TextAlign = ContentAlignment.BottomLeft;
-        // 
-        // _lblStatus
-        // 
-        _lblStatus.Font = UiFonts.Medium;
-        _lblStatus.ForeColor = UiColors.TextOnDarkMuted;
-        _lblStatus.Location = new Point(8, 118);
-        _lblStatus.Name = "_lblStatus";
-        _lblStatus.Size = new Size(500, 34);
-        _lblStatus.TabIndex = 2;
-        _lblStatus.Text = "Готов к взвешиванию  —  Тележка 1";
-        _lblStatus.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _lblBogie1Caption
-        //
-        _lblBogie1Caption.Font = UiFonts.Body;
-        _lblBogie1Caption.ForeColor = UiColors.TextOnDarkMuted;
-        _lblBogie1Caption.Location = new Point(528, 16);
-        _lblBogie1Caption.Name = "_lblBogie1Caption";
-        _lblBogie1Caption.Size = new Size(112, 20);
-        _lblBogie1Caption.TabIndex = 3;
-        _lblBogie1Caption.Text = "Тележка 1";
-        _lblBogie1Caption.TextAlign = ContentAlignment.MiddleLeft;
-        //
-        // _lblBogie1Value
-        //
-        _lblBogie1Value.Font = UiFonts.Medium;
-        _lblBogie1Value.ForeColor = UiColors.TextOnDarkMuted;
-        _lblBogie1Value.Location = new Point(528, 36);
-        _lblBogie1Value.Name = "_lblBogie1Value";
-        _lblBogie1Value.Size = new Size(112, 25);
-        _lblBogie1Value.TabIndex = 4;
-        _lblBogie1Value.Text = "—";
-        _lblBogie1Value.TextAlign = ContentAlignment.MiddleLeft;
-        //
-        // _lblBogie2Caption
-        //
-        _lblBogie2Caption.Font = UiFonts.Body;
-        _lblBogie2Caption.ForeColor = UiColors.TextOnDarkMuted;
-        _lblBogie2Caption.Location = new Point(528, 68);
-        _lblBogie2Caption.Name = "_lblBogie2Caption";
-        _lblBogie2Caption.Size = new Size(112, 20);
-        _lblBogie2Caption.TabIndex = 5;
-        _lblBogie2Caption.Text = "Тележка 2";
-        _lblBogie2Caption.TextAlign = ContentAlignment.MiddleLeft;
-        //
-        // _lblBogie2Value
-        //
-        _lblBogie2Value.Font = UiFonts.Medium;
-        _lblBogie2Value.ForeColor = UiColors.TextOnDarkMuted;
-        _lblBogie2Value.Location = new Point(528, 88);
-        _lblBogie2Value.Name = "_lblBogie2Value";
-        _lblBogie2Value.Size = new Size(112, 25);
-        _lblBogie2Value.TabIndex = 6;
-        _lblBogie2Value.Text = "—";
-        _lblBogie2Value.TextAlign = ContentAlignment.MiddleLeft;
-        //
-        // _lblTrainInfo
-        //
-        _lblTrainInfo.Font = UiFonts.Body;
-        _lblTrainInfo.ForeColor = UiColors.TextOnDarkMuted;
-        _lblTrainInfo.Location = new Point(528, 118);
-        _lblTrainInfo.Name = "_lblTrainInfo";
-        _lblTrainInfo.Size = new Size(112, 34);
-        _lblTrainInfo.TabIndex = 7;
-        _lblTrainInfo.Text = "Состав: —";
-        _lblTrainInfo.TextAlign = ContentAlignment.MiddleLeft;
-        //
         // _pnlActions
         // 
         _pnlActions.Controls.Add(_btnWeigh);
         _pnlActions.Controls.Add(_btnZero);
         _pnlActions.Controls.Add(_btnFinish);
         _pnlActions.Dock = DockStyle.Fill;
-        _pnlActions.Margin = new Padding(0, 0, 0, 8);
+        _pnlActions.Location = new Point(11, 366);
+        _pnlActions.Margin = new Padding(0, 0, 0, 13);
         _pnlActions.Name = "_pnlActions";
-        _pnlActions.Size = new Size(657, 96);
+        _pnlActions.Size = new Size(931, 147);
         _pnlActions.TabIndex = 3;
         // 
         // _btnWeigh
         // 
         _btnWeigh.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        _btnWeigh.BackColor = UiColors.PrimaryAction;
+        _btnWeigh.BackColor = Color.FromArgb(47, 111, 237);
         _btnWeigh.FlatStyle = FlatStyle.Flat;
-        _btnWeigh.Font = UiFonts.WeighButton;
-        _btnWeigh.ForeColor = UiColors.TextOnDark;
+        _btnWeigh.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+        _btnWeigh.ForeColor = Color.FromArgb(255, 255, 255);
         _btnWeigh.Location = new Point(0, 0);
+        _btnWeigh.Margin = new Padding(4, 5, 4, 5);
         _btnWeigh.Name = "_btnWeigh";
-        _btnWeigh.Size = new Size(657, 54);
+        _btnWeigh.Size = new Size(931, 90);
         _btnWeigh.TabIndex = 3;
         _btnWeigh.Text = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.UseVisualStyleBackColor = false;
@@ -257,13 +230,14 @@ partial class DynamicWeighingForm
         // 
         // _btnZero
         // 
-        _btnZero.BackColor = UiColors.NeutralAction;
+        _btnZero.BackColor = Color.FromArgb(217, 226, 236);
         _btnZero.FlatStyle = FlatStyle.Flat;
-        _btnZero.Font = UiFonts.Medium;
-        _btnZero.ForeColor = UiColors.TextPrimary;
-        _btnZero.Location = new Point(0, 58);
+        _btnZero.Font = new Font("Segoe UI", 10F);
+        _btnZero.ForeColor = Color.FromArgb(46, 58, 70);
+        _btnZero.Location = new Point(0, 97);
+        _btnZero.Margin = new Padding(4, 5, 4, 5);
         _btnZero.Name = "_btnZero";
-        _btnZero.Size = new Size(100, 32);
+        _btnZero.Size = new Size(143, 53);
         _btnZero.TabIndex = 4;
         _btnZero.Text = "Ноль";
         _btnZero.UseVisualStyleBackColor = false;
@@ -271,13 +245,14 @@ partial class DynamicWeighingForm
         // 
         // _btnFinish
         // 
-        _btnFinish.BackColor = UiColors.DangerAction;
+        _btnFinish.BackColor = Color.FromArgb(179, 58, 26);
         _btnFinish.FlatStyle = FlatStyle.Flat;
-        _btnFinish.Font = UiFonts.Medium;
-        _btnFinish.ForeColor = UiColors.TextOnDark;
-        _btnFinish.Location = new Point(108, 58);
+        _btnFinish.Font = new Font("Segoe UI", 10F);
+        _btnFinish.ForeColor = Color.FromArgb(255, 255, 255);
+        _btnFinish.Location = new Point(154, 97);
+        _btnFinish.Margin = new Padding(4, 5, 4, 5);
         _btnFinish.Name = "_btnFinish";
-        _btnFinish.Size = new Size(244, 32);
+        _btnFinish.Size = new Size(349, 53);
         _btnFinish.TabIndex = 5;
         _btnFinish.Text = "Завершить состав";
         _btnFinish.UseVisualStyleBackColor = false;
@@ -288,111 +263,116 @@ partial class DynamicWeighingForm
         _grid.AllowUserToAddRows = false;
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeRows = false;
-        dataGridViewCellStyle1.BackColor = UiColors.GridAlternateRow;
-        dataGridViewCellStyle1.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle1.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle1.SelectionForeColor = UiColors.GridSelectionText;
+        dataGridViewCellStyle1.BackColor = Color.FromArgb(240, 244, 248);
+        dataGridViewCellStyle1.ForeColor = Color.FromArgb(46, 58, 70);
+        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(35, 49, 63);
         _grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-        _grid.BackgroundColor = UiColors.Surface;
-        _grid.BorderStyle = BorderStyle.FixedSingle;
-        dataGridViewCellStyle2.BackColor = UiColors.GridHeaderBack;
-        dataGridViewCellStyle2.Font = UiFonts.GridHeader;
-        dataGridViewCellStyle2.ForeColor = UiColors.GridHeaderText;
-        dataGridViewCellStyle2.SelectionBackColor = UiColors.GridHeaderBack;
-        dataGridViewCellStyle2.SelectionForeColor = UiColors.GridHeaderText;
+        _grid.BackgroundColor = Color.FromArgb(247, 249, 252);
+        dataGridViewCellStyle2.BackColor = Color.FromArgb(221, 230, 240);
+        dataGridViewCellStyle2.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+        dataGridViewCellStyle2.ForeColor = Color.FromArgb(35, 49, 63);
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(221, 230, 240);
+        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(35, 49, 63);
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
         _grid.ColumnHeadersHeight = 40;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.Dock = DockStyle.Fill;
         _grid.EnableHeadersVisualStyles = false;
-        _grid.Font = UiFonts.GridBody;
-        _grid.GridColor = UiColors.GridLine;
-        _grid.Location = new Point(8, 270);
+        _grid.Font = new Font("Segoe UI", 12F);
+        _grid.GridColor = Color.FromArgb(200, 208, 218);
+        _grid.Location = new Point(15, 531);
+        _grid.Margin = new Padding(4, 5, 4, 5);
         _grid.Name = "_grid";
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
-        dataGridViewCellStyle3.BackColor = UiColors.GridAlternateRow;
-        dataGridViewCellStyle3.ForeColor = UiColors.TextPrimary;
-        dataGridViewCellStyle3.SelectionBackColor = UiColors.GridSelectionBack;
-        dataGridViewCellStyle3.SelectionForeColor = UiColors.GridSelectionText;
+        _grid.RowHeadersWidth = 62;
+        dataGridViewCellStyle3.BackColor = Color.FromArgb(240, 244, 248);
+        dataGridViewCellStyle3.ForeColor = Color.FromArgb(46, 58, 70);
+        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(35, 49, 63);
         _grid.RowsDefaultCellStyle = dataGridViewCellStyle3;
         _grid.RowTemplate.Height = 28;
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _grid.Size = new Size(657, 351);
+        _grid.Size = new Size(923, 452);
         _grid.TabIndex = 6;
         // 
         // _pnlStatusBar
         // 
-        _pnlStatusBar.BackColor = UiColors.StatusBar;
+        _pnlStatusBar.BackColor = Color.FromArgb(217, 226, 236);
         _pnlStatusBar.Controls.Add(_statusLayout);
         _pnlStatusBar.Dock = DockStyle.Bottom;
-        _pnlStatusBar.Location = new Point(0, 595);
+        _pnlStatusBar.Location = new Point(0, 1001);
+        _pnlStatusBar.Margin = new Padding(4, 5, 4, 5);
         _pnlStatusBar.Name = "_pnlStatusBar";
-        _pnlStatusBar.Size = new Size(673, 28);
+        _pnlStatusBar.Size = new Size(953, 47);
         _pnlStatusBar.TabIndex = 7;
         // 
         // _statusLayout
         // 
         _statusLayout.ColumnCount = 2;
-        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 18F));
+        _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 26F));
         _statusLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _statusLayout.Controls.Add(_dotConn, 0, 0);
+        _statusLayout.Controls.Add(_lblConn, 1, 0);
         _statusLayout.Dock = DockStyle.Fill;
         _statusLayout.Location = new Point(0, 0);
+        _statusLayout.Margin = new Padding(4, 5, 4, 5);
         _statusLayout.Name = "_statusLayout";
         _statusLayout.RowCount = 1;
         _statusLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _statusLayout.Size = new Size(673, 28);
+        _statusLayout.Size = new Size(953, 47);
         _statusLayout.TabIndex = 0;
-        _statusLayout.Controls.Add(_dotConn, 0, 0);
-        _statusLayout.Controls.Add(_lblConn, 1, 0);
         // 
         // _dotConn
         // 
-        _dotConn.BackColor = UiColors.Disconnected;
+        _dotConn.BackColor = Color.FromArgb(153, 153, 153);
         _dotConn.Dock = DockStyle.Fill;
-        _dotConn.Margin = new Padding(4, 9, 4, 9);
+        _dotConn.Location = new Point(6, 15);
+        _dotConn.Margin = new Padding(6, 15, 6, 15);
         _dotConn.Name = "_dotConn";
-        _dotConn.Size = new Size(10, 10);
+        _dotConn.Size = new Size(14, 17);
         _dotConn.TabIndex = 1;
         // 
         // _lblConn
         // 
         _lblConn.AutoSize = true;
         _lblConn.Dock = DockStyle.Fill;
-        _lblConn.Font = UiFonts.Body;
-        _lblConn.ForeColor = UiColors.TextMuted;
-        _lblConn.Margin = new Padding(0, 3, 0, 0);
+        _lblConn.Font = new Font("Segoe UI", 12F);
+        _lblConn.ForeColor = Color.FromArgb(102, 112, 124);
+        _lblConn.Location = new Point(26, 5);
+        _lblConn.Margin = new Padding(0, 5, 0, 0);
         _lblConn.Name = "_lblConn";
-        _lblConn.Size = new Size(655, 25);
+        _lblConn.Size = new Size(927, 42);
         _lblConn.TabIndex = 2;
         _lblConn.Text = "АЦП: —";
         // 
         // DynamicWeighingForm
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(10F, 25F);
         AutoScaleMode = AutoScaleMode.Font;
-        BackColor = UiColors.AppBackground;
-        ClientSize = new Size(673, 629);
+        BackColor = Color.FromArgb(238, 241, 244);
+        ClientSize = new Size(953, 1048);
         Controls.Add(_layoutMain);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;
-        MaximumSize = new Size(689, 10000);
+        Margin = new Padding(4, 5, 4, 5);
+        MaximumSize = new Size(975, 16629);
         Name = "DynamicWeighingForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Взвешивание — Динамика";
-        _layoutMain.ResumeLayout(false);
-        _layoutMain.PerformLayout();
-        _pnlTop.ResumeLayout(false);
-        _pnlTop.PerformLayout();
         _gbDir.ResumeLayout(false);
         _gbDir.PerformLayout();
+        _layoutMain.ResumeLayout(false);
+        _pnlTop.ResumeLayout(false);
+        _pnlTop.PerformLayout();
         _pnlDisplay.ResumeLayout(false);
         _pnlActions.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
-        _statusLayout.ResumeLayout(false);
         _pnlStatusBar.ResumeLayout(false);
+        _statusLayout.ResumeLayout(false);
+        _statusLayout.PerformLayout();
         ResumeLayout(false);
-        PerformLayout();
     }
 
     private TableLayoutPanel _layoutMain;
@@ -403,13 +383,10 @@ partial class DynamicWeighingForm
     private Label         _lblChannel;
     private Panel         _pnlDisplay;
     private Label         _lblValue;
-    private Label         _lblUnit;
-    private Label         _lblStatus;
     private Label         _lblBogie1Caption;
     private Label         _lblBogie1Value;
     private Label         _lblBogie2Caption;
     private Label         _lblBogie2Value;
-    private Label         _lblTrainInfo;
     private Button        _btnWeigh;
     private Button        _btnZero;
     private Button        _btnFinish;
