@@ -131,7 +131,7 @@ public partial class DynamicWeighingForm : Form
             SortMode   = DataGridViewColumnSortMode.NotSortable,
         };
 
-        _grid.Columns.Add(Col("Напр.", 50));
+        _grid.Columns.Add(Col("Напр.", 65));
         _grid.Columns.Add(Col("№", 45));
         _grid.Columns.Add(Col("Тел.1", 75));
         _grid.Columns.Add(Col("Тел.2", 75));
@@ -411,8 +411,6 @@ public partial class DynamicWeighingForm : Form
             r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"),
             r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"),
             r.TrainTime.ToString("dd.MM.yyyy"), r.TrainTime.ToString("HH:mm:ss"));
-        while (_grid.Rows.Count > 10)
-            _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
     }
 
     private async void SaveAsync(LocalWagon record)

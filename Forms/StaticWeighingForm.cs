@@ -406,8 +406,6 @@ public partial class StaticWeighingForm : Form
             r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"),
             r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"),
             r.TrainTime.ToString("dd.MM.yyyy"), r.TrainTime.ToString("HH:mm:ss"));
-        while (_grid.Rows.Count > 10)
-            _grid.Rows.RemoveAt(_grid.Rows.Count - 1);
     }
 
     private async void SaveAsync(LocalWagon record)
