@@ -10,6 +10,11 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class LogsForm : Form
 {
+    private const char CsvDelimiter = ';';
+    private const char CsvQuote = '"';
+    private const string CsvNewLine = "\r\n";
+    private const string CsvEncodingName = "UTF-8 BOM";
+
     public LogsForm()
     {
         InitializeComponent();
@@ -114,7 +119,11 @@ public partial class LogsForm : Form
 
     private void BtnCsvImport_Click(object? sender, EventArgs e)
     {
-        if (_grid.Rows.Count == 0)
+        var rows = _grid.Rows.Cast<DataGridViewRow>()
+            .Where(row => !row.IsNewRow)
+            .ToList();
+
+        if (rows.Count == 0)
         {
             MessageBox.Show("Нет данных для выгрузки.", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
@@ -133,21 +142,16 @@ public partial class LogsForm : Form
 
         try
         {
-            using var stream = new FileStream(dlg.FileName, FileMode.Create, FileAccess.Write, FileShare.None);
-            using var writer = new StreamWriter(stream, new UTF8Encoding(true));
+            var encoding = new UTF8Encoding(true);
+            string csv = BuildCsv(rows, fileSizeBytes: null);
+            long fileSizeBytes = encoding.GetByteCount(csv);
+            csv = BuildCsv(rows, fileSizeBytes);
+            fileSizeBytes = encoding.GetByteCount(csv);
+            csv = BuildCsv(rows, fileSizeBytes);
 
-            writer.WriteLine(string.Join(";", _grid.Columns.Cast<DataGridViewColumn>().Select(c => CsvEscape(c.HeaderText))));
-
-            foreach (DataGridViewRow row in _grid.Rows.Cast<DataGridViewRow>())
-            {
-                if (row.IsNewRow)
-                    continue;
-
-                writer.WriteLine(string.Join(";", row.Cells.Cast<DataGridViewCell>().Select(c => CsvEscape(c.Value?.ToString() ?? string.Empty))));
-            }
-
-            writer.Flush();
-            MessageBox.Show("CSV-файл выгружен.", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            File.WriteAllText(dlg.FileName, csv, encoding);
+            MessageBox.Show($"CSV-файл выгружен.\r\nСтрок: {rows.Count}\r\nКолонок: {_grid.Columns.Count}\r\nРазмер: {fileSizeBytes} байт.",
+                "CSV", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
@@ -155,10 +159,42 @@ public partial class LogsForm : Form
         }
     }
 
+    private string BuildCsv(List<DataGridViewRow> rows, long? fileSizeBytes)
+    {
+        var sb = new StringBuilder();
+        AppendCsvMetadata(sb, rows.Count, fileSizeBytes);
+        AppendCsvRow(sb, _grid.Columns.Cast<DataGridViewColumn>().Select(c => c.HeaderText));
+
+        foreach (var row in rows)
+            AppendCsvRow(sb, row.Cells.Cast<DataGridViewCell>().Select(c => c.Value?.ToString() ?? string.Empty));
+
+        return sb.ToString();
+    }
+
+    private void AppendCsvMetadata(StringBuilder sb, int rowCount, long? fileSizeBytes)
+    {
+        sb.Append("# Vesy13 audit log export").Append(CsvNewLine);
+        sb.Append("# encoding=").Append(CsvEncodingName).Append(CsvNewLine);
+        sb.Append("# delimiter=").Append(CsvDelimiter).Append(CsvNewLine);
+        sb.Append("# quote=").Append(CsvQuote).Append(CsvNewLine);
+        sb.Append("# newline=CRLF").Append(CsvNewLine);
+        sb.Append("# columns=").Append(_grid.Columns.Count).Append(CsvNewLine);
+        sb.Append("# rows=").Append(rowCount).Append(CsvNewLine);
+        sb.Append("# dateFrom=").Append(_dtpFrom.Value.ToString("dd.MM.yyyy HH:mm:ss")).Append(CsvNewLine);
+        sb.Append("# dateTo=").Append(_dtpTo.Value.ToString("dd.MM.yyyy HH:mm:ss")).Append(CsvNewLine);
+        sb.Append("# fileSizeBytes=").Append(fileSizeBytes?.ToString() ?? "pending").Append(CsvNewLine);
+        sb.Append("sep=").Append(CsvDelimiter).Append(CsvNewLine);
+    }
+
+    private static void AppendCsvRow(StringBuilder sb, IEnumerable<string> values)
+    {
+        sb.Append(string.Join(CsvDelimiter.ToString(), values.Select(CsvEscape))).Append(CsvNewLine);
+    }
+
     private static string CsvEscape(string value)
     {
-        if (value.Contains('"') || value.Contains(';') || value.Contains('\r') || value.Contains('\n'))
-            return '"' + value.Replace("\"", "\"\"") + '"';
+        if (value.Contains(CsvQuote) || value.Contains(CsvDelimiter) || value.Contains('\r') || value.Contains('\n'))
+            return CsvQuote + value.Replace(CsvQuote.ToString(), new string(CsvQuote, 2)) + CsvQuote;
 
         return value;
     }
