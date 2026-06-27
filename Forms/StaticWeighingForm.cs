@@ -44,6 +44,45 @@ public partial class StaticWeighingForm : Form
     private double ReadRawTonnes(int adcCode) =>
         CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel);
 
+    private (CalibPoint? Point, int ActiveCount) SelectStaticCalibPoint(int adcCode)
+    {
+        int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
+        var active = _ldb.CalibPoints
+            .Where(point => point.Channel == channel && point.IsActive)
+            .OrderBy(point => point.AdcCode)
+            .ToList();
+
+        if (active.Count == 0)
+            return (null, 0);
+
+        var selected = active[0];
+        foreach (var point in active)
+        {
+            if (adcCode >= point.AdcCode)
+                selected = point;
+            else
+                break;
+        }
+
+        return (selected, active.Count);
+    }
+
+    private string BuildStaticCalcDiagnostic(int adcCode, double rawTonnes, double resultTonnes)
+    {
+        int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
+        var (point, activeCount) = SelectStaticCalibPoint(adcCode);
+        var common = $"calibChannel={channel} activeCalibPoints={activeCount} totalCalibPoints={_ldb.CalibPoints.Count} " +
+                     $"rawTonnes={rawTonnes:F4} zeroOffset={_zeroOffsetTonnes:F4} resultTonnes={resultTonnes:F4} " +
+                     $"discretization={_settings.Current.WeightDiscretizationTonnes:F4}";
+
+        if (point is null)
+            return $"{common} calibPoint=none";
+
+        double k = point.AdcCode == 0 ? 0 : (double)point.Mass / point.AdcCode;
+        return $"{common} calibPointId={point.Id} calibPointChannel={point.Channel} " +
+               $"calibPointCode={point.AdcCode} calibPointMass={(double)point.Mass:F4} calibK={k:F8}";
+    }
+
     private double ToTonnes(int adcCode) =>
         WeightFormatter.RoundToDiscretization(
             ReadRawTonnes(adcCode) - _zeroOffsetTonnes,
@@ -326,9 +365,11 @@ public partial class StaticWeighingForm : Form
         if ((now - _lastCalcDiagAt).TotalSeconds < 1) return;
         _lastCalcDiagAt = now;
 
+        double rawTonnes = ReadRawTonnes(activeCode);
+        string calc = BuildStaticCalcDiagnostic(activeCode, rawTonnes, tonnes);
         AuditLogger.Action(AuditLogger.AdcStaticCalc,
             "StaticCalc",
-            $"channel={_sim.Channel} activeCode={activeCode} tonnes={tonnes:F2} ch0={frame.Ch0} ch1={frame.Ch1} activeCalibPoints={ActiveCalibPointCount()}",
+            $"channel={_sim.Channel} activeCode={activeCode} tonnes={tonnes:F2} ch0={frame.Ch0} ch1={frame.Ch1} {calc}",
             _sim.PortName,
             $"raw=[{_lastRawBytes}]");
     }
@@ -345,9 +386,11 @@ public partial class StaticWeighingForm : Form
                 _trainStartTime = DateTime.Now;
             _bogie1Code         = ActiveCode(_lastFrame);
             double bogie1Tonnes = ToTonnes(_bogie1Code);
+            double bogie1RawTonnes = ReadRawTonnes(_bogie1Code);
+            string bogie1Calc = BuildStaticCalcDiagnostic(_bogie1Code, bogie1RawTonnes, bogie1Tonnes);
             AuditLogger.Action(AuditLogger.AdcStaticCalc,
                 "StaticWeighPress",
-                $"step=bogie1 channel={_sim.Channel} code={_bogie1Code} tonnes={bogie1Tonnes:F2} ch0={_lastFrame.Ch0} ch1={_lastFrame.Ch1} activeCalibPoints={ActiveCalibPointCount()}",
+                $"step=bogie1 channel={_sim.Channel} code={_bogie1Code} tonnes={bogie1Tonnes:F2} ch0={_lastFrame.Ch0} ch1={_lastFrame.Ch1} {bogie1Calc}",
                 _sim.PortName,
                 $"raw=[{_lastRawBytes}]");
             _state              = WeighState.Bogie1Captured;
@@ -362,9 +405,11 @@ public partial class StaticWeighingForm : Form
             int      bogie2    = ActiveCode(_lastFrame);
             double   bogie2Tonnes = ToTonnes(bogie2);
             double   bogie1Tonnes = ToTonnes(_bogie1Code);
+            double   bogie2RawTonnes = ReadRawTonnes(bogie2);
+            string   bogie2Calc = BuildStaticCalcDiagnostic(bogie2, bogie2RawTonnes, bogie2Tonnes);
             AuditLogger.Action(AuditLogger.AdcStaticCalc,
                 "StaticWeighPress",
-                $"step=bogie2 channel={_sim.Channel} code={bogie2} tonnes={bogie2Tonnes:F2} ch0={_lastFrame.Ch0} ch1={_lastFrame.Ch1} activeCalibPoints={ActiveCalibPointCount()}",
+                $"step=bogie2 channel={_sim.Channel} code={bogie2} tonnes={bogie2Tonnes:F2} ch0={_lastFrame.Ch0} ch1={_lastFrame.Ch1} {bogie2Calc}",
                 _sim.PortName,
                 $"raw=[{_lastRawBytes}]");
             DateTime wagonTime = DateTime.Now;
