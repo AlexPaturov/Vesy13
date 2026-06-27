@@ -15,8 +15,6 @@ public partial class DynamicWeighingForm : Form
     private SimA04ReaderDynamic  _sim = null!;
     private LocalRepository _ldb  = null!;
     private SettingsService _settings = null!;
-    private const int MaxAdcCode = 65535;
-
     private enum WeighState { Idle, Bogie1Captured }
     private WeighState _state = WeighState.Idle;
     private DateTime?  _trainStartTime;
@@ -60,14 +58,13 @@ public partial class DynamicWeighingForm : Form
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
 
-    private double ReadRawTonnes(int adcCode)
-    {
-        double k = GetDirection().StartsWith("→") ? _ldb.Dynamic.KPlus : _ldb.Dynamic.KMinus;
-        if (Math.Abs(k) < double.Epsilon)
-            k = _settings.Current.MaxCapacityTonnes / MaxAdcCode;
+    private double CurrentDynamicCoefficient() =>
+        GetDirection().StartsWith("→") ? _ldb.Dynamic.KPlus : _ldb.Dynamic.KMinus;
 
-        return k * adcCode;
-    }
+    private bool HasDynamicCalibration() => Math.Abs(CurrentDynamicCoefficient()) >= double.Epsilon;
+
+    private double ReadRawTonnes(int adcCode) =>
+        CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
 
     private double ToTonnes(int adcCode) =>
         WeightFormatter.RoundToDiscretization(
@@ -76,8 +73,15 @@ public partial class DynamicWeighingForm : Form
 
     private bool ValidateBeforeWeigh()
     {
-        if (_rbPlus.Checked || _rbMinus.Checked) return true;
-        MessageBox.Show("Выберите направление движения состава.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (!_rbPlus.Checked && !_rbMinus.Checked)
+        {
+            MessageBox.Show("Выберите направление движения состава.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        if (HasDynamicCalibration()) return true;
+        MessageBox.Show($"Нет динамической калибровки для направления {GetDirection()}.",
+            "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }
 
@@ -171,6 +175,8 @@ public partial class DynamicWeighingForm : Form
         SetupGridColumns();
         _sim.SampleReceived    += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
+        _rbPlus.CheckedChanged += Direction_CheckedChanged;
+        _rbMinus.CheckedChanged += Direction_CheckedChanged;
         AuditLogger.QueueStatusChanged += OnAuditQueueStatusChanged;
         _adcDiagTimer.Start();
         EnsureAdcConnected(showError: true);
@@ -210,6 +216,8 @@ public partial class DynamicWeighingForm : Form
             _adcDiagTimer.Stop();
             _sim.SampleReceived    -= OnSample;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            _rbPlus.CheckedChanged -= Direction_CheckedChanged;
+            _rbMinus.CheckedChanged -= Direction_CheckedChanged;
             AuditLogger.QueueStatusChanged -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
@@ -232,6 +240,14 @@ public partial class DynamicWeighingForm : Form
     private void BtnWeigh_Click(object? sender, EventArgs e)  => HandleWeighPress();
     private void BtnZero_Click(object? sender, EventArgs e)   => OnZeroClick();
     private void BtnFinish_Click(object? sender, EventArgs e) => HandleFinish();
+
+    private void Direction_CheckedChanged(object? sender, EventArgs e)
+    {
+        _displayedSampleVersion = 0;
+        RefreshDisplayFromLatestSample();
+        UpdateButtonStates();
+        UpdateAdcDiagnostics();
+    }
 
     private bool EnsureAdcConnected(bool showError)
     {
@@ -282,6 +298,14 @@ public partial class DynamicWeighingForm : Form
         _displayedSampleVersion = version;
         Interlocked.Increment(ref _uiSamplesApplied);
         _lastSample = sample;
+
+        if (!HasDynamicCalibration())
+        {
+            _lblValue.Text = "—";
+            _lblValue.ForeColor = UiColors.Disconnected;
+            return;
+        }
+
         _lblValue.Text = ToTonnes(ActiveCode(sample)).ToString("F2");
         _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
 
@@ -495,7 +519,9 @@ public partial class DynamicWeighingForm : Form
 
     private void UpdateButtonStates()
     {
-        _btnZero.Enabled   = _state == WeighState.Idle;
+        bool hasCalibration = HasDynamicCalibration();
+        _btnWeigh.Enabled  = hasCalibration;
+        _btnZero.Enabled   = _state == WeighState.Idle && hasCalibration;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
         UpdateDirectionControls();
     }
@@ -529,10 +555,12 @@ public partial class DynamicWeighingForm : Form
     {
         var audit = AuditLogger.GetQueueStatus();
         var messages = new List<string>();
+        if (!HasDynamicCalibration())
+            messages.Add($"Динамическая калибровка: не задан коэффициент для {GetDirection()}");
         if (!_weighingStorageAvailable)
             messages.Add("Взвешивание: БД недоступна, запись не сохранена");
 
-        var hasError = !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
+        var hasError = !HasDynamicCalibration() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
         if (!audit.IsDatabaseAvailable)
             messages.Add(string.Format("Журнал: БД недоступна; очередь {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
         else if (audit.PendingCount > 0 || audit.DroppedCount > 0)
