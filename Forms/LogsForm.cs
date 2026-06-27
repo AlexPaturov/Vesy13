@@ -25,6 +25,7 @@ public partial class LogsForm : Form
         base.OnLoad(e);
         ApplyTheme();
         SetupGrid();
+        ConfigureGridClipboard();
         btnCsvImport.Click += BtnCsvImport_Click;
         _dtpFrom.Value = DateTime.Today;
         _dtpTo.Value = DateTime.Now;
@@ -72,6 +73,38 @@ public partial class LogsForm : Form
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Компьютер", Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "IP", Width = 120, SortMode = DataGridViewColumnSortMode.NotSortable });
         _grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "PID", Width = 65, SortMode = DataGridViewColumnSortMode.NotSortable });
+    }
+
+    private void ConfigureGridClipboard()
+    {
+        _grid.MultiSelect = true;
+        _grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+        _grid.KeyDown += Grid_KeyDown;
+
+        var menu = new ContextMenuStrip();
+        var copyItem = new ToolStripMenuItem("Копировать");
+        copyItem.Click += (_, _) => CopySelectedGridContent();
+        menu.Items.Add(copyItem);
+        _grid.ContextMenuStrip = menu;
+    }
+
+    private void Grid_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!e.Control || e.KeyCode != Keys.C)
+            return;
+
+        CopySelectedGridContent();
+        e.Handled = true;
+    }
+
+    private void CopySelectedGridContent()
+    {
+        if (_grid.GetCellCount(DataGridViewElementStates.Selected) == 0)
+            return;
+
+        var data = _grid.GetClipboardContent();
+        if (data is not null)
+            Clipboard.SetDataObject(data, copy: true);
     }
 
     private async void BtnFind_Click(object? sender, EventArgs e)
