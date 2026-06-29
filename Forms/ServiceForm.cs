@@ -311,9 +311,15 @@ public partial class ServiceForm : Form
         {
             _sim.RawFrameReceived -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            if (_sim.IsPortOpen)
+                _sim.Close();
+
             _dynamicSim.RawSampleReceived -= OnDynamicRawSample;
             _dynamicSim.SampleReceived -= OnDynamicSample;
             _dynamicSim.ConnectionChanged -= OnDynamicConnectionChanged;
+            if (_dynamicSim.IsPortOpen)
+                _dynamicSim.Close();
+
             _rateTimer.Stop();
         }
         base.OnFormClosed(e);
