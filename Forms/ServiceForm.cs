@@ -24,6 +24,8 @@ public partial class ServiceForm : Form
     private int _dynamicSampleCount;
     private int _lastCh0;
     private int _lastCh1;
+    private int _lastDynCh0;
+    private int _lastDynCh1;
 
     private TabPage _tabDynamicService = null!;
     private ComboBox _cmbDynamicPort = null!;
@@ -37,6 +39,9 @@ public partial class ServiceForm : Form
     private CheckBox _chkDynamicLog = null!;
     private Button _btnDynamicClearLog = null!;
     private RichTextBox _rtbDynamicLog = null!;
+    private Label _lblDynamicCalibConn = null!;
+    private Label _lblLiveWeightCapD = null!;
+    private Label _lblLiveWeightD = null!;
 
     public ServiceForm()
     {
@@ -278,6 +283,7 @@ public partial class ServiceForm : Form
         _sim.ConnectionTimeoutMs = 1000;
         _dynamicSim.ConnectionTimeoutMs = 5000;
         SetupDynamicServiceTab();
+        SetupDynamicCalibHeader();
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         _dynamicSim.RawSampleReceived += OnDynamicRawSample;
@@ -354,8 +360,15 @@ public partial class ServiceForm : Form
 
     private void BtnCapPlus_Click(object? sender, EventArgs e)
     {
-        int code = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
-        if (code != 0) _txtCodePlus.Text = code.ToString();
+        int code = CurrentDynamicAdcCode();
+        if (code != 0)
+        {
+            _txtCodePlus.Text = code.ToString();
+            return;
+        }
+
+        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на вкладке \"Сервисный режим Динамика\".",
+            "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
     private void BtnCalcPlus_Click(object? sender, EventArgs e)
     {
@@ -367,8 +380,15 @@ public partial class ServiceForm : Form
     }
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
-        int code = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
-        if (code != 0) _txtCodeMinus.Text = code.ToString();
+        int code = CurrentDynamicAdcCode();
+        if (code != 0)
+        {
+            _txtCodeMinus.Text = code.ToString();
+            return;
+        }
+
+        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на вкладке \"Сервисный режим Динамика\".",
+            "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e)
     {
@@ -391,10 +411,14 @@ public partial class ServiceForm : Form
 
     private void SetActiveChannel(ActiveChannel channel)
     {
-        if (_sim is null || _sim.Channel == channel) return;
+        if (_sim is null) return;
+        if (_sim.Channel == channel && (_dynamicSim is null || _dynamicSim.Channel == channel)) return;
 
         ActiveChannel old = _sim.Channel;
         _sim.Channel = channel;
+        if (_dynamicSim is not null)
+            _dynamicSim.Channel = channel;
+        UpdateLiveAdcLabel();
         AuditLogger.Action(AuditLogger.AdcChannelChanged,
             "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
     }
@@ -648,6 +672,7 @@ public partial class ServiceForm : Form
         _btnDynamicConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
         _btnDynamicConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
         _cmbDynamicPort.Enabled = !_dynamicSim.IsPortOpen;
+        UpdateDynamicCalibrationConnectionLabel();
         AppendDynamicLog(connected ? $"=== Подключено: {_dynamicSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
 
@@ -661,10 +686,13 @@ public partial class ServiceForm : Form
     {
         if (InvokeRequired) { BeginInvoke(() => OnDynamicSample(sender, sample)); return; }
         _dynamicSampleCount++;
+        _lastDynCh0 = sample.Ch0;
+        _lastDynCh1 = sample.Ch1;
         _lblDynamicCh0.Text = sample.Ch0.ToString();
         _lblDynamicCh1.Text = sample.Ch1.ToString();
         _lblDynamicCh0.ForeColor = UiColors.Info;
         _lblDynamicCh1.ForeColor = UiColors.Info;
+        UpdateLiveDynamicCalibrationLabels();
     }
 
     private void OnDynamicRawSample(object? sender, byte[] raw)
@@ -938,14 +966,111 @@ public partial class ServiceForm : Form
     {
         int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
         _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
-        if (_sim is not null)
-        {
-            int dynCode = _sim.Channel == ActiveChannel.Main ? _lastCh0 : _lastCh1;
-            _lblLiveAdcD.Text = dynCode == 0 ? "—" : dynCode.ToString();
-        }
+        UpdateLiveDynamicCalibrationLabels();
     }
 
     // ── Calibration dynamic ─────────────────────────────────────────────────
+
+    private void SetupDynamicCalibHeader()
+    {
+        if (_lblLiveWeightD is not null) return;
+
+        _lblLiveWeightCapD = new Label
+        {
+            Location = new Point(260, 12),
+            Size = new Size(85, 18),
+            Text = "Текущий вес:",
+            Font = UiFonts.Body,
+            ForeColor = UiColors.Disconnected,
+        };
+        _lblLiveWeightD = new Label
+        {
+            Location = new Point(345, 10),
+            Size = new Size(155, 22),
+            Text = "—",
+            Font = UiFonts.MonoLiveAdc,
+            ForeColor = UiColors.Info,
+        };
+        _lblDynamicCalibConn = new Label
+        {
+            Location = new Point(505, 12),
+            Size = new Size(190, 18),
+            Text = "Динамика: нет подключения",
+            Font = UiFonts.Body,
+            ForeColor = UiColors.Disconnected,
+        };
+
+        _pnlCalibDHead.Controls.Add(_lblLiveWeightCapD);
+        _pnlCalibDHead.Controls.Add(_lblLiveWeightD);
+        _pnlCalibDHead.Controls.Add(_lblDynamicCalibConn);
+
+        _txtKPlus.TextChanged += (_, _) => UpdateLiveDynamicCalibrationLabels();
+        _txtKMinus.TextChanged += (_, _) => UpdateLiveDynamicCalibrationLabels();
+        UpdateLiveDynamicCalibrationLabels();
+        UpdateDynamicCalibrationConnectionLabel();
+    }
+
+    private int CurrentDynamicAdcCode()
+    {
+        if (_dynamicSim is null) return 0;
+        return _dynamicSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
+    }
+
+    private void UpdateLiveDynamicCalibrationLabels()
+    {
+        if (_lblLiveAdcD is null) return;
+
+        int code = CurrentDynamicAdcCode();
+        _lblLiveAdcD.Text = code == 0 ? "—" : code.ToString();
+        _lblLiveAdcD.ForeColor = code == 0 ? UiColors.Disconnected : UiColors.Info;
+        UpdateLiveDynamicWeight(code);
+    }
+
+    private void UpdateLiveDynamicWeight(int code)
+    {
+        if (_lblLiveWeightD is null) return;
+        if (code == 0)
+        {
+            _lblLiveWeightD.Text = "—";
+            _lblLiveWeightD.ForeColor = UiColors.Disconnected;
+            return;
+        }
+
+        bool plusOk = double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp);
+        bool minusOk = double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km);
+        if (!plusOk && !minusOk)
+        {
+            _lblLiveWeightD.Text = "—";
+            _lblLiveWeightD.ForeColor = UiColors.Disconnected;
+            return;
+        }
+
+        string plus = plusOk ? (code * kp).ToString("F2", CultureInfo.InvariantCulture) : "—";
+        string minus = minusOk ? (code * km).ToString("F2", CultureInfo.InvariantCulture) : "—";
+        _lblLiveWeightD.Text = $"→ {plus} т  ← {minus} т";
+        _lblLiveWeightD.ForeColor = UiColors.Info;
+    }
+
+    private void UpdateDynamicCalibrationConnectionLabel()
+    {
+        if (_lblDynamicCalibConn is null || _dynamicSim is null) return;
+
+        if (_dynamicSim.IsConnected)
+        {
+            _lblDynamicCalibConn.Text = $"Динамика: {_dynamicSim.PortName}";
+            _lblDynamicCalibConn.ForeColor = UiColors.PrimaryAction;
+        }
+        else if (_dynamicSim.IsPortOpen)
+        {
+            _lblDynamicCalibConn.Text = $"Порт открыт: {_dynamicSim.PortName}";
+            _lblDynamicCalibConn.ForeColor = UiColors.Warning;
+        }
+        else
+        {
+            _lblDynamicCalibConn.Text = "Динамика: нет подключения";
+            _lblDynamicCalibConn.ForeColor = UiColors.Disconnected;
+        }
+    }
 
     private void SetupDynamicCalibGrid()
     {
@@ -967,12 +1092,30 @@ public partial class ServiceForm : Form
 
     private async void BtnCalibDynSave_Click(object? sender, EventArgs e)
     {
-        if (!double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
-            !double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km))
+        string plusText = _txtKPlus.Text.Trim();
+        string minusText = _txtKMinus.Text.Trim();
+        bool hasPlus = plusText.Length > 0;
+        bool hasMinus = minusText.Length > 0;
+
+        if (!hasPlus && !hasMinus)
         {
-            MessageBox.Show("Некорректные значения K→ или K←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Введите K→ или K← для сохранения.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
+
+        double kp = _calib.Dynamic.KPlus;
+        double km = _calib.Dynamic.KMinus;
+        if (hasPlus && !double.TryParse(plusText, NumberStyles.Float, CultureInfo.InvariantCulture, out kp))
+        {
+            MessageBox.Show("Некорректное значение K→.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        if (hasMinus && !double.TryParse(minusText, NumberStyles.Float, CultureInfo.InvariantCulture, out km))
+        {
+            MessageBox.Show("Некорректное значение K←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
         try
         {
             await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
