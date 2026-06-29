@@ -762,8 +762,7 @@ public partial class CorrectionsForm : Form
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", "GridDone_SelectionChanged", "Firebird", ex.Message);
-            MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         _btnSave.Visible = true;
