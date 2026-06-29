@@ -150,13 +150,12 @@ public class LocalRepository
         await conn.ExecuteAsync(@"
             UPDATE calibration_dynamic
             SET is_active = FALSE,
-                deleted_at = COALESCE(deleted_at, NOW()),
-                updated_at = NOW()
+                deleted_at = COALESCE(deleted_at, NOW())
             WHERE is_active = TRUE AND deleted_at IS NULL", transaction: tx);
 
         int id = await conn.ExecuteScalarAsync<int>(@"
-            INSERT INTO calibration_dynamic (k_plus, k_minus, is_active, created_at, deleted_at, updated_at)
-            VALUES (@KPlus, @KMinus, TRUE, NOW(), NULL, NOW())
+            INSERT INTO calibration_dynamic (k_plus, k_minus, is_active, created_at, deleted_at)
+            VALUES (@KPlus, @KMinus, TRUE, NOW(), NULL)
             RETURNING id",
             new { calib.KPlus, calib.KMinus }, tx);
 

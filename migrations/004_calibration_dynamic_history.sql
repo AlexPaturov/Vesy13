@@ -2,8 +2,6 @@
 --
 -- k_plus/k_minus keep 0 as a valid coefficient value.
 -- The current working profile is selected by is_active = true and deleted_at IS NULL.
--- updated_at is kept temporarily for compatibility with the current application code;
--- after repository code is switched to insert historical rows, it can be removed separately.
 
 BEGIN;
 
@@ -17,7 +15,7 @@ ALTER TABLE calibration_dynamic
     ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
 
 UPDATE calibration_dynamic
-SET created_at = COALESCE(created_at, updated_at, NOW())
+SET created_at = COALESCE(created_at, NOW())
 WHERE created_at IS NULL;
 
 ALTER TABLE calibration_dynamic

@@ -1132,6 +1132,26 @@ public partial class ServiceForm : Form
         }
     }
 
+    private static void ApplyDynamicCalibRowStyle(DataGridViewRow row, bool isActive)
+    {
+        if (isActive)
+        {
+            row.DefaultCellStyle.BackColor = UiColors.Surface;
+            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            row.ReadOnly = false;
+            return;
+        }
+
+        var deletedBack = Color.FromArgb(255, 228, 232);
+        row.DefaultCellStyle.BackColor = deletedBack;
+        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = deletedBack;
+        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
+        row.ReadOnly = true;
+    }
+
     private void LoadCalibDynamic() => _ = LoadCalibDynamicAsync();
 
     private async Task LoadCalibDynamicAsync()
@@ -1154,8 +1174,7 @@ public partial class ServiceForm : Form
                     row.CreatedAt == default ? "" : row.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm"),
                     row.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "");
 
-                if (row.IsActive)
-                    _dgvDynCalib.Rows[idx].DefaultCellStyle.BackColor = UiColors.GridSelectionBack;
+                ApplyDynamicCalibRowStyle(_dgvDynCalib.Rows[idx], row.IsActive);
             }
         }
         catch (Exception ex)
