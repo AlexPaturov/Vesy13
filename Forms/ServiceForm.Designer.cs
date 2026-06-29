@@ -181,7 +181,7 @@ partial class ServiceForm
         _rbMain.Size = new Size(128, 19);
         _rbMain.TabIndex = 1;
         _rbMain.TabStop = true;
-        _rbMain.Text = "Основной  —  CH0";
+        _rbMain.Text = "Канал: Основной (CH0)";
         _rbMain.CheckedChanged += RbMain_CheckedChanged;
         // 
         // _rbBackup
@@ -191,7 +191,7 @@ partial class ServiceForm
         _rbBackup.Name = "_rbBackup";
         _rbBackup.Size = new Size(132, 19);
         _rbBackup.TabIndex = 2;
-        _rbBackup.Text = "Резервный  —  CH1";
+        _rbBackup.Text = "Канал: Резервный (CH1)";
         _rbBackup.CheckedChanged += RbBackup_CheckedChanged;
         // 
         // _lblChannelNote
@@ -220,7 +220,7 @@ partial class ServiceForm
         _tabMonitor.Name = "_tabMonitor";
         _tabMonitor.Size = new Size(715, 351);
         _tabMonitor.TabIndex = 1;
-        _tabMonitor.Text = "Мониторинг";
+        _tabMonitor.Text = "Сервисный режим Статика";
         // 
         // _cmbPort
         // 
@@ -295,7 +295,7 @@ partial class ServiceForm
         _lblCh0Cap.Name = "_lblCh0Cap";
         _lblCh0Cap.Size = new Size(104, 15);
         _lblCh0Cap.TabIndex = 0;
-        _lblCh0Cap.Text = "CH0 — Основной";
+        _lblCh0Cap.Text = "Канал: Основной (CH0)";
         // 
         // _lblCh0
         // 
@@ -322,7 +322,7 @@ partial class ServiceForm
         _lblCh1Cap.Name = "_lblCh1Cap";
         _lblCh1Cap.Size = new Size(108, 15);
         _lblCh1Cap.TabIndex = 0;
-        _lblCh1Cap.Text = "CH1 — Резервный";
+        _lblCh1Cap.Text = "Канал: Резервный (CH1)";
         // 
         // _lblCh1
         // 
@@ -607,7 +607,7 @@ partial class ServiceForm
         _rbCh1Calib.Name = "_rbCh1Calib";
         _rbCh1Calib.Size = new Size(183, 21);
         _rbCh1Calib.TabIndex = 1;
-        _rbCh1Calib.Text = "CH1 — Резервный";
+        _rbCh1Calib.Text = "Канал: Резервный (CH1)";
         _rbCh1Calib.CheckedChanged += RbCh1Calib_CheckedChanged;
         // 
         // _lblLiveAdc
@@ -643,7 +643,7 @@ partial class ServiceForm
         _rbCh0Calib.Size = new Size(183, 22);
         _rbCh0Calib.TabIndex = 0;
         _rbCh0Calib.TabStop = true;
-        _rbCh0Calib.Text = "CH0 — Основной";
+        _rbCh0Calib.Text = "Канал: Основной (CH0)";
         _rbCh0Calib.CheckedChanged += RbCh0Calib_CheckedChanged;
         // 
         // _btnCapture
@@ -917,6 +917,7 @@ partial class ServiceForm
         // _dgvDynCalib
         //
         _dgvDynCalib.AllowUserToAddRows = false;
+        _dgvDynCalib.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _dgvDynCalib.AllowUserToDeleteRows = false;
         _dgvDynCalib.AllowUserToResizeRows = false;
         _dgvDynCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -934,7 +935,7 @@ partial class ServiceForm
         _dgvDynCalib.RowHeadersWidth = 62;
         _dgvDynCalib.RowTemplate.Height = 28;
         _dgvDynCalib.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _dgvDynCalib.Size = new Size(280, 392);
+        _dgvDynCalib.Size = new Size(280, 260);
         _dgvDynCalib.TabIndex = 24;
         //
         // _pnlCalibDHead

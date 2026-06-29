@@ -68,7 +68,7 @@ public partial class MainForm : Form
 
     private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_staticSim, _ldb, _settings));
     private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_dynamicSim, _ldb, _settings));
-    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_staticSim, _ldb, _settings));
+    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_staticSim, _dynamicSim, _ldb, _settings));
     private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb, _settings));
     private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()));
     private void BtnLogs_Click(object? sender, EventArgs e)        => OpenForm(new Forms.LogsForm());

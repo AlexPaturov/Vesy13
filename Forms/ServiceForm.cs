@@ -15,22 +15,38 @@ namespace Vesy13.Forms;
 public partial class ServiceForm : Form
 {
     private SimA04ReaderStatic _sim = null!;
+    private SimA04ReaderDynamic _dynamicSim = null!;
     private LocalRepository _calib = null!;
     private SettingsService _settings = null!;
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
     private int _frameCount;
+    private int _dynamicSampleCount;
     private int _lastCh0;
     private int _lastCh1;
+
+    private TabPage _tabDynamicService = null!;
+    private ComboBox _cmbDynamicPort = null!;
+    private Panel _dotDynamicConn = null!;
+    private Button _btnDynamicConn = null!;
+    private Button _btnDynamicPortRefresh = null!;
+    private Label _lblDynamicConn = null!;
+    private Label _lblDynamicRate = null!;
+    private Label _lblDynamicCh0 = null!;
+    private Label _lblDynamicCh1 = null!;
+    private CheckBox _chkDynamicLog = null!;
+    private Button _btnDynamicClearLog = null!;
+    private RichTextBox _rtbDynamicLog = null!;
 
     public ServiceForm()
     {
         InitializeComponent();
     }
 
-    public ServiceForm(SimA04ReaderStatic adc, LocalRepository calib, SettingsService settings)
+    public ServiceForm(SimA04ReaderStatic adc, SimA04ReaderDynamic dynamicAdc, LocalRepository calib, SettingsService settings)
     {
         _sim = adc;
+        _dynamicSim = dynamicAdc;
         _calib = calib;
         _settings = settings;
         InitializeComponent();
@@ -56,7 +72,7 @@ public partial class ServiceForm : Form
         _lblChannelNote.ForeColor = UiColors.Disconnected;
         _tabChannel.BackColor = UiColors.Surface;
 
-        // Monitor tab
+        // Monitor static tab
         _tabMonitor.BackColor = UiColors.Surface;
         _cmbPort.Font = UiFonts.Medium;
         _cmbPort.BackColor = UiColors.InputBack;
@@ -89,6 +105,7 @@ public partial class ServiceForm : Form
         _rtbLog.ForeColor = UiColors.LogText;
         _pnlCh0.BackColor = UiColors.MonitorBackground;
         _pnlCh1.BackColor = UiColors.MonitorBackground;
+        ApplyDynamicServiceTheme();
 
         // CalibStatic tab
         _tabCalibS.BackColor = UiColors.Surface;
@@ -259,20 +276,27 @@ public partial class ServiceForm : Form
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
         _sim.ConnectionTimeoutMs = 1000;
+        _dynamicSim.ConnectionTimeoutMs = 5000;
+        SetupDynamicServiceTab();
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
+        _dynamicSim.RawSampleReceived += OnDynamicRawSample;
+        _dynamicSim.SampleReceived += OnDynamicSample;
+        _dynamicSim.ConnectionChanged += OnDynamicConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
         _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
+        RefreshDynamicPorts();
         LoadSettingsUi();
         LoadCalibPoints();
         SetupDynamicCalibGrid();
         LoadCalibDynamic();
         SetAdminTabs(false);
         UpdateMonitorConn(_sim.IsConnected);
+        UpdateDynamicMonitorConn(_dynamicSim.IsConnected);
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
@@ -281,6 +305,9 @@ public partial class ServiceForm : Form
         {
             _sim.RawFrameReceived -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
+            _dynamicSim.RawSampleReceived -= OnDynamicRawSample;
+            _dynamicSim.SampleReceived -= OnDynamicSample;
+            _dynamicSim.ConnectionChanged -= OnDynamicConnectionChanged;
             _rateTimer.Stop();
         }
         base.OnFormClosed(e);
@@ -383,6 +410,11 @@ public partial class ServiceForm : Form
     {
         _lblRate.Text = $"{_frameCount} фр/с";
         _frameCount = 0;
+        if (_lblDynamicRate is not null)
+        {
+            _lblDynamicRate.Text = $"{_dynamicSampleCount} сэмпл/с";
+            _dynamicSampleCount = 0;
+        }
     }
 
     private void LoadSettingsUi()
@@ -491,6 +523,8 @@ public partial class ServiceForm : Form
         if (_cmbPort.SelectedItem is not string selectedPort) return;
         try
         {
+            if (_dynamicSim.IsPortOpen)
+                _dynamicSim.Close();
             _sim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04", selectedPort);
         }
@@ -499,6 +533,164 @@ public partial class ServiceForm : Form
             AppendLog($"ОШИБКА: {ex.Message}", UiColors.Error);
             AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04", selectedPort);
         }
+    }
+
+
+    private void SetupDynamicServiceTab()
+    {
+        if (_tabDynamicService is not null) return;
+
+        _tabMonitor.Text = "Сервисный режим Статика";
+        _tabDynamicService = new TabPage { Name = "_tabDynamicService", Text = "Сервисный режим Динамика", BackColor = UiColors.Surface };
+        _cmbDynamicPort = new ComboBox { Location = new Point(20, 14), Size = new Size(140, 23), DropDownStyle = ComboBoxStyle.DropDownList };
+        _dotDynamicConn = new Panel { Location = new Point(180, 18), Size = new Size(16, 16) };
+        _btnDynamicConn = new Button { Location = new Point(210, 10), Size = new Size(130, 32), Text = "Подключить", FlatStyle = FlatStyle.Flat };
+        _btnDynamicPortRefresh = new Button { Location = new Point(350, 10), Size = new Size(42, 32), Text = "↺", FlatStyle = FlatStyle.Flat };
+        _lblDynamicConn = new Label { Location = new Point(410, 14), Size = new Size(290, 23), Text = "Нет подключения" };
+        _lblDynamicRate = new Label { Location = new Point(20, 52), Size = new Size(120, 24), Text = "— сэмпл/с" };
+
+        var pnlCh0 = CreateDynamicChannelPanel("Канал: Основной (CH0)", new Point(20, 86), out _lblDynamicCh0);
+        var pnlCh1 = CreateDynamicChannelPanel("Канал: Резервный (CH1)", new Point(360, 86), out _lblDynamicCh1);
+        _chkDynamicLog = new CheckBox { Location = new Point(20, 198), Size = new Size(110, 24), Text = "Лог активен", Checked = true };
+        _btnDynamicClearLog = new Button { Anchor = AnchorStyles.Top | AnchorStyles.Right, Location = new Point(598, 198), Size = new Size(101, 32), Text = "Очистить", FlatStyle = FlatStyle.Flat };
+        _rtbDynamicLog = new RichTextBox { Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, Location = new Point(10, 239), Size = new Size(690, 99), ReadOnly = true, DetectUrls = false, WordWrap = false, ScrollBars = RichTextBoxScrollBars.Vertical };
+
+        _btnDynamicConn.Click += BtnDynamicConn_Click;
+        _btnDynamicPortRefresh.Click += (_, _) => RefreshDynamicPorts();
+        _btnDynamicClearLog.Click += (_, _) => _rtbDynamicLog.Clear();
+
+        _tabDynamicService.Controls.AddRange(new Control[] { _cmbDynamicPort, _dotDynamicConn, _btnDynamicConn, _btnDynamicPortRefresh, _lblDynamicConn, _lblDynamicRate, pnlCh0, pnlCh1, _chkDynamicLog, _btnDynamicClearLog, _rtbDynamicLog });
+        _tabs.TabPages.Insert(2, _tabDynamicService);
+        ApplyDynamicServiceTheme();
+    }
+
+    private Panel CreateDynamicChannelPanel(string title, Point location, out Label valueLabel)
+    {
+        var panel = new Panel { Location = location, Size = new Size(340, 144), BackColor = UiColors.MonitorBackground };
+        var titleLabel = new Label { Location = new Point(8, 6), AutoSize = true, Text = title, Font = UiFonts.Body, ForeColor = UiColors.TextOnDarkMuted };
+        valueLabel = new Label { Location = new Point(8, 28), Size = new Size(324, 90), Text = "—", TextAlign = ContentAlignment.MiddleRight, Font = UiFonts.MonitorDisplay, ForeColor = UiColors.Disconnected };
+        panel.Controls.Add(titleLabel);
+        panel.Controls.Add(valueLabel);
+        return panel;
+    }
+
+    private void ApplyDynamicServiceTheme()
+    {
+        if (_tabDynamicService is null) return;
+        _cmbDynamicPort.Font = UiFonts.Medium;
+        _cmbDynamicPort.BackColor = UiColors.InputBack;
+        _cmbDynamicPort.ForeColor = UiColors.InputFore;
+        _dotDynamicConn.BackColor = UiColors.Disconnected;
+        _btnDynamicConn.Font = UiFonts.Body;
+        _btnDynamicConn.BackColor = UiColors.PrimaryAction;
+        _btnDynamicConn.ForeColor = UiColors.TextOnDark;
+        _btnDynamicPortRefresh.Font = UiFonts.SubHeader;
+        _btnDynamicPortRefresh.BackColor = UiColors.NeutralAction;
+        _btnDynamicPortRefresh.ForeColor = UiColors.TextPrimary;
+        _lblDynamicConn.Font = UiFonts.Body;
+        _lblDynamicConn.ForeColor = UiColors.Disconnected;
+        _lblDynamicRate.Font = UiFonts.Body;
+        _lblDynamicRate.ForeColor = UiColors.Disconnected;
+        _chkDynamicLog.Font = UiFonts.Body;
+        _chkDynamicLog.ForeColor = UiColors.TextPrimary;
+        _btnDynamicClearLog.Font = UiFonts.Body;
+        _btnDynamicClearLog.BackColor = UiColors.NeutralAction;
+        _btnDynamicClearLog.ForeColor = UiColors.TextPrimary;
+        _rtbDynamicLog.Font = UiFonts.MonoSmall;
+        _rtbDynamicLog.BackColor = UiColors.LogBackground;
+        _rtbDynamicLog.ForeColor = UiColors.LogText;
+    }
+
+    private void RefreshDynamicPorts()
+    {
+        if (_dynamicSim is null || _cmbDynamicPort is null) return;
+        var ports = SerialPort.GetPortNames();
+        _cmbDynamicPort.Items.Clear();
+        if (ports.Length > 0)
+        {
+            _cmbDynamicPort.Items.AddRange(ports);
+            int idx = Array.IndexOf(ports, _dynamicSim.PortName);
+            _cmbDynamicPort.SelectedIndex = idx >= 0 ? idx : 0;
+        }
+        _btnDynamicConn.Enabled = ports.Length > 0;
+    }
+
+    private void BtnDynamicConn_Click(object? sender, EventArgs e)
+    {
+        if (_dynamicSim.IsPortOpen)
+        {
+            var port = _dynamicSim.PortName;
+            _dynamicSim.Close();
+            AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04Dynamic", port);
+            return;
+        }
+        if (_cmbDynamicPort.SelectedItem is not string selectedPort) return;
+        try
+        {
+            if (_sim.IsPortOpen)
+                _sim.Close();
+            _dynamicSim.Open(selectedPort);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04Dynamic", selectedPort);
+        }
+        catch (Exception ex)
+        {
+            AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error);
+            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04Dynamic", selectedPort);
+        }
+    }
+
+    private void UpdateDynamicMonitorConn(bool connected)
+    {
+        if (_lblDynamicConn is null) return;
+        _dotDynamicConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _lblDynamicConn.Text = connected ? $"Подключено: {_dynamicSim.PortName}  4800/Even/8/1" : (_dynamicSim.IsPortOpen ? $"Порт открыт: {_dynamicSim.PortName}, нет потока АЦП" : "Нет подключения");
+        _lblDynamicConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _btnDynamicConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnDynamicConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _cmbDynamicPort.Enabled = !_dynamicSim.IsPortOpen;
+        AppendDynamicLog(connected ? $"=== Подключено: {_dynamicSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
+    }
+
+    private void OnDynamicConnectionChanged(object? sender, bool connected)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnDynamicConnectionChanged(sender, connected)); return; }
+        UpdateDynamicMonitorConn(connected);
+    }
+
+    private void OnDynamicSample(object? sender, SimA04DynamicSample sample)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnDynamicSample(sender, sample)); return; }
+        _dynamicSampleCount++;
+        _lblDynamicCh0.Text = sample.Ch0.ToString();
+        _lblDynamicCh1.Text = sample.Ch1.ToString();
+        _lblDynamicCh0.ForeColor = UiColors.Info;
+        _lblDynamicCh1.ForeColor = UiColors.Info;
+    }
+
+    private void OnDynamicRawSample(object? sender, byte[] raw)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnDynamicRawSample(sender, raw)); return; }
+        if (!_chkDynamicLog.Checked) return;
+        var sample = SimA04DynamicSample.Parse(raw);
+        string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
+        string time = DateTime.Now.ToString("HH:mm:ss.fff");
+        AppendDynamicLog(sample.Valid ? $"{time}  [{bytes}]  CH0={sample.Ch0,5}  CH1={sample.Ch1,5} AUX={sample.Aux,3}" : $"{time}  [{bytes}]  INVALID ({raw.Length} байт)", sample.Valid ? UiColors.LogText : UiColors.Warning);
+    }
+
+    private void AppendDynamicLog(string text, Color color)
+    {
+        if (_rtbDynamicLog is null) return;
+        var prev = _rtbDynamicLog.SelectionColor;
+        _rtbDynamicLog.SelectionColor = color;
+        _rtbDynamicLog.AppendText(text + "\n");
+        _rtbDynamicLog.SelectionColor = prev;
+        if (_rtbDynamicLog.Lines.Length > 300)
+        {
+            int cut = _rtbDynamicLog.GetFirstCharIndexFromLine(50);
+            _rtbDynamicLog.Select(0, cut);
+            _rtbDynamicLog.SelectedText = "";
+        }
+        _rtbDynamicLog.ScrollToCaret();
     }
 
     private void UpdateMonitorConn(bool connected)
