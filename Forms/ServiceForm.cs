@@ -22,6 +22,21 @@ public partial class ServiceForm : Form
     private bool _calibUseCh0 = true;
     private int _frameCount;
     private int _dynamicSampleCount;
+    private long _dynamicSampleUiPosted;
+    private long _dynamicSampleUiApplied;
+    private long _dynamicRawUiPosted;
+    private long _dynamicRawUiApplied;
+    private long _dynamicLogAppended;
+    private long _dynamicLogMaxMs;
+    private long _dynamicDiagLastTick;
+    private long _lastDiagRawBytes;
+    private long _lastDiagSamples;
+    private long _lastDiagSkippedBytes;
+    private long _lastDiagSamplePosted;
+    private long _lastDiagSampleApplied;
+    private long _lastDiagRawPosted;
+    private long _lastDiagRawApplied;
+    private long _lastDiagLogAppended;
     private int _lastCh0;
     private int _lastCh1;
     private int _lastDynCh0;
@@ -690,7 +705,15 @@ public partial class ServiceForm : Form
 
     private void OnDynamicSample(object? sender, SimA04DynamicSample sample)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnDynamicSample(sender, sample)); return; }
+        if (InvokeRequired)
+        {
+            Interlocked.Increment(ref _dynamicSampleUiPosted);
+            WriteServiceDynamicDiagnostics();
+            BeginInvoke(() => OnDynamicSample(sender, sample));
+            return;
+        }
+
+        Interlocked.Increment(ref _dynamicSampleUiApplied);
         _dynamicSampleCount++;
         _lastDynCh0 = sample.Ch0;
         _lastDynCh1 = sample.Ch1;
@@ -703,7 +726,15 @@ public partial class ServiceForm : Form
 
     private void OnDynamicRawSample(object? sender, byte[] raw)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnDynamicRawSample(sender, raw)); return; }
+        if (InvokeRequired)
+        {
+            Interlocked.Increment(ref _dynamicRawUiPosted);
+            WriteServiceDynamicDiagnostics();
+            BeginInvoke(() => OnDynamicRawSample(sender, raw));
+            return;
+        }
+
+        Interlocked.Increment(ref _dynamicRawUiApplied);
         if (!_chkDynamicLog.Checked) return;
         var sample = SimA04DynamicSample.Parse(raw);
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
@@ -714,6 +745,7 @@ public partial class ServiceForm : Form
     private void AppendDynamicLog(string text, Color color)
     {
         if (_rtbDynamicLog is null) return;
+        var sw = System.Diagnostics.Stopwatch.StartNew();
         var prev = _rtbDynamicLog.SelectionColor;
         _rtbDynamicLog.SelectionColor = color;
         _rtbDynamicLog.AppendText(text + "\n");
@@ -725,6 +757,64 @@ public partial class ServiceForm : Form
             _rtbDynamicLog.SelectedText = "";
         }
         _rtbDynamicLog.ScrollToCaret();
+        sw.Stop();
+        Interlocked.Increment(ref _dynamicLogAppended);
+        UpdateMax(ref _dynamicLogMaxMs, sw.ElapsedMilliseconds);
+    }
+
+    private void WriteServiceDynamicDiagnostics()
+    {
+        const long intervalMs = 5000;
+        long now = Environment.TickCount64;
+        long last = Interlocked.Read(ref _dynamicDiagLastTick);
+        if (last != 0 && now - last < intervalMs) return;
+        if (Interlocked.CompareExchange(ref _dynamicDiagLastTick, now, last) != last) return;
+
+        long elapsedMs = last == 0 ? intervalMs : now - last;
+        long rawBytes = _dynamicSim.RawBytesReceived;
+        long samples = _dynamicSim.SamplesReceived;
+        long skipped = _dynamicSim.SkippedBytes;
+        long samplePosted = Interlocked.Read(ref _dynamicSampleUiPosted);
+        long sampleApplied = Interlocked.Read(ref _dynamicSampleUiApplied);
+        long rawPosted = Interlocked.Read(ref _dynamicRawUiPosted);
+        long rawApplied = Interlocked.Read(ref _dynamicRawUiApplied);
+        long logAppended = Interlocked.Read(ref _dynamicLogAppended);
+        long logMaxMs = Interlocked.Exchange(ref _dynamicLogMaxMs, 0);
+
+        long rawBytesDelta = Delta(rawBytes, ref _lastDiagRawBytes);
+        long samplesDelta = Delta(samples, ref _lastDiagSamples);
+        long skippedDelta = Delta(skipped, ref _lastDiagSkippedBytes);
+        long samplePostedDelta = Delta(samplePosted, ref _lastDiagSamplePosted);
+        long sampleAppliedDelta = Delta(sampleApplied, ref _lastDiagSampleApplied);
+        long rawPostedDelta = Delta(rawPosted, ref _lastDiagRawPosted);
+        long rawAppliedDelta = Delta(rawApplied, ref _lastDiagRawApplied);
+        long logAppendedDelta = Delta(logAppended, ref _lastDiagLogAppended);
+        long samplePending = samplePosted - sampleApplied;
+        long rawPending = rawPosted - rawApplied;
+
+        AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamicService",
+            $"periodMs={elapsedMs}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedDelta}; " +
+            $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
+            $"rawPosted={rawPostedDelta}; rawApplied={rawAppliedDelta}; rawPending={rawPending}; " +
+            $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}",
+            "SimA04Dynamic", _dynamicSim.PortName);
+    }
+
+    private static long Delta(long current, ref long previous)
+    {
+        long delta = current >= previous ? current - previous : current;
+        previous = current;
+        return delta;
+    }
+
+    private static void UpdateMax(ref long target, long value)
+    {
+        long current;
+        do
+        {
+            current = Interlocked.Read(ref target);
+            if (value <= current) return;
+        } while (Interlocked.CompareExchange(ref target, value, current) != current);
     }
 
     private void UpdateMonitorConn(bool connected)
