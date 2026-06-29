@@ -88,6 +88,7 @@ partial class ServiceForm
         _btnCalcMinus = new Button();
         _lblFormulaD = new Label();
         _btnCalibDynSave = new Button();
+        _dgvDynCalib = new DataGridView();
         _pnlCalibDHead = new Panel();
         _lblLiveAdcCapD = new Label();
         _lblLiveAdcD = new Label();
@@ -118,6 +119,7 @@ partial class ServiceForm
         _tabCalibD.SuspendLayout();
         _pnlCalibD.SuspendLayout();
         _pnlCalibDBody.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_dgvDynCalib).BeginInit();
         _pnlCalibDHead.SuspendLayout();
         _tabSett.SuspendLayout();
         SuspendLayout();
@@ -681,6 +683,7 @@ partial class ServiceForm
         // 
         _pnlCalibDBody.AutoScroll = true;
         _pnlCalibDBody.BorderStyle = BorderStyle.FixedSingle;
+        _pnlCalibDBody.Controls.Add(_dgvDynCalib);
         _pnlCalibDBody.Controls.Add(_lblSecPlus);
         _pnlCalibDBody.Controls.Add(_lblKPlusEquals);
         _pnlCalibDBody.Controls.Add(_txtKPlus);
@@ -911,6 +914,29 @@ partial class ServiceForm
         _btnCalibDynSave.UseVisualStyleBackColor = false;
         _btnCalibDynSave.Click += BtnCalibDynSave_Click;
         // 
+        // _dgvDynCalib
+        //
+        _dgvDynCalib.AllowUserToAddRows = false;
+        _dgvDynCalib.AllowUserToDeleteRows = false;
+        _dgvDynCalib.AllowUserToResizeRows = false;
+        _dgvDynCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        _dgvDynCalib.BackgroundColor = Color.FromArgb(245, 245, 247);
+        _dgvDynCalib.ColumnHeadersHeight = 34;
+        _dgvDynCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _dgvDynCalib.EditMode = DataGridViewEditMode.EditProgrammatically;
+        _dgvDynCalib.EnableHeadersVisualStyles = false;
+        _dgvDynCalib.GridColor = Color.FromArgb(212, 216, 222);
+        _dgvDynCalib.Location = new Point(410, 32);
+        _dgvDynCalib.MultiSelect = false;
+        _dgvDynCalib.Name = "_dgvDynCalib";
+        _dgvDynCalib.ReadOnly = true;
+        _dgvDynCalib.RowHeadersVisible = false;
+        _dgvDynCalib.RowHeadersWidth = 62;
+        _dgvDynCalib.RowTemplate.Height = 28;
+        _dgvDynCalib.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        _dgvDynCalib.Size = new Size(280, 392);
+        _dgvDynCalib.TabIndex = 24;
+        //
         // _pnlCalibDHead
         // 
         _pnlCalibDHead.BorderStyle = BorderStyle.FixedSingle;
@@ -1094,6 +1120,7 @@ partial class ServiceForm
         _pnlCalibD.ResumeLayout(false);
         _pnlCalibDBody.ResumeLayout(false);
         _pnlCalibDBody.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)_dgvDynCalib).EndInit();
         _pnlCalibDHead.ResumeLayout(false);
         _pnlCalibDHead.PerformLayout();
         _tabSett.ResumeLayout(false);
@@ -1176,6 +1203,7 @@ partial class ServiceForm
     private TextBox _txtKPlus;
     private TextBox _txtKMinus;
     private Label   _lblFormulaD;
+    private DataGridView _dgvDynCalib;
 
     private Label    _lblPortCap;
     private ComboBox _cmbSettPort;

@@ -206,6 +206,17 @@ public partial class ServiceForm : Form
         _btnCalibDynSave.Font = UiFonts.Medium;
         _btnCalibDynSave.BackColor = UiColors.PrimaryAction;
         _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
+        _dgvDynCalib.Font = UiFonts.GridBody;
+        _dgvDynCalib.BackgroundColor = UiColors.Surface;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
+        _dgvDynCalib.DefaultCellStyle.BackColor = UiColors.Surface;
+        _dgvDynCalib.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        _dgvDynCalib.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
+        _dgvDynCalib.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+        _dgvDynCalib.GridColor = UiColors.GridLine;
 
         // Settings tab
         _tabSett.BackColor = UiColors.Surface;
@@ -258,6 +269,7 @@ public partial class ServiceForm : Form
         RefreshPorts();
         LoadSettingsUi();
         LoadCalibPoints();
+        SetupDynamicCalibGrid();
         LoadCalibDynamic();
         SetAdminTabs(false);
         UpdateMonitorConn(_sim.IsConnected);
@@ -743,6 +755,24 @@ public partial class ServiceForm : Form
 
     // ── Calibration dynamic ─────────────────────────────────────────────────
 
+    private void SetupDynamicCalibGrid()
+    {
+        if (_dgvDynCalib.Columns.Count > 0) return;
+
+        DataGridViewTextBoxColumn Col(string header, int width) => new()
+        {
+            HeaderText = header,
+            Width = width,
+            SortMode = DataGridViewColumnSortMode.NotSortable,
+        };
+
+        _dgvDynCalib.Columns.Add(Col("Акт.", 45));
+        _dgvDynCalib.Columns.Add(Col("K→", 70));
+        _dgvDynCalib.Columns.Add(Col("K←", 70));
+        _dgvDynCalib.Columns.Add(Col("Создан", 95));
+        _dgvDynCalib.Columns.Add(Col("Снят", 95));
+    }
+
     private async void BtnCalibDynSave_Click(object? sender, EventArgs e)
     {
         if (!double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp) ||
@@ -754,9 +784,10 @@ public partial class ServiceForm : Form
         try
         {
             await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
+            await LoadCalibDynamicAsync();
             MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             AuditLogger.Action(AuditLogger.CalibrationSaved,
-                "CalibProfile", $"dynamic kp={kp:G4} km={km:G4}");
+                "CalibProfile", $"dynamic id={_calib.Dynamic.Id} kp={kp:G4} km={km:G4}");
         }
         catch (Exception ex)
         {
@@ -766,11 +797,36 @@ public partial class ServiceForm : Form
         }
     }
 
-    private void LoadCalibDynamic()
+    private void LoadCalibDynamic() => _ = LoadCalibDynamicAsync();
+
+    private async Task LoadCalibDynamicAsync()
     {
         if (_calib is null) return;
+
         _txtKPlus.Text = _calib.Dynamic.KPlus.ToString("G8", CultureInfo.InvariantCulture);
         _txtKMinus.Text = _calib.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
+
+        try
+        {
+            var rows = await _calib.GetDynamicCalibsAsync();
+            _dgvDynCalib.Rows.Clear();
+            foreach (var row in rows)
+            {
+                int idx = _dgvDynCalib.Rows.Add(
+                    row.IsActive ? "Да" : "",
+                    row.KPlus.ToString("G8", CultureInfo.InvariantCulture),
+                    row.KMinus.ToString("G8", CultureInfo.InvariantCulture),
+                    row.CreatedAt == default ? "" : row.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm"),
+                    row.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "");
+
+                if (row.IsActive)
+                    _dgvDynCalib.Rows[idx].DefaultCellStyle.BackColor = UiColors.GridSelectionBack;
+            }
+        }
+        catch (Exception ex)
+        {
+            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic history", "PostgreSQL", ex.Message);
+        }
     }
 
     // ── Admin ────────────────────────────────────────────────────────────────

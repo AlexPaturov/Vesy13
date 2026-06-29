@@ -34,10 +34,7 @@ public class LocalRepository
                 ORDER BY channel, adc_code");
             CalibPoints = pts.ToList().AsReadOnly();
 
-            var dyn = await conn.QueryFirstOrDefaultAsync<DynamicCalib>(@"
-                SELECT k_plus AS KPlus, k_minus AS KMinus
-                FROM calibration_dynamic WHERE id = 1");
-            Dynamic = dyn ?? new DynamicCalib();
+            Dynamic = await LoadActiveDynamicCalibAsync(conn);
         }
         catch
         {
@@ -128,17 +125,44 @@ public class LocalRepository
 
     // ── Dynamic calibration ────────────────────────────────────────────────
 
+    public async Task<List<DynamicCalib>> GetDynamicCalibsAsync()
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<DynamicCalib>(@"
+            SELECT id,
+                   k_plus     AS KPlus,
+                   k_minus    AS KMinus,
+                   is_active  AS IsActive,
+                   created_at AS CreatedAt,
+                   deleted_at AS DeletedAt
+            FROM calibration_dynamic
+            ORDER BY is_active DESC, created_at DESC, id DESC");
+        return rows.ToList();
+    }
+
     public async Task SaveDynamicCalibAsync(DynamicCalib calib)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
         await conn.ExecuteAsync(@"
-            INSERT INTO calibration_dynamic (id, k_plus, k_minus, updated_at)
-            VALUES (1, @KPlus, @KMinus, NOW())
-            ON CONFLICT (id) DO UPDATE
-            SET k_plus = EXCLUDED.k_plus, k_minus = EXCLUDED.k_minus, updated_at = NOW()",
-            new { calib.KPlus, calib.KMinus });
-        Dynamic = calib;
+            UPDATE calibration_dynamic
+            SET is_active = FALSE,
+                deleted_at = COALESCE(deleted_at, NOW()),
+                updated_at = NOW()
+            WHERE is_active = TRUE AND deleted_at IS NULL", transaction: tx);
+
+        int id = await conn.ExecuteScalarAsync<int>(@"
+            INSERT INTO calibration_dynamic (k_plus, k_minus, is_active, created_at, deleted_at, updated_at)
+            VALUES (@KPlus, @KMinus, TRUE, NOW(), NULL, NOW())
+            RETURNING id",
+            new { calib.KPlus, calib.KMinus }, tx);
+
+        await tx.CommitAsync();
+        Dynamic = await LoadActiveDynamicCalibAsync(conn);
+        calib.Id = id;
     }
 
     // ── Wagon weighing ─────────────────────────────────────────────────────
@@ -309,5 +333,22 @@ public class LocalRepository
             FROM calibration_points
             ORDER BY channel, adc_code");
         CalibPoints = pts.ToList().AsReadOnly();
+        Dynamic = await LoadActiveDynamicCalibAsync(conn);
+    }
+
+    private static async Task<DynamicCalib> LoadActiveDynamicCalibAsync(NpgsqlConnection conn)
+    {
+        var dyn = await conn.QueryFirstOrDefaultAsync<DynamicCalib>(@"
+            SELECT id,
+                   k_plus     AS KPlus,
+                   k_minus    AS KMinus,
+                   is_active  AS IsActive,
+                   created_at AS CreatedAt,
+                   deleted_at AS DeletedAt
+            FROM calibration_dynamic
+            WHERE is_active = TRUE AND deleted_at IS NULL
+            ORDER BY created_at DESC, id DESC
+            LIMIT 1");
+        return dyn ?? new DynamicCalib();
     }
 }
