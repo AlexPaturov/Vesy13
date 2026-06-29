@@ -54,9 +54,18 @@ public partial class ServiceForm : Form
     private CheckBox _chkDynamicLog = null!;
     private Button _btnDynamicClearLog = null!;
     private RichTextBox _rtbDynamicLog = null!;
+    private ComboBox _cmbStaticCalibPort = null!;
+    private Panel _dotStaticCalibConn = null!;
+    private Button _btnStaticCalibConn = null!;
+    private Button _btnStaticCalibPortRefresh = null!;
+    private Label _lblStaticCalibConn = null!;
     private Label _lblDynamicCalibConn = null!;
     private Label _lblLiveWeightCapD = null!;
     private Label _lblLiveWeightD = null!;
+    private ComboBox _cmbDynamicCalibPort = null!;
+    private Panel _dotDynamicCalibConn = null!;
+    private Button _btnDynamicCalibConn = null!;
+    private Button _btnDynamicCalibPortRefresh = null!;
 
     public ServiceForm()
     {
@@ -298,7 +307,9 @@ public partial class ServiceForm : Form
         _sim.ConnectionTimeoutMs = 1000;
         _dynamicSim.ConnectionTimeoutMs = 5000;
         SetupDynamicServiceTab();
+        SetupStaticCalibHeader();
         SetupDynamicCalibHeader();
+        _tabs.SelectedIndexChanged += Tabs_SelectedIndexChanged;
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         _dynamicSim.RawSampleReceived += OnDynamicRawSample;
@@ -324,6 +335,7 @@ public partial class ServiceForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
+            _tabs.SelectedIndexChanged -= Tabs_SelectedIndexChanged;
             _sim.RawFrameReceived -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
             if (_sim.IsPortOpen)
@@ -388,7 +400,7 @@ public partial class ServiceForm : Form
             return;
         }
 
-        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на вкладке \"Сервисный режим Динамика\".",
+        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.",
             "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
     private void BtnCalcPlus_Click(object? sender, EventArgs e)
@@ -408,7 +420,7 @@ public partial class ServiceForm : Form
             return;
         }
 
-        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на вкладке \"Сервисный режим Динамика\".",
+        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.",
             "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e)
@@ -536,14 +548,11 @@ public partial class ServiceForm : Form
     {
         if (_sim is null) return;
         var ports = SerialPort.GetPortNames();
-        _cmbPort.Items.Clear();
-        if (ports.Length > 0)
-        {
-            _cmbPort.Items.AddRange(ports);
-            int idx = Array.IndexOf(ports, _sim.PortName);
-            _cmbPort.SelectedIndex = idx >= 0 ? idx : 0;
-        }
+        FillStaticPortCombo(_cmbPort, ports);
+        FillStaticPortCombo(_cmbStaticCalibPort, ports);
         _btnConn.Enabled = ports.Length > 0;
+        if (_btnStaticCalibConn is not null)
+            _btnStaticCalibConn.Enabled = ports.Length > 0;
 
         _cmbSettPort.Items.Clear();
         if (!string.IsNullOrWhiteSpace(_settings.Current.AdcPortName))
@@ -556,26 +565,113 @@ public partial class ServiceForm : Form
         SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
     }
 
+    private void FillStaticPortCombo(ComboBox? combo, string[] ports)
+    {
+        if (combo is null) return;
+        string? selected = combo.SelectedItem as string;
+        combo.Items.Clear();
+        if (ports.Length == 0) return;
+
+        combo.Items.AddRange(ports);
+        int idx = Array.IndexOf(ports, selected ?? _sim.PortName);
+        combo.SelectedIndex = idx >= 0 ? idx : 0;
+    }
+
     private void BtnMonConn_Click(object? sender, EventArgs e)
+    {
+        ToggleStaticConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", UiColors.Error));
+    }
+
+    private void SetupStaticCalibHeader()
+    {
+        if (_btnStaticCalibConn is not null) return;
+
+        _pnlCalibSHead.Height = 96;
+        if (_pnlCalibSHead.Controls.Count > 0 && _pnlCalibSHead.Controls[0] is TableLayoutPanel layout)
+        {
+            layout.Dock = DockStyle.Top;
+            layout.Height = 55;
+        }
+
+        _cmbStaticCalibPort = new ComboBox
+        {
+            Location = new Point(20, 63),
+            Size = new Size(140, 23),
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            Font = UiFonts.Medium,
+            BackColor = UiColors.InputBack,
+            ForeColor = UiColors.InputFore,
+        };
+        _dotStaticCalibConn = new Panel
+        {
+            Location = new Point(174, 67),
+            Size = new Size(16, 16),
+            BackColor = UiColors.Disconnected,
+        };
+        _btnStaticCalibConn = new Button
+        {
+            Location = new Point(204, 59),
+            Size = new Size(120, 32),
+            Text = "Подключить",
+            FlatStyle = FlatStyle.Flat,
+            Font = UiFonts.Body,
+            BackColor = UiColors.PrimaryAction,
+            ForeColor = UiColors.TextOnDark,
+        };
+        _btnStaticCalibPortRefresh = new Button
+        {
+            Location = new Point(330, 59),
+            Size = new Size(42, 32),
+            Text = "↺",
+            FlatStyle = FlatStyle.Flat,
+            Font = UiFonts.SubHeader,
+            BackColor = UiColors.NeutralAction,
+            ForeColor = UiColors.TextPrimary,
+        };
+        _lblStaticCalibConn = new Label
+        {
+            Location = new Point(380, 67),
+            Size = new Size(315, 18),
+            Text = "Нет подключения",
+            Font = UiFonts.Body,
+            ForeColor = UiColors.Disconnected,
+        };
+
+        _btnStaticCalibConn.Click += BtnStaticCalibConn_Click;
+        _btnStaticCalibPortRefresh.Click += (_, _) => RefreshPorts();
+
+        _pnlCalibSHead.Controls.Add(_cmbStaticCalibPort);
+        _pnlCalibSHead.Controls.Add(_dotStaticCalibConn);
+        _pnlCalibSHead.Controls.Add(_btnStaticCalibConn);
+        _pnlCalibSHead.Controls.Add(_btnStaticCalibPortRefresh);
+        _pnlCalibSHead.Controls.Add(_lblStaticCalibConn);
+    }
+
+    private void BtnStaticCalibConn_Click(object? sender, EventArgs e)
+    {
+        ToggleStaticConnection(_cmbStaticCalibPort.SelectedItem as string,
+            ex => MessageBox.Show($"Не удалось подключить АЦП статики.\n{ex.Message}", "АЦП статики", MessageBoxButtons.OK, MessageBoxIcon.Error));
+    }
+
+    private void ToggleStaticConnection(string? selectedPort, Action<Exception> onError)
     {
         if (_sim.IsPortOpen)
         {
-            var port = _sim.PortName;
-            _sim.Close();
-            AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04", port);
+            CloseStaticConnection();
             return;
         }
-        if (_cmbPort.SelectedItem is not string selectedPort) return;
+
+        if (string.IsNullOrWhiteSpace(selectedPort)) return;
         try
         {
-            if (_dynamicSim.IsPortOpen)
-                _dynamicSim.Close();
+            CloseDynamicConnection();
             _sim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04", selectedPort);
+            UpdateMonitorConn(_sim.IsConnected);
         }
         catch (Exception ex)
         {
-            AppendLog($"ОШИБКА: {ex.Message}", UiColors.Error);
+            onError(ex);
             AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04", selectedPort);
         }
     }
@@ -648,40 +744,100 @@ public partial class ServiceForm : Form
 
     private void RefreshDynamicPorts()
     {
-        if (_dynamicSim is null || _cmbDynamicPort is null) return;
+        if (_dynamicSim is null) return;
         var ports = SerialPort.GetPortNames();
-        _cmbDynamicPort.Items.Clear();
-        if (ports.Length > 0)
-        {
-            _cmbDynamicPort.Items.AddRange(ports);
-            int idx = Array.IndexOf(ports, _dynamicSim.PortName);
-            _cmbDynamicPort.SelectedIndex = idx >= 0 ? idx : 0;
-        }
-        _btnDynamicConn.Enabled = ports.Length > 0;
+        FillDynamicPortCombo(_cmbDynamicPort, ports);
+        FillDynamicPortCombo(_cmbDynamicCalibPort, ports);
+        if (_btnDynamicConn is not null)
+            _btnDynamicConn.Enabled = ports.Length > 0;
+        if (_btnDynamicCalibConn is not null)
+            _btnDynamicCalibConn.Enabled = ports.Length > 0;
+    }
+
+    private void FillDynamicPortCombo(ComboBox? combo, string[] ports)
+    {
+        if (combo is null) return;
+        string? selected = combo.SelectedItem as string;
+        combo.Items.Clear();
+        if (ports.Length == 0) return;
+
+        combo.Items.AddRange(ports);
+        int idx = Array.IndexOf(ports, selected ?? _dynamicSim.PortName);
+        combo.SelectedIndex = idx >= 0 ? idx : 0;
     }
 
     private void BtnDynamicConn_Click(object? sender, EventArgs e)
     {
+        ToggleDynamicConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error));
+    }
+
+    private void BtnDynamicCalibConn_Click(object? sender, EventArgs e)
+    {
+        ToggleDynamicConnection(_cmbDynamicCalibPort.SelectedItem as string,
+            ex => MessageBox.Show($"Не удалось подключить АЦП динамики.\n{ex.Message}", "АЦП динамики", MessageBoxButtons.OK, MessageBoxIcon.Error));
+    }
+
+    private void ToggleDynamicConnection(string? selectedPort, Action<Exception> onError)
+    {
         if (_dynamicSim.IsPortOpen)
         {
-            var port = _dynamicSim.PortName;
-            _dynamicSim.Close();
-            AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04Dynamic", port);
+            CloseDynamicConnection();
             return;
         }
-        if (_cmbDynamicPort.SelectedItem is not string selectedPort) return;
+
+        if (string.IsNullOrWhiteSpace(selectedPort)) return;
         try
         {
-            if (_sim.IsPortOpen)
-                _sim.Close();
+            CloseStaticConnection();
             _dynamicSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04Dynamic", selectedPort);
+            UpdateDynamicMonitorConn(_dynamicSim.IsConnected);
         }
         catch (Exception ex)
         {
-            AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error);
+            onError(ex);
             AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04Dynamic", selectedPort);
         }
+    }
+
+    private void CloseStaticConnection()
+    {
+        if (!_sim.IsPortOpen) return;
+
+        var port = _sim.PortName;
+        _sim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04", port);
+        UpdateMonitorConn(false);
+    }
+
+    private void CloseDynamicConnection()
+    {
+        if (!_dynamicSim.IsPortOpen) return;
+
+        var port = _dynamicSim.PortName;
+        _dynamicSim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04Dynamic", port);
+        UpdateDynamicMonitorConn(false);
+    }
+
+    private void Tabs_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (DesignMode || _sim is null || _dynamicSim is null) return;
+        var tab = _tabs.SelectedTab;
+        if (tab == _tabMonitor || tab == _tabCalibS)
+        {
+            CloseDynamicConnection();
+            return;
+        }
+
+        if (tab == _tabDynamicService || tab == _tabCalibD)
+        {
+            CloseStaticConnection();
+            return;
+        }
+
+        CloseStaticConnection();
+        CloseDynamicConnection();
     }
 
     private void UpdateDynamicMonitorConn(bool connected)
@@ -693,6 +849,17 @@ public partial class ServiceForm : Form
         _btnDynamicConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
         _btnDynamicConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
         _cmbDynamicPort.Enabled = !_dynamicSim.IsPortOpen;
+        SelectComboValue(_cmbDynamicPort, _dynamicSim.PortName);
+        SelectComboValue(_cmbDynamicCalibPort, _dynamicSim.PortName);
+        if (_dotDynamicCalibConn is not null)
+            _dotDynamicCalibConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        if (_btnDynamicCalibConn is not null)
+        {
+            _btnDynamicCalibConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
+            _btnDynamicCalibConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        }
+        if (_cmbDynamicCalibPort is not null)
+            _cmbDynamicCalibPort.Enabled = !_dynamicSim.IsPortOpen;
         UpdateDynamicCalibrationConnectionLabel();
         AppendDynamicLog(connected ? $"=== Подключено: {_dynamicSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
@@ -825,6 +992,22 @@ public partial class ServiceForm : Form
         _btnConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
         _btnConn.BackColor = _sim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
         _cmbPort.Enabled = !_sim.IsPortOpen;
+        SelectComboValue(_cmbPort, _sim.PortName);
+        SelectComboValue(_cmbStaticCalibPort, _sim.PortName);
+        if (_dotStaticCalibConn is not null)
+            _dotStaticCalibConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        if (_lblStaticCalibConn is not null)
+        {
+            _lblStaticCalibConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : (_sim.IsPortOpen ? $"Порт открыт: {_sim.PortName}, нет ответа АЦП" : "Нет подключения");
+            _lblStaticCalibConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        }
+        if (_btnStaticCalibConn is not null)
+        {
+            _btnStaticCalibConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
+            _btnStaticCalibConn.BackColor = _sim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        }
+        if (_cmbStaticCalibPort is not null)
+            _cmbStaticCalibPort.Enabled = !_sim.IsPortOpen;
         AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
             connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
@@ -1071,6 +1254,8 @@ public partial class ServiceForm : Form
     {
         if (_lblLiveWeightD is not null) return;
 
+        _pnlCalibDHead.Height = 78;
+
         _lblLiveWeightCapD = new Label
         {
             Location = new Point(260, 12),
@@ -1089,15 +1274,57 @@ public partial class ServiceForm : Form
         };
         _lblDynamicCalibConn = new Label
         {
-            Location = new Point(505, 12),
-            Size = new Size(190, 18),
+            Location = new Point(380, 48),
+            Size = new Size(315, 18),
             Text = "Динамика: нет подключения",
             Font = UiFonts.Body,
             ForeColor = UiColors.Disconnected,
         };
+        _cmbDynamicCalibPort = new ComboBox
+        {
+            Location = new Point(20, 44),
+            Size = new Size(140, 23),
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            Font = UiFonts.Medium,
+            BackColor = UiColors.InputBack,
+            ForeColor = UiColors.InputFore,
+        };
+        _dotDynamicCalibConn = new Panel
+        {
+            Location = new Point(174, 48),
+            Size = new Size(16, 16),
+            BackColor = UiColors.Disconnected,
+        };
+        _btnDynamicCalibConn = new Button
+        {
+            Location = new Point(204, 40),
+            Size = new Size(120, 32),
+            Text = "Подключить",
+            FlatStyle = FlatStyle.Flat,
+            Font = UiFonts.Body,
+            BackColor = UiColors.PrimaryAction,
+            ForeColor = UiColors.TextOnDark,
+        };
+        _btnDynamicCalibPortRefresh = new Button
+        {
+            Location = new Point(330, 40),
+            Size = new Size(42, 32),
+            Text = "↺",
+            FlatStyle = FlatStyle.Flat,
+            Font = UiFonts.SubHeader,
+            BackColor = UiColors.NeutralAction,
+            ForeColor = UiColors.TextPrimary,
+        };
+
+        _btnDynamicCalibConn.Click += BtnDynamicCalibConn_Click;
+        _btnDynamicCalibPortRefresh.Click += (_, _) => RefreshDynamicPorts();
 
         _pnlCalibDHead.Controls.Add(_lblLiveWeightCapD);
         _pnlCalibDHead.Controls.Add(_lblLiveWeightD);
+        _pnlCalibDHead.Controls.Add(_cmbDynamicCalibPort);
+        _pnlCalibDHead.Controls.Add(_dotDynamicCalibConn);
+        _pnlCalibDHead.Controls.Add(_btnDynamicCalibConn);
+        _pnlCalibDHead.Controls.Add(_btnDynamicCalibPortRefresh);
         _pnlCalibDHead.Controls.Add(_lblDynamicCalibConn);
 
         _txtKPlus.TextChanged += (_, _) => UpdateLiveDynamicCalibrationLabels();
