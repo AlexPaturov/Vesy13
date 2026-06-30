@@ -42,30 +42,6 @@ public partial class ServiceForm : Form
     private int _lastDynCh0;
     private int _lastDynCh1;
 
-    private TabPage _tabDynamicService = null!;
-    private ComboBox _cmbDynamicPort = null!;
-    private Panel _dotDynamicConn = null!;
-    private Button _btnDynamicConn = null!;
-    private Button _btnDynamicPortRefresh = null!;
-    private Label _lblDynamicConn = null!;
-    private Label _lblDynamicRate = null!;
-    private Label _lblDynamicCh0 = null!;
-    private Label _lblDynamicCh1 = null!;
-    private CheckBox _chkDynamicLog = null!;
-    private Button _btnDynamicClearLog = null!;
-    private RichTextBox _rtbDynamicLog = null!;
-    private ComboBox _cmbStaticCalibPort = null!;
-    private Panel _dotStaticCalibConn = null!;
-    private Button _btnStaticCalibConn = null!;
-    private Button _btnStaticCalibPortRefresh = null!;
-    private Label _lblStaticCalibConn = null!;
-    private Label _lblDynamicCalibConn = null!;
-    private Label _lblLiveWeightCapD = null!;
-    private Label _lblLiveWeightD = null!;
-    private ComboBox _cmbDynamicCalibPort = null!;
-    private Panel _dotDynamicCalibConn = null!;
-    private Button _btnDynamicCalibConn = null!;
-    private Button _btnDynamicCalibPortRefresh = null!;
 
     public ServiceForm()
     {
@@ -141,6 +117,18 @@ public partial class ServiceForm : Form
         _pnlCalibS.BackColor = UiColors.Surface;
         _pnlCalibSHead.BackColor = UiColors.Surface;
         _pnlCalibSBody.BackColor = UiColors.Surface;
+        _cmbStaticCalibPort.Font = UiFonts.Medium;
+        _cmbStaticCalibPort.BackColor = UiColors.InputBack;
+        _cmbStaticCalibPort.ForeColor = UiColors.InputFore;
+        _dotStaticCalibConn.BackColor = UiColors.Disconnected;
+        _btnStaticCalibConn.Font = UiFonts.Body;
+        _btnStaticCalibConn.BackColor = UiColors.PrimaryAction;
+        _btnStaticCalibConn.ForeColor = UiColors.TextOnDark;
+        _btnStaticCalibPortRefresh.Font = UiFonts.SubHeader;
+        _btnStaticCalibPortRefresh.BackColor = UiColors.NeutralAction;
+        _btnStaticCalibPortRefresh.ForeColor = UiColors.TextPrimary;
+        _lblStaticCalibConn.Font = UiFonts.Body;
+        _lblStaticCalibConn.ForeColor = UiColors.Disconnected;
         _rbCh0Calib.Font = UiFonts.SubHeader;
         _rbCh0Calib.ForeColor = UiColors.TextPrimary;
         _rbCh1Calib.Font = UiFonts.SubHeader;
@@ -197,6 +185,22 @@ public partial class ServiceForm : Form
         _lblLiveAdcCapD.ForeColor = UiColors.Disconnected;
         _lblLiveAdcD.Font = UiFonts.MonoLiveAdc;
         _lblLiveAdcD.ForeColor = UiColors.Info;
+        _lblLiveWeightCapD.Font = UiFonts.Body;
+        _lblLiveWeightCapD.ForeColor = UiColors.Disconnected;
+        _lblLiveWeightD.Font = UiFonts.MonoLiveAdc;
+        _lblLiveWeightD.ForeColor = UiColors.Info;
+        _cmbDynamicCalibPort.Font = UiFonts.Medium;
+        _cmbDynamicCalibPort.BackColor = UiColors.InputBack;
+        _cmbDynamicCalibPort.ForeColor = UiColors.InputFore;
+        _dotDynamicCalibConn.BackColor = UiColors.Disconnected;
+        _btnDynamicCalibConn.Font = UiFonts.Body;
+        _btnDynamicCalibConn.BackColor = UiColors.PrimaryAction;
+        _btnDynamicCalibConn.ForeColor = UiColors.TextOnDark;
+        _btnDynamicCalibPortRefresh.Font = UiFonts.SubHeader;
+        _btnDynamicCalibPortRefresh.BackColor = UiColors.NeutralAction;
+        _btnDynamicCalibPortRefresh.ForeColor = UiColors.TextPrimary;
+        _lblDynamicCalibConn.Font = UiFonts.Body;
+        _lblDynamicCalibConn.ForeColor = UiColors.Disconnected;
         _lblSecPlus.Font = UiFonts.BodyBold;
         _lblSecPlus.ForeColor = UiColors.TextSection;
         _lblKPlusEquals.Font = UiFonts.Medium;
@@ -306,9 +310,6 @@ public partial class ServiceForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
         _sim.ConnectionTimeoutMs = 1000;
         _dynamicSim.ConnectionTimeoutMs = 5000;
-        SetupDynamicServiceTab();
-        SetupStaticCalibHeader();
-        SetupDynamicCalibHeader();
         _tabs.SelectedIndexChanged += Tabs_SelectedIndexChanged;
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
@@ -324,7 +325,6 @@ public partial class ServiceForm : Form
         RefreshDynamicPorts();
         LoadSettingsUi();
         LoadCalibPoints();
-        SetupDynamicCalibGrid();
         LoadCalibDynamic();
         SetAdminTabs(false);
         UpdateMonitorConn(_sim.IsConnected);
@@ -436,13 +436,13 @@ public partial class ServiceForm : Form
 
     private void RbMain_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbMain.Checked) 
+        if (_rbMain.Checked)
             SetActiveChannel(ActiveChannel.Main);
     }
 
     private void RbBackup_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbBackup.Checked) 
+        if (_rbBackup.Checked)
             SetActiveChannel(ActiveChannel.Backup);
     }
 
@@ -464,18 +464,18 @@ public partial class ServiceForm : Form
         if (_rbCh0Calib.Checked)
         {
             _calibUseCh0 = true;
-            LoadCalibPoints(); 
+            LoadCalibPoints();
             UpdateLiveAdcLabel();
         }
     }
 
     private void RbCh1Calib_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbCh1Calib.Checked) 
-        { 
-            _calibUseCh0 = false; 
-            LoadCalibPoints(); 
-            UpdateLiveAdcLabel(); 
+        if (_rbCh1Calib.Checked)
+        {
+            _calibUseCh0 = false;
+            LoadCalibPoints();
+            UpdateLiveAdcLabel();
         }
     }
 
@@ -567,7 +567,7 @@ public partial class ServiceForm : Form
         FillStaticPortCombo(_cmbPort, ports);
         FillStaticPortCombo(_cmbStaticCalibPort, ports);
         _btnConn.Enabled = ports.Length > 0;
-        
+
         if (_btnStaticCalibConn is not null)
             _btnStaticCalibConn.Enabled = ports.Length > 0;
 
@@ -601,75 +601,6 @@ public partial class ServiceForm : Form
         ToggleStaticConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", UiColors.Error));
     }
 
-    private void SetupStaticCalibHeader()
-    {
-        if (_btnStaticCalibConn is not null) return;
-
-        _pnlCalibSHead.Height = 96;
-        if (_pnlCalibSHead.Controls.Count > 0 && _pnlCalibSHead.Controls[0] is TableLayoutPanel layout)
-        {
-            layout.Dock = DockStyle.Top;
-            layout.Height = 55;
-        }
-
-        _cmbStaticCalibPort = new ComboBox
-        {
-            Location = new Point(20, 63),
-            Size = new Size(140, 23),
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Font = UiFonts.Medium,
-            BackColor = UiColors.InputBack,
-            ForeColor = UiColors.InputFore,
-        };
-
-        _dotStaticCalibConn = new Panel
-        {
-            Location = new Point(174, 67),
-            Size = new Size(16, 16),
-            BackColor = UiColors.Disconnected,
-        };
-
-        _btnStaticCalibConn = new Button
-        {
-            Location = new Point(204, 59),
-            Size = new Size(120, 32),
-            Text = "Подключить",
-            FlatStyle = FlatStyle.Flat,
-            Font = UiFonts.Body,
-            BackColor = UiColors.PrimaryAction,
-            ForeColor = UiColors.TextOnDark,
-        };
-
-        _btnStaticCalibPortRefresh = new Button
-        {
-            Location = new Point(330, 59),
-            Size = new Size(42, 32),
-            Text = "↺",
-            FlatStyle = FlatStyle.Flat,
-            Font = UiFonts.SubHeader,
-            BackColor = UiColors.NeutralAction,
-            ForeColor = UiColors.TextPrimary,
-        };
-
-        _lblStaticCalibConn = new Label
-        {
-            Location = new Point(380, 67),
-            Size = new Size(315, 18),
-            Text = "Нет подключения",
-            Font = UiFonts.Body,
-            ForeColor = UiColors.Disconnected,
-        };
-
-        _btnStaticCalibConn.Click += BtnStaticCalibConn_Click;
-        _btnStaticCalibPortRefresh.Click += (_, _) => RefreshPorts();
-
-        _pnlCalibSHead.Controls.Add(_cmbStaticCalibPort);
-        _pnlCalibSHead.Controls.Add(_dotStaticCalibConn);
-        _pnlCalibSHead.Controls.Add(_btnStaticCalibConn);
-        _pnlCalibSHead.Controls.Add(_btnStaticCalibPortRefresh);
-        _pnlCalibSHead.Controls.Add(_lblStaticCalibConn);
-    }
-
     private void BtnStaticCalibConn_Click(object? sender, EventArgs e)
     {
         ToggleStaticConnection(_cmbStaticCalibPort.SelectedItem as string,
@@ -701,44 +632,6 @@ public partial class ServiceForm : Form
     }
 
 
-    private void SetupDynamicServiceTab()
-    {
-        if (_tabDynamicService is not null) return;
-
-        _tabMonitor.Text = "Сервисный режим Статика";
-        _tabDynamicService = new TabPage { Name = "_tabDynamicService", Text = "Сервисный режим Динамика", BackColor = UiColors.Surface };
-        _cmbDynamicPort = new ComboBox { Location = new Point(20, 14), Size = new Size(140, 23), DropDownStyle = ComboBoxStyle.DropDownList };
-        _dotDynamicConn = new Panel { Location = new Point(180, 18), Size = new Size(16, 16) };
-        _btnDynamicConn = new Button { Location = new Point(210, 10), Size = new Size(130, 32), Text = "Подключить", FlatStyle = FlatStyle.Flat };
-        _btnDynamicPortRefresh = new Button { Location = new Point(350, 10), Size = new Size(42, 32), Text = "↺", FlatStyle = FlatStyle.Flat };
-        _lblDynamicConn = new Label { Location = new Point(410, 14), Size = new Size(290, 23), Text = "Нет подключения" };
-        _lblDynamicRate = new Label { Location = new Point(20, 52), Size = new Size(120, 24), Text = "— сэмпл/с" };
-
-        var pnlCh0 = CreateDynamicChannelPanel("Канал: Основной (CH0)", new Point(20, 86), out _lblDynamicCh0);
-        var pnlCh1 = CreateDynamicChannelPanel("Канал: Резервный (CH1)", new Point(360, 86), out _lblDynamicCh1);
-        _chkDynamicLog = new CheckBox { Location = new Point(20, 198), Size = new Size(110, 24), Text = "Лог активен", Checked = true };
-        _btnDynamicClearLog = new Button { Anchor = AnchorStyles.Top | AnchorStyles.Right, Location = new Point(598, 198), Size = new Size(101, 32), Text = "Очистить", FlatStyle = FlatStyle.Flat };
-        _rtbDynamicLog = new RichTextBox { Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, Location = new Point(10, 239), Size = new Size(690, 99), ReadOnly = true, DetectUrls = false, WordWrap = false, ScrollBars = RichTextBoxScrollBars.Vertical };
-
-        _btnDynamicConn.Click += BtnDynamicConn_Click;
-        _btnDynamicPortRefresh.Click += (_, _) => RefreshDynamicPorts();
-        _btnDynamicClearLog.Click += (_, _) => _rtbDynamicLog.Clear();
-
-        _tabDynamicService.Controls.AddRange(new Control[] { _cmbDynamicPort, _dotDynamicConn, _btnDynamicConn, _btnDynamicPortRefresh, _lblDynamicConn, _lblDynamicRate, pnlCh0, pnlCh1, _chkDynamicLog, _btnDynamicClearLog, _rtbDynamicLog });
-        _tabs.TabPages.Insert(2, _tabDynamicService);
-        ApplyDynamicServiceTheme();
-    }
-
-    private Panel CreateDynamicChannelPanel(string title, Point location, out Label valueLabel)
-    {
-        var panel = new Panel { Location = location, Size = new Size(340, 144), BackColor = UiColors.MonitorBackground };
-        var titleLabel = new Label { Location = new Point(8, 6), AutoSize = true, Text = title, Font = UiFonts.Body, ForeColor = UiColors.TextOnDarkMuted };
-        valueLabel = new Label { Location = new Point(8, 28), Size = new Size(324, 90), Text = "—", TextAlign = ContentAlignment.MiddleRight, Font = UiFonts.MonitorDisplay, ForeColor = UiColors.Disconnected };
-        panel.Controls.Add(titleLabel);
-        panel.Controls.Add(valueLabel);
-        return panel;
-    }
-
     private void ApplyDynamicServiceTheme()
     {
         if (_tabDynamicService is null) return;
@@ -756,6 +649,16 @@ public partial class ServiceForm : Form
         _lblDynamicConn.ForeColor = UiColors.Disconnected;
         _lblDynamicRate.Font = UiFonts.Body;
         _lblDynamicRate.ForeColor = UiColors.Disconnected;
+        _pnlDynamicCh0.BackColor = UiColors.MonitorBackground;
+        _pnlDynamicCh1.BackColor = UiColors.MonitorBackground;
+        _lblDynamicCh0Cap.Font = UiFonts.Body;
+        _lblDynamicCh0Cap.ForeColor = UiColors.TextOnDarkMuted;
+        _lblDynamicCh1Cap.Font = UiFonts.Body;
+        _lblDynamicCh1Cap.ForeColor = UiColors.TextOnDarkMuted;
+        _lblDynamicCh0.Font = UiFonts.MonitorDisplay;
+        _lblDynamicCh0.ForeColor = UiColors.Disconnected;
+        _lblDynamicCh1.Font = UiFonts.MonitorDisplay;
+        _lblDynamicCh1.ForeColor = UiColors.Disconnected;
         _chkDynamicLog.Font = UiFonts.Body;
         _chkDynamicLog.ForeColor = UiColors.TextPrimary;
         _btnDynamicClearLog.Font = UiFonts.Body;
@@ -793,6 +696,16 @@ public partial class ServiceForm : Form
     private void BtnDynamicConn_Click(object? sender, EventArgs e)
     {
         ToggleDynamicConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error));
+    }
+
+    private void BtnDynamicPortRefresh_Click(object? sender, EventArgs e)
+    {
+        RefreshDynamicPorts();
+    }
+
+    private void BtnDynamicClearLog_Click(object? sender, EventArgs e)
+    {
+        _rtbDynamicLog.Clear();
     }
 
     private void BtnDynamicCalibConn_Click(object? sender, EventArgs e)
@@ -1272,95 +1185,6 @@ public partial class ServiceForm : Form
 
     // ── Calibration dynamic ─────────────────────────────────────────────────
 
-    private void SetupDynamicCalibHeader()
-    {
-        if (_lblLiveWeightD is not null) return;
-
-        _pnlCalibDHead.Height = 78;
-
-        _lblLiveWeightCapD = new Label
-        {
-            Location = new Point(260, 12),
-            Size = new Size(85, 18),
-            Text = "Текущий вес:",
-            Font = UiFonts.Body,
-            ForeColor = UiColors.Disconnected,
-        };
-
-        _lblLiveWeightD = new Label
-        {
-            Location = new Point(345, 10),
-            Size = new Size(155, 22),
-            Text = "—",
-            Font = UiFonts.MonoLiveAdc,
-            ForeColor = UiColors.Info,
-        };
-
-        _lblDynamicCalibConn = new Label
-        {
-            Location = new Point(380, 48),
-            Size = new Size(315, 18),
-            Text = "Динамика: нет подключения",
-            Font = UiFonts.Body,
-            ForeColor = UiColors.Disconnected,
-        };
-
-        _cmbDynamicCalibPort = new ComboBox
-        {
-            Location = new Point(20, 44),
-            Size = new Size(140, 23),
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Font = UiFonts.Medium,
-            BackColor = UiColors.InputBack,
-            ForeColor = UiColors.InputFore,
-        };
-
-        _dotDynamicCalibConn = new Panel
-        {
-            Location = new Point(174, 48),
-            Size = new Size(16, 16),
-            BackColor = UiColors.Disconnected,
-        };
-
-        _btnDynamicCalibConn = new Button
-        {
-            Location = new Point(204, 40),
-            Size = new Size(120, 32),
-            Text = "Подключить",
-            FlatStyle = FlatStyle.Flat,
-            Font = UiFonts.Body,
-            BackColor = UiColors.PrimaryAction,
-            ForeColor = UiColors.TextOnDark,
-        };
-
-        _btnDynamicCalibPortRefresh = new Button
-        {
-            Location = new Point(330, 40),
-            Size = new Size(42, 32),
-            Text = "↺",
-            FlatStyle = FlatStyle.Flat,
-            Font = UiFonts.SubHeader,
-            BackColor = UiColors.NeutralAction,
-            ForeColor = UiColors.TextPrimary,
-        };
-
-        _btnDynamicCalibConn.Click += BtnDynamicCalibConn_Click;
-        _btnDynamicCalibPortRefresh.Click += (_, _) => RefreshDynamicPorts();
-
-        _pnlCalibDHead.Controls.Add(_lblLiveWeightCapD);
-        _pnlCalibDHead.Controls.Add(_lblLiveWeightD);
-        _pnlCalibDHead.Controls.Add(_cmbDynamicCalibPort);
-        _pnlCalibDHead.Controls.Add(_dotDynamicCalibConn);
-        _pnlCalibDHead.Controls.Add(_btnDynamicCalibConn);
-        _pnlCalibDHead.Controls.Add(_btnDynamicCalibPortRefresh);
-        _pnlCalibDHead.Controls.Add(_lblDynamicCalibConn);
-
-        _txtKPlus.TextChanged += (_, _) => UpdateLiveDynamicCalibrationLabels();
-        _txtKMinus.TextChanged += (_, _) => UpdateLiveDynamicCalibrationLabels();
-        UpdateLiveDynamicCalibrationLabels();
-        UpdateDynamicCalibrationConnectionLabel();
-    }
-
     private int CurrentDynamicAdcCode()
     {
         if (_dynamicSim is null) return 0;
@@ -1389,7 +1213,7 @@ public partial class ServiceForm : Form
 
         bool plusOk = double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp);
         bool minusOk = double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km);
-        
+
         if (!plusOk && !minusOk)
         {
             _lblLiveWeightD.Text = "—";
@@ -1422,24 +1246,6 @@ public partial class ServiceForm : Form
             _lblDynamicCalibConn.Text = "Динамика: нет подключения";
             _lblDynamicCalibConn.ForeColor = UiColors.Disconnected;
         }
-    }
-
-    private void SetupDynamicCalibGrid()
-    {
-        if (_dgvDynCalib.Columns.Count > 0) return;
-
-        DataGridViewTextBoxColumn Col(string header, int width) => new()
-        {
-            HeaderText = header,
-            Width = width,
-            SortMode = DataGridViewColumnSortMode.NotSortable,
-        };
-
-        _dgvDynCalib.Columns.Add(Col("Акт.", 45));
-        _dgvDynCalib.Columns.Add(Col("K→", 70));
-        _dgvDynCalib.Columns.Add(Col("K←", 70));
-        _dgvDynCalib.Columns.Add(Col("Создан", 95));
-        _dgvDynCalib.Columns.Add(Col("Снят", 95));
     }
 
     private async void BtnCalibDynSave_Click(object? sender, EventArgs e)

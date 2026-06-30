@@ -14,8 +14,8 @@ partial class ServiceForm
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
         _btnAdmin = new Button();
         _tabs = new TabControl();
         _tabChannel = new TabPage();
@@ -39,6 +39,22 @@ partial class ServiceForm
         _chkLog = new CheckBox();
         _btnClearLog = new Button();
         _rtbLog = new RichTextBox();
+        _tabDynamicService = new TabPage();
+        _cmbDynamicPort = new ComboBox();
+        _dotDynamicConn = new Panel();
+        _btnDynamicConn = new Button();
+        _btnDynamicPortRefresh = new Button();
+        _lblDynamicConn = new Label();
+        _lblDynamicRate = new Label();
+        _pnlDynamicCh0 = new Panel();
+        _lblDynamicCh0Cap = new Label();
+        _lblDynamicCh0 = new Label();
+        _pnlDynamicCh1 = new Panel();
+        _lblDynamicCh1Cap = new Label();
+        _lblDynamicCh1 = new Label();
+        _chkDynamicLog = new CheckBox();
+        _btnDynamicClearLog = new Button();
+        _rtbDynamicLog = new RichTextBox();
         _tabCalibS = new TabPage();
         _pnlCalibS = new Panel();
         _pnlCalibSBody = new Panel();
@@ -57,6 +73,11 @@ partial class ServiceForm
         _btnLsq = new Button();
         _btnCalibSave = new Button();
         _pnlCalibSHead = new Panel();
+        _cmbStaticCalibPort = new ComboBox();
+        _dotStaticCalibConn = new Panel();
+        _btnStaticCalibConn = new Button();
+        _btnStaticCalibPortRefresh = new Button();
+        _lblStaticCalibConn = new Label();
         tableLayoutPanel1 = new TableLayoutPanel();
         _rbCh1Calib = new RadioButton();
         _lblLiveAdc = new Label();
@@ -92,6 +113,18 @@ partial class ServiceForm
         _pnlCalibDHead = new Panel();
         _lblLiveAdcCapD = new Label();
         _lblLiveAdcD = new Label();
+        _lblLiveWeightCapD = new Label();
+        _lblLiveWeightD = new Label();
+        _cmbDynamicCalibPort = new ComboBox();
+        _dotDynamicCalibConn = new Panel();
+        _btnDynamicCalibConn = new Button();
+        _btnDynamicCalibPortRefresh = new Button();
+        _lblDynamicCalibConn = new Label();
+        dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+        dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+        dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+        dataGridViewTextBoxColumn7 = new DataGridViewTextBoxColumn();
+        dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
         _tabSett = new TabPage();
         _lblPortCap = new Label();
         _cmbSettPort = new ComboBox();
@@ -110,6 +143,9 @@ partial class ServiceForm
         _tabMonitor.SuspendLayout();
         _pnlCh0.SuspendLayout();
         _pnlCh1.SuspendLayout();
+        _tabDynamicService.SuspendLayout();
+        _pnlDynamicCh0.SuspendLayout();
+        _pnlDynamicCh1.SuspendLayout();
         _tabCalibS.SuspendLayout();
         _pnlCalibS.SuspendLayout();
         _pnlCalibSBody.SuspendLayout();
@@ -129,7 +165,7 @@ partial class ServiceForm
         _btnAdmin.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _btnAdmin.FlatAppearance.BorderSize = 0;
         _btnAdmin.FlatStyle = FlatStyle.Flat;
-        _btnAdmin.Location = new Point(600, 11);
+        _btnAdmin.Location = new Point(900, 11);
         _btnAdmin.Margin = new Padding(3, 4, 3, 4);
         _btnAdmin.Name = "_btnAdmin";
         _btnAdmin.Size = new Size(309, 37);
@@ -143,6 +179,7 @@ partial class ServiceForm
         _tabs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _tabs.Controls.Add(_tabChannel);
         _tabs.Controls.Add(_tabMonitor);
+        _tabs.Controls.Add(_tabDynamicService);
         _tabs.Controls.Add(_tabCalibS);
         _tabs.Controls.Add(_tabCalibD);
         _tabs.Controls.Add(_tabSett);
@@ -150,7 +187,7 @@ partial class ServiceForm
         _tabs.Margin = new Padding(3, 4, 3, 4);
         _tabs.Name = "_tabs";
         _tabs.SelectedIndex = 0;
-        _tabs.Size = new Size(920, 726);
+        _tabs.Size = new Size(1220, 726);
         _tabs.TabIndex = 1;
         // 
         // _tabChannel
@@ -162,7 +199,7 @@ partial class ServiceForm
         _tabChannel.Location = new Point(4, 29);
         _tabChannel.Margin = new Padding(3, 4, 3, 4);
         _tabChannel.Name = "_tabChannel";
-        _tabChannel.Size = new Size(912, 693);
+        _tabChannel.Size = new Size(1212, 693);
         _tabChannel.TabIndex = 0;
         _tabChannel.Text = "Канал";
         // 
@@ -224,7 +261,7 @@ partial class ServiceForm
         _tabMonitor.Location = new Point(4, 29);
         _tabMonitor.Margin = new Padding(3, 4, 3, 4);
         _tabMonitor.Name = "_tabMonitor";
-        _tabMonitor.Size = new Size(912, 693);
+        _tabMonitor.Size = new Size(1212, 693);
         _tabMonitor.TabIndex = 1;
         _tabMonitor.Text = "Сервисный режим Статика";
         // 
@@ -283,7 +320,7 @@ partial class ServiceForm
         // 
         _lblRate.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblRate.AutoSize = true;
-        _lblRate.Location = new Point(723, 19);
+        _lblRate.Location = new Point(1023, 19);
         _lblRate.Name = "_lblRate";
         _lblRate.Size = new Size(60, 20);
         _lblRate.TabIndex = 5;
@@ -361,7 +398,7 @@ partial class ServiceForm
         // 
         _btnClearLog.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _btnClearLog.FlatStyle = FlatStyle.Flat;
-        _btnClearLog.Location = new Point(766, 264);
+        _btnClearLog.Location = new Point(1066, 264);
         _btnClearLog.Margin = new Padding(3, 4, 3, 4);
         _btnClearLog.Name = "_btnClearLog";
         _btnClearLog.Size = new Size(115, 43);
@@ -379,10 +416,182 @@ partial class ServiceForm
         _rtbLog.Name = "_rtbLog";
         _rtbLog.ReadOnly = true;
         _rtbLog.ScrollBars = RichTextBoxScrollBars.Vertical;
-        _rtbLog.Size = new Size(871, 131);
+        _rtbLog.Size = new Size(1171, 131);
         _rtbLog.TabIndex = 10;
         _rtbLog.Text = "";
         _rtbLog.WordWrap = false;
+        // 
+        // _tabDynamicService
+        // 
+        _tabDynamicService.Controls.Add(_cmbDynamicPort);
+        _tabDynamicService.Controls.Add(_dotDynamicConn);
+        _tabDynamicService.Controls.Add(_btnDynamicConn);
+        _tabDynamicService.Controls.Add(_btnDynamicPortRefresh);
+        _tabDynamicService.Controls.Add(_lblDynamicConn);
+        _tabDynamicService.Controls.Add(_lblDynamicRate);
+        _tabDynamicService.Controls.Add(_pnlDynamicCh0);
+        _tabDynamicService.Controls.Add(_pnlDynamicCh1);
+        _tabDynamicService.Controls.Add(_chkDynamicLog);
+        _tabDynamicService.Controls.Add(_btnDynamicClearLog);
+        _tabDynamicService.Controls.Add(_rtbDynamicLog);
+        _tabDynamicService.Location = new Point(4, 29);
+        _tabDynamicService.Margin = new Padding(3, 4, 3, 4);
+        _tabDynamicService.Name = "_tabDynamicService";
+        _tabDynamicService.Size = new Size(1212, 693);
+        _tabDynamicService.TabIndex = 2;
+        _tabDynamicService.Text = "Сервисный режим Динамика";
+        // 
+        // _cmbDynamicPort
+        // 
+        _cmbDynamicPort.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbDynamicPort.Location = new Point(20, 14);
+        _cmbDynamicPort.Margin = new Padding(3, 4, 3, 4);
+        _cmbDynamicPort.Name = "_cmbDynamicPort";
+        _cmbDynamicPort.Size = new Size(140, 28);
+        _cmbDynamicPort.TabIndex = 0;
+        // 
+        // _dotDynamicConn
+        // 
+        _dotDynamicConn.Location = new Point(180, 18);
+        _dotDynamicConn.Margin = new Padding(3, 4, 3, 4);
+        _dotDynamicConn.Name = "_dotDynamicConn";
+        _dotDynamicConn.Size = new Size(16, 16);
+        _dotDynamicConn.TabIndex = 1;
+        // 
+        // _btnDynamicConn
+        // 
+        _btnDynamicConn.FlatStyle = FlatStyle.Flat;
+        _btnDynamicConn.Location = new Point(210, 10);
+        _btnDynamicConn.Margin = new Padding(3, 4, 3, 4);
+        _btnDynamicConn.Name = "_btnDynamicConn";
+        _btnDynamicConn.Size = new Size(130, 32);
+        _btnDynamicConn.TabIndex = 2;
+        _btnDynamicConn.Text = "Подключить";
+        _btnDynamicConn.UseVisualStyleBackColor = false;
+        _btnDynamicConn.Click += BtnDynamicConn_Click;
+        // 
+        // _btnDynamicPortRefresh
+        // 
+        _btnDynamicPortRefresh.FlatStyle = FlatStyle.Flat;
+        _btnDynamicPortRefresh.Location = new Point(350, 10);
+        _btnDynamicPortRefresh.Margin = new Padding(3, 4, 3, 4);
+        _btnDynamicPortRefresh.Name = "_btnDynamicPortRefresh";
+        _btnDynamicPortRefresh.Size = new Size(42, 32);
+        _btnDynamicPortRefresh.TabIndex = 3;
+        _btnDynamicPortRefresh.Text = "↺";
+        _btnDynamicPortRefresh.UseVisualStyleBackColor = false;
+        _btnDynamicPortRefresh.Click += BtnDynamicPortRefresh_Click;
+        // 
+        // _lblDynamicConn
+        // 
+        _lblDynamicConn.Location = new Point(410, 14);
+        _lblDynamicConn.Name = "_lblDynamicConn";
+        _lblDynamicConn.Size = new Size(290, 23);
+        _lblDynamicConn.TabIndex = 4;
+        _lblDynamicConn.Text = "Нет подключения";
+        // 
+        // _lblDynamicRate
+        // 
+        _lblDynamicRate.Location = new Point(20, 52);
+        _lblDynamicRate.Name = "_lblDynamicRate";
+        _lblDynamicRate.Size = new Size(120, 24);
+        _lblDynamicRate.TabIndex = 5;
+        _lblDynamicRate.Text = "— сэмпл/с";
+        // 
+        // _pnlDynamicCh0
+        // 
+        _pnlDynamicCh0.Controls.Add(_lblDynamicCh0Cap);
+        _pnlDynamicCh0.Controls.Add(_lblDynamicCh0);
+        _pnlDynamicCh0.Location = new Point(20, 86);
+        _pnlDynamicCh0.Margin = new Padding(3, 4, 3, 4);
+        _pnlDynamicCh0.Name = "_pnlDynamicCh0";
+        _pnlDynamicCh0.Size = new Size(340, 144);
+        _pnlDynamicCh0.TabIndex = 6;
+        // 
+        // _lblDynamicCh0Cap
+        // 
+        _lblDynamicCh0Cap.AutoSize = true;
+        _lblDynamicCh0Cap.Location = new Point(8, 6);
+        _lblDynamicCh0Cap.Name = "_lblDynamicCh0Cap";
+        _lblDynamicCh0Cap.Size = new Size(171, 20);
+        _lblDynamicCh0Cap.TabIndex = 0;
+        _lblDynamicCh0Cap.Text = "Канал: Основной (CH0)";
+        // 
+        // _lblDynamicCh0
+        // 
+        _lblDynamicCh0.Location = new Point(8, 28);
+        _lblDynamicCh0.Name = "_lblDynamicCh0";
+        _lblDynamicCh0.Size = new Size(324, 90);
+        _lblDynamicCh0.TabIndex = 1;
+        _lblDynamicCh0.Text = "—";
+        _lblDynamicCh0.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _pnlDynamicCh1
+        // 
+        _pnlDynamicCh1.Controls.Add(_lblDynamicCh1Cap);
+        _pnlDynamicCh1.Controls.Add(_lblDynamicCh1);
+        _pnlDynamicCh1.Location = new Point(360, 86);
+        _pnlDynamicCh1.Margin = new Padding(3, 4, 3, 4);
+        _pnlDynamicCh1.Name = "_pnlDynamicCh1";
+        _pnlDynamicCh1.Size = new Size(340, 144);
+        _pnlDynamicCh1.TabIndex = 7;
+        // 
+        // _lblDynamicCh1Cap
+        // 
+        _lblDynamicCh1Cap.AutoSize = true;
+        _lblDynamicCh1Cap.Location = new Point(8, 6);
+        _lblDynamicCh1Cap.Name = "_lblDynamicCh1Cap";
+        _lblDynamicCh1Cap.Size = new Size(177, 20);
+        _lblDynamicCh1Cap.TabIndex = 0;
+        _lblDynamicCh1Cap.Text = "Канал: Резервный (CH1)";
+        // 
+        // _lblDynamicCh1
+        // 
+        _lblDynamicCh1.Location = new Point(8, 28);
+        _lblDynamicCh1.Name = "_lblDynamicCh1";
+        _lblDynamicCh1.Size = new Size(324, 90);
+        _lblDynamicCh1.TabIndex = 1;
+        _lblDynamicCh1.Text = "—";
+        _lblDynamicCh1.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _chkDynamicLog
+        // 
+        _chkDynamicLog.AutoSize = true;
+        _chkDynamicLog.Checked = true;
+        _chkDynamicLog.CheckState = CheckState.Checked;
+        _chkDynamicLog.Location = new Point(20, 198);
+        _chkDynamicLog.Margin = new Padding(3, 4, 3, 4);
+        _chkDynamicLog.Name = "_chkDynamicLog";
+        _chkDynamicLog.Size = new Size(115, 24);
+        _chkDynamicLog.TabIndex = 8;
+        _chkDynamicLog.Text = "Лог активен";
+        // 
+        // _btnDynamicClearLog
+        // 
+        _btnDynamicClearLog.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        _btnDynamicClearLog.FlatStyle = FlatStyle.Flat;
+        _btnDynamicClearLog.Location = new Point(898, 198);
+        _btnDynamicClearLog.Margin = new Padding(3, 4, 3, 4);
+        _btnDynamicClearLog.Name = "_btnDynamicClearLog";
+        _btnDynamicClearLog.Size = new Size(101, 32);
+        _btnDynamicClearLog.TabIndex = 9;
+        _btnDynamicClearLog.Text = "Очистить";
+        _btnDynamicClearLog.UseVisualStyleBackColor = false;
+        _btnDynamicClearLog.Click += BtnDynamicClearLog_Click;
+        // 
+        // _rtbDynamicLog
+        // 
+        _rtbDynamicLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        _rtbDynamicLog.DetectUrls = false;
+        _rtbDynamicLog.Location = new Point(10, 239);
+        _rtbDynamicLog.Margin = new Padding(3, 4, 3, 4);
+        _rtbDynamicLog.Name = "_rtbDynamicLog";
+        _rtbDynamicLog.ReadOnly = true;
+        _rtbDynamicLog.ScrollBars = RichTextBoxScrollBars.Vertical;
+        _rtbDynamicLog.Size = new Size(990, 450);
+        _rtbDynamicLog.TabIndex = 10;
+        _rtbDynamicLog.Text = "";
+        _rtbDynamicLog.WordWrap = false;
         // 
         // _tabCalibS
         // 
@@ -390,8 +599,8 @@ partial class ServiceForm
         _tabCalibS.Location = new Point(4, 29);
         _tabCalibS.Margin = new Padding(3, 4, 3, 4);
         _tabCalibS.Name = "_tabCalibS";
-        _tabCalibS.Size = new Size(912, 693);
-        _tabCalibS.TabIndex = 2;
+        _tabCalibS.Size = new Size(1212, 693);
+        _tabCalibS.TabIndex = 3;
         _tabCalibS.Text = "Калибровка Статика";
         // 
         // _pnlCalibS
@@ -403,7 +612,7 @@ partial class ServiceForm
         _pnlCalibS.Location = new Point(0, 0);
         _pnlCalibS.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibS.Name = "_pnlCalibS";
-        _pnlCalibS.Size = new Size(912, 693);
+        _pnlCalibS.Size = new Size(1212, 693);
         _pnlCalibS.TabIndex = 0;
         // 
         // _pnlCalibSBody
@@ -422,11 +631,11 @@ partial class ServiceForm
         _pnlCalibSBody.Controls.Add(_btnLsq);
         _pnlCalibSBody.Controls.Add(_btnCalibSave);
         _pnlCalibSBody.Dock = DockStyle.Fill;
-        _pnlCalibSBody.Location = new Point(0, 75);
+        _pnlCalibSBody.Location = new Point(0, 96);
         _pnlCalibSBody.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSBody.Name = "_pnlCalibSBody";
         _pnlCalibSBody.Padding = new Padding(18, 16, 18, 16);
-        _pnlCalibSBody.Size = new Size(912, 618);
+        _pnlCalibSBody.Size = new Size(1212, 597);
         _pnlCalibSBody.TabIndex = 1;
         // 
         // _dgvCalib
@@ -436,22 +645,22 @@ partial class ServiceForm
         _dgvCalib.AllowUserToResizeRows = false;
         _dgvCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         _dgvCalib.BackgroundColor = Color.FromArgb(245, 245, 247);
-        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(196, 225, 230);
-        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(26, 26, 26);
-        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-        _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+        dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(196, 225, 230);
+        dataGridViewCellStyle5.SelectionForeColor = Color.FromArgb(26, 26, 26);
+        dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+        _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
         _dgvCalib.ColumnHeadersHeight = 34;
         _dgvCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewCheckBoxColumn1, dataGridViewTextBoxColumn3 });
-        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.BackColor = SystemColors.Window;
-        dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(26, 26, 26);
-        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-        _dgvCalib.DefaultCellStyle = dataGridViewCellStyle2;
+        dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle6.BackColor = SystemColors.Window;
+        dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle6.SelectionForeColor = Color.FromArgb(26, 26, 26);
+        dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+        _dgvCalib.DefaultCellStyle = dataGridViewCellStyle6;
         _dgvCalib.EditMode = DataGridViewEditMode.EditOnEnter;
         _dgvCalib.EnableHeadersVisualStyles = false;
         _dgvCalib.GridColor = Color.FromArgb(212, 216, 222);
@@ -593,13 +802,55 @@ partial class ServiceForm
         // _pnlCalibSHead
         // 
         _pnlCalibSHead.BorderStyle = BorderStyle.FixedSingle;
+        _pnlCalibSHead.Controls.Add(_cmbStaticCalibPort);
+        _pnlCalibSHead.Controls.Add(_dotStaticCalibConn);
+        _pnlCalibSHead.Controls.Add(_btnStaticCalibConn);
+        _pnlCalibSHead.Controls.Add(_btnStaticCalibPortRefresh);
+        _pnlCalibSHead.Controls.Add(_lblStaticCalibConn);
         _pnlCalibSHead.Controls.Add(tableLayoutPanel1);
         _pnlCalibSHead.Dock = DockStyle.Top;
         _pnlCalibSHead.Location = new Point(0, 0);
         _pnlCalibSHead.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSHead.Name = "_pnlCalibSHead";
-        _pnlCalibSHead.Size = new Size(912, 75);
+        _pnlCalibSHead.Size = new Size(1212, 96);
         _pnlCalibSHead.TabIndex = 0;
+        // 
+        // _cmbStaticCalibPort
+        // 
+        _cmbStaticCalibPort.Location = new Point(0, 0);
+        _cmbStaticCalibPort.Name = "_cmbStaticCalibPort";
+        _cmbStaticCalibPort.Size = new Size(121, 28);
+        _cmbStaticCalibPort.TabIndex = 0;
+        // 
+        // _dotStaticCalibConn
+        // 
+        _dotStaticCalibConn.Location = new Point(0, 0);
+        _dotStaticCalibConn.Name = "_dotStaticCalibConn";
+        _dotStaticCalibConn.Size = new Size(200, 100);
+        _dotStaticCalibConn.TabIndex = 1;
+        // 
+        // _btnStaticCalibConn
+        // 
+        _btnStaticCalibConn.Location = new Point(0, 0);
+        _btnStaticCalibConn.Name = "_btnStaticCalibConn";
+        _btnStaticCalibConn.Size = new Size(75, 23);
+        _btnStaticCalibConn.TabIndex = 2;
+        _btnStaticCalibConn.Click += BtnStaticCalibConn_Click;
+        // 
+        // _btnStaticCalibPortRefresh
+        // 
+        _btnStaticCalibPortRefresh.Location = new Point(0, 0);
+        _btnStaticCalibPortRefresh.Name = "_btnStaticCalibPortRefresh";
+        _btnStaticCalibPortRefresh.Size = new Size(75, 23);
+        _btnStaticCalibPortRefresh.TabIndex = 3;
+        _btnStaticCalibPortRefresh.Click += BtnPortRefresh_Click;
+        // 
+        // _lblStaticCalibConn
+        // 
+        _lblStaticCalibConn.Location = new Point(0, 0);
+        _lblStaticCalibConn.Name = "_lblStaticCalibConn";
+        _lblStaticCalibConn.Size = new Size(100, 23);
+        _lblStaticCalibConn.TabIndex = 4;
         // 
         // tableLayoutPanel1
         // 
@@ -614,24 +865,24 @@ partial class ServiceForm
         tableLayoutPanel1.Controls.Add(_lblLiveAdcCap, 0, 0);
         tableLayoutPanel1.Controls.Add(_rbCh0Calib, 4, 1);
         tableLayoutPanel1.Controls.Add(_btnCapture, 2, 0);
-        tableLayoutPanel1.Dock = DockStyle.Fill;
+        tableLayoutPanel1.Dock = DockStyle.Top;
         tableLayoutPanel1.Location = new Point(0, 0);
         tableLayoutPanel1.Margin = new Padding(2, 3, 2, 3);
         tableLayoutPanel1.Name = "tableLayoutPanel1";
         tableLayoutPanel1.RowCount = 2;
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.Size = new Size(910, 73);
+        tableLayoutPanel1.Size = new Size(1210, 55);
         tableLayoutPanel1.TabIndex = 5;
         // 
         // _rbCh1Calib
         // 
         _rbCh1Calib.AutoSize = true;
         _rbCh1Calib.Dock = DockStyle.Fill;
-        _rbCh1Calib.Location = new Point(673, 4);
+        _rbCh1Calib.Location = new Point(893, 4);
         _rbCh1Calib.Margin = new Padding(8, 4, 3, 4);
         _rbCh1Calib.Name = "_rbCh1Calib";
-        _rbCh1Calib.Size = new Size(234, 28);
+        _rbCh1Calib.Size = new Size(314, 19);
         _rbCh1Calib.TabIndex = 1;
         _rbCh1Calib.Text = "Канал: Резервный (CH1)";
         _rbCh1Calib.CheckedChanged += RbCh1Calib_CheckedChanged;
@@ -640,9 +891,9 @@ partial class ServiceForm
         // 
         _lblLiveAdc.AutoSize = true;
         _lblLiveAdc.Dock = DockStyle.Fill;
-        _lblLiveAdc.Location = new Point(185, 0);
+        _lblLiveAdc.Location = new Point(245, 0);
         _lblLiveAdc.Name = "_lblLiveAdc";
-        _lblLiveAdc.Size = new Size(176, 36);
+        _lblLiveAdc.Size = new Size(236, 27);
         _lblLiveAdc.TabIndex = 3;
         _lblLiveAdc.Text = "—";
         _lblLiveAdc.TextAlign = ContentAlignment.MiddleLeft;
@@ -653,7 +904,7 @@ partial class ServiceForm
         _lblLiveAdcCap.Dock = DockStyle.Fill;
         _lblLiveAdcCap.Location = new Point(3, 0);
         _lblLiveAdcCap.Name = "_lblLiveAdcCap";
-        _lblLiveAdcCap.Size = new Size(176, 36);
+        _lblLiveAdcCap.Size = new Size(236, 27);
         _lblLiveAdcCap.TabIndex = 2;
         _lblLiveAdcCap.Text = "Текущий код АЦП:";
         _lblLiveAdcCap.TextAlign = ContentAlignment.MiddleCenter;
@@ -663,10 +914,10 @@ partial class ServiceForm
         _rbCh0Calib.AutoSize = true;
         _rbCh0Calib.Checked = true;
         _rbCh0Calib.Dock = DockStyle.Fill;
-        _rbCh0Calib.Location = new Point(673, 40);
+        _rbCh0Calib.Location = new Point(893, 31);
         _rbCh0Calib.Margin = new Padding(8, 4, 3, 4);
         _rbCh0Calib.Name = "_rbCh0Calib";
-        _rbCh0Calib.Size = new Size(234, 29);
+        _rbCh0Calib.Size = new Size(314, 20);
         _rbCh0Calib.TabIndex = 0;
         _rbCh0Calib.TabStop = true;
         _rbCh0Calib.Text = "Канал: Основной (CH0)";
@@ -677,10 +928,10 @@ partial class ServiceForm
         _btnCapture.Dock = DockStyle.Fill;
         _btnCapture.FlatAppearance.BorderSize = 0;
         _btnCapture.FlatStyle = FlatStyle.Flat;
-        _btnCapture.Location = new Point(372, 3);
+        _btnCapture.Location = new Point(492, 3);
         _btnCapture.Margin = new Padding(8, 3, 8, 0);
         _btnCapture.Name = "_btnCapture";
-        _btnCapture.Size = new Size(136, 33);
+        _btnCapture.Size = new Size(187, 24);
         _btnCapture.TabIndex = 4;
         _btnCapture.Text = "Захватить";
         _btnCapture.UseVisualStyleBackColor = false;
@@ -693,7 +944,7 @@ partial class ServiceForm
         _tabCalibD.Margin = new Padding(3, 4, 3, 4);
         _tabCalibD.Name = "_tabCalibD";
         _tabCalibD.Size = new Size(912, 693);
-        _tabCalibD.TabIndex = 3;
+        _tabCalibD.TabIndex = 4;
         _tabCalibD.Text = "Калибровка Динамика";
         // 
         // _pnlCalibD
@@ -735,11 +986,11 @@ partial class ServiceForm
         _pnlCalibDBody.Controls.Add(_lblFormulaD);
         _pnlCalibDBody.Controls.Add(_btnCalibDynSave);
         _pnlCalibDBody.Dock = DockStyle.Fill;
-        _pnlCalibDBody.Location = new Point(0, 166);
+        _pnlCalibDBody.Location = new Point(0, 78);
         _pnlCalibDBody.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibDBody.Name = "_pnlCalibDBody";
         _pnlCalibDBody.Padding = new Padding(18, 16, 18, 16);
-        _pnlCalibDBody.Size = new Size(912, 527);
+        _pnlCalibDBody.Size = new Size(912, 615);
         _pnlCalibDBody.TabIndex = 1;
         // 
         // _dgvDynCalib
@@ -752,6 +1003,7 @@ partial class ServiceForm
         _dgvDynCalib.BackgroundColor = Color.FromArgb(245, 245, 247);
         _dgvDynCalib.ColumnHeadersHeight = 34;
         _dgvDynCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _dgvDynCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8 });
         _dgvDynCalib.EditMode = DataGridViewEditMode.EditProgrammatically;
         _dgvDynCalib.EnableHeadersVisualStyles = false;
         _dgvDynCalib.GridColor = Color.FromArgb(212, 216, 222);
@@ -984,12 +1236,19 @@ partial class ServiceForm
         _pnlCalibDHead.BorderStyle = BorderStyle.FixedSingle;
         _pnlCalibDHead.Controls.Add(_lblLiveAdcCapD);
         _pnlCalibDHead.Controls.Add(_lblLiveAdcD);
+        _pnlCalibDHead.Controls.Add(_lblLiveWeightCapD);
+        _pnlCalibDHead.Controls.Add(_lblLiveWeightD);
+        _pnlCalibDHead.Controls.Add(_cmbDynamicCalibPort);
+        _pnlCalibDHead.Controls.Add(_dotDynamicCalibConn);
+        _pnlCalibDHead.Controls.Add(_btnDynamicCalibConn);
+        _pnlCalibDHead.Controls.Add(_btnDynamicCalibPortRefresh);
+        _pnlCalibDHead.Controls.Add(_lblDynamicCalibConn);
         _pnlCalibDHead.Dock = DockStyle.Top;
         _pnlCalibDHead.Location = new Point(0, 0);
         _pnlCalibDHead.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibDHead.Name = "_pnlCalibDHead";
         _pnlCalibDHead.Padding = new Padding(18, 16, 18, 16);
-        _pnlCalibDHead.Size = new Size(912, 166);
+        _pnlCalibDHead.Size = new Size(912, 78);
         _pnlCalibDHead.TabIndex = 0;
         // 
         // _lblLiveAdcCapD
@@ -1010,6 +1269,87 @@ partial class ServiceForm
         _lblLiveAdcD.TabIndex = 1;
         _lblLiveAdcD.Text = "—";
         // 
+        // _lblLiveWeightCapD
+        // 
+        _lblLiveWeightCapD.Location = new Point(0, 0);
+        _lblLiveWeightCapD.Name = "_lblLiveWeightCapD";
+        _lblLiveWeightCapD.Size = new Size(100, 23);
+        _lblLiveWeightCapD.TabIndex = 2;
+        // 
+        // _lblLiveWeightD
+        // 
+        _lblLiveWeightD.Location = new Point(0, 0);
+        _lblLiveWeightD.Name = "_lblLiveWeightD";
+        _lblLiveWeightD.Size = new Size(100, 23);
+        _lblLiveWeightD.TabIndex = 3;
+        // 
+        // _cmbDynamicCalibPort
+        // 
+        _cmbDynamicCalibPort.Location = new Point(0, 0);
+        _cmbDynamicCalibPort.Name = "_cmbDynamicCalibPort";
+        _cmbDynamicCalibPort.Size = new Size(121, 28);
+        _cmbDynamicCalibPort.TabIndex = 4;
+        // 
+        // _dotDynamicCalibConn
+        // 
+        _dotDynamicCalibConn.Location = new Point(0, 0);
+        _dotDynamicCalibConn.Name = "_dotDynamicCalibConn";
+        _dotDynamicCalibConn.Size = new Size(200, 100);
+        _dotDynamicCalibConn.TabIndex = 5;
+        // 
+        // _btnDynamicCalibConn
+        // 
+        _btnDynamicCalibConn.Location = new Point(0, 0);
+        _btnDynamicCalibConn.Name = "_btnDynamicCalibConn";
+        _btnDynamicCalibConn.Size = new Size(75, 23);
+        _btnDynamicCalibConn.TabIndex = 6;
+        _btnDynamicCalibConn.Click += BtnDynamicCalibConn_Click;
+        // 
+        // _btnDynamicCalibPortRefresh
+        // 
+        _btnDynamicCalibPortRefresh.Location = new Point(0, 0);
+        _btnDynamicCalibPortRefresh.Name = "_btnDynamicCalibPortRefresh";
+        _btnDynamicCalibPortRefresh.Size = new Size(75, 23);
+        _btnDynamicCalibPortRefresh.TabIndex = 7;
+        _btnDynamicCalibPortRefresh.Click += BtnDynamicPortRefresh_Click;
+        // 
+        // _lblDynamicCalibConn
+        // 
+        _lblDynamicCalibConn.Location = new Point(0, 0);
+        _lblDynamicCalibConn.Name = "_lblDynamicCalibConn";
+        _lblDynamicCalibConn.Size = new Size(100, 23);
+        _lblDynamicCalibConn.TabIndex = 8;
+        // 
+        // dataGridViewTextBoxColumn4
+        // 
+        dataGridViewTextBoxColumn4.MinimumWidth = 6;
+        dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+        dataGridViewTextBoxColumn4.ReadOnly = true;
+        // 
+        // dataGridViewTextBoxColumn5
+        // 
+        dataGridViewTextBoxColumn5.MinimumWidth = 6;
+        dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+        dataGridViewTextBoxColumn5.ReadOnly = true;
+        // 
+        // dataGridViewTextBoxColumn6
+        // 
+        dataGridViewTextBoxColumn6.MinimumWidth = 6;
+        dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+        dataGridViewTextBoxColumn6.ReadOnly = true;
+        // 
+        // dataGridViewTextBoxColumn7
+        // 
+        dataGridViewTextBoxColumn7.MinimumWidth = 6;
+        dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+        dataGridViewTextBoxColumn7.ReadOnly = true;
+        // 
+        // dataGridViewTextBoxColumn8
+        // 
+        dataGridViewTextBoxColumn8.MinimumWidth = 6;
+        dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+        dataGridViewTextBoxColumn8.ReadOnly = true;
+        // 
         // _tabSett
         // 
         _tabSett.Controls.Add(_lblPortCap);
@@ -1027,7 +1367,7 @@ partial class ServiceForm
         _tabSett.Margin = new Padding(3, 4, 3, 4);
         _tabSett.Name = "_tabSett";
         _tabSett.Size = new Size(912, 693);
-        _tabSett.TabIndex = 4;
+        _tabSett.TabIndex = 5;
         _tabSett.Text = "Настройки";
         // 
         // _lblPortCap
@@ -1142,7 +1482,7 @@ partial class ServiceForm
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.FromArgb(255, 192, 255);
-        ClientSize = new Size(920, 798);
+        ClientSize = new Size(1220, 798);
         Controls.Add(_btnAdmin);
         Controls.Add(_tabs);
         Margin = new Padding(3, 4, 3, 4);
@@ -1159,6 +1499,12 @@ partial class ServiceForm
         _pnlCh0.PerformLayout();
         _pnlCh1.ResumeLayout(false);
         _pnlCh1.PerformLayout();
+        _tabDynamicService.ResumeLayout(false);
+        _tabDynamicService.PerformLayout();
+        _pnlDynamicCh0.ResumeLayout(false);
+        _pnlDynamicCh0.PerformLayout();
+        _pnlDynamicCh1.ResumeLayout(false);
+        _pnlDynamicCh1.PerformLayout();
         _tabCalibS.ResumeLayout(false);
         _pnlCalibS.ResumeLayout(false);
         _pnlCalibSBody.ResumeLayout(false);
@@ -1183,6 +1529,7 @@ partial class ServiceForm
     private TabControl  _tabs;
     private TabPage     _tabChannel;
     private TabPage     _tabMonitor;
+    private TabPage     _tabDynamicService;
     private TabPage     _tabCalibS;
     private Panel       _pnlCalibS;
     private Panel       _pnlCalibSHead;
@@ -1213,6 +1560,36 @@ partial class ServiceForm
     private CheckBox    _chkLog;
     private Button      _btnClearLog;
     private RichTextBox _rtbLog;
+
+    private ComboBox    _cmbStaticCalibPort;
+    private Panel       _dotStaticCalibConn;
+    private Button      _btnStaticCalibConn;
+    private Button      _btnStaticCalibPortRefresh;
+    private Label       _lblStaticCalibConn;
+
+    private ComboBox    _cmbDynamicPort;
+    private Panel       _dotDynamicConn;
+    private Button      _btnDynamicConn;
+    private Button      _btnDynamicPortRefresh;
+    private Label       _lblDynamicConn;
+    private Label       _lblDynamicRate;
+    private Panel       _pnlDynamicCh0;
+    private Label       _lblDynamicCh0Cap;
+    private Label       _lblDynamicCh0;
+    private Panel       _pnlDynamicCh1;
+    private Label       _lblDynamicCh1Cap;
+    private Label       _lblDynamicCh1;
+    private CheckBox    _chkDynamicLog;
+    private Button      _btnDynamicClearLog;
+    private RichTextBox _rtbDynamicLog;
+
+    private Label       _lblLiveWeightCapD;
+    private Label       _lblLiveWeightD;
+    private ComboBox    _cmbDynamicCalibPort;
+    private Panel       _dotDynamicCalibConn;
+    private Button      _btnDynamicCalibConn;
+    private Button      _btnDynamicCalibPortRefresh;
+    private Label       _lblDynamicCalibConn;
 
     private RadioButton  _rbCh0Calib;
     private RadioButton  _rbCh1Calib;
@@ -1274,4 +1651,9 @@ partial class ServiceForm
     private DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     private TableLayoutPanel tableLayoutPanel1;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
 }
