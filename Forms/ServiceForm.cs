@@ -226,8 +226,8 @@ public partial class ServiceForm : Form
         _btnCalcPlus.Font = UiFonts.Body;
         _btnCalcPlus.BackColor = UiColors.SecondaryAction;
         _btnCalcPlus.ForeColor = UiColors.TextOnDark;
-        _lblSecMinus.Font = UiFonts.BodyBold;
-        _lblSecMinus.ForeColor = UiColors.TextSection;
+        _lblSecMinus_00.Font = UiFonts.BodyBold;
+        _lblSecMinus_00.ForeColor = UiColors.TextSection;
         _lblKMinusEquals.Font = UiFonts.Medium;
         _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
         _txtKMinus.Font = UiFonts.Mono;
