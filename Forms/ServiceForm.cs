@@ -172,7 +172,7 @@ public partial class ServiceForm : Form
         _btnLsq.Font = UiFonts.Medium;
         _btnLsq.BackColor = UiColors.SecondaryAction;
         _btnLsq.ForeColor = UiColors.TextOnDark;
-        _btnCalibSave.Font = UiFonts.Medium;
+        _btnCalibSave.Font = UiFonts.Body;
         _btnCalibSave.BackColor = UiColors.PrimaryAction;
         _btnCalibSave.ForeColor = UiColors.TextOnDark;
 
@@ -183,11 +183,11 @@ public partial class ServiceForm : Form
         _pnlCalibDBody.BackColor = UiColors.Surface;
         _pnlCalibDBottom.BackColor = UiColors.Surface;
         _lblLiveAdcCapD.Font = UiFonts.Body;
-        _lblLiveAdcCapD.ForeColor = UiColors.TextOnDarkMuted;
+        _lblLiveAdcCapD.ForeColor = UiColors.TextPrimary;
         _lblLiveAdcD.Font = UiFonts.MonoLiveAdc;
         _lblLiveAdcD.ForeColor = UiColors.TextOnDark;
         _lblLiveWeightCapD.Font = UiFonts.Body;
-        _lblLiveWeightCapD.ForeColor = UiColors.TextOnDarkMuted;
+        _lblLiveWeightCapD.ForeColor = UiColors.TextPrimary;
         _lblLiveWeightD.Font = UiFonts.MonoLiveAdc;
         _lblLiveWeightD.ForeColor = UiColors.TextOnDark;
         _cmbDynamicCalibPort.Font = UiFonts.Medium;
@@ -261,7 +261,7 @@ public partial class ServiceForm : Form
         _btnCalcMinus.ForeColor = UiColors.TextOnDark;
         _lblFormulaD.Font = UiFonts.Body;
         _lblFormulaD.ForeColor = UiColors.TextMuted;
-        _btnCalibDynSave.Font = UiFonts.Medium;
+        _btnCalibDynSave.Font = UiFonts.Body;
         _btnCalibDynSave.BackColor = UiColors.PrimaryAction;
         _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
         _dgvDynCalib.Font = UiFonts.GridBody;
