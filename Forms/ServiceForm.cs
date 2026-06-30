@@ -21,7 +21,7 @@ public partial class ServiceForm : Form
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
     private int _frameCount;
-    private int _dynamicSampleCount;
+    private long _dynamicSampleCount;
     private long _dynamicSampleUiPosted;
     private long _dynamicSampleUiApplied;
     private long _dynamicRawUiPosted;
@@ -29,6 +29,11 @@ public partial class ServiceForm : Form
     private long _dynamicLogAppended;
     private long _dynamicLogMaxMs;
     private long _dynamicDiagLastTick;
+    private readonly object _dynamicSampleSync = new();
+    private readonly System.Windows.Forms.Timer _dynamicCalibDisplayTimer = new() { Interval = 100 };
+    private SimA04DynamicSample _latestDynamicSample;
+    private long _latestDynamicSampleVersion;
+    private long _displayedDynamicSampleVersion;
     private long _lastDiagRawBytes;
     private long _lastDiagSamples;
     private long _lastDiagSkippedBytes;
@@ -46,6 +51,7 @@ public partial class ServiceForm : Form
     public ServiceForm()
     {
         InitializeComponent();
+        InitializeDynamicCalibDisplayTimer();
     }
 
     public ServiceForm(SimA04ReaderStatic adc, SimA04ReaderDynamic dynamicAdc, LocalRepository calib, SettingsService settings)
@@ -55,6 +61,12 @@ public partial class ServiceForm : Form
         _calib = calib;
         _settings = settings;
         InitializeComponent();
+        InitializeDynamicCalibDisplayTimer();
+    }
+
+    private void InitializeDynamicCalibDisplayTimer()
+    {
+        _dynamicCalibDisplayTimer.Tick += (_, _) => RefreshDynamicSampleDisplay();
     }
 
     private void ApplyTheme()
@@ -328,6 +340,7 @@ public partial class ServiceForm : Form
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
+        _dynamicCalibDisplayTimer.Start();
         _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
@@ -357,6 +370,8 @@ public partial class ServiceForm : Form
                 _dynamicSim.Close();
 
             _rateTimer.Stop();
+            _dynamicCalibDisplayTimer.Stop();
+            _dynamicCalibDisplayTimer.Dispose();
         }
         base.OnFormClosed(e);
     }
@@ -494,8 +509,7 @@ public partial class ServiceForm : Form
         _frameCount = 0;
         if (_lblDynamicRate is not null)
         {
-            _lblDynamicRate.Text = $"{_dynamicSampleCount} сэмпл/с";
-            _dynamicSampleCount = 0;
+            _lblDynamicRate.Text = $"{Interlocked.Exchange(ref _dynamicSampleCount, 0)} сэмпл/с";
         }
     }
 
@@ -819,16 +833,32 @@ public partial class ServiceForm : Form
 
     private void OnDynamicSample(object? sender, SimA04DynamicSample sample)
     {
-        if (InvokeRequired)
+        lock (_dynamicSampleSync)
         {
-            Interlocked.Increment(ref _dynamicSampleUiPosted);
-            WriteServiceDynamicDiagnostics();
-            BeginInvoke(() => OnDynamicSample(sender, sample));
-            return;
+            _latestDynamicSample = sample;
+            _latestDynamicSampleVersion++;
         }
 
+        Interlocked.Increment(ref _dynamicSampleCount);
+        Interlocked.Increment(ref _dynamicSampleUiPosted);
+        WriteServiceDynamicDiagnostics();
+    }
+
+    private void RefreshDynamicSampleDisplay()
+    {
+        if (DesignMode || _dynamicSim is null) return;
+
+        SimA04DynamicSample sample;
+        long version;
+        lock (_dynamicSampleSync)
+        {
+            if (_latestDynamicSampleVersion == _displayedDynamicSampleVersion) return;
+            sample = _latestDynamicSample;
+            version = _latestDynamicSampleVersion;
+        }
+
+        _displayedDynamicSampleVersion = version;
         Interlocked.Increment(ref _dynamicSampleUiApplied);
-        _dynamicSampleCount++;
         _lastDynCh0 = sample.Ch0;
         _lastDynCh1 = sample.Ch1;
         _lblDynamicCh0.Text = sample.Ch0.ToString();
