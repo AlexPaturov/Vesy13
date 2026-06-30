@@ -400,9 +400,9 @@ public partial class ServiceForm : Form
             return;
         }
 
-        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.",
-            "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.", "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
+
     private void BtnCalcPlus_Click(object? sender, EventArgs e)
     {
         if (int.TryParse(_txtCodePlus.Text, out int code) &&
@@ -411,6 +411,7 @@ public partial class ServiceForm : Form
         else
             MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
+
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
         int code = CurrentDynamicAdcCode();
@@ -420,8 +421,7 @@ public partial class ServiceForm : Form
             return;
         }
 
-        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.",
-            "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.", "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e)
     {
@@ -431,15 +431,19 @@ public partial class ServiceForm : Form
         else
             MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
+
     private void BtnSaveSettings_Click(object? sender, EventArgs e) => SaveSettingsFromUi();
 
     private void RbMain_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbMain.Checked) SetActiveChannel(ActiveChannel.Main);
+        if (_rbMain.Checked) 
+            SetActiveChannel(ActiveChannel.Main);
     }
+
     private void RbBackup_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbBackup.Checked) SetActiveChannel(ActiveChannel.Backup);
+        if (_rbBackup.Checked) 
+            SetActiveChannel(ActiveChannel.Backup);
     }
 
     private void SetActiveChannel(ActiveChannel channel)
@@ -452,17 +456,29 @@ public partial class ServiceForm : Form
         if (_dynamicSim is not null)
             _dynamicSim.Channel = channel;
         UpdateLiveAdcLabel();
-        AuditLogger.Action(AuditLogger.AdcChannelChanged,
-            "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
+        AuditLogger.Action(AuditLogger.AdcChannelChanged, "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
     }
+
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbCh0Calib.Checked) { _calibUseCh0 = true; LoadCalibPoints(); UpdateLiveAdcLabel(); }
+        if (_rbCh0Calib.Checked)
+        {
+            _calibUseCh0 = true;
+            LoadCalibPoints(); 
+            UpdateLiveAdcLabel();
+        }
     }
+
     private void RbCh1Calib_CheckedChanged(object? sender, EventArgs e)
     {
-        if (_rbCh1Calib.Checked) { _calibUseCh0 = false; LoadCalibPoints(); UpdateLiveAdcLabel(); }
+        if (_rbCh1Calib.Checked) 
+        { 
+            _calibUseCh0 = false; 
+            LoadCalibPoints(); 
+            UpdateLiveAdcLabel(); 
+        }
     }
+
     private void RateTimer_Tick(object? sender, EventArgs e)
     {
         _lblRate.Text = $"{_frameCount} фр/с";
@@ -551,17 +567,20 @@ public partial class ServiceForm : Form
         FillStaticPortCombo(_cmbPort, ports);
         FillStaticPortCombo(_cmbStaticCalibPort, ports);
         _btnConn.Enabled = ports.Length > 0;
+        
         if (_btnStaticCalibConn is not null)
             _btnStaticCalibConn.Enabled = ports.Length > 0;
 
         _cmbSettPort.Items.Clear();
         if (!string.IsNullOrWhiteSpace(_settings.Current.AdcPortName))
             _cmbSettPort.Items.Add(_settings.Current.AdcPortName);
+
         foreach (string portName in ports)
         {
             if (!_cmbSettPort.Items.Contains(portName))
                 _cmbSettPort.Items.Add(portName);
         }
+
         SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
     }
 
@@ -602,12 +621,14 @@ public partial class ServiceForm : Form
             BackColor = UiColors.InputBack,
             ForeColor = UiColors.InputFore,
         };
+
         _dotStaticCalibConn = new Panel
         {
             Location = new Point(174, 67),
             Size = new Size(16, 16),
             BackColor = UiColors.Disconnected,
         };
+
         _btnStaticCalibConn = new Button
         {
             Location = new Point(204, 59),
@@ -618,6 +639,7 @@ public partial class ServiceForm : Form
             BackColor = UiColors.PrimaryAction,
             ForeColor = UiColors.TextOnDark,
         };
+
         _btnStaticCalibPortRefresh = new Button
         {
             Location = new Point(330, 59),
@@ -628,6 +650,7 @@ public partial class ServiceForm : Form
             BackColor = UiColors.NeutralAction,
             ForeColor = UiColors.TextPrimary,
         };
+
         _lblStaticCalibConn = new Label
         {
             Location = new Point(380, 67),
@@ -662,6 +685,7 @@ public partial class ServiceForm : Form
         }
 
         if (string.IsNullOrWhiteSpace(selectedPort)) return;
+
         try
         {
             CloseDynamicConnection();
@@ -967,6 +991,7 @@ public partial class ServiceForm : Form
             "SimA04Dynamic", _dynamicSim.PortName);
     }
 
+    // Возвращает прирост монотонного счетчика за период диагностики и обновляет предыдущую точку отсчета.
     private static long Delta(long current, ref long previous)
     {
         long delta = current >= previous ? current - previous : current;
@@ -1077,15 +1102,13 @@ public partial class ServiceForm : Form
         {
             await _calib.SaveCalibPointsAsync(channel, pts);
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            AuditLogger.Action(AuditLogger.CalibrationSaved,
-                "calibration_points", $"ch={(_calibUseCh0 ? "CH0" : "CH1")} rows={pts.Count}");
+            AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points", $"ch={(_calibUseCh0 ? "CH0" : "CH1")} rows={pts.Count}");
             await LoadCalibPointsAsync();
         }
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb, "calibration_points", "static", "PostgreSQL", ex.Message);
-            MessageBox.Show("Не удалось сохранить калибровку.\nОбратитесь к администратору.",
-                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось сохранить калибровку.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -1103,8 +1126,7 @@ public partial class ServiceForm : Form
             _dgvCalib.Rows[row].Cells[1].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
             _dgvCalib.Rows[row].Cells[2].Value = p.IsActive;
             if (p.AdcCode != 0)
-                _dgvCalib.Rows[row].Cells[3].Value =
-                    ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
+                _dgvCalib.Rows[row].Cells[3].Value = ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
             ApplyCalibRowStyle(_dgvCalib.Rows[row]);
         }
     }
@@ -1264,6 +1286,7 @@ public partial class ServiceForm : Form
             Font = UiFonts.Body,
             ForeColor = UiColors.Disconnected,
         };
+
         _lblLiveWeightD = new Label
         {
             Location = new Point(345, 10),
@@ -1272,6 +1295,7 @@ public partial class ServiceForm : Form
             Font = UiFonts.MonoLiveAdc,
             ForeColor = UiColors.Info,
         };
+
         _lblDynamicCalibConn = new Label
         {
             Location = new Point(380, 48),
@@ -1280,6 +1304,7 @@ public partial class ServiceForm : Form
             Font = UiFonts.Body,
             ForeColor = UiColors.Disconnected,
         };
+
         _cmbDynamicCalibPort = new ComboBox
         {
             Location = new Point(20, 44),
@@ -1289,12 +1314,14 @@ public partial class ServiceForm : Form
             BackColor = UiColors.InputBack,
             ForeColor = UiColors.InputFore,
         };
+
         _dotDynamicCalibConn = new Panel
         {
             Location = new Point(174, 48),
             Size = new Size(16, 16),
             BackColor = UiColors.Disconnected,
         };
+
         _btnDynamicCalibConn = new Button
         {
             Location = new Point(204, 40),
@@ -1305,6 +1332,7 @@ public partial class ServiceForm : Form
             BackColor = UiColors.PrimaryAction,
             ForeColor = UiColors.TextOnDark,
         };
+
         _btnDynamicCalibPortRefresh = new Button
         {
             Location = new Point(330, 40),
@@ -1361,6 +1389,7 @@ public partial class ServiceForm : Form
 
         bool plusOk = double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp);
         bool minusOk = double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km);
+        
         if (!plusOk && !minusOk)
         {
             _lblLiveWeightD.Text = "—";
@@ -1444,14 +1473,12 @@ public partial class ServiceForm : Form
             await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
             await LoadCalibDynamicAsync();
             MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            AuditLogger.Action(AuditLogger.CalibrationSaved,
-                "CalibProfile", $"dynamic id={_calib.Dynamic.Id} kp={kp:G4} km={km:G4}");
+            AuditLogger.Action(AuditLogger.CalibrationSaved, "CalibProfile", $"dynamic id={_calib.Dynamic.Id} kp={kp:G4} km={km:G4}");
         }
         catch (Exception ex)
         {
             AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic", "PostgreSQL", ex.Message);
-            MessageBox.Show("Не удалось сохранить калибровку динамики.\nОбратитесь к администратору.",
-                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось сохранить калибровку динамики.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
