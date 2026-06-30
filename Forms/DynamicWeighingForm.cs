@@ -58,18 +58,15 @@ public partial class DynamicWeighingForm : Form
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
 
-    private double CurrentDynamicCoefficient() =>
-        GetDirection().StartsWith("→") ? _ldb.Dynamic.KPlus : _ldb.Dynamic.KMinus;
+    //private double CurrentDynamicCoefficient() =>
+    //    GetDirection().StartsWith("→") ? _ldb.Dynamic.KPlus : _ldb.Dynamic.KMinus;
 
-    private bool HasDynamicCalibration() => Math.Abs(CurrentDynamicCoefficient()) >= double.Epsilon;
+    private bool HasDynamicCalibration() => _ldb.Dynamic.IsActive && _ldb.Dynamic.DeletedAt is null;
 
-    private double ReadRawTonnes(int adcCode) =>
-        CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+    private double ReadRawTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
 
     private double ToTonnes(int adcCode) =>
-        WeightFormatter.RoundToDiscretization(
-            ReadRawTonnes(adcCode) - _zeroOffsetTonnes,
-            _settings.Current.WeightDiscretizationTonnes);
+        WeightFormatter.RoundToDiscretization(ReadRawTonnes(adcCode) - _zeroOffsetTonnes, _settings.Current.WeightDiscretizationTonnes);
 
     private bool ValidateBeforeWeigh()
     {
@@ -80,8 +77,7 @@ public partial class DynamicWeighingForm : Form
         }
 
         if (HasDynamicCalibration()) return true;
-        MessageBox.Show($"Нет динамической калибровки для направления {GetDirection()}.",
-            "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        MessageBox.Show($"Нет динамической калибровки для направления {GetDirection()}.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }
 
@@ -173,7 +169,7 @@ public partial class DynamicWeighingForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
         _sim.ConnectionTimeoutMs = 5000;
         SetupGridColumns();
-        _sim.SampleReceived    += OnSample;
+        _sim.SampleReceived += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
         _rbPlus.CheckedChanged += Direction_CheckedChanged;
         _rbMinus.CheckedChanged += Direction_CheckedChanged;
@@ -214,11 +210,11 @@ public partial class DynamicWeighingForm : Form
         if (!DesignMode && _sim is not null)
         {
             _adcDiagTimer.Stop();
-            _sim.SampleReceived    -= OnSample;
-            _sim.ConnectionChanged -= OnConnectionChanged;
-            _rbPlus.CheckedChanged -= Direction_CheckedChanged;
-            _rbMinus.CheckedChanged -= Direction_CheckedChanged;
-            AuditLogger.QueueStatusChanged -= OnAuditQueueStatusChanged;
+            _sim.SampleReceived             -= OnSample;
+            _sim.ConnectionChanged          -= OnConnectionChanged;
+            _rbPlus.CheckedChanged          -= Direction_CheckedChanged;
+            _rbMinus.CheckedChanged         -= Direction_CheckedChanged;
+            AuditLogger.QueueStatusChanged  -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
 
@@ -263,8 +259,7 @@ public partial class DynamicWeighingForm : Form
             UpdateConn(false);
             if (showError)
             {
-                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;
         }
@@ -398,6 +393,7 @@ public partial class DynamicWeighingForm : Form
             "SimA04", _sim.PortName);
     }
 
+    // Возвращает прирост монотонного счетчика за период диагностики и обновляет предыдущую точку отсчета.
     private static long Delta(long current, ref long previous)
     {
         var delta = current >= previous ? current - previous : current;
@@ -405,8 +401,7 @@ public partial class DynamicWeighingForm : Form
         return delta;
     }
 
-    private void UpdateChannelLabel() =>
-        _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
+    private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
     private int ActiveCode(SimA04DynamicSample sample) => _sim.Channel == ActiveChannel.Main ? sample.Ch0 : sample.Ch1;
 
@@ -464,9 +459,7 @@ public partial class DynamicWeighingForm : Form
             };
             AddToGrid(record);
             SaveAsync(record);
-            AuditLogger.Action(AuditLogger.WeighingSaved,
-                "LocalWagon", $"вагон №{_wagonNumber} dir={record.Direction} total={record.Total:F2}",
-                "PostgreSQL", _wagonNumber.ToString());
+            AuditLogger.Action(AuditLogger.WeighingSaved, "LocalWagon", $"вагон №{_wagonNumber} dir={record.Direction} total={record.Total:F2}", "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
             ResetBogieValues();
             _lblValue.Text      = record.Total.ToString("F2");
@@ -486,8 +479,7 @@ public partial class DynamicWeighingForm : Form
         double limit = _settings.Current.OperatorZeroLimitTonnes;
         if (Math.Abs(current) > limit)
         {
-            MessageBox.Show($"Ноль можно установить только в пределах {limit:F2} т.", "Ноль",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show($"Ноль можно установить только в пределах {limit:F2} т.", "Ноль", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -512,8 +504,7 @@ public partial class DynamicWeighingForm : Form
         ResetBogieValues();
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.BackColor = UiColors.PrimaryAction;
-        AuditLogger.Action(AuditLogger.TrainFinished,
-            "Train", $"ДИНАМИКА вагонов={finishedCount}", "PostgreSQL");
+        AuditLogger.Action(AuditLogger.TrainFinished, "Train", $"ДИНАМИКА вагонов={finishedCount}", "PostgreSQL");
         UpdateButtonStates();
     }
 
@@ -528,10 +519,15 @@ public partial class DynamicWeighingForm : Form
 
     private void AddToGrid(LocalWagon r)
     {
-        _grid.Rows.Insert(0, r.Direction, r.Number.ToString(),
-            r.Bogie1.ToString("F2"), r.Bogie2.ToString("F2"),
-            r.Total.ToString("F2"), r.WagonTime.ToString("HH:mm:ss"),
-            r.TrainTime.ToString("dd.MM.yyyy"), r.TrainTime.ToString("HH:mm:ss"));
+        _grid.Rows.Insert(0, 
+            r.Direction, 
+            r.Number.ToString(), 
+            r.Bogie1.ToString("F2"), 
+            r.Bogie2.ToString("F2"),
+            r.Total.ToString("F2"), 
+            r.WagonTime.ToString("HH:mm:ss"),
+            r.TrainTime.ToString("dd.MM.yyyy"), 
+            r.TrainTime.ToString("HH:mm:ss"));
     }
 
     private async void SaveAsync(LocalWagon record)
@@ -546,8 +542,7 @@ public partial class DynamicWeighingForm : Form
         {
             _weighingStorageAvailable = false;
             UpdateAdcDiagnostics();
-            AuditLogger.Error(AuditLogger.ErrorDb,
-                "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
+            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
         }
     }
 
