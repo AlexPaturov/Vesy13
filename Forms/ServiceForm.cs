@@ -202,7 +202,11 @@ public partial class ServiceForm : Form
         _lblDynamicCalibConn.Font = UiFonts.Body;
         _lblDynamicCalibConn.ForeColor = UiColors.TextPrimary;
         _lblSecPlus_00.Font = UiFonts.BodyBold;
-        _lblSecPlus_00.ForeColor = UiColors.TextSection;
+        _lblSecPlus_00.ForeColor = UiColors.TextPrimary;
+        _lblSecPlus_01.Font = UiFonts.BodyBold;
+        _lblSecPlus_01.ForeColor = UiColors.TextPrimary;
+        _lblSecPlus_02.Font = UiFonts.BodyBold;
+        _lblSecPlus_02.ForeColor = UiColors.TextPrimary;
         _lblKPlusEquals.Font = UiFonts.Medium;
         _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
         _txtKPlus.Font = UiFonts.Mono;
@@ -227,7 +231,11 @@ public partial class ServiceForm : Form
         _btnCalcPlus.BackColor = UiColors.SecondaryAction;
         _btnCalcPlus.ForeColor = UiColors.TextOnDark;
         _lblSecMinus_00.Font = UiFonts.BodyBold;
-        _lblSecMinus_00.ForeColor = UiColors.TextSection;
+        _lblSecMinus_00.ForeColor = UiColors.TextPrimary;
+        _lblSecMinus_01.Font = UiFonts.BodyBold;
+        _lblSecMinus_01.ForeColor = UiColors.TextPrimary;
+        _lblSecMinus_02.Font = UiFonts.BodyBold;
+        _lblSecMinus_02.ForeColor = UiColors.TextPrimary;
         _lblKMinusEquals.Font = UiFonts.Medium;
         _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
         _txtKMinus.Font = UiFonts.Mono;
