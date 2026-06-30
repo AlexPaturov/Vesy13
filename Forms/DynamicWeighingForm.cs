@@ -58,9 +58,6 @@ public partial class DynamicWeighingForm : Form
 
     private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
 
-    //private double CurrentDynamicCoefficient() =>
-    //    GetDirection().StartsWith("→") ? _ldb.Dynamic.KPlus : _ldb.Dynamic.KMinus;
-
     private bool HasDynamicCalibration() => _ldb.Dynamic.IsActive && _ldb.Dynamic.DeletedAt is null;
 
     private double ReadRawTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
