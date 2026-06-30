@@ -181,18 +181,18 @@ public partial class ServiceForm : Form
         _pnlCalibD.BackColor = UiColors.Surface;
         _pnlCalibDHead.BackColor = UiColors.Surface;
         _pnlCalibDBody.BackColor = UiColors.Surface;
+        _pnlCalibDBottom.BackColor = UiColors.Surface;
         _lblLiveAdcCapD.Font = UiFonts.Body;
-        _lblLiveAdcCapD.ForeColor = UiColors.Disconnected;
+        _lblLiveAdcCapD.ForeColor = UiColors.TextOnDarkMuted;
         _lblLiveAdcD.Font = UiFonts.MonoLiveAdc;
-        _lblLiveAdcD.ForeColor = UiColors.Info;
+        _lblLiveAdcD.ForeColor = UiColors.TextOnDark;
         _lblLiveWeightCapD.Font = UiFonts.Body;
-        _lblLiveWeightCapD.ForeColor = UiColors.Disconnected;
+        _lblLiveWeightCapD.ForeColor = UiColors.TextOnDarkMuted;
         _lblLiveWeightD.Font = UiFonts.MonoLiveAdc;
-        _lblLiveWeightD.ForeColor = UiColors.Info;
+        _lblLiveWeightD.ForeColor = UiColors.TextOnDark;
         _cmbDynamicCalibPort.Font = UiFonts.Medium;
         _cmbDynamicCalibPort.BackColor = UiColors.InputBack;
         _cmbDynamicCalibPort.ForeColor = UiColors.InputFore;
-        _dotDynamicCalibConn.BackColor = UiColors.Disconnected;
         _btnDynamicCalibConn.Font = UiFonts.Body;
         _btnDynamicCalibConn.BackColor = UiColors.PrimaryAction;
         _btnDynamicCalibConn.ForeColor = UiColors.TextOnDark;
@@ -200,9 +200,9 @@ public partial class ServiceForm : Form
         _btnDynamicCalibPortRefresh.BackColor = UiColors.NeutralAction;
         _btnDynamicCalibPortRefresh.ForeColor = UiColors.TextPrimary;
         _lblDynamicCalibConn.Font = UiFonts.Body;
-        _lblDynamicCalibConn.ForeColor = UiColors.Disconnected;
-        _lblSecPlus.Font = UiFonts.BodyBold;
-        _lblSecPlus.ForeColor = UiColors.TextSection;
+        _lblDynamicCalibConn.ForeColor = UiColors.TextPrimary;
+        _lblSecPlus_00.Font = UiFonts.BodyBold;
+        _lblSecPlus_00.ForeColor = UiColors.TextSection;
         _lblKPlusEquals.Font = UiFonts.Medium;
         _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
         _txtKPlus.Font = UiFonts.Mono;
@@ -258,9 +258,10 @@ public partial class ServiceForm : Form
         _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
         _dgvDynCalib.Font = UiFonts.GridBody;
         _dgvDynCalib.BackgroundColor = UiColors.Surface;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 255, 255);
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 255, 255);
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _dgvDynCalib.DefaultCellStyle.BackColor = UiColors.Surface;
         _dgvDynCalib.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
@@ -788,15 +789,16 @@ public partial class ServiceForm : Form
         _cmbDynamicPort.Enabled = !_dynamicSim.IsPortOpen;
         SelectComboValue(_cmbDynamicPort, _dynamicSim.PortName);
         SelectComboValue(_cmbDynamicCalibPort, _dynamicSim.PortName);
-        if (_dotDynamicCalibConn is not null)
-            _dotDynamicCalibConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+
         if (_btnDynamicCalibConn is not null)
         {
             _btnDynamicCalibConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
             _btnDynamicCalibConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
         }
+
         if (_cmbDynamicCalibPort is not null)
             _cmbDynamicCalibPort.Enabled = !_dynamicSim.IsPortOpen;
+
         UpdateDynamicCalibrationConnectionLabel();
         AppendDynamicLog(connected ? $"=== Подключено: {_dynamicSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
@@ -854,12 +856,14 @@ public partial class ServiceForm : Form
         _rtbDynamicLog.SelectionColor = color;
         _rtbDynamicLog.AppendText(text + "\n");
         _rtbDynamicLog.SelectionColor = prev;
+
         if (_rtbDynamicLog.Lines.Length > 300)
         {
             int cut = _rtbDynamicLog.GetFirstCharIndexFromLine(50);
             _rtbDynamicLog.Select(0, cut);
             _rtbDynamicLog.SelectedText = "";
         }
+
         _rtbDynamicLog.ScrollToCaret();
         sw.Stop();
         Interlocked.Increment(ref _dynamicLogAppended);
