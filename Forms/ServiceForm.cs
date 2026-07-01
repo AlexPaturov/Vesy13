@@ -22,15 +22,18 @@ public partial class ServiceForm : Form
     private bool _adminUnlocked;
     private bool _calibUseCh0 = true;
     private int _frameCount;
-    private long _dynamicSampleCount;
-    private long _dynamicSampleUiPosted;
-    private long _dynamicSampleUiApplied;
-    private long _dynamicRawUiPosted;
-    private long _dynamicRawUiApplied;
-    private long _dynamicLogAppended;
-    private long _dynamicLogMaxMs;
-    private long _dynamicDiagLastTick;
+    private long _dynamicServiceSampleRateCount;
+    private long _dynamicServiceSampleUiPosted;
+    private long _dynamicServiceSampleUiApplied;
+    private long _dynamicServiceRawUiPosted;
+    private long _dynamicServiceRawUiApplied;
+    private long _dynamicServiceLogAppended;
+    private long _dynamicServiceLogMaxMs;
+    private long _dynamicServiceDiagLastTick;
     private long _dynamicCalibDiagLastTick;
+    private long _dynamicCalibSampleUiPosted;
+    private long _dynamicCalibSampleUiApplied;
+    private long _dynamicCalibLogAppended;
     private long _dynamicCalibDisplayTicks;
     private long _dynamicCalibDisplayApplied;
     private long _dynamicCalibDisplaySkipped;
@@ -59,6 +62,7 @@ public partial class ServiceForm : Form
     private long _lastCalibDiagLogAppended;
     private bool _dynamicServiceDataSubscribed;
     private bool _dynamicCalibDataSubscribed;
+    private bool _dynamicCalibTabActive;
     private int _lastCh0;
     private int _lastCh1;
     private int _lastDynCh0;
@@ -537,7 +541,7 @@ public partial class ServiceForm : Form
         _frameCount = 0;
         if (_lblDynamicRate is not null)
         {
-            _lblDynamicRate.Text = $"{Interlocked.Exchange(ref _dynamicSampleCount, 0)} сэмпл/с";
+            _lblDynamicRate.Text = $"{Interlocked.Exchange(ref _dynamicServiceSampleRateCount, 0)} сэмпл/с";
         }
     }
 
@@ -882,8 +886,10 @@ public partial class ServiceForm : Form
     {
         if (DesignMode || _dynamicServiceSim is null || _dynamicCalibSim is null || _tabs is null) return;
         var tab = _tabs.SelectedTab;
+        bool calibTabActive = tab == _tabCalibD;
+        Volatile.Write(ref _dynamicCalibTabActive, calibTabActive);
         SetDynamicServiceDataSubscription(tab == _tabDynamicService);
-        SetDynamicCalibDataSubscription(tab == _tabCalibD);
+        SetDynamicCalibDataSubscription(calibTabActive);
     }
 
     private void SetDynamicServiceDataSubscription(bool enabled)
@@ -953,16 +959,16 @@ public partial class ServiceForm : Form
 
     private void OnDynamicServiceSample(object? sender, SimA04DynamicSample sample)
     {
-        Interlocked.Increment(ref _dynamicSampleCount);
+        Interlocked.Increment(ref _dynamicServiceSampleRateCount);
         if (InvokeRequired)
         {
-            Interlocked.Increment(ref _dynamicSampleUiPosted);
+            Interlocked.Increment(ref _dynamicServiceSampleUiPosted);
             WriteServiceDynamicDiagnostics();
             BeginInvoke(() => OnDynamicServiceSample(sender, sample));
             return;
         }
 
-        Interlocked.Increment(ref _dynamicSampleUiApplied);
+        Interlocked.Increment(ref _dynamicServiceSampleUiApplied);
         _lblDynamicCh0.Text = sample.Ch0.ToString();
         _lblDynamicCh1.Text = sample.Ch1.ToString();
         _lblDynamicCh0.ForeColor = UiColors.Info;
@@ -977,8 +983,7 @@ public partial class ServiceForm : Form
             _latestDynamicSampleVersion++;
         }
 
-        Interlocked.Increment(ref _dynamicSampleCount);
-        Interlocked.Increment(ref _dynamicSampleUiPosted);
+        Interlocked.Increment(ref _dynamicCalibSampleUiPosted);
         WriteDynamicCalibDiagnostics();
     }
 
@@ -1004,7 +1009,7 @@ public partial class ServiceForm : Form
             }
 
             _displayedDynamicSampleVersion = version;
-            Interlocked.Increment(ref _dynamicSampleUiApplied);
+            Interlocked.Increment(ref _dynamicCalibSampleUiApplied);
             Interlocked.Increment(ref _dynamicCalibDisplayApplied);
             _lastDynCh0 = sample.Ch0;
             _lastDynCh1 = sample.Ch1;
@@ -1022,14 +1027,14 @@ public partial class ServiceForm : Form
     {
         if (InvokeRequired)
         {
-            Interlocked.Increment(ref _dynamicRawUiPosted);
+            Interlocked.Increment(ref _dynamicServiceRawUiPosted);
             WriteServiceDynamicDiagnostics();
             BeginInvoke(() => OnDynamicServiceRawSample(sender, raw));
             return;
         }
 
         if (_tabs.SelectedTab != _tabDynamicService) return;
-        Interlocked.Increment(ref _dynamicRawUiApplied);
+        Interlocked.Increment(ref _dynamicServiceRawUiApplied);
         if (!_chkDynamicLog.Checked) return;
         var sample = SimA04DynamicSample.Parse(raw);
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
@@ -1055,8 +1060,8 @@ public partial class ServiceForm : Form
 
         _rtbDynamicLog.ScrollToCaret();
         sw.Stop();
-        Interlocked.Increment(ref _dynamicLogAppended);
-        UpdateMax(ref _dynamicLogMaxMs, sw.ElapsedMilliseconds);
+        Interlocked.Increment(ref _dynamicServiceLogAppended);
+        UpdateMax(ref _dynamicServiceLogMaxMs, sw.ElapsedMilliseconds);
     }
 
     private void WriteDynamicCalibDiagnostics()
@@ -1071,12 +1076,12 @@ public partial class ServiceForm : Form
         long rawBytes = _dynamicCalibSim.RawBytesReceived;
         long samples = _dynamicCalibSim.SamplesReceived;
         long skipped = _dynamicCalibSim.SkippedBytes;
-        long samplePosted = Interlocked.Read(ref _dynamicSampleUiPosted);
-        long sampleApplied = Interlocked.Read(ref _dynamicSampleUiApplied);
+        long samplePosted = Interlocked.Read(ref _dynamicCalibSampleUiPosted);
+        long sampleApplied = Interlocked.Read(ref _dynamicCalibSampleUiApplied);
         long displayTicks = Interlocked.Read(ref _dynamicCalibDisplayTicks);
         long displayApplied = Interlocked.Read(ref _dynamicCalibDisplayApplied);
         long displaySkipped = Interlocked.Read(ref _dynamicCalibDisplaySkipped);
-        long logAppended = Interlocked.Read(ref _dynamicLogAppended);
+        long logAppended = Interlocked.Read(ref _dynamicCalibLogAppended);
         long displayMaxMs = Interlocked.Exchange(ref _dynamicCalibDisplayMaxMs, 0);
         long latestVersion;
         long displayedVersion;
@@ -1095,13 +1100,13 @@ public partial class ServiceForm : Form
         long displayAppliedDelta = Delta(displayApplied, ref _lastCalibDiagDisplayApplied);
         long displaySkippedDelta = Delta(displaySkipped, ref _lastCalibDiagDisplaySkipped);
         long logAppendedDelta = Delta(logAppended, ref _lastCalibDiagLogAppended);
-        long samplePending = samplePosted - sampleApplied;
+        long sampleNotDisplayed = samplePosted - sampleApplied;
         long displayPending = latestVersion - displayedVersion;
-        bool activeTab = _tabs?.SelectedTab == _tabCalibD;
+        bool activeTab = Volatile.Read(ref _dynamicCalibTabActive);
 
         AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamicCalib",
             $"periodMs={elapsedMs}; activeTab={activeTab}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedDelta}; " +
-            $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
+            $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; sampleNotDisplayed={sampleNotDisplayed}; " +
             $"displayTicks={displayTicksDelta}; displayApplied={displayAppliedDelta}; displaySkipped={displaySkippedDelta}; displayPending={displayPending}; " +
             $"latestVersion={latestVersion}; displayedVersion={displayedVersion}; logAppended={logAppendedDelta}; displayMaxMs={displayMaxMs}",
             "SimA04DynamicCalib", _dynamicCalibSim.PortName);
@@ -1111,20 +1116,20 @@ public partial class ServiceForm : Form
     {
         const long intervalMs = 5000;
         long now = Environment.TickCount64;
-        long last = Interlocked.Read(ref _dynamicDiagLastTick);
+        long last = Interlocked.Read(ref _dynamicServiceDiagLastTick);
         if (last != 0 && now - last < intervalMs) return;
-        if (Interlocked.CompareExchange(ref _dynamicDiagLastTick, now, last) != last) return;
+        if (Interlocked.CompareExchange(ref _dynamicServiceDiagLastTick, now, last) != last) return;
 
         long elapsedMs = last == 0 ? intervalMs : now - last;
         long rawBytes = _dynamicServiceSim.RawBytesReceived;
         long samples = _dynamicServiceSim.SamplesReceived;
         long skipped = _dynamicServiceSim.SkippedBytes;
-        long samplePosted = Interlocked.Read(ref _dynamicSampleUiPosted);
-        long sampleApplied = Interlocked.Read(ref _dynamicSampleUiApplied);
-        long rawPosted = Interlocked.Read(ref _dynamicRawUiPosted);
-        long rawApplied = Interlocked.Read(ref _dynamicRawUiApplied);
-        long logAppended = Interlocked.Read(ref _dynamicLogAppended);
-        long logMaxMs = Interlocked.Exchange(ref _dynamicLogMaxMs, 0);
+        long samplePosted = Interlocked.Read(ref _dynamicServiceSampleUiPosted);
+        long sampleApplied = Interlocked.Read(ref _dynamicServiceSampleUiApplied);
+        long rawPosted = Interlocked.Read(ref _dynamicServiceRawUiPosted);
+        long rawApplied = Interlocked.Read(ref _dynamicServiceRawUiApplied);
+        long logAppended = Interlocked.Read(ref _dynamicServiceLogAppended);
+        long logMaxMs = Interlocked.Exchange(ref _dynamicServiceLogMaxMs, 0);
 
         long rawBytesDelta = Delta(rawBytes, ref _lastDiagRawBytes);
         long samplesDelta = Delta(samples, ref _lastDiagSamples);

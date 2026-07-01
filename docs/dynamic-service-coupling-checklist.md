@@ -35,8 +35,8 @@
 - [x] `Tabs_SelectedIndexChanged` считает `_tabDynamicService` и `_tabCalibD` одним владельцем динамического подключения:
   переход между ними не разделяет процессы, а удерживает общий stream.
 
-- [ ] Диагностика `AdcDynamicService` и `AdcDynamicCalib` использует общие счётчики:
-  `_dynamicSampleUiPosted`, `_dynamicSampleUiApplied`, `_dynamicLogAppended`. Reader-счётчики уже читаются из отдельных `_dynamicServiceSim` и `_dynamicCalibSim`.
+- [x] Диагностика `AdcDynamicService` и `AdcDynamicCalib` использует общие счётчики:
+  `_dynamicSampleUiPosted`, `_dynamicSampleUiApplied`, `_dynamicLogAppended`. Теперь service/calib используют отдельные UI/log/rate-счётчики; reader-счётчики читаются из отдельных `_dynamicServiceSim` и `_dynamicCalibSim`.
 
 ## Главная проблемная цепочка
 
@@ -49,3 +49,8 @@
 ```
 
 Статус: устранено в группах 1 и 2. Raw-подписка включается только для вкладки `Сервисный режим Динамика`, вкладка `Калибровка Динамика` получает только parsed samples через свой обработчик, а connection workflow и reader-ы разделены.
+
+
+## Итог
+
+Все 10 точек нежелательной связи из checklist закрыты.
