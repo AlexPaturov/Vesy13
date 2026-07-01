@@ -1243,6 +1243,8 @@ public partial class ServiceForm : Form
         UpdateLiveDynamicWeight(code);
     }
 
+    private static string FormatServiceDynamicWeight(double tonnes) => tonnes.ToString("F5", CultureInfo.InvariantCulture);
+
     private void UpdateLiveDynamicWeight(int code)
     {
         if (_lblLiveWeightD is null) return;
@@ -1263,8 +1265,8 @@ public partial class ServiceForm : Form
             return;
         }
 
-        string plus = plusOk ? (code * kp).ToString("F2", CultureInfo.InvariantCulture) : "—";
-        string minus = minusOk ? (code * km).ToString("F2", CultureInfo.InvariantCulture) : "—";
+        string plus = plusOk ? FormatServiceDynamicWeight(code * kp) : "—";
+        string minus = minusOk ? FormatServiceDynamicWeight(code * km) : "—";
         _lblLiveWeightD.Text = $"→ {plus} т  ← {minus} т";
         _lblLiveWeightD.ForeColor = UiColors.Info;
     }
