@@ -56,6 +56,8 @@ public partial class ServiceForm : Form
     private long _lastCalibDiagDisplayApplied;
     private long _lastCalibDiagDisplaySkipped;
     private long _lastCalibDiagLogAppended;
+    private bool _dynamicServiceDataSubscribed;
+    private bool _dynamicCalibDataSubscribed;
     private int _lastCh0;
     private int _lastCh1;
     private int _lastDynCh0;
@@ -348,8 +350,6 @@ public partial class ServiceForm : Form
         _tabs.SelectedIndexChanged += Tabs_SelectedIndexChanged;
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
-        _dynamicSim.RawSampleReceived += OnDynamicRawSample;
-        _dynamicSim.SampleReceived += OnDynamicSample;
         _dynamicSim.ConnectionChanged += OnDynamicConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
@@ -365,6 +365,7 @@ public partial class ServiceForm : Form
         SetAdminTabs(false);
         UpdateMonitorConn(_sim.IsConnected);
         UpdateDynamicMonitorConn(_dynamicSim.IsConnected);
+        UpdateDynamicDataSubscriptions();
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
@@ -377,8 +378,8 @@ public partial class ServiceForm : Form
             if (_sim.IsPortOpen)
                 _sim.Close();
 
-            _dynamicSim.RawSampleReceived -= OnDynamicRawSample;
-            _dynamicSim.SampleReceived -= OnDynamicSample;
+            SetDynamicServiceDataSubscription(false);
+            SetDynamicCalibDataSubscription(false);
             _dynamicSim.ConnectionChanged -= OnDynamicConnectionChanged;
             if (_dynamicSim.IsPortOpen)
                 _dynamicSim.Close();
@@ -797,6 +798,7 @@ public partial class ServiceForm : Form
     private void Tabs_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (DesignMode || _sim is null || _dynamicSim is null) return;
+        UpdateDynamicDataSubscriptions();
         var tab = _tabs.SelectedTab;
         if (tab == _tabMonitor || tab == _tabCalibS)
         {
@@ -812,6 +814,44 @@ public partial class ServiceForm : Form
 
         CloseStaticConnection();
         CloseDynamicConnection();
+    }
+
+    private void UpdateDynamicDataSubscriptions()
+    {
+        if (DesignMode || _dynamicSim is null || _tabs is null) return;
+        var tab = _tabs.SelectedTab;
+        SetDynamicServiceDataSubscription(tab == _tabDynamicService);
+        SetDynamicCalibDataSubscription(tab == _tabCalibD);
+    }
+
+    private void SetDynamicServiceDataSubscription(bool enabled)
+    {
+        if (_dynamicServiceDataSubscribed == enabled) return;
+
+        if (enabled)
+        {
+            _dynamicSim.RawSampleReceived += OnDynamicServiceRawSample;
+            _dynamicSim.SampleReceived += OnDynamicServiceSample;
+        }
+        else
+        {
+            _dynamicSim.RawSampleReceived -= OnDynamicServiceRawSample;
+            _dynamicSim.SampleReceived -= OnDynamicServiceSample;
+        }
+
+        _dynamicServiceDataSubscribed = enabled;
+    }
+
+    private void SetDynamicCalibDataSubscription(bool enabled)
+    {
+        if (_dynamicCalibDataSubscribed == enabled) return;
+
+        if (enabled)
+            _dynamicSim.SampleReceived += OnDynamicCalibSample;
+        else
+            _dynamicSim.SampleReceived -= OnDynamicCalibSample;
+
+        _dynamicCalibDataSubscribed = enabled;
     }
 
     private void UpdateDynamicMonitorConn(bool connected)
@@ -845,7 +885,25 @@ public partial class ServiceForm : Form
         UpdateDynamicMonitorConn(connected);
     }
 
-    private void OnDynamicSample(object? sender, SimA04DynamicSample sample)
+    private void OnDynamicServiceSample(object? sender, SimA04DynamicSample sample)
+    {
+        Interlocked.Increment(ref _dynamicSampleCount);
+        if (InvokeRequired)
+        {
+            Interlocked.Increment(ref _dynamicSampleUiPosted);
+            WriteServiceDynamicDiagnostics();
+            BeginInvoke(() => OnDynamicServiceSample(sender, sample));
+            return;
+        }
+
+        Interlocked.Increment(ref _dynamicSampleUiApplied);
+        _lblDynamicCh0.Text = sample.Ch0.ToString();
+        _lblDynamicCh1.Text = sample.Ch1.ToString();
+        _lblDynamicCh0.ForeColor = UiColors.Info;
+        _lblDynamicCh1.ForeColor = UiColors.Info;
+    }
+
+    private void OnDynamicCalibSample(object? sender, SimA04DynamicSample sample)
     {
         lock (_dynamicSampleSync)
         {
@@ -855,7 +913,7 @@ public partial class ServiceForm : Form
 
         Interlocked.Increment(ref _dynamicSampleCount);
         Interlocked.Increment(ref _dynamicSampleUiPosted);
-        WriteServiceDynamicDiagnostics();
+        WriteDynamicCalibDiagnostics();
     }
 
     private void RefreshDynamicSampleDisplay()
@@ -884,10 +942,6 @@ public partial class ServiceForm : Form
             Interlocked.Increment(ref _dynamicCalibDisplayApplied);
             _lastDynCh0 = sample.Ch0;
             _lastDynCh1 = sample.Ch1;
-            _lblDynamicCh0.Text = sample.Ch0.ToString();
-            _lblDynamicCh1.Text = sample.Ch1.ToString();
-            _lblDynamicCh0.ForeColor = UiColors.Info;
-            _lblDynamicCh1.ForeColor = UiColors.Info;
             UpdateLiveDynamicCalibrationLabels();
         }
         finally
@@ -898,16 +952,17 @@ public partial class ServiceForm : Form
         }
     }
 
-    private void OnDynamicRawSample(object? sender, byte[] raw)
+    private void OnDynamicServiceRawSample(object? sender, byte[] raw)
     {
         if (InvokeRequired)
         {
             Interlocked.Increment(ref _dynamicRawUiPosted);
             WriteServiceDynamicDiagnostics();
-            BeginInvoke(() => OnDynamicRawSample(sender, raw));
+            BeginInvoke(() => OnDynamicServiceRawSample(sender, raw));
             return;
         }
 
+        if (_tabs.SelectedTab != _tabDynamicService) return;
         Interlocked.Increment(ref _dynamicRawUiApplied);
         if (!_chkDynamicLog.Checked) return;
         var sample = SimA04DynamicSample.Parse(raw);
