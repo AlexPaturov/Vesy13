@@ -42,7 +42,4 @@
     <EmbeddedResource Remove="SerialProbe\**" />
     <None Remove="SerialProbe\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="docs\" />
-  </ItemGroup>
 </Project>
