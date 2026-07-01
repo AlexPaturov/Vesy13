@@ -6,7 +6,7 @@
 
 ## Точки связи
 
-- [ ] Общий экземпляр `ServiceForm._dynamicSim` используется двумя процессами:
+- [x] Общий экземпляр `ServiceForm._dynamicSim` используется двумя процессами:
   `Сервисный режим Динамика` и `Калибровка Динамика`.
 
 - [x] Общая подписка на raw-поток:
@@ -25,18 +25,18 @@
 
 - [x] `_chkDynamicLog` находится на сервисной вкладке, но его состояние влияет на обработку raw-событий во время калибровки динамики.
 
-- [ ] `ToggleDynamicConnection` общий для двух кнопок подключения:
+- [x] `ToggleDynamicConnection` общий для двух кнопок подключения:
   `BtnDynamicConn_Click` и `BtnDynamicCalibConn_Click`.
   Подключение/отключение одной вкладки меняет состояние другой.
 
-- [ ] `UpdateDynamicMonitorConn` обновляет UI обеих вкладок из одного метода:
+- [x] `UpdateDynamicMonitorConn` обновляет UI обеих вкладок из одного метода:
   `_lblDynamicConn`, `_btnDynamicConn`, `_cmbDynamicPort`, `_btnDynamicCalibConn`, `_cmbDynamicCalibPort`, `_lblDynamicCalibConn`.
 
-- [ ] `Tabs_SelectedIndexChanged` считает `_tabDynamicService` и `_tabCalibD` одним владельцем динамического подключения:
+- [x] `Tabs_SelectedIndexChanged` считает `_tabDynamicService` и `_tabCalibD` одним владельцем динамического подключения:
   переход между ними не разделяет процессы, а удерживает общий stream.
 
 - [ ] Диагностика `AdcDynamicService` и `AdcDynamicCalib` использует общие счётчики:
-  `_dynamicSampleUiPosted`, `_dynamicSampleUiApplied`, `_dynamicLogAppended`, `_dynamicSim.RawBytesReceived`, `_dynamicSim.SamplesReceived`.
+  `_dynamicSampleUiPosted`, `_dynamicSampleUiApplied`, `_dynamicLogAppended`. Reader-счётчики уже читаются из отдельных `_dynamicServiceSim` и `_dynamicCalibSim`.
 
 ## Главная проблемная цепочка
 
@@ -48,4 +48,4 @@
   -> _rtbDynamicLog на вкладке Сервисный режим Динамика
 ```
 
-Статус: устранено в группе 2. Raw-подписка теперь включается только для вкладки `Сервисный режим Динамика`, а вкладка `Калибровка Динамика` получает только parsed samples через свой обработчик.
+Статус: устранено в группах 1 и 2. Raw-подписка включается только для вкладки `Сервисный режим Динамика`, вкладка `Калибровка Динамика` получает только parsed samples через свой обработчик, а connection workflow и reader-ы разделены.

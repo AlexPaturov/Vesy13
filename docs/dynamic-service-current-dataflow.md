@@ -2,19 +2,21 @@
 
 Дата фиксации: 2026-07-01.
 
-Документ описывает текущее фактическое устройство `ServiceForm` после выполнения группы 2: обработчики данных разделены по вкладкам, но connection workflow ещё общий.
+Документ описывает текущее фактическое устройство `ServiceForm` после выполнения групп 1 и 2: обработчики данных и workflow подключения разделены по вкладкам. Диагностические счётчики ещё частично общие, это осталось для группы 3.
 
-## Общая точка входа
+## Точки входа
 
-Сейчас обе вкладки формы сервиса всё ещё используют один экземпляр:
+Внутри `ServiceForm` динамические процессы используют разные экземпляры reader-а:
 
 ```text
-ServiceForm._dynamicSim : SimA04ReaderDynamic
+ServiceForm._dynamicServiceSim : SimA04ReaderDynamic
+ServiceForm._dynamicCalibSim   : SimA04ReaderDynamic
 ```
 
-Это относится к группе 1 и ещё не исправлено.
+`_dynamicServiceSim` приходит извне, как и раньше, и обслуживает вкладку `Сервисный режим Динамика`.
+`_dynamicCalibSim` создаётся внутри `ServiceForm` и обслуживает только вкладку `Калибровка Динамика`.
 
-`SimA04ReaderDynamic` читает COM-порт, собирает 5-байтовый динамический сэмпл и публикует два события:
+Каждый `SimA04ReaderDynamic` читает свой открытый COM-порт, собирает 5-байтовый динамический сэмпл и публикует события:
 
 ```text
 COM port bytes
@@ -25,7 +27,7 @@ COM port bytes
 
 ## Подписки на данные
 
-Подписки на raw/sample поток теперь переключаются по активной вкладке:
+Подписки на raw/sample поток переключаются по активной вкладке:
 
 ```text
 Tabs_SelectedIndexChanged
@@ -37,45 +39,48 @@ Tabs_SelectedIndexChanged
 Для `Сервисный режим Динамика`:
 
 ```text
-_dynamicSim.RawSampleReceived += OnDynamicServiceRawSample
-_dynamicSim.SampleReceived    += OnDynamicServiceSample
+_dynamicServiceSim.RawSampleReceived += OnDynamicServiceRawSample
+_dynamicServiceSim.SampleReceived    += OnDynamicServiceSample
 ```
 
 Для `Калибровка Динамика`:
 
 ```text
-_dynamicSim.SampleReceived += OnDynamicCalibSample
+_dynamicCalibSim.SampleReceived += OnDynamicCalibSample
 ```
 
-Raw-подписки для калибровки динамики больше нет.
+Raw-подписки для калибровки динамики нет.
 
 ## Вкладка "Сервисный режим Динамика"
 
 Назначение вкладки: смотреть поток динамического АЦП, CH0/CH1 и raw-log.
 
-Текущий путь подключения всё ещё общий:
+Путь подключения:
 
 ```text
 _btnDynamicConn.Click
   -> BtnDynamicConn_Click
-  -> ToggleDynamicConnection(_cmbDynamicPort.SelectedItem, ...)
-  -> _dynamicSim.Open(port) / _dynamicSim.Close()
+  -> ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem, ...)
+  -> CloseStaticConnection()
+  -> CloseDynamicCalibConnection()
+  -> _dynamicServiceSim.Open(port) / CloseDynamicServiceConnection()
+  -> UpdateDynamicServiceMonitorConn(...)
 ```
 
-Текущий путь parsed sample:
+Путь parsed sample:
 
 ```text
-_dynamicSim.SampleReceived
+_dynamicServiceSim.SampleReceived
   -> OnDynamicServiceSample(sample)
   -> BeginInvoke(...), если событие пришло не на UI-потоке
   -> _lblDynamicCh0.Text
   -> _lblDynamicCh1.Text
 ```
 
-Текущий путь raw-log:
+Путь raw-log:
 
 ```text
-_dynamicSim.RawSampleReceived
+_dynamicServiceSim.RawSampleReceived
   -> OnDynamicServiceRawSample(raw)
   -> BeginInvoke(...), если событие пришло не на UI-потоке
   -> guard: активная вкладка должна быть _tabDynamicService
@@ -92,19 +97,22 @@ _dynamicSim.RawSampleReceived
 
 Назначение вкладки: калибровка коэффициентов динамики, просмотр текущего кода АЦП и расчёт live-веса.
 
-Текущий путь подключения всё ещё общий:
+Путь подключения:
 
 ```text
 _btnDynamicCalibConn.Click
   -> BtnDynamicCalibConn_Click
-  -> ToggleDynamicConnection(_cmbDynamicCalibPort.SelectedItem, ...)
-  -> _dynamicSim.Open(port) / _dynamicSim.Close()
+  -> ToggleDynamicCalibConnection(_cmbDynamicCalibPort.SelectedItem, ...)
+  -> CloseStaticConnection()
+  -> CloseDynamicServiceConnection()
+  -> _dynamicCalibSim.Open(port) / CloseDynamicCalibConnection()
+  -> UpdateDynamicCalibMonitorConn(...)
 ```
 
-Текущий путь parsed sample для калибровки:
+Путь parsed sample для калибровки:
 
 ```text
-_dynamicSim.SampleReceived
+_dynamicCalibSim.SampleReceived
   -> OnDynamicCalibSample(sample)
   -> сохранить sample как latest
   -> RefreshDynamicSampleDisplay() по timer 100 ms
@@ -114,45 +122,40 @@ _dynamicSim.SampleReceived
   -> _lblLiveWeightD.Text
 ```
 
-Текущий расчёт live-веса на вкладке калибровки:
+Расчёт live-веса на вкладке калибровки:
 
 ```text
 CurrentDynamicAdcCode()
-  -> выбранный канал из _dynamicSim.Channel
+  -> выбранный канал из _dynamicCalibSim.Channel
   -> code * KPlus / code * KMinus
   -> FormatServiceDynamicWeight(...)
   -> _lblLiveWeightD
 ```
 
-Raw-log калибровка динамики больше не получает и не пишет.
+Raw-log калибровка динамики не получает и не пишет.
 
 ## Переключение вкладок
 
-При смене вкладки сейчас выполняются две вещи:
+При смене вкладки выполняются разделённые действия:
 
 ```text
 Tabs_SelectedIndexChanged
   -> UpdateDynamicDataSubscriptions()
-  -> если вкладка _tabDynamicService или _tabCalibD: CloseStaticConnection(); динамическое подключение не закрывать
-  -> иначе закрыть неактуальные подключения
+  -> если вкладка _tabMonitor или _tabCalibS: CloseDynamicConnections()
+  -> если вкладка _tabDynamicService: CloseStaticConnection(); CloseDynamicCalibConnection()
+  -> если вкладка _tabCalibD: CloseStaticConnection(); CloseDynamicServiceConnection()
+  -> иначе CloseStaticConnection(); CloseDynamicConnections()
 ```
 
-Connection workflow всё ещё общий: переход между `_tabDynamicService` и `_tabCalibD` удерживает один stream.
+Переход между `_tabDynamicService` и `_tabCalibD` больше не удерживает общий stream.
 
 ## Текущая блок-схема
 
 ```text
-                         +------------------------+
-                         | SimA04ReaderDynamic    |
-                         | _dynamicSim общий      |
-                         +-----------+------------+
-                                     |
-                         active tab selects subscriptions
-                                     |
-          +--------------------------+--------------------------+
+  _tabDynamicService                                      _tabCalibD
           |                                                     |
           v                                                     v
-  _tabDynamicService                                     _tabCalibD
+  _dynamicServiceSim                                   _dynamicCalibSim
           |                                                     |
           | RawSampleReceived + SampleReceived                  | SampleReceived only
           |                                                     |
@@ -170,12 +173,8 @@ Connection workflow всё ещё общий: переход между `_tabDyn
 
 ## Что ещё не разделено
 
-Группа 2 выполнена для обработчиков данных, но остаются связи из других групп:
+Осталась группа 3:
 
 ```text
-- общий _dynamicSim
-- общий ToggleDynamicConnection(...)
-- общий UpdateDynamicMonitorConn(...)
-- Tabs_SelectedIndexChanged всё ещё считает две вкладки владельцами одного stream
 - диагностика всё ещё частично использует общие счётчики
 ```

@@ -15,7 +15,8 @@ namespace Vesy13.Forms;
 public partial class ServiceForm : Form
 {
     private SimA04ReaderStatic _sim = null!;
-    private SimA04ReaderDynamic _dynamicSim = null!;
+    private SimA04ReaderDynamic _dynamicServiceSim = null!;
+    private SimA04ReaderDynamic _dynamicCalibSim = null!;
     private LocalRepository _calib = null!;
     private SettingsService _settings = null!;
     private bool _adminUnlocked;
@@ -73,7 +74,8 @@ public partial class ServiceForm : Form
     public ServiceForm(SimA04ReaderStatic adc, SimA04ReaderDynamic dynamicAdc, LocalRepository calib, SettingsService settings)
     {
         _sim = adc;
-        _dynamicSim = dynamicAdc;
+        _dynamicServiceSim = dynamicAdc;
+        _dynamicCalibSim = new SimA04ReaderDynamic { Channel = dynamicAdc.Channel };
         _calib = calib;
         _settings = settings;
         InitializeComponent();
@@ -346,11 +348,13 @@ public partial class ServiceForm : Form
         if (DesignMode || _sim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
         _sim.ConnectionTimeoutMs = 1000;
-        _dynamicSim.ConnectionTimeoutMs = 5000;
+        _dynamicServiceSim.ConnectionTimeoutMs = 5000;
+        _dynamicCalibSim.ConnectionTimeoutMs = 5000;
         _tabs.SelectedIndexChanged += Tabs_SelectedIndexChanged;
         _sim.RawFrameReceived += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
-        _dynamicSim.ConnectionChanged += OnDynamicConnectionChanged;
+        _dynamicServiceSim.ConnectionChanged += OnDynamicServiceConnectionChanged;
+        _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
@@ -364,7 +368,8 @@ public partial class ServiceForm : Form
         LoadCalibDynamic();
         SetAdminTabs(false);
         UpdateMonitorConn(_sim.IsConnected);
-        UpdateDynamicMonitorConn(_dynamicSim.IsConnected);
+        UpdateDynamicServiceMonitorConn(_dynamicServiceSim.IsConnected);
+        UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);
         UpdateDynamicDataSubscriptions();
     }
 
@@ -380,9 +385,13 @@ public partial class ServiceForm : Form
 
             SetDynamicServiceDataSubscription(false);
             SetDynamicCalibDataSubscription(false);
-            _dynamicSim.ConnectionChanged -= OnDynamicConnectionChanged;
-            if (_dynamicSim.IsPortOpen)
-                _dynamicSim.Close();
+            _dynamicServiceSim.ConnectionChanged -= OnDynamicServiceConnectionChanged;
+            _dynamicCalibSim.ConnectionChanged -= OnDynamicCalibConnectionChanged;
+            if (_dynamicServiceSim.IsPortOpen)
+                _dynamicServiceSim.Close();
+            if (_dynamicCalibSim.IsPortOpen)
+                _dynamicCalibSim.Close();
+            _dynamicCalibSim.Dispose();
 
             _rateTimer.Stop();
             _dynamicCalibDisplayTimer.Stop();
@@ -488,12 +497,16 @@ public partial class ServiceForm : Form
     private void SetActiveChannel(ActiveChannel channel)
     {
         if (_sim is null) return;
-        if (_sim.Channel == channel && (_dynamicSim is null || _dynamicSim.Channel == channel)) return;
+        if (_sim.Channel == channel &&
+            (_dynamicServiceSim is null || _dynamicServiceSim.Channel == channel) &&
+            (_dynamicCalibSim is null || _dynamicCalibSim.Channel == channel)) return;
 
         ActiveChannel old = _sim.Channel;
         _sim.Channel = channel;
-        if (_dynamicSim is not null)
-            _dynamicSim.Channel = channel;
+        if (_dynamicServiceSim is not null)
+            _dynamicServiceSim.Channel = channel;
+        if (_dynamicCalibSim is not null)
+            _dynamicCalibSim.Channel = channel;
         UpdateLiveAdcLabel();
         AuditLogger.Action(AuditLogger.AdcChannelChanged, "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
     }
@@ -657,7 +670,7 @@ public partial class ServiceForm : Form
 
         try
         {
-            CloseDynamicConnection();
+            CloseDynamicConnections();
             _sim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04", selectedPort);
             UpdateMonitorConn(_sim.IsConnected);
@@ -709,17 +722,17 @@ public partial class ServiceForm : Form
 
     private void RefreshDynamicPorts()
     {
-        if (_dynamicSim is null) return;
+        if (_dynamicServiceSim is null || _dynamicCalibSim is null) return;
         var ports = SerialPort.GetPortNames();
-        FillDynamicPortCombo(_cmbDynamicPort, ports);
-        FillDynamicPortCombo(_cmbDynamicCalibPort, ports);
+        FillDynamicPortCombo(_cmbDynamicPort, ports, _dynamicServiceSim.PortName);
+        FillDynamicPortCombo(_cmbDynamicCalibPort, ports, _dynamicCalibSim.PortName);
         if (_btnDynamicConn is not null)
             _btnDynamicConn.Enabled = ports.Length > 0;
         if (_btnDynamicCalibConn is not null)
             _btnDynamicCalibConn.Enabled = ports.Length > 0;
     }
 
-    private void FillDynamicPortCombo(ComboBox? combo, string[] ports)
+    private static void FillDynamicPortCombo(ComboBox? combo, string[] ports, string fallbackPort)
     {
         if (combo is null) return;
         string? selected = combo.SelectedItem as string;
@@ -727,13 +740,13 @@ public partial class ServiceForm : Form
         if (ports.Length == 0) return;
 
         combo.Items.AddRange(ports);
-        int idx = Array.IndexOf(ports, selected ?? _dynamicSim.PortName);
+        int idx = Array.IndexOf(ports, selected ?? fallbackPort);
         combo.SelectedIndex = idx >= 0 ? idx : 0;
     }
 
     private void BtnDynamicConn_Click(object? sender, EventArgs e)
     {
-        ToggleDynamicConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error));
+        ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error));
     }
 
     private void BtnDynamicPortRefresh_Click(object? sender, EventArgs e)
@@ -748,15 +761,15 @@ public partial class ServiceForm : Form
 
     private void BtnDynamicCalibConn_Click(object? sender, EventArgs e)
     {
-        ToggleDynamicConnection(_cmbDynamicCalibPort.SelectedItem as string,
+        ToggleDynamicCalibConnection(_cmbDynamicCalibPort.SelectedItem as string,
             ex => MessageBox.Show($"Не удалось подключить АЦП динамики.\n{ex.Message}", "АЦП динамики", MessageBoxButtons.OK, MessageBoxIcon.Error));
     }
 
-    private void ToggleDynamicConnection(string? selectedPort, Action<Exception> onError)
+    private void ToggleDynamicServiceConnection(string? selectedPort, Action<Exception> onError)
     {
-        if (_dynamicSim.IsPortOpen)
+        if (_dynamicServiceSim.IsPortOpen)
         {
-            CloseDynamicConnection();
+            CloseDynamicServiceConnection();
             return;
         }
 
@@ -764,14 +777,39 @@ public partial class ServiceForm : Form
         try
         {
             CloseStaticConnection();
-            _dynamicSim.Open(selectedPort);
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04Dynamic", selectedPort);
-            UpdateDynamicMonitorConn(_dynamicSim.IsConnected);
+            CloseDynamicCalibConnection();
+            _dynamicServiceSim.Open(selectedPort);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort);
+            UpdateDynamicServiceMonitorConn(_dynamicServiceSim.IsConnected);
         }
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04Dynamic", selectedPort);
+            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort);
+        }
+    }
+
+    private void ToggleDynamicCalibConnection(string? selectedPort, Action<Exception> onError)
+    {
+        if (_dynamicCalibSim.IsPortOpen)
+        {
+            CloseDynamicCalibConnection();
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(selectedPort)) return;
+        try
+        {
+            CloseStaticConnection();
+            CloseDynamicServiceConnection();
+            _dynamicCalibSim.Open(selectedPort);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort);
+            UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);
+        }
+        catch (Exception ex)
+        {
+            onError(ex);
+            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort);
         }
     }
 
@@ -785,40 +823,64 @@ public partial class ServiceForm : Form
         UpdateMonitorConn(false);
     }
 
-    private void CloseDynamicConnection()
+    private void CloseDynamicConnections()
     {
-        if (!_dynamicSim.IsPortOpen) return;
+        CloseDynamicServiceConnection();
+        CloseDynamicCalibConnection();
+    }
 
-        var port = _dynamicSim.PortName;
-        _dynamicSim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04Dynamic", port);
-        UpdateDynamicMonitorConn(false);
+    private void CloseDynamicServiceConnection()
+    {
+        if (!_dynamicServiceSim.IsPortOpen) return;
+
+        var port = _dynamicServiceSim.PortName;
+        _dynamicServiceSim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04DynamicService", port);
+        UpdateDynamicServiceMonitorConn(false);
+    }
+
+    private void CloseDynamicCalibConnection()
+    {
+        if (!_dynamicCalibSim.IsPortOpen) return;
+
+        var port = _dynamicCalibSim.PortName;
+        _dynamicCalibSim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04DynamicCalib", port);
+        UpdateDynamicCalibMonitorConn(false);
     }
 
     private void Tabs_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (DesignMode || _sim is null || _dynamicSim is null) return;
+        if (DesignMode || _sim is null || _dynamicServiceSim is null || _dynamicCalibSim is null) return;
         UpdateDynamicDataSubscriptions();
         var tab = _tabs.SelectedTab;
         if (tab == _tabMonitor || tab == _tabCalibS)
         {
-            CloseDynamicConnection();
+            CloseDynamicConnections();
             return;
         }
 
-        if (tab == _tabDynamicService || tab == _tabCalibD)
+        if (tab == _tabDynamicService)
         {
             CloseStaticConnection();
+            CloseDynamicCalibConnection();
+            return;
+        }
+
+        if (tab == _tabCalibD)
+        {
+            CloseStaticConnection();
+            CloseDynamicServiceConnection();
             return;
         }
 
         CloseStaticConnection();
-        CloseDynamicConnection();
+        CloseDynamicConnections();
     }
 
     private void UpdateDynamicDataSubscriptions()
     {
-        if (DesignMode || _dynamicSim is null || _tabs is null) return;
+        if (DesignMode || _dynamicServiceSim is null || _dynamicCalibSim is null || _tabs is null) return;
         var tab = _tabs.SelectedTab;
         SetDynamicServiceDataSubscription(tab == _tabDynamicService);
         SetDynamicCalibDataSubscription(tab == _tabCalibD);
@@ -830,13 +892,13 @@ public partial class ServiceForm : Form
 
         if (enabled)
         {
-            _dynamicSim.RawSampleReceived += OnDynamicServiceRawSample;
-            _dynamicSim.SampleReceived += OnDynamicServiceSample;
+            _dynamicServiceSim.RawSampleReceived += OnDynamicServiceRawSample;
+            _dynamicServiceSim.SampleReceived += OnDynamicServiceSample;
         }
         else
         {
-            _dynamicSim.RawSampleReceived -= OnDynamicServiceRawSample;
-            _dynamicSim.SampleReceived -= OnDynamicServiceSample;
+            _dynamicServiceSim.RawSampleReceived -= OnDynamicServiceRawSample;
+            _dynamicServiceSim.SampleReceived -= OnDynamicServiceSample;
         }
 
         _dynamicServiceDataSubscribed = enabled;
@@ -847,42 +909,46 @@ public partial class ServiceForm : Form
         if (_dynamicCalibDataSubscribed == enabled) return;
 
         if (enabled)
-            _dynamicSim.SampleReceived += OnDynamicCalibSample;
+            _dynamicCalibSim.SampleReceived += OnDynamicCalibSample;
         else
-            _dynamicSim.SampleReceived -= OnDynamicCalibSample;
+            _dynamicCalibSim.SampleReceived -= OnDynamicCalibSample;
 
         _dynamicCalibDataSubscribed = enabled;
     }
 
-    private void UpdateDynamicMonitorConn(bool connected)
+    private void UpdateDynamicServiceMonitorConn(bool connected)
     {
         if (_lblDynamicConn is null) return;
         _dotDynamicConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _lblDynamicConn.Text = connected ? $"Подключено: {_dynamicSim.PortName}  4800/Even/8/1" : (_dynamicSim.IsPortOpen ? $"Порт открыт: {_dynamicSim.PortName}, нет потока АЦП" : "Нет подключения");
+        _lblDynamicConn.Text = connected ? $"Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1" : (_dynamicServiceSim.IsPortOpen ? $"Порт открыт: {_dynamicServiceSim.PortName}, нет потока АЦП" : "Нет подключения");
         _lblDynamicConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        _btnDynamicConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
-        _btnDynamicConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
-        _cmbDynamicPort.Enabled = !_dynamicSim.IsPortOpen;
-        SelectComboValue(_cmbDynamicPort, _dynamicSim.PortName);
-        SelectComboValue(_cmbDynamicCalibPort, _dynamicSim.PortName);
-
-        if (_btnDynamicCalibConn is not null)
-        {
-            _btnDynamicCalibConn.Text = _dynamicSim.IsPortOpen ? "Отключить" : "Подключить";
-            _btnDynamicCalibConn.BackColor = _dynamicSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
-        }
-
-        if (_cmbDynamicCalibPort is not null)
-            _cmbDynamicCalibPort.Enabled = !_dynamicSim.IsPortOpen;
-
-        UpdateDynamicCalibrationConnectionLabel();
-        AppendDynamicLog(connected ? $"=== Подключено: {_dynamicSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
+        _btnDynamicConn.Text = _dynamicServiceSim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnDynamicConn.BackColor = _dynamicServiceSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _cmbDynamicPort.Enabled = !_dynamicServiceSim.IsPortOpen;
+        SelectComboValue(_cmbDynamicPort, _dynamicServiceSim.PortName);
+        AppendDynamicLog(connected ? $"=== Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
     }
 
-    private void OnDynamicConnectionChanged(object? sender, bool connected)
+    private void UpdateDynamicCalibMonitorConn(bool connected)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnDynamicConnectionChanged(sender, connected)); return; }
-        UpdateDynamicMonitorConn(connected);
+        if (_btnDynamicCalibConn is null || _cmbDynamicCalibPort is null) return;
+        _btnDynamicCalibConn.Text = _dynamicCalibSim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnDynamicCalibConn.BackColor = _dynamicCalibSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _cmbDynamicCalibPort.Enabled = !_dynamicCalibSim.IsPortOpen;
+        SelectComboValue(_cmbDynamicCalibPort, _dynamicCalibSim.PortName);
+        UpdateDynamicCalibrationConnectionLabel();
+    }
+
+    private void OnDynamicServiceConnectionChanged(object? sender, bool connected)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnDynamicServiceConnectionChanged(sender, connected)); return; }
+        UpdateDynamicServiceMonitorConn(connected);
+    }
+
+    private void OnDynamicCalibConnectionChanged(object? sender, bool connected)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnDynamicCalibConnectionChanged(sender, connected)); return; }
+        UpdateDynamicCalibMonitorConn(connected);
     }
 
     private void OnDynamicServiceSample(object? sender, SimA04DynamicSample sample)
@@ -918,7 +984,7 @@ public partial class ServiceForm : Form
 
     private void RefreshDynamicSampleDisplay()
     {
-        if (DesignMode || _dynamicSim is null) return;
+        if (DesignMode || _dynamicCalibSim is null) return;
 
         var sw = System.Diagnostics.Stopwatch.StartNew();
         Interlocked.Increment(ref _dynamicCalibDisplayTicks);
@@ -1002,9 +1068,9 @@ public partial class ServiceForm : Form
         if (Interlocked.CompareExchange(ref _dynamicCalibDiagLastTick, now, last) != last) return;
 
         long elapsedMs = last == 0 ? intervalMs : now - last;
-        long rawBytes = _dynamicSim.RawBytesReceived;
-        long samples = _dynamicSim.SamplesReceived;
-        long skipped = _dynamicSim.SkippedBytes;
+        long rawBytes = _dynamicCalibSim.RawBytesReceived;
+        long samples = _dynamicCalibSim.SamplesReceived;
+        long skipped = _dynamicCalibSim.SkippedBytes;
         long samplePosted = Interlocked.Read(ref _dynamicSampleUiPosted);
         long sampleApplied = Interlocked.Read(ref _dynamicSampleUiApplied);
         long displayTicks = Interlocked.Read(ref _dynamicCalibDisplayTicks);
@@ -1038,7 +1104,7 @@ public partial class ServiceForm : Form
             $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
             $"displayTicks={displayTicksDelta}; displayApplied={displayAppliedDelta}; displaySkipped={displaySkippedDelta}; displayPending={displayPending}; " +
             $"latestVersion={latestVersion}; displayedVersion={displayedVersion}; logAppended={logAppendedDelta}; displayMaxMs={displayMaxMs}",
-            "SimA04Dynamic", _dynamicSim.PortName);
+            "SimA04DynamicCalib", _dynamicCalibSim.PortName);
     }
 
     private void WriteServiceDynamicDiagnostics()
@@ -1050,9 +1116,9 @@ public partial class ServiceForm : Form
         if (Interlocked.CompareExchange(ref _dynamicDiagLastTick, now, last) != last) return;
 
         long elapsedMs = last == 0 ? intervalMs : now - last;
-        long rawBytes = _dynamicSim.RawBytesReceived;
-        long samples = _dynamicSim.SamplesReceived;
-        long skipped = _dynamicSim.SkippedBytes;
+        long rawBytes = _dynamicServiceSim.RawBytesReceived;
+        long samples = _dynamicServiceSim.SamplesReceived;
+        long skipped = _dynamicServiceSim.SkippedBytes;
         long samplePosted = Interlocked.Read(ref _dynamicSampleUiPosted);
         long sampleApplied = Interlocked.Read(ref _dynamicSampleUiApplied);
         long rawPosted = Interlocked.Read(ref _dynamicRawUiPosted);
@@ -1076,7 +1142,7 @@ public partial class ServiceForm : Form
             $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
             $"rawPosted={rawPostedDelta}; rawApplied={rawAppliedDelta}; rawPending={rawPending}; " +
             $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}",
-            "SimA04Dynamic", _dynamicSim.PortName);
+            "SimA04DynamicService", _dynamicServiceSim.PortName);
     }
 
     // Возвращает прирост монотонного счетчика за период диагностики и обновляет предыдущую точку отсчета.
@@ -1362,8 +1428,8 @@ public partial class ServiceForm : Form
 
     private int CurrentDynamicAdcCode()
     {
-        if (_dynamicSim is null) return 0;
-        return _dynamicSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
+        if (_dynamicCalibSim is null) return 0;
+        return _dynamicCalibSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
     }
 
     private void UpdateLiveDynamicCalibrationLabels()
@@ -1406,16 +1472,16 @@ public partial class ServiceForm : Form
 
     private void UpdateDynamicCalibrationConnectionLabel()
     {
-        if (_lblDynamicCalibConn is null || _dynamicSim is null) return;
+        if (_lblDynamicCalibConn is null || _dynamicCalibSim is null) return;
 
-        if (_dynamicSim.IsConnected)
+        if (_dynamicCalibSim.IsConnected)
         {
-            _lblDynamicCalibConn.Text = $"Динамика: {_dynamicSim.PortName}";
+            _lblDynamicCalibConn.Text = $"Динамика: {_dynamicCalibSim.PortName}";
             _lblDynamicCalibConn.ForeColor = UiColors.PrimaryAction;
         }
-        else if (_dynamicSim.IsPortOpen)
+        else if (_dynamicCalibSim.IsPortOpen)
         {
-            _lblDynamicCalibConn.Text = $"Порт открыт: {_dynamicSim.PortName}";
+            _lblDynamicCalibConn.Text = $"Порт открыт: {_dynamicCalibSim.PortName}";
             _lblDynamicCalibConn.ForeColor = UiColors.Warning;
         }
         else
