@@ -925,7 +925,7 @@ public partial class ServiceForm : Form
     private void UpdateDynamicServiceMonitorConn(bool connected)
     {
         if (_lblDynamicConn is null) return;
-        _dotDynamicConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _dotDynamicConn.BackColor = connected ? UiColors.Connected : UiColors.Disconnected;
         _lblDynamicConn.Text = connected ? $"Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1" : (_dynamicServiceSim.IsPortOpen ? $"Порт открыт: {_dynamicServiceSim.PortName}, нет потока АЦП" : "Нет подключения");
         _lblDynamicConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
         _btnDynamicConn.Text = _dynamicServiceSim.IsPortOpen ? "Отключить" : "Подключить";

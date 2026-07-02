@@ -48,5 +48,6 @@ internal static class UiColors
     public static readonly Color Info               = Color.FromArgb(0x2F, 0x6F, 0xED);
     public static readonly Color Error              = Color.FromArgb(0xC8, 0x32, 0x32);
     public static readonly Color Warning            = Color.FromArgb(0xD4, 0x62, 0x0A);
+    public static readonly Color Connected          = Color.LimeGreen;
     public static readonly Color Disconnected       = Color.FromArgb(0x99, 0x99, 0x99);
 }
