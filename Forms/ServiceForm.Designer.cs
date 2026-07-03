@@ -17,6 +17,10 @@ partial class ServiceForm
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
         _btnAdmin = new Button();
         _tabs = new TabControl();
         _tabChannel = new TabPage();
@@ -46,11 +50,13 @@ partial class ServiceForm
         _pnlChannels = new Panel();
         _tlpChannels = new TableLayoutPanel();
         _pnlDynamicCh0 = new Panel();
-        _lblDynamicCh0Cap = new Label();
+        _tlpCh0 = new TableLayoutPanel();
         _lblDynamicCh0 = new Label();
+        _lblDynamicCh0Cap = new Label();
         _pnlDynamicCh1 = new Panel();
-        _lblDynamicCh1Cap = new Label();
+        _tlpCh1 = new TableLayoutPanel();
         _lblDynamicCh1 = new Label();
+        _lblDynamicCh1Cap = new Label();
         _pnlTop = new Panel();
         _tlpTop = new TableLayoutPanel();
         _cmbDynamicPort = new ComboBox();
@@ -65,9 +71,9 @@ partial class ServiceForm
         _pnlCalibS = new Panel();
         _pnlCalibSBody = new Panel();
         _dgvCalib = new DataGridView();
+        dataGridViewTextBoxColumnCalibActive = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-        dataGridViewTextBoxColumnCalibActive = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
         _btnAddRow = new Button();
         _btnDelRow = new Button();
@@ -154,8 +160,6 @@ partial class ServiceForm
         _txtNewPassword = new TextBox();
         _btnSaveSettings = new Button();
         _rateTimer = new System.Windows.Forms.Timer(components);
-        _tlpCh0 = new TableLayoutPanel();
-        _tlpCh1 = new TableLayoutPanel();
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
         _tabMonitor.SuspendLayout();
@@ -166,7 +170,9 @@ partial class ServiceForm
         _pnlChannels.SuspendLayout();
         _tlpChannels.SuspendLayout();
         _pnlDynamicCh0.SuspendLayout();
+        _tlpCh0.SuspendLayout();
         _pnlDynamicCh1.SuspendLayout();
+        _tlpCh1.SuspendLayout();
         _pnlTop.SuspendLayout();
         _tlpTop.SuspendLayout();
         _tabCalibS.SuspendLayout();
@@ -189,8 +195,6 @@ partial class ServiceForm
         _pnlCalibDHead.SuspendLayout();
         _tlpHeaders.SuspendLayout();
         _tabSett.SuspendLayout();
-        _tlpCh0.SuspendLayout();
-        _tlpCh1.SuspendLayout();
         SuspendLayout();
         // 
         // _btnAdmin
@@ -488,9 +492,9 @@ partial class ServiceForm
         // 
         _pnlLogs.Controls.Add(_rtbDynamicLog);
         _pnlLogs.Dock = DockStyle.Fill;
-        _pnlLogs.Location = new Point(0, 308);
+        _pnlLogs.Location = new Point(0, 284);
         _pnlLogs.Name = "_pnlLogs";
-        _pnlLogs.Size = new Size(1533, 381);
+        _pnlLogs.Size = new Size(1533, 405);
         _pnlLogs.TabIndex = 13;
         // 
         // _rtbDynamicLog
@@ -503,7 +507,7 @@ partial class ServiceForm
         _rtbDynamicLog.Name = "_rtbDynamicLog";
         _rtbDynamicLog.ReadOnly = true;
         _rtbDynamicLog.ScrollBars = RichTextBoxScrollBars.Vertical;
-        _rtbDynamicLog.Size = new Size(1533, 381);
+        _rtbDynamicLog.Size = new Size(1533, 405);
         _rtbDynamicLog.TabIndex = 10;
         _rtbDynamicLog.Text = "";
         _rtbDynamicLog.WordWrap = false;
@@ -512,7 +516,7 @@ partial class ServiceForm
         // 
         _pnlChannels.Controls.Add(_tlpChannels);
         _pnlChannels.Dock = DockStyle.Top;
-        _pnlChannels.Location = new Point(0, 125);
+        _pnlChannels.Location = new Point(0, 101);
         _pnlChannels.Name = "_pnlChannels";
         _pnlChannels.Size = new Size(1533, 183);
         _pnlChannels.TabIndex = 12;
@@ -542,17 +546,20 @@ partial class ServiceForm
         _pnlDynamicCh0.Size = new Size(760, 175);
         _pnlDynamicCh0.TabIndex = 6;
         // 
-        // _lblDynamicCh0Cap
+        // _tlpCh0
         // 
-        _lblDynamicCh0Cap.AutoSize = true;
-        _lblDynamicCh0Cap.Dock = DockStyle.Fill;
-        _lblDynamicCh0Cap.Font = new Font("Segoe UI", 12F);
-        _lblDynamicCh0Cap.Location = new Point(3, 0);
-        _lblDynamicCh0Cap.Name = "_lblDynamicCh0Cap";
-        _lblDynamicCh0Cap.Size = new Size(754, 48);
-        _lblDynamicCh0Cap.TabIndex = 0;
-        _lblDynamicCh0Cap.Text = "Канал: Основной (CH0)";
-        _lblDynamicCh0Cap.TextAlign = ContentAlignment.MiddleLeft;
+        _tlpCh0.ColumnCount = 1;
+        _tlpCh0.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpCh0.Controls.Add(_lblDynamicCh0, 0, 1);
+        _tlpCh0.Controls.Add(_lblDynamicCh0Cap, 0, 0);
+        _tlpCh0.Dock = DockStyle.Fill;
+        _tlpCh0.Location = new Point(0, 0);
+        _tlpCh0.Name = "_tlpCh0";
+        _tlpCh0.RowCount = 2;
+        _tlpCh0.RowStyles.Add(new RowStyle(SizeType.Percent, 27.4285717F));
+        _tlpCh0.RowStyles.Add(new RowStyle(SizeType.Percent, 72.57143F));
+        _tlpCh0.Size = new Size(760, 175);
+        _tlpCh0.TabIndex = 2;
         // 
         // _lblDynamicCh0
         // 
@@ -565,6 +572,18 @@ partial class ServiceForm
         _lblDynamicCh0.Text = "—";
         _lblDynamicCh0.TextAlign = ContentAlignment.MiddleCenter;
         // 
+        // _lblDynamicCh0Cap
+        // 
+        _lblDynamicCh0Cap.AutoSize = true;
+        _lblDynamicCh0Cap.Dock = DockStyle.Fill;
+        _lblDynamicCh0Cap.Font = new Font("Segoe UI", 12F);
+        _lblDynamicCh0Cap.Location = new Point(3, 0);
+        _lblDynamicCh0Cap.Name = "_lblDynamicCh0Cap";
+        _lblDynamicCh0Cap.Size = new Size(754, 48);
+        _lblDynamicCh0Cap.TabIndex = 0;
+        _lblDynamicCh0Cap.Text = "Канал: Основной (CH0)";
+        _lblDynamicCh0Cap.TextAlign = ContentAlignment.MiddleLeft;
+        // 
         // _pnlDynamicCh1
         // 
         _pnlDynamicCh1.Controls.Add(_tlpCh1);
@@ -574,6 +593,32 @@ partial class ServiceForm
         _pnlDynamicCh1.Name = "_pnlDynamicCh1";
         _pnlDynamicCh1.Size = new Size(761, 175);
         _pnlDynamicCh1.TabIndex = 7;
+        // 
+        // _tlpCh1
+        // 
+        _tlpCh1.ColumnCount = 1;
+        _tlpCh1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpCh1.Controls.Add(_lblDynamicCh1, 0, 1);
+        _tlpCh1.Controls.Add(_lblDynamicCh1Cap, 0, 0);
+        _tlpCh1.Dock = DockStyle.Fill;
+        _tlpCh1.Location = new Point(0, 0);
+        _tlpCh1.Name = "_tlpCh1";
+        _tlpCh1.RowCount = 2;
+        _tlpCh1.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1428566F));
+        _tlpCh1.RowStyles.Add(new RowStyle(SizeType.Percent, 70.85714F));
+        _tlpCh1.Size = new Size(761, 175);
+        _tlpCh1.TabIndex = 3;
+        // 
+        // _lblDynamicCh1
+        // 
+        _lblDynamicCh1.Dock = DockStyle.Fill;
+        _lblDynamicCh1.Font = new Font("Courier New", 48F, FontStyle.Bold);
+        _lblDynamicCh1.Location = new Point(3, 51);
+        _lblDynamicCh1.Name = "_lblDynamicCh1";
+        _lblDynamicCh1.Size = new Size(755, 124);
+        _lblDynamicCh1.TabIndex = 1;
+        _lblDynamicCh1.Text = "—";
+        _lblDynamicCh1.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _lblDynamicCh1Cap
         // 
@@ -587,24 +632,13 @@ partial class ServiceForm
         _lblDynamicCh1Cap.Text = "Канал: Резервный (CH1)";
         _lblDynamicCh1Cap.TextAlign = ContentAlignment.MiddleLeft;
         // 
-        // _lblDynamicCh1
-        // 
-        _lblDynamicCh1.Dock = DockStyle.Fill;
-        _lblDynamicCh1.Font = new Font("Courier New", 48F, FontStyle.Bold);
-        _lblDynamicCh1.Location = new Point(3, 51);
-        _lblDynamicCh1.Name = "_lblDynamicCh1";
-        _lblDynamicCh1.Size = new Size(755, 124);
-        _lblDynamicCh1.TabIndex = 1;
-        _lblDynamicCh1.Text = "—";
-        _lblDynamicCh1.TextAlign = ContentAlignment.MiddleCenter;
-        // 
         // _pnlTop
         // 
         _pnlTop.Controls.Add(_tlpTop);
         _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(0, 0);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1533, 125);
+        _pnlTop.Size = new Size(1533, 101);
         _pnlTop.TabIndex = 11;
         // 
         // _tlpTop
@@ -615,8 +649,8 @@ partial class ServiceForm
         _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6.316591F));
         _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.7747335F));
         _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.1978693F));
-        _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.4733639F));
-        _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.87519F));
+        _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.5274143F));
+        _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.6710186F));
         _tlpTop.Controls.Add(_cmbDynamicPort, 0, 0);
         _tlpTop.Controls.Add(_lblDynamicRate, 0, 1);
         _tlpTop.Controls.Add(_lblDynamicConn, 4, 0);
@@ -629,9 +663,9 @@ partial class ServiceForm
         _tlpTop.Location = new Point(0, 0);
         _tlpTop.Name = "_tlpTop";
         _tlpTop.RowCount = 2;
-        _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _tlpTop.Size = new Size(1533, 125);
+        _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 52F));
+        _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 48F));
+        _tlpTop.Size = new Size(1533, 101);
         _tlpTop.TabIndex = 0;
         // 
         // _cmbDynamicPort
@@ -641,39 +675,43 @@ partial class ServiceForm
         _cmbDynamicPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDynamicPort.Font = new Font("Segoe UI", 10F);
         _cmbDynamicPort.ForeColor = Color.FromArgb(35, 49, 63);
-        _cmbDynamicPort.Location = new Point(4, 5);
+        _cmbDynamicPort.Location = new Point(6, 8);
         _cmbDynamicPort.Margin = new Padding(5, 0, 5, 4);
         _cmbDynamicPort.Name = "_cmbDynamicPort";
-        _cmbDynamicPort.Size = new Size(140, 31);
+        _cmbDynamicPort.Size = new Size(243, 31);
         _cmbDynamicPort.TabIndex = 0;
         // 
         // _lblDynamicRate
         // 
+        _lblDynamicRate.Dock = DockStyle.Fill;
         _lblDynamicRate.Font = new Font("Segoe UI", 12F);
-        _lblDynamicRate.Location = new Point(4, 63);
+        _lblDynamicRate.Location = new Point(4, 52);
         _lblDynamicRate.Name = "_lblDynamicRate";
-        _lblDynamicRate.Size = new Size(120, 24);
+        _lblDynamicRate.Size = new Size(247, 48);
         _lblDynamicRate.TabIndex = 5;
         _lblDynamicRate.Text = "— сэмпл/с";
+        _lblDynamicRate.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _lblDynamicConn
         // 
+        _lblDynamicConn.Dock = DockStyle.Fill;
         _lblDynamicConn.Font = new Font("Segoe UI", 12F);
         _lblDynamicConn.Location = new Point(721, 1);
         _lblDynamicConn.Name = "_lblDynamicConn";
-        _lblDynamicConn.Size = new Size(290, 23);
+        _lblDynamicConn.Size = new Size(474, 50);
         _lblDynamicConn.TabIndex = 4;
         _lblDynamicConn.Text = "Нет подключения";
+        _lblDynamicConn.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _btnDynamicClearLog
         // 
-        _btnDynamicClearLog.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        _btnDynamicClearLog.Dock = DockStyle.Fill;
         _btnDynamicClearLog.FlatStyle = FlatStyle.Flat;
         _btnDynamicClearLog.Font = new Font("Segoe UI", 12F);
-        _btnDynamicClearLog.Location = new Point(1393, 5);
-        _btnDynamicClearLog.Margin = new Padding(3, 4, 3, 4);
+        _btnDynamicClearLog.Location = new Point(1209, 5);
+        _btnDynamicClearLog.Margin = new Padding(10, 4, 10, 4);
         _btnDynamicClearLog.Name = "_btnDynamicClearLog";
-        _btnDynamicClearLog.Size = new Size(136, 43);
+        _btnDynamicClearLog.Size = new Size(313, 42);
         _btnDynamicClearLog.TabIndex = 9;
         _btnDynamicClearLog.Text = "Очистить";
         _btnDynamicClearLog.UseVisualStyleBackColor = false;
@@ -684,35 +722,38 @@ partial class ServiceForm
         _chkDynamicLog.AutoSize = true;
         _chkDynamicLog.Checked = true;
         _chkDynamicLog.CheckState = CheckState.Checked;
+        _chkDynamicLog.Dock = DockStyle.Fill;
         _chkDynamicLog.Font = new Font("Segoe UI", 12F);
-        _chkDynamicLog.Location = new Point(1139, 67);
-        _chkDynamicLog.Margin = new Padding(3, 4, 3, 4);
+        _chkDynamicLog.Location = new Point(1219, 56);
+        _chkDynamicLog.Margin = new Padding(20, 4, 20, 4);
         _chkDynamicLog.Name = "_chkDynamicLog";
-        _chkDynamicLog.Size = new Size(145, 32);
+        _chkDynamicLog.Size = new Size(293, 40);
         _chkDynamicLog.TabIndex = 8;
         _chkDynamicLog.Text = "Лог активен";
         // 
         // _btnDynamicPortRefresh
         // 
+        _btnDynamicPortRefresh.Dock = DockStyle.Fill;
         _btnDynamicPortRefresh.FlatStyle = FlatStyle.Flat;
         _btnDynamicPortRefresh.Font = new Font("Segoe UI", 11F);
-        _btnDynamicPortRefresh.Location = new Point(565, 5);
-        _btnDynamicPortRefresh.Margin = new Padding(3, 4, 3, 4);
+        _btnDynamicPortRefresh.Location = new Point(572, 5);
+        _btnDynamicPortRefresh.Margin = new Padding(10, 4, 10, 4);
         _btnDynamicPortRefresh.Name = "_btnDynamicPortRefresh";
-        _btnDynamicPortRefresh.Size = new Size(42, 40);
+        _btnDynamicPortRefresh.Size = new Size(135, 42);
         _btnDynamicPortRefresh.TabIndex = 3;
-        _btnDynamicPortRefresh.Text = "↺";
+        _btnDynamicPortRefresh.Text = "↺  Обновить";
         _btnDynamicPortRefresh.UseVisualStyleBackColor = false;
         _btnDynamicPortRefresh.Click += BtnDynamicPortRefresh_Click;
         // 
         // _btnDynamicConn
         // 
+        _btnDynamicConn.Dock = DockStyle.Fill;
         _btnDynamicConn.FlatStyle = FlatStyle.Flat;
         _btnDynamicConn.Font = new Font("Segoe UI", 12F);
-        _btnDynamicConn.Location = new Point(355, 5);
-        _btnDynamicConn.Margin = new Padding(3, 4, 3, 4);
+        _btnDynamicConn.Location = new Point(362, 5);
+        _btnDynamicConn.Margin = new Padding(10, 4, 10, 4);
         _btnDynamicConn.Name = "_btnDynamicConn";
-        _btnDynamicConn.Size = new Size(161, 40);
+        _btnDynamicConn.Size = new Size(189, 42);
         _btnDynamicConn.TabIndex = 2;
         _btnDynamicConn.Text = "Подключить";
         _btnDynamicConn.UseVisualStyleBackColor = false;
@@ -720,10 +761,11 @@ partial class ServiceForm
         // 
         // _dotDynamicConn
         // 
-        _dotDynamicConn.Location = new Point(258, 5);
-        _dotDynamicConn.Margin = new Padding(3, 4, 3, 4);
+        _dotDynamicConn.Dock = DockStyle.Fill;
+        _dotDynamicConn.Location = new Point(265, 11);
+        _dotDynamicConn.Margin = new Padding(10);
         _dotDynamicConn.Name = "_dotDynamicConn";
-        _dotDynamicConn.Size = new Size(16, 16);
+        _dotDynamicConn.Size = new Size(76, 30);
         _dotDynamicConn.TabIndex = 1;
         // 
         // _tabCalibS
@@ -776,28 +818,27 @@ partial class ServiceForm
         _dgvCalib.AllowUserToAddRows = false;
         _dgvCalib.AllowUserToDeleteRows = false;
         _dgvCalib.AllowUserToResizeRows = false;
+        dataGridViewCellStyle1.BackColor = Color.White;
+        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvCalib.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
         _dgvCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _dgvCalib.BackgroundColor = ServiceUiColors.GridRowBack;
-        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(196, 225, 230);
-        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(26, 26, 26);
-        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-        _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+        _dgvCalib.BackgroundColor = Color.White;
+        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(196, 225, 230);
+        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(26, 26, 26);
+        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+        _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
         _dgvCalib.ColumnHeadersHeight = 34;
         _dgvCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumnCalibActive, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3 });
-        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.BackColor = SystemColors.Window;
-        dataGridViewCellStyle2.Font = new Font("Segoe UI", 12F);
-        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(26, 26, 26);
-        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-        _dgvCalib.DefaultCellStyle = dataGridViewCellStyle2;
-        _dgvCalib.RowsDefaultCellStyle.BackColor = Color.White;
-        _dgvCalib.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        _dgvCalib.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
-        _dgvCalib.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle3.BackColor = SystemColors.Window;
+        dataGridViewCellStyle3.Font = new Font("Segoe UI", 12F);
+        dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(26, 26, 26);
+        dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+        _dgvCalib.DefaultCellStyle = dataGridViewCellStyle3;
         _dgvCalib.EditMode = DataGridViewEditMode.EditOnEnter;
         _dgvCalib.EnableHeadersVisualStyles = false;
         _dgvCalib.Font = new Font("Segoe UI", 12F);
@@ -807,6 +848,9 @@ partial class ServiceForm
         _dgvCalib.Name = "_dgvCalib";
         _dgvCalib.RowHeadersVisible = false;
         _dgvCalib.RowHeadersWidth = 62;
+        dataGridViewCellStyle4.BackColor = Color.White;
+        dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvCalib.RowsDefaultCellStyle = dataGridViewCellStyle4;
         _dgvCalib.RowTemplate.Height = 30;
         _dgvCalib.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _dgvCalib.Size = new Size(526, 333);
@@ -1530,26 +1574,25 @@ partial class ServiceForm
         _dgvDynCalib.AllowUserToAddRows = false;
         _dgvDynCalib.AllowUserToDeleteRows = false;
         _dgvDynCalib.AllowUserToResizeRows = false;
+        dataGridViewCellStyle5.BackColor = Color.White;
+        dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvDynCalib.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
         _dgvDynCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _dgvDynCalib.BackgroundColor = ServiceUiColors.GridRowBack;
-        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle3.BackColor = ServiceUiColors.GridHeaderBack;
-        dataGridViewCellStyle3.Font = ServiceUiFonts.GridHeader;
-        dataGridViewCellStyle3.ForeColor = ServiceUiColors.GridHeaderText;
-        dataGridViewCellStyle3.SelectionBackColor = ServiceUiColors.GridHeaderBack;
-        dataGridViewCellStyle3.SelectionForeColor = ServiceUiColors.GridHeaderText;
-        dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+        _dgvDynCalib.BackgroundColor = Color.White;
+        dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle6.BackColor = Color.FromArgb(147, 112, 219);
+        dataGridViewCellStyle6.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+        dataGridViewCellStyle6.ForeColor = Color.FromArgb(240, 255, 240);
+        dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(147, 112, 219);
+        dataGridViewCellStyle6.SelectionForeColor = Color.FromArgb(240, 255, 240);
+        dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
         _dgvDynCalib.ColumnHeadersHeight = 34;
         _dgvDynCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _dgvDynCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8 });
         _dgvDynCalib.Dock = DockStyle.Fill;
         _dgvDynCalib.EditMode = DataGridViewEditMode.EditProgrammatically;
         _dgvDynCalib.EnableHeadersVisualStyles = false;
-        _dgvDynCalib.RowsDefaultCellStyle.BackColor = Color.White;
-        _dgvDynCalib.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        _dgvDynCalib.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
-        _dgvDynCalib.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
         _dgvDynCalib.Font = new Font("Segoe UI", 12F);
         _dgvDynCalib.GridColor = Color.FromArgb(212, 216, 222);
         _dgvDynCalib.Location = new Point(751, 4);
@@ -1559,6 +1602,9 @@ partial class ServiceForm
         _dgvDynCalib.ReadOnly = true;
         _dgvDynCalib.RowHeadersVisible = false;
         _dgvDynCalib.RowHeadersWidth = 62;
+        dataGridViewCellStyle7.BackColor = Color.White;
+        dataGridViewCellStyle7.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvDynCalib.RowsDefaultCellStyle = dataGridViewCellStyle7;
         _dgvDynCalib.RowTemplate.Height = 28;
         _dgvDynCalib.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _dgvDynCalib.Size = new Size(777, 509);
@@ -1933,36 +1979,6 @@ partial class ServiceForm
         // 
         _rateTimer.Tick += RateTimer_Tick;
         // 
-        // _tlpCh0
-        // 
-        _tlpCh0.ColumnCount = 1;
-        _tlpCh0.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _tlpCh0.Controls.Add(_lblDynamicCh0, 0, 1);
-        _tlpCh0.Controls.Add(_lblDynamicCh0Cap, 0, 0);
-        _tlpCh0.Dock = DockStyle.Fill;
-        _tlpCh0.Location = new Point(0, 0);
-        _tlpCh0.Name = "_tlpCh0";
-        _tlpCh0.RowCount = 2;
-        _tlpCh0.RowStyles.Add(new RowStyle(SizeType.Percent, 27.4285717F));
-        _tlpCh0.RowStyles.Add(new RowStyle(SizeType.Percent, 72.57143F));
-        _tlpCh0.Size = new Size(760, 175);
-        _tlpCh0.TabIndex = 2;
-        // 
-        // _tlpCh1
-        // 
-        _tlpCh1.ColumnCount = 1;
-        _tlpCh1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _tlpCh1.Controls.Add(_lblDynamicCh1, 0, 1);
-        _tlpCh1.Controls.Add(_lblDynamicCh1Cap, 0, 0);
-        _tlpCh1.Dock = DockStyle.Fill;
-        _tlpCh1.Location = new Point(0, 0);
-        _tlpCh1.Name = "_tlpCh1";
-        _tlpCh1.RowCount = 2;
-        _tlpCh1.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1428566F));
-        _tlpCh1.RowStyles.Add(new RowStyle(SizeType.Percent, 70.85714F));
-        _tlpCh1.Size = new Size(761, 175);
-        _tlpCh1.TabIndex = 3;
-        // 
         // ServiceForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
@@ -1990,7 +2006,11 @@ partial class ServiceForm
         _pnlChannels.ResumeLayout(false);
         _tlpChannels.ResumeLayout(false);
         _pnlDynamicCh0.ResumeLayout(false);
+        _tlpCh0.ResumeLayout(false);
+        _tlpCh0.PerformLayout();
         _pnlDynamicCh1.ResumeLayout(false);
+        _tlpCh1.ResumeLayout(false);
+        _tlpCh1.PerformLayout();
         _pnlTop.ResumeLayout(false);
         _tlpTop.ResumeLayout(false);
         _tlpTop.PerformLayout();
@@ -2021,10 +2041,6 @@ partial class ServiceForm
         _tlpHeaders.PerformLayout();
         _tabSett.ResumeLayout(false);
         _tabSett.PerformLayout();
-        _tlpCh0.ResumeLayout(false);
-        _tlpCh0.PerformLayout();
-        _tlpCh1.ResumeLayout(false);
-        _tlpCh1.PerformLayout();
         ResumeLayout(false);
     }
 
