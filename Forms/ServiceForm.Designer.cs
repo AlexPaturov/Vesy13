@@ -636,10 +636,13 @@ partial class ServiceForm
         // 
         // _cmbDynamicPort
         // 
+        _cmbDynamicPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _cmbDynamicPort.BackColor = Color.FromArgb(255, 255, 255);
         _cmbDynamicPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDynamicPort.Font = new Font("Segoe UI", 10F);
+        _cmbDynamicPort.ForeColor = Color.FromArgb(35, 49, 63);
         _cmbDynamicPort.Location = new Point(4, 5);
-        _cmbDynamicPort.Margin = new Padding(3, 4, 3, 4);
+        _cmbDynamicPort.Margin = new Padding(5, 0, 5, 4);
         _cmbDynamicPort.Name = "_cmbDynamicPort";
         _cmbDynamicPort.Size = new Size(140, 31);
         _cmbDynamicPort.TabIndex = 0;
