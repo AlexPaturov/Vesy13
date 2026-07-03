@@ -93,254 +93,254 @@ public partial class ServiceForm : Form
 
     private void ApplyTheme()
     {
-        BackColor = UiColors.AppBackground;
-        _tabs.BackColor = UiColors.Surface;
-        _tabs.Font = UiFonts.Medium;
+        BackColor = ServiceUiColors.AppBackground;
+        _tabs.BackColor = ServiceUiColors.Surface;
+        _tabs.Font = ServiceUiFonts.Medium;
 
         // Channel tab
-        _btnAdmin.Font = UiFonts.Body;
-        _btnAdmin.BackColor = UiColors.AdminLocked;
-        _btnAdmin.ForeColor = UiColors.TextOnDark;
-        _lblChannelTitle.Font = UiFonts.SubHeaderBold;
-        _lblChannelTitle.ForeColor = UiColors.TextPrimary;
-        _rbMain.Font = UiFonts.NavButton;
-        _rbMain.ForeColor = UiColors.TextPrimary;
-        _rbBackup.Font = UiFonts.NavButton;
-        _rbBackup.ForeColor = UiColors.TextPrimary;
-        _lblChannelNote.Font = UiFonts.Body;
-        _lblChannelNote.ForeColor = UiColors.Disconnected;
-        _tabChannel.BackColor = UiColors.Surface;
+        _btnAdmin.Font = ServiceUiFonts.Body;
+        _btnAdmin.BackColor = ServiceUiColors.AdminLocked;
+        _btnAdmin.ForeColor = ServiceUiColors.TextOnDark;
+        _lblChannelTitle.Font = ServiceUiFonts.SubHeaderBold;
+        _lblChannelTitle.ForeColor = ServiceUiColors.TextPrimary;
+        _rbMain.Font = ServiceUiFonts.NavButton;
+        _rbMain.ForeColor = ServiceUiColors.TextPrimary;
+        _rbBackup.Font = ServiceUiFonts.NavButton;
+        _rbBackup.ForeColor = ServiceUiColors.TextPrimary;
+        _lblChannelNote.Font = ServiceUiFonts.Body;
+        _lblChannelNote.ForeColor = ServiceUiColors.Disconnected;
+        _tabChannel.BackColor = ServiceUiColors.Surface;
 
         // Monitor static tab
-        _tabMonitor.BackColor = UiColors.Surface;
-        _cmbPort.Font = UiFonts.Medium;
-        _cmbPort.BackColor = UiColors.InputBack;
-        _cmbPort.ForeColor = UiColors.InputFore;
-        _btnConn.Font = UiFonts.Body;
-        _btnConn.BackColor = UiColors.PrimaryAction;
-        _btnConn.ForeColor = UiColors.TextOnDark;
-        _btnPortRefresh.Font = UiFonts.SubHeader;
-        _btnPortRefresh.BackColor = UiColors.NeutralAction;
-        _btnPortRefresh.ForeColor = UiColors.TextPrimary;
-        _lblConn.Font = UiFonts.Body;
-        _lblConn.ForeColor = UiColors.Disconnected;
-        _lblRate.Font = UiFonts.Body;
-        _lblRate.ForeColor = UiColors.Disconnected;
-        _lblCh0Cap.Font = UiFonts.Body;
-        _lblCh0Cap.ForeColor = UiColors.TextOnDarkMuted;
-        _lblCh0.Font = UiFonts.MonitorDisplay;
-        _lblCh0.ForeColor = UiColors.Disconnected;
-        _lblCh1Cap.Font = UiFonts.Body;
-        _lblCh1Cap.ForeColor = UiColors.TextOnDarkMuted;
-        _lblCh1.Font = UiFonts.MonitorDisplay;
-        _lblCh1.ForeColor = UiColors.Disconnected;
-        _chkLog.Font = UiFonts.Body;
-        _chkLog.ForeColor = UiColors.TextPrimary;
-        _btnClearLog.Font = UiFonts.Body;
-        _btnClearLog.BackColor = UiColors.NeutralAction;
-        _btnClearLog.ForeColor = UiColors.TextPrimary;
-        _rtbLog.Font = UiFonts.MonoSmall;
-        _rtbLog.BackColor = UiColors.LogBackground;
-        _rtbLog.ForeColor = UiColors.LogText;
-        _pnlCh0.BackColor = UiColors.MonitorBackground;
-        _pnlCh1.BackColor = UiColors.MonitorBackground;
+        _tabMonitor.BackColor = ServiceUiColors.Surface;
+        _cmbPort.Font = ServiceUiFonts.Medium;
+        _cmbPort.BackColor = ServiceUiColors.InputBack;
+        _cmbPort.ForeColor = ServiceUiColors.InputFore;
+        _btnConn.Font = ServiceUiFonts.Body;
+        _btnConn.BackColor = ServiceUiColors.PrimaryAction;
+        _btnConn.ForeColor = ServiceUiColors.TextOnDark;
+        _btnPortRefresh.Font = ServiceUiFonts.SubHeader;
+        _btnPortRefresh.BackColor = ServiceUiColors.NeutralAction;
+        _btnPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
+        _lblConn.Font = ServiceUiFonts.Body;
+        _lblConn.ForeColor = ServiceUiColors.Disconnected;
+        _lblRate.Font = ServiceUiFonts.Body;
+        _lblRate.ForeColor = ServiceUiColors.Disconnected;
+        _lblCh0Cap.Font = ServiceUiFonts.Body;
+        _lblCh0Cap.ForeColor = ServiceUiColors.TextOnDarkMuted;
+        _lblCh0.Font = ServiceUiFonts.MonitorDisplay;
+        _lblCh0.ForeColor = ServiceUiColors.Disconnected;
+        _lblCh1Cap.Font = ServiceUiFonts.Body;
+        _lblCh1Cap.ForeColor = ServiceUiColors.TextOnDarkMuted;
+        _lblCh1.Font = ServiceUiFonts.MonitorDisplay;
+        _lblCh1.ForeColor = ServiceUiColors.Disconnected;
+        _chkLog.Font = ServiceUiFonts.Body;
+        _chkLog.ForeColor = ServiceUiColors.TextPrimary;
+        _btnClearLog.Font = ServiceUiFonts.Body;
+        _btnClearLog.BackColor = ServiceUiColors.NeutralAction;
+        _btnClearLog.ForeColor = ServiceUiColors.TextPrimary;
+        _rtbLog.Font = ServiceUiFonts.MonoSmall;
+        _rtbLog.BackColor = ServiceUiColors.LogBackground;
+        _rtbLog.ForeColor = ServiceUiColors.LogText;
+        _pnlCh0.BackColor = ServiceUiColors.MonitorBackground;
+        _pnlCh1.BackColor = ServiceUiColors.MonitorBackground;
         ApplyDynamicServiceTheme();
 
         // CalibStatic tab
-        _tabCalibS.BackColor = UiColors.Surface;
-        _pnlCalibS.BackColor = UiColors.Surface;
-        _pnlCalibSHead.BackColor = UiColors.Surface;
-        _pnlCalibSBody.BackColor = UiColors.Surface;
-        _cmbStaticCalibPort.Font = UiFonts.Medium;
-        _cmbStaticCalibPort.BackColor = UiColors.InputBack;
-        _cmbStaticCalibPort.ForeColor = UiColors.InputFore;
-        _dotStaticCalibConn.BackColor = UiColors.Disconnected;
-        _btnStaticCalibConn.Font = UiFonts.Body;
-        _btnStaticCalibConn.BackColor = UiColors.PrimaryAction;
-        _btnStaticCalibConn.ForeColor = UiColors.TextOnDark;
-        _btnStaticCalibPortRefresh.Font = UiFonts.SubHeader;
-        _btnStaticCalibPortRefresh.BackColor = UiColors.NeutralAction;
-        _btnStaticCalibPortRefresh.ForeColor = UiColors.TextPrimary;
-        _lblStaticCalibConn.Font = UiFonts.Body;
-        _lblStaticCalibConn.ForeColor = UiColors.Disconnected;
-        _rbCh0Calib.Font = UiFonts.SubHeader;
-        _rbCh0Calib.ForeColor = UiColors.TextPrimary;
-        _rbCh1Calib.Font = UiFonts.SubHeader;
-        _rbCh1Calib.ForeColor = UiColors.TextPrimary;
-        _lblLiveAdcCap.Font = UiFonts.Body;
-        _lblLiveAdcCap.ForeColor = UiColors.Disconnected;
-        _lblLiveAdc.Font = UiFonts.MonoLiveAdc;
-        _lblLiveAdc.ForeColor = UiColors.Info;
-        _btnCapture.Font = UiFonts.Body;
-        _btnCapture.BackColor = UiColors.NeutralAction;
-        _btnCapture.ForeColor = UiColors.TextPrimary;
-        _dgvCalib.Font = UiFonts.GridBody;
-        _dgvCalib.BackgroundColor = UiColors.Surface;
-        _dgvCalib.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBack;
-        _dgvCalib.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBack;
-        _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
-        _dgvCalib.DefaultCellStyle.BackColor = UiColors.Surface;
-        _dgvCalib.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
-        _dgvCalib.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
-        _dgvCalib.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
-        _dgvCalib.GridColor = UiColors.GridLine;
-        _btnAddRow.Font = UiFonts.Body;
-        _btnAddRow.BackColor = UiColors.NeutralAction;
-        _btnAddRow.ForeColor = UiColors.TextPrimary;
-        _btnDelRow.Font = UiFonts.Body;
-        _btnDelRow.BackColor = UiColors.NeutralAction;
-        _btnDelRow.ForeColor = UiColors.TextPrimary;
-        _lblKEquals.Font = UiFonts.Medium;
-        _lblKEquals.ForeColor = UiColors.TextPrimary;
-        _txtK.Font = UiFonts.Mono;
-        _txtK.BackColor = UiColors.InputBack;
-        _txtK.ForeColor = UiColors.InputFore;
-        _lblBEquals.Font = UiFonts.Medium;
-        _lblBEquals.ForeColor = UiColors.TextPrimary;
-        _txtB.Font = UiFonts.Mono;
-        _txtB.BackColor = UiColors.InputBack;
-        _txtB.ForeColor = UiColors.InputFore;
-        _lblFormula.Font = UiFonts.Body;
-        _lblFormula.ForeColor = UiColors.TextMuted;
-        _btnLsq.Font = UiFonts.Medium;
-        _btnLsq.BackColor = UiColors.SecondaryAction;
-        _btnLsq.ForeColor = UiColors.TextOnDark;
-        _btnCalibSave.Font = UiFonts.Body;
-        _btnCalibSave.BackColor = UiColors.PrimaryAction;
-        _btnCalibSave.ForeColor = UiColors.TextOnDark;
+        _tabCalibS.BackColor = ServiceUiColors.Surface;
+        _pnlCalibS.BackColor = ServiceUiColors.Surface;
+        _pnlCalibSHead.BackColor = ServiceUiColors.Surface;
+        _pnlCalibSBody.BackColor = ServiceUiColors.Surface;
+        _cmbStaticCalibPort.Font = ServiceUiFonts.Medium;
+        _cmbStaticCalibPort.BackColor = ServiceUiColors.InputBack;
+        _cmbStaticCalibPort.ForeColor = ServiceUiColors.InputFore;
+        _dotStaticCalibConn.BackColor = ServiceUiColors.Disconnected;
+        _btnStaticCalibConn.Font = ServiceUiFonts.Body;
+        _btnStaticCalibConn.BackColor = ServiceUiColors.PrimaryAction;
+        _btnStaticCalibConn.ForeColor = ServiceUiColors.TextOnDark;
+        _btnStaticCalibPortRefresh.Font = ServiceUiFonts.SubHeader;
+        _btnStaticCalibPortRefresh.BackColor = ServiceUiColors.NeutralAction;
+        _btnStaticCalibPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
+        _lblStaticCalibConn.Font = ServiceUiFonts.Body;
+        _lblStaticCalibConn.ForeColor = ServiceUiColors.Disconnected;
+        _rbCh0Calib.Font = ServiceUiFonts.SubHeader;
+        _rbCh0Calib.ForeColor = ServiceUiColors.TextPrimary;
+        _rbCh1Calib.Font = ServiceUiFonts.SubHeader;
+        _rbCh1Calib.ForeColor = ServiceUiColors.TextPrimary;
+        _lblLiveAdcCap.Font = ServiceUiFonts.Body;
+        _lblLiveAdcCap.ForeColor = ServiceUiColors.Disconnected;
+        _lblLiveAdc.Font = ServiceUiFonts.MonoLiveAdc;
+        _lblLiveAdc.ForeColor = ServiceUiColors.Info;
+        _btnCapture.Font = ServiceUiFonts.Body;
+        _btnCapture.BackColor = ServiceUiColors.NeutralAction;
+        _btnCapture.ForeColor = ServiceUiColors.TextPrimary;
+        _dgvCalib.Font = ServiceUiFonts.GridBody;
+        _dgvCalib.BackgroundColor = ServiceUiColors.Surface;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.BackColor = ServiceUiColors.GridHeaderBack;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.ForeColor = ServiceUiColors.GridHeaderText;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBack;
+        _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = ServiceUiColors.GridHeaderText;
+        _dgvCalib.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
+        _dgvCalib.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
+        _dgvCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+        _dgvCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
+        _dgvCalib.GridColor = ServiceUiColors.GridLine;
+        _btnAddRow.Font = ServiceUiFonts.Body;
+        _btnAddRow.BackColor = ServiceUiColors.NeutralAction;
+        _btnAddRow.ForeColor = ServiceUiColors.TextPrimary;
+        _btnDelRow.Font = ServiceUiFonts.Body;
+        _btnDelRow.BackColor = ServiceUiColors.NeutralAction;
+        _btnDelRow.ForeColor = ServiceUiColors.TextPrimary;
+        _lblKEquals.Font = ServiceUiFonts.Medium;
+        _lblKEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _txtK.Font = ServiceUiFonts.Mono;
+        _txtK.BackColor = ServiceUiColors.InputBack;
+        _txtK.ForeColor = ServiceUiColors.InputFore;
+        _lblBEquals.Font = ServiceUiFonts.Medium;
+        _lblBEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _txtB.Font = ServiceUiFonts.Mono;
+        _txtB.BackColor = ServiceUiColors.InputBack;
+        _txtB.ForeColor = ServiceUiColors.InputFore;
+        _lblFormula.Font = ServiceUiFonts.Body;
+        _lblFormula.ForeColor = ServiceUiColors.TextMuted;
+        _btnLsq.Font = ServiceUiFonts.Medium;
+        _btnLsq.BackColor = ServiceUiColors.SecondaryAction;
+        _btnLsq.ForeColor = ServiceUiColors.TextOnDark;
+        _btnCalibSave.Font = ServiceUiFonts.Body;
+        _btnCalibSave.BackColor = ServiceUiColors.PrimaryAction;
+        _btnCalibSave.ForeColor = ServiceUiColors.TextOnDark;
 
         // CalibDynamic tab
-        _tabCalibD.BackColor = UiColors.Surface;
-        _pnlCalibD.BackColor = UiColors.Surface;
-        _pnlCalibDHead.BackColor = UiColors.Surface;
-        _pnlCalibDBody.BackColor = UiColors.Surface;
-        _pnlCalibDBottom.BackColor = UiColors.Surface;
-        _lblLiveAdcCapD.Font = UiFonts.Body;
-        _lblLiveAdcCapD.ForeColor = UiColors.TextPrimary;
-        _lblLiveAdcD.Font = UiFonts.MonoLiveAdc;
-        _lblLiveAdcD.ForeColor = UiColors.TextOnDark;
-        _lblLiveWeightCapD.Font = UiFonts.Body;
-        _lblLiveWeightCapD.ForeColor = UiColors.TextPrimary;
-        _lblLiveWeightD.Font = UiFonts.MonoLiveAdc;
-        _lblLiveWeightD.ForeColor = UiColors.TextOnDark;
-        _cmbDynamicCalibPort.Font = UiFonts.Medium;
-        _cmbDynamicCalibPort.BackColor = UiColors.InputBack;
-        _cmbDynamicCalibPort.ForeColor = UiColors.InputFore;
-        _btnDynamicCalibConn.Font = UiFonts.Body;
-        _btnDynamicCalibConn.BackColor = UiColors.PrimaryAction;
-        _btnDynamicCalibConn.ForeColor = UiColors.TextOnDark;
-        _btnDynamicCalibPortRefresh.Font = UiFonts.SubHeader;
-        _btnDynamicCalibPortRefresh.BackColor = UiColors.NeutralAction;
-        _btnDynamicCalibPortRefresh.ForeColor = UiColors.TextPrimary;
-        _lblDynamicCalibConn.Font = UiFonts.Body;
-        _lblDynamicCalibConn.ForeColor = UiColors.TextPrimary;
-        _lblSecPlus_00.Font = UiFonts.BodyBold;
-        _lblSecPlus_00.ForeColor = UiColors.TextPrimary;
-        _lblSecPlus_01.Font = UiFonts.BodyBold;
-        _lblSecPlus_01.ForeColor = UiColors.TextPrimary;
-        _lblSecPlus_02.Font = UiFonts.BodyBold;
-        _lblSecPlus_02.ForeColor = UiColors.TextPrimary;
-        _lblKPlusEquals.Font = UiFonts.Medium;
-        _lblKPlusEquals.ForeColor = UiColors.TextPrimary;
-        _txtKPlus.Font = UiFonts.Mono;
-        _txtKPlus.BackColor = UiColors.InputBack;
-        _txtKPlus.ForeColor = UiColors.InputFore;
-        _lblAutoCalcPlus.Font = UiFonts.Body;
-        _lblAutoCalcPlus.ForeColor = UiColors.Disconnected;
-        _lblCodePlusCap.Font = UiFonts.Body;
-        _lblCodePlusCap.ForeColor = UiColors.TextPrimary;
-        _txtCodePlus.Font = UiFonts.MonoSmall;
-        _txtCodePlus.BackColor = UiColors.InputBack;
-        _txtCodePlus.ForeColor = UiColors.InputFore;
-        _btnCapPlus.Font = UiFonts.Small;
-        _btnCapPlus.BackColor = UiColors.NeutralAction;
-        _btnCapPlus.ForeColor = UiColors.TextPrimary;
-        _lblMassPlusCap.Font = UiFonts.Body;
-        _lblMassPlusCap.ForeColor = UiColors.TextPrimary;
-        _txtMassPlus.Font = UiFonts.MonoSmall;
-        _txtMassPlus.BackColor = UiColors.InputBack;
-        _txtMassPlus.ForeColor = UiColors.InputFore;
-        _btnCalcPlus.Font = UiFonts.Body;
-        _btnCalcPlus.BackColor = UiColors.SecondaryAction;
-        _btnCalcPlus.ForeColor = UiColors.TextOnDark;
-        _lblSecMinus_00.Font = UiFonts.BodyBold;
-        _lblSecMinus_00.ForeColor = UiColors.TextPrimary;
-        _lblSecMinus_01.Font = UiFonts.BodyBold;
-        _lblSecMinus_01.ForeColor = UiColors.TextPrimary;
-        _lblSecMinus_02.Font = UiFonts.BodyBold;
-        _lblSecMinus_02.ForeColor = UiColors.TextPrimary;
-        _lblKMinusEquals.Font = UiFonts.Medium;
-        _lblKMinusEquals.ForeColor = UiColors.TextPrimary;
-        _txtKMinus.Font = UiFonts.Mono;
-        _txtKMinus.BackColor = UiColors.InputBack;
-        _txtKMinus.ForeColor = UiColors.InputFore;
-        _lblAutoCalcMinus.Font = UiFonts.Body;
-        _lblAutoCalcMinus.ForeColor = UiColors.Disconnected;
-        _lblCodeMinusCap.Font = UiFonts.Body;
-        _lblCodeMinusCap.ForeColor = UiColors.TextPrimary;
-        _txtCodeMinus.Font = UiFonts.MonoSmall;
-        _txtCodeMinus.BackColor = UiColors.InputBack;
-        _txtCodeMinus.ForeColor = UiColors.InputFore;
-        _btnCapMinus.Font = UiFonts.Small;
-        _btnCapMinus.BackColor = UiColors.NeutralAction;
-        _btnCapMinus.ForeColor = UiColors.TextPrimary;
-        _lblMassMinusCap.Font = UiFonts.Body;
-        _lblMassMinusCap.ForeColor = UiColors.TextPrimary;
-        _txtMassMinus.Font = UiFonts.MonoSmall;
-        _txtMassMinus.BackColor = UiColors.InputBack;
-        _txtMassMinus.ForeColor = UiColors.InputFore;
-        _btnCalcMinus.Font = UiFonts.Body;
-        _btnCalcMinus.BackColor = UiColors.SecondaryAction;
-        _btnCalcMinus.ForeColor = UiColors.TextOnDark;
-        _lblFormulaD.Font = UiFonts.Body;
-        _lblFormulaD.ForeColor = UiColors.TextMuted;
-        _btnCalibDynSave.Font = UiFonts.Body;
-        _btnCalibDynSave.BackColor = UiColors.PrimaryAction;
-        _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
-        _dgvDynCalib.Font = UiFonts.GridBody;
-        _dgvDynCalib.BackgroundColor = UiColors.Surface;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBackCalibCoef;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBackCalibCoef;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
-        _dgvDynCalib.DefaultCellStyle.BackColor = UiColors.Surface;
-        _dgvDynCalib.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
-        _dgvDynCalib.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
-        _dgvDynCalib.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
-        _dgvDynCalib.GridColor = UiColors.GridLine;
+        _tabCalibD.BackColor = ServiceUiColors.Surface;
+        _pnlCalibD.BackColor = ServiceUiColors.Surface;
+        _pnlCalibDHead.BackColor = ServiceUiColors.Surface;
+        _pnlCalibDBody.BackColor = ServiceUiColors.Surface;
+        _pnlCalibDBottom.BackColor = ServiceUiColors.Surface;
+        _lblLiveAdcCapD.Font = ServiceUiFonts.Body;
+        _lblLiveAdcCapD.ForeColor = ServiceUiColors.TextPrimary;
+        _lblLiveAdcD.Font = ServiceUiFonts.MonoLiveAdc;
+        _lblLiveAdcD.ForeColor = ServiceUiColors.TextOnDark;
+        _lblLiveWeightCapD.Font = ServiceUiFonts.Body;
+        _lblLiveWeightCapD.ForeColor = ServiceUiColors.TextPrimary;
+        _lblLiveWeightD.Font = ServiceUiFonts.MonoLiveAdc;
+        _lblLiveWeightD.ForeColor = ServiceUiColors.TextOnDark;
+        _cmbDynamicCalibPort.Font = ServiceUiFonts.Medium;
+        _cmbDynamicCalibPort.BackColor = ServiceUiColors.InputBack;
+        _cmbDynamicCalibPort.ForeColor = ServiceUiColors.InputFore;
+        _btnDynamicCalibConn.Font = ServiceUiFonts.Body;
+        _btnDynamicCalibConn.BackColor = ServiceUiColors.PrimaryAction;
+        _btnDynamicCalibConn.ForeColor = ServiceUiColors.TextOnDark;
+        _btnDynamicCalibPortRefresh.Font = ServiceUiFonts.SubHeader;
+        _btnDynamicCalibPortRefresh.BackColor = ServiceUiColors.NeutralAction;
+        _btnDynamicCalibPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDynamicCalibConn.Font = ServiceUiFonts.Body;
+        _lblDynamicCalibConn.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecPlus_00.Font = ServiceUiFonts.BodyBold;
+        _lblSecPlus_00.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecPlus_01.Font = ServiceUiFonts.BodyBold;
+        _lblSecPlus_01.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecPlus_02.Font = ServiceUiFonts.BodyBold;
+        _lblSecPlus_02.ForeColor = ServiceUiColors.TextPrimary;
+        _lblKPlusEquals.Font = ServiceUiFonts.Medium;
+        _lblKPlusEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _txtKPlus.Font = ServiceUiFonts.Mono;
+        _txtKPlus.BackColor = ServiceUiColors.InputBack;
+        _txtKPlus.ForeColor = ServiceUiColors.InputFore;
+        _lblAutoCalcPlus.Font = ServiceUiFonts.Body;
+        _lblAutoCalcPlus.ForeColor = ServiceUiColors.Disconnected;
+        _lblCodePlusCap.Font = ServiceUiFonts.Body;
+        _lblCodePlusCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtCodePlus.Font = ServiceUiFonts.MonoSmall;
+        _txtCodePlus.BackColor = ServiceUiColors.InputBack;
+        _txtCodePlus.ForeColor = ServiceUiColors.InputFore;
+        _btnCapPlus.Font = ServiceUiFonts.Small;
+        _btnCapPlus.BackColor = ServiceUiColors.NeutralAction;
+        _btnCapPlus.ForeColor = ServiceUiColors.TextPrimary;
+        _lblMassPlusCap.Font = ServiceUiFonts.Body;
+        _lblMassPlusCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtMassPlus.Font = ServiceUiFonts.MonoSmall;
+        _txtMassPlus.BackColor = ServiceUiColors.InputBack;
+        _txtMassPlus.ForeColor = ServiceUiColors.InputFore;
+        _btnCalcPlus.Font = ServiceUiFonts.Body;
+        _btnCalcPlus.BackColor = ServiceUiColors.SecondaryAction;
+        _btnCalcPlus.ForeColor = ServiceUiColors.TextOnDark;
+        _lblSecMinus_00.Font = ServiceUiFonts.BodyBold;
+        _lblSecMinus_00.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecMinus_01.Font = ServiceUiFonts.BodyBold;
+        _lblSecMinus_01.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecMinus_02.Font = ServiceUiFonts.BodyBold;
+        _lblSecMinus_02.ForeColor = ServiceUiColors.TextPrimary;
+        _lblKMinusEquals.Font = ServiceUiFonts.Medium;
+        _lblKMinusEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _txtKMinus.Font = ServiceUiFonts.Mono;
+        _txtKMinus.BackColor = ServiceUiColors.InputBack;
+        _txtKMinus.ForeColor = ServiceUiColors.InputFore;
+        _lblAutoCalcMinus.Font = ServiceUiFonts.Body;
+        _lblAutoCalcMinus.ForeColor = ServiceUiColors.Disconnected;
+        _lblCodeMinusCap.Font = ServiceUiFonts.Body;
+        _lblCodeMinusCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtCodeMinus.Font = ServiceUiFonts.MonoSmall;
+        _txtCodeMinus.BackColor = ServiceUiColors.InputBack;
+        _txtCodeMinus.ForeColor = ServiceUiColors.InputFore;
+        _btnCapMinus.Font = ServiceUiFonts.Small;
+        _btnCapMinus.BackColor = ServiceUiColors.NeutralAction;
+        _btnCapMinus.ForeColor = ServiceUiColors.TextPrimary;
+        _lblMassMinusCap.Font = ServiceUiFonts.Body;
+        _lblMassMinusCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtMassMinus.Font = ServiceUiFonts.MonoSmall;
+        _txtMassMinus.BackColor = ServiceUiColors.InputBack;
+        _txtMassMinus.ForeColor = ServiceUiColors.InputFore;
+        _btnCalcMinus.Font = ServiceUiFonts.Body;
+        _btnCalcMinus.BackColor = ServiceUiColors.SecondaryAction;
+        _btnCalcMinus.ForeColor = ServiceUiColors.TextOnDark;
+        _lblFormulaD.Font = ServiceUiFonts.Body;
+        _lblFormulaD.ForeColor = ServiceUiColors.TextMuted;
+        _btnCalibDynSave.Font = ServiceUiFonts.Body;
+        _btnCalibDynSave.BackColor = ServiceUiColors.PrimaryAction;
+        _btnCalibDynSave.ForeColor = ServiceUiColors.TextOnDark;
+        _dgvDynCalib.Font = ServiceUiFonts.GridBody;
+        _dgvDynCalib.BackgroundColor = ServiceUiColors.Surface;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = ServiceUiColors.GridHeaderBackCalibCoef;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = ServiceUiColors.GridHeaderText;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.Font = ServiceUiFonts.GridHeader;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBackCalibCoef;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = ServiceUiColors.GridHeaderText;
+        _dgvDynCalib.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
+        _dgvDynCalib.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
+        _dgvDynCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+        _dgvDynCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
+        _dgvDynCalib.GridColor = ServiceUiColors.GridLine;
 
         // Settings tab
-        _tabSett.BackColor = UiColors.Surface;
-        _lblPortCap.Font = UiFonts.Medium;
-        _lblPortCap.ForeColor = UiColors.TextPrimary;
-        _cmbSettPort.Font = UiFonts.Body;
-        _cmbSettPort.BackColor = UiColors.InputBack;
-        _cmbSettPort.ForeColor = UiColors.InputFore;
-        _lblNpvCap.Font = UiFonts.Medium;
-        _lblNpvCap.ForeColor = UiColors.TextPrimary;
-        _txtNpv.Font = UiFonts.Body;
-        _txtNpv.BackColor = UiColors.InputBack;
-        _txtNpv.ForeColor = UiColors.InputFore;
-        _lblDiscCap.Font = UiFonts.Medium;
-        _lblDiscCap.ForeColor = UiColors.TextPrimary;
-        _cmbDisc.Font = UiFonts.Body;
-        _cmbDisc.BackColor = UiColors.InputBack;
-        _cmbDisc.ForeColor = UiColors.InputFore;
-        _lblZeroCap.Font = UiFonts.Medium;
-        _lblZeroCap.ForeColor = UiColors.TextPrimary;
-        _txtZeroLimit.Font = UiFonts.Body;
-        _txtZeroLimit.BackColor = UiColors.InputBack;
-        _txtZeroLimit.ForeColor = UiColors.InputFore;
-        _lblPasswordCap.Font = UiFonts.Medium;
-        _lblPasswordCap.ForeColor = UiColors.TextPrimary;
-        _txtNewPassword.Font = UiFonts.Body;
-        _txtNewPassword.BackColor = UiColors.InputBack;
-        _txtNewPassword.ForeColor = UiColors.InputFore;
-        _btnSaveSettings.Font = UiFonts.Medium;
-        _btnSaveSettings.BackColor = UiColors.PrimaryAction;
-        _btnSaveSettings.ForeColor = UiColors.TextOnDark;
+        _tabSett.BackColor = ServiceUiColors.Surface;
+        _lblPortCap.Font = ServiceUiFonts.Medium;
+        _lblPortCap.ForeColor = ServiceUiColors.TextPrimary;
+        _cmbSettPort.Font = ServiceUiFonts.Body;
+        _cmbSettPort.BackColor = ServiceUiColors.InputBack;
+        _cmbSettPort.ForeColor = ServiceUiColors.InputFore;
+        _lblNpvCap.Font = ServiceUiFonts.Medium;
+        _lblNpvCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtNpv.Font = ServiceUiFonts.Body;
+        _txtNpv.BackColor = ServiceUiColors.InputBack;
+        _txtNpv.ForeColor = ServiceUiColors.InputFore;
+        _lblDiscCap.Font = ServiceUiFonts.Medium;
+        _lblDiscCap.ForeColor = ServiceUiColors.TextPrimary;
+        _cmbDisc.Font = ServiceUiFonts.Body;
+        _cmbDisc.BackColor = ServiceUiColors.InputBack;
+        _cmbDisc.ForeColor = ServiceUiColors.InputFore;
+        _lblZeroCap.Font = ServiceUiFonts.Medium;
+        _lblZeroCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtZeroLimit.Font = ServiceUiFonts.Body;
+        _txtZeroLimit.BackColor = ServiceUiColors.InputBack;
+        _txtZeroLimit.ForeColor = ServiceUiColors.InputFore;
+        _lblPasswordCap.Font = ServiceUiFonts.Medium;
+        _lblPasswordCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtNewPassword.Font = ServiceUiFonts.Body;
+        _txtNewPassword.BackColor = ServiceUiColors.InputBack;
+        _txtNewPassword.ForeColor = ServiceUiColors.InputFore;
+        _btnSaveSettings.Font = ServiceUiFonts.Medium;
+        _btnSaveSettings.BackColor = ServiceUiColors.PrimaryAction;
+        _btnSaveSettings.ForeColor = ServiceUiColors.TextOnDark;
     }
 
     // ── Lifecycle ───────────────────────────────────────────────────────────
@@ -653,7 +653,7 @@ public partial class ServiceForm : Form
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
     {
-        ToggleStaticConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", UiColors.Error));
+        ToggleStaticConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", ServiceUiColors.Error));
     }
 
     private void BtnStaticCalibConn_Click(object? sender, EventArgs e)
@@ -690,38 +690,38 @@ public partial class ServiceForm : Form
     private void ApplyDynamicServiceTheme()
     {
         if (_tabDynamicService is null) return;
-        _cmbDynamicPort.Font = UiFonts.Medium;
-        _cmbDynamicPort.BackColor = UiColors.InputBack;
-        _cmbDynamicPort.ForeColor = UiColors.InputFore;
-        _dotDynamicConn.BackColor = UiColors.Disconnected;
-        _btnDynamicConn.Font = UiFonts.Body;
-        _btnDynamicConn.BackColor = UiColors.PrimaryAction;
-        _btnDynamicConn.ForeColor = UiColors.TextOnDark;
-        _btnDynamicPortRefresh.Font = UiFonts.SubHeader;
-        _btnDynamicPortRefresh.BackColor = UiColors.NeutralAction;
-        _btnDynamicPortRefresh.ForeColor = UiColors.TextPrimary;
-        _lblDynamicConn.Font = UiFonts.Body;
-        _lblDynamicConn.ForeColor = UiColors.Disconnected;
-        _lblDynamicRate.Font = UiFonts.Body;
-        _lblDynamicRate.ForeColor = UiColors.Disconnected;
-        _pnlDynamicCh0.BackColor = UiColors.MonitorBackground;
-        _pnlDynamicCh1.BackColor = UiColors.MonitorBackground;
-        _lblDynamicCh0Cap.Font = UiFonts.Body;
-        _lblDynamicCh0Cap.ForeColor = UiColors.TextOnDarkMuted;
-        _lblDynamicCh1Cap.Font = UiFonts.Body;
-        _lblDynamicCh1Cap.ForeColor = UiColors.TextOnDarkMuted;
-        _lblDynamicCh0.Font = UiFonts.MonitorDisplay;
-        _lblDynamicCh0.ForeColor = UiColors.Disconnected;
-        _lblDynamicCh1.Font = UiFonts.MonitorDisplay;
-        _lblDynamicCh1.ForeColor = UiColors.Disconnected;
-        _chkDynamicLog.Font = UiFonts.Body;
-        _chkDynamicLog.ForeColor = UiColors.TextPrimary;
-        _btnDynamicClearLog.Font = UiFonts.Body;
-        _btnDynamicClearLog.BackColor = UiColors.NeutralAction;
-        _btnDynamicClearLog.ForeColor = UiColors.TextPrimary;
-        _rtbDynamicLog.Font = UiFonts.MonoSmall;
-        _rtbDynamicLog.BackColor = UiColors.LogBackground;
-        _rtbDynamicLog.ForeColor = UiColors.LogText;
+        _cmbDynamicPort.Font = ServiceUiFonts.Medium;
+        _cmbDynamicPort.BackColor = ServiceUiColors.InputBack;
+        _cmbDynamicPort.ForeColor = ServiceUiColors.InputFore;
+        _dotDynamicConn.BackColor = ServiceUiColors.Disconnected;
+        _btnDynamicConn.Font = ServiceUiFonts.Body;
+        _btnDynamicConn.BackColor = ServiceUiColors.PrimaryAction;
+        _btnDynamicConn.ForeColor = ServiceUiColors.TextOnDark;
+        _btnDynamicPortRefresh.Font = ServiceUiFonts.SubHeader;
+        _btnDynamicPortRefresh.BackColor = ServiceUiColors.NeutralAction;
+        _btnDynamicPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDynamicConn.Font = ServiceUiFonts.Body;
+        _lblDynamicConn.ForeColor = ServiceUiColors.Disconnected;
+        _lblDynamicRate.Font = ServiceUiFonts.Body;
+        _lblDynamicRate.ForeColor = ServiceUiColors.Disconnected;
+        _pnlDynamicCh0.BackColor = ServiceUiColors.MonitorBackground;
+        _pnlDynamicCh1.BackColor = ServiceUiColors.MonitorBackground;
+        _lblDynamicCh0Cap.Font = ServiceUiFonts.Body;
+        _lblDynamicCh0Cap.ForeColor = ServiceUiColors.TextOnDarkMuted;
+        _lblDynamicCh1Cap.Font = ServiceUiFonts.Body;
+        _lblDynamicCh1Cap.ForeColor = ServiceUiColors.TextOnDarkMuted;
+        _lblDynamicCh0.Font = ServiceUiFonts.MonitorDisplay;
+        _lblDynamicCh0.ForeColor = ServiceUiColors.Disconnected;
+        _lblDynamicCh1.Font = ServiceUiFonts.MonitorDisplay;
+        _lblDynamicCh1.ForeColor = ServiceUiColors.Disconnected;
+        _chkDynamicLog.Font = ServiceUiFonts.Body;
+        _chkDynamicLog.ForeColor = ServiceUiColors.TextPrimary;
+        _btnDynamicClearLog.Font = ServiceUiFonts.Body;
+        _btnDynamicClearLog.BackColor = ServiceUiColors.NeutralAction;
+        _btnDynamicClearLog.ForeColor = ServiceUiColors.TextPrimary;
+        _rtbDynamicLog.Font = ServiceUiFonts.MonoSmall;
+        _rtbDynamicLog.BackColor = ServiceUiColors.LogBackground;
+        _rtbDynamicLog.ForeColor = ServiceUiColors.LogText;
     }
 
     private void RefreshDynamicPorts()
@@ -750,7 +750,7 @@ public partial class ServiceForm : Form
 
     private void BtnDynamicConn_Click(object? sender, EventArgs e)
     {
-        ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", UiColors.Error));
+        ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", ServiceUiColors.Error));
     }
 
     private void BtnDynamicPortRefresh_Click(object? sender, EventArgs e)
@@ -925,21 +925,21 @@ public partial class ServiceForm : Form
     private void UpdateDynamicServiceMonitorConn(bool connected)
     {
         if (_lblDynamicConn is null) return;
-        _dotDynamicConn.BackColor = connected ? UiColors.Connected : UiColors.Disconnected;
+        _dotDynamicConn.BackColor = connected ? ServiceUiColors.Connected : ServiceUiColors.Disconnected;
         _lblDynamicConn.Text = connected ? $"Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1" : (_dynamicServiceSim.IsPortOpen ? $"Порт открыт: {_dynamicServiceSim.PortName}, нет потока АЦП" : "Нет подключения");
-        _lblDynamicConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _lblDynamicConn.ForeColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
         _btnDynamicConn.Text = _dynamicServiceSim.IsPortOpen ? "Отключить" : "Подключить";
-        _btnDynamicConn.BackColor = _dynamicServiceSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _btnDynamicConn.BackColor = _dynamicServiceSim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
         _cmbDynamicPort.Enabled = !_dynamicServiceSim.IsPortOpen;
         SelectComboValue(_cmbDynamicPort, _dynamicServiceSim.PortName);
-        AppendDynamicLog(connected ? $"=== Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? UiColors.PrimaryAction : UiColors.Disconnected);
+        AppendDynamicLog(connected ? $"=== Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected);
     }
 
     private void UpdateDynamicCalibMonitorConn(bool connected)
     {
         if (_btnDynamicCalibConn is null || _cmbDynamicCalibPort is null) return;
         _btnDynamicCalibConn.Text = _dynamicCalibSim.IsPortOpen ? "Отключить" : "Подключить";
-        _btnDynamicCalibConn.BackColor = _dynamicCalibSim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _btnDynamicCalibConn.BackColor = _dynamicCalibSim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
         _cmbDynamicCalibPort.Enabled = !_dynamicCalibSim.IsPortOpen;
         SelectComboValue(_cmbDynamicCalibPort, _dynamicCalibSim.PortName);
         UpdateDynamicCalibrationConnectionLabel();
@@ -971,8 +971,8 @@ public partial class ServiceForm : Form
         Interlocked.Increment(ref _dynamicServiceSampleUiApplied);
         _lblDynamicCh0.Text = sample.Ch0.ToString();
         _lblDynamicCh1.Text = sample.Ch1.ToString();
-        _lblDynamicCh0.ForeColor = UiColors.Info;
-        _lblDynamicCh1.ForeColor = UiColors.Info;
+        _lblDynamicCh0.ForeColor = ServiceUiColors.Info;
+        _lblDynamicCh1.ForeColor = ServiceUiColors.Info;
     }
 
     private void OnDynamicCalibSample(object? sender, SimA04DynamicSample sample)
@@ -1039,7 +1039,7 @@ public partial class ServiceForm : Form
         var sample = SimA04DynamicSample.Parse(raw);
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
         string time = DateTime.Now.ToString("HH:mm:ss.fff");
-        AppendDynamicLog(sample.Valid ? $"{time}  [{bytes}]  CH0={sample.Ch0,5}  CH1={sample.Ch1,5} AUX={sample.Aux,3}" : $"{time}  [{bytes}]  INVALID ({raw.Length} байт)", sample.Valid ? UiColors.LogText : UiColors.Warning);
+        AppendDynamicLog(sample.Valid ? $"{time}  [{bytes}]  CH0={sample.Ch0,5}  CH1={sample.Ch1,5} AUX={sample.Aux,3}" : $"{time}  [{bytes}]  INVALID ({raw.Length} байт)", sample.Valid ? ServiceUiColors.LogText : ServiceUiColors.Warning);
     }
 
     private void AppendDynamicLog(string text, Color color)
@@ -1170,30 +1170,30 @@ public partial class ServiceForm : Form
 
     private void UpdateMonitorConn(bool connected)
     {
-        _dotConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _dotConn.BackColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
         _lblConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : (_sim.IsPortOpen ? $"Порт открыт: {_sim.PortName}, нет ответа АЦП" : "Нет подключения");
-        _lblConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+        _lblConn.ForeColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
         _btnConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
-        _btnConn.BackColor = _sim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+        _btnConn.BackColor = _sim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
         _cmbPort.Enabled = !_sim.IsPortOpen;
         SelectComboValue(_cmbPort, _sim.PortName);
         SelectComboValue(_cmbStaticCalibPort, _sim.PortName);
         if (_dotStaticCalibConn is not null)
-            _dotStaticCalibConn.BackColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+            _dotStaticCalibConn.BackColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
         if (_lblStaticCalibConn is not null)
         {
             _lblStaticCalibConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : (_sim.IsPortOpen ? $"Порт открыт: {_sim.PortName}, нет ответа АЦП" : "Нет подключения");
-            _lblStaticCalibConn.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
+            _lblStaticCalibConn.ForeColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
         }
         if (_btnStaticCalibConn is not null)
         {
             _btnStaticCalibConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
-            _btnStaticCalibConn.BackColor = _sim.IsPortOpen ? UiColors.DangerAction : UiColors.PrimaryAction;
+            _btnStaticCalibConn.BackColor = _sim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
         }
         if (_cmbStaticCalibPort is not null)
             _cmbStaticCalibPort.Enabled = !_sim.IsPortOpen;
         AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
-            connected ? UiColors.PrimaryAction : UiColors.Disconnected);
+            connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected);
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
@@ -1213,22 +1213,22 @@ public partial class ServiceForm : Form
             _lastCh1 = frame.Ch1;
             _lblCh0.Text = frame.Ch0.ToString();
             _lblCh1.Text = frame.Ch1.ToString();
-            _lblCh0.ForeColor = UiColors.Info;
-            _lblCh1.ForeColor = UiColors.Info;
+            _lblCh0.ForeColor = ServiceUiColors.Info;
+            _lblCh1.ForeColor = ServiceUiColors.Info;
             UpdateLiveAdcLabel();
         }
         else
         {
-            _lblCh0.ForeColor = UiColors.Error;
-            _lblCh1.ForeColor = UiColors.Error;
+            _lblCh0.ForeColor = ServiceUiColors.Error;
+            _lblCh1.ForeColor = ServiceUiColors.Error;
         }
         if (!_chkLog.Checked) return;
         string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
         string time = DateTime.Now.ToString("HH:mm:ss.fff");
         if (frame.Valid)
-            AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", UiColors.LogText);
+            AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", ServiceUiColors.LogText);
         else
-            AppendLog($"{time}  [{bytes}]  INVALID ({raw.Length} байт)", UiColors.Warning);
+            AppendLog($"{time}  [{bytes}]  INVALID ({raw.Length} байт)", ServiceUiColors.Warning);
     }
 
     private void AppendLog(string text, Color color)
@@ -1368,19 +1368,19 @@ public partial class ServiceForm : Form
         bool active = row.Cells[2].Value is true;
         if (active)
         {
-            row.DefaultCellStyle.BackColor = UiColors.Surface;
-            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
-            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
-            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            row.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
+            row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
             row.ReadOnly = false;
             return;
         }
 
         var deletedBack = Color.FromArgb(255, 228, 232);
         row.DefaultCellStyle.BackColor = deletedBack;
-        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
         row.DefaultCellStyle.SelectionBackColor = deletedBack;
-        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.TextPrimary;
         row.ReadOnly = true;
     }
 
@@ -1443,7 +1443,7 @@ public partial class ServiceForm : Form
 
         int code = CurrentDynamicAdcCode();
         _lblLiveAdcD.Text = code == 0 ? "—" : code.ToString();
-        _lblLiveAdcD.ForeColor = code == 0 ? UiColors.Disconnected : UiColors.Info;
+        _lblLiveAdcD.ForeColor = code == 0 ? ServiceUiColors.Disconnected : ServiceUiColors.Info;
         UpdateLiveDynamicWeight(code);
     }
 
@@ -1455,7 +1455,7 @@ public partial class ServiceForm : Form
         if (code == 0)
         {
             _lblLiveWeightD.Text = "—";
-            _lblLiveWeightD.ForeColor = UiColors.Disconnected;
+            _lblLiveWeightD.ForeColor = ServiceUiColors.Disconnected;
             return;
         }
 
@@ -1465,14 +1465,14 @@ public partial class ServiceForm : Form
         if (!plusOk && !minusOk)
         {
             _lblLiveWeightD.Text = "—";
-            _lblLiveWeightD.ForeColor = UiColors.Disconnected;
+            _lblLiveWeightD.ForeColor = ServiceUiColors.Disconnected;
             return;
         }
 
         string plus = plusOk ? FormatServiceDynamicWeight(code * kp) : "—";
         string minus = minusOk ? FormatServiceDynamicWeight(code * km) : "—";
         _lblLiveWeightD.Text = $"→ {plus} т  ← {minus} т";
-        _lblLiveWeightD.ForeColor = UiColors.Info;
+        _lblLiveWeightD.ForeColor = ServiceUiColors.Info;
     }
 
     private void UpdateDynamicCalibrationConnectionLabel()
@@ -1482,17 +1482,17 @@ public partial class ServiceForm : Form
         if (_dynamicCalibSim.IsConnected)
         {
             _lblDynamicCalibConn.Text = $"Динамика: {_dynamicCalibSim.PortName}";
-            _lblDynamicCalibConn.ForeColor = UiColors.PrimaryAction;
+            _lblDynamicCalibConn.ForeColor = ServiceUiColors.PrimaryAction;
         }
         else if (_dynamicCalibSim.IsPortOpen)
         {
             _lblDynamicCalibConn.Text = $"Порт открыт: {_dynamicCalibSim.PortName}";
-            _lblDynamicCalibConn.ForeColor = UiColors.Warning;
+            _lblDynamicCalibConn.ForeColor = ServiceUiColors.Warning;
         }
         else
         {
             _lblDynamicCalibConn.Text = "Динамика: нет подключения";
-            _lblDynamicCalibConn.ForeColor = UiColors.Disconnected;
+            _lblDynamicCalibConn.ForeColor = ServiceUiColors.Disconnected;
         }
     }
 
@@ -1540,19 +1540,19 @@ public partial class ServiceForm : Form
     {
         if (isActive)
         {
-            row.DefaultCellStyle.BackColor = UiColors.Surface;
-            row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
-            row.DefaultCellStyle.SelectionBackColor = UiColors.GridSelectionBack;
-            row.DefaultCellStyle.SelectionForeColor = UiColors.GridSelectionText;
+            row.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
+            row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
             row.ReadOnly = false;
             return;
         }
 
         var deletedBack = Color.FromArgb(255, 228, 232);
         row.DefaultCellStyle.BackColor = deletedBack;
-        row.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
         row.DefaultCellStyle.SelectionBackColor = deletedBack;
-        row.DefaultCellStyle.SelectionForeColor = UiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.TextPrimary;
         row.ReadOnly = true;
     }
 
@@ -1595,7 +1595,7 @@ public partial class ServiceForm : Form
         {
             _adminUnlocked = false;
             _btnAdmin.Text = "🔒 Войти как администратор";
-            _btnAdmin.BackColor = UiColors.AdminLocked;
+            _btnAdmin.BackColor = ServiceUiColors.AdminLocked;
             SetAdminTabs(false);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "выход из режима администратора");
         }
@@ -1605,7 +1605,7 @@ public partial class ServiceForm : Form
             if (dlg.ShowDialog(this) != DialogResult.OK) return;
             _adminUnlocked = true;
             _btnAdmin.Text = "🔓 Выйти из режима администратора";
-            _btnAdmin.BackColor = UiColors.AdminUnlocked;
+            _btnAdmin.BackColor = ServiceUiColors.AdminUnlocked;
             SetAdminTabs(true);
             AuditLogger.Action(AuditLogger.AdminLogin, "AdminSession", "вход в режим администратора");
         }
