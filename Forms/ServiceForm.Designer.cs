@@ -1526,10 +1526,10 @@ partial class ServiceForm
         _dgvDynCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         _dgvDynCalib.BackgroundColor = Color.FromArgb(245, 245, 247);
         dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle3.BackColor = Color.FromArgb(0, 255, 255);
+        dataGridViewCellStyle3.BackColor = UiColors.GridHeaderBackCalibCoef;
         dataGridViewCellStyle3.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         dataGridViewCellStyle3.ForeColor = Color.FromArgb(35, 49, 63);
-        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(0, 255, 255);
+        dataGridViewCellStyle3.SelectionBackColor = UiColors.GridHeaderBackCalibCoef;
         dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(35, 49, 63);
         dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;

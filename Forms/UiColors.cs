@@ -27,6 +27,7 @@ internal static class UiColors
     public static readonly Color InputFore          = Color.FromArgb(0x23, 0x31, 0x3F);
 
     public static readonly Color GridHeaderBack     = Color.FromArgb(0xDD, 0xE6, 0xF0);
+    public static readonly Color GridHeaderBackCalibCoef = Color.FromArgb(0, 255, 255);
     public static readonly Color GridHeaderDarkBack = Color.FromArgb(0xDD, 0xE6, 0xF0);
     public static readonly Color GridHeaderText     = Color.FromArgb(0x23, 0x31, 0x3F);
     public static readonly Color GridLine           = Color.FromArgb(0xC8, 0xD0, 0xDA);

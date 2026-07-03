@@ -300,10 +300,10 @@ public partial class ServiceForm : Form
         _btnCalibDynSave.ForeColor = UiColors.TextOnDark;
         _dgvDynCalib.Font = UiFonts.GridBody;
         _dgvDynCalib.BackgroundColor = UiColors.Surface;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 255, 255);
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = UiColors.GridHeaderBackCalibCoef;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = UiColors.GridHeaderText;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 255, 255);
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiColors.GridHeaderBackCalibCoef;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiColors.GridHeaderText;
         _dgvDynCalib.DefaultCellStyle.BackColor = UiColors.Surface;
         _dgvDynCalib.DefaultCellStyle.ForeColor = UiColors.TextPrimary;
