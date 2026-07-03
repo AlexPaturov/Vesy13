@@ -70,12 +70,6 @@ public partial class ServiceForm : Form
     private long _lastDiagRawApplied;
     private long _lastDiagLogAppended;
     private long _lastDiagLogDropped;
-    // Диагностика аллокаций (давление на GC). Аккумуляторы байт reader-пути и обновления лога,
-    // сбрасываются при каждом отчёте; last-* — для дельты монотонных GC-счётчиков.
-    private long _diagAllocReaderBytes;
-    private long _diagAllocLogBytes;
-    private long _lastDiagTotalAllocBytes;
-    private long _lastDiagGen0Count;
     private long _lastCalibDiagRawBytes;
     private long _lastCalibDiagSamples;
     private long _lastCalibDiagSkippedBytes;
@@ -1092,7 +1086,6 @@ public partial class ServiceForm : Form
         Interlocked.Increment(ref _dynamicServiceRawUiPosted);
         if (!_chkDynamicLog.Checked) return;
 
-        long alloc0 = GC.GetAllocatedBytesForCurrentThread();
         var sample = SimA04DynamicSample.Parse(raw);
         string text = FormatDynamicServiceLogLine(raw, sample);
         var color = sample.Valid ? ServiceUiColors.LogText : ServiceUiColors.Warning;
@@ -1106,7 +1099,6 @@ public partial class ServiceForm : Form
                 Interlocked.Increment(ref _dynamicServiceLogDropped);
             }
         }
-        Interlocked.Add(ref _diagAllocReaderBytes, GC.GetAllocatedBytesForCurrentThread() - alloc0);
     }
 
     // Без LINQ/string.Join/интерполяции с выравниванием — они на каждый байт/число аллоцируют
@@ -1179,7 +1171,6 @@ public partial class ServiceForm : Form
         }
 
         var sw = System.Diagnostics.Stopwatch.StartNew();
-        long alloc0 = GC.GetAllocatedBytesForCurrentThread();
 
         _lstDynamicLog.BeginUpdate();
         foreach (var (text, color) in _dynamicServiceLogBatch)
@@ -1187,8 +1178,6 @@ public partial class ServiceForm : Form
         _lstDynamicLog.TopIndex = 0;
         _lstDynamicLog.EndUpdate();
 
-        long alloc1 = GC.GetAllocatedBytesForCurrentThread();
-        Interlocked.Add(ref _diagAllocLogBytes, alloc1 - alloc0);
         sw.Stop();
         Interlocked.Add(ref _dynamicServiceRawUiApplied, _dynamicServiceLogBatch.Count);
         Interlocked.Add(ref _dynamicServiceLogAppended, _dynamicServiceLogBatch.Count);
@@ -1301,20 +1290,11 @@ public partial class ServiceForm : Form
         long samplePending = samplePosted - sampleApplied;
         long rawPending = rawPosted - rawApplied;
 
-        // Аллокации: суммарно по процессу + Gen0-сборки (давление на GC), и разбивка по сегментам:
-        // reader-поток (Parse+format+enqueue) и обновление owner-drawn лога на UI-потоке. За период, в КБ.
-        long totalAllocDelta = Delta(GC.GetTotalAllocatedBytes(), ref _lastDiagTotalAllocBytes);
-        long gen0Delta = Delta(GC.CollectionCount(0), ref _lastDiagGen0Count);
-        long allocReaderKb = Interlocked.Exchange(ref _diagAllocReaderBytes, 0) / 1024;
-        long allocLogKb = Interlocked.Exchange(ref _diagAllocLogBytes, 0) / 1024;
-
         AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamicService",
             $"periodMs={elapsedMs}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedDelta}; " +
             $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
             $"rawPosted={rawPostedDelta}; rawApplied={rawAppliedDelta}; rawPending={rawPending}; " +
-            $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}; logDropped={logDroppedDelta}; " +
-            $"totalAllocKB={totalAllocDelta / 1024}; gen0={gen0Delta}; " +
-            $"allocReaderKB={allocReaderKb}; allocLogKB={allocLogKb}",
+            $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}; logDropped={logDroppedDelta}",
             "SimA04DynamicService", _dynamicServiceSim.PortName);
     }
 
