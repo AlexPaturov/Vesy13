@@ -46,7 +46,7 @@ partial class ServiceForm
         _rtbLog = new RichTextBox();
         _tabDynamicService = new TabPage();
         _pnlLogs = new Panel();
-        _rtbDynamicLog = new RichTextBox();
+        _lstDynamicLog = new ListBox();
         _pnlChannels = new Panel();
         _tlpChannels = new TableLayoutPanel();
         _pnlDynamicCh0 = new Panel();
@@ -490,27 +490,27 @@ partial class ServiceForm
         // 
         // _pnlLogs
         // 
-        _pnlLogs.Controls.Add(_rtbDynamicLog);
+        _pnlLogs.Controls.Add(_lstDynamicLog);
         _pnlLogs.Dock = DockStyle.Fill;
         _pnlLogs.Location = new Point(0, 284);
         _pnlLogs.Name = "_pnlLogs";
         _pnlLogs.Size = new Size(1533, 405);
         _pnlLogs.TabIndex = 13;
         // 
-        // _rtbDynamicLog
+        // _lstDynamicLog
         // 
-        _rtbDynamicLog.DetectUrls = false;
-        _rtbDynamicLog.Dock = DockStyle.Fill;
-        _rtbDynamicLog.Font = new Font("Courier New", 9F);
-        _rtbDynamicLog.Location = new Point(0, 0);
-        _rtbDynamicLog.Margin = new Padding(3, 4, 3, 4);
-        _rtbDynamicLog.Name = "_rtbDynamicLog";
-        _rtbDynamicLog.ReadOnly = true;
-        _rtbDynamicLog.ScrollBars = RichTextBoxScrollBars.Vertical;
-        _rtbDynamicLog.Size = new Size(1533, 405);
-        _rtbDynamicLog.TabIndex = 10;
-        _rtbDynamicLog.Text = "";
-        _rtbDynamicLog.WordWrap = false;
+        _lstDynamicLog.DrawMode = DrawMode.OwnerDrawFixed;
+        _lstDynamicLog.Dock = DockStyle.Fill;
+        _lstDynamicLog.Font = new Font("Courier New", 9F);
+        _lstDynamicLog.Location = new Point(0, 0);
+        _lstDynamicLog.Margin = new Padding(3, 4, 3, 4);
+        _lstDynamicLog.Name = "_lstDynamicLog";
+        _lstDynamicLog.ItemHeight = 15;
+        _lstDynamicLog.IntegralHeight = false;
+        _lstDynamicLog.SelectionMode = SelectionMode.One;
+        _lstDynamicLog.Size = new Size(1533, 405);
+        _lstDynamicLog.TabIndex = 10;
+        _lstDynamicLog.DrawItem += LstDynamicLog_DrawItem;
         // 
         // _pnlChannels
         // 
@@ -2101,7 +2101,7 @@ partial class ServiceForm
     private Label       _lblDynamicCh1;
     private CheckBox    _chkDynamicLog;
     private Button      _btnDynamicClearLog;
-    private RichTextBox _rtbDynamicLog;
+    private ListBox _lstDynamicLog;
 
     private Label       _lblLiveWeightCapD;
     private Label       _lblLiveWeightD;

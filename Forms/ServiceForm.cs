@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.IO.Ports;
+using System.Text;
 using Vesy13.Application;
 using Vesy13.Models;
 using Vesy13.Services.Configuration;
@@ -43,6 +44,23 @@ public partial class ServiceForm : Form
     private SimA04DynamicSample _latestDynamicSample;
     private long _latestDynamicSampleVersion;
     private long _displayedDynamicSampleVersion;
+    private readonly object _dynamicServiceSampleSync = new();
+    private readonly System.Windows.Forms.Timer _dynamicServiceDisplayTimer = new() { Interval = 100 };
+    private SimA04DynamicSample _latestDynamicServiceSample;
+    private long _latestDynamicServiceSampleVersion;
+    private long _displayedDynamicServiceSampleVersion;
+    private readonly object _dynamicServiceLogSync = new();
+    private readonly Queue<(string Text, Color Color)> _dynamicServiceLogQueue = new();
+    private const int DynamicServiceLogQueueLimit = 500;
+    private long _dynamicServiceLogDropped;
+    // Лог динамики — owner-drawn ListBox (_lstDynamicLog из Designer): элементы DynamicServiceLogLine,
+    // число строк ограничено DynamicServiceLogLineLimit. ListBox рисует только видимые строки и не
+    // копит внутреннее состояние (нет RTF/undo/переформатирования) — аллокации не растут со временем.
+    private const int DynamicServiceLogLineLimit = 300;
+    // Переиспользуемые буферы: формирование строки лога (только из потока reader-а — SerialPort
+    // не поднимает DataReceived параллельно для одного порта, блокировка не нужна) и пачка на flush.
+    private readonly StringBuilder _dynamicServiceLogBuilder = new(64);
+    private readonly List<(string Text, Color Color)> _dynamicServiceLogBatch = new();
     private long _lastDiagRawBytes;
     private long _lastDiagSamples;
     private long _lastDiagSkippedBytes;
@@ -51,6 +69,13 @@ public partial class ServiceForm : Form
     private long _lastDiagRawPosted;
     private long _lastDiagRawApplied;
     private long _lastDiagLogAppended;
+    private long _lastDiagLogDropped;
+    // Диагностика аллокаций (давление на GC). Аккумуляторы байт reader-пути и обновления лога,
+    // сбрасываются при каждом отчёте; last-* — для дельты монотонных GC-счётчиков.
+    private long _diagAllocReaderBytes;
+    private long _diagAllocLogBytes;
+    private long _lastDiagTotalAllocBytes;
+    private long _lastDiagGen0Count;
     private long _lastCalibDiagRawBytes;
     private long _lastCalibDiagSamples;
     private long _lastCalibDiagSkippedBytes;
@@ -89,6 +114,11 @@ public partial class ServiceForm : Form
     private void InitializeDynamicCalibDisplayTimer()
     {
         _dynamicCalibDisplayTimer.Tick += (_, _) => RefreshDynamicSampleDisplay();
+        _dynamicServiceDisplayTimer.Tick += (_, _) =>
+        {
+            RefreshDynamicServiceSampleDisplay();
+            FlushDynamicServiceLogQueue();
+        };
     }
 
     private void ApplyTheme()
@@ -362,7 +392,6 @@ public partial class ServiceForm : Form
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
-        _dynamicCalibDisplayTimer.Start();
         _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
         RefreshPorts();
@@ -400,6 +429,8 @@ public partial class ServiceForm : Form
             _rateTimer.Stop();
             _dynamicCalibDisplayTimer.Stop();
             _dynamicCalibDisplayTimer.Dispose();
+            _dynamicServiceDisplayTimer.Stop();
+            _dynamicServiceDisplayTimer.Dispose();
         }
         base.OnFormClosed(e);
     }
@@ -719,9 +750,10 @@ public partial class ServiceForm : Form
         _btnDynamicClearLog.Font = ServiceUiFonts.Body;
         _btnDynamicClearLog.BackColor = ServiceUiColors.NeutralAction;
         _btnDynamicClearLog.ForeColor = ServiceUiColors.TextPrimary;
-        _rtbDynamicLog.Font = ServiceUiFonts.MonoSmall;
-        _rtbDynamicLog.BackColor = ServiceUiColors.LogBackground;
-        _rtbDynamicLog.ForeColor = ServiceUiColors.LogText;
+        _lstDynamicLog.Font = ServiceUiFonts.MonoSmall;
+        _lstDynamicLog.ItemHeight = ServiceUiFonts.MonoSmall.Height;
+        _lstDynamicLog.BackColor = ServiceUiColors.LogBackground;
+        _lstDynamicLog.ForeColor = ServiceUiColors.LogText;
     }
 
     private void RefreshDynamicPorts()
@@ -760,7 +792,11 @@ public partial class ServiceForm : Form
 
     private void BtnDynamicClearLog_Click(object? sender, EventArgs e)
     {
-        _rtbDynamicLog.Clear();
+        lock (_dynamicServiceLogSync)
+        {
+            _dynamicServiceLogQueue.Clear();
+        }
+        _lstDynamicLog.Items.Clear();
     }
 
     private void BtnDynamicCalibConn_Click(object? sender, EventArgs e)
@@ -900,11 +936,17 @@ public partial class ServiceForm : Form
         {
             _dynamicServiceSim.RawSampleReceived += OnDynamicServiceRawSample;
             _dynamicServiceSim.SampleReceived += OnDynamicServiceSample;
+            _dynamicServiceDisplayTimer.Start();
         }
         else
         {
             _dynamicServiceSim.RawSampleReceived -= OnDynamicServiceRawSample;
             _dynamicServiceSim.SampleReceived -= OnDynamicServiceSample;
+            _dynamicServiceDisplayTimer.Stop();
+            lock (_dynamicServiceLogSync)
+            {
+                _dynamicServiceLogQueue.Clear();
+            }
         }
 
         _dynamicServiceDataSubscribed = enabled;
@@ -915,9 +957,15 @@ public partial class ServiceForm : Form
         if (_dynamicCalibDataSubscribed == enabled) return;
 
         if (enabled)
+        {
             _dynamicCalibSim.SampleReceived += OnDynamicCalibSample;
+            _dynamicCalibDisplayTimer.Start();
+        }
         else
+        {
             _dynamicCalibSim.SampleReceived -= OnDynamicCalibSample;
+            _dynamicCalibDisplayTimer.Stop();
+        }
 
         _dynamicCalibDataSubscribed = enabled;
     }
@@ -960,14 +1008,30 @@ public partial class ServiceForm : Form
     private void OnDynamicServiceSample(object? sender, SimA04DynamicSample sample)
     {
         Interlocked.Increment(ref _dynamicServiceSampleRateCount);
-        if (InvokeRequired)
+        lock (_dynamicServiceSampleSync)
         {
-            Interlocked.Increment(ref _dynamicServiceSampleUiPosted);
-            WriteServiceDynamicDiagnostics();
-            BeginInvoke(() => OnDynamicServiceSample(sender, sample));
-            return;
+            _latestDynamicServiceSample = sample;
+            _latestDynamicServiceSampleVersion++;
         }
 
+        Interlocked.Increment(ref _dynamicServiceSampleUiPosted);
+        WriteServiceDynamicDiagnostics();
+    }
+
+    private void RefreshDynamicServiceSampleDisplay()
+    {
+        if (DesignMode || _dynamicServiceSim is null) return;
+
+        SimA04DynamicSample sample;
+        long version;
+        lock (_dynamicServiceSampleSync)
+        {
+            if (_latestDynamicServiceSampleVersion == _displayedDynamicServiceSampleVersion) return;
+            sample = _latestDynamicServiceSample;
+            version = _latestDynamicServiceSampleVersion;
+        }
+
+        _displayedDynamicServiceSampleVersion = version;
         Interlocked.Increment(ref _dynamicServiceSampleUiApplied);
         _lblDynamicCh0.Text = sample.Ch0.ToString();
         _lblDynamicCh1.Text = sample.Ch1.ToString();
@@ -1025,43 +1089,136 @@ public partial class ServiceForm : Form
 
     private void OnDynamicServiceRawSample(object? sender, byte[] raw)
     {
-        if (InvokeRequired)
+        Interlocked.Increment(ref _dynamicServiceRawUiPosted);
+        if (!_chkDynamicLog.Checked) return;
+
+        long alloc0 = GC.GetAllocatedBytesForCurrentThread();
+        var sample = SimA04DynamicSample.Parse(raw);
+        string text = FormatDynamicServiceLogLine(raw, sample);
+        var color = sample.Valid ? ServiceUiColors.LogText : ServiceUiColors.Warning;
+
+        lock (_dynamicServiceLogSync)
         {
-            Interlocked.Increment(ref _dynamicServiceRawUiPosted);
-            WriteServiceDynamicDiagnostics();
-            BeginInvoke(() => OnDynamicServiceRawSample(sender, raw));
-            return;
+            _dynamicServiceLogQueue.Enqueue((text, color));
+            while (_dynamicServiceLogQueue.Count > DynamicServiceLogQueueLimit)
+            {
+                _dynamicServiceLogQueue.Dequeue();
+                Interlocked.Increment(ref _dynamicServiceLogDropped);
+            }
+        }
+        Interlocked.Add(ref _diagAllocReaderBytes, GC.GetAllocatedBytesForCurrentThread() - alloc0);
+    }
+
+    // Без LINQ/string.Join/интерполяции с выравниванием — они на каждый байт/число аллоцируют
+    // отдельную строку. Здесь только числа дописываются в StringBuilder напрямую (Append(int)
+    // не аллоцирует), а итоговая строка собирается один раз через ToString().
+    private string FormatDynamicServiceLogLine(byte[] raw, SimA04DynamicSample sample)
+    {
+        var sb = _dynamicServiceLogBuilder;
+        sb.Clear();
+        sb.Append(DateTime.Now.ToString("HH:mm:ss.fff"));
+        sb.Append("  [");
+        for (int i = 0; i < raw.Length; i++)
+        {
+            if (i > 0) sb.Append("  ");
+            AppendPadded(sb, raw[i], 3);
+        }
+        sb.Append(']');
+
+        if (sample.Valid)
+        {
+            sb.Append("  CH0=");
+            AppendPadded(sb, sample.Ch0, 5);
+            sb.Append("  CH1=");
+            AppendPadded(sb, sample.Ch1, 5);
+            sb.Append(" AUX=");
+            AppendPadded(sb, sample.Aux, 3);
+        }
+        else
+        {
+            sb.Append("  INVALID (").Append(raw.Length).Append(" байт)");
         }
 
-        if (_tabs.SelectedTab != _tabDynamicService) return;
-        Interlocked.Increment(ref _dynamicServiceRawUiApplied);
-        if (!_chkDynamicLog.Checked) return;
-        var sample = SimA04DynamicSample.Parse(raw);
-        string bytes = string.Join("  ", raw.Select(b => b.ToString("D3")));
-        string time = DateTime.Now.ToString("HH:mm:ss.fff");
-        AppendDynamicLog(sample.Valid ? $"{time}  [{bytes}]  CH0={sample.Ch0,5}  CH1={sample.Ch1,5} AUX={sample.Aux,3}" : $"{time}  [{bytes}]  INVALID ({raw.Length} байт)", sample.Valid ? ServiceUiColors.LogText : ServiceUiColors.Warning);
+        return sb.ToString();
+    }
+
+    // Дописывает число с ведущими пробелами до заданной ширины, без промежуточных строк.
+    private static void AppendPadded(StringBuilder sb, int value, int width)
+    {
+        int digits = value switch
+        {
+            < 10 => 1,
+            < 100 => 2,
+            < 1000 => 3,
+            < 10000 => 4,
+            _ => 5,
+        };
+        for (int i = digits; i < width; i++) sb.Append(' ');
+        sb.Append(value);
+    }
+
+    // Строка owner-drawn лога: текст уже отформатирован, цвет задаёт валидность сэмпла.
+    private sealed class DynamicServiceLogLine
+    {
+        public readonly string Text;
+        public readonly Color Color;
+        public DynamicServiceLogLine(string text, Color color) { Text = text; Color = color; }
+        public override string ToString() => Text;
+    }
+
+    private void FlushDynamicServiceLogQueue()
+    {
+        if (_lstDynamicLog is null) return;
+
+        lock (_dynamicServiceLogSync)
+        {
+            if (_dynamicServiceLogQueue.Count == 0) return;
+            _dynamicServiceLogBatch.Clear();
+            _dynamicServiceLogBatch.AddRange(_dynamicServiceLogQueue);
+            _dynamicServiceLogQueue.Clear();
+        }
+
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        long alloc0 = GC.GetAllocatedBytesForCurrentThread();
+
+        _lstDynamicLog.BeginUpdate();
+        foreach (var (text, color) in _dynamicServiceLogBatch)
+            AddDynamicLogLine(text, color);
+        _lstDynamicLog.TopIndex = 0;
+        _lstDynamicLog.EndUpdate();
+
+        long alloc1 = GC.GetAllocatedBytesForCurrentThread();
+        Interlocked.Add(ref _diagAllocLogBytes, alloc1 - alloc0);
+        sw.Stop();
+        Interlocked.Add(ref _dynamicServiceRawUiApplied, _dynamicServiceLogBatch.Count);
+        Interlocked.Add(ref _dynamicServiceLogAppended, _dynamicServiceLogBatch.Count);
+        UpdateMax(ref _dynamicServiceLogMaxMs, sw.ElapsedMilliseconds);
+    }
+
+    // Новая строка — сверху (index 0), число строк ограничено; лишние старые снимаются с конца.
+    private void AddDynamicLogLine(string text, Color color)
+    {
+        _lstDynamicLog.Items.Insert(0, new DynamicServiceLogLine(text, color));
+        while (_lstDynamicLog.Items.Count > DynamicServiceLogLineLimit)
+            _lstDynamicLog.Items.RemoveAt(_lstDynamicLog.Items.Count - 1);
+    }
+
+    // Рисуется только для видимых строк — ListBox виртуализирует отрисовку.
+    private void LstDynamicLog_DrawItem(object? sender, DrawItemEventArgs e)
+    {
+        if (e.Index < 0 || e.Index >= _lstDynamicLog.Items.Count) return;
+        e.DrawBackground();
+        if (_lstDynamicLog.Items[e.Index] is DynamicServiceLogLine line)
+            TextRenderer.DrawText(e.Graphics, line.Text, _lstDynamicLog.Font, e.Bounds, line.Color,
+                TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.NoPadding);
     }
 
     private void AppendDynamicLog(string text, Color color)
     {
-        if (_rtbDynamicLog is null) return;
-        var sw = System.Diagnostics.Stopwatch.StartNew();
-        var prev = _rtbDynamicLog.SelectionColor;
-        _rtbDynamicLog.SelectionColor = color;
-        _rtbDynamicLog.AppendText(text + "\n");
-        _rtbDynamicLog.SelectionColor = prev;
-
-        if (_rtbDynamicLog.Lines.Length > 300)
-        {
-            int cut = _rtbDynamicLog.GetFirstCharIndexFromLine(50);
-            _rtbDynamicLog.Select(0, cut);
-            _rtbDynamicLog.SelectedText = "";
-        }
-
-        _rtbDynamicLog.ScrollToCaret();
-        sw.Stop();
+        if (_lstDynamicLog is null) return;
+        AddDynamicLogLine(text, color);
+        _lstDynamicLog.TopIndex = 0;
         Interlocked.Increment(ref _dynamicServiceLogAppended);
-        UpdateMax(ref _dynamicServiceLogMaxMs, sw.ElapsedMilliseconds);
     }
 
     private void WriteDynamicCalibDiagnostics()
@@ -1130,6 +1287,7 @@ public partial class ServiceForm : Form
         long rawApplied = Interlocked.Read(ref _dynamicServiceRawUiApplied);
         long logAppended = Interlocked.Read(ref _dynamicServiceLogAppended);
         long logMaxMs = Interlocked.Exchange(ref _dynamicServiceLogMaxMs, 0);
+        long logDropped = Interlocked.Read(ref _dynamicServiceLogDropped);
 
         long rawBytesDelta = Delta(rawBytes, ref _lastDiagRawBytes);
         long samplesDelta = Delta(samples, ref _lastDiagSamples);
@@ -1139,14 +1297,24 @@ public partial class ServiceForm : Form
         long rawPostedDelta = Delta(rawPosted, ref _lastDiagRawPosted);
         long rawAppliedDelta = Delta(rawApplied, ref _lastDiagRawApplied);
         long logAppendedDelta = Delta(logAppended, ref _lastDiagLogAppended);
+        long logDroppedDelta = Delta(logDropped, ref _lastDiagLogDropped);
         long samplePending = samplePosted - sampleApplied;
         long rawPending = rawPosted - rawApplied;
+
+        // Аллокации: суммарно по процессу + Gen0-сборки (давление на GC), и разбивка по сегментам:
+        // reader-поток (Parse+format+enqueue) и обновление owner-drawn лога на UI-потоке. За период, в КБ.
+        long totalAllocDelta = Delta(GC.GetTotalAllocatedBytes(), ref _lastDiagTotalAllocBytes);
+        long gen0Delta = Delta(GC.CollectionCount(0), ref _lastDiagGen0Count);
+        long allocReaderKb = Interlocked.Exchange(ref _diagAllocReaderBytes, 0) / 1024;
+        long allocLogKb = Interlocked.Exchange(ref _diagAllocLogBytes, 0) / 1024;
 
         AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamicService",
             $"periodMs={elapsedMs}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedDelta}; " +
             $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
             $"rawPosted={rawPostedDelta}; rawApplied={rawAppliedDelta}; rawPending={rawPending}; " +
-            $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}",
+            $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}; logDropped={logDroppedDelta}; " +
+            $"totalAllocKB={totalAllocDelta / 1024}; gen0={gen0Delta}; " +
+            $"allocReaderKB={allocReaderKb}; allocLogKB={allocLogKb}",
             "SimA04DynamicService", _dynamicServiceSim.PortName);
     }
 
