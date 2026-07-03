@@ -180,7 +180,7 @@ public partial class ServiceForm : Form
         _dgvCalib.ColumnHeadersDefaultCellStyle.ForeColor = ServiceUiColors.GridHeaderText;
         _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBack;
         _dgvCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = ServiceUiColors.GridHeaderText;
-        _dgvCalib.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
+        _dgvCalib.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
         _dgvCalib.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
         _dgvCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
         _dgvCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
@@ -300,12 +300,12 @@ public partial class ServiceForm : Form
         _btnCalibDynSave.ForeColor = ServiceUiColors.TextOnDark;
         _dgvDynCalib.Font = ServiceUiFonts.GridBody;
         _dgvDynCalib.BackgroundColor = ServiceUiColors.Surface;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = ServiceUiColors.GridHeaderBackCalibCoef;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = ServiceUiColors.GridHeaderBack;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = ServiceUiColors.GridHeaderText;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.Font = ServiceUiFonts.GridHeader;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBackCalibCoef;
+        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBack;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = ServiceUiColors.GridHeaderText;
-        _dgvDynCalib.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
+        _dgvDynCalib.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
         _dgvDynCalib.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
         _dgvDynCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
         _dgvDynCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
@@ -1368,10 +1368,10 @@ public partial class ServiceForm : Form
         bool active = row.Cells[2].Value is true;
         if (active)
         {
-            row.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
-            row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
-            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
-            row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
+            row.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
+            row.DefaultCellStyle.ForeColor = row.DataGridView?.DefaultCellStyle.ForeColor ?? ServiceUiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridRowBack;
+            row.DefaultCellStyle.SelectionForeColor = row.DataGridView?.DefaultCellStyle.SelectionForeColor ?? ServiceUiColors.GridSelectionText;
             row.ReadOnly = false;
             return;
         }
@@ -1540,10 +1540,10 @@ public partial class ServiceForm : Form
     {
         if (isActive)
         {
-            row.DefaultCellStyle.BackColor = ServiceUiColors.Surface;
-            row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
-            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
-            row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
+            row.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
+            row.DefaultCellStyle.ForeColor = row.DataGridView?.DefaultCellStyle.ForeColor ?? ServiceUiColors.TextPrimary;
+            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridRowBack;
+            row.DefaultCellStyle.SelectionForeColor = row.DataGridView?.DefaultCellStyle.SelectionForeColor ?? ServiceUiColors.GridSelectionText;
             row.ReadOnly = false;
             return;
         }
@@ -1572,7 +1572,7 @@ public partial class ServiceForm : Form
             foreach (var row in rows)
             {
                 int idx = _dgvDynCalib.Rows.Add(
-                    row.IsActive ? "Да" : "",
+                    row.IsActive ? "Да" : "Нет",
                     row.KPlus.ToString("G8", CultureInfo.InvariantCulture),
                     row.KMinus.ToString("G8", CultureInfo.InvariantCulture),
                     row.CreatedAt == default ? "" : row.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm"),

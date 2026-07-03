@@ -774,7 +774,7 @@ partial class ServiceForm
         _dgvCalib.AllowUserToDeleteRows = false;
         _dgvCalib.AllowUserToResizeRows = false;
         _dgvCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _dgvCalib.BackgroundColor = Color.FromArgb(245, 245, 247);
+        _dgvCalib.BackgroundColor = ServiceUiColors.GridRowBack;
         dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(196, 225, 230);
         dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(26, 26, 26);
@@ -791,6 +791,10 @@ partial class ServiceForm
         dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(26, 26, 26);
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _dgvCalib.DefaultCellStyle = dataGridViewCellStyle2;
+        _dgvCalib.RowsDefaultCellStyle.BackColor = Color.White;
+        _dgvCalib.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvCalib.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
+        _dgvCalib.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
         _dgvCalib.EditMode = DataGridViewEditMode.EditOnEnter;
         _dgvCalib.EnableHeadersVisualStyles = false;
         _dgvCalib.Font = new Font("Segoe UI", 12F);
@@ -1524,12 +1528,12 @@ partial class ServiceForm
         _dgvDynCalib.AllowUserToDeleteRows = false;
         _dgvDynCalib.AllowUserToResizeRows = false;
         _dgvDynCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        _dgvDynCalib.BackgroundColor = Color.FromArgb(245, 245, 247);
+        _dgvDynCalib.BackgroundColor = ServiceUiColors.GridRowBack;
         dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle3.BackColor = ServiceUiColors.GridHeaderBackCalibCoef;
+        dataGridViewCellStyle3.BackColor = ServiceUiColors.GridHeaderBack;
         dataGridViewCellStyle3.Font = ServiceUiFonts.GridHeader;
         dataGridViewCellStyle3.ForeColor = ServiceUiColors.GridHeaderText;
-        dataGridViewCellStyle3.SelectionBackColor = ServiceUiColors.GridHeaderBackCalibCoef;
+        dataGridViewCellStyle3.SelectionBackColor = ServiceUiColors.GridHeaderBack;
         dataGridViewCellStyle3.SelectionForeColor = ServiceUiColors.GridHeaderText;
         dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
         _dgvDynCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
@@ -1539,6 +1543,10 @@ partial class ServiceForm
         _dgvDynCalib.Dock = DockStyle.Fill;
         _dgvDynCalib.EditMode = DataGridViewEditMode.EditProgrammatically;
         _dgvDynCalib.EnableHeadersVisualStyles = false;
+        _dgvDynCalib.RowsDefaultCellStyle.BackColor = Color.White;
+        _dgvDynCalib.RowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvDynCalib.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
+        _dgvDynCalib.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 232, 247);
         _dgvDynCalib.Font = new Font("Segoe UI", 12F);
         _dgvDynCalib.GridColor = Color.FromArgb(212, 216, 222);
         _dgvDynCalib.Location = new Point(751, 4);
@@ -1557,7 +1565,7 @@ partial class ServiceForm
         // 
         dataGridViewTextBoxColumn4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         dataGridViewTextBoxColumn4.FillWeight = 18F;
-        dataGridViewTextBoxColumn4.HeaderText = "Акт.";
+        dataGridViewTextBoxColumn4.HeaderText = "Активный";
         dataGridViewTextBoxColumn4.MinimumWidth = 6;
         dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
         dataGridViewTextBoxColumn4.ReadOnly = true;
