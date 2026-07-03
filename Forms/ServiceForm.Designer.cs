@@ -67,7 +67,7 @@ partial class ServiceForm
         _dgvCalib = new DataGridView();
         dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-        dataGridViewCheckBoxColumn1 = new DataGridViewCheckBoxColumn();
+        dataGridViewTextBoxColumnCalibActive = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
         _btnAddRow = new Button();
         _btnDelRow = new Button();
@@ -782,7 +782,7 @@ partial class ServiceForm
         _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
         _dgvCalib.ColumnHeadersHeight = 34;
         _dgvCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewCheckBoxColumn1, dataGridViewTextBoxColumn3 });
+        _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumnCalibActive, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3 });
         dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle2.BackColor = SystemColors.Window;
         dataGridViewCellStyle2.Font = new Font("Segoe UI", 12F);
@@ -809,6 +809,14 @@ partial class ServiceForm
         _dgvCalib.Size = new Size(526, 333);
         _dgvCalib.TabIndex = 5;
         // 
+        // dataGridViewTextBoxColumnCalibActive
+        // 
+        dataGridViewTextBoxColumnCalibActive.FillWeight = 25F;
+        dataGridViewTextBoxColumnCalibActive.HeaderText = "Активна";
+        dataGridViewTextBoxColumnCalibActive.MinimumWidth = 90;
+        dataGridViewTextBoxColumnCalibActive.Name = "dataGridViewTextBoxColumnCalibActive";
+        dataGridViewTextBoxColumnCalibActive.ReadOnly = true;
+        // 
         // dataGridViewTextBoxColumn1
         // 
         dataGridViewTextBoxColumn1.FillWeight = 25F;
@@ -822,14 +830,6 @@ partial class ServiceForm
         dataGridViewTextBoxColumn2.HeaderText = "Масса, т";
         dataGridViewTextBoxColumn2.MinimumWidth = 115;
         dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-        // 
-        // dataGridViewCheckBoxColumn1
-        // 
-        dataGridViewCheckBoxColumn1.FillWeight = 25F;
-        dataGridViewCheckBoxColumn1.HeaderText = "Активна";
-        dataGridViewCheckBoxColumn1.MinimumWidth = 90;
-        dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
-        dataGridViewCheckBoxColumn1.ReadOnly = true;
         // 
         // dataGridViewTextBoxColumn3
         // 
@@ -2148,7 +2148,7 @@ partial class ServiceForm
     private System.Windows.Forms.Timer _rateTimer;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-    private DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumnCalibActive;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     private TableLayoutPanel tlpCalibSHead;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;

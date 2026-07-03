@@ -417,7 +417,7 @@ public partial class ServiceForm : Form
     {
         int row = _dgvCalib.Rows.Add();
         SetCalibRowActive(_dgvCalib.Rows[row], true);
-        _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[0];
+        _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
         _dgvCalib.BeginEdit(true);
     }
     private void BtnCapture_Click(object? sender, EventArgs e)
@@ -425,9 +425,9 @@ public partial class ServiceForm : Form
         int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
         if (code == 0) return;
         int row = _dgvCalib.Rows.Add();
-        _dgvCalib.Rows[row].Cells[0].Value = code;
+        _dgvCalib.Rows[row].Cells[1].Value = code;
         SetCalibRowActive(_dgvCalib.Rows[row], true);
-        _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
+        _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[2];
         _dgvCalib.BeginEdit(true);
     }
     private void BtnLsq_Click(object? sender, EventArgs e)
@@ -1281,9 +1281,9 @@ public partial class ServiceForm : Form
         {
             int row = _dgvCalib.Rows.Add();
             _dgvCalib.Rows[row].Tag = p;
-            _dgvCalib.Rows[row].Cells[0].Value = p.AdcCode;
-            _dgvCalib.Rows[row].Cells[1].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
-            _dgvCalib.Rows[row].Cells[2].Value = p.IsActive;
+            _dgvCalib.Rows[row].Cells[0].Value = p.IsActive ? "Да" : "Нет";
+            _dgvCalib.Rows[row].Cells[1].Value = p.AdcCode;
+            _dgvCalib.Rows[row].Cells[2].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
             if (p.AdcCode != 0)
                 _dgvCalib.Rows[row].Cells[3].Value = ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
             ApplyCalibRowStyle(_dgvCalib.Rows[row]);
@@ -1301,17 +1301,15 @@ public partial class ServiceForm : Form
     private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
     {
         if (e.RowIndex < 0) return;
-        if (e.ColumnIndex == 0 || e.ColumnIndex == 1)
+        if (e.ColumnIndex == 1 || e.ColumnIndex == 2)
             RefreshCalibK(e.RowIndex);
-        if (e.ColumnIndex == 2)
-            SyncCalibRowActiveState(_dgvCalib.Rows[e.RowIndex]);
     }
 
     private void RefreshCalibK(int rowIndex)
     {
         var row = _dgvCalib.Rows[rowIndex];
-        if (int.TryParse(row.Cells[0].Value?.ToString(), out int code) &&
-            double.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
+        if (int.TryParse(row.Cells[1].Value?.ToString(), out int code) &&
+            double.TryParse(row.Cells[2].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
             code != 0)
             row.Cells[3].Value = (mass / code * 65535).ToString("F4", CultureInfo.InvariantCulture);
         else
@@ -1320,7 +1318,7 @@ public partial class ServiceForm : Form
 
     private void SetCalibRowActive(DataGridViewRow row, bool isActive, DateTime? deletedAt = null)
     {
-        row.Cells[2].Value = isActive;
+        row.Cells[0].Value = isActive ? "Да" : "Нет";
         var point = row.Tag as CalibPoint;
         if (point is null && !isActive)
         {
@@ -1335,37 +1333,9 @@ public partial class ServiceForm : Form
         ApplyCalibRowStyle(row);
     }
 
-    private void SyncCalibRowActiveState(DataGridViewRow row)
-    {
-        bool active = row.Cells[2].Value is true;
-        var point = row.Tag as CalibPoint;
-
-        if (point?.DeletedAt is not null && active)
-        {
-            row.Cells[2].Value = false;
-            point.IsActive = false;
-            ApplyCalibRowStyle(row);
-            return;
-        }
-
-        if (point is null && !active)
-        {
-            point = new CalibPoint();
-            row.Tag = point;
-        }
-
-        if (point is not null)
-        {
-            point.IsActive = active;
-            point.DeletedAt = active ? null : point.DeletedAt ?? DateTime.Now;
-        }
-
-        ApplyCalibRowStyle(row);
-    }
-
     private static void ApplyCalibRowStyle(DataGridViewRow row)
     {
-        bool active = row.Cells[2].Value is true;
+        bool active = row.Cells[0].Value?.ToString() == "Да";
         if (active)
         {
             row.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
@@ -1391,12 +1361,12 @@ public partial class ServiceForm : Form
 
         foreach (DataGridViewRow row in _dgvCalib.Rows)
         {
-            if (!int.TryParse(row.Cells[0].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
+            if (!int.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
                 continue;
-            if (!decimal.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
+            if (!decimal.TryParse(row.Cells[2].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
                 continue;
 
-            bool active = row.Cells[2].Value is true;
+            bool active = row.Cells[0].Value?.ToString() == "Да";
             var existing = row.Tag as CalibPoint;
             DateTime? deletedAt = existing?.DeletedAt ?? (active ? null : DateTime.Now);
             active = active && deletedAt is null;
