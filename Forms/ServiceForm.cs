@@ -167,9 +167,10 @@ public partial class ServiceForm : Form
         _btnClearLog.Font = ServiceUiFonts.Body;
         _btnClearLog.BackColor = ServiceUiColors.NeutralAction;
         _btnClearLog.ForeColor = ServiceUiColors.TextPrimary;
-        _rtbLog.Font = ServiceUiFonts.MonoSmall;
-        _rtbLog.BackColor = ServiceUiColors.LogBackground;
-        _rtbLog.ForeColor = ServiceUiColors.LogText;
+        _lstLog.Font = ServiceUiFonts.MonoSmall;
+        _lstLog.ItemHeight = ServiceUiFonts.MonoSmall.Height;
+        _lstLog.BackColor = ServiceUiColors.LogBackground;
+        _lstLog.ForeColor = ServiceUiColors.LogText;
         _pnlCh0.BackColor = ServiceUiColors.MonitorBackground;
         _pnlCh1.BackColor = ServiceUiColors.MonitorBackground;
         ApplyDynamicServiceTheme();
@@ -455,7 +456,7 @@ public partial class ServiceForm : Form
     // ── Designer event handlers ─────────────────────────────────────────────
 
     private void BtnPortRefresh_Click(object? sender, EventArgs e) => RefreshPorts();
-    private void BtnClearLog_Click(object? sender, EventArgs e) => _rtbLog.Clear();
+    private void BtnClearLog_Click(object? sender, EventArgs e) => _lstLog.Items.Clear();
     private void BtnDelRow_Click(object? sender, EventArgs e)
     {
         if (_dgvCalib.SelectedRows.Count == 0) return;
@@ -1486,19 +1487,33 @@ public partial class ServiceForm : Form
         UpdateLiveAdcLabel();
     }
 
+    private const int StaticServiceLogLineLimit = 300;
+
+    private sealed class StaticServiceLogLine
+    {
+        public readonly string Text;
+        public readonly Color Color;
+        public StaticServiceLogLine(string text, Color color) { Text = text; Color = color; }
+        public override string ToString() => Text;
+    }
+
+    // Новая строка — сверху (index 0), как на _lstDynamicLog; лишние старые снимаются с конца.
     private void AppendLog(string text, Color color)
     {
-        var prev = _rtbLog.SelectionColor;
-        _rtbLog.SelectionColor = color;
-        _rtbLog.AppendText(text + "\n");
-        _rtbLog.SelectionColor = prev;
-        if (_rtbLog.Lines.Length > 300)
-        {
-            int cut = _rtbLog.GetFirstCharIndexFromLine(50);
-            _rtbLog.Select(0, cut);
-            _rtbLog.SelectedText = "";
-        }
-        _rtbLog.ScrollToCaret();
+        _lstLog.Items.Insert(0, new StaticServiceLogLine(text, color));
+        while (_lstLog.Items.Count > StaticServiceLogLineLimit)
+            _lstLog.Items.RemoveAt(_lstLog.Items.Count - 1);
+        _lstLog.TopIndex = 0;
+    }
+
+    // Рисуется только для видимых строк — ListBox виртуализирует отрисовку.
+    private void LstLog_DrawItem(object? sender, DrawItemEventArgs e)
+    {
+        if (e.Index < 0 || e.Index >= _lstLog.Items.Count) return;
+        e.DrawBackground();
+        if (_lstLog.Items[e.Index] is StaticServiceLogLine line)
+            TextRenderer.DrawText(e.Graphics, line.Text, _lstLog.Font, e.Bounds, line.Color,
+                TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.NoPadding);
     }
 
     // ── Calibration static ──────────────────────────────────────────────────

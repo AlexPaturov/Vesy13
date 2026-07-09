@@ -43,7 +43,7 @@ partial class ServiceForm
         _lblCh1 = new Label();
         _chkLog = new CheckBox();
         _btnClearLog = new Button();
-        _rtbLog = new RichTextBox();
+        _lstLog = new ListBox();
         _tabDynamicService = new TabPage();
         _pnlLogs = new Panel();
         _lstDynamicLog = new ListBox();
@@ -310,7 +310,7 @@ partial class ServiceForm
         _tabMonitor.Controls.Add(_pnlCh1);
         _tabMonitor.Controls.Add(_chkLog);
         _tabMonitor.Controls.Add(_btnClearLog);
-        _tabMonitor.Controls.Add(_rtbLog);
+        _tabMonitor.Controls.Add(_lstLog);
         _tabMonitor.Location = new Point(4, 32);
         _tabMonitor.Margin = new Padding(3, 4, 3, 4);
         _tabMonitor.Name = "_tabMonitor";
@@ -471,20 +471,19 @@ partial class ServiceForm
         _btnClearLog.UseVisualStyleBackColor = false;
         _btnClearLog.Click += BtnClearLog_Click;
         // 
-        // _rtbLog
-        // 
-        _rtbLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        _rtbLog.DetectUrls = false;
-        _rtbLog.Font = new Font("Courier New", 9F);
-        _rtbLog.Location = new Point(11, 319);
-        _rtbLog.Margin = new Padding(3, 4, 3, 4);
-        _rtbLog.Name = "_rtbLog";
-        _rtbLog.ReadOnly = true;
-        _rtbLog.ScrollBars = RichTextBoxScrollBars.Vertical;
-        _rtbLog.Size = new Size(1171, 353);
-        _rtbLog.TabIndex = 10;
-        _rtbLog.Text = "";
-        _rtbLog.WordWrap = false;
+        // _lstLog
+        //
+        _lstLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        _lstLog.DrawMode = DrawMode.OwnerDrawFixed;
+        _lstLog.Font = new Font("Courier New", 9F);
+        _lstLog.IntegralHeight = false;
+        _lstLog.ItemHeight = 15;
+        _lstLog.Location = new Point(11, 319);
+        _lstLog.Margin = new Padding(3, 4, 3, 4);
+        _lstLog.Name = "_lstLog";
+        _lstLog.Size = new Size(1171, 353);
+        _lstLog.TabIndex = 10;
+        _lstLog.DrawItem += LstLog_DrawItem;
         // 
         // _tabDynamicService
         // 
@@ -2225,7 +2224,7 @@ partial class ServiceForm
     private Label       _lblCh1;
     private CheckBox    _chkLog;
     private Button      _btnClearLog;
-    private RichTextBox _rtbLog;
+    private ListBox      _lstLog;
 
     private ComboBox    _cmbStaticCalibPort;
     private Button      _btnStaticCalibConn;
