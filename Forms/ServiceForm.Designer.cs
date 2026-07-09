@@ -29,21 +29,26 @@ partial class ServiceForm
         _rbBackup = new RadioButton();
         _lblChannelNote = new Label();
         _tabMonitor = new TabPage();
-        _cmbPort = new ComboBox();
-        _dotConn = new Panel();
-        _btnConn = new Button();
-        _btnPortRefresh = new Button();
-        _lblConn = new Label();
-        _lblRate = new Label();
-        _pnlCh0 = new Panel();
-        _lblCh0Cap = new Label();
-        _lblCh0 = new Label();
-        _pnlCh1 = new Panel();
-        _lblCh1Cap = new Label();
-        _lblCh1 = new Label();
-        _chkLog = new CheckBox();
-        _btnClearLog = new Button();
+        _pnlMonitorLogs = new Panel();
         _lstLog = new ListBox();
+        _pnlMonitorChannels = new Panel();
+        _tlpMonitorChannels = new TableLayoutPanel();
+        _pnlCh0 = new Panel();
+        _lblCh0 = new Label();
+        _lblCh0Cap = new Label();
+        _pnlCh1 = new Panel();
+        _lblCh1 = new Label();
+        _lblCh1Cap = new Label();
+        _pnlMonitorTop = new Panel();
+        _tlpMonitorTop = new TableLayoutPanel();
+        _cmbPort = new ComboBox();
+        _lblRate = new Label();
+        _lblConn = new Label();
+        _btnClearLog = new Button();
+        _chkLog = new CheckBox();
+        _btnPortRefresh = new Button();
+        _btnConn = new Button();
+        _dotConn = new Panel();
         _tabDynamicService = new TabPage();
         _pnlLogs = new Panel();
         _lstDynamicLog = new ListBox();
@@ -170,8 +175,13 @@ partial class ServiceForm
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
         _tabMonitor.SuspendLayout();
+        _pnlMonitorLogs.SuspendLayout();
+        _pnlMonitorChannels.SuspendLayout();
+        _tlpMonitorChannels.SuspendLayout();
         _pnlCh0.SuspendLayout();
         _pnlCh1.SuspendLayout();
+        _pnlMonitorTop.SuspendLayout();
+        _tlpMonitorTop.SuspendLayout();
         _tabDynamicService.SuspendLayout();
         _pnlLogs.SuspendLayout();
         _pnlChannels.SuspendLayout();
@@ -300,17 +310,9 @@ partial class ServiceForm
         // 
         // _tabMonitor
         // 
-        _tabMonitor.Controls.Add(_cmbPort);
-        _tabMonitor.Controls.Add(_dotConn);
-        _tabMonitor.Controls.Add(_btnConn);
-        _tabMonitor.Controls.Add(_btnPortRefresh);
-        _tabMonitor.Controls.Add(_lblConn);
-        _tabMonitor.Controls.Add(_lblRate);
-        _tabMonitor.Controls.Add(_pnlCh0);
-        _tabMonitor.Controls.Add(_pnlCh1);
-        _tabMonitor.Controls.Add(_chkLog);
-        _tabMonitor.Controls.Add(_btnClearLog);
-        _tabMonitor.Controls.Add(_lstLog);
+        _tabMonitor.Controls.Add(_pnlMonitorLogs);
+        _tabMonitor.Controls.Add(_pnlMonitorChannels);
+        _tabMonitor.Controls.Add(_pnlMonitorTop);
         _tabMonitor.Location = new Point(4, 32);
         _tabMonitor.Margin = new Padding(3, 4, 3, 4);
         _tabMonitor.Name = "_tabMonitor";
@@ -318,172 +320,255 @@ partial class ServiceForm
         _tabMonitor.TabIndex = 1;
         _tabMonitor.Text = "Сервисный режим Статика";
         // 
-        // _cmbPort
+        // _pnlMonitorLogs
         // 
-        _cmbPort.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbPort.Font = new Font("Segoe UI", 10F);
-        _cmbPort.Location = new Point(11, 16);
-        _cmbPort.Margin = new Padding(3, 4, 3, 4);
-        _cmbPort.Name = "_cmbPort";
-        _cmbPort.Size = new Size(102, 31);
-        _cmbPort.TabIndex = 0;
+        _pnlMonitorLogs.Controls.Add(_lstLog);
+        _pnlMonitorLogs.Dock = DockStyle.Fill;
+        _pnlMonitorLogs.Location = new Point(0, 284);
+        _pnlMonitorLogs.Name = "_pnlMonitorLogs";
+        _pnlMonitorLogs.Size = new Size(1533, 405);
+        _pnlMonitorLogs.TabIndex = 13;
         // 
-        // _dotConn
+        // _lstLog
         // 
-        _dotConn.Location = new Point(123, 21);
-        _dotConn.Margin = new Padding(3, 4, 3, 4);
-        _dotConn.Name = "_dotConn";
-        _dotConn.Size = new Size(11, 13);
-        _dotConn.TabIndex = 1;
+        _lstLog.Dock = DockStyle.Fill;
+        _lstLog.DrawMode = DrawMode.OwnerDrawFixed;
+        _lstLog.Font = new Font("Courier New", 9F);
+        _lstLog.IntegralHeight = false;
+        _lstLog.ItemHeight = 15;
+        _lstLog.Location = new Point(0, 0);
+        _lstLog.Margin = new Padding(3, 4, 3, 4);
+        _lstLog.Name = "_lstLog";
+        _lstLog.Size = new Size(1533, 405);
+        _lstLog.TabIndex = 10;
+        _lstLog.DrawItem += LstLog_DrawItem;
         // 
-        // _btnConn
+        // _pnlMonitorChannels
         // 
-        _btnConn.FlatAppearance.BorderSize = 0;
-        _btnConn.FlatStyle = FlatStyle.Flat;
-        _btnConn.Font = new Font("Segoe UI", 12F);
-        _btnConn.Location = new Point(142, 11);
-        _btnConn.Margin = new Padding(3, 4, 3, 4);
-        _btnConn.Name = "_btnConn";
-        _btnConn.Size = new Size(147, 37);
-        _btnConn.TabIndex = 2;
-        _btnConn.Text = "Подключить";
-        _btnConn.UseVisualStyleBackColor = false;
-        _btnConn.Click += BtnMonConn_Click;
+        _pnlMonitorChannels.Controls.Add(_tlpMonitorChannels);
+        _pnlMonitorChannels.Dock = DockStyle.Top;
+        _pnlMonitorChannels.Location = new Point(0, 101);
+        _pnlMonitorChannels.Name = "_pnlMonitorChannels";
+        _pnlMonitorChannels.Size = new Size(1533, 183);
+        _pnlMonitorChannels.TabIndex = 12;
         // 
-        // _btnPortRefresh
+        // _tlpMonitorChannels
         // 
-        _btnPortRefresh.FlatStyle = FlatStyle.Flat;
-        _btnPortRefresh.Font = new Font("Segoe UI", 11F);
-        _btnPortRefresh.Location = new Point(322, 11);
-        _btnPortRefresh.Margin = new Padding(3, 4, 3, 4);
-        _btnPortRefresh.Name = "_btnPortRefresh";
-        _btnPortRefresh.Size = new Size(34, 37);
-        _btnPortRefresh.TabIndex = 3;
-        _btnPortRefresh.Text = "↺";
-        _btnPortRefresh.UseVisualStyleBackColor = false;
-        _btnPortRefresh.Click += BtnPortRefresh_Click;
-        // 
-        // _lblConn
-        // 
-        _lblConn.AutoSize = true;
-        _lblConn.Font = new Font("Segoe UI", 12F);
-        _lblConn.Location = new Point(461, 19);
-        _lblConn.Name = "_lblConn";
-        _lblConn.Size = new Size(176, 28);
-        _lblConn.TabIndex = 4;
-        _lblConn.Text = "Нет подключения";
-        // 
-        // _lblRate
-        // 
-        _lblRate.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        _lblRate.AutoSize = true;
-        _lblRate.Font = new Font("Segoe UI", 12F);
-        _lblRate.Location = new Point(1023, 19);
-        _lblRate.Name = "_lblRate";
-        _lblRate.Size = new Size(80, 28);
-        _lblRate.TabIndex = 5;
-        _lblRate.Text = "— фр/с";
+        _tlpMonitorChannels.ColumnCount = 2;
+        _tlpMonitorChannels.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _tlpMonitorChannels.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _tlpMonitorChannels.Controls.Add(_pnlCh0, 0, 0);
+        _tlpMonitorChannels.Controls.Add(_pnlCh1, 1, 0);
+        _tlpMonitorChannels.Dock = DockStyle.Fill;
+        _tlpMonitorChannels.Location = new Point(0, 0);
+        _tlpMonitorChannels.Name = "_tlpMonitorChannels";
+        _tlpMonitorChannels.RowCount = 1;
+        _tlpMonitorChannels.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _tlpMonitorChannels.Size = new Size(1533, 183);
+        _tlpMonitorChannels.TabIndex = 0;
         // 
         // _pnlCh0
         // 
-        _pnlCh0.Controls.Add(_lblCh0Cap);
         _pnlCh0.Controls.Add(_lblCh0);
-        _pnlCh0.Location = new Point(11, 64);
+        _pnlCh0.Controls.Add(_lblCh0Cap);
+        _pnlCh0.Dock = DockStyle.Fill;
+        _pnlCh0.Location = new Point(3, 4);
         _pnlCh0.Margin = new Padding(3, 4, 3, 4);
         _pnlCh0.Name = "_pnlCh0";
-        _pnlCh0.Size = new Size(389, 192);
+        _pnlCh0.Size = new Size(760, 175);
         _pnlCh0.TabIndex = 6;
+        // 
+        // _lblCh0
+        // 
+        _lblCh0.Dock = DockStyle.Fill;
+        _lblCh0.Font = new Font("Courier New", 48F, FontStyle.Bold);
+        _lblCh0.Location = new Point(0, 28);
+        _lblCh0.Name = "_lblCh0";
+        _lblCh0.Size = new Size(760, 147);
+        _lblCh0.TabIndex = 1;
+        _lblCh0.Text = "—";
+        _lblCh0.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _lblCh0Cap
         // 
         _lblCh0Cap.AutoSize = true;
+        _lblCh0Cap.Dock = DockStyle.Top;
         _lblCh0Cap.Font = new Font("Segoe UI", 12F);
-        _lblCh0Cap.Location = new Point(9, 8);
+        _lblCh0Cap.Location = new Point(0, 0);
         _lblCh0Cap.Name = "_lblCh0Cap";
         _lblCh0Cap.Size = new Size(225, 28);
         _lblCh0Cap.TabIndex = 0;
         _lblCh0Cap.Text = "Канал: Основной (CH0)";
-        // 
-        // _lblCh0
-        // 
-        _lblCh0.Font = new Font("Courier New", 48F, FontStyle.Bold);
-        _lblCh0.Location = new Point(9, 37);
-        _lblCh0.Name = "_lblCh0";
-        _lblCh0.Size = new Size(370, 120);
-        _lblCh0.TabIndex = 1;
-        _lblCh0.Text = "—";
-        _lblCh0.TextAlign = ContentAlignment.MiddleRight;
+        _lblCh0Cap.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _pnlCh1
         // 
-        _pnlCh1.Controls.Add(_lblCh1Cap);
         _pnlCh1.Controls.Add(_lblCh1);
-        _pnlCh1.Location = new Point(411, 64);
+        _pnlCh1.Controls.Add(_lblCh1Cap);
+        _pnlCh1.Dock = DockStyle.Fill;
+        _pnlCh1.Location = new Point(769, 4);
         _pnlCh1.Margin = new Padding(3, 4, 3, 4);
         _pnlCh1.Name = "_pnlCh1";
-        _pnlCh1.Size = new Size(389, 192);
+        _pnlCh1.Size = new Size(761, 175);
         _pnlCh1.TabIndex = 7;
+        // 
+        // _lblCh1
+        // 
+        _lblCh1.Dock = DockStyle.Fill;
+        _lblCh1.Font = new Font("Courier New", 48F, FontStyle.Bold);
+        _lblCh1.Location = new Point(0, 28);
+        _lblCh1.Name = "_lblCh1";
+        _lblCh1.Size = new Size(761, 147);
+        _lblCh1.TabIndex = 1;
+        _lblCh1.Text = "—";
+        _lblCh1.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _lblCh1Cap
         // 
         _lblCh1Cap.AutoSize = true;
+        _lblCh1Cap.Dock = DockStyle.Top;
         _lblCh1Cap.Font = new Font("Segoe UI", 12F);
-        _lblCh1Cap.Location = new Point(9, 8);
+        _lblCh1Cap.Location = new Point(0, 0);
         _lblCh1Cap.Name = "_lblCh1Cap";
         _lblCh1Cap.Size = new Size(231, 28);
         _lblCh1Cap.TabIndex = 0;
         _lblCh1Cap.Text = "Канал: Резервный (CH1)";
+        _lblCh1Cap.TextAlign = ContentAlignment.MiddleLeft;
         // 
-        // _lblCh1
+        // _pnlMonitorTop
         // 
-        _lblCh1.Font = new Font("Courier New", 48F, FontStyle.Bold);
-        _lblCh1.Location = new Point(9, 37);
-        _lblCh1.Name = "_lblCh1";
-        _lblCh1.Size = new Size(370, 120);
-        _lblCh1.TabIndex = 1;
-        _lblCh1.Text = "—";
-        _lblCh1.TextAlign = ContentAlignment.MiddleRight;
+        _pnlMonitorTop.Controls.Add(_tlpMonitorTop);
+        _pnlMonitorTop.Dock = DockStyle.Top;
+        _pnlMonitorTop.Location = new Point(0, 0);
+        _pnlMonitorTop.Name = "_pnlMonitorTop";
+        _pnlMonitorTop.Size = new Size(1533, 101);
+        _pnlMonitorTop.TabIndex = 11;
+        // 
+        // _tlpMonitorTop
+        // 
+        _tlpMonitorTop.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        _tlpMonitorTop.ColumnCount = 6;
+        _tlpMonitorTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
+        _tlpMonitorTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6.316591F));
+        _tlpMonitorTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.7747335F));
+        _tlpMonitorTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.1978693F));
+        _tlpMonitorTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.5274143F));
+        _tlpMonitorTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.6710186F));
+        _tlpMonitorTop.Controls.Add(_cmbPort, 0, 0);
+        _tlpMonitorTop.Controls.Add(_lblRate, 0, 1);
+        _tlpMonitorTop.Controls.Add(_lblConn, 4, 0);
+        _tlpMonitorTop.Controls.Add(_btnClearLog, 5, 0);
+        _tlpMonitorTop.Controls.Add(_chkLog, 5, 1);
+        _tlpMonitorTop.Controls.Add(_btnPortRefresh, 3, 0);
+        _tlpMonitorTop.Controls.Add(_btnConn, 2, 0);
+        _tlpMonitorTop.Controls.Add(_dotConn, 1, 0);
+        _tlpMonitorTop.Dock = DockStyle.Fill;
+        _tlpMonitorTop.Location = new Point(0, 0);
+        _tlpMonitorTop.Name = "_tlpMonitorTop";
+        _tlpMonitorTop.RowCount = 2;
+        _tlpMonitorTop.RowStyles.Add(new RowStyle(SizeType.Percent, 52F));
+        _tlpMonitorTop.RowStyles.Add(new RowStyle(SizeType.Percent, 48F));
+        _tlpMonitorTop.Size = new Size(1533, 101);
+        _tlpMonitorTop.TabIndex = 0;
+        // 
+        // _cmbPort
+        // 
+        _cmbPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _cmbPort.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbPort.Font = new Font("Segoe UI", 10F);
+        _cmbPort.Location = new Point(6, 8);
+        _cmbPort.Margin = new Padding(5, 0, 5, 4);
+        _cmbPort.Name = "_cmbPort";
+        _cmbPort.Size = new Size(243, 31);
+        _cmbPort.TabIndex = 0;
+        // 
+        // _lblRate
+        // 
+        _lblRate.Dock = DockStyle.Fill;
+        _lblRate.Font = new Font("Segoe UI", 12F);
+        _lblRate.Location = new Point(4, 52);
+        _lblRate.Name = "_lblRate";
+        _lblRate.Size = new Size(247, 48);
+        _lblRate.TabIndex = 5;
+        _lblRate.Text = "— фр/с";
+        _lblRate.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // _lblConn
+        // 
+        _lblConn.Dock = DockStyle.Fill;
+        _lblConn.Font = new Font("Segoe UI", 12F);
+        _lblConn.Location = new Point(721, 1);
+        _lblConn.Name = "_lblConn";
+        _lblConn.Size = new Size(474, 50);
+        _lblConn.TabIndex = 4;
+        _lblConn.Text = "Нет подключения";
+        _lblConn.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // _btnClearLog
+        // 
+        _btnClearLog.Dock = DockStyle.Fill;
+        _btnClearLog.FlatStyle = FlatStyle.Flat;
+        _btnClearLog.Font = new Font("Segoe UI", 12F);
+        _btnClearLog.Location = new Point(1209, 5);
+        _btnClearLog.Margin = new Padding(10, 4, 10, 4);
+        _btnClearLog.Name = "_btnClearLog";
+        _btnClearLog.Size = new Size(313, 42);
+        _btnClearLog.TabIndex = 9;
+        _btnClearLog.Text = "Очистить";
+        _btnClearLog.UseVisualStyleBackColor = false;
+        _btnClearLog.Click += BtnClearLog_Click;
         // 
         // _chkLog
         // 
         _chkLog.AutoSize = true;
         _chkLog.Checked = true;
         _chkLog.CheckState = CheckState.Checked;
+        _chkLog.Dock = DockStyle.Fill;
         _chkLog.Font = new Font("Segoe UI", 12F);
-        _chkLog.Location = new Point(11, 264);
-        _chkLog.Margin = new Padding(3, 4, 3, 4);
+        _chkLog.Location = new Point(1219, 56);
+        _chkLog.Margin = new Padding(20, 4, 20, 4);
         _chkLog.Name = "_chkLog";
-        _chkLog.Size = new Size(145, 32);
+        _chkLog.Size = new Size(293, 40);
         _chkLog.TabIndex = 8;
         _chkLog.Text = "Лог активен";
         // 
-        // _btnClearLog
+        // _btnPortRefresh
         // 
-        _btnClearLog.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        _btnClearLog.FlatStyle = FlatStyle.Flat;
-        _btnClearLog.Font = new Font("Segoe UI", 12F);
-        _btnClearLog.Location = new Point(1066, 264);
-        _btnClearLog.Margin = new Padding(3, 4, 3, 4);
-        _btnClearLog.Name = "_btnClearLog";
-        _btnClearLog.Size = new Size(115, 43);
-        _btnClearLog.TabIndex = 9;
-        _btnClearLog.Text = "Очистить";
-        _btnClearLog.UseVisualStyleBackColor = false;
-        _btnClearLog.Click += BtnClearLog_Click;
+        _btnPortRefresh.Dock = DockStyle.Fill;
+        _btnPortRefresh.FlatStyle = FlatStyle.Flat;
+        _btnPortRefresh.Font = new Font("Segoe UI", 11F);
+        _btnPortRefresh.Location = new Point(572, 5);
+        _btnPortRefresh.Margin = new Padding(10, 4, 10, 4);
+        _btnPortRefresh.Name = "_btnPortRefresh";
+        _btnPortRefresh.Size = new Size(135, 42);
+        _btnPortRefresh.TabIndex = 3;
+        _btnPortRefresh.Text = "↺";
+        _btnPortRefresh.UseVisualStyleBackColor = false;
+        _btnPortRefresh.Click += BtnPortRefresh_Click;
         // 
-        // _lstLog
-        //
-        _lstLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        _lstLog.DrawMode = DrawMode.OwnerDrawFixed;
-        _lstLog.Font = new Font("Courier New", 9F);
-        _lstLog.IntegralHeight = false;
-        _lstLog.ItemHeight = 15;
-        _lstLog.Location = new Point(11, 319);
-        _lstLog.Margin = new Padding(3, 4, 3, 4);
-        _lstLog.Name = "_lstLog";
-        _lstLog.Size = new Size(1171, 353);
-        _lstLog.TabIndex = 10;
-        _lstLog.DrawItem += LstLog_DrawItem;
+        // _btnConn
+        // 
+        _btnConn.Dock = DockStyle.Fill;
+        _btnConn.FlatAppearance.BorderSize = 0;
+        _btnConn.FlatStyle = FlatStyle.Flat;
+        _btnConn.Font = new Font("Segoe UI", 12F);
+        _btnConn.Location = new Point(362, 5);
+        _btnConn.Margin = new Padding(10, 4, 10, 4);
+        _btnConn.Name = "_btnConn";
+        _btnConn.Size = new Size(189, 42);
+        _btnConn.TabIndex = 2;
+        _btnConn.Text = "Подключить";
+        _btnConn.UseVisualStyleBackColor = false;
+        _btnConn.Click += BtnMonConn_Click;
+        // 
+        // _dotConn
+        // 
+        _dotConn.Dock = DockStyle.Fill;
+        _dotConn.Location = new Point(265, 11);
+        _dotConn.Margin = new Padding(10);
+        _dotConn.Name = "_dotConn";
+        _dotConn.Size = new Size(76, 30);
+        _dotConn.TabIndex = 1;
         // 
         // _tabDynamicService
         // 
@@ -2138,11 +2223,16 @@ partial class ServiceForm
         _tabChannel.ResumeLayout(false);
         _tabChannel.PerformLayout();
         _tabMonitor.ResumeLayout(false);
-        _tabMonitor.PerformLayout();
+        _pnlMonitorLogs.ResumeLayout(false);
+        _pnlMonitorChannels.ResumeLayout(false);
+        _tlpMonitorChannels.ResumeLayout(false);
         _pnlCh0.ResumeLayout(false);
         _pnlCh0.PerformLayout();
         _pnlCh1.ResumeLayout(false);
         _pnlCh1.PerformLayout();
+        _pnlMonitorTop.ResumeLayout(false);
+        _tlpMonitorTop.ResumeLayout(false);
+        _tlpMonitorTop.PerformLayout();
         _tabDynamicService.ResumeLayout(false);
         _pnlLogs.ResumeLayout(false);
         _pnlChannels.ResumeLayout(false);
@@ -2210,12 +2300,16 @@ partial class ServiceForm
     private RadioButton _rbBackup;
     private Label       _lblChannelNote;
 
+    private Panel       _pnlMonitorTop;
+    private TableLayoutPanel _tlpMonitorTop;
     private ComboBox    _cmbPort;
     private Panel       _dotConn;
     private Button      _btnConn;
     private Button      _btnPortRefresh;
     private Label       _lblConn;
     private Label       _lblRate;
+    private Panel       _pnlMonitorChannels;
+    private TableLayoutPanel _tlpMonitorChannels;
     private Panel       _pnlCh0;
     private Label       _lblCh0Cap;
     private Label       _lblCh0;
@@ -2224,6 +2318,7 @@ partial class ServiceForm
     private Label       _lblCh1;
     private CheckBox    _chkLog;
     private Button      _btnClearLog;
+    private Panel       _pnlMonitorLogs;
     private ListBox      _lstLog;
 
     private ComboBox    _cmbStaticCalibPort;
