@@ -1025,7 +1025,7 @@ partial class ServiceForm
         _btnLsq.BackColor = SystemColors.ActiveBorder;
         _btnLsq.FlatAppearance.BorderSize = 0;
         _btnLsq.FlatStyle = FlatStyle.Flat;
-        _btnLsq.Font = new Font("Segoe UI", 10F);
+        _btnLsq.Font = new Font("Segoe UI", 12F);
         _btnLsq.Location = new Point(254, 117);
         _btnLsq.Margin = new Padding(3, 4, 3, 4);
         _btnLsq.Name = "_btnLsq";
@@ -1194,14 +1194,14 @@ partial class ServiceForm
         // 
         // _btnCapture
         // 
+        _btnCapture.BackColor = Color.Gainsboro;
         _btnCapture.Dock = DockStyle.Fill;
         _btnCapture.FlatAppearance.BorderSize = 0;
         _btnCapture.FlatStyle = FlatStyle.Flat;
         _btnCapture.Font = new Font("Segoe UI", 12F);
-        _btnCapture.Location = new Point(414, 4);
-        _btnCapture.Margin = new Padding(8, 3, 8, 0);
+        _btnCapture.Location = new Point(409, 4);
         _btnCapture.Name = "_btnCapture";
-        _btnCapture.Size = new Size(154, 44);
+        _btnCapture.Size = new Size(164, 41);
         _btnCapture.TabIndex = 4;
         _btnCapture.Text = "Захватить";
         _btnCapture.UseVisualStyleBackColor = false;

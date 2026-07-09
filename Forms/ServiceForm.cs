@@ -185,7 +185,7 @@ public partial class ServiceForm : Form
         _btnStaticCalibConn.Font = ServiceUiFonts.Body;
         _btnStaticCalibConn.BackColor = ServiceUiColors.PrimaryAction;
         _btnStaticCalibConn.ForeColor = ServiceUiColors.TextOnDark;
-        _btnStaticCalibPortRefresh.Font = ServiceUiFonts.SubHeader;
+        _btnStaticCalibPortRefresh.Font = ServiceUiFonts.Body;
         _btnStaticCalibPortRefresh.BackColor = ServiceUiColors.NeutralAction;
         _btnStaticCalibPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
         _lblStaticCalibConn.Font = ServiceUiFonts.Body;
