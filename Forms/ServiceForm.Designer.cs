@@ -948,11 +948,11 @@ partial class ServiceForm
         _lblKEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _txtK
-        // 
-        _txtK.Dock = DockStyle.Fill;
+        //
+        _txtK.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtK.Font = new Font("Courier New", 10F);
         _txtK.Location = new Point(254, 5);
-        _txtK.Margin = new Padding(3, 4, 3, 4);
+        _txtK.Margin = new Padding(5, 0, 5, 0);
         _txtK.Name = "_txtK";
         _txtK.Size = new Size(243, 26);
         _txtK.TabIndex = 9;
@@ -971,10 +971,11 @@ partial class ServiceForm
         _lblBEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _txtB
-        // 
+        //
+        _txtB.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtB.Font = new Font("Courier New", 10F);
         _txtB.Location = new Point(254, 61);
-        _txtB.Margin = new Padding(3, 4, 3, 4);
+        _txtB.Margin = new Padding(5, 0, 5, 0);
         _txtB.Name = "_txtB";
         _txtB.Size = new Size(148, 26);
         _txtB.TabIndex = 11;
