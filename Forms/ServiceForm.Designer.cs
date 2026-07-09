@@ -1132,11 +1132,11 @@ partial class ServiceForm
         tlpCalibSHead.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
         tlpCalibSHead.ColumnCount = 6;
         tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.1568632F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.3137255F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.198699F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.3120728F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.4882317F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.5383453F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.6013069F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.5751638F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.8431377F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.1503277F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.5424843F));
         tlpCalibSHead.Controls.Add(_lblStaticCalibConn, 1, 0);
         tlpCalibSHead.Controls.Add(_cmbStaticCalibPort, 0, 0);
         tlpCalibSHead.Controls.Add(_btnStaticCalibConn, 0, 1);
@@ -1164,7 +1164,7 @@ partial class ServiceForm
         _lblStaticCalibConn.Font = new Font("Segoe UI", 12F);
         _lblStaticCalibConn.Location = new Point(190, 1);
         _lblStaticCalibConn.Name = "_lblStaticCalibConn";
-        _lblStaticCalibConn.Size = new Size(212, 47);
+        _lblStaticCalibConn.Size = new Size(247, 47);
         _lblStaticCalibConn.TabIndex = 4;
         _lblStaticCalibConn.Text = "Нет подключения";
         _lblStaticCalibConn.TextAlign = ContentAlignment.MiddleCenter;
@@ -1183,6 +1183,7 @@ partial class ServiceForm
         // 
         _btnStaticCalibConn.BackColor = Color.Transparent;
         _btnStaticCalibConn.Dock = DockStyle.Fill;
+        _btnStaticCalibConn.FlatAppearance.BorderColor = Color.Black;
         _btnStaticCalibConn.Font = new Font("Segoe UI", 12F);
         _btnStaticCalibConn.Location = new Point(4, 52);
         _btnStaticCalibConn.Name = "_btnStaticCalibConn";
@@ -1196,12 +1197,12 @@ partial class ServiceForm
         // 
         _btnCapture.BackColor = Color.Gainsboro;
         _btnCapture.Dock = DockStyle.Fill;
-        _btnCapture.FlatAppearance.BorderSize = 0;
         _btnCapture.FlatStyle = FlatStyle.Flat;
         _btnCapture.Font = new Font("Segoe UI", 12F);
-        _btnCapture.Location = new Point(409, 4);
+        _btnCapture.Location = new Point(463, 4);
+        _btnCapture.Margin = new Padding(22, 3, 22, 3);
         _btnCapture.Name = "_btnCapture";
-        _btnCapture.Size = new Size(164, 41);
+        _btnCapture.Size = new Size(178, 41);
         _btnCapture.TabIndex = 4;
         _btnCapture.Text = "Захватить";
         _btnCapture.UseVisualStyleBackColor = false;
@@ -1211,10 +1212,12 @@ partial class ServiceForm
         // 
         _btnStaticCalibPortRefresh.BackColor = Color.Transparent;
         _btnStaticCalibPortRefresh.Dock = DockStyle.Fill;
+        _btnStaticCalibPortRefresh.FlatAppearance.BorderColor = Color.Black;
         _btnStaticCalibPortRefresh.Font = new Font("Segoe UI", 11F);
-        _btnStaticCalibPortRefresh.Location = new Point(190, 52);
+        _btnStaticCalibPortRefresh.Location = new Point(222, 52);
+        _btnStaticCalibPortRefresh.Margin = new Padding(35, 3, 35, 3);
         _btnStaticCalibPortRefresh.Name = "_btnStaticCalibPortRefresh";
-        _btnStaticCalibPortRefresh.Size = new Size(212, 42);
+        _btnStaticCalibPortRefresh.Size = new Size(183, 42);
         _btnStaticCalibPortRefresh.TabIndex = 3;
         _btnStaticCalibPortRefresh.Text = "↺ Обновить";
         _btnStaticCalibPortRefresh.UseVisualStyleBackColor = false;
@@ -1225,7 +1228,7 @@ partial class ServiceForm
         _rbCh0Calib.AutoSize = true;
         _rbCh0Calib.Checked = true;
         _rbCh0Calib.Font = new Font("Segoe UI", 11F);
-        _rbCh0Calib.Location = new Point(585, 53);
+        _rbCh0Calib.Location = new Point(672, 53);
         _rbCh0Calib.Margin = new Padding(8, 4, 3, 4);
         _rbCh0Calib.Name = "_rbCh0Calib";
         _rbCh0Calib.Size = new Size(234, 29);
@@ -1238,7 +1241,7 @@ partial class ServiceForm
         // 
         _rbCh1Calib.AutoSize = true;
         _rbCh1Calib.Font = new Font("Segoe UI", 11F);
-        _rbCh1Calib.Location = new Point(585, 5);
+        _rbCh1Calib.Location = new Point(672, 5);
         _rbCh1Calib.Margin = new Padding(8, 4, 3, 4);
         _rbCh1Calib.Name = "_rbCh1Calib";
         _rbCh1Calib.Size = new Size(241, 29);
@@ -1251,9 +1254,9 @@ partial class ServiceForm
         _lblLiveAdcCap.AutoSize = true;
         _lblLiveAdcCap.Dock = DockStyle.Fill;
         _lblLiveAdcCap.Font = new Font("Segoe UI", 12F);
-        _lblLiveAdcCap.Location = new Point(844, 1);
+        _lblLiveAdcCap.Location = new Point(940, 1);
         _lblLiveAdcCap.Name = "_lblLiveAdcCap";
-        _lblLiveAdcCap.Size = new Size(321, 47);
+        _lblLiveAdcCap.Size = new Size(286, 47);
         _lblLiveAdcCap.TabIndex = 2;
         _lblLiveAdcCap.Text = "Текущий код АЦП";
         _lblLiveAdcCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1265,9 +1268,9 @@ partial class ServiceForm
         _lblStaticCalibMassCap.Dock = DockStyle.Fill;
         _lblStaticCalibMassCap.Font = new Font("Segoe UI", 12F);
         _lblStaticCalibMassCap.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblStaticCalibMassCap.Location = new Point(844, 49);
+        _lblStaticCalibMassCap.Location = new Point(940, 49);
         _lblStaticCalibMassCap.Name = "_lblStaticCalibMassCap";
-        _lblStaticCalibMassCap.Size = new Size(321, 48);
+        _lblStaticCalibMassCap.Size = new Size(286, 48);
         _lblStaticCalibMassCap.TabIndex = 5;
         _lblStaticCalibMassCap.Text = "Текущая масса";
         _lblStaticCalibMassCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1278,9 +1281,9 @@ partial class ServiceForm
         _lblStaticCalibMass.Dock = DockStyle.Fill;
         _lblStaticCalibMass.Font = new Font("Courier New", 13F, FontStyle.Bold);
         _lblStaticCalibMass.ForeColor = Color.FromArgb(192, 0, 192);
-        _lblStaticCalibMass.Location = new Point(1172, 49);
+        _lblStaticCalibMass.Location = new Point(1233, 49);
         _lblStaticCalibMass.Name = "_lblStaticCalibMass";
-        _lblStaticCalibMass.Size = new Size(355, 48);
+        _lblStaticCalibMass.Size = new Size(294, 48);
         _lblStaticCalibMass.TabIndex = 6;
         _lblStaticCalibMass.Text = "—";
         _lblStaticCalibMass.TextAlign = ContentAlignment.MiddleLeft;
@@ -1290,9 +1293,9 @@ partial class ServiceForm
         _lblLiveAdc.AutoSize = true;
         _lblLiveAdc.Dock = DockStyle.Fill;
         _lblLiveAdc.Font = new Font("Courier New", 13F, FontStyle.Bold);
-        _lblLiveAdc.Location = new Point(1172, 1);
+        _lblLiveAdc.Location = new Point(1233, 1);
         _lblLiveAdc.Name = "_lblLiveAdc";
-        _lblLiveAdc.Size = new Size(355, 47);
+        _lblLiveAdc.Size = new Size(294, 47);
         _lblLiveAdc.TabIndex = 3;
         _lblLiveAdc.Text = "—";
         _lblLiveAdc.TextAlign = ContentAlignment.MiddleLeft;
