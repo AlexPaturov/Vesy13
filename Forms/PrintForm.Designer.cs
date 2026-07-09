@@ -95,7 +95,7 @@ partial class PrintForm
         // 
         // _pnlTopRow2
         // 
-        _pnlTopRow2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        _pnlTopRow2.Dock = DockStyle.Top;
         _pnlTopRow2.Controls.Add(tableLayoutPanel2);
         _pnlTopRow2.Location = new Point(0, 51);
         _pnlTopRow2.Name = "_pnlTopRow2";
@@ -172,7 +172,7 @@ partial class PrintForm
         // 
         // _pnlTopRow1
         // 
-        _pnlTopRow1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        _pnlTopRow1.Dock = DockStyle.Top;
         _pnlTopRow1.Controls.Add(tableLayoutPanel1);
         _pnlTopRow1.Location = new Point(0, 0);
         _pnlTopRow1.Name = "_pnlTopRow1";
