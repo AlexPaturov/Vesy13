@@ -7,5 +7,6 @@ public class CalibPoint
     public int     AdcCode  { get; set; }
     public decimal Mass     { get; set; }
     public bool    IsActive { get; set; } = true;
+    public DateTime  CreatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
 }

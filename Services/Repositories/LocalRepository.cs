@@ -29,7 +29,8 @@ public class LocalRepository
             await conn.OpenAsync();
 
             var pts = await conn.QueryAsync<CalibPoint>(@"
-                SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive, deleted_at AS DeletedAt
+                SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive,
+                       created_at AS CreatedAt, deleted_at AS DeletedAt
                 FROM calibration_points
                 ORDER BY channel, adc_code");
             CalibPoints = pts.ToList().AsReadOnly();
@@ -57,6 +58,7 @@ public class LocalRepository
                 adc_code AS AdcCode,
                 CAST(mass AS float8) AS Mass,
                 is_active AS IsActive,
+                created_at AS CreatedAt,
                 deleted_at AS DeletedAt
             FROM calibration_points
             WHERE channel = @channel
@@ -95,8 +97,8 @@ public class LocalRepository
             else
             {
                 await conn.ExecuteAsync(@"
-                    INSERT INTO calibration_points (channel, adc_code, mass, is_active, deleted_at)
-                    VALUES (@channel, @AdcCode, @Mass, @IsActive, @DeletedAt)",
+                    INSERT INTO calibration_points (channel, adc_code, mass, is_active, created_at, deleted_at)
+                    VALUES (@channel, @AdcCode, @Mass, @IsActive, NOW(), @DeletedAt)",
                     new { channel, p.AdcCode, p.Mass, p.IsActive, DeletedAt = deletedAt }, tx);
             }
         }

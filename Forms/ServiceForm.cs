@@ -15,7 +15,8 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class ServiceForm : Form
 {
-    private SimA04ReaderStatic _sim = null!;
+    private SimA04ReaderStatic _staticServiceSim = null!;
+    private SimA04ReaderStatic _staticCalibSim = null!;
     private SimA04ReaderDynamic _dynamicServiceSim = null!;
     private SimA04ReaderDynamic _dynamicCalibSim = null!;
     private LocalRepository _calib = null!;
@@ -84,6 +85,8 @@ public partial class ServiceForm : Form
     private bool _dynamicCalibTabActive;
     private int _lastCh0;
     private int _lastCh1;
+    private int _lastStaticCalibCh0;
+    private int _lastStaticCalibCh1;
     private int _lastDynCh0;
     private int _lastDynCh1;
 
@@ -96,7 +99,8 @@ public partial class ServiceForm : Form
 
     public ServiceForm(SimA04ReaderStatic adc, SimA04ReaderDynamic dynamicAdc, LocalRepository calib, SettingsService settings)
     {
-        _sim = adc;
+        _staticServiceSim = adc;
+        _staticCalibSim = new SimA04ReaderStatic { Channel = adc.Channel };
         _dynamicServiceSim = dynamicAdc;
         _dynamicCalibSim = new SimA04ReaderDynamic { Channel = dynamicAdc.Channel };
         _calib = calib;
@@ -178,7 +182,6 @@ public partial class ServiceForm : Form
         _cmbStaticCalibPort.Font = ServiceUiFonts.Medium;
         _cmbStaticCalibPort.BackColor = ServiceUiColors.InputBack;
         _cmbStaticCalibPort.ForeColor = ServiceUiColors.InputFore;
-        _dotStaticCalibConn.BackColor = ServiceUiColors.Disconnected;
         _btnStaticCalibConn.Font = ServiceUiFonts.Body;
         _btnStaticCalibConn.BackColor = ServiceUiColors.PrimaryAction;
         _btnStaticCalibConn.ForeColor = ServiceUiColors.TextOnDark;
@@ -195,6 +198,16 @@ public partial class ServiceForm : Form
         _lblLiveAdcCap.ForeColor = ServiceUiColors.Disconnected;
         _lblLiveAdc.Font = ServiceUiFonts.MonoLiveAdc;
         _lblLiveAdc.ForeColor = ServiceUiColors.Info;
+        if (_lblStaticCalibMassCap is not null)
+        {
+            _lblStaticCalibMassCap.Font = ServiceUiFonts.Body;
+            _lblStaticCalibMassCap.ForeColor = ServiceUiColors.Disconnected;
+        }
+        if (_lblStaticCalibMass is not null)
+        {
+            _lblStaticCalibMass.Font = ServiceUiFonts.MonoLiveAdc;
+            _lblStaticCalibMass.ForeColor = ServiceUiColors.Info;
+        }
         _btnCapture.Font = ServiceUiFonts.Body;
         _btnCapture.BackColor = ServiceUiColors.NeutralAction;
         _btnCapture.ForeColor = ServiceUiColors.TextPrimary;
@@ -373,28 +386,32 @@ public partial class ServiceForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
-        if (DesignMode || _sim is null) return;
+        if (DesignMode || _staticServiceSim is null) return;
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
-        _sim.ConnectionTimeoutMs = 1000;
+        _staticServiceSim.ConnectionTimeoutMs = 1000;
+        _staticCalibSim.ConnectionTimeoutMs = 1000;
         _dynamicServiceSim.ConnectionTimeoutMs = 5000;
         _dynamicCalibSim.ConnectionTimeoutMs = 5000;
         _tabs.SelectedIndexChanged += Tabs_SelectedIndexChanged;
-        _sim.RawFrameReceived += OnRawFrame;
-        _sim.ConnectionChanged += OnConnectionChanged;
+        _staticServiceSim.RawFrameReceived += OnStaticServiceRawFrame;
+        _staticServiceSim.ConnectionChanged += OnStaticServiceConnectionChanged;
+        _staticCalibSim.RawFrameReceived += OnStaticCalibRawFrame;
+        _staticCalibSim.ConnectionChanged += OnStaticCalibConnectionChanged;
         _dynamicServiceSim.ConnectionChanged += OnDynamicServiceConnectionChanged;
         _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _rateTimer.Start();
-        _rbMain.Checked = _sim.Channel == ActiveChannel.Main;
-        _rbBackup.Checked = _sim.Channel == ActiveChannel.Backup;
+        _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
+        _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.Backup;
         RefreshPorts();
         RefreshDynamicPorts();
         LoadSettingsUi();
         LoadCalibPoints();
         LoadCalibDynamic();
         SetAdminTabs(false);
-        UpdateMonitorConn(_sim.IsConnected);
+        UpdateStaticServiceMonitorConn(_staticServiceSim.IsConnected);
+        UpdateStaticCalibMonitorConn(_staticCalibSim.IsConnected);
         UpdateDynamicServiceMonitorConn(_dynamicServiceSim.IsConnected);
         UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);
         UpdateDynamicDataSubscriptions();
@@ -402,13 +419,19 @@ public partial class ServiceForm : Form
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        if (!DesignMode && _sim is not null)
+        if (!DesignMode && _staticServiceSim is not null)
         {
             _tabs.SelectedIndexChanged -= Tabs_SelectedIndexChanged;
-            _sim.RawFrameReceived -= OnRawFrame;
-            _sim.ConnectionChanged -= OnConnectionChanged;
-            if (_sim.IsPortOpen)
-                _sim.Close();
+            _staticServiceSim.RawFrameReceived -= OnStaticServiceRawFrame;
+            _staticServiceSim.ConnectionChanged -= OnStaticServiceConnectionChanged;
+            if (_staticServiceSim.IsPortOpen)
+                _staticServiceSim.Close();
+
+            _staticCalibSim.RawFrameReceived -= OnStaticCalibRawFrame;
+            _staticCalibSim.ConnectionChanged -= OnStaticCalibConnectionChanged;
+            if (_staticCalibSim.IsPortOpen)
+                _staticCalibSim.Close();
+            _staticCalibSim.Dispose();
 
             SetDynamicServiceDataSubscription(false);
             SetDynamicCalibDataSubscription(false);
@@ -447,7 +470,7 @@ public partial class ServiceForm : Form
     }
     private void BtnCapture_Click(object? sender, EventArgs e)
     {
-        int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
+        int code = _calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1;
         if (code == 0) return;
         int row = _dgvCalib.Rows.Add();
         _dgvCalib.Rows[row].Cells[1].Value = code;
@@ -525,13 +548,16 @@ public partial class ServiceForm : Form
 
     private void SetActiveChannel(ActiveChannel channel)
     {
-        if (_sim is null) return;
-        if (_sim.Channel == channel &&
+        if (_staticServiceSim is null) return;
+        if (_staticServiceSim.Channel == channel &&
+            (_staticCalibSim is null || _staticCalibSim.Channel == channel) &&
             (_dynamicServiceSim is null || _dynamicServiceSim.Channel == channel) &&
             (_dynamicCalibSim is null || _dynamicCalibSim.Channel == channel)) return;
 
-        ActiveChannel old = _sim.Channel;
-        _sim.Channel = channel;
+        ActiveChannel old = _staticServiceSim.Channel;
+        _staticServiceSim.Channel = channel;
+        if (_staticCalibSim is not null)
+            _staticCalibSim.Channel = channel;
         if (_dynamicServiceSim is not null)
             _dynamicServiceSim.Channel = channel;
         if (_dynamicCalibSim is not null)
@@ -642,10 +668,10 @@ public partial class ServiceForm : Form
 
     private void RefreshPorts()
     {
-        if (_sim is null) return;
+        if (_staticServiceSim is null || _staticCalibSim is null) return;
         var ports = SerialPort.GetPortNames();
-        FillStaticPortCombo(_cmbPort, ports);
-        FillStaticPortCombo(_cmbStaticCalibPort, ports);
+        FillStaticPortCombo(_cmbPort, ports, _staticServiceSim.PortName);
+        FillStaticPortCombo(_cmbStaticCalibPort, ports, _staticCalibSim.PortName);
         _btnConn.Enabled = ports.Length > 0;
 
         if (_btnStaticCalibConn is not null)
@@ -664,7 +690,7 @@ public partial class ServiceForm : Form
         SelectComboValue(_cmbSettPort, _settings.Current.AdcPortName);
     }
 
-    private void FillStaticPortCombo(ComboBox? combo, string[] ports)
+    private static void FillStaticPortCombo(ComboBox? combo, string[] ports, string fallbackPort)
     {
         if (combo is null) return;
         string? selected = combo.SelectedItem as string;
@@ -672,26 +698,26 @@ public partial class ServiceForm : Form
         if (ports.Length == 0) return;
 
         combo.Items.AddRange(ports);
-        int idx = Array.IndexOf(ports, selected ?? _sim.PortName);
+        int idx = Array.IndexOf(ports, selected ?? fallbackPort);
         combo.SelectedIndex = idx >= 0 ? idx : 0;
     }
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
     {
-        ToggleStaticConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", ServiceUiColors.Error));
+        ToggleStaticServiceConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", ServiceUiColors.Error));
     }
 
     private void BtnStaticCalibConn_Click(object? sender, EventArgs e)
     {
-        ToggleStaticConnection(_cmbStaticCalibPort.SelectedItem as string,
+        ToggleStaticCalibConnection(_cmbStaticCalibPort.SelectedItem as string,
             ex => MessageBox.Show($"Не удалось подключить АЦП статики.\n{ex.Message}", "АЦП статики", MessageBoxButtons.OK, MessageBoxIcon.Error));
     }
 
-    private void ToggleStaticConnection(string? selectedPort, Action<Exception> onError)
+    private void ToggleStaticServiceConnection(string? selectedPort, Action<Exception> onError)
     {
-        if (_sim.IsPortOpen)
+        if (_staticServiceSim.IsPortOpen)
         {
-            CloseStaticConnection();
+            CloseStaticServiceConnection();
             return;
         }
 
@@ -699,15 +725,41 @@ public partial class ServiceForm : Form
 
         try
         {
+            CloseStaticCalibConnection();
             CloseDynamicConnections();
-            _sim.Open(selectedPort);
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04", selectedPort);
-            UpdateMonitorConn(_sim.IsConnected);
+            _staticServiceSim.Open(selectedPort);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
+            UpdateStaticServiceMonitorConn(_staticServiceSim.IsConnected);
         }
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04", selectedPort);
+            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
+        }
+    }
+
+    private void ToggleStaticCalibConnection(string? selectedPort, Action<Exception> onError)
+    {
+        if (_staticCalibSim.IsPortOpen)
+        {
+            CloseStaticCalibConnection();
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(selectedPort)) return;
+
+        try
+        {
+            CloseStaticServiceConnection();
+            CloseDynamicConnections();
+            _staticCalibSim.Open(selectedPort);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04StaticCalib", selectedPort);
+            UpdateStaticCalibMonitorConn(_staticCalibSim.IsConnected);
+        }
+        catch (Exception ex)
+        {
+            onError(ex);
+            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticCalib", selectedPort);
         }
     }
 
@@ -810,7 +862,7 @@ public partial class ServiceForm : Form
         if (string.IsNullOrWhiteSpace(selectedPort)) return;
         try
         {
-            CloseStaticConnection();
+            CloseStaticConnections();
             CloseDynamicCalibConnection();
             _dynamicServiceSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort);
@@ -834,7 +886,7 @@ public partial class ServiceForm : Form
         if (string.IsNullOrWhiteSpace(selectedPort)) return;
         try
         {
-            CloseStaticConnection();
+            CloseStaticConnections();
             CloseDynamicServiceConnection();
             _dynamicCalibSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort);
@@ -847,14 +899,30 @@ public partial class ServiceForm : Form
         }
     }
 
-    private void CloseStaticConnection()
+    private void CloseStaticConnections()
     {
-        if (!_sim.IsPortOpen) return;
+        CloseStaticServiceConnection();
+        CloseStaticCalibConnection();
+    }
 
-        var port = _sim.PortName;
-        _sim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04", port);
-        UpdateMonitorConn(false);
+    private void CloseStaticServiceConnection()
+    {
+        if (!_staticServiceSim.IsPortOpen) return;
+
+        var port = _staticServiceSim.PortName;
+        _staticServiceSim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04StaticService", port);
+        UpdateStaticServiceMonitorConn(false);
+    }
+
+    private void CloseStaticCalibConnection()
+    {
+        if (!_staticCalibSim.IsPortOpen) return;
+
+        var port = _staticCalibSim.PortName;
+        _staticCalibSim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04StaticCalib", port);
+        UpdateStaticCalibMonitorConn(false);
     }
 
     private void CloseDynamicConnections()
@@ -885,30 +953,38 @@ public partial class ServiceForm : Form
 
     private void Tabs_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (DesignMode || _sim is null || _dynamicServiceSim is null || _dynamicCalibSim is null) return;
+        if (DesignMode || _staticServiceSim is null || _staticCalibSim is null || _dynamicServiceSim is null || _dynamicCalibSim is null) return;
         UpdateDynamicDataSubscriptions();
         var tab = _tabs.SelectedTab;
-        if (tab == _tabMonitor || tab == _tabCalibS)
+        if (tab == _tabMonitor)
         {
+            CloseStaticCalibConnection();
+            CloseDynamicConnections();
+            return;
+        }
+
+        if (tab == _tabCalibS)
+        {
+            CloseStaticServiceConnection();
             CloseDynamicConnections();
             return;
         }
 
         if (tab == _tabDynamicService)
         {
-            CloseStaticConnection();
+            CloseStaticConnections();
             CloseDynamicCalibConnection();
             return;
         }
 
         if (tab == _tabCalibD)
         {
-            CloseStaticConnection();
+            CloseStaticConnections();
             CloseDynamicServiceConnection();
             return;
         }
 
-        CloseStaticConnection();
+        CloseStaticConnections();
         CloseDynamicConnections();
     }
 
@@ -1316,43 +1392,65 @@ public partial class ServiceForm : Form
         } while (Interlocked.CompareExchange(ref target, value, current) != current);
     }
 
-    private void UpdateMonitorConn(bool connected)
+    private void UpdateStaticServiceMonitorConn(bool connected)
     {
         _dotConn.BackColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
-        _lblConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : (_sim.IsPortOpen ? $"Порт открыт: {_sim.PortName}, нет ответа АЦП" : "Нет подключения");
+        _lblConn.Text = connected ? $"Подключено: {_staticServiceSim.PortName}  4800/Even/8/1" : (_staticServiceSim.IsPortOpen ? $"Порт открыт: {_staticServiceSim.PortName}, нет ответа АЦП" : "Нет подключения");
         _lblConn.ForeColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
-        _btnConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
-        _btnConn.BackColor = _sim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
-        _cmbPort.Enabled = !_sim.IsPortOpen;
-        SelectComboValue(_cmbPort, _sim.PortName);
-        SelectComboValue(_cmbStaticCalibPort, _sim.PortName);
-        if (_dotStaticCalibConn is not null)
-            _dotStaticCalibConn.BackColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
-        if (_lblStaticCalibConn is not null)
-        {
-            _lblStaticCalibConn.Text = connected ? $"Подключено: {_sim.PortName}  4800/Even/8/1" : (_sim.IsPortOpen ? $"Порт открыт: {_sim.PortName}, нет ответа АЦП" : "Нет подключения");
-            _lblStaticCalibConn.ForeColor = connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected;
-        }
-        if (_btnStaticCalibConn is not null)
-        {
-            _btnStaticCalibConn.Text = _sim.IsPortOpen ? "Отключить" : "Подключить";
-            _btnStaticCalibConn.BackColor = _sim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
-        }
-        if (_cmbStaticCalibPort is not null)
-            _cmbStaticCalibPort.Enabled = !_sim.IsPortOpen;
-        AppendLog(connected ? $"=== Подключено: {_sim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
+        _btnConn.Text = _staticServiceSim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnConn.BackColor = _staticServiceSim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
+        _cmbPort.Enabled = !_staticServiceSim.IsPortOpen;
+        SelectComboValue(_cmbPort, _staticServiceSim.PortName);
+        AppendLog(connected ? $"=== Подключено: {_staticServiceSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===",
             connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected);
     }
 
-    private void OnConnectionChanged(object? sender, bool connected)
+    private void UpdateStaticCalibMonitorConn(bool connected)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnConnectionChanged(sender, connected)); return; }
-        UpdateMonitorConn(connected);
+        if (_btnStaticCalibConn is null || _cmbStaticCalibPort is null) return;
+        _btnStaticCalibConn.Text = _staticCalibSim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnStaticCalibConn.BackColor = _staticCalibSim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
+        _cmbStaticCalibPort.Enabled = !_staticCalibSim.IsPortOpen;
+        SelectComboValue(_cmbStaticCalibPort, _staticCalibSim.PortName);
+        UpdateStaticCalibConnectionLabel();
     }
 
-    private void OnRawFrame(object? sender, byte[] raw)
+    private void UpdateStaticCalibConnectionLabel()
     {
-        if (InvokeRequired) { BeginInvoke(() => OnRawFrame(sender, raw)); return; }
+        if (_lblStaticCalibConn is null || _staticCalibSim is null) return;
+
+        if (_staticCalibSim.IsConnected)
+        {
+            _lblStaticCalibConn.Text = $"Подключено: {_staticCalibSim.PortName}  4800/Even/8/1";
+            _lblStaticCalibConn.ForeColor = ServiceUiColors.PrimaryAction;
+        }
+        else if (_staticCalibSim.IsPortOpen)
+        {
+            _lblStaticCalibConn.Text = $"Порт открыт: {_staticCalibSim.PortName}, нет ответа АЦП";
+            _lblStaticCalibConn.ForeColor = ServiceUiColors.Warning;
+        }
+        else
+        {
+            _lblStaticCalibConn.Text = "Нет подключения";
+            _lblStaticCalibConn.ForeColor = ServiceUiColors.Disconnected;
+        }
+    }
+
+    private void OnStaticServiceConnectionChanged(object? sender, bool connected)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnStaticServiceConnectionChanged(sender, connected)); return; }
+        UpdateStaticServiceMonitorConn(connected);
+    }
+
+    private void OnStaticCalibConnectionChanged(object? sender, bool connected)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnStaticCalibConnectionChanged(sender, connected)); return; }
+        UpdateStaticCalibMonitorConn(connected);
+    }
+
+    private void OnStaticServiceRawFrame(object? sender, byte[] raw)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnStaticServiceRawFrame(sender, raw)); return; }
         var frame = SimA04Frame.Parse(raw);
         _frameCount++;
         if (frame.Valid)
@@ -1363,7 +1461,6 @@ public partial class ServiceForm : Form
             _lblCh1.Text = frame.Ch1.ToString();
             _lblCh0.ForeColor = ServiceUiColors.Info;
             _lblCh1.ForeColor = ServiceUiColors.Info;
-            UpdateLiveAdcLabel();
         }
         else
         {
@@ -1377,6 +1474,16 @@ public partial class ServiceForm : Form
             AppendLog($"{time}  [{bytes}]  CH0={frame.Ch0,5}  CH1={frame.Ch1,5}", ServiceUiColors.LogText);
         else
             AppendLog($"{time}  [{bytes}]  INVALID ({raw.Length} байт)", ServiceUiColors.Warning);
+    }
+
+    private void OnStaticCalibRawFrame(object? sender, byte[] raw)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnStaticCalibRawFrame(sender, raw)); return; }
+        var frame = SimA04Frame.Parse(raw);
+        if (!frame.Valid) return;
+        _lastStaticCalibCh0 = frame.Ch0;
+        _lastStaticCalibCh1 = frame.Ch1;
+        UpdateLiveAdcLabel();
     }
 
     private void AppendLog(string text, Color color)
@@ -1434,6 +1541,8 @@ public partial class ServiceForm : Form
             _dgvCalib.Rows[row].Cells[2].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
             if (p.AdcCode != 0)
                 _dgvCalib.Rows[row].Cells[3].Value = ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
+            _dgvCalib.Rows[row].Cells[4].Value = p.CreatedAt == default ? "" : p.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm");
+            _dgvCalib.Rows[row].Cells[5].Value = p.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "";
             ApplyCalibRowStyle(_dgvCalib.Rows[row]);
         }
     }
@@ -1478,6 +1587,7 @@ public partial class ServiceForm : Form
             point.IsActive = isActive;
             point.DeletedAt = isActive ? null : deletedAt ?? point.DeletedAt ?? DateTime.Now;
         }
+        row.Cells[5].Value = point?.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "";
         ApplyCalibRowStyle(row);
     }
 
@@ -1525,6 +1635,7 @@ public partial class ServiceForm : Form
                 AdcCode = code,
                 Mass = mass,
                 IsActive = active,
+                CreatedAt = existing?.CreatedAt ?? default,
                 DeletedAt = deletedAt,
             });
         }
@@ -1542,9 +1653,26 @@ public partial class ServiceForm : Form
 
     private void UpdateLiveAdcLabel()
     {
-        int code = _calibUseCh0 ? _lastCh0 : _lastCh1;
+        int code = _calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1;
         _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
+        UpdateStaticCalibMassLabel(code);
         UpdateLiveDynamicCalibrationLabels();
+    }
+
+    private void UpdateStaticCalibMassLabel(int code)
+    {
+        if (_lblStaticCalibMass is null) return;
+        if (code == 0)
+        {
+            _lblStaticCalibMass.Text = "—";
+            return;
+        }
+
+        var channel = _calibUseCh0 ? ActiveChannel.Main : ActiveChannel.Backup;
+        double? mass = CalibrationCalculator.Convert(ReadGridPoints(), code, channel);
+        _lblStaticCalibMass.Text = mass is null
+            ? "нет калибровки"
+            : mass.Value.ToString("F5", CultureInfo.InvariantCulture);
     }
 
     // ── Calibration dynamic ─────────────────────────────────────────────────

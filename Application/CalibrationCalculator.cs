@@ -13,7 +13,11 @@ namespace Vesy13.Application;
 /// </summary>
 public static class CalibrationCalculator
 {
-    public static double Convert(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
+    /// <summary>
+    /// Возвращает null, если для канала нет ни одной активной калибровочной точки —
+    /// это отличает «калибровка не задана» от легитимного нулевого результата расчёта.
+    /// </summary>
+    public static double? Convert(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
     {
         int ch = channel == ActiveChannel.Main ? 0 : 1;
         var active = points
@@ -21,7 +25,7 @@ public static class CalibrationCalculator
             .OrderBy(p => p.AdcCode)
             .ToList();
 
-        if (active.Count == 0) return 0;
+        if (active.Count == 0) return null;
         var point = active[0];
 
         foreach (var p in active)

@@ -42,7 +42,7 @@ public partial class StaticWeighingForm : Form
     }
 
     private double ReadRawTonnes(int adcCode) =>
-        CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel);
+        CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel) ?? 0;
 
     private (CalibPoint? Point, int ActiveCount) SelectStaticCalibPoint(int adcCode)
     {

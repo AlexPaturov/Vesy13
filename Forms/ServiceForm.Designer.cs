@@ -75,6 +75,8 @@ partial class ServiceForm
         dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+        dataGridViewTextBoxColumnCalibCreated = new DataGridViewTextBoxColumn();
+        dataGridViewTextBoxColumnCalibDeleted = new DataGridViewTextBoxColumn();
         _btnAddRow = new Button();
         _btnDelRow = new Button();
         _lblKEquals = new Label();
@@ -85,17 +87,18 @@ partial class ServiceForm
         _btnLsq = new Button();
         _btnCalibSave = new Button();
         _pnlCalibSHead = new Panel();
-        _dotStaticCalibConn = new Panel();
+        tlpCalibSHead = new TableLayoutPanel();
+        _lblStaticCalibConn = new Label();
         _cmbStaticCalibPort = new ComboBox();
         _btnStaticCalibConn = new Button();
-        _btnStaticCalibPortRefresh = new Button();
-        _lblStaticCalibConn = new Label();
-        tlpCalibSHead = new TableLayoutPanel();
-        _rbCh1Calib = new RadioButton();
-        _lblLiveAdc = new Label();
-        _lblLiveAdcCap = new Label();
-        _rbCh0Calib = new RadioButton();
         _btnCapture = new Button();
+        _btnStaticCalibPortRefresh = new Button();
+        _rbCh0Calib = new RadioButton();
+        _rbCh1Calib = new RadioButton();
+        _lblLiveAdcCap = new Label();
+        _lblStaticCalibMassCap = new Label();
+        _lblStaticCalibMass = new Label();
+        _lblLiveAdc = new Label();
         _tabCalibD = new TabPage();
         _pnlCalibD = new Panel();
         _pnlCalibDBody = new Panel();
@@ -180,7 +183,6 @@ partial class ServiceForm
         _pnlCalibSBody.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_dgvCalib).BeginInit();
         _pnlCalibSHead.SuspendLayout();
-        _dotStaticCalibConn.SuspendLayout();
         tlpCalibSHead.SuspendLayout();
         _tabCalibD.SuspendLayout();
         _pnlCalibD.SuspendLayout();
@@ -499,15 +501,14 @@ partial class ServiceForm
         // 
         // _lstDynamicLog
         // 
-        _lstDynamicLog.DrawMode = DrawMode.OwnerDrawFixed;
         _lstDynamicLog.Dock = DockStyle.Fill;
+        _lstDynamicLog.DrawMode = DrawMode.OwnerDrawFixed;
         _lstDynamicLog.Font = new Font("Courier New", 9F);
+        _lstDynamicLog.IntegralHeight = false;
+        _lstDynamicLog.ItemHeight = 15;
         _lstDynamicLog.Location = new Point(0, 0);
         _lstDynamicLog.Margin = new Padding(3, 4, 3, 4);
         _lstDynamicLog.Name = "_lstDynamicLog";
-        _lstDynamicLog.ItemHeight = 15;
-        _lstDynamicLog.IntegralHeight = false;
-        _lstDynamicLog.SelectionMode = SelectionMode.One;
         _lstDynamicLog.Size = new Size(1533, 405);
         _lstDynamicLog.TabIndex = 10;
         _lstDynamicLog.DrawItem += LstDynamicLog_DrawItem;
@@ -806,11 +807,11 @@ partial class ServiceForm
         _pnlCalibSBody.Controls.Add(_btnLsq);
         _pnlCalibSBody.Controls.Add(_btnCalibSave);
         _pnlCalibSBody.Dock = DockStyle.Fill;
-        _pnlCalibSBody.Location = new Point(0, 95);
+        _pnlCalibSBody.Location = new Point(0, 100);
         _pnlCalibSBody.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSBody.Name = "_pnlCalibSBody";
         _pnlCalibSBody.Padding = new Padding(18, 16, 18, 16);
-        _pnlCalibSBody.Size = new Size(1533, 594);
+        _pnlCalibSBody.Size = new Size(1533, 589);
         _pnlCalibSBody.TabIndex = 1;
         // 
         // _dgvCalib
@@ -830,7 +831,7 @@ partial class ServiceForm
         _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
         _dgvCalib.ColumnHeadersHeight = 34;
         _dgvCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-        _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumnCalibActive, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3 });
+        _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumnCalibActive, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumnCalibCreated, dataGridViewTextBoxColumnCalibDeleted });
         dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle3.BackColor = SystemColors.Window;
         dataGridViewCellStyle3.Font = new Font("Segoe UI", 12F);
@@ -885,7 +886,23 @@ partial class ServiceForm
         dataGridViewTextBoxColumn3.MinimumWidth = 105;
         dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
         dataGridViewTextBoxColumn3.ReadOnly = true;
-        // 
+        //
+        // dataGridViewTextBoxColumnCalibCreated
+        //
+        dataGridViewTextBoxColumnCalibCreated.FillWeight = 25F;
+        dataGridViewTextBoxColumnCalibCreated.HeaderText = "Добавлена";
+        dataGridViewTextBoxColumnCalibCreated.MinimumWidth = 105;
+        dataGridViewTextBoxColumnCalibCreated.Name = "dataGridViewTextBoxColumnCalibCreated";
+        dataGridViewTextBoxColumnCalibCreated.ReadOnly = true;
+        //
+        // dataGridViewTextBoxColumnCalibDeleted
+        //
+        dataGridViewTextBoxColumnCalibDeleted.FillWeight = 25F;
+        dataGridViewTextBoxColumnCalibDeleted.HeaderText = "Снята";
+        dataGridViewTextBoxColumnCalibDeleted.MinimumWidth = 105;
+        dataGridViewTextBoxColumnCalibDeleted.Name = "dataGridViewTextBoxColumnCalibDeleted";
+        dataGridViewTextBoxColumnCalibDeleted.ReadOnly = true;
+        //
         // _btnAddRow
         // 
         _btnAddRow.FlatStyle = FlatStyle.Flat;
@@ -993,134 +1010,70 @@ partial class ServiceForm
         // _pnlCalibSHead
         // 
         _pnlCalibSHead.BorderStyle = BorderStyle.FixedSingle;
-        _pnlCalibSHead.Controls.Add(_dotStaticCalibConn);
-        _pnlCalibSHead.Controls.Add(_btnStaticCalibConn);
-        _pnlCalibSHead.Controls.Add(_btnStaticCalibPortRefresh);
-        _pnlCalibSHead.Controls.Add(_lblStaticCalibConn);
         _pnlCalibSHead.Controls.Add(tlpCalibSHead);
         _pnlCalibSHead.Dock = DockStyle.Top;
         _pnlCalibSHead.Location = new Point(0, 0);
         _pnlCalibSHead.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSHead.Name = "_pnlCalibSHead";
-        _pnlCalibSHead.Size = new Size(1533, 95);
+        _pnlCalibSHead.Size = new Size(1533, 100);
         _pnlCalibSHead.TabIndex = 0;
         // 
-        // _dotStaticCalibConn
+        // tlpCalibSHead
         // 
-        _dotStaticCalibConn.Controls.Add(_cmbStaticCalibPort);
-        _dotStaticCalibConn.Dock = DockStyle.Left;
-        _dotStaticCalibConn.Location = new Point(0, 0);
-        _dotStaticCalibConn.Name = "_dotStaticCalibConn";
-        _dotStaticCalibConn.Size = new Size(181, 93);
-        _dotStaticCalibConn.TabIndex = 1;
+        tlpCalibSHead.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tlpCalibSHead.ColumnCount = 6;
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.3383389F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.3383389F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.198699F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.3120728F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.4882317F));
+        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.5383453F));
+        tlpCalibSHead.Controls.Add(_lblStaticCalibConn, 1, 0);
+        tlpCalibSHead.Controls.Add(_cmbStaticCalibPort, 0, 0);
+        tlpCalibSHead.Controls.Add(_btnStaticCalibConn, 0, 1);
+        tlpCalibSHead.Controls.Add(_btnCapture, 2, 0);
+        tlpCalibSHead.Controls.Add(_btnStaticCalibPortRefresh, 1, 1);
+        tlpCalibSHead.Controls.Add(_rbCh0Calib, 3, 1);
+        tlpCalibSHead.Controls.Add(_rbCh1Calib, 3, 0);
+        tlpCalibSHead.Controls.Add(_lblLiveAdcCap, 4, 0);
+        tlpCalibSHead.Controls.Add(_lblStaticCalibMassCap, 4, 1);
+        tlpCalibSHead.Controls.Add(_lblStaticCalibMass, 5, 1);
+        tlpCalibSHead.Controls.Add(_lblLiveAdc, 5, 0);
+        tlpCalibSHead.Dock = DockStyle.Fill;
+        tlpCalibSHead.Location = new Point(0, 0);
+        tlpCalibSHead.Margin = new Padding(2, 3, 2, 3);
+        tlpCalibSHead.Name = "tlpCalibSHead";
+        tlpCalibSHead.RowCount = 2;
+        tlpCalibSHead.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tlpCalibSHead.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tlpCalibSHead.Size = new Size(1531, 98);
+        tlpCalibSHead.TabIndex = 5;
+        // 
+        // _lblStaticCalibConn
+        // 
+        _lblStaticCalibConn.Font = new Font("Segoe UI", 12F);
+        _lblStaticCalibConn.Location = new Point(207, 1);
+        _lblStaticCalibConn.Name = "_lblStaticCalibConn";
+        _lblStaticCalibConn.Size = new Size(101, 23);
+        _lblStaticCalibConn.TabIndex = 4;
         // 
         // _cmbStaticCalibPort
         // 
         _cmbStaticCalibPort.Font = new Font("Segoe UI", 10F);
-        _cmbStaticCalibPort.Location = new Point(18, 29);
+        _cmbStaticCalibPort.Location = new Point(4, 4);
         _cmbStaticCalibPort.Name = "_cmbStaticCalibPort";
         _cmbStaticCalibPort.Size = new Size(121, 31);
         _cmbStaticCalibPort.TabIndex = 0;
         // 
         // _btnStaticCalibConn
         // 
+        _btnStaticCalibConn.Dock = DockStyle.Fill;
         _btnStaticCalibConn.Font = new Font("Segoe UI", 12F);
-        _btnStaticCalibConn.Location = new Point(0, 0);
+        _btnStaticCalibConn.Location = new Point(4, 52);
         _btnStaticCalibConn.Name = "_btnStaticCalibConn";
-        _btnStaticCalibConn.Size = new Size(75, 23);
+        _btnStaticCalibConn.Size = new Size(196, 42);
         _btnStaticCalibConn.TabIndex = 2;
         _btnStaticCalibConn.Click += BtnStaticCalibConn_Click;
-        // 
-        // _btnStaticCalibPortRefresh
-        // 
-        _btnStaticCalibPortRefresh.Font = new Font("Segoe UI", 11F);
-        _btnStaticCalibPortRefresh.Location = new Point(0, 0);
-        _btnStaticCalibPortRefresh.Name = "_btnStaticCalibPortRefresh";
-        _btnStaticCalibPortRefresh.Size = new Size(75, 23);
-        _btnStaticCalibPortRefresh.TabIndex = 3;
-        _btnStaticCalibPortRefresh.Click += BtnPortRefresh_Click;
-        // 
-        // _lblStaticCalibConn
-        // 
-        _lblStaticCalibConn.Font = new Font("Segoe UI", 12F);
-        _lblStaticCalibConn.Location = new Point(0, 0);
-        _lblStaticCalibConn.Name = "_lblStaticCalibConn";
-        _lblStaticCalibConn.Size = new Size(101, 23);
-        _lblStaticCalibConn.TabIndex = 4;
-        // 
-        // tlpCalibSHead
-        // 
-        tlpCalibSHead.ColumnCount = 5;
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.7917442F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.41651F));
-        tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.73546F));
-        tlpCalibSHead.Controls.Add(_rbCh1Calib, 4, 0);
-        tlpCalibSHead.Controls.Add(_lblLiveAdc, 1, 0);
-        tlpCalibSHead.Controls.Add(_lblLiveAdcCap, 0, 0);
-        tlpCalibSHead.Controls.Add(_rbCh0Calib, 4, 1);
-        tlpCalibSHead.Controls.Add(_btnCapture, 2, 0);
-        tlpCalibSHead.Location = new Point(247, 0);
-        tlpCalibSHead.Margin = new Padding(2, 3, 2, 3);
-        tlpCalibSHead.Name = "tlpCalibSHead";
-        tlpCalibSHead.RowCount = 2;
-        tlpCalibSHead.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tlpCalibSHead.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tlpCalibSHead.Size = new Size(963, 97);
-        tlpCalibSHead.TabIndex = 5;
-        // 
-        // _rbCh1Calib
-        // 
-        _rbCh1Calib.AutoSize = true;
-        _rbCh1Calib.Dock = DockStyle.Fill;
-        _rbCh1Calib.Font = new Font("Segoe UI", 11F);
-        _rbCh1Calib.Location = new Point(711, 4);
-        _rbCh1Calib.Margin = new Padding(8, 4, 3, 4);
-        _rbCh1Calib.Name = "_rbCh1Calib";
-        _rbCh1Calib.Size = new Size(249, 40);
-        _rbCh1Calib.TabIndex = 1;
-        _rbCh1Calib.Text = "Канал: Резервный (CH1)";
-        _rbCh1Calib.CheckedChanged += RbCh1Calib_CheckedChanged;
-        // 
-        // _lblLiveAdc
-        // 
-        _lblLiveAdc.AutoSize = true;
-        _lblLiveAdc.Dock = DockStyle.Fill;
-        _lblLiveAdc.Font = new Font("Courier New", 13F, FontStyle.Bold);
-        _lblLiveAdc.Location = new Point(195, 0);
-        _lblLiveAdc.Name = "_lblLiveAdc";
-        _lblLiveAdc.Size = new Size(186, 48);
-        _lblLiveAdc.TabIndex = 3;
-        _lblLiveAdc.Text = "—";
-        _lblLiveAdc.TextAlign = ContentAlignment.MiddleLeft;
-        // 
-        // _lblLiveAdcCap
-        // 
-        _lblLiveAdcCap.AutoSize = true;
-        _lblLiveAdcCap.Dock = DockStyle.Fill;
-        _lblLiveAdcCap.Font = new Font("Segoe UI", 12F);
-        _lblLiveAdcCap.Location = new Point(3, 0);
-        _lblLiveAdcCap.Name = "_lblLiveAdcCap";
-        _lblLiveAdcCap.Size = new Size(186, 48);
-        _lblLiveAdcCap.TabIndex = 2;
-        _lblLiveAdcCap.Text = "Текущий код АЦП:";
-        _lblLiveAdcCap.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _rbCh0Calib
-        // 
-        _rbCh0Calib.AutoSize = true;
-        _rbCh0Calib.Checked = true;
-        _rbCh0Calib.Dock = DockStyle.Fill;
-        _rbCh0Calib.Font = new Font("Segoe UI", 11F);
-        _rbCh0Calib.Location = new Point(711, 52);
-        _rbCh0Calib.Margin = new Padding(8, 4, 3, 4);
-        _rbCh0Calib.Name = "_rbCh0Calib";
-        _rbCh0Calib.Size = new Size(249, 41);
-        _rbCh0Calib.TabIndex = 0;
-        _rbCh0Calib.TabStop = true;
-        _rbCh0Calib.Text = "Канал: Основной (CH0)";
-        _rbCh0Calib.CheckedChanged += RbCh0Calib_CheckedChanged;
         // 
         // _btnCapture
         // 
@@ -1128,14 +1081,101 @@ partial class ServiceForm
         _btnCapture.FlatAppearance.BorderSize = 0;
         _btnCapture.FlatStyle = FlatStyle.Flat;
         _btnCapture.Font = new Font("Segoe UI", 12F);
-        _btnCapture.Location = new Point(392, 3);
+        _btnCapture.Location = new Point(415, 4);
         _btnCapture.Margin = new Padding(8, 3, 8, 0);
         _btnCapture.Name = "_btnCapture";
-        _btnCapture.Size = new Size(145, 45);
+        _btnCapture.Size = new Size(154, 44);
         _btnCapture.TabIndex = 4;
         _btnCapture.Text = "Захватить";
         _btnCapture.UseVisualStyleBackColor = false;
         _btnCapture.Click += BtnCapture_Click;
+        // 
+        // _btnStaticCalibPortRefresh
+        // 
+        _btnStaticCalibPortRefresh.Dock = DockStyle.Fill;
+        _btnStaticCalibPortRefresh.Font = new Font("Segoe UI", 11F);
+        _btnStaticCalibPortRefresh.Location = new Point(207, 52);
+        _btnStaticCalibPortRefresh.Name = "_btnStaticCalibPortRefresh";
+        _btnStaticCalibPortRefresh.Size = new Size(196, 42);
+        _btnStaticCalibPortRefresh.TabIndex = 3;
+        _btnStaticCalibPortRefresh.Click += BtnPortRefresh_Click;
+        // 
+        // _rbCh0Calib
+        // 
+        _rbCh0Calib.AutoSize = true;
+        _rbCh0Calib.Checked = true;
+        _rbCh0Calib.Font = new Font("Segoe UI", 11F);
+        _rbCh0Calib.Location = new Point(586, 53);
+        _rbCh0Calib.Margin = new Padding(8, 4, 3, 4);
+        _rbCh0Calib.Name = "_rbCh0Calib";
+        _rbCh0Calib.Size = new Size(234, 29);
+        _rbCh0Calib.TabIndex = 0;
+        _rbCh0Calib.TabStop = true;
+        _rbCh0Calib.Text = "Канал: Основной (CH0)";
+        _rbCh0Calib.CheckedChanged += RbCh0Calib_CheckedChanged;
+        // 
+        // _rbCh1Calib
+        // 
+        _rbCh1Calib.AutoSize = true;
+        _rbCh1Calib.Font = new Font("Segoe UI", 11F);
+        _rbCh1Calib.Location = new Point(586, 5);
+        _rbCh1Calib.Margin = new Padding(8, 4, 3, 4);
+        _rbCh1Calib.Name = "_rbCh1Calib";
+        _rbCh1Calib.Size = new Size(241, 29);
+        _rbCh1Calib.TabIndex = 1;
+        _rbCh1Calib.Text = "Канал: Резервный (CH1)";
+        _rbCh1Calib.CheckedChanged += RbCh1Calib_CheckedChanged;
+        // 
+        // _lblLiveAdcCap
+        // 
+        _lblLiveAdcCap.AutoSize = true;
+        _lblLiveAdcCap.Dock = DockStyle.Fill;
+        _lblLiveAdcCap.Font = new Font("Segoe UI", 12F);
+        _lblLiveAdcCap.Location = new Point(845, 1);
+        _lblLiveAdcCap.Name = "_lblLiveAdcCap";
+        _lblLiveAdcCap.Size = new Size(320, 47);
+        _lblLiveAdcCap.TabIndex = 2;
+        _lblLiveAdcCap.Text = "Текущий код АЦП";
+        _lblLiveAdcCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblStaticCalibMassCap
+        // 
+        _lblStaticCalibMassCap.AutoSize = true;
+        _lblStaticCalibMassCap.BackColor = Color.Transparent;
+        _lblStaticCalibMassCap.Dock = DockStyle.Fill;
+        _lblStaticCalibMassCap.Font = new Font("Segoe UI", 12F);
+        _lblStaticCalibMassCap.ForeColor = Color.FromArgb(46, 58, 70);
+        _lblStaticCalibMassCap.Location = new Point(845, 49);
+        _lblStaticCalibMassCap.Name = "_lblStaticCalibMassCap";
+        _lblStaticCalibMassCap.Size = new Size(320, 48);
+        _lblStaticCalibMassCap.TabIndex = 5;
+        _lblStaticCalibMassCap.Text = "Текущая масса";
+        _lblStaticCalibMassCap.TextAlign = ContentAlignment.MiddleRight;
+        // 
+        // _lblStaticCalibMass
+        // 
+        _lblStaticCalibMass.BackColor = Color.Transparent;
+        _lblStaticCalibMass.Dock = DockStyle.Fill;
+        _lblStaticCalibMass.Font = new Font("Courier New", 13F, FontStyle.Bold);
+        _lblStaticCalibMass.ForeColor = Color.FromArgb(192, 0, 192);
+        _lblStaticCalibMass.Location = new Point(1172, 49);
+        _lblStaticCalibMass.Name = "_lblStaticCalibMass";
+        _lblStaticCalibMass.Size = new Size(355, 48);
+        _lblStaticCalibMass.TabIndex = 6;
+        _lblStaticCalibMass.Text = "—";
+        _lblStaticCalibMass.TextAlign = ContentAlignment.MiddleLeft;
+        // 
+        // _lblLiveAdc
+        // 
+        _lblLiveAdc.AutoSize = true;
+        _lblLiveAdc.Dock = DockStyle.Fill;
+        _lblLiveAdc.Font = new Font("Courier New", 13F, FontStyle.Bold);
+        _lblLiveAdc.Location = new Point(1172, 1);
+        _lblLiveAdc.Name = "_lblLiveAdc";
+        _lblLiveAdc.Size = new Size(355, 47);
+        _lblLiveAdc.TabIndex = 3;
+        _lblLiveAdc.Text = "—";
+        _lblLiveAdc.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _tabCalibD
         // 
@@ -2020,7 +2060,6 @@ partial class ServiceForm
         _pnlCalibSBody.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)_dgvCalib).EndInit();
         _pnlCalibSHead.ResumeLayout(false);
-        _dotStaticCalibConn.ResumeLayout(false);
         tlpCalibSHead.ResumeLayout(false);
         tlpCalibSHead.PerformLayout();
         _tabCalibD.ResumeLayout(false);
@@ -2082,7 +2121,6 @@ partial class ServiceForm
     private RichTextBox _rtbLog;
 
     private ComboBox    _cmbStaticCalibPort;
-    private Panel       _dotStaticCalibConn;
     private Button      _btnStaticCalibConn;
     private Button      _btnStaticCalibPortRefresh;
     private Label       _lblStaticCalibConn;
@@ -2169,6 +2207,8 @@ partial class ServiceForm
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumnCalibActive;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumnCalibCreated;
+    private DataGridViewTextBoxColumn dataGridViewTextBoxColumnCalibDeleted;
     private TableLayoutPanel tlpCalibSHead;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
@@ -2192,4 +2232,6 @@ partial class ServiceForm
     private Panel _pnlLogs;
     private TableLayoutPanel _tlpCh0;
     private TableLayoutPanel _tlpCh1;
+    private Label _lblStaticCalibMassCap;
+    private Label _lblStaticCalibMass;
 }
