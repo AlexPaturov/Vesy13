@@ -70,7 +70,7 @@ partial class ServiceForm
         _tabCalibS = new TabPage();
         _pnlCalibS = new Panel();
         _pnlCalibSBody = new Panel();
-        tableLayoutPanel1 = new TableLayoutPanel();
+        _tlpCalibSBody = new TableLayoutPanel();
         _dgvCalib = new DataGridView();
         dataGridViewTextBoxColumnCalibActive = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
@@ -78,9 +78,9 @@ partial class ServiceForm
         dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumnCalibCreated = new DataGridViewTextBoxColumn();
         dataGridViewTextBoxColumnCalibDeleted = new DataGridViewTextBoxColumn();
-        panel1 = new Panel();
-        panel3 = new Panel();
-        tableLayoutPanel2 = new TableLayoutPanel();
+        _pnlCalibSForm = new Panel();
+        _pnlCalibSFormInner = new Panel();
+        _tlpCalibSForm = new TableLayoutPanel();
         _txtK = new TextBox();
         _lblKEquals = new Label();
         _txtB = new TextBox();
@@ -185,11 +185,11 @@ partial class ServiceForm
         _tabCalibS.SuspendLayout();
         _pnlCalibS.SuspendLayout();
         _pnlCalibSBody.SuspendLayout();
-        tableLayoutPanel1.SuspendLayout();
+        _tlpCalibSBody.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_dgvCalib).BeginInit();
-        panel1.SuspendLayout();
-        panel3.SuspendLayout();
-        tableLayoutPanel2.SuspendLayout();
+        _pnlCalibSForm.SuspendLayout();
+        _pnlCalibSFormInner.SuspendLayout();
+        _tlpCalibSForm.SuspendLayout();
         _pnlCalibSHead.SuspendLayout();
         tlpCalibSHead.SuspendLayout();
         _tabCalibD.SuspendLayout();
@@ -804,7 +804,7 @@ partial class ServiceForm
         _pnlCalibSBody.AutoScroll = true;
         _pnlCalibSBody.BackColor = SystemColors.ActiveCaption;
         _pnlCalibSBody.BorderStyle = BorderStyle.FixedSingle;
-        _pnlCalibSBody.Controls.Add(tableLayoutPanel1);
+        _pnlCalibSBody.Controls.Add(_tlpCalibSBody);
         _pnlCalibSBody.Dock = DockStyle.Fill;
         _pnlCalibSBody.Location = new Point(0, 100);
         _pnlCalibSBody.Margin = new Padding(3, 4, 3, 4);
@@ -813,23 +813,23 @@ partial class ServiceForm
         _pnlCalibSBody.Size = new Size(1533, 589);
         _pnlCalibSBody.TabIndex = 1;
         // 
-        // tableLayoutPanel1
+        // _tlpCalibSBody
         // 
-        tableLayoutPanel1.BackColor = SystemColors.Window;
-        tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-        tableLayoutPanel1.ColumnCount = 2;
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.12352F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.87648F));
-        tableLayoutPanel1.Controls.Add(_dgvCalib, 1, 0);
-        tableLayoutPanel1.Controls.Add(panel1, 0, 0);
-        tableLayoutPanel1.Dock = DockStyle.Fill;
-        tableLayoutPanel1.Location = new Point(4, 4);
-        tableLayoutPanel1.Name = "tableLayoutPanel1";
-        tableLayoutPanel1.RowCount = 1;
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.Size = new Size(1523, 579);
-        tableLayoutPanel1.TabIndex = 15;
+        _tlpCalibSBody.BackColor = SystemColors.Window;
+        _tlpCalibSBody.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        _tlpCalibSBody.ColumnCount = 2;
+        _tlpCalibSBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.12352F));
+        _tlpCalibSBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.87648F));
+        _tlpCalibSBody.Controls.Add(_dgvCalib, 1, 0);
+        _tlpCalibSBody.Controls.Add(_pnlCalibSForm, 0, 0);
+        _tlpCalibSBody.Dock = DockStyle.Fill;
+        _tlpCalibSBody.Location = new Point(4, 4);
+        _tlpCalibSBody.Name = "_tlpCalibSBody";
+        _tlpCalibSBody.RowCount = 1;
+        _tlpCalibSBody.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpCalibSBody.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpCalibSBody.Size = new Size(1523, 579);
+        _tlpCalibSBody.TabIndex = 15;
         // 
         // _dgvCalib
         // 
@@ -921,56 +921,56 @@ partial class ServiceForm
         dataGridViewTextBoxColumnCalibDeleted.Name = "dataGridViewTextBoxColumnCalibDeleted";
         dataGridViewTextBoxColumnCalibDeleted.ReadOnly = true;
         // 
-        // panel1
+        // _pnlCalibSForm
         // 
-        panel1.BorderStyle = BorderStyle.FixedSingle;
-        panel1.Controls.Add(panel3);
-        panel1.Dock = DockStyle.Fill;
-        panel1.Location = new Point(4, 4);
-        panel1.Name = "panel1";
-        panel1.Size = new Size(695, 571);
-        panel1.TabIndex = 6;
+        _pnlCalibSForm.BorderStyle = BorderStyle.FixedSingle;
+        _pnlCalibSForm.Controls.Add(_pnlCalibSFormInner);
+        _pnlCalibSForm.Dock = DockStyle.Fill;
+        _pnlCalibSForm.Location = new Point(4, 4);
+        _pnlCalibSForm.Name = "_pnlCalibSForm";
+        _pnlCalibSForm.Size = new Size(695, 571);
+        _pnlCalibSForm.TabIndex = 6;
         // 
-        // panel3
+        // _pnlCalibSFormInner
         // 
-        panel3.Controls.Add(tableLayoutPanel2);
-        panel3.Dock = DockStyle.Fill;
-        panel3.Location = new Point(0, 0);
-        panel3.Name = "panel3";
-        panel3.Size = new Size(693, 569);
-        panel3.TabIndex = 1;
+        _pnlCalibSFormInner.Controls.Add(_tlpCalibSForm);
+        _pnlCalibSFormInner.Dock = DockStyle.Fill;
+        _pnlCalibSFormInner.Location = new Point(0, 0);
+        _pnlCalibSFormInner.Name = "_pnlCalibSFormInner";
+        _pnlCalibSFormInner.Size = new Size(693, 569);
+        _pnlCalibSFormInner.TabIndex = 1;
         // 
-        // tableLayoutPanel2
+        // _tlpCalibSForm
         // 
-        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-        tableLayoutPanel2.ColumnCount = 3;
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.51445F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.0578041F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 37.4277458F));
-        tableLayoutPanel2.Controls.Add(_txtK, 1, 0);
-        tableLayoutPanel2.Controls.Add(_lblKEquals, 0, 0);
-        tableLayoutPanel2.Controls.Add(_txtB, 1, 1);
-        tableLayoutPanel2.Controls.Add(_lblBEquals, 0, 1);
-        tableLayoutPanel2.Controls.Add(_btnAddRow, 2, 4);
-        tableLayoutPanel2.Controls.Add(_btnDelRow, 2, 5);
-        tableLayoutPanel2.Controls.Add(_btnLsq, 2, 1);
-        tableLayoutPanel2.Controls.Add(_lblFormula, 0, 8);
-        tableLayoutPanel2.Controls.Add(_btnCalibSave, 1, 8);
-        tableLayoutPanel2.Dock = DockStyle.Fill;
-        tableLayoutPanel2.Location = new Point(0, 0);
-        tableLayoutPanel2.Name = "tableLayoutPanel2";
-        tableLayoutPanel2.RowCount = 9;
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
-        tableLayoutPanel2.Size = new Size(693, 569);
-        tableLayoutPanel2.TabIndex = 6;
+        _tlpCalibSForm.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        _tlpCalibSForm.ColumnCount = 3;
+        _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.51445F));
+        _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.0578041F));
+        _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 37.4277458F));
+        _tlpCalibSForm.Controls.Add(_txtK, 1, 0);
+        _tlpCalibSForm.Controls.Add(_lblKEquals, 0, 0);
+        _tlpCalibSForm.Controls.Add(_txtB, 1, 1);
+        _tlpCalibSForm.Controls.Add(_lblBEquals, 0, 1);
+        _tlpCalibSForm.Controls.Add(_btnAddRow, 2, 4);
+        _tlpCalibSForm.Controls.Add(_btnDelRow, 2, 5);
+        _tlpCalibSForm.Controls.Add(_btnLsq, 2, 1);
+        _tlpCalibSForm.Controls.Add(_lblFormula, 0, 8);
+        _tlpCalibSForm.Controls.Add(_btnCalibSave, 1, 8);
+        _tlpCalibSForm.Dock = DockStyle.Fill;
+        _tlpCalibSForm.Location = new Point(0, 0);
+        _tlpCalibSForm.Name = "_tlpCalibSForm";
+        _tlpCalibSForm.RowCount = 9;
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
+        _tlpCalibSForm.Size = new Size(693, 569);
+        _tlpCalibSForm.TabIndex = 6;
         // 
         // _txtK
         // 
@@ -2160,12 +2160,12 @@ partial class ServiceForm
         _tabCalibS.ResumeLayout(false);
         _pnlCalibS.ResumeLayout(false);
         _pnlCalibSBody.ResumeLayout(false);
-        tableLayoutPanel1.ResumeLayout(false);
+        _tlpCalibSBody.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_dgvCalib).EndInit();
-        panel1.ResumeLayout(false);
-        panel3.ResumeLayout(false);
-        tableLayoutPanel2.ResumeLayout(false);
-        tableLayoutPanel2.PerformLayout();
+        _pnlCalibSForm.ResumeLayout(false);
+        _pnlCalibSFormInner.ResumeLayout(false);
+        _tlpCalibSForm.ResumeLayout(false);
+        _tlpCalibSForm.PerformLayout();
         _pnlCalibSHead.ResumeLayout(false);
         tlpCalibSHead.ResumeLayout(false);
         tlpCalibSHead.PerformLayout();
@@ -2341,8 +2341,8 @@ partial class ServiceForm
     private TableLayoutPanel _tlpCh1;
     private Label _lblStaticCalibMassCap;
     private Label _lblStaticCalibMass;
-    private TableLayoutPanel tableLayoutPanel1;
-    private TableLayoutPanel tableLayoutPanel2;
-    private Panel panel1;
-    private Panel panel3;
+    private TableLayoutPanel _tlpCalibSBody;
+    private TableLayoutPanel _tlpCalibSForm;
+    private Panel _pnlCalibSForm;
+    private Panel _pnlCalibSFormInner;
 }
