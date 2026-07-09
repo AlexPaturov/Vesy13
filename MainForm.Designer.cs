@@ -111,8 +111,8 @@ partial class MainForm
         _pnlMenu.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / 6F));
         _pnlMenu.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / 6F));
         _pnlMenu.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / 6F));
-        _pnlMenu.Controls.Add(_btnStatic,      0, 0);
-        _pnlMenu.Controls.Add(_btnDynamic,     0, 1);
+        _pnlMenu.Controls.Add(_btnDynamic,     0, 0);
+        _pnlMenu.Controls.Add(_btnStatic,      0, 1);
         _pnlMenu.Controls.Add(_btnService,     0, 2);
         _pnlMenu.Controls.Add(_btnCorrections, 0, 3);
         _pnlMenu.Controls.Add(_btnPrint,       0, 4);
