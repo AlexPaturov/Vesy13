@@ -163,6 +163,12 @@ partial class ServiceForm
         _txtNewPassword = new TextBox();
         _btnSaveSettings = new Button();
         _rateTimer = new System.Windows.Forms.Timer(components);
+        tableLayoutPanel1 = new TableLayoutPanel();
+        tableLayoutPanel2 = new TableLayoutPanel();
+        panel1 = new Panel();
+        panel2 = new Panel();
+        panel3 = new Panel();
+        tableLayoutPanel3 = new TableLayoutPanel();
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
         _tabMonitor.SuspendLayout();
@@ -197,6 +203,12 @@ partial class ServiceForm
         _pnlCalibDHead.SuspendLayout();
         _tlpHeaders.SuspendLayout();
         _tabSett.SuspendLayout();
+        tableLayoutPanel1.SuspendLayout();
+        tableLayoutPanel2.SuspendLayout();
+        panel1.SuspendLayout();
+        panel2.SuspendLayout();
+        panel3.SuspendLayout();
+        tableLayoutPanel3.SuspendLayout();
         SuspendLayout();
         // 
         // _btnAdmin
@@ -796,21 +808,12 @@ partial class ServiceForm
         _pnlCalibSBody.AutoScroll = true;
         _pnlCalibSBody.BackColor = SystemColors.ActiveCaption;
         _pnlCalibSBody.BorderStyle = BorderStyle.FixedSingle;
-        _pnlCalibSBody.Controls.Add(_dgvCalib);
-        _pnlCalibSBody.Controls.Add(_btnAddRow);
-        _pnlCalibSBody.Controls.Add(_btnDelRow);
-        _pnlCalibSBody.Controls.Add(_lblKEquals);
-        _pnlCalibSBody.Controls.Add(_txtK);
-        _pnlCalibSBody.Controls.Add(_lblBEquals);
-        _pnlCalibSBody.Controls.Add(_txtB);
-        _pnlCalibSBody.Controls.Add(_lblFormula);
-        _pnlCalibSBody.Controls.Add(_btnLsq);
-        _pnlCalibSBody.Controls.Add(_btnCalibSave);
+        _pnlCalibSBody.Controls.Add(tableLayoutPanel1);
         _pnlCalibSBody.Dock = DockStyle.Fill;
         _pnlCalibSBody.Location = new Point(0, 100);
         _pnlCalibSBody.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSBody.Name = "_pnlCalibSBody";
-        _pnlCalibSBody.Padding = new Padding(18, 16, 18, 16);
+        _pnlCalibSBody.Padding = new Padding(4);
         _pnlCalibSBody.Size = new Size(1533, 589);
         _pnlCalibSBody.TabIndex = 1;
         // 
@@ -840,11 +843,12 @@ partial class ServiceForm
         dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(26, 26, 26);
         dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
         _dgvCalib.DefaultCellStyle = dataGridViewCellStyle3;
+        _dgvCalib.Dock = DockStyle.Fill;
         _dgvCalib.EditMode = DataGridViewEditMode.EditOnEnter;
         _dgvCalib.EnableHeadersVisualStyles = false;
         _dgvCalib.Font = new Font("Segoe UI", 12F);
         _dgvCalib.GridColor = Color.FromArgb(212, 216, 222);
-        _dgvCalib.Location = new Point(18, 0);
+        _dgvCalib.Location = new Point(765, 5);
         _dgvCalib.Margin = new Padding(3, 4, 3, 4);
         _dgvCalib.Name = "_dgvCalib";
         _dgvCalib.RowHeadersVisible = false;
@@ -854,7 +858,7 @@ partial class ServiceForm
         _dgvCalib.RowsDefaultCellStyle = dataGridViewCellStyle4;
         _dgvCalib.RowTemplate.Height = 30;
         _dgvCalib.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _dgvCalib.Size = new Size(526, 333);
+        _dgvCalib.Size = new Size(754, 569);
         _dgvCalib.TabIndex = 5;
         // 
         // dataGridViewTextBoxColumnCalibActive
@@ -886,46 +890,48 @@ partial class ServiceForm
         dataGridViewTextBoxColumn3.MinimumWidth = 105;
         dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
         dataGridViewTextBoxColumn3.ReadOnly = true;
-        //
+        // 
         // dataGridViewTextBoxColumnCalibCreated
-        //
+        // 
         dataGridViewTextBoxColumnCalibCreated.FillWeight = 25F;
         dataGridViewTextBoxColumnCalibCreated.HeaderText = "Добавлена";
         dataGridViewTextBoxColumnCalibCreated.MinimumWidth = 105;
         dataGridViewTextBoxColumnCalibCreated.Name = "dataGridViewTextBoxColumnCalibCreated";
         dataGridViewTextBoxColumnCalibCreated.ReadOnly = true;
-        //
+        // 
         // dataGridViewTextBoxColumnCalibDeleted
-        //
+        // 
         dataGridViewTextBoxColumnCalibDeleted.FillWeight = 25F;
         dataGridViewTextBoxColumnCalibDeleted.HeaderText = "Снята";
         dataGridViewTextBoxColumnCalibDeleted.MinimumWidth = 105;
         dataGridViewTextBoxColumnCalibDeleted.Name = "dataGridViewTextBoxColumnCalibDeleted";
         dataGridViewTextBoxColumnCalibDeleted.ReadOnly = true;
-        //
+        // 
         // _btnAddRow
         // 
+        _btnAddRow.BackColor = SystemColors.ActiveBorder;
         _btnAddRow.FlatStyle = FlatStyle.Flat;
         _btnAddRow.Font = new Font("Segoe UI", 12F);
-        _btnAddRow.Location = new Point(18, 341);
+        _btnAddRow.Location = new Point(379, 340);
         _btnAddRow.Margin = new Padding(3, 4, 3, 4);
         _btnAddRow.Name = "_btnAddRow";
-        _btnAddRow.Size = new Size(183, 37);
+        _btnAddRow.Size = new Size(265, 37);
         _btnAddRow.TabIndex = 6;
-        _btnAddRow.Text = "Добавить строку";
+        _btnAddRow.Text = "Добавить строку →";
         _btnAddRow.UseVisualStyleBackColor = false;
         _btnAddRow.Click += BtnAddRow_Click;
         // 
         // _btnDelRow
         // 
+        _btnDelRow.BackColor = SystemColors.ActiveBorder;
         _btnDelRow.FlatStyle = FlatStyle.Flat;
         _btnDelRow.Font = new Font("Segoe UI", 12F);
-        _btnDelRow.Location = new Point(215, 341);
+        _btnDelRow.Location = new Point(379, 424);
         _btnDelRow.Margin = new Padding(3, 4, 3, 4);
         _btnDelRow.Name = "_btnDelRow";
-        _btnDelRow.Size = new Size(194, 37);
+        _btnDelRow.Size = new Size(271, 37);
         _btnDelRow.TabIndex = 7;
-        _btnDelRow.Text = "Удалить выбранную";
+        _btnDelRow.Text = "Удалить выбранную →";
         _btnDelRow.UseVisualStyleBackColor = false;
         _btnDelRow.Click += BtnDelRow_Click;
         // 
@@ -933,7 +939,7 @@ partial class ServiceForm
         // 
         _lblKEquals.AutoSize = true;
         _lblKEquals.Font = new Font("Segoe UI", 10F);
-        _lblKEquals.Location = new Point(565, 81);
+        _lblKEquals.Location = new Point(3, 0);
         _lblKEquals.Name = "_lblKEquals";
         _lblKEquals.Size = new Size(40, 23);
         _lblKEquals.TabIndex = 8;
@@ -942,7 +948,7 @@ partial class ServiceForm
         // _txtK
         // 
         _txtK.Font = new Font("Courier New", 10F);
-        _txtK.Location = new Point(606, 75);
+        _txtK.Location = new Point(379, 4);
         _txtK.Margin = new Padding(3, 4, 3, 4);
         _txtK.Name = "_txtK";
         _txtK.Size = new Size(148, 26);
@@ -953,7 +959,7 @@ partial class ServiceForm
         // 
         _lblBEquals.AutoSize = true;
         _lblBEquals.Font = new Font("Segoe UI", 10F);
-        _lblBEquals.Location = new Point(565, 129);
+        _lblBEquals.Location = new Point(3, 84);
         _lblBEquals.Name = "_lblBEquals";
         _lblBEquals.Size = new Size(42, 23);
         _lblBEquals.TabIndex = 10;
@@ -962,7 +968,7 @@ partial class ServiceForm
         // _txtB
         // 
         _txtB.Font = new Font("Courier New", 10F);
-        _txtB.Location = new Point(606, 124);
+        _txtB.Location = new Point(379, 88);
         _txtB.Margin = new Padding(3, 4, 3, 4);
         _txtB.Name = "_txtB";
         _txtB.Size = new Size(148, 26);
@@ -972,22 +978,25 @@ partial class ServiceForm
         // _lblFormula
         // 
         _lblFormula.AutoSize = true;
+        _lblFormula.Dock = DockStyle.Fill;
         _lblFormula.Font = new Font("Segoe UI", 12F);
-        _lblFormula.Location = new Point(593, 32);
+        _lblFormula.Location = new Point(3, 0);
         _lblFormula.Name = "_lblFormula";
-        _lblFormula.Size = new Size(197, 28);
+        _lblFormula.Size = new Size(746, 62);
         _lblFormula.TabIndex = 12;
         _lblFormula.Text = "Масса = k × Код + b";
+        _lblFormula.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _btnLsq
         // 
+        _btnLsq.BackColor = SystemColors.ActiveBorder;
         _btnLsq.FlatAppearance.BorderSize = 0;
         _btnLsq.FlatStyle = FlatStyle.Flat;
         _btnLsq.Font = new Font("Segoe UI", 10F);
-        _btnLsq.Location = new Point(567, 183);
+        _btnLsq.Location = new Point(379, 172);
         _btnLsq.Margin = new Padding(3, 4, 3, 4);
         _btnLsq.Name = "_btnLsq";
-        _btnLsq.Size = new Size(206, 45);
+        _btnLsq.Size = new Size(284, 45);
         _btnLsq.TabIndex = 13;
         _btnLsq.Text = "Рассчитать МНК";
         _btnLsq.UseVisualStyleBackColor = false;
@@ -995,13 +1004,14 @@ partial class ServiceForm
         // 
         // _btnCalibSave
         // 
+        _btnCalibSave.BackColor = SystemColors.ActiveBorder;
         _btnCalibSave.FlatAppearance.BorderSize = 0;
         _btnCalibSave.FlatStyle = FlatStyle.Flat;
         _btnCalibSave.Font = new Font("Segoe UI", 12F);
-        _btnCalibSave.Location = new Point(567, 263);
+        _btnCalibSave.Location = new Point(3, 340);
         _btnCalibSave.Margin = new Padding(3, 4, 3, 4);
         _btnCalibSave.Name = "_btnCalibSave";
-        _btnCalibSave.Size = new Size(185, 45);
+        _btnCalibSave.Size = new Size(284, 45);
         _btnCalibSave.TabIndex = 14;
         _btnCalibSave.Text = "Применить и сохранить";
         _btnCalibSave.UseVisualStyleBackColor = false;
@@ -1009,6 +1019,7 @@ partial class ServiceForm
         // 
         // _pnlCalibSHead
         // 
+        _pnlCalibSHead.BackColor = Color.Transparent;
         _pnlCalibSHead.BorderStyle = BorderStyle.FixedSingle;
         _pnlCalibSHead.Controls.Add(tlpCalibSHead);
         _pnlCalibSHead.Dock = DockStyle.Top;
@@ -1020,6 +1031,7 @@ partial class ServiceForm
         // 
         // tlpCalibSHead
         // 
+        tlpCalibSHead.BackColor = Color.Transparent;
         tlpCalibSHead.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
         tlpCalibSHead.ColumnCount = 6;
         tlpCalibSHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.3383389F));
@@ -1059,20 +1071,24 @@ partial class ServiceForm
         // 
         // _cmbStaticCalibPort
         // 
+        _cmbStaticCalibPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStaticCalibPort.Font = new Font("Segoe UI", 10F);
-        _cmbStaticCalibPort.Location = new Point(4, 4);
+        _cmbStaticCalibPort.Location = new Point(6, 7);
+        _cmbStaticCalibPort.Margin = new Padding(5, 0, 5, 4);
         _cmbStaticCalibPort.Name = "_cmbStaticCalibPort";
-        _cmbStaticCalibPort.Size = new Size(121, 31);
+        _cmbStaticCalibPort.Size = new Size(192, 31);
         _cmbStaticCalibPort.TabIndex = 0;
         // 
         // _btnStaticCalibConn
         // 
+        _btnStaticCalibConn.BackColor = Color.Transparent;
         _btnStaticCalibConn.Dock = DockStyle.Fill;
         _btnStaticCalibConn.Font = new Font("Segoe UI", 12F);
         _btnStaticCalibConn.Location = new Point(4, 52);
         _btnStaticCalibConn.Name = "_btnStaticCalibConn";
         _btnStaticCalibConn.Size = new Size(196, 42);
         _btnStaticCalibConn.TabIndex = 2;
+        _btnStaticCalibConn.UseVisualStyleBackColor = false;
         _btnStaticCalibConn.Click += BtnStaticCalibConn_Click;
         // 
         // _btnCapture
@@ -1092,12 +1108,15 @@ partial class ServiceForm
         // 
         // _btnStaticCalibPortRefresh
         // 
+        _btnStaticCalibPortRefresh.BackColor = Color.Transparent;
         _btnStaticCalibPortRefresh.Dock = DockStyle.Fill;
         _btnStaticCalibPortRefresh.Font = new Font("Segoe UI", 11F);
         _btnStaticCalibPortRefresh.Location = new Point(207, 52);
         _btnStaticCalibPortRefresh.Name = "_btnStaticCalibPortRefresh";
         _btnStaticCalibPortRefresh.Size = new Size(196, 42);
         _btnStaticCalibPortRefresh.TabIndex = 3;
+        _btnStaticCalibPortRefresh.Text = "↺ Обновить";
+        _btnStaticCalibPortRefresh.UseVisualStyleBackColor = false;
         _btnStaticCalibPortRefresh.Click += BtnPortRefresh_Click;
         // 
         // _rbCh0Calib
@@ -2019,6 +2038,94 @@ partial class ServiceForm
         // 
         _rateTimer.Tick += RateTimer_Tick;
         // 
+        // tableLayoutPanel1
+        // 
+        tableLayoutPanel1.BackColor = SystemColors.Window;
+        tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel1.ColumnCount = 2;
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.Controls.Add(_dgvCalib, 1, 0);
+        tableLayoutPanel1.Controls.Add(panel1, 0, 0);
+        tableLayoutPanel1.Dock = DockStyle.Fill;
+        tableLayoutPanel1.Location = new Point(4, 4);
+        tableLayoutPanel1.Name = "tableLayoutPanel1";
+        tableLayoutPanel1.RowCount = 1;
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.Size = new Size(1523, 579);
+        tableLayoutPanel1.TabIndex = 15;
+        // 
+        // tableLayoutPanel2
+        // 
+        tableLayoutPanel2.ColumnCount = 2;
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.Controls.Add(_btnDelRow, 1, 5);
+        tableLayoutPanel2.Controls.Add(_btnAddRow, 1, 4);
+        tableLayoutPanel2.Controls.Add(_btnCalibSave, 0, 4);
+        tableLayoutPanel2.Controls.Add(_txtK, 1, 0);
+        tableLayoutPanel2.Controls.Add(_lblKEquals, 0, 0);
+        tableLayoutPanel2.Controls.Add(_txtB, 1, 1);
+        tableLayoutPanel2.Controls.Add(_lblBEquals, 0, 1);
+        tableLayoutPanel2.Controls.Add(_btnLsq, 1, 2);
+        tableLayoutPanel2.Dock = DockStyle.Fill;
+        tableLayoutPanel2.Location = new Point(0, 0);
+        tableLayoutPanel2.Name = "tableLayoutPanel2";
+        tableLayoutPanel2.RowCount = 6;
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
+        tableLayoutPanel2.Size = new Size(752, 507);
+        tableLayoutPanel2.TabIndex = 6;
+        // 
+        // panel1
+        // 
+        panel1.BorderStyle = BorderStyle.FixedSingle;
+        panel1.Controls.Add(panel3);
+        panel1.Controls.Add(panel2);
+        panel1.Dock = DockStyle.Fill;
+        panel1.Location = new Point(4, 4);
+        panel1.Name = "panel1";
+        panel1.Size = new Size(754, 571);
+        panel1.TabIndex = 6;
+        // 
+        // panel2
+        // 
+        panel2.Controls.Add(tableLayoutPanel3);
+        panel2.Dock = DockStyle.Top;
+        panel2.Location = new Point(0, 0);
+        panel2.Name = "panel2";
+        panel2.Size = new Size(752, 62);
+        panel2.TabIndex = 0;
+        // 
+        // panel3
+        // 
+        panel3.Controls.Add(tableLayoutPanel2);
+        panel3.Dock = DockStyle.Fill;
+        panel3.Location = new Point(0, 62);
+        panel3.Name = "panel3";
+        panel3.Size = new Size(752, 507);
+        panel3.TabIndex = 1;
+        // 
+        // tableLayoutPanel3
+        // 
+        tableLayoutPanel3.ColumnCount = 1;
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.Controls.Add(_lblFormula, 0, 0);
+        tableLayoutPanel3.Dock = DockStyle.Fill;
+        tableLayoutPanel3.Location = new Point(0, 0);
+        tableLayoutPanel3.Name = "tableLayoutPanel3";
+        tableLayoutPanel3.RowCount = 1;
+        tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel3.Size = new Size(752, 62);
+        tableLayoutPanel3.TabIndex = 0;
+        // 
         // ServiceForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
@@ -2057,7 +2164,6 @@ partial class ServiceForm
         _tabCalibS.ResumeLayout(false);
         _pnlCalibS.ResumeLayout(false);
         _pnlCalibSBody.ResumeLayout(false);
-        _pnlCalibSBody.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)_dgvCalib).EndInit();
         _pnlCalibSHead.ResumeLayout(false);
         tlpCalibSHead.ResumeLayout(false);
@@ -2080,6 +2186,14 @@ partial class ServiceForm
         _tlpHeaders.PerformLayout();
         _tabSett.ResumeLayout(false);
         _tabSett.PerformLayout();
+        tableLayoutPanel1.ResumeLayout(false);
+        tableLayoutPanel2.ResumeLayout(false);
+        tableLayoutPanel2.PerformLayout();
+        panel1.ResumeLayout(false);
+        panel2.ResumeLayout(false);
+        panel3.ResumeLayout(false);
+        tableLayoutPanel3.ResumeLayout(false);
+        tableLayoutPanel3.PerformLayout();
         ResumeLayout(false);
     }
 
@@ -2234,4 +2348,10 @@ partial class ServiceForm
     private TableLayoutPanel _tlpCh1;
     private Label _lblStaticCalibMassCap;
     private Label _lblStaticCalibMass;
+    private TableLayoutPanel tableLayoutPanel1;
+    private TableLayoutPanel tableLayoutPanel2;
+    private Panel panel1;
+    private Panel panel3;
+    private Panel panel2;
+    private TableLayoutPanel tableLayoutPanel3;
 }
