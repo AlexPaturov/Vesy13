@@ -1074,7 +1074,8 @@ partial class ServiceForm
         _lblStaticCalibConn.Name = "_lblStaticCalibConn";
         _lblStaticCalibConn.Size = new Size(101, 23);
         _lblStaticCalibConn.TabIndex = 4;
-        // 
+        _lblStaticCalibConn.Text = "Нет подключения";
+        //
         // _cmbStaticCalibPort
         // 
         _cmbStaticCalibPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
@@ -1094,6 +1095,7 @@ partial class ServiceForm
         _btnStaticCalibConn.Name = "_btnStaticCalibConn";
         _btnStaticCalibConn.Size = new Size(196, 42);
         _btnStaticCalibConn.TabIndex = 2;
+        _btnStaticCalibConn.Text = "Подключить";
         _btnStaticCalibConn.UseVisualStyleBackColor = false;
         _btnStaticCalibConn.Click += BtnStaticCalibConn_Click;
         // 
@@ -1357,6 +1359,7 @@ partial class ServiceForm
         _txtKPlus.Name = "_txtKPlus";
         _txtKPlus.Size = new Size(236, 26);
         _txtKPlus.TabIndex = 4;
+        _txtKPlus.Text = "0";
         // 
         // _lblKPlusEquals
         // 
@@ -1522,6 +1525,7 @@ partial class ServiceForm
         _txtKMinus.Name = "_txtKMinus";
         _txtKMinus.Size = new Size(235, 26);
         _txtKMinus.TabIndex = 14;
+        _txtKMinus.Text = "0";
         // 
         // _lblSecMinus_02
         // 
