@@ -554,9 +554,9 @@ public partial class DynamicWeighingForm : Form
 
         var hasError = !HasDynamicCalibration() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
         if (!audit.IsDatabaseAvailable)
-            messages.Add(string.Format("Журнал: БД недоступна; очередь {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
+            messages.Add(string.Format("БД недоступна; очередь {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
         else if (audit.PendingCount > 0 || audit.DroppedCount > 0)
-            messages.Add(string.Format("Журнал: синхронизация {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
+            messages.Add(string.Format("синхронизация {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
 
         _lblStorage.Text = string.Join(" | ", messages);
         _lblStorage.ForeColor = hasError ? Color.Red : UiColors.TextMuted;

@@ -354,9 +354,9 @@ public partial class StaticWeighingForm : Form
 
         var hasError = !HasStaticCalibration() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
         if (!audit.IsDatabaseAvailable)
-            messages.Add($"Журнал: БД недоступна; очередь {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
+            messages.Add($"БД недоступна; очередь {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
         else if (audit.PendingCount > 0 || audit.DroppedCount > 0)
-            messages.Add($"Журнал: синхронизация {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
+            messages.Add($"синхронизация {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
 
         _lblStorage.Text = string.Join(" | ", messages);
         _lblStorage.ForeColor = hasError ? Color.Red : UiColors.TextMuted;
