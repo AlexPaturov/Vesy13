@@ -29,6 +29,9 @@ static class Program
         }
         AuditLogger.Initialize();
         AuditLogger.Action(AuditLogger.AppStarted, "Application", "Vesy13");
+        if (!calibLoadedFromDb)
+            AuditLogger.Action(AuditLogger.CalibrationFallback, "LocalRepository",
+                $"БД недоступна на старте, калибровка восстановлена из локального кэша (обновлён {settings.Current.CalibCacheUpdatedAt:yyyy-MM-dd HH:mm:ss})");
         System.Windows.Forms.Application.Run(new MainForm(staticSim, dynamicSim, ldb, settings));
     }
 }

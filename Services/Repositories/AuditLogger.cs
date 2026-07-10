@@ -27,6 +27,7 @@ public static class AuditLogger
     public const int RecordUpdated     = 1005;
     public const int TrainFinished     = 1006;
     public const int CalibrationSaved  = 1007;
+    public const int CalibrationFallback = 1008;
     public const int AdcConnected      = 2001;
     public const int AdcDisconnected   = 2002;
     public const int AdcStaticRawFrame = 2010;
