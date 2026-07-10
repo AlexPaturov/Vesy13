@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Vesy13.Models;
 
 namespace Vesy13.Services.Configuration;
 
@@ -53,6 +54,14 @@ public sealed class SettingsService
         var (hash, salt) = PasswordHasher.Create(password);
         _settings.AdminPasswordHash = hash;
         _settings.AdminPasswordSalt = salt;
+    }
+
+    /// <summary>Обновляет локальный fallback-кэш калибровки последним известным состоянием из БД. Не вызывает Save().</summary>
+    public void UpdateCalibrationCache(IReadOnlyList<CalibPoint> staticPoints, DynamicCalib dynamicCalib)
+    {
+        _settings.CachedStaticPoints = staticPoints.ToList();
+        _settings.CachedDynamicCalib = dynamicCalib;
+        _settings.CalibCacheUpdatedAt = DateTime.Now;
     }
 
     private static AppSettings CreateDefault()

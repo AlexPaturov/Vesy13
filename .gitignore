@@ -4,6 +4,7 @@ obj/
 .vs/
 .idea/
 *.suo
+/settings.json
 # Empty WinForms designer resources generated for MainForm without actual resources
 /MainForm.resx
 /ScaleListener/MainForm.resx

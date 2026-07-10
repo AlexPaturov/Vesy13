@@ -21,7 +21,8 @@ public class LocalRepository
 
     // ── Load ───────────────────────────────────────────────────────────────
 
-    public async Task LoadAsync()
+    /// <summary>Возвращает true, если калибровка успешно прочитана из БД, false — если БД недоступна.</summary>
+    public async Task<bool> LoadAsync()
     {
         try
         {
@@ -36,11 +37,13 @@ public class LocalRepository
             CalibPoints = pts.ToList().AsReadOnly();
 
             Dynamic = await LoadActiveDynamicCalibAsync(conn);
+            return true;
         }
         catch
         {
             CalibPoints = [];
             Dynamic     = new DynamicCalib();
+            return false;
         }
     }
 

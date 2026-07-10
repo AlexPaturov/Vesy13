@@ -1530,6 +1530,8 @@ public partial class ServiceForm : Form
         try
         {
             await _calib.SaveCalibPointsAsync(channel, pts);
+            _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
+            _settings.Save();
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points", $"ch={(_calibUseCh0 ? "CH0" : "CH1")} rows={pts.Count}");
             await LoadCalibPointsAsync();
@@ -1786,6 +1788,8 @@ public partial class ServiceForm : Form
         try
         {
             await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
+            _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
+            _settings.Save();
             await LoadCalibDynamicAsync();
             MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             AuditLogger.Action(AuditLogger.CalibrationSaved, "CalibProfile", $"dynamic id={_calib.Dynamic.Id} kp={kp:G4} km={km:G4}");
