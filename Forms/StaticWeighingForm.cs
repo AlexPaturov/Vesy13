@@ -327,7 +327,9 @@ public partial class StaticWeighingForm : Form
     {
         _dotConn.BackColor = connected ? Color.LimeGreen : Color.Red;
         _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
-        var adcState = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
+        var adcState = connected
+            ? $"АЦП: {_sim.PortName}"
+            : _sim.IsPortOpen ? $"АЦП: нет валидного потока ({_sim.PortName})" : "АЦП: порт закрыт";
         _lblConn.Text = adcState;
         UpdateStorageStatus();
         UpdateButtonStates();

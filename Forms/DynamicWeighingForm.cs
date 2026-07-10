@@ -354,7 +354,7 @@ public partial class DynamicWeighingForm : Form
         {
             _dotConn.BackColor = Color.Red;
             _lblConn.ForeColor = Color.Red;
-            _lblConn.Text = "АЦП: отключён";
+            _lblConn.Text = "АЦП: порт закрыт";
             UpdateStorageStatus();
             UpdateButtonStates();
             return;
@@ -365,7 +365,7 @@ public partial class DynamicWeighingForm : Form
         _lblConn.ForeColor = connected ? Color.LimeGreen : Color.Red;
         var adcState = connected
             ? $"АЦП: {_sim.PortName}"
-            : "АЦП: отключён";
+            : $"АЦП: нет валидного потока ({_sim.PortName})";
         _lblConn.Text = adcState;
         UpdateStorageStatus();
         UpdateButtonStates();
