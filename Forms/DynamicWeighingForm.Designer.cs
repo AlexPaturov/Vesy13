@@ -369,7 +369,7 @@ partial class DynamicWeighingForm
         AutoScaleDimensions = new SizeF(10F, 25F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.FromArgb(238, 241, 244);
-        ClientSize = new Size(1111, 1048);
+        ClientSize = new Size(1241, 1048);
         Controls.Add(_layoutMain);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;

@@ -108,8 +108,6 @@ public partial class StaticWeighingForm : Form
         _pnlDisplay.BackColor = UiColors.DisplayBackground;
         _lblValue.Font    = UiFonts.Display;
         _lblValue.ForeColor = UiColors.TextOnDarkMuted;
-        _lblUnit.Font     = UiFonts.UnitLabel;
-        _lblUnit.ForeColor = UiColors.TextOnDarkMuted;
         _lblBogie1Caption.Font = UiFonts.Body;
         _lblBogie1Caption.ForeColor = UiColors.TextOnDarkMuted;
         _lblBogie1Value.Font = UiFonts.Medium;
