@@ -67,6 +67,12 @@ public partial class DynamicWeighingForm : Form
 
     private bool ValidateBeforeWeigh()
     {
+        if (!_sim.IsConnected)
+        {
+            MessageBox.Show("АЦП не подключён.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
         if (!_rbPlus.Checked && !_rbMinus.Checked)
         {
             MessageBox.Show("Выберите направление движения состава.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -350,6 +356,7 @@ public partial class DynamicWeighingForm : Form
             _lblConn.ForeColor = Color.Red;
             _lblConn.Text = "АЦП: порт закрыт";
             UpdateStorageStatus();
+            UpdateButtonStates();
             return;
         }
 
@@ -361,6 +368,7 @@ public partial class DynamicWeighingForm : Form
             : $"АЦП: нет валидного потока ({_sim.PortName})";
         _lblConn.Text = adcState;
         UpdateStorageStatus();
+        UpdateButtonStates();
     }
 
     private void WriteDynamicDiagnostics()
@@ -507,9 +515,9 @@ public partial class DynamicWeighingForm : Form
 
     private void UpdateButtonStates()
     {
-        bool hasCalibration = HasDynamicCalibration();
-        _btnWeigh.Enabled  = hasCalibration;
-        _btnZero.Enabled   = _state == WeighState.Idle && hasCalibration;
+        bool canWeigh = HasDynamicCalibration() && _sim.IsConnected;
+        _btnWeigh.Enabled  = canWeigh;
+        _btnZero.Enabled   = _state == WeighState.Idle && canWeigh;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
         UpdateDirectionControls();
     }

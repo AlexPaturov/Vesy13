@@ -48,6 +48,11 @@ public partial class StaticWeighingForm : Form
 
     private bool ValidateBeforeWeigh()
     {
+        if (!_sim.IsConnected)
+        {
+            MessageBox.Show("АЦП не подключён.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
         if (HasStaticCalibration()) return true;
         MessageBox.Show($"Нет статической калибровки для канала {(_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1")}.",
             "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -325,6 +330,7 @@ public partial class StaticWeighingForm : Form
         var adcState = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         _lblConn.Text = adcState;
         UpdateStorageStatus();
+        UpdateButtonStates();
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
     }
@@ -498,9 +504,9 @@ public partial class StaticWeighingForm : Form
 
     private void UpdateButtonStates()
     {
-        bool hasCalibration = HasStaticCalibration();
-        _btnWeigh.Enabled  = hasCalibration;
-        _btnZero.Enabled   = _state == WeighState.Idle && hasCalibration;
+        bool canWeigh = HasStaticCalibration() && _sim.IsConnected;
+        _btnWeigh.Enabled  = canWeigh;
+        _btnZero.Enabled   = _state == WeighState.Idle && canWeigh;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
     }
 
