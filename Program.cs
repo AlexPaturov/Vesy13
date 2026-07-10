@@ -23,6 +23,10 @@ static class Program
             settings.UpdateCalibrationCache(ldb.CalibPoints, ldb.Dynamic);
             settings.Save();
         }
+        else
+        {
+            ldb.RestoreLastKnownCalibration(settings.Current.CachedStaticPoints, settings.Current.CachedDynamicCalib);
+        }
         AuditLogger.Initialize();
         AuditLogger.Action(AuditLogger.AppStarted, "Application", "Vesy13");
         System.Windows.Forms.Application.Run(new MainForm(staticSim, dynamicSim, ldb, settings));

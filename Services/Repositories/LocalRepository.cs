@@ -13,7 +13,7 @@ public class LocalRepository
     private const string ConnStr =
         "Host=localhost;Port=5432;Database=scale_db;Username=scale_user;Password=fluffyBunny";
 
-    /// <summary>Кэш всех калибровочных точек. Обновляется после каждого сохранения.</summary>
+    /// <summary>Кэш всех калибровочных точек. Обновляется после каждого сохранения и при восстановлении последнего известного состояния.</summary>
     public IReadOnlyList<CalibPoint> CalibPoints { get; private set; } = [];
 
     /// <summary>Коэффициенты динамической калибровки.</summary>
@@ -45,6 +45,16 @@ public class LocalRepository
             Dynamic     = new DynamicCalib();
             return false;
         }
+    }
+
+    /// <summary>
+    /// Заполняет калибровку последним известным состоянием, когда БД недоступна.
+    /// В БД не пишет. Пустые значения оставляют весы незакалиброванными, как и неудачное чтение.
+    /// </summary>
+    public void RestoreLastKnownCalibration(IReadOnlyList<CalibPoint> points, DynamicCalib dynamicCalib)
+    {
+        CalibPoints = points.ToList().AsReadOnly();
+        Dynamic     = dynamicCalib;
     }
 
     // ── Calibration points ─────────────────────────────────────────────────
