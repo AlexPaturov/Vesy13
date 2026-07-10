@@ -58,8 +58,16 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 | `AdminZeroLimitPercent` | административный предел установки нуля, % от НПВ | `100.0` |
 | `AdminPasswordHash` | PBKDF2-хеш пароля администратора | создается при первом запуске |
 | `AdminPasswordSalt` | соль пароля администратора | создается при первом запуске |
+| `CachedStaticPoints` | локальный снимок всех точек статической калибровки (полные строки из БД, включая снятые) — fallback на случай недоступности БД при старте | обновляется при каждой успешной загрузке/сохранении калибровки |
+| `CachedDynamicCalib` | локальный снимок активной строки динамической калибровки — тот же fallback | обновляется вместе с `CachedStaticPoints` |
+| `CalibCacheUpdatedAt` | время последнего обновления двух полей выше | `null`, пока калибровка ни разу не была успешно прочитана |
 
 После первого запуска пароль администратора нужно сменить через сервисную форму.
+
+Если БД недоступна при старте, `LocalRepository.RestoreLastKnownCalibration` подставляет
+`CachedStaticPoints`/`CachedDynamicCalib` вместо пустой калибровки; событие пишется в аудит
+(`AuditLogger.CalibrationFallback`). Пустой кэш (калибровка никогда не была успешно прочитана)
+оставляет то же заблокированное состояние, что и обычная неудача чтения из БД.
 
 ## Строки подключения
 
@@ -87,6 +95,8 @@ dotnet run --project ScaleListener/ScaleListener.csproj
    - `migration_v2.sql`
    - `002_calibration_points.sql`
    - `003_calibration_points_deleted_at.sql`
+   - `004_calibration_dynamic_history.sql`
+   - `005_calibration_points_created_at.sql`
 3. Запустить приложение.
 4. Открыть сервисную форму.
 5. Проверить COM-порт и сохранить настройки.

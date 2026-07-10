@@ -8,7 +8,9 @@
 2. инициализирует WinForms;
 3. загружает или создает `settings.json`;
 4. создает `SimA04ReaderStatic` и `SimA04ReaderDynamic`;
-5. загружает кэш калибровки из PostgreSQL через `LocalRepository`;
+5. загружает калибровку из PostgreSQL через `LocalRepository.LoadCalibrationFromDbAsync`;
+   при неудаче подставляет `LocalRepository.RestoreLastKnownCalibration` из локального
+   кэша `settings.json` (см. `configuration.md`); при удаче — обновляет этот кэш;
 6. инициализирует аудит;
 7. открывает `MainForm`.
 
