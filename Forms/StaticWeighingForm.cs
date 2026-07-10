@@ -44,6 +44,16 @@ public partial class StaticWeighingForm : Form
     private double ReadRawTonnes(int adcCode) =>
         CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel) ?? 0;
 
+    private bool HasStaticCalibration() => ActiveCalibPointCount() > 0;
+
+    private bool ValidateBeforeWeigh()
+    {
+        if (HasStaticCalibration()) return true;
+        MessageBox.Show($"Нет статической калибровки для канала {(_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1")}.",
+            "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        return false;
+    }
+
     private (CalibPoint? Point, int ActiveCount) SelectStaticCalibPoint(int adcCode)
     {
         int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
@@ -280,13 +290,22 @@ public partial class StaticWeighingForm : Form
         _lastFrame = frame;
         int code = ActiveCode(frame);
         double tonnes = ToTonnes(code);
-        _lblValue.Text = tonnes.ToString("F2");
-        _lblValue.ForeColor = _sim.IsConnected
-            ? (_state == WeighState.Bogie1Captured ? UiColors.PendingAction : UiColors.PrimaryAction)
-            : UiColors.Disconnected;
 
-        if (_state == WeighState.Bogie1Captured)
-            SetBogieValue(_lblBogie2Value, tonnes);
+        if (!HasStaticCalibration())
+        {
+            _lblValue.Text = "—";
+            _lblValue.ForeColor = UiColors.Disconnected;
+        }
+        else
+        {
+            _lblValue.Text = tonnes.ToString("F2");
+            _lblValue.ForeColor = _sim.IsConnected
+                ? (_state == WeighState.Bogie1Captured ? UiColors.PendingAction : UiColors.PrimaryAction)
+                : UiColors.Disconnected;
+
+            if (_state == WeighState.Bogie1Captured)
+                SetBogieValue(_lblBogie2Value, tonnes);
+        }
 
         WriteCalcDiagnostic(frame, code, tonnes);
     }
@@ -328,10 +347,12 @@ public partial class StaticWeighingForm : Form
     {
         var audit = AuditLogger.GetQueueStatus();
         var messages = new List<string>();
+        if (!HasStaticCalibration())
+            messages.Add($"Статическая калибровка: не задана для канала {(_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1")}");
         if (!_weighingStorageAvailable)
             messages.Add("Взвешивание: БД недоступна, запись не сохранена");
 
-        var hasError = !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
+        var hasError = !HasStaticCalibration() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
         if (!audit.IsDatabaseAvailable)
             messages.Add($"Журнал: БД недоступна; очередь {audit.PendingCount}/{AuditLogger.QueueCapacity}; потеряно {audit.DroppedCount}");
         else if (audit.PendingCount > 0 || audit.DroppedCount > 0)
@@ -379,6 +400,7 @@ public partial class StaticWeighingForm : Form
     private void HandleWeighPress()
     {
         if (!_btnWeigh.Enabled) return;
+        if (!ValidateBeforeWeigh()) return;
         if (_state == WeighState.Idle)
         {
             _wagonNumber++;
@@ -440,6 +462,7 @@ public partial class StaticWeighingForm : Form
 
     private void OnZeroClick()
     {
+        if (!ValidateBeforeWeigh()) return;
         double current = ReadRawTonnes(ActiveCode(_lastFrame));
         double limit = _settings.Current.OperatorZeroLimitTonnes;
         if (Math.Abs(current) > limit)
@@ -477,7 +500,9 @@ public partial class StaticWeighingForm : Form
 
     private void UpdateButtonStates()
     {
-        _btnZero.Enabled   = _state == WeighState.Idle;
+        bool hasCalibration = HasStaticCalibration();
+        _btnWeigh.Enabled  = hasCalibration;
+        _btnZero.Enabled   = _state == WeighState.Idle && hasCalibration;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
     }
 
