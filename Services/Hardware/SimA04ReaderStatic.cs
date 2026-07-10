@@ -40,6 +40,13 @@ public class SimA04ReaderStatic : IDisposable
     /// <summary>Контроллер АЦП отвечает валидными кадрами.</summary>
     public bool          IsConnected   { get; private set; }
 
+    /// <summary>
+    /// true, если последнее закрытие порта пришлось форсировать (устройство не отвечало
+    /// дольше штатного таймаута) — SerialPort в этом случае мог остаться в неопределённом
+    /// внутреннем состоянии, этот экземпляр дальше переиспользовать для Open() не стоит.
+    /// </summary>
+    public bool          IsPoisoned    { get; private set; }
+
     /// <summary>Имя COM-порта, переданного в <see cref="Open"/>.</summary>
     public string        PortName      { get; private set; } = "COM3";
 
@@ -53,6 +60,7 @@ public class SimA04ReaderStatic : IDisposable
     public void Open(string portName = "COM3")
     {
         PortName = portName;
+        IsPoisoned = false;
         _port = new SerialPort(portName, 4800, Parity.Even, 8, StopBits.One)
         {
             ReadTimeout  = SerialPort.InfiniteTimeout,
@@ -81,8 +89,8 @@ public class SimA04ReaderStatic : IDisposable
         _pollTimer?.Dispose();
         _pollTimer = null;
         lock (_lock) _buffer.Clear();
-        _port?.Close();
-        _port?.Dispose();
+        if (_port is not null)
+            IsPoisoned = !SerialPortForceCloser.CloseWithTimeout(_port);
         _port       = null;
         IsPortOpen = false;
         SetConnected(false, force: true);
