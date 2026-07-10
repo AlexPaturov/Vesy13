@@ -106,6 +106,7 @@ partial class StaticWeighingForm
         // 
         // _lblBogie1Caption
         // 
+        _lblBogie1Caption.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie1Caption.Font = new Font("Segoe UI", 12F);
         _lblBogie1Caption.ForeColor = Color.FromArgb(215, 224, 234);
         _lblBogie1Caption.Location = new Point(462, 18);
@@ -117,6 +118,7 @@ partial class StaticWeighingForm
         // 
         // _lblBogie1Value
         // 
+        _lblBogie1Value.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie1Value.Font = new Font("Segoe UI", 10F);
         _lblBogie1Value.ForeColor = Color.FromArgb(215, 224, 234);
         _lblBogie1Value.Location = new Point(462, 39);
@@ -128,6 +130,7 @@ partial class StaticWeighingForm
         // 
         // _lblBogie2Caption
         // 
+        _lblBogie2Caption.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie2Caption.Font = new Font("Segoe UI", 12F);
         _lblBogie2Caption.ForeColor = Color.FromArgb(215, 224, 234);
         _lblBogie2Caption.Location = new Point(462, 84);
@@ -139,6 +142,7 @@ partial class StaticWeighingForm
         // 
         // _lblBogie2Value
         // 
+        _lblBogie2Value.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _lblBogie2Value.Font = new Font("Segoe UI", 10F);
         _lblBogie2Value.ForeColor = Color.FromArgb(215, 224, 234);
         _lblBogie2Value.Location = new Point(462, 105);
@@ -311,7 +315,6 @@ partial class StaticWeighingForm
         Controls.Add(_layoutMain);
         Controls.Add(_pnlStatusBar);
         KeyPreview = true;
-        MaximumSize = new Size(689, 10000);
         Name = "StaticWeighingForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Взвешивание — Статика";
