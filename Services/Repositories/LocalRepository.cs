@@ -22,7 +22,7 @@ public class LocalRepository
     // ── Load ───────────────────────────────────────────────────────────────
 
     /// <summary>Возвращает true, если калибровка успешно прочитана из БД, false — если БД недоступна.</summary>
-    public async Task<bool> LoadAsync()
+    public async Task<bool> LoadCalibrationFromDbAsync()
     {
         try
         {

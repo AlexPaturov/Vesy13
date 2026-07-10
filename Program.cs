@@ -17,8 +17,8 @@ static class Program
         using var staticSim = new SimA04ReaderStatic();
         using var dynamicSim = new SimA04ReaderDynamic();
         var       ldb = new LocalRepository();
-        bool calibLoaded = ldb.LoadAsync().GetAwaiter().GetResult();
-        if (calibLoaded)
+        bool calibLoadedFromDb = ldb.LoadCalibrationFromDbAsync().GetAwaiter().GetResult();
+        if (calibLoadedFromDb)
         {
             settings.UpdateCalibrationCache(ldb.CalibPoints, ldb.Dynamic);
             settings.Save();
