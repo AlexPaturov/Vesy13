@@ -1,4 +1,5 @@
 using System.IO.Ports;
+using ScaleListener.FaultInjection;
 
 namespace ScaleListener;
 
@@ -16,6 +17,7 @@ public class DynamicForm : Form
     private Button _btnConnect = null!;
     private Button _btnStopStream = null!;
     private Button _btnClear = null!;
+    private Button _btnFaults = null!;
     private NumericUpDown _numWeight = null!;
     private NumericUpDown _numTolerance = null!;
     private NumericUpDown _numHz = null!;
@@ -27,6 +29,10 @@ public class DynamicForm : Form
     private readonly SerialPort _port;
     private readonly Random _rng = new();
     private readonly System.Windows.Forms.Timer _streamTimer = new();
+    private readonly FaultEngine _faultEngine = new();
+    private DynamicFaultForm? _faultForm;
+    private DateTime _driftStartedAt;
+    private int _stuckCode;
     private volatile bool _isShuttingDown;
     private bool _streaming;
     private int _sampleIndex;
@@ -45,13 +51,15 @@ public class DynamicForm : Form
 
         _streamTimer.Interval = HzToIntervalMs((int)_numHz.Value);
         _streamTimer.Tick += (_, _) => SendDynamicResponse();
+
+        _faultEngine.WindowChanged += OnFaultWindowChanged;
     }
 
     private void BuildUi()
     {
         Text = "Scale Listener - Динамика - COM4  4800/Even";
-        ClientSize = new Size(860, 520);
-        MinimumSize = new Size(760, 430);
+        ClientSize = new Size(968, 520);
+        MinimumSize = new Size(868, 430);
 
         var lblWeight = new Label
         {
@@ -208,15 +216,64 @@ public class DynamicForm : Form
         };
         _btnClear.Click += (_, _) => ClearLog();
 
+        _btnFaults = new Button
+        {
+            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+            Location = new Point(860, 486),
+            Size = new Size(96, 26),
+            Text = "Сбои...",
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.FromArgb(255, 224, 178),
+        };
+        _btnFaults.Click += (_, _) => OpenFaultForm();
+
         Controls.AddRange(new Control[]
         {
             lblWeight, _numWeight, lblTolerance, _numTolerance, lblHz, _numHz,
             lblScenario, _cmbScenario, lblPacketLog, _cmbPacketLog, _lblCode, _log, _btnConnect, _lblState,
-            _btnStopStream, _btnClear
+            _btnStopStream, _btnClear, _btnFaults
         });
 
         UpdateStateLabel();
         UpdateCodePreview();
+    }
+
+    private void OpenFaultForm()
+    {
+        if (_faultForm is { IsDisposed: false })
+        {
+            _faultForm.Activate();
+            return;
+        }
+
+        _faultForm = new DynamicFaultForm(_faultEngine) { Owner = this };
+        _faultForm.Show();
+    }
+
+    private void OnFaultWindowChanged(FaultType type, bool active)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnFaultWindowChanged(type, active)); return; }
+
+        int currentCode = WeightToAdcCode(_numWeight.Value);
+        string correct = $"{_numWeight.Value:F2} т (код {currentCode})";
+
+        switch (type)
+        {
+            case FaultType.Drift:
+                if (active) _driftStartedAt = DateTime.UtcNow;
+                _faultEngine.AppendHistory(type, active ? FaultEventKind.Started : FaultEventKind.Stopped,
+                    correct, active ? "дрейф включён" : "дрейф выключен");
+                break;
+            case FaultType.Stuck:
+                if (active) _stuckCode = currentCode;
+                _faultEngine.AppendHistory(type, active ? FaultEventKind.Started : FaultEventKind.Stopped,
+                    correct, active ? $"застрял на коде {_stuckCode}" : "отпущен");
+                break;
+            case FaultType.Silence:
+                _faultEngine.AppendHistory(type, active ? FaultEventKind.Started : FaultEventKind.Stopped,
+                    correct, active ? "нет ответа" : "ответ возобновлён");
+                break;
+        }
     }
 
     private void BtnConnect_Click(object? sender, EventArgs e)
@@ -315,16 +372,60 @@ public class DynamicForm : Form
         if (_isShuttingDown || !_port.IsOpen)
             return;
 
+        _faultEngine.Pump();
+
+        if (_faultEngine.IsWindowActive(FaultType.Silence))
+        {
+            _sampleIndex++;
+            return; // эмулятор "молчит" - не отвечает вообще, как реальный оборвавшийся АЦП
+        }
+
         decimal baseWeight = GetScenarioWeight();
         decimal tolerance = _numTolerance.Value;
         decimal ch0Weight = ApplyTolerance(baseWeight, tolerance);
         decimal ch1Weight = ApplyTolerance(baseWeight, tolerance);
+
+        if (_faultEngine.IsWindowActive(FaultType.Drift))
+        {
+            double t = (DateTime.UtcNow - _driftStartedAt).TotalSeconds;
+            decimal amplitude = (decimal)_faultEngine.Get(FaultType.Drift).Magnitude;
+            decimal offset = (decimal)Math.Sin(t * Math.PI) * amplitude;
+            ch0Weight = Math.Clamp(ch0Weight + offset, 0, MaxWeightTonnes);
+            ch1Weight = Math.Clamp(ch1Weight + offset, 0, MaxWeightTonnes);
+        }
+
         int ch0 = WeightToAdcCode(ch0Weight);
         int ch1 = WeightToAdcCode(ch1Weight);
+
+        if (_faultEngine.IsWindowActive(FaultType.Stuck))
+        {
+            ch0 = _stuckCode;
+            ch1 = _stuckCode;
+        }
+
+        if (_faultEngine.ShouldFireDiscrete(FaultType.Spike))
+        {
+            int correctCh0 = ch0, correctCh1 = ch1;
+            int spikeAdc = (int)((decimal)_faultEngine.Get(FaultType.Spike).Magnitude / MaxWeightTonnes * MaxAdcCode);
+            ch0 = Math.Clamp(ch0 + spikeAdc, 0, MaxAdcCode);
+            ch1 = Math.Clamp(ch1 + spikeAdc, 0, MaxAdcCode);
+            _faultEngine.AppendHistory(FaultType.Spike, FaultEventKind.Fired,
+                $"CH0={correctCh0} CH1={correctCh1}", $"CH0={ch0} CH1={ch1}");
+        }
+
         byte[] buf = BuildSample(ch0, ch1);
 
         if (_cmbScenario.Text == "Битые сэмплы" && _sampleIndex > 0 && _sampleIndex % 50 == 0)
             buf[4]++;
+
+        if (_faultEngine.ShouldFireDiscrete(FaultType.Corrupt))
+        {
+            string correctBytes = string.Join(" ", buf);
+            int garbageBytes = Math.Max(1, (int)_faultEngine.Get(FaultType.Corrupt).Magnitude);
+            for (int i = 0; i < garbageBytes; i++)
+                buf[_rng.Next(buf.Length)] = (byte)_rng.Next(256);
+            _faultEngine.AppendHistory(FaultType.Corrupt, FaultEventKind.Fired, correctBytes, string.Join(" ", buf));
+        }
 
         try
         {
@@ -456,6 +557,7 @@ public class DynamicForm : Form
         _streamTimer.Dispose();
         _port.DataReceived -= Port_DataReceived;
         if (_port.IsOpen) _port.Close();
+        _faultForm?.Close();
         base.OnFormClosing(e);
     }
 }

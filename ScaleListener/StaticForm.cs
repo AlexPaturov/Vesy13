@@ -1,4 +1,5 @@
 using System.IO.Ports;
+using ScaleListener.FaultInjection;
 
 namespace ScaleListener;
 
@@ -11,6 +12,7 @@ public class StaticForm : Form
     private RichTextBox _log = null!;
     private Button _btnConnect = null!;
     private Button _btnClear = null!;
+    private Button _btnFaults = null!;
     private NumericUpDown _numWeight = null!;
     private NumericUpDown _numTolerance = null!;
     private Label _lblCode = null!;
@@ -18,6 +20,10 @@ public class StaticForm : Form
     // ── Serial ────────────────────────────────────────────────────────────
     private readonly SerialPort _port;
     private readonly Random _rng = new();
+    private readonly FaultEngine _faultEngine = new();
+    private StaticFaultForm? _faultForm;
+    private DateTime _driftStartedAt;
+    private int _stuckCode;
     private volatile bool _isShuttingDown;
 
     public StaticForm()
@@ -30,13 +36,15 @@ public class StaticForm : Form
             WriteTimeout = 500,
         };
         _port.DataReceived += Port_DataReceived;
+
+        _faultEngine.WindowChanged += OnFaultWindowChanged;
     }
 
     private void BuildUi()
     {
         Text = "Scale Listener - Статика - COM4  4800/Even";
-        ClientSize = new Size(620, 430);
-        MinimumSize = new Size(540, 340);
+        ClientSize = new Size(730, 430);
+        MinimumSize = new Size(650, 340);
 
         var lblWeight = new Label
         {
@@ -82,7 +90,7 @@ public class StaticForm : Form
         {
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
             Location = new Point(430, 12),
-            Size = new Size(182, 24),
+            Size = new Size(292, 24),
             TextAlign = ContentAlignment.MiddleLeft,
         };
 
@@ -90,7 +98,7 @@ public class StaticForm : Form
         {
             Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
             Location = new Point(8, 46),
-            Size = new Size(604, 336),
+            Size = new Size(714, 336),
             ReadOnly = true,
             BackColor = Color.LightGray,
             Font = new Font("Courier New", 9.75f),
@@ -108,18 +116,67 @@ public class StaticForm : Form
         };
         _btnConnect.Click += BtnConnect_Click;
 
+        _btnFaults = new Button
+        {
+            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+            Location = new Point(550, 394),
+            Size = new Size(90, 26),
+            Text = "Сбои...",
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.FromArgb(255, 224, 178),
+        };
+        _btnFaults.Click += (_, _) => OpenFaultForm();
+
         _btnClear = new Button
         {
             Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-            Location = new Point(538, 394),
+            Location = new Point(648, 394),
             Size = new Size(74, 26),
             Text = "Clear",
             FlatStyle = FlatStyle.Flat,
         };
         _btnClear.Click += (_, _) => _log.Clear();
 
-        Controls.AddRange(new Control[] { lblWeight, _numWeight, lblTolerance, _numTolerance, _lblCode, _log, _btnConnect, _btnClear });
+        Controls.AddRange(new Control[] { lblWeight, _numWeight, lblTolerance, _numTolerance, _lblCode, _log, _btnConnect, _btnFaults, _btnClear });
         UpdateCodePreview();
+    }
+
+    private void OpenFaultForm()
+    {
+        if (_faultForm is { IsDisposed: false })
+        {
+            _faultForm.Activate();
+            return;
+        }
+
+        _faultForm = new StaticFaultForm(_faultEngine) { Owner = this };
+        _faultForm.Show();
+    }
+
+    private void OnFaultWindowChanged(FaultType type, bool active)
+    {
+        if (InvokeRequired) { BeginInvoke(() => OnFaultWindowChanged(type, active)); return; }
+
+        int currentCode = WeightToAdcCode(_numWeight.Value);
+        string correct = $"{_numWeight.Value:F2} т (код {currentCode})";
+
+        switch (type)
+        {
+            case FaultType.Drift:
+                if (active) _driftStartedAt = DateTime.UtcNow;
+                _faultEngine.AppendHistory(type, active ? FaultEventKind.Started : FaultEventKind.Stopped,
+                    correct, active ? "дрейф включён" : "дрейф выключен");
+                break;
+            case FaultType.Stuck:
+                if (active) _stuckCode = currentCode;
+                _faultEngine.AppendHistory(type, active ? FaultEventKind.Started : FaultEventKind.Stopped,
+                    correct, active ? $"застрял на коде {_stuckCode}" : "отпущен");
+                break;
+            case FaultType.Silence:
+                _faultEngine.AppendHistory(type, active ? FaultEventKind.Started : FaultEventKind.Stopped,
+                    correct, active ? "нет ответа на poll" : "ответ возобновлён");
+                break;
+        }
     }
 
     private void BtnConnect_Click(object? sender, EventArgs e)
@@ -181,13 +238,54 @@ public class StaticForm : Form
 
     private void SendStaticResponse()
     {
+        _faultEngine.Pump();
+
+        if (_faultEngine.IsWindowActive(FaultType.Silence))
+            return; // эмулятор "молчит" - не отвечает на poll вообще
+
         decimal weight = _numWeight.Value;
         decimal tolerance = _numTolerance.Value;
         decimal ch0Weight = ApplyTolerance(weight, tolerance);
         decimal ch1Weight = ApplyTolerance(weight, tolerance);
+
+        if (_faultEngine.IsWindowActive(FaultType.Drift))
+        {
+            double t = (DateTime.UtcNow - _driftStartedAt).TotalSeconds;
+            decimal amplitude = (decimal)_faultEngine.Get(FaultType.Drift).Magnitude;
+            decimal offset = (decimal)Math.Sin(t * Math.PI) * amplitude;
+            ch0Weight = Math.Clamp(ch0Weight + offset, 0, MaxWeightTonnes);
+            ch1Weight = Math.Clamp(ch1Weight + offset, 0, MaxWeightTonnes);
+        }
+
         int ch0 = WeightToAdcCode(ch0Weight);
         int ch1 = WeightToAdcCode(ch1Weight);
+
+        if (_faultEngine.IsWindowActive(FaultType.Stuck))
+        {
+            ch0 = _stuckCode;
+            ch1 = _stuckCode;
+        }
+
+        if (_faultEngine.ShouldFireDiscrete(FaultType.Spike))
+        {
+            int correctCh0 = ch0, correctCh1 = ch1;
+            int spikeAdc = (int)((decimal)_faultEngine.Get(FaultType.Spike).Magnitude / MaxWeightTonnes * MaxAdcCode);
+            ch0 = Math.Clamp(ch0 + spikeAdc, 0, MaxAdcCode);
+            ch1 = Math.Clamp(ch1 + spikeAdc, 0, MaxAdcCode);
+            _faultEngine.AppendHistory(FaultType.Spike, FaultEventKind.Fired,
+                $"CH0={correctCh0} CH1={correctCh1}", $"CH0={ch0} CH1={ch1}");
+        }
+
         byte[] buf = BuildFrame(ch0, ch1);
+
+        if (_faultEngine.ShouldFireDiscrete(FaultType.Corrupt))
+        {
+            string correctBytes = string.Join(" ", buf);
+            int garbageBytes = Math.Max(1, (int)_faultEngine.Get(FaultType.Corrupt).Magnitude);
+            for (int i = 0; i < garbageBytes; i++)
+                buf[_rng.Next(buf.Length)] = (byte)_rng.Next(256);
+            _faultEngine.AppendHistory(FaultType.Corrupt, FaultEventKind.Fired, correctBytes, string.Join(" ", buf));
+        }
 
         try
         {
@@ -248,6 +346,7 @@ public class StaticForm : Form
         _isShuttingDown = true;
         _port.DataReceived -= Port_DataReceived;
         if (_port.IsOpen) _port.Close();
+        _faultForm?.Close();
         base.OnFormClosing(e);
     }
 }
