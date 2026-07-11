@@ -32,6 +32,14 @@ public class SimA04ReaderDynamic : IDisposable
 
     public bool IsPortOpen { get; private set; }
     public bool IsConnected { get; private set; }
+
+    /// <summary>
+    /// true, если последнее закрытие порта пришлось форсировать (устройство не отвечало
+    /// дольше штатного таймаута) — SerialPort в этом случае мог остаться в неопределённом
+    /// внутреннем состоянии, этот экземпляр дальше переиспользовать для Open() не стоит.
+    /// </summary>
+    public bool IsPoisoned { get; private set; }
+
     public string PortName { get; private set; } = "COM1";
     public ActiveChannel Channel { get; set; } = ActiveChannel.Main;
     public long RawBytesReceived { get; private set; }
@@ -41,6 +49,7 @@ public class SimA04ReaderDynamic : IDisposable
     public void Open(string portName = "COM1")
     {
         PortName = portName;
+        IsPoisoned = false;
         _port = new SerialPort(portName, 4800, Parity.Even, 8, StopBits.One)
         {
             ReadTimeout = SerialPort.InfiniteTimeout,
@@ -74,9 +83,10 @@ public class SimA04ReaderDynamic : IDisposable
         lock (_lock) _sampleBytes = 0;
 
         if (_port is not null)
+        {
             _port.DataReceived -= OnDataReceived;
-        _port?.Close();
-        _port?.Dispose();
+            IsPoisoned = !SerialPortForceCloser.CloseWithTimeout(_port);
+        }
         _port = null;
 
         IsPortOpen = false;
