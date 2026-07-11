@@ -1,11 +1,15 @@
 using System.Text.Json.Serialization;
 using Vesy13.Models;
+using Vesy13.Services.Hardware;
 
 namespace Vesy13.Services.Configuration;
 
 public sealed class AppSettings
 {
     public string AdcPortName { get; set; } = "COM3";
+
+    /// <summary>Активный канал АЦП (CH0/CH1), общий для статики и динамики. Переключается на вкладке «Канал» сервисной формы; переживает перезапуск программы.</summary>
+    public ActiveChannel ActiveChannel { get; set; } = ActiveChannel.Main;
     public double MaxCapacityTonnes { get; set; } = 140.0;
     public double WeightDiscretizationTonnes { get; set; } = 0.05;
     public double OperatorZeroLimitPercent { get; set; } = 2.0;

@@ -42,9 +42,9 @@ public partial class DynamicWeighingForm : Form
         InitializeComponent();
     }
 
-    public DynamicWeighingForm(SimA04ReaderDynamic sim, LocalRepository ldb, SettingsService settings)
+    public DynamicWeighingForm(LocalRepository ldb, SettingsService settings)
     {
-        _sim = sim;
+        _sim = new SimA04ReaderDynamic { Channel = settings.Current.ActiveChannel };
         _ldb  = ldb;
         _settings = settings;
         InitializeComponent();

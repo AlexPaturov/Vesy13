@@ -1,17 +1,15 @@
 using Vesy13.Services.Configuration;
-using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13;
 
 /// <summary>
 /// Главная форма — навигационный хаб. Открывает дочерние формы через OpenForm и
-/// скрывается, пока открыта дочерняя.
+/// скрывается, пока открыта дочерняя. Не владеет АЦП-reader-ами — каждая форма,
+/// которой нужен АЦП, создаёт и закрывает свой собственный экземпляр самостоятельно.
 /// </summary>
 public partial class MainForm : Form
 {
-    private SimA04ReaderStatic _staticSim = null!;
-    private SimA04ReaderDynamic _dynamicSim = null!;
     private LocalRepository _ldb = null!;
     private SettingsService _settings = null!;
 
@@ -20,10 +18,8 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
-    public MainForm(SimA04ReaderStatic staticSim, SimA04ReaderDynamic dynamicSim, LocalRepository ldb, SettingsService settings)
+    public MainForm(LocalRepository ldb, SettingsService settings)
     {
-        _staticSim = staticSim;
-        _dynamicSim = dynamicSim;
         _ldb = ldb;
         _settings = settings;
         InitializeComponent();
@@ -62,13 +58,13 @@ public partial class MainForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
-        if (DesignMode || _staticSim is null) return;
+        if (DesignMode || _ldb is null) return;
     }
     // ── Navigation ──────────────────────────────────────────────────────────
 
-    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_staticSim, _ldb, _settings));
-    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_dynamicSim, _ldb, _settings));
-    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_staticSim, _dynamicSim, _ldb, _settings));
+    private void BtnStatic_Click(object? sender, EventArgs e)      => OpenForm(new Forms.StaticWeighingForm(_ldb, _settings));
+    private void BtnDynamic_Click(object? sender, EventArgs e)     => OpenForm(new Forms.DynamicWeighingForm(_ldb, _settings));
+    private void BtnService_Click(object? sender, EventArgs e)     => OpenForm(new Forms.ServiceForm(_ldb, _settings));
     private void BtnCorrections_Click(object? sender, EventArgs e) => OpenForm(new Forms.CorrectionsForm(_ldb, _settings));
     private void BtnPrint_Click(object? sender, EventArgs e)       => OpenForm(new Forms.PrintForm(new FactoryRepository()));
     private void BtnLogs_Click(object? sender, EventArgs e)        => OpenForm(new Forms.LogsForm());

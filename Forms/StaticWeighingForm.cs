@@ -33,9 +33,9 @@ public partial class StaticWeighingForm : Form
         InitializeComponent();
     }
 
-    public StaticWeighingForm(SimA04ReaderStatic sim, LocalRepository ldb, SettingsService settings)
+    public StaticWeighingForm(LocalRepository ldb, SettingsService settings)
     {
-        _sim = sim;
+        _sim = new SimA04ReaderStatic { Channel = settings.Current.ActiveChannel };
         _ldb  = ldb;
         _settings = settings;
         InitializeComponent();

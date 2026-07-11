@@ -97,12 +97,13 @@ public partial class ServiceForm : Form
         InitializeDynamicCalibDisplayTimer();
     }
 
-    public ServiceForm(SimA04ReaderStatic adc, SimA04ReaderDynamic dynamicAdc, LocalRepository calib, SettingsService settings)
+    public ServiceForm(LocalRepository calib, SettingsService settings)
     {
-        _staticServiceSim = adc;
-        _staticCalibSim = new SimA04ReaderStatic { Channel = adc.Channel };
-        _dynamicServiceSim = dynamicAdc;
-        _dynamicCalibSim = new SimA04ReaderDynamic { Channel = dynamicAdc.Channel };
+        ActiveChannel channel = settings.Current.ActiveChannel;
+        _staticServiceSim = new SimA04ReaderStatic { Channel = channel };
+        _staticCalibSim = new SimA04ReaderStatic { Channel = channel };
+        _dynamicServiceSim = new SimA04ReaderDynamic { Channel = channel };
+        _dynamicCalibSim = new SimA04ReaderDynamic { Channel = channel };
         _calib = calib;
         _settings = settings;
         InitializeComponent();
@@ -427,6 +428,7 @@ public partial class ServiceForm : Form
             _staticServiceSim.ConnectionChanged -= OnStaticServiceConnectionChanged;
             if (_staticServiceSim.IsPortOpen)
                 _staticServiceSim.Close();
+            _staticServiceSim.Dispose();
 
             _staticCalibSim.RawFrameReceived -= OnStaticCalibRawFrame;
             _staticCalibSim.ConnectionChanged -= OnStaticCalibConnectionChanged;
@@ -440,6 +442,7 @@ public partial class ServiceForm : Form
             _dynamicCalibSim.ConnectionChanged -= OnDynamicCalibConnectionChanged;
             if (_dynamicServiceSim.IsPortOpen)
                 _dynamicServiceSim.Close();
+            _dynamicServiceSim.Dispose();
             if (_dynamicCalibSim.IsPortOpen)
                 _dynamicCalibSim.Close();
             _dynamicCalibSim.Dispose();
@@ -563,8 +566,63 @@ public partial class ServiceForm : Form
             _dynamicServiceSim.Channel = channel;
         if (_dynamicCalibSim is not null)
             _dynamicCalibSim.Channel = channel;
+        _settings.Current.ActiveChannel = channel;
+        _settings.Save();
         UpdateLiveAdcLabel();
         AuditLogger.Action(AuditLogger.AdcChannelChanged, "AdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
+    }
+
+    // ── Замена «отравленного» (IsPoisoned) reader-а на месте ─────────────────
+    // Reader локальный для формы, но переиспользуется в рамках одной сессии
+    // (переключения вкладок, повторные подключения) - при замене нужно перенести
+    // подписки на события со старого объекта на новый, иначе форма "онемеет".
+
+    private void ReplaceStaticServiceSim()
+    {
+        _staticServiceSim.RawFrameReceived -= OnStaticServiceRawFrame;
+        _staticServiceSim.ConnectionChanged -= OnStaticServiceConnectionChanged;
+        _staticServiceSim = new SimA04ReaderStatic { Channel = _staticServiceSim.Channel };
+        _staticServiceSim.RawFrameReceived += OnStaticServiceRawFrame;
+        _staticServiceSim.ConnectionChanged += OnStaticServiceConnectionChanged;
+    }
+
+    private void ReplaceStaticCalibSim()
+    {
+        _staticCalibSim.RawFrameReceived -= OnStaticCalibRawFrame;
+        _staticCalibSim.ConnectionChanged -= OnStaticCalibConnectionChanged;
+        _staticCalibSim = new SimA04ReaderStatic { Channel = _staticCalibSim.Channel };
+        _staticCalibSim.RawFrameReceived += OnStaticCalibRawFrame;
+        _staticCalibSim.ConnectionChanged += OnStaticCalibConnectionChanged;
+    }
+
+    private void ReplaceDynamicServiceSim()
+    {
+        _dynamicServiceSim.ConnectionChanged -= OnDynamicServiceConnectionChanged;
+        bool dataSubscribed = _dynamicServiceDataSubscribed;
+        if (dataSubscribed)
+        {
+            _dynamicServiceSim.RawSampleReceived -= OnDynamicServiceRawSample;
+            _dynamicServiceSim.SampleReceived -= OnDynamicServiceSample;
+        }
+        _dynamicServiceSim = new SimA04ReaderDynamic { Channel = _dynamicServiceSim.Channel };
+        _dynamicServiceSim.ConnectionChanged += OnDynamicServiceConnectionChanged;
+        if (dataSubscribed)
+        {
+            _dynamicServiceSim.RawSampleReceived += OnDynamicServiceRawSample;
+            _dynamicServiceSim.SampleReceived += OnDynamicServiceSample;
+        }
+    }
+
+    private void ReplaceDynamicCalibSim()
+    {
+        _dynamicCalibSim.ConnectionChanged -= OnDynamicCalibConnectionChanged;
+        bool dataSubscribed = _dynamicCalibDataSubscribed;
+        if (dataSubscribed)
+            _dynamicCalibSim.SampleReceived -= OnDynamicCalibSample;
+        _dynamicCalibSim = new SimA04ReaderDynamic { Channel = _dynamicCalibSim.Channel };
+        _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
+        if (dataSubscribed)
+            _dynamicCalibSim.SampleReceived += OnDynamicCalibSample;
     }
 
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
@@ -728,6 +786,8 @@ public partial class ServiceForm : Form
         {
             CloseStaticCalibConnection();
             CloseDynamicConnections();
+            if (_staticServiceSim.IsPoisoned)
+                ReplaceStaticServiceSim();
             _staticServiceSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
             UpdateStaticServiceMonitorConn(_staticServiceSim.IsConnected);
@@ -753,6 +813,8 @@ public partial class ServiceForm : Form
         {
             CloseStaticServiceConnection();
             CloseDynamicConnections();
+            if (_staticCalibSim.IsPoisoned)
+                ReplaceStaticCalibSim();
             _staticCalibSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04StaticCalib", selectedPort);
             UpdateStaticCalibMonitorConn(_staticCalibSim.IsConnected);
@@ -865,6 +927,8 @@ public partial class ServiceForm : Form
         {
             CloseStaticConnections();
             CloseDynamicCalibConnection();
+            if (_dynamicServiceSim.IsPoisoned)
+                ReplaceDynamicServiceSim();
             _dynamicServiceSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort);
             UpdateDynamicServiceMonitorConn(_dynamicServiceSim.IsConnected);
@@ -889,6 +953,8 @@ public partial class ServiceForm : Form
         {
             CloseStaticConnections();
             CloseDynamicServiceConnection();
+            if (_dynamicCalibSim.IsPoisoned)
+                ReplaceDynamicCalibSim();
             _dynamicCalibSim.Open(selectedPort);
             AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort);
             UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);

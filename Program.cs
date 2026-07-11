@@ -1,6 +1,5 @@
 using QuestPDF.Infrastructure;
 using Vesy13.Services.Configuration;
-using Vesy13.Services.Hardware;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13;
@@ -14,9 +13,7 @@ static class Program
         ApplicationConfiguration.Initialize();
         var settings = new SettingsService();
         settings.LoadOrCreate();
-        using var staticSim = new SimA04ReaderStatic();
-        using var dynamicSim = new SimA04ReaderDynamic();
-        var       ldb = new LocalRepository();
+        var ldb = new LocalRepository();
         bool calibLoadedFromDb = ldb.LoadCalibrationFromDbAsync().GetAwaiter().GetResult();
         if (calibLoadedFromDb)
         {
@@ -32,6 +29,6 @@ static class Program
         if (!calibLoadedFromDb)
             AuditLogger.Action(AuditLogger.CalibrationFallback, "LocalRepository",
                 $"БД недоступна на старте, калибровка восстановлена из локального кэша (обновлён {settings.Current.CalibCacheUpdatedAt:yyyy-MM-dd HH:mm:ss})");
-        System.Windows.Forms.Application.Run(new MainForm(staticSim, dynamicSim, ldb, settings));
+        System.Windows.Forms.Application.Run(new MainForm(ldb, settings));
     }
 }
