@@ -3,19 +3,10 @@ using ScaleListener.FaultInjection;
 
 namespace ScaleListener;
 
-public class StaticForm : Form
+public partial class StaticForm : Form
 {
     private const decimal MaxWeightTonnes = 140m;
     private const int MaxAdcCode = 65535;
-
-    // ── UI ────────────────────────────────────────────────────────────────
-    private RichTextBox _log = null!;
-    private Button _btnConnect = null!;
-    private Button _btnClear = null!;
-    private Button _btnFaults = null!;
-    private NumericUpDown _numWeight = null!;
-    private NumericUpDown _numTolerance = null!;
-    private Label _lblCode = null!;
 
     // ── Serial ────────────────────────────────────────────────────────────
     private readonly SerialPort _port;
@@ -28,7 +19,7 @@ public class StaticForm : Form
 
     public StaticForm()
     {
-        BuildUi();
+        InitializeComponent();
 
         _port = new SerialPort("COM4", 4800, Parity.Even, 8, StopBits.One)
         {
@@ -38,108 +29,14 @@ public class StaticForm : Form
         _port.DataReceived += Port_DataReceived;
 
         _faultEngine.WindowChanged += OnFaultWindowChanged;
-    }
 
-    private void BuildUi()
-    {
-        Text = "Scale Listener - Статика - COM4  4800/Even";
-        ClientSize = new Size(730, 430);
-        MinimumSize = new Size(650, 340);
-
-        var lblWeight = new Label
-        {
-            Location = new Point(8, 12),
-            Size = new Size(85, 24),
-            Text = "Вес, т:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _numWeight = new NumericUpDown
-        {
-            DecimalPlaces = 2,
-            Increment = 0.10m,
-            Location = new Point(95, 10),
-            Maximum = MaxWeightTonnes,
-            Minimum = 0,
-            Size = new Size(100, 24),
-            Value = 0,
-        };
-        _numWeight.ValueChanged += (_, _) => UpdateCodePreview();
-
-        var lblTolerance = new Label
-        {
-            Location = new Point(215, 12),
-            Size = new Size(105, 24),
-            Text = "Погр., т:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _numTolerance = new NumericUpDown
-        {
-            DecimalPlaces = 2,
-            Increment = 0.01m,
-            Location = new Point(322, 10),
-            Maximum = 10,
-            Minimum = 0,
-            Size = new Size(90, 24),
-            Value = 0.02m,
-        };
-        _numTolerance.ValueChanged += (_, _) => UpdateCodePreview();
-
-        _lblCode = new Label
-        {
-            Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(430, 12),
-            Size = new Size(292, 24),
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _log = new RichTextBox
-        {
-            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(8, 46),
-            Size = new Size(714, 336),
-            ReadOnly = true,
-            BackColor = Color.LightGray,
-            Font = new Font("Courier New", 9.75f),
-            DetectUrls = false,
-            ScrollBars = RichTextBoxScrollBars.Vertical,
-        };
-
-        _btnConnect = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
-            Location = new Point(8, 394),
-            Size = new Size(100, 26),
-            Text = "Connect",
-            FlatStyle = FlatStyle.Flat,
-        };
-        _btnConnect.Click += BtnConnect_Click;
-
-        _btnFaults = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-            Location = new Point(550, 394),
-            Size = new Size(90, 26),
-            Text = "Сбои...",
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.FromArgb(255, 224, 178),
-        };
-        _btnFaults.Click += (_, _) => OpenFaultForm();
-
-        _btnClear = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-            Location = new Point(648, 394),
-            Size = new Size(74, 26),
-            Text = "Clear",
-            FlatStyle = FlatStyle.Flat,
-        };
-        _btnClear.Click += (_, _) => _log.Clear();
-
-        Controls.AddRange(new Control[] { lblWeight, _numWeight, lblTolerance, _numTolerance, _lblCode, _log, _btnConnect, _btnFaults, _btnClear });
         UpdateCodePreview();
     }
+
+    private void NumWeight_ValueChanged(object? sender, EventArgs e) => UpdateCodePreview();
+    private void NumTolerance_ValueChanged(object? sender, EventArgs e) => UpdateCodePreview();
+    private void BtnClear_Click(object? sender, EventArgs e) => _log.Clear();
+    private void BtnFaults_Click(object? sender, EventArgs e) => OpenFaultForm();
 
     private void OpenFaultForm()
     {

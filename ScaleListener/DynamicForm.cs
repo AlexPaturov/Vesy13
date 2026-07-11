@@ -3,7 +3,7 @@ using ScaleListener.FaultInjection;
 
 namespace ScaleListener;
 
-public class DynamicForm : Form
+public partial class DynamicForm : Form
 {
     private const decimal MaxWeightTonnes = 140m;
     private const int MaxAdcCode = 65535;
@@ -13,22 +13,8 @@ public class DynamicForm : Form
     private const int DefaultHz = 47;
     private const int MaxLogLines = 500;
 
-    private RichTextBox _log = null!;
-    private Button _btnConnect = null!;
-    private Button _btnStopStream = null!;
-    private Button _btnClear = null!;
-    private Button _btnFaults = null!;
-    private NumericUpDown _numWeight = null!;
-    private NumericUpDown _numTolerance = null!;
-    private NumericUpDown _numHz = null!;
-    private ComboBox _cmbScenario = null!;
-    private ComboBox _cmbPacketLog = null!;
-    private Label _lblCode = null!;
-    private Label _lblState = null!;
-
     private readonly SerialPort _port;
     private readonly Random _rng = new();
-    private readonly System.Windows.Forms.Timer _streamTimer = new();
     private readonly FaultEngine _faultEngine = new();
     private DynamicFaultForm? _faultForm;
     private DateTime _driftStartedAt;
@@ -40,7 +26,7 @@ public class DynamicForm : Form
 
     public DynamicForm()
     {
-        BuildUi();
+        InitializeComponent();
 
         _port = new SerialPort("COM4", 4800, Parity.Even, 8, StopBits.One)
         {
@@ -50,193 +36,22 @@ public class DynamicForm : Form
         _port.DataReceived += Port_DataReceived;
 
         _streamTimer.Interval = HzToIntervalMs((int)_numHz.Value);
-        _streamTimer.Tick += (_, _) => SendDynamicResponse();
 
         _faultEngine.WindowChanged += OnFaultWindowChanged;
-    }
-
-    private void BuildUi()
-    {
-        Text = "Scale Listener - Динамика - COM4  4800/Even";
-        ClientSize = new Size(968, 520);
-        MinimumSize = new Size(868, 430);
-
-        var lblWeight = new Label
-        {
-            Location = new Point(8, 12),
-            Size = new Size(65, 24),
-            Text = "Вес, т:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _numWeight = new NumericUpDown
-        {
-            DecimalPlaces = 2,
-            Increment = 0.10m,
-            Location = new Point(75, 10),
-            Maximum = MaxWeightTonnes,
-            Minimum = 0,
-            Size = new Size(90, 24),
-            Value = 0,
-        };
-        _numWeight.ValueChanged += (_, _) => UpdateCodePreview();
-
-        var lblTolerance = new Label
-        {
-            Location = new Point(178, 12),
-            Size = new Size(70, 24),
-            Text = "Шум, т:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _numTolerance = new NumericUpDown
-        {
-            DecimalPlaces = 2,
-            Increment = 0.01m,
-            Location = new Point(250, 10),
-            Maximum = 10,
-            Minimum = 0,
-            Size = new Size(80, 24),
-            Value = 0.02m,
-        };
-        _numTolerance.ValueChanged += (_, _) => UpdateCodePreview();
-
-        var lblHz = new Label
-        {
-            Location = new Point(342, 12),
-            Size = new Size(32, 24),
-            Text = "Hz:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _numHz = new NumericUpDown
-        {
-            DecimalPlaces = 0,
-            Increment = 1,
-            Location = new Point(376, 10),
-            Maximum = 200,
-            Minimum = 1,
-            Size = new Size(64, 24),
-            Value = DefaultHz,
-        };
-        _numHz.ValueChanged += (_, _) => UpdateStreamInterval();
-
-        var lblScenario = new Label
-        {
-            Location = new Point(452, 12),
-            Size = new Size(76, 24),
-            Text = "Сценарий:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _cmbScenario = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Location = new Point(532, 10),
-            Size = new Size(150, 24),
-        };
-        _cmbScenario.Items.AddRange(new object[] { "Постоянная", "Две тележки", "Битые сэмплы" });
-        _cmbScenario.SelectedIndex = 0;
-        _cmbScenario.SelectedIndexChanged += (_, _) => UpdateCodePreview();
-
-        var lblPacketLog = new Label
-        {
-            Location = new Point(690, 12),
-            Size = new Size(35, 24),
-            Text = "Лог:",
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _cmbPacketLog = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Location = new Point(728, 10),
-            Size = new Size(124, 24),
-        };
-        _cmbPacketLog.Items.AddRange(new object[] { "Все", "Каждый 10-й" });
-        _cmbPacketLog.SelectedIndex = 1;
-        _cmbPacketLog.SelectedIndexChanged += (_, _) => UpdateStateLabel();
-
-        _lblCode = new Label
-        {
-            Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(8, 42),
-            Size = new Size(844, 24),
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _lblState = new Label
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(118, 486),
-            Size = new Size(560, 24),
-            TextAlign = ContentAlignment.MiddleLeft,
-        };
-
-        _log = new RichTextBox
-        {
-            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-            Location = new Point(8, 70),
-            Size = new Size(844, 406),
-            ReadOnly = true,
-            BackColor = Color.LightGray,
-            Font = new Font("Courier New", 9.75f),
-            DetectUrls = false,
-            ScrollBars = RichTextBoxScrollBars.Vertical,
-        };
-
-        _btnConnect = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
-            Location = new Point(8, 486),
-            Size = new Size(100, 26),
-            Text = "Connect",
-            FlatStyle = FlatStyle.Flat,
-        };
-        _btnConnect.Click += BtnConnect_Click;
-
-        _btnStopStream = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-            Location = new Point(678, 486),
-            Size = new Size(96, 26),
-            Text = "Stop stream",
-            FlatStyle = FlatStyle.Flat,
-            Enabled = false,
-        };
-        _btnStopStream.Click += (_, _) => StopStream("manual");
-
-        _btnClear = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-            Location = new Point(786, 486),
-            Size = new Size(66, 26),
-            Text = "Clear",
-            FlatStyle = FlatStyle.Flat,
-        };
-        _btnClear.Click += (_, _) => ClearLog();
-
-        _btnFaults = new Button
-        {
-            Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-            Location = new Point(860, 486),
-            Size = new Size(96, 26),
-            Text = "Сбои...",
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.FromArgb(255, 224, 178),
-        };
-        _btnFaults.Click += (_, _) => OpenFaultForm();
-
-        Controls.AddRange(new Control[]
-        {
-            lblWeight, _numWeight, lblTolerance, _numTolerance, lblHz, _numHz,
-            lblScenario, _cmbScenario, lblPacketLog, _cmbPacketLog, _lblCode, _log, _btnConnect, _lblState,
-            _btnStopStream, _btnClear, _btnFaults
-        });
 
         UpdateStateLabel();
         UpdateCodePreview();
     }
+
+    private void NumWeight_ValueChanged(object? sender, EventArgs e) => UpdateCodePreview();
+    private void NumTolerance_ValueChanged(object? sender, EventArgs e) => UpdateCodePreview();
+    private void NumHz_ValueChanged(object? sender, EventArgs e) => UpdateStreamInterval();
+    private void CmbScenario_SelectedIndexChanged(object? sender, EventArgs e) => UpdateCodePreview();
+    private void CmbPacketLog_SelectedIndexChanged(object? sender, EventArgs e) => UpdateStateLabel();
+    private void BtnStopStream_Click(object? sender, EventArgs e) => StopStream("manual");
+    private void BtnClear_Click(object? sender, EventArgs e) => ClearLog();
+    private void BtnFaults_Click(object? sender, EventArgs e) => OpenFaultForm();
+    private void StreamTimer_Tick(object? sender, EventArgs e) => SendDynamicResponse();
 
     private void OpenFaultForm()
     {
@@ -554,7 +369,6 @@ public class DynamicForm : Form
     {
         _isShuttingDown = true;
         _streamTimer.Stop();
-        _streamTimer.Dispose();
         _port.DataReceived -= Port_DataReceived;
         if (_port.IsOpen) _port.Close();
         _faultForm?.Close();
