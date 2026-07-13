@@ -20,12 +20,10 @@ partial class DynamicFaultForm
         _btnCycle = new Button();
         _btnClearHistory = new Button();
         _lblSilenceMode = new Label();
-        _cmbSilenceMode = new ComboBox();
         _lblSilenceActive = new Label();
         _numSilenceActive = new NumericUpDown();
         _lblSilenceGap = new Label();
         _numSilenceGap = new NumericUpDown();
-        _btnSilenceManual = new Button();
         _grpSpike = new GroupBox();
         _lblSpikeMode = new Label();
         _cmbSpikeMode = new ComboBox();
@@ -67,12 +65,14 @@ partial class DynamicFaultForm
         _numStuckMagnitude = new NumericUpDown();
         _btnStuckManual = new Button();
         _history = new FaultHistoryListBox();
-        tableLayoutPanel1 = new TableLayoutPanel();
-        panel1 = new Panel();
-        panel3 = new Panel();
-        panel2 = new Panel();
-        tableLayoutPanel2 = new TableLayoutPanel();
-        label1 = new Label();
+        _tlpSilenceParams = new TableLayoutPanel();
+        _btnSilenceManual = new Button();
+        _cmbSilenceMode = new ComboBox();
+        _pnlSilence = new Panel();
+        _pnlSilenceBody = new Panel();
+        _pnlSilenceHeader = new Panel();
+        _tlpSilenceHeader = new TableLayoutPanel();
+        _lblSilenceTitle = new Label();
         ((System.ComponentModel.ISupportInitialize)_numSilenceActive).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numSilenceGap).BeginInit();
         _grpSpike.SuspendLayout();
@@ -91,11 +91,11 @@ partial class DynamicFaultForm
         ((System.ComponentModel.ISupportInitialize)_numStuckActive).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numStuckGap).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numStuckMagnitude).BeginInit();
-        tableLayoutPanel1.SuspendLayout();
-        panel1.SuspendLayout();
-        panel3.SuspendLayout();
-        panel2.SuspendLayout();
-        tableLayoutPanel2.SuspendLayout();
+        _tlpSilenceParams.SuspendLayout();
+        _pnlSilence.SuspendLayout();
+        _pnlSilenceBody.SuspendLayout();
+        _pnlSilenceHeader.SuspendLayout();
+        _tlpSilenceHeader.SuspendLayout();
         SuspendLayout();
         // 
         // _btnCycle
@@ -104,7 +104,7 @@ partial class DynamicFaultForm
         _btnCycle.FlatStyle = FlatStyle.Flat;
         _btnCycle.Location = new Point(11, 11);
         _btnCycle.Name = "_btnCycle";
-        _btnCycle.Size = new Size(150, 26);
+        _btnCycle.Size = new Size(150, 46);
         _btnCycle.TabIndex = 0;
         _btnCycle.Text = "Старт цикла";
         _btnCycle.UseVisualStyleBackColor = false;
@@ -115,7 +115,7 @@ partial class DynamicFaultForm
         _btnClearHistory.FlatStyle = FlatStyle.Flat;
         _btnClearHistory.Location = new Point(167, 11);
         _btnClearHistory.Name = "_btnClearHistory";
-        _btnClearHistory.Size = new Size(140, 26);
+        _btnClearHistory.Size = new Size(140, 46);
         _btnClearHistory.TabIndex = 1;
         _btnClearHistory.Text = "Очистить историю";
         _btnClearHistory.Click += BtnClearHistory_Click;
@@ -123,41 +123,34 @@ partial class DynamicFaultForm
         // _lblSilenceMode
         // 
         _lblSilenceMode.Dock = DockStyle.Fill;
-        _lblSilenceMode.Location = new Point(688, 1);
+        _lblSilenceMode.Location = new Point(206, 1);
         _lblSilenceMode.Name = "_lblSilenceMode";
-        _lblSilenceMode.Size = new Size(221, 52);
+        _lblSilenceMode.Size = new Size(89, 46);
         _lblSilenceMode.TabIndex = 1;
-        _lblSilenceMode.Text = "Режим:";
-        // 
-        // _cmbSilenceMode
-        // 
-        _cmbSilenceMode.Dock = DockStyle.Fill;
-        _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSilenceMode.Location = new Point(916, 4);
-        _cmbSilenceMode.Name = "_cmbSilenceMode";
-        _cmbSilenceMode.Size = new Size(224, 36);
-        _cmbSilenceMode.TabIndex = 2;
-        _cmbSilenceMode.SelectedIndexChanged += CmbSilenceMode_SelectedIndexChanged;
+        _lblSilenceMode.Text = "Режим";
+        _lblSilenceMode.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _lblSilenceActive
         // 
         _lblSilenceActive.Dock = DockStyle.Fill;
-        _lblSilenceActive.Location = new Point(232, 1);
+        _lblSilenceActive.Location = new Point(4, 1);
         _lblSilenceActive.Name = "_lblSilenceActive";
-        _lblSilenceActive.Size = new Size(221, 52);
+        _lblSilenceActive.Size = new Size(106, 46);
         _lblSilenceActive.TabIndex = 4;
-        _lblSilenceActive.Text = "Актив., с:";
+        _lblSilenceActive.Text = "Актив., с";
+        _lblSilenceActive.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _numSilenceActive
         // 
+        _numSilenceActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSilenceActive.DecimalPlaces = 1;
         _numSilenceActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceActive.Location = new Point(460, 4);
+        _numSilenceActive.Location = new Point(118, 7);
+        _numSilenceActive.Margin = new Padding(4, 0, 4, 0);
         _numSilenceActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numSilenceActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSilenceActive.Name = "_numSilenceActive";
-        _numSilenceActive.Size = new Size(72, 34);
+        _numSilenceActive.Size = new Size(80, 34);
         _numSilenceActive.TabIndex = 5;
         _numSilenceActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numSilenceActive.ValueChanged += NumSilenceActive_ValueChanged;
@@ -165,35 +158,27 @@ partial class DynamicFaultForm
         // _lblSilenceGap
         // 
         _lblSilenceGap.Dock = DockStyle.Fill;
-        _lblSilenceGap.Location = new Point(232, 54);
+        _lblSilenceGap.Location = new Point(4, 48);
         _lblSilenceGap.Name = "_lblSilenceGap";
-        _lblSilenceGap.Size = new Size(221, 52);
+        _lblSilenceGap.Size = new Size(106, 46);
         _lblSilenceGap.TabIndex = 6;
-        _lblSilenceGap.Text = "Пауза, с:";
+        _lblSilenceGap.Text = "Пауза, с";
+        _lblSilenceGap.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _numSilenceGap
         // 
+        _numSilenceGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSilenceGap.DecimalPlaces = 1;
         _numSilenceGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceGap.Location = new Point(460, 57);
+        _numSilenceGap.Location = new Point(118, 54);
+        _numSilenceGap.Margin = new Padding(4, 0, 4, 0);
         _numSilenceGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numSilenceGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSilenceGap.Name = "_numSilenceGap";
-        _numSilenceGap.Size = new Size(72, 34);
+        _numSilenceGap.Size = new Size(80, 34);
         _numSilenceGap.TabIndex = 7;
         _numSilenceGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numSilenceGap.ValueChanged += NumSilenceGap_ValueChanged;
-        // 
-        // _btnSilenceManual
-        // 
-        _btnSilenceManual.Dock = DockStyle.Fill;
-        _btnSilenceManual.FlatStyle = FlatStyle.Flat;
-        _btnSilenceManual.Location = new Point(916, 57);
-        _btnSilenceManual.Name = "_btnSilenceManual";
-        _btnSilenceManual.Size = new Size(224, 46);
-        _btnSilenceManual.TabIndex = 3;
-        _btnSilenceManual.Text = "Вкл/выкл сейчас";
-        _btnSilenceManual.Click += BtnSilenceManual_Click;
         // 
         // _grpSpike
         // 
@@ -641,98 +626,122 @@ partial class DynamicFaultForm
         _history.Font = new Font("Courier New", 12F);
         _history.FormattingEnabled = true;
         _history.IntegralHeight = false;
+        _history.ItemHeight = 25;
         _history.Location = new Point(11, 652);
         _history.Name = "_history";
         _history.Size = new Size(1620, 116);
         _history.TabIndex = 7;
         // 
-        // tableLayoutPanel1
+        // _tlpSilenceParams
         // 
-        tableLayoutPanel1.BackColor = Color.FromArgb(192, 255, 255);
-        tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-        tableLayoutPanel1.ColumnCount = 5;
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.Controls.Add(_btnSilenceManual, 4, 1);
-        tableLayoutPanel1.Controls.Add(_lblSilenceMode, 3, 0);
-        tableLayoutPanel1.Controls.Add(_cmbSilenceMode, 4, 0);
-        tableLayoutPanel1.Controls.Add(_lblSilenceActive, 1, 0);
-        tableLayoutPanel1.Controls.Add(_numSilenceGap, 2, 1);
-        tableLayoutPanel1.Controls.Add(_lblSilenceGap, 1, 1);
-        tableLayoutPanel1.Controls.Add(_numSilenceActive, 2, 0);
-        tableLayoutPanel1.Dock = DockStyle.Fill;
-        tableLayoutPanel1.Location = new Point(0, 0);
-        tableLayoutPanel1.Name = "tableLayoutPanel1";
-        tableLayoutPanel1.RowCount = 2;
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.Size = new Size(1144, 107);
-        tableLayoutPanel1.TabIndex = 8;
+        _tlpSilenceParams.BackColor = Color.FromArgb(192, 255, 255);
+        _tlpSilenceParams.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        _tlpSilenceParams.ColumnCount = 4;
+        _tlpSilenceParams.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.96748F));
+        _tlpSilenceParams.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.0894318F));
+        _tlpSilenceParams.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.4495411F));
+        _tlpSilenceParams.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 39.2660561F));
+        _tlpSilenceParams.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+        _tlpSilenceParams.Controls.Add(_lblSilenceActive, 0, 0);
+        _tlpSilenceParams.Controls.Add(_lblSilenceGap, 0, 1);
+        _tlpSilenceParams.Controls.Add(_numSilenceActive, 1, 0);
+        _tlpSilenceParams.Controls.Add(_numSilenceGap, 1, 1);
+        _tlpSilenceParams.Controls.Add(_lblSilenceMode, 2, 0);
+        _tlpSilenceParams.Controls.Add(_btnSilenceManual, 3, 1);
+        _tlpSilenceParams.Controls.Add(_cmbSilenceMode, 3, 0);
+        _tlpSilenceParams.Dock = DockStyle.Fill;
+        _tlpSilenceParams.Location = new Point(0, 0);
+        _tlpSilenceParams.Name = "_tlpSilenceParams";
+        _tlpSilenceParams.RowCount = 2;
+        _tlpSilenceParams.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpSilenceParams.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpSilenceParams.Size = new Size(493, 95);
+        _tlpSilenceParams.TabIndex = 8;
         // 
-        // panel1
+        // _btnSilenceManual
         // 
-        panel1.BackColor = Color.FromArgb(192, 192, 255);
-        panel1.Controls.Add(panel3);
-        panel1.Controls.Add(panel2);
-        panel1.Location = new Point(49, 453);
-        panel1.Name = "panel1";
-        panel1.Size = new Size(1144, 142);
-        panel1.TabIndex = 9;
+        _btnSilenceManual.Dock = DockStyle.Fill;
+        _btnSilenceManual.FlatStyle = FlatStyle.Flat;
+        _btnSilenceManual.Location = new Point(302, 51);
+        _btnSilenceManual.Name = "_btnSilenceManual";
+        _btnSilenceManual.Size = new Size(187, 40);
+        _btnSilenceManual.TabIndex = 3;
+        _btnSilenceManual.Text = "Вкл/выкл сейчас";
+        _btnSilenceManual.Click += BtnSilenceManual_Click;
         // 
-        // panel3
+        // _cmbSilenceMode
         // 
-        panel3.Controls.Add(tableLayoutPanel1);
-        panel3.Dock = DockStyle.Fill;
-        panel3.Location = new Point(0, 35);
-        panel3.Name = "panel3";
-        panel3.Size = new Size(1144, 107);
-        panel3.TabIndex = 10;
+        _cmbSilenceMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbSilenceMode.Location = new Point(303, 10);
+        _cmbSilenceMode.Margin = new Padding(4, 0, 4, 0);
+        _cmbSilenceMode.Name = "_cmbSilenceMode";
+        _cmbSilenceMode.Size = new Size(185, 36);
+        _cmbSilenceMode.TabIndex = 2;
+        _cmbSilenceMode.SelectedIndexChanged += CmbSilenceMode_SelectedIndexChanged;
         // 
-        // panel2
+        // _pnlSilence
         // 
-        panel2.BackColor = Color.FromArgb(255, 224, 192);
-        panel2.Controls.Add(tableLayoutPanel2);
-        panel2.Dock = DockStyle.Top;
-        panel2.Location = new Point(0, 0);
-        panel2.Name = "panel2";
-        panel2.Size = new Size(1144, 35);
-        panel2.TabIndex = 9;
+        _pnlSilence.BackColor = Color.FromArgb(192, 192, 255);
+        _pnlSilence.Controls.Add(_pnlSilenceBody);
+        _pnlSilence.Controls.Add(_pnlSilenceHeader);
+        _pnlSilence.Location = new Point(49, 453);
+        _pnlSilence.Name = "_pnlSilence";
+        _pnlSilence.Size = new Size(493, 130);
+        _pnlSilence.TabIndex = 9;
         // 
-        // tableLayoutPanel2
+        // _pnlSilenceBody
         // 
-        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-        tableLayoutPanel2.ColumnCount = 1;
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        tableLayoutPanel2.Controls.Add(label1, 0, 0);
-        tableLayoutPanel2.Dock = DockStyle.Fill;
-        tableLayoutPanel2.Location = new Point(0, 0);
-        tableLayoutPanel2.Name = "tableLayoutPanel2";
-        tableLayoutPanel2.RowCount = 1;
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel2.Size = new Size(1144, 35);
-        tableLayoutPanel2.TabIndex = 0;
+        _pnlSilenceBody.Controls.Add(_tlpSilenceParams);
+        _pnlSilenceBody.Dock = DockStyle.Fill;
+        _pnlSilenceBody.Location = new Point(0, 35);
+        _pnlSilenceBody.Name = "_pnlSilenceBody";
+        _pnlSilenceBody.Size = new Size(493, 95);
+        _pnlSilenceBody.TabIndex = 10;
         // 
-        // label1
+        // _pnlSilenceHeader
         // 
-        label1.AutoSize = true;
-        label1.Dock = DockStyle.Fill;
-        label1.Location = new Point(4, 1);
-        label1.Name = "label1";
-        label1.Size = new Size(1136, 33);
-        label1.TabIndex = 0;
-        label1.Text = "Тишина (Silence) — эмулятор не отвечает";
-        label1.TextAlign = ContentAlignment.MiddleCenter;
+        _pnlSilenceHeader.BackColor = Color.FromArgb(255, 224, 192);
+        _pnlSilenceHeader.Controls.Add(_tlpSilenceHeader);
+        _pnlSilenceHeader.Dock = DockStyle.Top;
+        _pnlSilenceHeader.Location = new Point(0, 0);
+        _pnlSilenceHeader.Name = "_pnlSilenceHeader";
+        _pnlSilenceHeader.Size = new Size(493, 35);
+        _pnlSilenceHeader.TabIndex = 9;
+        // 
+        // _tlpSilenceHeader
+        // 
+        _tlpSilenceHeader.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        _tlpSilenceHeader.ColumnCount = 1;
+        _tlpSilenceHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _tlpSilenceHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _tlpSilenceHeader.Controls.Add(_lblSilenceTitle, 0, 0);
+        _tlpSilenceHeader.Dock = DockStyle.Fill;
+        _tlpSilenceHeader.Location = new Point(0, 0);
+        _tlpSilenceHeader.Name = "_tlpSilenceHeader";
+        _tlpSilenceHeader.RowCount = 1;
+        _tlpSilenceHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpSilenceHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpSilenceHeader.Size = new Size(493, 35);
+        _tlpSilenceHeader.TabIndex = 0;
+        // 
+        // _lblSilenceTitle
+        // 
+        _lblSilenceTitle.AutoSize = true;
+        _lblSilenceTitle.Dock = DockStyle.Fill;
+        _lblSilenceTitle.Location = new Point(4, 1);
+        _lblSilenceTitle.Name = "_lblSilenceTitle";
+        _lblSilenceTitle.Size = new Size(485, 33);
+        _lblSilenceTitle.TabIndex = 0;
+        _lblSilenceTitle.Text = "Тишина (Silence) — эмулятор не отвечает";
+        _lblSilenceTitle.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // DynamicFaultForm
         // 
         BackColor = Color.FromArgb(255, 250, 240);
         ClientSize = new Size(1642, 780);
-        Controls.Add(panel1);
+        Controls.Add(_pnlSilence);
         Controls.Add(_btnCycle);
         Controls.Add(_btnClearHistory);
         Controls.Add(_grpSpike);
@@ -762,24 +771,22 @@ partial class DynamicFaultForm
         ((System.ComponentModel.ISupportInitialize)_numStuckActive).EndInit();
         ((System.ComponentModel.ISupportInitialize)_numStuckGap).EndInit();
         ((System.ComponentModel.ISupportInitialize)_numStuckMagnitude).EndInit();
-        tableLayoutPanel1.ResumeLayout(false);
-        panel1.ResumeLayout(false);
-        panel3.ResumeLayout(false);
-        panel2.ResumeLayout(false);
-        tableLayoutPanel2.ResumeLayout(false);
-        tableLayoutPanel2.PerformLayout();
+        _tlpSilenceParams.ResumeLayout(false);
+        _pnlSilence.ResumeLayout(false);
+        _pnlSilenceBody.ResumeLayout(false);
+        _pnlSilenceHeader.ResumeLayout(false);
+        _tlpSilenceHeader.ResumeLayout(false);
+        _tlpSilenceHeader.PerformLayout();
         ResumeLayout(false);
     }
 
     private Button _btnCycle;
     private Button _btnClearHistory;
     private Label _lblSilenceMode;
-    private ComboBox _cmbSilenceMode;
     private Label _lblSilenceActive;
     private NumericUpDown _numSilenceActive;
     private Label _lblSilenceGap;
     private NumericUpDown _numSilenceGap;
-    private Button _btnSilenceManual;
 
     private GroupBox _grpSpike;
     private Label _lblSpikeMode;
@@ -826,10 +833,12 @@ partial class DynamicFaultForm
     private Button _btnStuckManual;
 
     private FaultHistoryListBox _history;
-    private TableLayoutPanel tableLayoutPanel1;
-    private Panel panel1;
-    private Panel panel2;
-    private TableLayoutPanel tableLayoutPanel2;
-    private Label label1;
-    private Panel panel3;
+    private TableLayoutPanel _tlpSilenceParams;
+    private Panel _pnlSilence;
+    private Panel _pnlSilenceHeader;
+    private TableLayoutPanel _tlpSilenceHeader;
+    private Label _lblSilenceTitle;
+    private Panel _pnlSilenceBody;
+    private ComboBox _cmbSilenceMode;
+    private Button _btnSilenceManual;
 }
