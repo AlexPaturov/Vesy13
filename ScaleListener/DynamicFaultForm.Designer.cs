@@ -19,93 +19,99 @@ partial class DynamicFaultForm
     {
         _btnCycle = new Button();
         _btnClearHistory = new Button();
-
-        _grpSilence = new GroupBox();
-        _chkSilenceEnabled = new CheckBox();
         _lblSilenceMode = new Label();
         _cmbSilenceMode = new ComboBox();
-        _lblSilenceParam1 = new Label();
-        _numSilenceParam1 = new NumericUpDown();
-        _lblSilenceParam2 = new Label();
-        _numSilenceParam2 = new NumericUpDown();
+        _lblSilenceActive = new Label();
+        _numSilenceActive = new NumericUpDown();
+        _lblSilenceGap = new Label();
+        _numSilenceGap = new NumericUpDown();
         _btnSilenceManual = new Button();
-
         _grpSpike = new GroupBox();
-        _chkSpikeEnabled = new CheckBox();
         _lblSpikeMode = new Label();
         _cmbSpikeMode = new ComboBox();
-        _lblSpikeParam1 = new Label();
-        _numSpikeParam1 = new NumericUpDown();
+        _lblSpikeInterval = new Label();
+        _numSpikeInterval = new NumericUpDown();
+        _lblSpikeRate = new Label();
+        _numSpikeRate = new NumericUpDown();
         _lblSpikeMagnitude = new Label();
         _numSpikeMagnitude = new NumericUpDown();
         _btnSpikeManual = new Button();
-
         _grpDrift = new GroupBox();
-        _chkDriftEnabled = new CheckBox();
         _lblDriftMode = new Label();
         _cmbDriftMode = new ComboBox();
-        _lblDriftParam1 = new Label();
-        _numDriftParam1 = new NumericUpDown();
-        _lblDriftParam2 = new Label();
-        _numDriftParam2 = new NumericUpDown();
+        _lblDriftActive = new Label();
+        _numDriftActive = new NumericUpDown();
+        _lblDriftGap = new Label();
+        _numDriftGap = new NumericUpDown();
         _lblDriftMagnitude = new Label();
         _numDriftMagnitude = new NumericUpDown();
         _btnDriftManual = new Button();
-
         _grpCorrupt = new GroupBox();
-        _chkCorruptEnabled = new CheckBox();
         _lblCorruptMode = new Label();
         _cmbCorruptMode = new ComboBox();
-        _lblCorruptParam1 = new Label();
-        _numCorruptParam1 = new NumericUpDown();
+        _lblCorruptInterval = new Label();
+        _numCorruptInterval = new NumericUpDown();
+        _lblCorruptRate = new Label();
+        _numCorruptRate = new NumericUpDown();
         _lblCorruptMagnitude = new Label();
         _numCorruptMagnitude = new NumericUpDown();
         _btnCorruptManual = new Button();
-
         _grpStuck = new GroupBox();
-        _chkStuckEnabled = new CheckBox();
         _lblStuckMode = new Label();
         _cmbStuckMode = new ComboBox();
-        _lblStuckParam1 = new Label();
-        _numStuckParam1 = new NumericUpDown();
-        _lblStuckParam2 = new Label();
-        _numStuckParam2 = new NumericUpDown();
+        _lblStuckActive = new Label();
+        _numStuckActive = new NumericUpDown();
+        _lblStuckGap = new Label();
+        _numStuckGap = new NumericUpDown();
         _lblStuckMagnitude = new Label();
         _numStuckMagnitude = new NumericUpDown();
         _btnStuckManual = new Button();
-
         _history = new FaultHistoryListBox();
-
-        _grpSilence.SuspendLayout();
+        tableLayoutPanel1 = new TableLayoutPanel();
+        panel1 = new Panel();
+        panel3 = new Panel();
+        panel2 = new Panel();
+        tableLayoutPanel2 = new TableLayoutPanel();
+        label1 = new Label();
+        ((System.ComponentModel.ISupportInitialize)_numSilenceActive).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)_numSilenceGap).BeginInit();
         _grpSpike.SuspendLayout();
-        _grpDrift.SuspendLayout();
-        _grpCorrupt.SuspendLayout();
-        _grpStuck.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)_numSilenceParam1).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numSilenceParam2).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numSpikeParam1).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)_numSpikeInterval).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)_numSpikeRate).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numSpikeMagnitude).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numDriftParam1).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numDriftParam2).BeginInit();
+        _grpDrift.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_numDriftActive).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)_numDriftGap).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numDriftMagnitude).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numCorruptParam1).BeginInit();
+        _grpCorrupt.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_numCorruptInterval).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)_numCorruptRate).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numCorruptMagnitude).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numStuckParam1).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_numStuckParam2).BeginInit();
+        _grpStuck.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_numStuckActive).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)_numStuckGap).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numStuckMagnitude).BeginInit();
+        tableLayoutPanel1.SuspendLayout();
+        panel1.SuspendLayout();
+        panel3.SuspendLayout();
+        panel2.SuspendLayout();
+        tableLayoutPanel2.SuspendLayout();
         SuspendLayout();
-        //
+        // 
         // _btnCycle
-        //
+        // 
+        _btnCycle.BackColor = Color.White;
         _btnCycle.FlatStyle = FlatStyle.Flat;
         _btnCycle.Location = new Point(11, 11);
         _btnCycle.Name = "_btnCycle";
         _btnCycle.Size = new Size(150, 26);
         _btnCycle.TabIndex = 0;
+        _btnCycle.Text = "Старт цикла";
+        _btnCycle.UseVisualStyleBackColor = false;
         _btnCycle.Click += BtnCycle_Click;
-        //
+        // 
         // _btnClearHistory
-        //
+        // 
         _btnClearHistory.FlatStyle = FlatStyle.Flat;
         _btnClearHistory.Location = new Point(167, 11);
         _btnClearHistory.Name = "_btnClearHistory";
@@ -113,589 +119,717 @@ partial class DynamicFaultForm
         _btnClearHistory.TabIndex = 1;
         _btnClearHistory.Text = "Очистить историю";
         _btnClearHistory.Click += BtnClearHistory_Click;
-        //
-        // _grpSilence
-        //
-        _grpSilence.BackColor = Color.FromArgb(255, 243, 224);
-        _grpSilence.Controls.Add(_chkSilenceEnabled);
-        _grpSilence.Controls.Add(_lblSilenceMode);
-        _grpSilence.Controls.Add(_cmbSilenceMode);
-        _grpSilence.Controls.Add(_lblSilenceParam1);
-        _grpSilence.Controls.Add(_numSilenceParam1);
-        _grpSilence.Controls.Add(_lblSilenceParam2);
-        _grpSilence.Controls.Add(_numSilenceParam2);
-        _grpSilence.Controls.Add(_btnSilenceManual);
-        _grpSilence.Location = new Point(11, 47);
-        _grpSilence.Name = "_grpSilence";
-        _grpSilence.Padding = new Padding(8, 4, 8, 4);
-        _grpSilence.Size = new Size(935, 96);
-        _grpSilence.TabIndex = 2;
-        _grpSilence.TabStop = false;
-        _grpSilence.Text = "Тишина (Silence) — эмулятор не отвечает";
-        //
-        // _chkSilenceEnabled
-        //
-        _chkSilenceEnabled.Location = new Point(8, 20);
-        _chkSilenceEnabled.Name = "_chkSilenceEnabled";
-        _chkSilenceEnabled.Size = new Size(60, 22);
-        _chkSilenceEnabled.TabIndex = 0;
-        _chkSilenceEnabled.Text = "Вкл";
-        //
+        // 
         // _lblSilenceMode
-        //
-        _lblSilenceMode.Location = new Point(76, 22);
+        // 
+        _lblSilenceMode.Dock = DockStyle.Fill;
+        _lblSilenceMode.Location = new Point(688, 1);
         _lblSilenceMode.Name = "_lblSilenceMode";
-        _lblSilenceMode.Size = new Size(48, 20);
+        _lblSilenceMode.Size = new Size(221, 52);
         _lblSilenceMode.TabIndex = 1;
         _lblSilenceMode.Text = "Режим:";
-        //
+        // 
         // _cmbSilenceMode
-        //
+        // 
+        _cmbSilenceMode.Dock = DockStyle.Fill;
         _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно", "Вручную" });
-        _cmbSilenceMode.Location = new Point(126, 19);
+        _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbSilenceMode.Location = new Point(916, 4);
         _cmbSilenceMode.Name = "_cmbSilenceMode";
-        _cmbSilenceMode.Size = new Size(110, 22);
+        _cmbSilenceMode.Size = new Size(224, 36);
         _cmbSilenceMode.TabIndex = 2;
-        //
-        // _lblSilenceParam1
-        //
-        _lblSilenceParam1.Location = new Point(8, 48);
-        _lblSilenceParam1.Name = "_lblSilenceParam1";
-        _lblSilenceParam1.Size = new Size(100, 20);
-        _lblSilenceParam1.TabIndex = 3;
-        //
-        // _numSilenceParam1
-        //
-        _numSilenceParam1.DecimalPlaces = 1;
-        _numSilenceParam1.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceParam1.Location = new Point(112, 46);
-        _numSilenceParam1.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numSilenceParam1.Name = "_numSilenceParam1";
-        _numSilenceParam1.Size = new Size(72, 22);
-        _numSilenceParam1.TabIndex = 4;
-        //
-        // _lblSilenceParam2
-        //
-        _lblSilenceParam2.Location = new Point(192, 48);
-        _lblSilenceParam2.Name = "_lblSilenceParam2";
-        _lblSilenceParam2.Size = new Size(64, 20);
-        _lblSilenceParam2.TabIndex = 5;
-        //
-        // _numSilenceParam2
-        //
-        _numSilenceParam2.DecimalPlaces = 1;
-        _numSilenceParam2.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceParam2.Location = new Point(256, 46);
-        _numSilenceParam2.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numSilenceParam2.Name = "_numSilenceParam2";
-        _numSilenceParam2.Size = new Size(72, 22);
-        _numSilenceParam2.TabIndex = 6;
-        //
+        _cmbSilenceMode.SelectedIndexChanged += CmbSilenceMode_SelectedIndexChanged;
+        // 
+        // _lblSilenceActive
+        // 
+        _lblSilenceActive.Dock = DockStyle.Fill;
+        _lblSilenceActive.Location = new Point(232, 1);
+        _lblSilenceActive.Name = "_lblSilenceActive";
+        _lblSilenceActive.Size = new Size(221, 52);
+        _lblSilenceActive.TabIndex = 4;
+        _lblSilenceActive.Text = "Актив., с:";
+        // 
+        // _numSilenceActive
+        // 
+        _numSilenceActive.DecimalPlaces = 1;
+        _numSilenceActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numSilenceActive.Location = new Point(460, 4);
+        _numSilenceActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
+        _numSilenceActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numSilenceActive.Name = "_numSilenceActive";
+        _numSilenceActive.Size = new Size(72, 34);
+        _numSilenceActive.TabIndex = 5;
+        _numSilenceActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
+        _numSilenceActive.ValueChanged += NumSilenceActive_ValueChanged;
+        // 
+        // _lblSilenceGap
+        // 
+        _lblSilenceGap.Dock = DockStyle.Fill;
+        _lblSilenceGap.Location = new Point(232, 54);
+        _lblSilenceGap.Name = "_lblSilenceGap";
+        _lblSilenceGap.Size = new Size(221, 52);
+        _lblSilenceGap.TabIndex = 6;
+        _lblSilenceGap.Text = "Пауза, с:";
+        // 
+        // _numSilenceGap
+        // 
+        _numSilenceGap.DecimalPlaces = 1;
+        _numSilenceGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numSilenceGap.Location = new Point(460, 57);
+        _numSilenceGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
+        _numSilenceGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numSilenceGap.Name = "_numSilenceGap";
+        _numSilenceGap.Size = new Size(72, 34);
+        _numSilenceGap.TabIndex = 7;
+        _numSilenceGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
+        _numSilenceGap.ValueChanged += NumSilenceGap_ValueChanged;
+        // 
         // _btnSilenceManual
-        //
+        // 
+        _btnSilenceManual.Dock = DockStyle.Fill;
         _btnSilenceManual.FlatStyle = FlatStyle.Flat;
-        _btnSilenceManual.Location = new Point(8, 72);
+        _btnSilenceManual.Location = new Point(916, 57);
         _btnSilenceManual.Name = "_btnSilenceManual";
-        _btnSilenceManual.Size = new Size(150, 22);
-        _btnSilenceManual.TabIndex = 7;
-        _btnSilenceManual.Text = "Сработать сейчас";
-        //
+        _btnSilenceManual.Size = new Size(224, 46);
+        _btnSilenceManual.TabIndex = 3;
+        _btnSilenceManual.Text = "Вкл/выкл сейчас";
+        _btnSilenceManual.Click += BtnSilenceManual_Click;
+        // 
         // _grpSpike
-        //
+        // 
         _grpSpike.BackColor = Color.FromArgb(255, 243, 224);
-        _grpSpike.Controls.Add(_chkSpikeEnabled);
         _grpSpike.Controls.Add(_lblSpikeMode);
         _grpSpike.Controls.Add(_cmbSpikeMode);
-        _grpSpike.Controls.Add(_lblSpikeParam1);
-        _grpSpike.Controls.Add(_numSpikeParam1);
+        _grpSpike.Controls.Add(_lblSpikeInterval);
+        _grpSpike.Controls.Add(_numSpikeInterval);
+        _grpSpike.Controls.Add(_lblSpikeRate);
+        _grpSpike.Controls.Add(_numSpikeRate);
         _grpSpike.Controls.Add(_lblSpikeMagnitude);
         _grpSpike.Controls.Add(_numSpikeMagnitude);
         _grpSpike.Controls.Add(_btnSpikeManual);
-        _grpSpike.Location = new Point(11, 149);
+        _grpSpike.Location = new Point(747, 153);
         _grpSpike.Name = "_grpSpike";
         _grpSpike.Padding = new Padding(8, 4, 8, 4);
-        _grpSpike.Size = new Size(536, 96);
+        _grpSpike.Size = new Size(700, 90);
         _grpSpike.TabIndex = 3;
         _grpSpike.TabStop = false;
         _grpSpike.Text = "Одиночный выброс (Spike)";
-        //
-        // _chkSpikeEnabled
-        //
-        _chkSpikeEnabled.Location = new Point(8, 20);
-        _chkSpikeEnabled.Name = "_chkSpikeEnabled";
-        _chkSpikeEnabled.Size = new Size(60, 22);
-        _chkSpikeEnabled.TabIndex = 0;
-        _chkSpikeEnabled.Text = "Вкл";
-        //
+        // 
         // _lblSpikeMode
-        //
-        _lblSpikeMode.Location = new Point(76, 22);
+        // 
+        _lblSpikeMode.Location = new Point(76, 24);
         _lblSpikeMode.Name = "_lblSpikeMode";
         _lblSpikeMode.Size = new Size(48, 20);
         _lblSpikeMode.TabIndex = 1;
         _lblSpikeMode.Text = "Режим:";
-        //
+        // 
         // _cmbSpikeMode
-        //
+        // 
         _cmbSpikeMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно", "Вручную" });
-        _cmbSpikeMode.Location = new Point(126, 19);
+        _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbSpikeMode.Location = new Point(126, 21);
         _cmbSpikeMode.Name = "_cmbSpikeMode";
-        _cmbSpikeMode.Size = new Size(110, 22);
+        _cmbSpikeMode.Size = new Size(110, 36);
         _cmbSpikeMode.TabIndex = 2;
-        //
-        // _lblSpikeParam1
-        //
-        _lblSpikeParam1.Location = new Point(8, 48);
-        _lblSpikeParam1.Name = "_lblSpikeParam1";
-        _lblSpikeParam1.Size = new Size(100, 20);
-        _lblSpikeParam1.TabIndex = 3;
-        //
-        // _numSpikeParam1
-        //
-        _numSpikeParam1.DecimalPlaces = 1;
-        _numSpikeParam1.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeParam1.Location = new Point(112, 46);
-        _numSpikeParam1.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numSpikeParam1.Name = "_numSpikeParam1";
-        _numSpikeParam1.Size = new Size(72, 22);
-        _numSpikeParam1.TabIndex = 4;
-        //
+        _cmbSpikeMode.SelectedIndexChanged += CmbSpikeMode_SelectedIndexChanged;
+        // 
+        // _lblSpikeInterval
+        // 
+        _lblSpikeInterval.Location = new Point(8, 56);
+        _lblSpikeInterval.Name = "_lblSpikeInterval";
+        _lblSpikeInterval.Size = new Size(100, 20);
+        _lblSpikeInterval.TabIndex = 4;
+        _lblSpikeInterval.Text = "Интервал, с:";
+        // 
+        // _numSpikeInterval
+        // 
+        _numSpikeInterval.DecimalPlaces = 1;
+        _numSpikeInterval.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numSpikeInterval.Location = new Point(112, 54);
+        _numSpikeInterval.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
+        _numSpikeInterval.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numSpikeInterval.Name = "_numSpikeInterval";
+        _numSpikeInterval.Size = new Size(72, 34);
+        _numSpikeInterval.TabIndex = 5;
+        _numSpikeInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
+        _numSpikeInterval.ValueChanged += NumSpikeInterval_ValueChanged;
+        // 
+        // _lblSpikeRate
+        // 
+        _lblSpikeRate.Location = new Point(196, 56);
+        _lblSpikeRate.Name = "_lblSpikeRate";
+        _lblSpikeRate.Size = new Size(100, 20);
+        _lblSpikeRate.TabIndex = 6;
+        _lblSpikeRate.Text = "Частота, /мин:";
+        // 
+        // _numSpikeRate
+        // 
+        _numSpikeRate.DecimalPlaces = 1;
+        _numSpikeRate.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numSpikeRate.Location = new Point(300, 54);
+        _numSpikeRate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+        _numSpikeRate.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numSpikeRate.Name = "_numSpikeRate";
+        _numSpikeRate.Size = new Size(72, 34);
+        _numSpikeRate.TabIndex = 7;
+        _numSpikeRate.Value = new decimal(new int[] { 3, 0, 0, 0 });
+        _numSpikeRate.ValueChanged += NumSpikeRate_ValueChanged;
+        // 
         // _lblSpikeMagnitude
-        //
-        _lblSpikeMagnitude.Location = new Point(336, 48);
+        // 
+        _lblSpikeMagnitude.Location = new Point(384, 56);
         _lblSpikeMagnitude.Name = "_lblSpikeMagnitude";
-        _lblSpikeMagnitude.Size = new Size(90, 20);
-        _lblSpikeMagnitude.TabIndex = 5;
-        _lblSpikeMagnitude.Text = "Ампл., т";
-        //
+        _lblSpikeMagnitude.Size = new Size(80, 20);
+        _lblSpikeMagnitude.TabIndex = 8;
+        _lblSpikeMagnitude.Text = "Ампл., т:";
+        // 
         // _numSpikeMagnitude
-        //
+        // 
         _numSpikeMagnitude.DecimalPlaces = 2;
         _numSpikeMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeMagnitude.Location = new Point(430, 46);
+        _numSpikeMagnitude.Location = new Point(468, 54);
         _numSpikeMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numSpikeMagnitude.Name = "_numSpikeMagnitude";
-        _numSpikeMagnitude.Size = new Size(72, 22);
-        _numSpikeMagnitude.TabIndex = 6;
-        //
+        _numSpikeMagnitude.Size = new Size(72, 34);
+        _numSpikeMagnitude.TabIndex = 9;
+        _numSpikeMagnitude.Value = new decimal(new int[] { 5, 0, 0, 0 });
+        _numSpikeMagnitude.ValueChanged += NumSpikeMagnitude_ValueChanged;
+        // 
         // _btnSpikeManual
-        //
+        // 
         _btnSpikeManual.FlatStyle = FlatStyle.Flat;
-        _btnSpikeManual.Location = new Point(8, 72);
+        _btnSpikeManual.Location = new Point(530, 20);
         _btnSpikeManual.Name = "_btnSpikeManual";
-        _btnSpikeManual.Size = new Size(150, 22);
-        _btnSpikeManual.TabIndex = 7;
+        _btnSpikeManual.Size = new Size(160, 24);
+        _btnSpikeManual.TabIndex = 3;
         _btnSpikeManual.Text = "Сработать сейчас";
-        //
+        _btnSpikeManual.Click += BtnSpikeManual_Click;
+        // 
         // _grpDrift
-        //
+        // 
         _grpDrift.BackColor = Color.FromArgb(255, 243, 224);
-        _grpDrift.Controls.Add(_chkDriftEnabled);
         _grpDrift.Controls.Add(_lblDriftMode);
         _grpDrift.Controls.Add(_cmbDriftMode);
-        _grpDrift.Controls.Add(_lblDriftParam1);
-        _grpDrift.Controls.Add(_numDriftParam1);
-        _grpDrift.Controls.Add(_lblDriftParam2);
-        _grpDrift.Controls.Add(_numDriftParam2);
+        _grpDrift.Controls.Add(_lblDriftActive);
+        _grpDrift.Controls.Add(_numDriftActive);
+        _grpDrift.Controls.Add(_lblDriftGap);
+        _grpDrift.Controls.Add(_numDriftGap);
         _grpDrift.Controls.Add(_lblDriftMagnitude);
         _grpDrift.Controls.Add(_numDriftMagnitude);
         _grpDrift.Controls.Add(_btnDriftManual);
-        _grpDrift.Location = new Point(11, 251);
+        _grpDrift.Location = new Point(19, 153);
         _grpDrift.Name = "_grpDrift";
         _grpDrift.Padding = new Padding(8, 4, 8, 4);
-        _grpDrift.Size = new Size(536, 96);
+        _grpDrift.Size = new Size(700, 90);
         _grpDrift.TabIndex = 4;
         _grpDrift.TabStop = false;
         _grpDrift.Text = "Дрейф/дребезг (Drift)";
-        //
-        // _chkDriftEnabled
-        //
-        _chkDriftEnabled.Location = new Point(8, 20);
-        _chkDriftEnabled.Name = "_chkDriftEnabled";
-        _chkDriftEnabled.Size = new Size(60, 22);
-        _chkDriftEnabled.TabIndex = 0;
-        _chkDriftEnabled.Text = "Вкл";
-        //
+        // 
         // _lblDriftMode
-        //
-        _lblDriftMode.Location = new Point(76, 22);
+        // 
+        _lblDriftMode.Location = new Point(76, 24);
         _lblDriftMode.Name = "_lblDriftMode";
         _lblDriftMode.Size = new Size(48, 20);
         _lblDriftMode.TabIndex = 1;
         _lblDriftMode.Text = "Режим:";
-        //
+        // 
         // _cmbDriftMode
-        //
+        // 
         _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно", "Вручную" });
-        _cmbDriftMode.Location = new Point(126, 19);
+        _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbDriftMode.Location = new Point(126, 21);
         _cmbDriftMode.Name = "_cmbDriftMode";
-        _cmbDriftMode.Size = new Size(110, 22);
+        _cmbDriftMode.Size = new Size(110, 36);
         _cmbDriftMode.TabIndex = 2;
-        //
-        // _lblDriftParam1
-        //
-        _lblDriftParam1.Location = new Point(8, 48);
-        _lblDriftParam1.Name = "_lblDriftParam1";
-        _lblDriftParam1.Size = new Size(100, 20);
-        _lblDriftParam1.TabIndex = 3;
-        //
-        // _numDriftParam1
-        //
-        _numDriftParam1.DecimalPlaces = 1;
-        _numDriftParam1.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftParam1.Location = new Point(112, 46);
-        _numDriftParam1.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numDriftParam1.Name = "_numDriftParam1";
-        _numDriftParam1.Size = new Size(72, 22);
-        _numDriftParam1.TabIndex = 4;
-        //
-        // _lblDriftParam2
-        //
-        _lblDriftParam2.Location = new Point(192, 48);
-        _lblDriftParam2.Name = "_lblDriftParam2";
-        _lblDriftParam2.Size = new Size(64, 20);
-        _lblDriftParam2.TabIndex = 5;
-        //
-        // _numDriftParam2
-        //
-        _numDriftParam2.DecimalPlaces = 1;
-        _numDriftParam2.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftParam2.Location = new Point(256, 46);
-        _numDriftParam2.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numDriftParam2.Name = "_numDriftParam2";
-        _numDriftParam2.Size = new Size(72, 22);
-        _numDriftParam2.TabIndex = 6;
-        //
+        _cmbDriftMode.SelectedIndexChanged += CmbDriftMode_SelectedIndexChanged;
+        // 
+        // _lblDriftActive
+        // 
+        _lblDriftActive.Location = new Point(8, 56);
+        _lblDriftActive.Name = "_lblDriftActive";
+        _lblDriftActive.Size = new Size(100, 20);
+        _lblDriftActive.TabIndex = 4;
+        _lblDriftActive.Text = "Актив., с:";
+        // 
+        // _numDriftActive
+        // 
+        _numDriftActive.DecimalPlaces = 1;
+        _numDriftActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numDriftActive.Location = new Point(112, 54);
+        _numDriftActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
+        _numDriftActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numDriftActive.Name = "_numDriftActive";
+        _numDriftActive.Size = new Size(72, 34);
+        _numDriftActive.TabIndex = 5;
+        _numDriftActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
+        _numDriftActive.ValueChanged += NumDriftActive_ValueChanged;
+        // 
+        // _lblDriftGap
+        // 
+        _lblDriftGap.Location = new Point(196, 56);
+        _lblDriftGap.Name = "_lblDriftGap";
+        _lblDriftGap.Size = new Size(70, 20);
+        _lblDriftGap.TabIndex = 6;
+        _lblDriftGap.Text = "Пауза, с:";
+        // 
+        // _numDriftGap
+        // 
+        _numDriftGap.DecimalPlaces = 1;
+        _numDriftGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numDriftGap.Location = new Point(270, 54);
+        _numDriftGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
+        _numDriftGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numDriftGap.Name = "_numDriftGap";
+        _numDriftGap.Size = new Size(72, 34);
+        _numDriftGap.TabIndex = 7;
+        _numDriftGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
+        _numDriftGap.ValueChanged += NumDriftGap_ValueChanged;
+        // 
         // _lblDriftMagnitude
-        //
-        _lblDriftMagnitude.Location = new Point(336, 48);
+        // 
+        _lblDriftMagnitude.Location = new Point(384, 56);
         _lblDriftMagnitude.Name = "_lblDriftMagnitude";
-        _lblDriftMagnitude.Size = new Size(90, 20);
-        _lblDriftMagnitude.TabIndex = 7;
-        _lblDriftMagnitude.Text = "Ампл., т";
-        //
+        _lblDriftMagnitude.Size = new Size(80, 20);
+        _lblDriftMagnitude.TabIndex = 8;
+        _lblDriftMagnitude.Text = "Ампл., т:";
+        // 
         // _numDriftMagnitude
-        //
+        // 
         _numDriftMagnitude.DecimalPlaces = 2;
         _numDriftMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftMagnitude.Location = new Point(430, 46);
+        _numDriftMagnitude.Location = new Point(468, 54);
         _numDriftMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numDriftMagnitude.Name = "_numDriftMagnitude";
-        _numDriftMagnitude.Size = new Size(72, 22);
-        _numDriftMagnitude.TabIndex = 8;
-        //
+        _numDriftMagnitude.Size = new Size(72, 34);
+        _numDriftMagnitude.TabIndex = 9;
+        _numDriftMagnitude.Value = new decimal(new int[] { 5, 0, 0, 0 });
+        _numDriftMagnitude.ValueChanged += NumDriftMagnitude_ValueChanged;
+        // 
         // _btnDriftManual
-        //
+        // 
         _btnDriftManual.FlatStyle = FlatStyle.Flat;
-        _btnDriftManual.Location = new Point(8, 72);
+        _btnDriftManual.Location = new Point(530, 20);
         _btnDriftManual.Name = "_btnDriftManual";
-        _btnDriftManual.Size = new Size(150, 22);
-        _btnDriftManual.TabIndex = 9;
-        _btnDriftManual.Text = "Сработать сейчас";
-        //
+        _btnDriftManual.Size = new Size(160, 24);
+        _btnDriftManual.TabIndex = 3;
+        _btnDriftManual.Text = "Вкл/выкл сейчас";
+        _btnDriftManual.Click += BtnDriftManual_Click;
+        // 
         // _grpCorrupt
-        //
+        // 
         _grpCorrupt.BackColor = Color.FromArgb(255, 243, 224);
-        _grpCorrupt.Controls.Add(_chkCorruptEnabled);
         _grpCorrupt.Controls.Add(_lblCorruptMode);
         _grpCorrupt.Controls.Add(_cmbCorruptMode);
-        _grpCorrupt.Controls.Add(_lblCorruptParam1);
-        _grpCorrupt.Controls.Add(_numCorruptParam1);
+        _grpCorrupt.Controls.Add(_lblCorruptInterval);
+        _grpCorrupt.Controls.Add(_numCorruptInterval);
+        _grpCorrupt.Controls.Add(_lblCorruptRate);
+        _grpCorrupt.Controls.Add(_numCorruptRate);
         _grpCorrupt.Controls.Add(_lblCorruptMagnitude);
         _grpCorrupt.Controls.Add(_numCorruptMagnitude);
         _grpCorrupt.Controls.Add(_btnCorruptManual);
-        _grpCorrupt.Location = new Point(11, 353);
+        _grpCorrupt.Location = new Point(19, 261);
         _grpCorrupt.Name = "_grpCorrupt";
         _grpCorrupt.Padding = new Padding(8, 4, 8, 4);
-        _grpCorrupt.Size = new Size(536, 96);
+        _grpCorrupt.Size = new Size(700, 90);
         _grpCorrupt.TabIndex = 5;
         _grpCorrupt.TabStop = false;
         _grpCorrupt.Text = "Порча байт (Corrupt)";
-        //
-        // _chkCorruptEnabled
-        //
-        _chkCorruptEnabled.Location = new Point(8, 20);
-        _chkCorruptEnabled.Name = "_chkCorruptEnabled";
-        _chkCorruptEnabled.Size = new Size(60, 22);
-        _chkCorruptEnabled.TabIndex = 0;
-        _chkCorruptEnabled.Text = "Вкл";
-        //
+        // 
         // _lblCorruptMode
-        //
-        _lblCorruptMode.Location = new Point(76, 22);
+        // 
+        _lblCorruptMode.Location = new Point(76, 24);
         _lblCorruptMode.Name = "_lblCorruptMode";
         _lblCorruptMode.Size = new Size(48, 20);
         _lblCorruptMode.TabIndex = 1;
         _lblCorruptMode.Text = "Режим:";
-        //
+        // 
         // _cmbCorruptMode
-        //
+        // 
         _cmbCorruptMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно", "Вручную" });
-        _cmbCorruptMode.Location = new Point(126, 19);
+        _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbCorruptMode.Location = new Point(126, 21);
         _cmbCorruptMode.Name = "_cmbCorruptMode";
-        _cmbCorruptMode.Size = new Size(110, 22);
+        _cmbCorruptMode.Size = new Size(110, 36);
         _cmbCorruptMode.TabIndex = 2;
-        //
-        // _lblCorruptParam1
-        //
-        _lblCorruptParam1.Location = new Point(8, 48);
-        _lblCorruptParam1.Name = "_lblCorruptParam1";
-        _lblCorruptParam1.Size = new Size(100, 20);
-        _lblCorruptParam1.TabIndex = 3;
-        //
-        // _numCorruptParam1
-        //
-        _numCorruptParam1.DecimalPlaces = 1;
-        _numCorruptParam1.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numCorruptParam1.Location = new Point(112, 46);
-        _numCorruptParam1.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numCorruptParam1.Name = "_numCorruptParam1";
-        _numCorruptParam1.Size = new Size(72, 22);
-        _numCorruptParam1.TabIndex = 4;
-        //
+        _cmbCorruptMode.SelectedIndexChanged += CmbCorruptMode_SelectedIndexChanged;
+        // 
+        // _lblCorruptInterval
+        // 
+        _lblCorruptInterval.Location = new Point(8, 56);
+        _lblCorruptInterval.Name = "_lblCorruptInterval";
+        _lblCorruptInterval.Size = new Size(100, 20);
+        _lblCorruptInterval.TabIndex = 4;
+        _lblCorruptInterval.Text = "Интервал, с:";
+        // 
+        // _numCorruptInterval
+        // 
+        _numCorruptInterval.DecimalPlaces = 1;
+        _numCorruptInterval.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numCorruptInterval.Location = new Point(112, 54);
+        _numCorruptInterval.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
+        _numCorruptInterval.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numCorruptInterval.Name = "_numCorruptInterval";
+        _numCorruptInterval.Size = new Size(72, 34);
+        _numCorruptInterval.TabIndex = 5;
+        _numCorruptInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
+        _numCorruptInterval.ValueChanged += NumCorruptInterval_ValueChanged;
+        // 
+        // _lblCorruptRate
+        // 
+        _lblCorruptRate.Location = new Point(196, 56);
+        _lblCorruptRate.Name = "_lblCorruptRate";
+        _lblCorruptRate.Size = new Size(100, 20);
+        _lblCorruptRate.TabIndex = 6;
+        _lblCorruptRate.Text = "Частота, /мин:";
+        // 
+        // _numCorruptRate
+        // 
+        _numCorruptRate.DecimalPlaces = 1;
+        _numCorruptRate.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numCorruptRate.Location = new Point(300, 54);
+        _numCorruptRate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+        _numCorruptRate.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numCorruptRate.Name = "_numCorruptRate";
+        _numCorruptRate.Size = new Size(72, 34);
+        _numCorruptRate.TabIndex = 7;
+        _numCorruptRate.Value = new decimal(new int[] { 3, 0, 0, 0 });
+        _numCorruptRate.ValueChanged += NumCorruptRate_ValueChanged;
+        // 
         // _lblCorruptMagnitude
-        //
-        _lblCorruptMagnitude.Location = new Point(336, 48);
+        // 
+        _lblCorruptMagnitude.Location = new Point(384, 56);
         _lblCorruptMagnitude.Name = "_lblCorruptMagnitude";
-        _lblCorruptMagnitude.Size = new Size(90, 20);
-        _lblCorruptMagnitude.TabIndex = 5;
-        _lblCorruptMagnitude.Text = "Байт мусора";
-        //
+        _lblCorruptMagnitude.Size = new Size(80, 20);
+        _lblCorruptMagnitude.TabIndex = 8;
+        _lblCorruptMagnitude.Text = "Байт:";
+        // 
         // _numCorruptMagnitude
-        //
-        _numCorruptMagnitude.DecimalPlaces = 2;
-        _numCorruptMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numCorruptMagnitude.Location = new Point(430, 46);
-        _numCorruptMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
+        // 
+        _numCorruptMagnitude.Location = new Point(468, 54);
+        _numCorruptMagnitude.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+        _numCorruptMagnitude.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         _numCorruptMagnitude.Name = "_numCorruptMagnitude";
-        _numCorruptMagnitude.Size = new Size(72, 22);
-        _numCorruptMagnitude.TabIndex = 6;
-        //
+        _numCorruptMagnitude.Size = new Size(72, 34);
+        _numCorruptMagnitude.TabIndex = 9;
+        _numCorruptMagnitude.Value = new decimal(new int[] { 1, 0, 0, 0 });
+        _numCorruptMagnitude.ValueChanged += NumCorruptMagnitude_ValueChanged;
+        // 
         // _btnCorruptManual
-        //
+        // 
         _btnCorruptManual.FlatStyle = FlatStyle.Flat;
-        _btnCorruptManual.Location = new Point(8, 72);
+        _btnCorruptManual.Location = new Point(530, 20);
         _btnCorruptManual.Name = "_btnCorruptManual";
-        _btnCorruptManual.Size = new Size(150, 22);
-        _btnCorruptManual.TabIndex = 7;
+        _btnCorruptManual.Size = new Size(160, 24);
+        _btnCorruptManual.TabIndex = 3;
         _btnCorruptManual.Text = "Сработать сейчас";
-        //
+        _btnCorruptManual.Click += BtnCorruptManual_Click;
+        // 
         // _grpStuck
-        //
+        // 
         _grpStuck.BackColor = Color.FromArgb(255, 243, 224);
-        _grpStuck.Controls.Add(_chkStuckEnabled);
         _grpStuck.Controls.Add(_lblStuckMode);
         _grpStuck.Controls.Add(_cmbStuckMode);
-        _grpStuck.Controls.Add(_lblStuckParam1);
-        _grpStuck.Controls.Add(_numStuckParam1);
-        _grpStuck.Controls.Add(_lblStuckParam2);
-        _grpStuck.Controls.Add(_numStuckParam2);
+        _grpStuck.Controls.Add(_lblStuckActive);
+        _grpStuck.Controls.Add(_numStuckActive);
+        _grpStuck.Controls.Add(_lblStuckGap);
+        _grpStuck.Controls.Add(_numStuckGap);
         _grpStuck.Controls.Add(_lblStuckMagnitude);
         _grpStuck.Controls.Add(_numStuckMagnitude);
         _grpStuck.Controls.Add(_btnStuckManual);
-        _grpStuck.Location = new Point(11, 455);
+        _grpStuck.Location = new Point(19, 357);
         _grpStuck.Name = "_grpStuck";
         _grpStuck.Padding = new Padding(8, 4, 8, 4);
-        _grpStuck.Size = new Size(536, 96);
+        _grpStuck.Size = new Size(700, 90);
         _grpStuck.TabIndex = 6;
         _grpStuck.TabStop = false;
         _grpStuck.Text = "Застрявший датчик (Stuck)";
-        //
-        // _chkStuckEnabled
-        //
-        _chkStuckEnabled.Location = new Point(8, 20);
-        _chkStuckEnabled.Name = "_chkStuckEnabled";
-        _chkStuckEnabled.Size = new Size(60, 22);
-        _chkStuckEnabled.TabIndex = 0;
-        _chkStuckEnabled.Text = "Вкл";
-        //
+        // 
         // _lblStuckMode
-        //
-        _lblStuckMode.Location = new Point(76, 22);
+        // 
+        _lblStuckMode.Location = new Point(76, 24);
         _lblStuckMode.Name = "_lblStuckMode";
         _lblStuckMode.Size = new Size(48, 20);
         _lblStuckMode.TabIndex = 1;
         _lblStuckMode.Text = "Режим:";
-        //
+        // 
         // _cmbStuckMode
-        //
+        // 
         _cmbStuckMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно", "Вручную" });
-        _cmbStuckMode.Location = new Point(126, 19);
+        _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbStuckMode.Location = new Point(126, 21);
         _cmbStuckMode.Name = "_cmbStuckMode";
-        _cmbStuckMode.Size = new Size(110, 22);
+        _cmbStuckMode.Size = new Size(110, 36);
         _cmbStuckMode.TabIndex = 2;
-        //
-        // _lblStuckParam1
-        //
-        _lblStuckParam1.Location = new Point(8, 48);
-        _lblStuckParam1.Name = "_lblStuckParam1";
-        _lblStuckParam1.Size = new Size(100, 20);
-        _lblStuckParam1.TabIndex = 3;
-        //
-        // _numStuckParam1
-        //
-        _numStuckParam1.DecimalPlaces = 1;
-        _numStuckParam1.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckParam1.Location = new Point(112, 46);
-        _numStuckParam1.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numStuckParam1.Name = "_numStuckParam1";
-        _numStuckParam1.Size = new Size(72, 22);
-        _numStuckParam1.TabIndex = 4;
-        //
-        // _lblStuckParam2
-        //
-        _lblStuckParam2.Location = new Point(192, 48);
-        _lblStuckParam2.Name = "_lblStuckParam2";
-        _lblStuckParam2.Size = new Size(64, 20);
-        _lblStuckParam2.TabIndex = 5;
-        //
-        // _numStuckParam2
-        //
-        _numStuckParam2.DecimalPlaces = 1;
-        _numStuckParam2.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckParam2.Location = new Point(256, 46);
-        _numStuckParam2.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
-        _numStuckParam2.Name = "_numStuckParam2";
-        _numStuckParam2.Size = new Size(72, 22);
-        _numStuckParam2.TabIndex = 6;
-        //
+        _cmbStuckMode.SelectedIndexChanged += CmbStuckMode_SelectedIndexChanged;
+        // 
+        // _lblStuckActive
+        // 
+        _lblStuckActive.Location = new Point(8, 56);
+        _lblStuckActive.Name = "_lblStuckActive";
+        _lblStuckActive.Size = new Size(100, 20);
+        _lblStuckActive.TabIndex = 4;
+        _lblStuckActive.Text = "Актив., с:";
+        // 
+        // _numStuckActive
+        // 
+        _numStuckActive.DecimalPlaces = 1;
+        _numStuckActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numStuckActive.Location = new Point(112, 54);
+        _numStuckActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
+        _numStuckActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numStuckActive.Name = "_numStuckActive";
+        _numStuckActive.Size = new Size(72, 34);
+        _numStuckActive.TabIndex = 5;
+        _numStuckActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
+        _numStuckActive.ValueChanged += NumStuckActive_ValueChanged;
+        // 
+        // _lblStuckGap
+        // 
+        _lblStuckGap.Location = new Point(196, 56);
+        _lblStuckGap.Name = "_lblStuckGap";
+        _lblStuckGap.Size = new Size(70, 20);
+        _lblStuckGap.TabIndex = 6;
+        _lblStuckGap.Text = "Пауза, с:";
+        // 
+        // _numStuckGap
+        // 
+        _numStuckGap.DecimalPlaces = 1;
+        _numStuckGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+        _numStuckGap.Location = new Point(270, 54);
+        _numStuckGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
+        _numStuckGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
+        _numStuckGap.Name = "_numStuckGap";
+        _numStuckGap.Size = new Size(72, 34);
+        _numStuckGap.TabIndex = 7;
+        _numStuckGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
+        _numStuckGap.ValueChanged += NumStuckGap_ValueChanged;
+        // 
         // _lblStuckMagnitude
-        //
-        _lblStuckMagnitude.Location = new Point(336, 48);
+        // 
+        _lblStuckMagnitude.Location = new Point(384, 56);
         _lblStuckMagnitude.Name = "_lblStuckMagnitude";
-        _lblStuckMagnitude.Size = new Size(90, 20);
-        _lblStuckMagnitude.TabIndex = 7;
-        _lblStuckMagnitude.Text = "Код АЦП";
-        //
+        _lblStuckMagnitude.Size = new Size(80, 20);
+        _lblStuckMagnitude.TabIndex = 8;
+        _lblStuckMagnitude.Text = "Код АЦП:";
+        // 
         // _numStuckMagnitude
-        //
-        _numStuckMagnitude.DecimalPlaces = 2;
-        _numStuckMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckMagnitude.Location = new Point(430, 46);
-        _numStuckMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
+        // 
+        _numStuckMagnitude.Increment = new decimal(new int[] { 100, 0, 0, 0 });
+        _numStuckMagnitude.Location = new Point(468, 54);
+        _numStuckMagnitude.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
         _numStuckMagnitude.Name = "_numStuckMagnitude";
-        _numStuckMagnitude.Size = new Size(72, 22);
-        _numStuckMagnitude.TabIndex = 8;
-        //
+        _numStuckMagnitude.Size = new Size(72, 34);
+        _numStuckMagnitude.TabIndex = 9;
+        _numStuckMagnitude.ValueChanged += NumStuckMagnitude_ValueChanged;
+        // 
         // _btnStuckManual
-        //
+        // 
         _btnStuckManual.FlatStyle = FlatStyle.Flat;
-        _btnStuckManual.Location = new Point(8, 72);
+        _btnStuckManual.Location = new Point(530, 20);
         _btnStuckManual.Name = "_btnStuckManual";
-        _btnStuckManual.Size = new Size(150, 22);
-        _btnStuckManual.TabIndex = 9;
-        _btnStuckManual.Text = "Сработать сейчас";
-        //
+        _btnStuckManual.Size = new Size(160, 24);
+        _btnStuckManual.TabIndex = 3;
+        _btnStuckManual.Text = "Вкл/выкл сейчас";
+        _btnStuckManual.Click += BtnStuckManual_Click;
+        // 
         // _history
-        //
+        // 
         _history.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _history.BackColor = Color.White;
         _history.BorderStyle = BorderStyle.FixedSingle;
         _history.DrawMode = DrawMode.OwnerDrawFixed;
-        _history.Font = new Font("Courier New", 9.25F);
+        _history.Font = new Font("Courier New", 12F);
         _history.FormattingEnabled = true;
         _history.IntegralHeight = false;
-        _history.Location = new Point(11, 560);
+        _history.Location = new Point(11, 652);
         _history.Name = "_history";
-        _history.Size = new Size(1620, 208);
+        _history.Size = new Size(1620, 116);
         _history.TabIndex = 7;
-        //
+        // 
+        // tableLayoutPanel1
+        // 
+        tableLayoutPanel1.BackColor = Color.FromArgb(192, 255, 255);
+        tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel1.ColumnCount = 5;
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel1.Controls.Add(_btnSilenceManual, 4, 1);
+        tableLayoutPanel1.Controls.Add(_lblSilenceMode, 3, 0);
+        tableLayoutPanel1.Controls.Add(_cmbSilenceMode, 4, 0);
+        tableLayoutPanel1.Controls.Add(_lblSilenceActive, 1, 0);
+        tableLayoutPanel1.Controls.Add(_numSilenceGap, 2, 1);
+        tableLayoutPanel1.Controls.Add(_lblSilenceGap, 1, 1);
+        tableLayoutPanel1.Controls.Add(_numSilenceActive, 2, 0);
+        tableLayoutPanel1.Dock = DockStyle.Fill;
+        tableLayoutPanel1.Location = new Point(0, 0);
+        tableLayoutPanel1.Name = "tableLayoutPanel1";
+        tableLayoutPanel1.RowCount = 2;
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel1.Size = new Size(1144, 107);
+        tableLayoutPanel1.TabIndex = 8;
+        // 
+        // panel1
+        // 
+        panel1.BackColor = Color.FromArgb(192, 192, 255);
+        panel1.Controls.Add(panel3);
+        panel1.Controls.Add(panel2);
+        panel1.Location = new Point(49, 453);
+        panel1.Name = "panel1";
+        panel1.Size = new Size(1144, 142);
+        panel1.TabIndex = 9;
+        // 
+        // panel3
+        // 
+        panel3.Controls.Add(tableLayoutPanel1);
+        panel3.Dock = DockStyle.Fill;
+        panel3.Location = new Point(0, 35);
+        panel3.Name = "panel3";
+        panel3.Size = new Size(1144, 107);
+        panel3.TabIndex = 10;
+        // 
+        // panel2
+        // 
+        panel2.BackColor = Color.FromArgb(255, 224, 192);
+        panel2.Controls.Add(tableLayoutPanel2);
+        panel2.Dock = DockStyle.Top;
+        panel2.Location = new Point(0, 0);
+        panel2.Name = "panel2";
+        panel2.Size = new Size(1144, 35);
+        panel2.TabIndex = 9;
+        // 
+        // tableLayoutPanel2
+        // 
+        tableLayoutPanel2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        tableLayoutPanel2.ColumnCount = 1;
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.Controls.Add(label1, 0, 0);
+        tableLayoutPanel2.Dock = DockStyle.Fill;
+        tableLayoutPanel2.Location = new Point(0, 0);
+        tableLayoutPanel2.Name = "tableLayoutPanel2";
+        tableLayoutPanel2.RowCount = 1;
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        tableLayoutPanel2.Size = new Size(1144, 35);
+        tableLayoutPanel2.TabIndex = 0;
+        // 
+        // label1
+        // 
+        label1.AutoSize = true;
+        label1.Dock = DockStyle.Fill;
+        label1.Location = new Point(4, 1);
+        label1.Name = "label1";
+        label1.Size = new Size(1136, 33);
+        label1.TabIndex = 0;
+        label1.Text = "Тишина (Silence) — эмулятор не отвечает";
+        label1.TextAlign = ContentAlignment.MiddleCenter;
+        // 
         // DynamicFaultForm
-        //
+        // 
         BackColor = Color.FromArgb(255, 250, 240);
         ClientSize = new Size(1642, 780);
+        Controls.Add(panel1);
         Controls.Add(_btnCycle);
         Controls.Add(_btnClearHistory);
-        Controls.Add(_grpSilence);
         Controls.Add(_grpSpike);
         Controls.Add(_grpDrift);
         Controls.Add(_grpCorrupt);
         Controls.Add(_grpStuck);
         Controls.Add(_history);
-        MinimumSize = new Size(560, 700);
+        Font = new Font("Segoe UI", 12F);
+        MinimumSize = new Size(760, 700);
         Name = "DynamicFaultForm";
         Text = "Сбои — Динамика";
-        _grpSilence.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)_numSilenceActive).EndInit();
+        ((System.ComponentModel.ISupportInitialize)_numSilenceGap).EndInit();
         _grpSpike.ResumeLayout(false);
-        _grpDrift.ResumeLayout(false);
-        _grpCorrupt.ResumeLayout(false);
-        _grpStuck.ResumeLayout(false);
-        ((System.ComponentModel.ISupportInitialize)_numSilenceParam1).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numSilenceParam2).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numSpikeParam1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)_numSpikeInterval).EndInit();
+        ((System.ComponentModel.ISupportInitialize)_numSpikeRate).EndInit();
         ((System.ComponentModel.ISupportInitialize)_numSpikeMagnitude).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numDriftParam1).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numDriftParam2).EndInit();
+        _grpDrift.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)_numDriftActive).EndInit();
+        ((System.ComponentModel.ISupportInitialize)_numDriftGap).EndInit();
         ((System.ComponentModel.ISupportInitialize)_numDriftMagnitude).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numCorruptParam1).EndInit();
+        _grpCorrupt.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)_numCorruptInterval).EndInit();
+        ((System.ComponentModel.ISupportInitialize)_numCorruptRate).EndInit();
         ((System.ComponentModel.ISupportInitialize)_numCorruptMagnitude).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numStuckParam1).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_numStuckParam2).EndInit();
+        _grpStuck.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)_numStuckActive).EndInit();
+        ((System.ComponentModel.ISupportInitialize)_numStuckGap).EndInit();
         ((System.ComponentModel.ISupportInitialize)_numStuckMagnitude).EndInit();
+        tableLayoutPanel1.ResumeLayout(false);
+        panel1.ResumeLayout(false);
+        panel3.ResumeLayout(false);
+        panel2.ResumeLayout(false);
+        tableLayoutPanel2.ResumeLayout(false);
+        tableLayoutPanel2.PerformLayout();
         ResumeLayout(false);
     }
 
     private Button _btnCycle;
     private Button _btnClearHistory;
-
-    private GroupBox _grpSilence;
-    private CheckBox _chkSilenceEnabled;
     private Label _lblSilenceMode;
     private ComboBox _cmbSilenceMode;
-    private Label _lblSilenceParam1;
-    private NumericUpDown _numSilenceParam1;
-    private Label _lblSilenceParam2;
-    private NumericUpDown _numSilenceParam2;
+    private Label _lblSilenceActive;
+    private NumericUpDown _numSilenceActive;
+    private Label _lblSilenceGap;
+    private NumericUpDown _numSilenceGap;
     private Button _btnSilenceManual;
 
     private GroupBox _grpSpike;
-    private CheckBox _chkSpikeEnabled;
     private Label _lblSpikeMode;
     private ComboBox _cmbSpikeMode;
-    private Label _lblSpikeParam1;
-    private NumericUpDown _numSpikeParam1;
+    private Label _lblSpikeInterval;
+    private NumericUpDown _numSpikeInterval;
+    private Label _lblSpikeRate;
+    private NumericUpDown _numSpikeRate;
     private Label _lblSpikeMagnitude;
     private NumericUpDown _numSpikeMagnitude;
     private Button _btnSpikeManual;
 
     private GroupBox _grpDrift;
-    private CheckBox _chkDriftEnabled;
     private Label _lblDriftMode;
     private ComboBox _cmbDriftMode;
-    private Label _lblDriftParam1;
-    private NumericUpDown _numDriftParam1;
-    private Label _lblDriftParam2;
-    private NumericUpDown _numDriftParam2;
+    private Label _lblDriftActive;
+    private NumericUpDown _numDriftActive;
+    private Label _lblDriftGap;
+    private NumericUpDown _numDriftGap;
     private Label _lblDriftMagnitude;
     private NumericUpDown _numDriftMagnitude;
     private Button _btnDriftManual;
 
     private GroupBox _grpCorrupt;
-    private CheckBox _chkCorruptEnabled;
     private Label _lblCorruptMode;
     private ComboBox _cmbCorruptMode;
-    private Label _lblCorruptParam1;
-    private NumericUpDown _numCorruptParam1;
+    private Label _lblCorruptInterval;
+    private NumericUpDown _numCorruptInterval;
+    private Label _lblCorruptRate;
+    private NumericUpDown _numCorruptRate;
     private Label _lblCorruptMagnitude;
     private NumericUpDown _numCorruptMagnitude;
     private Button _btnCorruptManual;
 
     private GroupBox _grpStuck;
-    private CheckBox _chkStuckEnabled;
     private Label _lblStuckMode;
     private ComboBox _cmbStuckMode;
-    private Label _lblStuckParam1;
-    private NumericUpDown _numStuckParam1;
-    private Label _lblStuckParam2;
-    private NumericUpDown _numStuckParam2;
+    private Label _lblStuckActive;
+    private NumericUpDown _numStuckActive;
+    private Label _lblStuckGap;
+    private NumericUpDown _numStuckGap;
     private Label _lblStuckMagnitude;
     private NumericUpDown _numStuckMagnitude;
     private Button _btnStuckManual;
 
     private FaultHistoryListBox _history;
+    private TableLayoutPanel tableLayoutPanel1;
+    private Panel panel1;
+    private Panel panel2;
+    private TableLayoutPanel tableLayoutPanel2;
+    private Label label1;
+    private Panel panel3;
 }
