@@ -6,7 +6,7 @@ public sealed class FaultState
     public FaultType Type { get; }
     public FaultKind Kind { get; }
 
-    public bool Enabled { get; set; }
+    /// <summary>Единственный переключатель автоцикла: Off - сбой сам не срабатывает. Ручное срабатывание кнопкой работает независимо от режима.</summary>
     public FaultMode Mode { get; set; } = FaultMode.Off;
 
     /// <summary>Discrete + Periodic: интервал между срабатываниями, сек.</summary>

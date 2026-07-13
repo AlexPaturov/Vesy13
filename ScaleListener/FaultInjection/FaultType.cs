@@ -28,6 +28,11 @@ public enum FaultType
 /// </summary>
 public enum FaultKind { Discrete, Continuous }
 
-public enum FaultMode { Off, Periodic, Random, Manual }
+/// <summary>
+/// Как сбой запускает себя сам. Ручное срабатывание - отдельная ось управления
+/// (кнопка на панели), оно работает в любом режиме и здесь не представлено.
+/// Порядок значений совпадает с порядком пунктов комбобокса режима на форме.
+/// </summary>
+public enum FaultMode { Off, Periodic, Random }
 
 public enum FaultEventKind { Fired, Started, Stopped }

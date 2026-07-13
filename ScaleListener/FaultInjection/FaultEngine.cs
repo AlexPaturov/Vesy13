@@ -87,8 +87,7 @@ public sealed class FaultEngine
 
         foreach (var state in _states.Values)
         {
-            if (state.Kind != FaultKind.Continuous || !state.Enabled ||
-                state.Mode is FaultMode.Off or FaultMode.Manual)
+            if (state.Kind != FaultKind.Continuous || state.Mode == FaultMode.Off)
                 continue;
 
             if (state.NextTransitionAt == DateTime.MinValue)
@@ -128,7 +127,7 @@ public sealed class FaultEngine
             return true;
         }
 
-        if (!IsRunning || !state.Enabled) return false;
+        if (!IsRunning) return false;
 
         var now = DateTime.UtcNow;
         bool fire;
@@ -166,10 +165,16 @@ public sealed class FaultEngine
         return fire;
     }
 
+    /// <summary>
+    /// Окно непрерывного сбоя открыто прямо сейчас. Режим здесь не проверяется намеренно:
+    /// он решает только участие в автоцикле (см. <see cref="Pump"/>), а окно могло быть
+    /// открыто вручную через <see cref="TriggerManual"/> - как и разовое ручное срабатывание
+    /// дискретных сбоёв, оно работает независимо от режима.
+    /// </summary>
     public bool IsWindowActive(FaultType type)
     {
         var state = _states[type];
-        return state.Kind == FaultKind.Continuous && state.Enabled && state.IsActive;
+        return state.Kind == FaultKind.Continuous && state.IsActive;
     }
 
     public void AppendHistory(FaultType type, FaultEventKind kind, string correctValue, string wrongValue)
