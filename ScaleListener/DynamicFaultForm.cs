@@ -6,25 +6,49 @@ namespace ScaleListener;
 /// Панель управления сбоями для динамического потока. Сам движок (<see cref="FaultEngine"/>)
 /// живёт в <see cref="DynamicForm"/> и продолжает работать, даже если эта панель закрыта -
 /// форма только показывает/редактирует его состояние и историю.
+/// Разметка каждой панели сбоя лежит в Designer.cs и настраивается независимо от остальных;
+/// привязка контролов к состоянию сбоя - через <see cref="FaultPanelBinder"/>.
 /// </summary>
 public partial class DynamicFaultForm : Form
 {
     private readonly FaultEngine _engine;
+
+    /// <summary>Только для дизайнера VS: ему нужен конструктор без параметров, чтобы создать design-time экземпляр формы.</summary>
+    public DynamicFaultForm() : this(new FaultEngine()) { }
 
     public DynamicFaultForm(FaultEngine engine)
     {
         _engine = engine;
         InitializeComponent();
 
-        _panelSilence.Bind(_engine.Get(FaultType.Silence), "Тишина (Silence) — эмулятор не отвечает", "—",
+        _ = new FaultPanelBinder(_engine.Get(FaultType.Silence),
+            _chkSilenceEnabled, _cmbSilenceMode,
+            _lblSilenceParam1, _numSilenceParam1, _lblSilenceParam2, _numSilenceParam2,
+            null, _btnSilenceManual,
             () => _engine.TriggerManual(FaultType.Silence));
-        _panelSpike.Bind(_engine.Get(FaultType.Spike), "Одиночный выброс (Spike)", "Ампл., т",
+
+        _ = new FaultPanelBinder(_engine.Get(FaultType.Spike),
+            _chkSpikeEnabled, _cmbSpikeMode,
+            _lblSpikeParam1, _numSpikeParam1, null, null,
+            _numSpikeMagnitude, _btnSpikeManual,
             () => _engine.ArmManualDiscrete(FaultType.Spike));
-        _panelDrift.Bind(_engine.Get(FaultType.Drift), "Дрейф/дребезг (Drift)", "Ампл., т",
+
+        _ = new FaultPanelBinder(_engine.Get(FaultType.Drift),
+            _chkDriftEnabled, _cmbDriftMode,
+            _lblDriftParam1, _numDriftParam1, _lblDriftParam2, _numDriftParam2,
+            _numDriftMagnitude, _btnDriftManual,
             () => _engine.TriggerManual(FaultType.Drift));
-        _panelCorrupt.Bind(_engine.Get(FaultType.Corrupt), "Порча байт (Corrupt)", "Байт мусора",
+
+        _ = new FaultPanelBinder(_engine.Get(FaultType.Corrupt),
+            _chkCorruptEnabled, _cmbCorruptMode,
+            _lblCorruptParam1, _numCorruptParam1, null, null,
+            _numCorruptMagnitude, _btnCorruptManual,
             () => _engine.ArmManualDiscrete(FaultType.Corrupt));
-        _panelStuck.Bind(_engine.Get(FaultType.Stuck), "Застрявший датчик (Stuck)", "Код АЦП",
+
+        _ = new FaultPanelBinder(_engine.Get(FaultType.Stuck),
+            _chkStuckEnabled, _cmbStuckMode,
+            _lblStuckParam1, _numStuckParam1, _lblStuckParam2, _numStuckParam2,
+            _numStuckMagnitude, _btnStuckManual,
             () => _engine.TriggerManual(FaultType.Stuck));
 
         _engine.HistoryAppended += OnHistoryAppended;
