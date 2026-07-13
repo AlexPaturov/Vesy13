@@ -83,7 +83,7 @@ partial class StaticForm
         _log.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _log.BackColor = Color.LightGray;
         _log.DetectUrls = false;
-        _log.Font = new Font("Courier New", 9.75F);
+        _log.Font = new Font("Courier New", 12F);
         _log.Location = new Point(8, 46);
         _log.Name = "_log";
         _log.ReadOnly = true;
@@ -128,6 +128,7 @@ partial class StaticForm
         //
         // StaticForm
         //
+        Font = new Font("Segoe UI", 12F);
         ClientSize = new Size(730, 430);
         Controls.Add(_lblWeight);
         Controls.Add(_numWeight);

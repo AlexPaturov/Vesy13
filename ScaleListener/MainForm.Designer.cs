@@ -64,6 +64,7 @@ partial class MainForm
         //
         // MainForm
         //
+        Font = new Font("Segoe UI", 12F);
         ClientSize = new Size(360, 180);
         Controls.Add(_lblTitle);
         Controls.Add(_btnStatic);

@@ -15,7 +15,7 @@ public sealed class FaultHistoryListBox : ListBox
         DrawMode = DrawMode.OwnerDrawFixed;
         BorderStyle = BorderStyle.FixedSingle;
         BackColor = Color.White;
-        Font = new Font("Courier New", 9.25f);
+        Font = new Font("Courier New", 12f);
         ItemHeight = Font.Height + 2;
         IntegralHeight = false;
     }
