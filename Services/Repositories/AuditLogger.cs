@@ -33,6 +33,11 @@ public static class AuditLogger
     public const int AdcStaticRawFrame = 2010;
     public const int AdcStaticCalc     = 2011;
     public const int AdcDynamicDiag    = 2012;
+    public const int FilterClamp       = 2020;
+    public const int FilterDelta       = 2021;
+    public const int FilterStuck       = 2022;
+    public const int FilterChecksum    = 2023;
+    public const int FilterEma         = 2024;
     public const int AdminLogin        = 2003;
     public const int AppStarted        = 2004;
     public const int SettingsSaved     = 2005;

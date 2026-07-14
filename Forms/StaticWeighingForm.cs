@@ -2,6 +2,7 @@ using Vesy13.Application;
 using Vesy13.Models;
 using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
+using Vesy13.Services.Hardware.Filters;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
@@ -13,6 +14,7 @@ namespace Vesy13.Forms;
 public partial class StaticWeighingForm : Form
 {
     private SimA04ReaderStatic    _sim = null!;
+    private StaticFilterPipeline  _filter = null!;
     private LocalRepository _ldb  = null!;
     private SettingsService _settings = null!;
 
@@ -36,6 +38,7 @@ public partial class StaticWeighingForm : Form
     public StaticWeighingForm(LocalRepository ldb, SettingsService settings)
     {
         _sim = new SimA04ReaderStatic { Channel = settings.Current.ActiveChannel };
+        _filter = new StaticFilterPipeline(_sim, settings.Current);
         _ldb  = ldb;
         _settings = settings;
         InitializeComponent();
@@ -182,7 +185,7 @@ public partial class StaticWeighingForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "StaticWeighingForm");
         _sim.ConnectionTimeoutMs = 2000;
         SetupGridColumns();
-        _sim.FrameReceived     += OnFrame;
+        _filter.FilteredFrameReceived += OnFrame;
         _sim.RawFrameReceived  += OnRawFrame;
         _sim.ConnectionChanged += OnConnectionChanged;
         AuditLogger.QueueStatusChanged += OnAuditQueueStatusChanged;
@@ -219,7 +222,8 @@ public partial class StaticWeighingForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
-            _sim.FrameReceived     -= OnFrame;
+            _filter.FilteredFrameReceived -= OnFrame;
+            _filter.Dispose();
             _sim.RawFrameReceived  -= OnRawFrame;
             _sim.ConnectionChanged -= OnConnectionChanged;
             AuditLogger.QueueStatusChanged -= OnAuditQueueStatusChanged;

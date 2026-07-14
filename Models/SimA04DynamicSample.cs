@@ -20,6 +20,12 @@ public readonly struct SimA04DynamicSample
         Valid = true;
     }
 
+    /// <summary>
+    /// Собирает валидный сэмпл из готовых кодов каналов — для фильтров входного потока,
+    /// которые публикуют сглаженное значение, а не разобранные байты.
+    /// </summary>
+    public static SimA04DynamicSample FromCodes(int ch0, int ch1, byte aux) => new(ch0, ch1, aux);
+
     public static SimA04DynamicSample Parse(byte[] data)
     {
         if (data.Length != 5) return default;

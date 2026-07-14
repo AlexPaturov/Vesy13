@@ -18,6 +18,12 @@ public readonly struct SimA04Frame
     private SimA04Frame(int ch0, int ch1) { Ch0 = ch0; Ch1 = ch1; Valid = true; }
 
     /// <summary>
+    /// Собирает валидный кадр из готовых кодов каналов — для фильтров входного потока,
+    /// которые публикуют сглаженное значение, а не разобранные байты.
+    /// </summary>
+    public static SimA04Frame FromCodes(int ch0, int ch1) => new(ch0, ch1);
+
+    /// <summary>
     /// Разбирает 4-байтовый ответ прибора.
     /// Протокол: CH0 = byte[1]*256 + byte[0], CH1 = byte[3]*256 + byte[2].
     /// При длине не равной 4 возвращает невалидный фрейм (<see cref="Valid"/> = false).

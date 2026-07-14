@@ -115,6 +115,50 @@ public sealed class SettingsService
             changed = true;
         }
 
+        if (settings.StaticClampMaxCode <= settings.StaticClampMinCode)
+        {
+            settings.StaticClampMinCode = 0;
+            settings.StaticClampMaxCode = 65535;
+            changed = true;
+        }
+
+        if (settings.DynamicClampMaxCode <= settings.DynamicClampMinCode)
+        {
+            settings.DynamicClampMinCode = 0;
+            settings.DynamicClampMaxCode = 65535;
+            changed = true;
+        }
+
+        if (settings.StaticDeltaMaxCodes <= 0)
+        {
+            settings.StaticDeltaMaxCodes = 5000;
+            changed = true;
+        }
+
+        if (settings.DynamicDeltaMaxCodes <= 0)
+        {
+            settings.DynamicDeltaMaxCodes = 5000;
+            changed = true;
+        }
+
+        if (settings.DynamicStuckSamples < 2)
+        {
+            settings.DynamicStuckSamples = 150;
+            changed = true;
+        }
+
+        if (settings.StaticEmaAlpha is <= 0 or > 1)
+        {
+            settings.StaticEmaAlpha = 0.3;
+            changed = true;
+        }
+
+        if (settings.DynamicEmaAlpha is <= 0 or > 1)
+        {
+            settings.DynamicEmaAlpha = 0.2;
+            changed = true;
+        }
+
         return changed;
     }
 }

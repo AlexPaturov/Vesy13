@@ -18,6 +18,12 @@ public class SimA04ReaderDynamic : IDisposable
     public event EventHandler<byte[]>? RawSampleReceived;
     public event EventHandler<bool>? ConnectionChanged;
 
+    /// <summary>
+    /// Пятибайтовое окно не сошлось по контрольной сумме aux и отброшено (дальше идёт ресинк
+    /// сдвигом на байт). Единственный контроль целостности, который даёт протокол динамики.
+    /// </summary>
+    public event EventHandler<byte[]>? ChecksumRejected;
+
     public int ConnectionTimeoutMs { get; set; } = 5000;
 
     private SerialPort? _port;
@@ -110,6 +116,7 @@ public class SimA04ReaderDynamic : IDisposable
     private void ProcessByte(byte value)
     {
         byte[]? raw = null;
+        byte[]? rejected = null;
         SimA04DynamicSample sample = default;
 
         lock (_lock)
@@ -125,14 +132,22 @@ public class SimA04ReaderDynamic : IDisposable
             sample = SimA04DynamicSample.Parse(raw);
             if (!sample.Valid)
             {
+                rejected = raw;
                 ShiftLeft();
                 SkippedBytes++;
-                return;
             }
+            else
+            {
+                _sampleBytes = 0;
+                SamplesReceived++;
+                _lastValidSampleAt = DateTime.UtcNow;
+            }
+        }
 
-            _sampleBytes = 0;
-            SamplesReceived++;
-            _lastValidSampleAt = DateTime.UtcNow;
+        if (rejected is not null)
+        {
+            ChecksumRejected?.Invoke(this, rejected);
+            return;
         }
 
         SetConnected(true);
