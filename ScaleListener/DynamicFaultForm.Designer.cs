@@ -93,6 +93,13 @@ partial class DynamicFaultForm
         _pnlSilenceHeader = new Panel();
         _tlpSilenceHeader = new TableLayoutPanel();
         _lblSilenceTitle = new Label();
+        _pnlMain = new Panel();
+        _pnlMiddle = new Panel();
+        _tlpContent = new TableLayoutPanel();
+        _pnlHistory = new Panel();
+        _pnlFaults = new Panel();
+        _tlpFaults = new TableLayoutPanel();
+        _pnlBottom = new Panel();
         ((System.ComponentModel.ISupportInitialize)_numSilenceActive).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numSilenceGap).BeginInit();
         _pnlSpike.SuspendLayout();
@@ -132,13 +139,20 @@ partial class DynamicFaultForm
         _pnlSilenceBody.SuspendLayout();
         _pnlSilenceHeader.SuspendLayout();
         _tlpSilenceHeader.SuspendLayout();
+        _pnlMain.SuspendLayout();
+        _pnlMiddle.SuspendLayout();
+        _tlpContent.SuspendLayout();
+        _pnlHistory.SuspendLayout();
+        _pnlFaults.SuspendLayout();
+        _tlpFaults.SuspendLayout();
+        _pnlBottom.SuspendLayout();
         SuspendLayout();
         // 
         // _btnCycle
         // 
         _btnCycle.BackColor = Color.White;
         _btnCycle.FlatStyle = FlatStyle.Flat;
-        _btnCycle.Location = new Point(11, 11);
+        _btnCycle.Location = new Point(9, 6);
         _btnCycle.Name = "_btnCycle";
         _btnCycle.Size = new Size(150, 46);
         _btnCycle.TabIndex = 0;
@@ -149,7 +163,7 @@ partial class DynamicFaultForm
         // _btnClearHistory
         // 
         _btnClearHistory.FlatStyle = FlatStyle.Flat;
-        _btnClearHistory.Location = new Point(167, 11);
+        _btnClearHistory.Location = new Point(230, 7);
         _btnClearHistory.Name = "_btnClearHistory";
         _btnClearHistory.Size = new Size(217, 46);
         _btnClearHistory.TabIndex = 1;
@@ -221,9 +235,10 @@ partial class DynamicFaultForm
         _pnlSpike.BackColor = Color.FromArgb(192, 192, 255);
         _pnlSpike.Controls.Add(_pnlSpikeBody);
         _pnlSpike.Controls.Add(_pnlSpikeHeader);
-        _pnlSpike.Location = new Point(522, 64);
+        _pnlSpike.Dock = DockStyle.Fill;
+        _pnlSpike.Location = new Point(3, 3);
         _pnlSpike.Name = "_pnlSpike";
-        _pnlSpike.Size = new Size(493, 177);
+        _pnlSpike.Size = new Size(514, 180);
         _pnlSpike.TabIndex = 3;
         // 
         // _pnlSpikeBody
@@ -409,9 +424,10 @@ partial class DynamicFaultForm
         _pnlDrift.BackColor = Color.FromArgb(192, 192, 255);
         _pnlDrift.Controls.Add(_pnlDriftBody);
         _pnlDrift.Controls.Add(_pnlDriftHeader);
-        _pnlDrift.Location = new Point(23, 63);
+        _pnlDrift.Dock = DockStyle.Fill;
+        _pnlDrift.Location = new Point(3, 189);
         _pnlDrift.Name = "_pnlDrift";
-        _pnlDrift.Size = new Size(493, 177);
+        _pnlDrift.Size = new Size(514, 178);
         _pnlDrift.TabIndex = 4;
         // 
         // _pnlDriftBody
@@ -597,9 +613,10 @@ partial class DynamicFaultForm
         _pnlCorrupt.BackColor = Color.FromArgb(192, 192, 255);
         _pnlCorrupt.Controls.Add(_pnlCorruptBody);
         _pnlCorrupt.Controls.Add(_pnlCorruptHeader);
-        _pnlCorrupt.Location = new Point(518, 247);
+        _pnlCorrupt.Dock = DockStyle.Fill;
+        _pnlCorrupt.Location = new Point(3, 373);
         _pnlCorrupt.Name = "_pnlCorrupt";
-        _pnlCorrupt.Size = new Size(493, 177);
+        _pnlCorrupt.Size = new Size(514, 181);
         _pnlCorrupt.TabIndex = 4;
         // 
         // _pnlCorruptBody
@@ -784,9 +801,10 @@ partial class DynamicFaultForm
         _pnlStuck.BackColor = Color.FromArgb(192, 192, 255);
         _pnlStuck.Controls.Add(_pnlStuckBody);
         _pnlStuck.Controls.Add(_pnlStuckHeader);
-        _pnlStuck.Location = new Point(23, 246);
+        _pnlStuck.Dock = DockStyle.Fill;
+        _pnlStuck.Location = new Point(3, 560);
         _pnlStuck.Name = "_pnlStuck";
-        _pnlStuck.Size = new Size(493, 177);
+        _pnlStuck.Size = new Size(514, 179);
         _pnlStuck.TabIndex = 4;
         // 
         // _pnlStuckBody
@@ -967,17 +985,18 @@ partial class DynamicFaultForm
         // 
         // _history
         // 
-        _history.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _history.BackColor = Color.White;
         _history.BorderStyle = BorderStyle.FixedSingle;
+        _history.Dock = DockStyle.Fill;
         _history.DrawMode = DrawMode.OwnerDrawFixed;
         _history.Font = new Font("Courier New", 12F);
         _history.FormattingEnabled = true;
         _history.IntegralHeight = false;
         _history.ItemHeight = 25;
-        _history.Location = new Point(11, 652);
+        _history.Location = new Point(0, 0);
+        _history.Margin = new Padding(4);
         _history.Name = "_history";
-        _history.Size = new Size(1620, 116);
+        _history.Size = new Size(752, 878);
         _history.TabIndex = 7;
         // 
         // _tlpSilenceParams
@@ -1034,9 +1053,10 @@ partial class DynamicFaultForm
         _pnlSilence.BackColor = Color.FromArgb(192, 192, 255);
         _pnlSilence.Controls.Add(_pnlSilenceBody);
         _pnlSilence.Controls.Add(_pnlSilenceHeader);
-        _pnlSilence.Location = new Point(49, 453);
+        _pnlSilence.Dock = DockStyle.Fill;
+        _pnlSilence.Location = new Point(3, 745);
         _pnlSilence.Name = "_pnlSilence";
-        _pnlSilence.Size = new Size(493, 130);
+        _pnlSilence.Size = new Size(514, 138);
         _pnlSilence.TabIndex = 9;
         // 
         // _pnlSilenceBody
@@ -1084,19 +1104,98 @@ partial class DynamicFaultForm
         _lblSilenceTitle.TabIndex = 0;
         _lblSilenceTitle.Text = "Тишина (Silence) — эмулятор не отвечает";
         _lblSilenceTitle.TextAlign = ContentAlignment.MiddleCenter;
-        // 
+        //
+        // _pnlMain
+        //
+        _pnlMain.Controls.Add(_pnlMiddle);
+        _pnlMain.Controls.Add(_pnlBottom);
+        _pnlMain.Dock = DockStyle.Fill;
+        _pnlMain.Location = new Point(0, 0);
+        _pnlMain.Name = "_pnlMain";
+        _pnlMain.Size = new Size(1292, 953);
+        _pnlMain.TabIndex = 10;
+        //
+        // _pnlMiddle
+        //
+        _pnlMiddle.Controls.Add(_tlpContent);
+        _pnlMiddle.Dock = DockStyle.Fill;
+        _pnlMiddle.Location = new Point(0, 0);
+        _pnlMiddle.Name = "_pnlMiddle";
+        _pnlMiddle.Size = new Size(1292, 892);
+        _pnlMiddle.TabIndex = 10;
+        //
+        // _tlpContent
+        //
+        _tlpContent.ColumnCount = 2;
+        _tlpContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.78125F));
+        _tlpContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 59.21875F));
+        _tlpContent.Controls.Add(_pnlHistory, 1, 0);
+        _tlpContent.Controls.Add(_pnlFaults, 0, 0);
+        _tlpContent.Dock = DockStyle.Fill;
+        _tlpContent.Location = new Point(0, 0);
+        _tlpContent.Name = "_tlpContent";
+        _tlpContent.RowCount = 1;
+        _tlpContent.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpContent.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpContent.Size = new Size(1292, 892);
+        _tlpContent.TabIndex = 0;
+        //
+        // _pnlHistory
+        //
+        _pnlHistory.BorderStyle = BorderStyle.FixedSingle;
+        _pnlHistory.Controls.Add(_history);
+        _pnlHistory.Dock = DockStyle.Fill;
+        _pnlHistory.Location = new Point(532, 6);
+        _pnlHistory.Margin = new Padding(6);
+        _pnlHistory.Name = "_pnlHistory";
+        _pnlHistory.Size = new Size(754, 880);
+        _pnlHistory.TabIndex = 0;
+        //
+        // _pnlFaults
+        //
+        _pnlFaults.Controls.Add(_tlpFaults);
+        _pnlFaults.Dock = DockStyle.Fill;
+        _pnlFaults.Location = new Point(3, 3);
+        _pnlFaults.Name = "_pnlFaults";
+        _pnlFaults.Size = new Size(520, 886);
+        _pnlFaults.TabIndex = 1;
+        //
+        // _tlpFaults
+        //
+        _tlpFaults.ColumnCount = 1;
+        _tlpFaults.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpFaults.Controls.Add(_pnlSpike, 0, 0);
+        _tlpFaults.Controls.Add(_pnlSilence, 0, 4);
+        _tlpFaults.Controls.Add(_pnlDrift, 0, 1);
+        _tlpFaults.Controls.Add(_pnlStuck, 0, 3);
+        _tlpFaults.Controls.Add(_pnlCorrupt, 0, 2);
+        _tlpFaults.Dock = DockStyle.Fill;
+        _tlpFaults.Location = new Point(0, 0);
+        _tlpFaults.Name = "_tlpFaults";
+        _tlpFaults.RowCount = 5;
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 21.0285721F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 20.8F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 21.1428566F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 20.9142857F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1142864F));
+        _tlpFaults.Size = new Size(520, 886);
+        _tlpFaults.TabIndex = 0;
+        //
+        // _pnlBottom
+        //
+        _pnlBottom.Controls.Add(_btnCycle);
+        _pnlBottom.Controls.Add(_btnClearHistory);
+        _pnlBottom.Dock = DockStyle.Bottom;
+        _pnlBottom.Location = new Point(0, 892);
+        _pnlBottom.Name = "_pnlBottom";
+        _pnlBottom.Size = new Size(1292, 61);
+        _pnlBottom.TabIndex = 2;
+        //
         // DynamicFaultForm
-        // 
+        //
         BackColor = Color.FromArgb(255, 250, 240);
-        ClientSize = new Size(1642, 780);
-        Controls.Add(_pnlSilence);
-        Controls.Add(_btnCycle);
-        Controls.Add(_btnClearHistory);
-        Controls.Add(_pnlSpike);
-        Controls.Add(_pnlDrift);
-        Controls.Add(_pnlCorrupt);
-        Controls.Add(_pnlStuck);
-        Controls.Add(_history);
+        ClientSize = new Size(1292, 953);
+        Controls.Add(_pnlMain);
         Font = new Font("Segoe UI", 12F);
         MinimumSize = new Size(760, 700);
         Name = "DynamicFaultForm";
@@ -1145,6 +1244,13 @@ partial class DynamicFaultForm
         _pnlSilenceHeader.ResumeLayout(false);
         _tlpSilenceHeader.ResumeLayout(false);
         _tlpSilenceHeader.PerformLayout();
+        _pnlMain.ResumeLayout(false);
+        _pnlMiddle.ResumeLayout(false);
+        _tlpContent.ResumeLayout(false);
+        _pnlHistory.ResumeLayout(false);
+        _pnlFaults.ResumeLayout(false);
+        _tlpFaults.ResumeLayout(false);
+        _pnlBottom.ResumeLayout(false);
         ResumeLayout(false);
     }
 
@@ -1229,4 +1335,11 @@ partial class DynamicFaultForm
     private Panel _pnlSilenceBody;
     private ComboBox _cmbSilenceMode;
     private Button _btnSilenceManual;
+    private Panel _pnlMain;
+    private Panel _pnlHistory;
+    private Panel _pnlBottom;
+    private Panel _pnlFaults;
+    private Panel _pnlMiddle;
+    private TableLayoutPanel _tlpContent;
+    private TableLayoutPanel _tlpFaults;
 }
