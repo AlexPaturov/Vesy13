@@ -316,6 +316,7 @@ partial class DynamicFaultForm
         // 
         _cmbSpikeMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSpikeMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbSpikeMode.Font = new Font("Segoe UI", 12F);
         _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
         _cmbSpikeMode.Location = new Point(316, 10);
         _cmbSpikeMode.Margin = new Padding(4, 0, 4, 0);
@@ -505,6 +506,7 @@ partial class DynamicFaultForm
         // 
         _cmbDriftMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbDriftMode.Font = new Font("Segoe UI", 12F);
         _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
         _cmbDriftMode.Location = new Point(316, 10);
         _cmbDriftMode.Margin = new Padding(4, 0, 4, 0);
@@ -694,6 +696,7 @@ partial class DynamicFaultForm
         // 
         _cmbCorruptMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbCorruptMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbCorruptMode.Font = new Font("Segoe UI", 12F);
         _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
         _cmbCorruptMode.Location = new Point(316, 10);
         _cmbCorruptMode.Margin = new Padding(4, 0, 4, 0);
@@ -882,6 +885,7 @@ partial class DynamicFaultForm
         // 
         _cmbStuckMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStuckMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbStuckMode.Font = new Font("Segoe UI", 12F);
         _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
         _cmbStuckMode.Location = new Point(316, 10);
         _cmbStuckMode.Margin = new Padding(4, 0, 4, 0);
@@ -1040,6 +1044,7 @@ partial class DynamicFaultForm
         // 
         _cmbSilenceMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbSilenceMode.Font = new Font("Segoe UI", 12F);
         _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
         _cmbSilenceMode.Location = new Point(316, 12);
         _cmbSilenceMode.Margin = new Padding(4, 0, 4, 0);
