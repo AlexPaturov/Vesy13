@@ -45,12 +45,12 @@ partial class StaticFaultForm
         _lblDriftActive = new Label();
         _numDriftActive = new NumericUpDown();
         _lblDriftMode = new Label();
-        _cmbDriftMode = new ComboBox();
         _lblDriftGap = new Label();
         _numDriftGap = new NumericUpDown();
         _lblDriftMagnitude = new Label();
         _numDriftMagnitude = new NumericUpDown();
         _btnDriftManual = new Button();
+        _cmbDriftMode = new ComboBox();
         _pnlDriftHeader = new Panel();
         _tlpDriftHeader = new TableLayoutPanel();
         _lblDriftTitle = new Label();
@@ -181,12 +181,12 @@ partial class StaticFaultForm
         _numSilenceActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSilenceActive.DecimalPlaces = 1;
         _numSilenceActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceActive.Location = new Point(118, 9);
+        _numSilenceActive.Location = new Point(118, 7);
         _numSilenceActive.Margin = new Padding(4, 0, 4, 0);
         _numSilenceActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numSilenceActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSilenceActive.Name = "_numSilenceActive";
-        _numSilenceActive.Size = new Size(80, 29);
+        _numSilenceActive.Size = new Size(80, 34);
         _numSilenceActive.TabIndex = 5;
         _numSilenceActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numSilenceActive.ValueChanged += NumSilenceActive_ValueChanged;
@@ -206,12 +206,12 @@ partial class StaticFaultForm
         _numSilenceGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSilenceGap.DecimalPlaces = 1;
         _numSilenceGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceGap.Location = new Point(118, 56);
+        _numSilenceGap.Location = new Point(118, 54);
         _numSilenceGap.Margin = new Padding(4, 0, 4, 0);
         _numSilenceGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numSilenceGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSilenceGap.Name = "_numSilenceGap";
-        _numSilenceGap.Size = new Size(80, 29);
+        _numSilenceGap.Size = new Size(80, 34);
         _numSilenceGap.TabIndex = 7;
         _numSilenceGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numSilenceGap.ValueChanged += NumSilenceGap_ValueChanged;
@@ -277,12 +277,12 @@ partial class StaticFaultForm
         _numSpikeInterval.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSpikeInterval.DecimalPlaces = 1;
         _numSpikeInterval.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeInterval.Location = new Point(118, 9);
+        _numSpikeInterval.Location = new Point(118, 6);
         _numSpikeInterval.Margin = new Padding(4, 0, 4, 0);
         _numSpikeInterval.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numSpikeInterval.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSpikeInterval.Name = "_numSpikeInterval";
-        _numSpikeInterval.Size = new Size(80, 29);
+        _numSpikeInterval.Size = new Size(80, 34);
         _numSpikeInterval.TabIndex = 1;
         _numSpikeInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
         _numSpikeInterval.ValueChanged += NumSpikeInterval_ValueChanged;
@@ -302,10 +302,10 @@ partial class StaticFaultForm
         _cmbSpikeMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSpikeMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSpikeMode.Location = new Point(303, 12);
+        _cmbSpikeMode.Location = new Point(303, 9);
         _cmbSpikeMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSpikeMode.Name = "_cmbSpikeMode";
-        _cmbSpikeMode.Size = new Size(185, 29);
+        _cmbSpikeMode.Size = new Size(185, 36);
         _cmbSpikeMode.TabIndex = 3;
         _cmbSpikeMode.SelectedIndexChanged += CmbSpikeMode_SelectedIndexChanged;
         // 
@@ -324,12 +324,12 @@ partial class StaticFaultForm
         _numSpikeRate.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSpikeRate.DecimalPlaces = 1;
         _numSpikeRate.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeRate.Location = new Point(118, 55);
+        _numSpikeRate.Location = new Point(118, 52);
         _numSpikeRate.Margin = new Padding(4, 0, 4, 0);
         _numSpikeRate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
         _numSpikeRate.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSpikeRate.Name = "_numSpikeRate";
-        _numSpikeRate.Size = new Size(80, 29);
+        _numSpikeRate.Size = new Size(80, 34);
         _numSpikeRate.TabIndex = 5;
         _numSpikeRate.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numSpikeRate.ValueChanged += NumSpikeRate_ValueChanged;
@@ -349,11 +349,11 @@ partial class StaticFaultForm
         _numSpikeMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSpikeMagnitude.DecimalPlaces = 2;
         _numSpikeMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeMagnitude.Location = new Point(118, 102);
+        _numSpikeMagnitude.Location = new Point(118, 100);
         _numSpikeMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numSpikeMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numSpikeMagnitude.Name = "_numSpikeMagnitude";
-        _numSpikeMagnitude.Size = new Size(80, 29);
+        _numSpikeMagnitude.Size = new Size(80, 34);
         _numSpikeMagnitude.TabIndex = 7;
         _numSpikeMagnitude.Value = new decimal(new int[] { 5, 0, 0, 0 });
         _numSpikeMagnitude.ValueChanged += NumSpikeMagnitude_ValueChanged;
@@ -411,7 +411,7 @@ partial class StaticFaultForm
         _pnlDrift.Controls.Add(_pnlDriftHeader);
         _pnlDrift.Location = new Point(23, 63);
         _pnlDrift.Name = "_pnlDrift";
-        _pnlDrift.Size = new Size(493, 177);
+        _pnlDrift.Size = new Size(493, 147);
         _pnlDrift.TabIndex = 4;
         // 
         // _pnlDriftBody
@@ -420,7 +420,7 @@ partial class StaticFaultForm
         _pnlDriftBody.Dock = DockStyle.Fill;
         _pnlDriftBody.Location = new Point(0, 35);
         _pnlDriftBody.Name = "_pnlDriftBody";
-        _pnlDriftBody.Size = new Size(493, 142);
+        _pnlDriftBody.Size = new Size(493, 112);
         _pnlDriftBody.TabIndex = 1;
         // 
         // _tlpDriftParams
@@ -434,20 +434,19 @@ partial class StaticFaultForm
         _tlpDriftParams.Controls.Add(_lblDriftActive, 0, 0);
         _tlpDriftParams.Controls.Add(_numDriftActive, 1, 0);
         _tlpDriftParams.Controls.Add(_lblDriftMode, 2, 0);
-        _tlpDriftParams.Controls.Add(_cmbDriftMode, 3, 0);
         _tlpDriftParams.Controls.Add(_lblDriftGap, 0, 1);
         _tlpDriftParams.Controls.Add(_numDriftGap, 1, 1);
         _tlpDriftParams.Controls.Add(_lblDriftMagnitude, 0, 2);
         _tlpDriftParams.Controls.Add(_numDriftMagnitude, 1, 2);
         _tlpDriftParams.Controls.Add(_btnDriftManual, 3, 2);
-        _tlpDriftParams.Dock = DockStyle.Fill;
+        _tlpDriftParams.Controls.Add(_cmbDriftMode, 3, 0);
         _tlpDriftParams.Location = new Point(0, 0);
         _tlpDriftParams.Name = "_tlpDriftParams";
         _tlpDriftParams.RowCount = 3;
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.34F));
-        _tlpDriftParams.Size = new Size(493, 142);
+        _tlpDriftParams.Size = new Size(493, 93);
         _tlpDriftParams.TabIndex = 0;
         // 
         // _lblDriftActive
@@ -455,7 +454,7 @@ partial class StaticFaultForm
         _lblDriftActive.Dock = DockStyle.Fill;
         _lblDriftActive.Location = new Point(4, 1);
         _lblDriftActive.Name = "_lblDriftActive";
-        _lblDriftActive.Size = new Size(106, 45);
+        _lblDriftActive.Size = new Size(106, 29);
         _lblDriftActive.TabIndex = 0;
         _lblDriftActive.Text = "Актив., с";
         _lblDriftActive.TextAlign = ContentAlignment.MiddleRight;
@@ -465,12 +464,12 @@ partial class StaticFaultForm
         _numDriftActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftActive.DecimalPlaces = 1;
         _numDriftActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftActive.Location = new Point(118, 9);
+        _numDriftActive.Location = new Point(118, 1);
         _numDriftActive.Margin = new Padding(4, 0, 4, 0);
         _numDriftActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numDriftActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numDriftActive.Name = "_numDriftActive";
-        _numDriftActive.Size = new Size(80, 29);
+        _numDriftActive.Size = new Size(80, 34);
         _numDriftActive.TabIndex = 1;
         _numDriftActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numDriftActive.ValueChanged += NumDriftActive_ValueChanged;
@@ -480,29 +479,17 @@ partial class StaticFaultForm
         _lblDriftMode.Dock = DockStyle.Fill;
         _lblDriftMode.Location = new Point(206, 1);
         _lblDriftMode.Name = "_lblDriftMode";
-        _lblDriftMode.Size = new Size(89, 45);
+        _lblDriftMode.Size = new Size(89, 29);
         _lblDriftMode.TabIndex = 2;
         _lblDriftMode.Text = "Режим";
         _lblDriftMode.TextAlign = ContentAlignment.MiddleRight;
         // 
-        // _cmbDriftMode
-        // 
-        _cmbDriftMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
-        _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbDriftMode.Location = new Point(303, 9);
-        _cmbDriftMode.Margin = new Padding(4, 0, 4, 0);
-        _cmbDriftMode.Name = "_cmbDriftMode";
-        _cmbDriftMode.Size = new Size(185, 29);
-        _cmbDriftMode.TabIndex = 3;
-        _cmbDriftMode.SelectedIndexChanged += CmbDriftMode_SelectedIndexChanged;
-        // 
         // _lblDriftGap
         // 
         _lblDriftGap.Dock = DockStyle.Fill;
-        _lblDriftGap.Location = new Point(4, 47);
+        _lblDriftGap.Location = new Point(4, 31);
         _lblDriftGap.Name = "_lblDriftGap";
-        _lblDriftGap.Size = new Size(106, 45);
+        _lblDriftGap.Size = new Size(106, 29);
         _lblDriftGap.TabIndex = 4;
         _lblDriftGap.Text = "Пауза, с";
         _lblDriftGap.TextAlign = ContentAlignment.MiddleRight;
@@ -512,12 +499,12 @@ partial class StaticFaultForm
         _numDriftGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftGap.DecimalPlaces = 1;
         _numDriftGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftGap.Location = new Point(118, 55);
+        _numDriftGap.Location = new Point(118, 31);
         _numDriftGap.Margin = new Padding(4, 0, 4, 0);
         _numDriftGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numDriftGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numDriftGap.Name = "_numDriftGap";
-        _numDriftGap.Size = new Size(80, 29);
+        _numDriftGap.Size = new Size(80, 34);
         _numDriftGap.TabIndex = 5;
         _numDriftGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numDriftGap.ValueChanged += NumDriftGap_ValueChanged;
@@ -525,9 +512,9 @@ partial class StaticFaultForm
         // _lblDriftMagnitude
         // 
         _lblDriftMagnitude.Dock = DockStyle.Fill;
-        _lblDriftMagnitude.Location = new Point(4, 93);
+        _lblDriftMagnitude.Location = new Point(4, 61);
         _lblDriftMagnitude.Name = "_lblDriftMagnitude";
-        _lblDriftMagnitude.Size = new Size(106, 48);
+        _lblDriftMagnitude.Size = new Size(106, 31);
         _lblDriftMagnitude.TabIndex = 6;
         _lblDriftMagnitude.Text = "Ампл., т";
         _lblDriftMagnitude.TextAlign = ContentAlignment.MiddleRight;
@@ -537,11 +524,11 @@ partial class StaticFaultForm
         _numDriftMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftMagnitude.DecimalPlaces = 2;
         _numDriftMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftMagnitude.Location = new Point(118, 102);
+        _numDriftMagnitude.Location = new Point(118, 61);
         _numDriftMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numDriftMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numDriftMagnitude.Name = "_numDriftMagnitude";
-        _numDriftMagnitude.Size = new Size(80, 29);
+        _numDriftMagnitude.Size = new Size(80, 34);
         _numDriftMagnitude.TabIndex = 7;
         _numDriftMagnitude.Value = new decimal(new int[] { 5, 0, 0, 0 });
         _numDriftMagnitude.ValueChanged += NumDriftMagnitude_ValueChanged;
@@ -550,12 +537,24 @@ partial class StaticFaultForm
         // 
         _btnDriftManual.Dock = DockStyle.Fill;
         _btnDriftManual.FlatStyle = FlatStyle.Flat;
-        _btnDriftManual.Location = new Point(302, 96);
+        _btnDriftManual.Location = new Point(302, 64);
         _btnDriftManual.Name = "_btnDriftManual";
-        _btnDriftManual.Size = new Size(187, 42);
+        _btnDriftManual.Size = new Size(187, 25);
         _btnDriftManual.TabIndex = 8;
         _btnDriftManual.Text = "Вкл/выкл сейчас";
         _btnDriftManual.Click += BtnDriftManual_Click;
+        // 
+        // _cmbDriftMode
+        // 
+        _cmbDriftMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
+        _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
+        _cmbDriftMode.Location = new Point(303, 1);
+        _cmbDriftMode.Margin = new Padding(4, 0, 4, 0);
+        _cmbDriftMode.Name = "_cmbDriftMode";
+        _cmbDriftMode.Size = new Size(185, 36);
+        _cmbDriftMode.TabIndex = 3;
+        _cmbDriftMode.SelectedIndexChanged += CmbDriftMode_SelectedIndexChanged;
         // 
         // _pnlDriftHeader
         // 
@@ -653,12 +652,12 @@ partial class StaticFaultForm
         _numCorruptInterval.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numCorruptInterval.DecimalPlaces = 1;
         _numCorruptInterval.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numCorruptInterval.Location = new Point(118, 9);
+        _numCorruptInterval.Location = new Point(118, 6);
         _numCorruptInterval.Margin = new Padding(4, 0, 4, 0);
         _numCorruptInterval.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numCorruptInterval.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numCorruptInterval.Name = "_numCorruptInterval";
-        _numCorruptInterval.Size = new Size(80, 29);
+        _numCorruptInterval.Size = new Size(80, 34);
         _numCorruptInterval.TabIndex = 1;
         _numCorruptInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
         _numCorruptInterval.ValueChanged += NumCorruptInterval_ValueChanged;
@@ -678,10 +677,10 @@ partial class StaticFaultForm
         _cmbCorruptMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbCorruptMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbCorruptMode.Location = new Point(303, 9);
+        _cmbCorruptMode.Location = new Point(303, 5);
         _cmbCorruptMode.Margin = new Padding(4, 0, 4, 0);
         _cmbCorruptMode.Name = "_cmbCorruptMode";
-        _cmbCorruptMode.Size = new Size(185, 29);
+        _cmbCorruptMode.Size = new Size(185, 36);
         _cmbCorruptMode.TabIndex = 3;
         _cmbCorruptMode.SelectedIndexChanged += CmbCorruptMode_SelectedIndexChanged;
         // 
@@ -700,12 +699,12 @@ partial class StaticFaultForm
         _numCorruptRate.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numCorruptRate.DecimalPlaces = 1;
         _numCorruptRate.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numCorruptRate.Location = new Point(118, 55);
+        _numCorruptRate.Location = new Point(118, 52);
         _numCorruptRate.Margin = new Padding(4, 0, 4, 0);
         _numCorruptRate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
         _numCorruptRate.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numCorruptRate.Name = "_numCorruptRate";
-        _numCorruptRate.Size = new Size(80, 29);
+        _numCorruptRate.Size = new Size(80, 34);
         _numCorruptRate.TabIndex = 5;
         _numCorruptRate.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numCorruptRate.ValueChanged += NumCorruptRate_ValueChanged;
@@ -723,12 +722,12 @@ partial class StaticFaultForm
         // _numCorruptMagnitude
         // 
         _numCorruptMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _numCorruptMagnitude.Location = new Point(118, 102);
+        _numCorruptMagnitude.Location = new Point(118, 100);
         _numCorruptMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numCorruptMagnitude.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
         _numCorruptMagnitude.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         _numCorruptMagnitude.Name = "_numCorruptMagnitude";
-        _numCorruptMagnitude.Size = new Size(80, 29);
+        _numCorruptMagnitude.Size = new Size(80, 34);
         _numCorruptMagnitude.TabIndex = 7;
         _numCorruptMagnitude.Value = new decimal(new int[] { 1, 0, 0, 0 });
         _numCorruptMagnitude.ValueChanged += NumCorruptMagnitude_ValueChanged;
@@ -840,12 +839,12 @@ partial class StaticFaultForm
         _numStuckActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numStuckActive.DecimalPlaces = 1;
         _numStuckActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckActive.Location = new Point(118, 9);
+        _numStuckActive.Location = new Point(118, 6);
         _numStuckActive.Margin = new Padding(4, 0, 4, 0);
         _numStuckActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numStuckActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numStuckActive.Name = "_numStuckActive";
-        _numStuckActive.Size = new Size(80, 29);
+        _numStuckActive.Size = new Size(80, 34);
         _numStuckActive.TabIndex = 1;
         _numStuckActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numStuckActive.ValueChanged += NumStuckActive_ValueChanged;
@@ -865,10 +864,10 @@ partial class StaticFaultForm
         _cmbStuckMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStuckMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbStuckMode.Location = new Point(303, 9);
+        _cmbStuckMode.Location = new Point(303, 5);
         _cmbStuckMode.Margin = new Padding(4, 0, 4, 0);
         _cmbStuckMode.Name = "_cmbStuckMode";
-        _cmbStuckMode.Size = new Size(185, 29);
+        _cmbStuckMode.Size = new Size(185, 36);
         _cmbStuckMode.TabIndex = 3;
         _cmbStuckMode.SelectedIndexChanged += CmbStuckMode_SelectedIndexChanged;
         // 
@@ -887,12 +886,12 @@ partial class StaticFaultForm
         _numStuckGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numStuckGap.DecimalPlaces = 1;
         _numStuckGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckGap.Location = new Point(118, 55);
+        _numStuckGap.Location = new Point(118, 52);
         _numStuckGap.Margin = new Padding(4, 0, 4, 0);
         _numStuckGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numStuckGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numStuckGap.Name = "_numStuckGap";
-        _numStuckGap.Size = new Size(80, 29);
+        _numStuckGap.Size = new Size(80, 34);
         _numStuckGap.TabIndex = 5;
         _numStuckGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numStuckGap.ValueChanged += NumStuckGap_ValueChanged;
@@ -911,11 +910,11 @@ partial class StaticFaultForm
         // 
         _numStuckMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numStuckMagnitude.Increment = new decimal(new int[] { 100, 0, 0, 0 });
-        _numStuckMagnitude.Location = new Point(118, 102);
+        _numStuckMagnitude.Location = new Point(118, 100);
         _numStuckMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numStuckMagnitude.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
         _numStuckMagnitude.Name = "_numStuckMagnitude";
-        _numStuckMagnitude.Size = new Size(80, 29);
+        _numStuckMagnitude.Size = new Size(80, 34);
         _numStuckMagnitude.TabIndex = 7;
         _numStuckMagnitude.ValueChanged += NumStuckMagnitude_ValueChanged;
         // 
@@ -975,9 +974,9 @@ partial class StaticFaultForm
         _history.FormattingEnabled = true;
         _history.IntegralHeight = false;
         _history.ItemHeight = 25;
-        _history.Location = new Point(11, 652);
+        _history.Location = new Point(1065, 652);
         _history.Name = "_history";
-        _history.Size = new Size(1620, 116);
+        _history.Size = new Size(566, 116);
         _history.TabIndex = 7;
         // 
         // _tlpSilenceParams
@@ -1022,10 +1021,10 @@ partial class StaticFaultForm
         _cmbSilenceMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSilenceMode.Location = new Point(303, 12);
+        _cmbSilenceMode.Location = new Point(303, 10);
         _cmbSilenceMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSilenceMode.Name = "_cmbSilenceMode";
-        _cmbSilenceMode.Size = new Size(185, 29);
+        _cmbSilenceMode.Size = new Size(185, 36);
         _cmbSilenceMode.TabIndex = 2;
         _cmbSilenceMode.SelectedIndexChanged += CmbSilenceMode_SelectedIndexChanged;
         // 
