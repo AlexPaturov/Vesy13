@@ -25,21 +25,6 @@ public partial class ServiceForm : Form
     private bool _calibUseCh0 = true;
     private int _frameCount;
     private long _dynamicServiceSampleRateCount;
-    private long _dynamicServiceSampleUiPosted;
-    private long _dynamicServiceSampleUiApplied;
-    private long _dynamicServiceRawUiPosted;
-    private long _dynamicServiceRawUiApplied;
-    private long _dynamicServiceLogAppended;
-    private long _dynamicServiceLogMaxMs;
-    private long _dynamicServiceDiagLastTick;
-    private long _dynamicCalibDiagLastTick;
-    private long _dynamicCalibSampleUiPosted;
-    private long _dynamicCalibSampleUiApplied;
-    private long _dynamicCalibLogAppended;
-    private long _dynamicCalibDisplayTicks;
-    private long _dynamicCalibDisplayApplied;
-    private long _dynamicCalibDisplaySkipped;
-    private long _dynamicCalibDisplayMaxMs;
     private readonly object _dynamicSampleSync = new();
     private readonly System.Windows.Forms.Timer _dynamicCalibDisplayTimer = new() { Interval = 100 };
     private SimA04DynamicSample _latestDynamicSample;
@@ -53,7 +38,6 @@ public partial class ServiceForm : Form
     private readonly object _dynamicServiceLogSync = new();
     private readonly Queue<(string Text, Color Color)> _dynamicServiceLogQueue = new();
     private const int DynamicServiceLogQueueLimit = 500;
-    private long _dynamicServiceLogDropped;
     // Лог динамики — owner-drawn ListBox (_lstDynamicLog из Designer): элементы DynamicServiceLogLine,
     // число строк ограничено DynamicServiceLogLineLimit. ListBox рисует только видимые строки и не
     // копит внутреннее состояние (нет RTF/undo/переформатирования) — аллокации не растут со временем.
@@ -62,24 +46,6 @@ public partial class ServiceForm : Form
     // не поднимает DataReceived параллельно для одного порта, блокировка не нужна) и пачка на flush.
     private readonly StringBuilder _dynamicServiceLogBuilder = new(64);
     private readonly List<(string Text, Color Color)> _dynamicServiceLogBatch = new();
-    private long _lastDiagRawBytes;
-    private long _lastDiagSamples;
-    private long _lastDiagSkippedBytes;
-    private long _lastDiagSamplePosted;
-    private long _lastDiagSampleApplied;
-    private long _lastDiagRawPosted;
-    private long _lastDiagRawApplied;
-    private long _lastDiagLogAppended;
-    private long _lastDiagLogDropped;
-    private long _lastCalibDiagRawBytes;
-    private long _lastCalibDiagSamples;
-    private long _lastCalibDiagSkippedBytes;
-    private long _lastCalibDiagSamplePosted;
-    private long _lastCalibDiagSampleApplied;
-    private long _lastCalibDiagDisplayTicks;
-    private long _lastCalibDiagDisplayApplied;
-    private long _lastCalibDiagDisplaySkipped;
-    private long _lastCalibDiagLogAppended;
     private bool _dynamicServiceDataSubscribed;
     private bool _dynamicCalibDataSubscribed;
     private bool _dynamicCalibTabActive;
@@ -1150,9 +1116,6 @@ public partial class ServiceForm : Form
             _latestDynamicServiceSample = sample;
             _latestDynamicServiceSampleVersion++;
         }
-
-        Interlocked.Increment(ref _dynamicServiceSampleUiPosted);
-        WriteServiceDynamicDiagnostics();
     }
 
     private void RefreshDynamicServiceSampleDisplay()
@@ -1169,7 +1132,6 @@ public partial class ServiceForm : Form
         }
 
         _displayedDynamicServiceSampleVersion = version;
-        Interlocked.Increment(ref _dynamicServiceSampleUiApplied);
         _lblDynamicCh0.Text = sample.Ch0.ToString();
         _lblDynamicCh1.Text = sample.Ch1.ToString();
         _lblDynamicCh0.ForeColor = ServiceUiColors.Info;
@@ -1183,50 +1145,29 @@ public partial class ServiceForm : Form
             _latestDynamicSample = sample;
             _latestDynamicSampleVersion++;
         }
-
-        Interlocked.Increment(ref _dynamicCalibSampleUiPosted);
-        WriteDynamicCalibDiagnostics();
     }
 
     private void RefreshDynamicSampleDisplay()
     {
         if (DesignMode || _dynamicCalibSim is null) return;
 
-        var sw = System.Diagnostics.Stopwatch.StartNew();
-        Interlocked.Increment(ref _dynamicCalibDisplayTicks);
-        try
+        SimA04DynamicSample sample;
+        long version;
+        lock (_dynamicSampleSync)
         {
-            SimA04DynamicSample sample;
-            long version;
-            lock (_dynamicSampleSync)
-            {
-                if (_latestDynamicSampleVersion == _displayedDynamicSampleVersion)
-                {
-                    Interlocked.Increment(ref _dynamicCalibDisplaySkipped);
-                    return;
-                }
-                sample = _latestDynamicSample;
-                version = _latestDynamicSampleVersion;
-            }
+            if (_latestDynamicSampleVersion == _displayedDynamicSampleVersion) return;
+            sample = _latestDynamicSample;
+            version = _latestDynamicSampleVersion;
+        }
 
-            _displayedDynamicSampleVersion = version;
-            Interlocked.Increment(ref _dynamicCalibSampleUiApplied);
-            Interlocked.Increment(ref _dynamicCalibDisplayApplied);
-            _lastDynCh0 = sample.Ch0;
-            _lastDynCh1 = sample.Ch1;
-            UpdateLiveDynamicCalibrationLabels();
-        }
-        finally
-        {
-            sw.Stop();
-            UpdateMax(ref _dynamicCalibDisplayMaxMs, sw.ElapsedMilliseconds);
-            WriteDynamicCalibDiagnostics();
-        }
+        _displayedDynamicSampleVersion = version;
+        _lastDynCh0 = sample.Ch0;
+        _lastDynCh1 = sample.Ch1;
+        UpdateLiveDynamicCalibrationLabels();
     }
 
     private void OnDynamicServiceRawSample(object? sender, byte[] raw)
     {
-        Interlocked.Increment(ref _dynamicServiceRawUiPosted);
         if (!_chkDynamicLog.Checked) return;
 
         var sample = SimA04DynamicSample.Parse(raw);
@@ -1237,10 +1178,7 @@ public partial class ServiceForm : Form
         {
             _dynamicServiceLogQueue.Enqueue((text, color));
             while (_dynamicServiceLogQueue.Count > DynamicServiceLogQueueLimit)
-            {
                 _dynamicServiceLogQueue.Dequeue();
-                Interlocked.Increment(ref _dynamicServiceLogDropped);
-            }
         }
     }
 
@@ -1313,18 +1251,11 @@ public partial class ServiceForm : Form
             _dynamicServiceLogQueue.Clear();
         }
 
-        var sw = System.Diagnostics.Stopwatch.StartNew();
-
         _lstDynamicLog.BeginUpdate();
         foreach (var (text, color) in _dynamicServiceLogBatch)
             AddDynamicLogLine(text, color);
         _lstDynamicLog.TopIndex = 0;
         _lstDynamicLog.EndUpdate();
-
-        sw.Stop();
-        Interlocked.Add(ref _dynamicServiceRawUiApplied, _dynamicServiceLogBatch.Count);
-        Interlocked.Add(ref _dynamicServiceLogAppended, _dynamicServiceLogBatch.Count);
-        UpdateMax(ref _dynamicServiceLogMaxMs, sw.ElapsedMilliseconds);
     }
 
     // Новая строка — сверху (index 0), число строк ограничено; лишние старые снимаются с конца.
@@ -1350,113 +1281,6 @@ public partial class ServiceForm : Form
         if (_lstDynamicLog is null) return;
         AddDynamicLogLine(text, color);
         _lstDynamicLog.TopIndex = 0;
-        Interlocked.Increment(ref _dynamicServiceLogAppended);
-    }
-
-    private void WriteDynamicCalibDiagnostics()
-    {
-        const long intervalMs = 5000;
-        long now = Environment.TickCount64;
-        long last = Interlocked.Read(ref _dynamicCalibDiagLastTick);
-        if (last != 0 && now - last < intervalMs) return;
-        if (Interlocked.CompareExchange(ref _dynamicCalibDiagLastTick, now, last) != last) return;
-
-        long elapsedMs = last == 0 ? intervalMs : now - last;
-        long rawBytes = _dynamicCalibSim.RawBytesReceived;
-        long samples = _dynamicCalibSim.SamplesReceived;
-        long skipped = _dynamicCalibSim.SkippedBytes;
-        long samplePosted = Interlocked.Read(ref _dynamicCalibSampleUiPosted);
-        long sampleApplied = Interlocked.Read(ref _dynamicCalibSampleUiApplied);
-        long displayTicks = Interlocked.Read(ref _dynamicCalibDisplayTicks);
-        long displayApplied = Interlocked.Read(ref _dynamicCalibDisplayApplied);
-        long displaySkipped = Interlocked.Read(ref _dynamicCalibDisplaySkipped);
-        long logAppended = Interlocked.Read(ref _dynamicCalibLogAppended);
-        long displayMaxMs = Interlocked.Exchange(ref _dynamicCalibDisplayMaxMs, 0);
-        long latestVersion;
-        long displayedVersion;
-        lock (_dynamicSampleSync)
-        {
-            latestVersion = _latestDynamicSampleVersion;
-            displayedVersion = _displayedDynamicSampleVersion;
-        }
-
-        long rawBytesDelta = Delta(rawBytes, ref _lastCalibDiagRawBytes);
-        long samplesDelta = Delta(samples, ref _lastCalibDiagSamples);
-        long skippedDelta = Delta(skipped, ref _lastCalibDiagSkippedBytes);
-        long samplePostedDelta = Delta(samplePosted, ref _lastCalibDiagSamplePosted);
-        long sampleAppliedDelta = Delta(sampleApplied, ref _lastCalibDiagSampleApplied);
-        long displayTicksDelta = Delta(displayTicks, ref _lastCalibDiagDisplayTicks);
-        long displayAppliedDelta = Delta(displayApplied, ref _lastCalibDiagDisplayApplied);
-        long displaySkippedDelta = Delta(displaySkipped, ref _lastCalibDiagDisplaySkipped);
-        long logAppendedDelta = Delta(logAppended, ref _lastCalibDiagLogAppended);
-        long sampleNotDisplayed = samplePosted - sampleApplied;
-        long displayPending = latestVersion - displayedVersion;
-        bool activeTab = Volatile.Read(ref _dynamicCalibTabActive);
-
-        AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamicCalib",
-            $"periodMs={elapsedMs}; activeTab={activeTab}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedDelta}; " +
-            $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; sampleNotDisplayed={sampleNotDisplayed}; " +
-            $"displayTicks={displayTicksDelta}; displayApplied={displayAppliedDelta}; displaySkipped={displaySkippedDelta}; displayPending={displayPending}; " +
-            $"latestVersion={latestVersion}; displayedVersion={displayedVersion}; logAppended={logAppendedDelta}; displayMaxMs={displayMaxMs}",
-            "SimA04DynamicCalib", _dynamicCalibSim.PortName);
-    }
-
-    private void WriteServiceDynamicDiagnostics()
-    {
-        const long intervalMs = 5000;
-        long now = Environment.TickCount64;
-        long last = Interlocked.Read(ref _dynamicServiceDiagLastTick);
-        if (last != 0 && now - last < intervalMs) return;
-        if (Interlocked.CompareExchange(ref _dynamicServiceDiagLastTick, now, last) != last) return;
-
-        long elapsedMs = last == 0 ? intervalMs : now - last;
-        long rawBytes = _dynamicServiceSim.RawBytesReceived;
-        long samples = _dynamicServiceSim.SamplesReceived;
-        long skipped = _dynamicServiceSim.SkippedBytes;
-        long samplePosted = Interlocked.Read(ref _dynamicServiceSampleUiPosted);
-        long sampleApplied = Interlocked.Read(ref _dynamicServiceSampleUiApplied);
-        long rawPosted = Interlocked.Read(ref _dynamicServiceRawUiPosted);
-        long rawApplied = Interlocked.Read(ref _dynamicServiceRawUiApplied);
-        long logAppended = Interlocked.Read(ref _dynamicServiceLogAppended);
-        long logMaxMs = Interlocked.Exchange(ref _dynamicServiceLogMaxMs, 0);
-        long logDropped = Interlocked.Read(ref _dynamicServiceLogDropped);
-
-        long rawBytesDelta = Delta(rawBytes, ref _lastDiagRawBytes);
-        long samplesDelta = Delta(samples, ref _lastDiagSamples);
-        long skippedDelta = Delta(skipped, ref _lastDiagSkippedBytes);
-        long samplePostedDelta = Delta(samplePosted, ref _lastDiagSamplePosted);
-        long sampleAppliedDelta = Delta(sampleApplied, ref _lastDiagSampleApplied);
-        long rawPostedDelta = Delta(rawPosted, ref _lastDiagRawPosted);
-        long rawAppliedDelta = Delta(rawApplied, ref _lastDiagRawApplied);
-        long logAppendedDelta = Delta(logAppended, ref _lastDiagLogAppended);
-        long logDroppedDelta = Delta(logDropped, ref _lastDiagLogDropped);
-        long samplePending = samplePosted - sampleApplied;
-        long rawPending = rawPosted - rawApplied;
-
-        AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamicService",
-            $"periodMs={elapsedMs}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedDelta}; " +
-            $"samplePosted={samplePostedDelta}; sampleApplied={sampleAppliedDelta}; samplePending={samplePending}; " +
-            $"rawPosted={rawPostedDelta}; rawApplied={rawAppliedDelta}; rawPending={rawPending}; " +
-            $"logAppended={logAppendedDelta}; logMaxMs={logMaxMs}; logDropped={logDroppedDelta}",
-            "SimA04DynamicService", _dynamicServiceSim.PortName);
-    }
-
-    // Возвращает прирост монотонного счетчика за период диагностики и обновляет предыдущую точку отсчета.
-    private static long Delta(long current, ref long previous)
-    {
-        long delta = current >= previous ? current - previous : current;
-        previous = current;
-        return delta;
-    }
-
-    private static void UpdateMax(ref long target, long value)
-    {
-        long current;
-        do
-        {
-            current = Interlocked.Read(ref target);
-            if (value <= current) return;
-        } while (Interlocked.CompareExchange(ref target, value, current) != current);
     }
 
     private void UpdateStaticServiceMonitorConn(bool connected)
