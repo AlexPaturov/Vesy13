@@ -317,7 +317,7 @@ partial class StaticFaultForm
         _cmbSpikeMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSpikeMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSpikeMode.Location = new Point(316, 10);
+        _cmbSpikeMode.Location = new Point(316, 6);
         _cmbSpikeMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSpikeMode.Name = "_cmbSpikeMode";
         _cmbSpikeMode.Size = new Size(193, 36);
@@ -566,7 +566,7 @@ partial class StaticFaultForm
         _cmbDriftMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbDriftMode.Location = new Point(316, 6);
+        _cmbDriftMode.Location = new Point(316, 10);
         _cmbDriftMode.Margin = new Padding(4, 0, 4, 0);
         _cmbDriftMode.Name = "_cmbDriftMode";
         _cmbDriftMode.Size = new Size(193, 36);
@@ -695,7 +695,7 @@ partial class StaticFaultForm
         _cmbCorruptMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbCorruptMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbCorruptMode.Location = new Point(316, 6);
+        _cmbCorruptMode.Location = new Point(316, 10);
         _cmbCorruptMode.Margin = new Padding(4, 0, 4, 0);
         _cmbCorruptMode.Name = "_cmbCorruptMode";
         _cmbCorruptMode.Size = new Size(193, 36);
@@ -883,7 +883,7 @@ partial class StaticFaultForm
         _cmbStuckMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStuckMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbStuckMode.Location = new Point(316, 6);
+        _cmbStuckMode.Location = new Point(316, 10);
         _cmbStuckMode.Margin = new Padding(4, 0, 4, 0);
         _cmbStuckMode.Name = "_cmbStuckMode";
         _cmbStuckMode.Size = new Size(193, 36);
@@ -1041,7 +1041,7 @@ partial class StaticFaultForm
         _cmbSilenceMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSilenceMode.Location = new Point(316, 12);
+        _cmbSilenceMode.Location = new Point(316, 8);
         _cmbSilenceMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSilenceMode.Name = "_cmbSilenceMode";
         _cmbSilenceMode.Size = new Size(193, 36);
