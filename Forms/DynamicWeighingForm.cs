@@ -2,6 +2,7 @@ using Vesy13.Application;
 using Vesy13.Models;
 using Vesy13.Services.Configuration;
 using Vesy13.Services.Hardware;
+using Vesy13.Services.Hardware.Filters;
 using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
@@ -13,6 +14,7 @@ namespace Vesy13.Forms;
 public partial class DynamicWeighingForm : Form
 {
     private SimA04ReaderDynamic  _sim = null!;
+    private DynamicFilterPipeline _filter = null!;
     private LocalRepository _ldb  = null!;
     private SettingsService _settings = null!;
     private enum WeighState { Idle, Bogie1Captured }
@@ -22,19 +24,11 @@ public partial class DynamicWeighingForm : Form
     private int        _bogie1Code;
     private SimA04DynamicSample _lastSample;
     private double     _zeroOffsetTonnes;
-    private readonly System.Windows.Forms.Timer _adcDiagTimer = new();
+    private readonly System.Windows.Forms.Timer _uiRefreshTimer = new();
     private readonly object _sampleSync = new();
     private SimA04DynamicSample _latestSample;
     private long _latestSampleVersion;
     private long _displayedSampleVersion;
-    private long _uiSamplesReceived;
-    private long _uiSamplesApplied;
-    private long _lastLoggedRawBytes;
-    private long _lastLoggedSamples;
-    private long _lastLoggedSkippedBytes;
-    private long _lastLoggedUiReceived;
-    private long _lastLoggedUiApplied;
-    private long _lastDynamicDiagAt;
     private bool _weighingStorageAvailable = true;
 
     public DynamicWeighingForm()
@@ -45,14 +39,15 @@ public partial class DynamicWeighingForm : Form
     public DynamicWeighingForm(LocalRepository ldb, SettingsService settings)
     {
         _sim = new SimA04ReaderDynamic { Channel = settings.Current.ActiveChannel };
+        _filter = new DynamicFilterPipeline(_sim, settings.Current);
         _ldb  = ldb;
         _settings = settings;
         InitializeComponent();
-        _adcDiagTimer.Interval = 100;
-        _adcDiagTimer.Tick += (_, _) =>
+        _uiRefreshTimer.Interval = 100;
+        _uiRefreshTimer.Tick += (_, _) =>
         {
             RefreshDisplayFromLatestSample();
-            UpdateAdcDiagnostics();
+            UpdateAdcStatus();
         };
     }
 
@@ -172,12 +167,12 @@ public partial class DynamicWeighingForm : Form
         AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
         _sim.ConnectionTimeoutMs = 5000;
         SetupGridColumns();
-        _sim.SampleReceived += OnSample;
+        _filter.FilteredSampleReceived += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
         _rbPlus.CheckedChanged += Direction_CheckedChanged;
         _rbMinus.CheckedChanged += Direction_CheckedChanged;
         AuditLogger.QueueStatusChanged += OnAuditQueueStatusChanged;
-        _adcDiagTimer.Start();
+        _uiRefreshTimer.Start();
         EnsureAdcConnected(showError: true);
         UpdateConn(_sim.IsConnected);
         UpdateChannelLabel();
@@ -212,8 +207,9 @@ public partial class DynamicWeighingForm : Form
     {
         if (!DesignMode && _sim is not null)
         {
-            _adcDiagTimer.Stop();
-            _sim.SampleReceived             -= OnSample;
+            _uiRefreshTimer.Stop();
+            _filter.FilteredSampleReceived  -= OnSample;
+            _filter.Dispose();
             _sim.ConnectionChanged          -= OnConnectionChanged;
             _rbPlus.CheckedChanged          -= Direction_CheckedChanged;
             _rbMinus.CheckedChanged         -= Direction_CheckedChanged;
@@ -245,7 +241,7 @@ public partial class DynamicWeighingForm : Form
         _displayedSampleVersion = 0;
         RefreshDisplayFromLatestSample();
         UpdateButtonStates();
-        UpdateAdcDiagnostics();
+        UpdateAdcStatus();
     }
 
     private bool EnsureAdcConnected(bool showError)
@@ -277,8 +273,6 @@ public partial class DynamicWeighingForm : Form
             _latestSample = sample;
             _latestSampleVersion++;
         }
-
-        Interlocked.Increment(ref _uiSamplesReceived);
     }
 
     private void RefreshDisplayFromLatestSample()
@@ -294,7 +288,6 @@ public partial class DynamicWeighingForm : Form
         }
 
         _displayedSampleVersion = version;
-        Interlocked.Increment(ref _uiSamplesApplied);
         _lastSample = sample;
 
         if (!HasDynamicCalibration())
@@ -331,7 +324,7 @@ public partial class DynamicWeighingForm : Form
             return;
         }
 
-        UpdateAdcDiagnostics();
+        UpdateAdcStatus();
     }
 
     private void UpdateConn(bool connected)
@@ -341,14 +334,13 @@ public partial class DynamicWeighingForm : Form
         _lblConn.Text      = connected ? $"АЦП: {_sim.PortName}" : "АЦП: отключён";
         if (_state == WeighState.Idle)
             _lblValue.ForeColor = connected ? UiColors.PrimaryAction : UiColors.Disconnected;
-        UpdateAdcDiagnostics();
+        UpdateAdcStatus();
     }
 
-    private void UpdateAdcDiagnostics()
+    /// <summary>Приводит индикатор связи, статус хранилища и доступность кнопок к текущему состоянию АЦП.</summary>
+    private void UpdateAdcStatus()
     {
         if (DesignMode || _sim is null) return;
-
-        WriteDynamicDiagnostics();
 
         if (!_sim.IsPortOpen)
         {
@@ -369,41 +361,6 @@ public partial class DynamicWeighingForm : Form
         _lblConn.Text = adcState;
         UpdateStorageStatus();
         UpdateButtonStates();
-    }
-
-    private void WriteDynamicDiagnostics()
-    {
-        const long intervalMs = 5000;
-        var now = Environment.TickCount64;
-        if (_lastDynamicDiagAt != 0 && now - _lastDynamicDiagAt < intervalMs) return;
-
-        var elapsedMs = _lastDynamicDiagAt == 0 ? intervalMs : now - _lastDynamicDiagAt;
-        _lastDynamicDiagAt = now;
-
-        var rawBytes = _sim.RawBytesReceived;
-        var samples = _sim.SamplesReceived;
-        var skippedBytes = _sim.SkippedBytes;
-        var received = Interlocked.Read(ref _uiSamplesReceived);
-        var applied = Interlocked.Read(ref _uiSamplesApplied);
-
-        var rawBytesDelta = Delta(rawBytes, ref _lastLoggedRawBytes);
-        var samplesDelta = Delta(samples, ref _lastLoggedSamples);
-        var skippedBytesDelta = Delta(skippedBytes, ref _lastLoggedSkippedBytes);
-        var receivedDelta = Delta(received, ref _lastLoggedUiReceived);
-        var appliedDelta = Delta(applied, ref _lastLoggedUiApplied);
-
-        AuditLogger.Action(AuditLogger.AdcDynamicDiag, "AdcDynamic",
-            $"periodMs={elapsedMs}; bytes={rawBytesDelta}; samples={samplesDelta}; skipped={skippedBytesDelta}; " +
-            $"uiReceived={receivedDelta}; uiApplied={appliedDelta}",
-            "SimA04", _sim.PortName);
-    }
-
-    // Возвращает прирост монотонного счетчика за период диагностики и обновляет предыдущую точку отсчета.
-    private static long Delta(long current, ref long previous)
-    {
-        var delta = current >= previous ? current - previous : current;
-        previous = current;
-        return delta;
     }
 
     private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
@@ -541,12 +498,12 @@ public partial class DynamicWeighingForm : Form
         {
             await _ldb.SaveWagonAsync(record);
             _weighingStorageAvailable = true;
-            UpdateAdcDiagnostics();
+            UpdateAdcStatus();
         }
         catch (Exception ex)
         {
             _weighingStorageAvailable = false;
-            UpdateAdcDiagnostics();
+            UpdateAdcStatus();
             AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
         }
     }
