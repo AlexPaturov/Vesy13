@@ -302,7 +302,7 @@ partial class StaticFaultForm
         _cmbSpikeMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSpikeMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSpikeMode.Location = new Point(303, 9);
+        _cmbSpikeMode.Location = new Point(303, 5);
         _cmbSpikeMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSpikeMode.Name = "_cmbSpikeMode";
         _cmbSpikeMode.Size = new Size(185, 36);
@@ -411,7 +411,7 @@ partial class StaticFaultForm
         _pnlDrift.Controls.Add(_pnlDriftHeader);
         _pnlDrift.Location = new Point(23, 63);
         _pnlDrift.Name = "_pnlDrift";
-        _pnlDrift.Size = new Size(493, 147);
+        _pnlDrift.Size = new Size(493, 177);
         _pnlDrift.TabIndex = 4;
         // 
         // _pnlDriftBody
@@ -420,7 +420,7 @@ partial class StaticFaultForm
         _pnlDriftBody.Dock = DockStyle.Fill;
         _pnlDriftBody.Location = new Point(0, 35);
         _pnlDriftBody.Name = "_pnlDriftBody";
-        _pnlDriftBody.Size = new Size(493, 112);
+        _pnlDriftBody.Size = new Size(493, 142);
         _pnlDriftBody.TabIndex = 1;
         // 
         // _tlpDriftParams
@@ -446,7 +446,7 @@ partial class StaticFaultForm
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.34F));
-        _tlpDriftParams.Size = new Size(493, 93);
+        _tlpDriftParams.Size = new Size(493, 142);
         _tlpDriftParams.TabIndex = 0;
         // 
         // _lblDriftActive
@@ -454,7 +454,7 @@ partial class StaticFaultForm
         _lblDriftActive.Dock = DockStyle.Fill;
         _lblDriftActive.Location = new Point(4, 1);
         _lblDriftActive.Name = "_lblDriftActive";
-        _lblDriftActive.Size = new Size(106, 29);
+        _lblDriftActive.Size = new Size(106, 45);
         _lblDriftActive.TabIndex = 0;
         _lblDriftActive.Text = "Актив., с";
         _lblDriftActive.TextAlign = ContentAlignment.MiddleRight;
@@ -464,7 +464,7 @@ partial class StaticFaultForm
         _numDriftActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftActive.DecimalPlaces = 1;
         _numDriftActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftActive.Location = new Point(118, 1);
+        _numDriftActive.Location = new Point(118, 6);
         _numDriftActive.Margin = new Padding(4, 0, 4, 0);
         _numDriftActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numDriftActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
@@ -479,7 +479,7 @@ partial class StaticFaultForm
         _lblDriftMode.Dock = DockStyle.Fill;
         _lblDriftMode.Location = new Point(206, 1);
         _lblDriftMode.Name = "_lblDriftMode";
-        _lblDriftMode.Size = new Size(89, 29);
+        _lblDriftMode.Size = new Size(89, 45);
         _lblDriftMode.TabIndex = 2;
         _lblDriftMode.Text = "Режим";
         _lblDriftMode.TextAlign = ContentAlignment.MiddleRight;
@@ -487,9 +487,9 @@ partial class StaticFaultForm
         // _lblDriftGap
         // 
         _lblDriftGap.Dock = DockStyle.Fill;
-        _lblDriftGap.Location = new Point(4, 31);
+        _lblDriftGap.Location = new Point(4, 47);
         _lblDriftGap.Name = "_lblDriftGap";
-        _lblDriftGap.Size = new Size(106, 29);
+        _lblDriftGap.Size = new Size(106, 45);
         _lblDriftGap.TabIndex = 4;
         _lblDriftGap.Text = "Пауза, с";
         _lblDriftGap.TextAlign = ContentAlignment.MiddleRight;
@@ -499,7 +499,7 @@ partial class StaticFaultForm
         _numDriftGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftGap.DecimalPlaces = 1;
         _numDriftGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftGap.Location = new Point(118, 31);
+        _numDriftGap.Location = new Point(118, 52);
         _numDriftGap.Margin = new Padding(4, 0, 4, 0);
         _numDriftGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numDriftGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
@@ -512,9 +512,9 @@ partial class StaticFaultForm
         // _lblDriftMagnitude
         // 
         _lblDriftMagnitude.Dock = DockStyle.Fill;
-        _lblDriftMagnitude.Location = new Point(4, 61);
+        _lblDriftMagnitude.Location = new Point(4, 93);
         _lblDriftMagnitude.Name = "_lblDriftMagnitude";
-        _lblDriftMagnitude.Size = new Size(106, 31);
+        _lblDriftMagnitude.Size = new Size(106, 48);
         _lblDriftMagnitude.TabIndex = 6;
         _lblDriftMagnitude.Text = "Ампл., т";
         _lblDriftMagnitude.TextAlign = ContentAlignment.MiddleRight;
@@ -524,7 +524,7 @@ partial class StaticFaultForm
         _numDriftMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftMagnitude.DecimalPlaces = 2;
         _numDriftMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftMagnitude.Location = new Point(118, 61);
+        _numDriftMagnitude.Location = new Point(118, 100);
         _numDriftMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numDriftMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numDriftMagnitude.Name = "_numDriftMagnitude";
@@ -537,9 +537,9 @@ partial class StaticFaultForm
         // 
         _btnDriftManual.Dock = DockStyle.Fill;
         _btnDriftManual.FlatStyle = FlatStyle.Flat;
-        _btnDriftManual.Location = new Point(302, 64);
+        _btnDriftManual.Location = new Point(302, 96);
         _btnDriftManual.Name = "_btnDriftManual";
-        _btnDriftManual.Size = new Size(187, 25);
+        _btnDriftManual.Size = new Size(187, 42);
         _btnDriftManual.TabIndex = 8;
         _btnDriftManual.Text = "Вкл/выкл сейчас";
         _btnDriftManual.Click += BtnDriftManual_Click;
@@ -549,7 +549,7 @@ partial class StaticFaultForm
         _cmbDriftMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbDriftMode.Location = new Point(303, 1);
+        _cmbDriftMode.Location = new Point(303, 9);
         _cmbDriftMode.Margin = new Padding(4, 0, 4, 0);
         _cmbDriftMode.Name = "_cmbDriftMode";
         _cmbDriftMode.Size = new Size(185, 36);
@@ -677,7 +677,7 @@ partial class StaticFaultForm
         _cmbCorruptMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbCorruptMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbCorruptMode.Location = new Point(303, 5);
+        _cmbCorruptMode.Location = new Point(303, 9);
         _cmbCorruptMode.Margin = new Padding(4, 0, 4, 0);
         _cmbCorruptMode.Name = "_cmbCorruptMode";
         _cmbCorruptMode.Size = new Size(185, 36);
@@ -864,7 +864,7 @@ partial class StaticFaultForm
         _cmbStuckMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStuckMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbStuckMode.Location = new Point(303, 5);
+        _cmbStuckMode.Location = new Point(303, 9);
         _cmbStuckMode.Margin = new Padding(4, 0, 4, 0);
         _cmbStuckMode.Name = "_cmbStuckMode";
         _cmbStuckMode.Size = new Size(185, 36);
@@ -1021,7 +1021,7 @@ partial class StaticFaultForm
         _cmbSilenceMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSilenceMode.Location = new Point(303, 10);
+        _cmbSilenceMode.Location = new Point(303, 6);
         _cmbSilenceMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSilenceMode.Name = "_cmbSilenceMode";
         _cmbSilenceMode.Size = new Size(185, 36);
