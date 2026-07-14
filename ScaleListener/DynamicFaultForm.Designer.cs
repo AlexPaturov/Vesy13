@@ -173,9 +173,9 @@ partial class DynamicFaultForm
         // _lblSilenceMode
         // 
         _lblSilenceMode.Dock = DockStyle.Fill;
-        _lblSilenceMode.Location = new Point(206, 1);
+        _lblSilenceMode.Location = new Point(215, 1);
         _lblSilenceMode.Name = "_lblSilenceMode";
-        _lblSilenceMode.Size = new Size(89, 46);
+        _lblSilenceMode.Size = new Size(93, 50);
         _lblSilenceMode.TabIndex = 1;
         _lblSilenceMode.Text = "Режим";
         _lblSilenceMode.TextAlign = ContentAlignment.MiddleRight;
@@ -185,7 +185,7 @@ partial class DynamicFaultForm
         _lblSilenceActive.Dock = DockStyle.Fill;
         _lblSilenceActive.Location = new Point(4, 1);
         _lblSilenceActive.Name = "_lblSilenceActive";
-        _lblSilenceActive.Size = new Size(106, 46);
+        _lblSilenceActive.Size = new Size(111, 50);
         _lblSilenceActive.TabIndex = 4;
         _lblSilenceActive.Text = "Актив., с";
         _lblSilenceActive.TextAlign = ContentAlignment.MiddleRight;
@@ -195,12 +195,12 @@ partial class DynamicFaultForm
         _numSilenceActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSilenceActive.DecimalPlaces = 1;
         _numSilenceActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceActive.Location = new Point(118, 9);
+        _numSilenceActive.Location = new Point(123, 9);
         _numSilenceActive.Margin = new Padding(4, 0, 4, 0);
         _numSilenceActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numSilenceActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSilenceActive.Name = "_numSilenceActive";
-        _numSilenceActive.Size = new Size(80, 29);
+        _numSilenceActive.Size = new Size(84, 34);
         _numSilenceActive.TabIndex = 5;
         _numSilenceActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numSilenceActive.ValueChanged += NumSilenceActive_ValueChanged;
@@ -208,9 +208,9 @@ partial class DynamicFaultForm
         // _lblSilenceGap
         // 
         _lblSilenceGap.Dock = DockStyle.Fill;
-        _lblSilenceGap.Location = new Point(4, 48);
+        _lblSilenceGap.Location = new Point(4, 52);
         _lblSilenceGap.Name = "_lblSilenceGap";
-        _lblSilenceGap.Size = new Size(106, 46);
+        _lblSilenceGap.Size = new Size(111, 50);
         _lblSilenceGap.TabIndex = 6;
         _lblSilenceGap.Text = "Пауза, с";
         _lblSilenceGap.TextAlign = ContentAlignment.MiddleRight;
@@ -220,12 +220,12 @@ partial class DynamicFaultForm
         _numSilenceGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSilenceGap.DecimalPlaces = 1;
         _numSilenceGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSilenceGap.Location = new Point(118, 56);
+        _numSilenceGap.Location = new Point(123, 60);
         _numSilenceGap.Margin = new Padding(4, 0, 4, 0);
         _numSilenceGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numSilenceGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSilenceGap.Name = "_numSilenceGap";
-        _numSilenceGap.Size = new Size(80, 29);
+        _numSilenceGap.Size = new Size(84, 34);
         _numSilenceGap.TabIndex = 7;
         _numSilenceGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numSilenceGap.ValueChanged += NumSilenceGap_ValueChanged;
@@ -247,7 +247,7 @@ partial class DynamicFaultForm
         _pnlSpikeBody.Dock = DockStyle.Fill;
         _pnlSpikeBody.Location = new Point(0, 35);
         _pnlSpikeBody.Name = "_pnlSpikeBody";
-        _pnlSpikeBody.Size = new Size(493, 142);
+        _pnlSpikeBody.Size = new Size(514, 145);
         _pnlSpikeBody.TabIndex = 1;
         // 
         // _tlpSpikeParams
@@ -274,7 +274,7 @@ partial class DynamicFaultForm
         _tlpSpikeParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpSpikeParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpSpikeParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.34F));
-        _tlpSpikeParams.Size = new Size(493, 142);
+        _tlpSpikeParams.Size = new Size(514, 145);
         _tlpSpikeParams.TabIndex = 0;
         // 
         // _lblSpikeInterval
@@ -282,7 +282,7 @@ partial class DynamicFaultForm
         _lblSpikeInterval.Dock = DockStyle.Fill;
         _lblSpikeInterval.Location = new Point(4, 1);
         _lblSpikeInterval.Name = "_lblSpikeInterval";
-        _lblSpikeInterval.Size = new Size(106, 45);
+        _lblSpikeInterval.Size = new Size(111, 46);
         _lblSpikeInterval.TabIndex = 0;
         _lblSpikeInterval.Text = "Интервал, с";
         _lblSpikeInterval.TextAlign = ContentAlignment.MiddleRight;
@@ -292,12 +292,12 @@ partial class DynamicFaultForm
         _numSpikeInterval.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSpikeInterval.DecimalPlaces = 1;
         _numSpikeInterval.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeInterval.Location = new Point(118, 9);
+        _numSpikeInterval.Location = new Point(123, 7);
         _numSpikeInterval.Margin = new Padding(4, 0, 4, 0);
         _numSpikeInterval.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numSpikeInterval.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSpikeInterval.Name = "_numSpikeInterval";
-        _numSpikeInterval.Size = new Size(80, 29);
+        _numSpikeInterval.Size = new Size(84, 34);
         _numSpikeInterval.TabIndex = 1;
         _numSpikeInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
         _numSpikeInterval.ValueChanged += NumSpikeInterval_ValueChanged;
@@ -305,9 +305,9 @@ partial class DynamicFaultForm
         // _lblSpikeMode
         // 
         _lblSpikeMode.Dock = DockStyle.Fill;
-        _lblSpikeMode.Location = new Point(206, 1);
+        _lblSpikeMode.Location = new Point(215, 1);
         _lblSpikeMode.Name = "_lblSpikeMode";
-        _lblSpikeMode.Size = new Size(89, 45);
+        _lblSpikeMode.Size = new Size(93, 46);
         _lblSpikeMode.TabIndex = 2;
         _lblSpikeMode.Text = "Режим";
         _lblSpikeMode.TextAlign = ContentAlignment.MiddleRight;
@@ -317,19 +317,19 @@ partial class DynamicFaultForm
         _cmbSpikeMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSpikeMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSpikeMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSpikeMode.Location = new Point(303, 12);
+        _cmbSpikeMode.Location = new Point(316, 10);
         _cmbSpikeMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSpikeMode.Name = "_cmbSpikeMode";
-        _cmbSpikeMode.Size = new Size(185, 29);
+        _cmbSpikeMode.Size = new Size(193, 36);
         _cmbSpikeMode.TabIndex = 3;
         _cmbSpikeMode.SelectedIndexChanged += CmbSpikeMode_SelectedIndexChanged;
         // 
         // _lblSpikeRate
         // 
         _lblSpikeRate.Dock = DockStyle.Fill;
-        _lblSpikeRate.Location = new Point(4, 47);
+        _lblSpikeRate.Location = new Point(4, 48);
         _lblSpikeRate.Name = "_lblSpikeRate";
-        _lblSpikeRate.Size = new Size(106, 45);
+        _lblSpikeRate.Size = new Size(111, 46);
         _lblSpikeRate.TabIndex = 4;
         _lblSpikeRate.Text = "Частота, /мин";
         _lblSpikeRate.TextAlign = ContentAlignment.MiddleRight;
@@ -339,12 +339,12 @@ partial class DynamicFaultForm
         _numSpikeRate.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSpikeRate.DecimalPlaces = 1;
         _numSpikeRate.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeRate.Location = new Point(118, 55);
+        _numSpikeRate.Location = new Point(123, 54);
         _numSpikeRate.Margin = new Padding(4, 0, 4, 0);
         _numSpikeRate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
         _numSpikeRate.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numSpikeRate.Name = "_numSpikeRate";
-        _numSpikeRate.Size = new Size(80, 29);
+        _numSpikeRate.Size = new Size(84, 34);
         _numSpikeRate.TabIndex = 5;
         _numSpikeRate.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numSpikeRate.ValueChanged += NumSpikeRate_ValueChanged;
@@ -352,9 +352,9 @@ partial class DynamicFaultForm
         // _lblSpikeMagnitude
         // 
         _lblSpikeMagnitude.Dock = DockStyle.Fill;
-        _lblSpikeMagnitude.Location = new Point(4, 93);
+        _lblSpikeMagnitude.Location = new Point(4, 95);
         _lblSpikeMagnitude.Name = "_lblSpikeMagnitude";
-        _lblSpikeMagnitude.Size = new Size(106, 48);
+        _lblSpikeMagnitude.Size = new Size(111, 49);
         _lblSpikeMagnitude.TabIndex = 6;
         _lblSpikeMagnitude.Text = "Ампл., т";
         _lblSpikeMagnitude.TextAlign = ContentAlignment.MiddleRight;
@@ -364,11 +364,11 @@ partial class DynamicFaultForm
         _numSpikeMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numSpikeMagnitude.DecimalPlaces = 2;
         _numSpikeMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numSpikeMagnitude.Location = new Point(118, 102);
+        _numSpikeMagnitude.Location = new Point(123, 102);
         _numSpikeMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numSpikeMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numSpikeMagnitude.Name = "_numSpikeMagnitude";
-        _numSpikeMagnitude.Size = new Size(80, 29);
+        _numSpikeMagnitude.Size = new Size(84, 34);
         _numSpikeMagnitude.TabIndex = 7;
         _numSpikeMagnitude.Value = new decimal(new int[] { 5, 0, 0, 0 });
         _numSpikeMagnitude.ValueChanged += NumSpikeMagnitude_ValueChanged;
@@ -377,9 +377,9 @@ partial class DynamicFaultForm
         // 
         _btnSpikeManual.Dock = DockStyle.Fill;
         _btnSpikeManual.FlatStyle = FlatStyle.Flat;
-        _btnSpikeManual.Location = new Point(302, 96);
+        _btnSpikeManual.Location = new Point(315, 98);
         _btnSpikeManual.Name = "_btnSpikeManual";
-        _btnSpikeManual.Size = new Size(187, 42);
+        _btnSpikeManual.Size = new Size(195, 43);
         _btnSpikeManual.TabIndex = 8;
         _btnSpikeManual.Text = "Сработать сейчас";
         _btnSpikeManual.Click += BtnSpikeManual_Click;
@@ -391,7 +391,7 @@ partial class DynamicFaultForm
         _pnlSpikeHeader.Dock = DockStyle.Top;
         _pnlSpikeHeader.Location = new Point(0, 0);
         _pnlSpikeHeader.Name = "_pnlSpikeHeader";
-        _pnlSpikeHeader.Size = new Size(493, 35);
+        _pnlSpikeHeader.Size = new Size(514, 35);
         _pnlSpikeHeader.TabIndex = 0;
         // 
         // _tlpSpikeHeader
@@ -405,7 +405,7 @@ partial class DynamicFaultForm
         _tlpSpikeHeader.Name = "_tlpSpikeHeader";
         _tlpSpikeHeader.RowCount = 1;
         _tlpSpikeHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpSpikeHeader.Size = new Size(493, 35);
+        _tlpSpikeHeader.Size = new Size(514, 35);
         _tlpSpikeHeader.TabIndex = 0;
         // 
         // _lblSpikeTitle
@@ -414,7 +414,7 @@ partial class DynamicFaultForm
         _lblSpikeTitle.Dock = DockStyle.Fill;
         _lblSpikeTitle.Location = new Point(4, 1);
         _lblSpikeTitle.Name = "_lblSpikeTitle";
-        _lblSpikeTitle.Size = new Size(485, 33);
+        _lblSpikeTitle.Size = new Size(506, 33);
         _lblSpikeTitle.TabIndex = 0;
         _lblSpikeTitle.Text = "Одиночный выброс (Spike)";
         _lblSpikeTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -436,7 +436,7 @@ partial class DynamicFaultForm
         _pnlDriftBody.Dock = DockStyle.Fill;
         _pnlDriftBody.Location = new Point(0, 35);
         _pnlDriftBody.Name = "_pnlDriftBody";
-        _pnlDriftBody.Size = new Size(493, 142);
+        _pnlDriftBody.Size = new Size(514, 143);
         _pnlDriftBody.TabIndex = 1;
         // 
         // _tlpDriftParams
@@ -463,7 +463,7 @@ partial class DynamicFaultForm
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpDriftParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.34F));
-        _tlpDriftParams.Size = new Size(493, 142);
+        _tlpDriftParams.Size = new Size(514, 143);
         _tlpDriftParams.TabIndex = 0;
         // 
         // _lblDriftActive
@@ -471,7 +471,7 @@ partial class DynamicFaultForm
         _lblDriftActive.Dock = DockStyle.Fill;
         _lblDriftActive.Location = new Point(4, 1);
         _lblDriftActive.Name = "_lblDriftActive";
-        _lblDriftActive.Size = new Size(106, 45);
+        _lblDriftActive.Size = new Size(111, 46);
         _lblDriftActive.TabIndex = 0;
         _lblDriftActive.Text = "Актив., с";
         _lblDriftActive.TextAlign = ContentAlignment.MiddleRight;
@@ -481,12 +481,12 @@ partial class DynamicFaultForm
         _numDriftActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftActive.DecimalPlaces = 1;
         _numDriftActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftActive.Location = new Point(118, 9);
+        _numDriftActive.Location = new Point(123, 7);
         _numDriftActive.Margin = new Padding(4, 0, 4, 0);
         _numDriftActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numDriftActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numDriftActive.Name = "_numDriftActive";
-        _numDriftActive.Size = new Size(80, 29);
+        _numDriftActive.Size = new Size(84, 34);
         _numDriftActive.TabIndex = 1;
         _numDriftActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numDriftActive.ValueChanged += NumDriftActive_ValueChanged;
@@ -494,9 +494,9 @@ partial class DynamicFaultForm
         // _lblDriftMode
         // 
         _lblDriftMode.Dock = DockStyle.Fill;
-        _lblDriftMode.Location = new Point(206, 1);
+        _lblDriftMode.Location = new Point(215, 1);
         _lblDriftMode.Name = "_lblDriftMode";
-        _lblDriftMode.Size = new Size(89, 45);
+        _lblDriftMode.Size = new Size(93, 46);
         _lblDriftMode.TabIndex = 2;
         _lblDriftMode.Text = "Режим";
         _lblDriftMode.TextAlign = ContentAlignment.MiddleRight;
@@ -506,19 +506,19 @@ partial class DynamicFaultForm
         _cmbDriftMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbDriftMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDriftMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbDriftMode.Location = new Point(303, 9);
+        _cmbDriftMode.Location = new Point(316, 10);
         _cmbDriftMode.Margin = new Padding(4, 0, 4, 0);
         _cmbDriftMode.Name = "_cmbDriftMode";
-        _cmbDriftMode.Size = new Size(185, 29);
+        _cmbDriftMode.Size = new Size(193, 36);
         _cmbDriftMode.TabIndex = 3;
         _cmbDriftMode.SelectedIndexChanged += CmbDriftMode_SelectedIndexChanged;
         // 
         // _lblDriftGap
         // 
         _lblDriftGap.Dock = DockStyle.Fill;
-        _lblDriftGap.Location = new Point(4, 47);
+        _lblDriftGap.Location = new Point(4, 48);
         _lblDriftGap.Name = "_lblDriftGap";
-        _lblDriftGap.Size = new Size(106, 45);
+        _lblDriftGap.Size = new Size(111, 46);
         _lblDriftGap.TabIndex = 4;
         _lblDriftGap.Text = "Пауза, с";
         _lblDriftGap.TextAlign = ContentAlignment.MiddleRight;
@@ -528,12 +528,12 @@ partial class DynamicFaultForm
         _numDriftGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftGap.DecimalPlaces = 1;
         _numDriftGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftGap.Location = new Point(118, 55);
+        _numDriftGap.Location = new Point(123, 54);
         _numDriftGap.Margin = new Padding(4, 0, 4, 0);
         _numDriftGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numDriftGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numDriftGap.Name = "_numDriftGap";
-        _numDriftGap.Size = new Size(80, 29);
+        _numDriftGap.Size = new Size(84, 34);
         _numDriftGap.TabIndex = 5;
         _numDriftGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numDriftGap.ValueChanged += NumDriftGap_ValueChanged;
@@ -541,9 +541,9 @@ partial class DynamicFaultForm
         // _lblDriftMagnitude
         // 
         _lblDriftMagnitude.Dock = DockStyle.Fill;
-        _lblDriftMagnitude.Location = new Point(4, 93);
+        _lblDriftMagnitude.Location = new Point(4, 95);
         _lblDriftMagnitude.Name = "_lblDriftMagnitude";
-        _lblDriftMagnitude.Size = new Size(106, 48);
+        _lblDriftMagnitude.Size = new Size(111, 47);
         _lblDriftMagnitude.TabIndex = 6;
         _lblDriftMagnitude.Text = "Ампл., т";
         _lblDriftMagnitude.TextAlign = ContentAlignment.MiddleRight;
@@ -553,11 +553,11 @@ partial class DynamicFaultForm
         _numDriftMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numDriftMagnitude.DecimalPlaces = 2;
         _numDriftMagnitude.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numDriftMagnitude.Location = new Point(118, 102);
+        _numDriftMagnitude.Location = new Point(123, 101);
         _numDriftMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numDriftMagnitude.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
         _numDriftMagnitude.Name = "_numDriftMagnitude";
-        _numDriftMagnitude.Size = new Size(80, 29);
+        _numDriftMagnitude.Size = new Size(84, 34);
         _numDriftMagnitude.TabIndex = 7;
         _numDriftMagnitude.Value = new decimal(new int[] { 5, 0, 0, 0 });
         _numDriftMagnitude.ValueChanged += NumDriftMagnitude_ValueChanged;
@@ -566,9 +566,9 @@ partial class DynamicFaultForm
         // 
         _btnDriftManual.Dock = DockStyle.Fill;
         _btnDriftManual.FlatStyle = FlatStyle.Flat;
-        _btnDriftManual.Location = new Point(302, 96);
+        _btnDriftManual.Location = new Point(315, 98);
         _btnDriftManual.Name = "_btnDriftManual";
-        _btnDriftManual.Size = new Size(187, 42);
+        _btnDriftManual.Size = new Size(195, 41);
         _btnDriftManual.TabIndex = 8;
         _btnDriftManual.Text = "Вкл/выкл сейчас";
         _btnDriftManual.Click += BtnDriftManual_Click;
@@ -580,7 +580,7 @@ partial class DynamicFaultForm
         _pnlDriftHeader.Dock = DockStyle.Top;
         _pnlDriftHeader.Location = new Point(0, 0);
         _pnlDriftHeader.Name = "_pnlDriftHeader";
-        _pnlDriftHeader.Size = new Size(493, 35);
+        _pnlDriftHeader.Size = new Size(514, 35);
         _pnlDriftHeader.TabIndex = 0;
         // 
         // _tlpDriftHeader
@@ -594,7 +594,7 @@ partial class DynamicFaultForm
         _tlpDriftHeader.Name = "_tlpDriftHeader";
         _tlpDriftHeader.RowCount = 1;
         _tlpDriftHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpDriftHeader.Size = new Size(493, 35);
+        _tlpDriftHeader.Size = new Size(514, 35);
         _tlpDriftHeader.TabIndex = 0;
         // 
         // _lblDriftTitle
@@ -603,7 +603,7 @@ partial class DynamicFaultForm
         _lblDriftTitle.Dock = DockStyle.Fill;
         _lblDriftTitle.Location = new Point(4, 1);
         _lblDriftTitle.Name = "_lblDriftTitle";
-        _lblDriftTitle.Size = new Size(485, 33);
+        _lblDriftTitle.Size = new Size(506, 33);
         _lblDriftTitle.TabIndex = 0;
         _lblDriftTitle.Text = "Дрейф/дребезг (Drift)";
         _lblDriftTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -625,7 +625,7 @@ partial class DynamicFaultForm
         _pnlCorruptBody.Dock = DockStyle.Fill;
         _pnlCorruptBody.Location = new Point(0, 35);
         _pnlCorruptBody.Name = "_pnlCorruptBody";
-        _pnlCorruptBody.Size = new Size(493, 142);
+        _pnlCorruptBody.Size = new Size(514, 146);
         _pnlCorruptBody.TabIndex = 1;
         // 
         // _tlpCorruptParams
@@ -652,7 +652,7 @@ partial class DynamicFaultForm
         _tlpCorruptParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpCorruptParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpCorruptParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.34F));
-        _tlpCorruptParams.Size = new Size(493, 142);
+        _tlpCorruptParams.Size = new Size(514, 146);
         _tlpCorruptParams.TabIndex = 0;
         // 
         // _lblCorruptInterval
@@ -660,7 +660,7 @@ partial class DynamicFaultForm
         _lblCorruptInterval.Dock = DockStyle.Fill;
         _lblCorruptInterval.Location = new Point(4, 1);
         _lblCorruptInterval.Name = "_lblCorruptInterval";
-        _lblCorruptInterval.Size = new Size(106, 45);
+        _lblCorruptInterval.Size = new Size(111, 47);
         _lblCorruptInterval.TabIndex = 0;
         _lblCorruptInterval.Text = "Интервал, с";
         _lblCorruptInterval.TextAlign = ContentAlignment.MiddleRight;
@@ -670,12 +670,12 @@ partial class DynamicFaultForm
         _numCorruptInterval.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numCorruptInterval.DecimalPlaces = 1;
         _numCorruptInterval.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numCorruptInterval.Location = new Point(118, 9);
+        _numCorruptInterval.Location = new Point(123, 7);
         _numCorruptInterval.Margin = new Padding(4, 0, 4, 0);
         _numCorruptInterval.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numCorruptInterval.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numCorruptInterval.Name = "_numCorruptInterval";
-        _numCorruptInterval.Size = new Size(80, 29);
+        _numCorruptInterval.Size = new Size(84, 34);
         _numCorruptInterval.TabIndex = 1;
         _numCorruptInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
         _numCorruptInterval.ValueChanged += NumCorruptInterval_ValueChanged;
@@ -683,9 +683,9 @@ partial class DynamicFaultForm
         // _lblCorruptMode
         // 
         _lblCorruptMode.Dock = DockStyle.Fill;
-        _lblCorruptMode.Location = new Point(206, 1);
+        _lblCorruptMode.Location = new Point(215, 1);
         _lblCorruptMode.Name = "_lblCorruptMode";
-        _lblCorruptMode.Size = new Size(89, 45);
+        _lblCorruptMode.Size = new Size(93, 47);
         _lblCorruptMode.TabIndex = 2;
         _lblCorruptMode.Text = "Режим";
         _lblCorruptMode.TextAlign = ContentAlignment.MiddleRight;
@@ -695,19 +695,19 @@ partial class DynamicFaultForm
         _cmbCorruptMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbCorruptMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbCorruptMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbCorruptMode.Location = new Point(303, 9);
+        _cmbCorruptMode.Location = new Point(316, 10);
         _cmbCorruptMode.Margin = new Padding(4, 0, 4, 0);
         _cmbCorruptMode.Name = "_cmbCorruptMode";
-        _cmbCorruptMode.Size = new Size(185, 29);
+        _cmbCorruptMode.Size = new Size(193, 36);
         _cmbCorruptMode.TabIndex = 3;
         _cmbCorruptMode.SelectedIndexChanged += CmbCorruptMode_SelectedIndexChanged;
         // 
         // _lblCorruptRate
         // 
         _lblCorruptRate.Dock = DockStyle.Fill;
-        _lblCorruptRate.Location = new Point(4, 47);
+        _lblCorruptRate.Location = new Point(4, 49);
         _lblCorruptRate.Name = "_lblCorruptRate";
-        _lblCorruptRate.Size = new Size(106, 45);
+        _lblCorruptRate.Size = new Size(111, 47);
         _lblCorruptRate.TabIndex = 4;
         _lblCorruptRate.Text = "Частота, /мин";
         _lblCorruptRate.TextAlign = ContentAlignment.MiddleRight;
@@ -717,12 +717,12 @@ partial class DynamicFaultForm
         _numCorruptRate.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numCorruptRate.DecimalPlaces = 1;
         _numCorruptRate.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numCorruptRate.Location = new Point(118, 55);
+        _numCorruptRate.Location = new Point(123, 55);
         _numCorruptRate.Margin = new Padding(4, 0, 4, 0);
         _numCorruptRate.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
         _numCorruptRate.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numCorruptRate.Name = "_numCorruptRate";
-        _numCorruptRate.Size = new Size(80, 29);
+        _numCorruptRate.Size = new Size(84, 34);
         _numCorruptRate.TabIndex = 5;
         _numCorruptRate.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numCorruptRate.ValueChanged += NumCorruptRate_ValueChanged;
@@ -730,9 +730,9 @@ partial class DynamicFaultForm
         // _lblCorruptMagnitude
         // 
         _lblCorruptMagnitude.Dock = DockStyle.Fill;
-        _lblCorruptMagnitude.Location = new Point(4, 93);
+        _lblCorruptMagnitude.Location = new Point(4, 97);
         _lblCorruptMagnitude.Name = "_lblCorruptMagnitude";
-        _lblCorruptMagnitude.Size = new Size(106, 48);
+        _lblCorruptMagnitude.Size = new Size(111, 48);
         _lblCorruptMagnitude.TabIndex = 6;
         _lblCorruptMagnitude.Text = "Байт";
         _lblCorruptMagnitude.TextAlign = ContentAlignment.MiddleRight;
@@ -740,12 +740,12 @@ partial class DynamicFaultForm
         // _numCorruptMagnitude
         // 
         _numCorruptMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _numCorruptMagnitude.Location = new Point(118, 102);
+        _numCorruptMagnitude.Location = new Point(123, 104);
         _numCorruptMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numCorruptMagnitude.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
         _numCorruptMagnitude.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         _numCorruptMagnitude.Name = "_numCorruptMagnitude";
-        _numCorruptMagnitude.Size = new Size(80, 29);
+        _numCorruptMagnitude.Size = new Size(84, 34);
         _numCorruptMagnitude.TabIndex = 7;
         _numCorruptMagnitude.Value = new decimal(new int[] { 1, 0, 0, 0 });
         _numCorruptMagnitude.ValueChanged += NumCorruptMagnitude_ValueChanged;
@@ -754,9 +754,9 @@ partial class DynamicFaultForm
         // 
         _btnCorruptManual.Dock = DockStyle.Fill;
         _btnCorruptManual.FlatStyle = FlatStyle.Flat;
-        _btnCorruptManual.Location = new Point(302, 96);
+        _btnCorruptManual.Location = new Point(315, 100);
         _btnCorruptManual.Name = "_btnCorruptManual";
-        _btnCorruptManual.Size = new Size(187, 42);
+        _btnCorruptManual.Size = new Size(195, 42);
         _btnCorruptManual.TabIndex = 8;
         _btnCorruptManual.Text = "Сработать сейчас";
         _btnCorruptManual.Click += BtnCorruptManual_Click;
@@ -768,7 +768,7 @@ partial class DynamicFaultForm
         _pnlCorruptHeader.Dock = DockStyle.Top;
         _pnlCorruptHeader.Location = new Point(0, 0);
         _pnlCorruptHeader.Name = "_pnlCorruptHeader";
-        _pnlCorruptHeader.Size = new Size(493, 35);
+        _pnlCorruptHeader.Size = new Size(514, 35);
         _pnlCorruptHeader.TabIndex = 0;
         // 
         // _tlpCorruptHeader
@@ -782,7 +782,7 @@ partial class DynamicFaultForm
         _tlpCorruptHeader.Name = "_tlpCorruptHeader";
         _tlpCorruptHeader.RowCount = 1;
         _tlpCorruptHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpCorruptHeader.Size = new Size(493, 35);
+        _tlpCorruptHeader.Size = new Size(514, 35);
         _tlpCorruptHeader.TabIndex = 0;
         // 
         // _lblCorruptTitle
@@ -791,7 +791,7 @@ partial class DynamicFaultForm
         _lblCorruptTitle.Dock = DockStyle.Fill;
         _lblCorruptTitle.Location = new Point(4, 1);
         _lblCorruptTitle.Name = "_lblCorruptTitle";
-        _lblCorruptTitle.Size = new Size(485, 33);
+        _lblCorruptTitle.Size = new Size(506, 33);
         _lblCorruptTitle.TabIndex = 0;
         _lblCorruptTitle.Text = "Порча байт (Corrupt)";
         _lblCorruptTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -813,7 +813,7 @@ partial class DynamicFaultForm
         _pnlStuckBody.Dock = DockStyle.Fill;
         _pnlStuckBody.Location = new Point(0, 35);
         _pnlStuckBody.Name = "_pnlStuckBody";
-        _pnlStuckBody.Size = new Size(493, 142);
+        _pnlStuckBody.Size = new Size(514, 144);
         _pnlStuckBody.TabIndex = 1;
         // 
         // _tlpStuckParams
@@ -840,7 +840,7 @@ partial class DynamicFaultForm
         _tlpStuckParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpStuckParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33F));
         _tlpStuckParams.RowStyles.Add(new RowStyle(SizeType.Percent, 33.34F));
-        _tlpStuckParams.Size = new Size(493, 142);
+        _tlpStuckParams.Size = new Size(514, 144);
         _tlpStuckParams.TabIndex = 0;
         // 
         // _lblStuckActive
@@ -848,7 +848,7 @@ partial class DynamicFaultForm
         _lblStuckActive.Dock = DockStyle.Fill;
         _lblStuckActive.Location = new Point(4, 1);
         _lblStuckActive.Name = "_lblStuckActive";
-        _lblStuckActive.Size = new Size(106, 45);
+        _lblStuckActive.Size = new Size(111, 46);
         _lblStuckActive.TabIndex = 0;
         _lblStuckActive.Text = "Актив., с";
         _lblStuckActive.TextAlign = ContentAlignment.MiddleRight;
@@ -858,12 +858,12 @@ partial class DynamicFaultForm
         _numStuckActive.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numStuckActive.DecimalPlaces = 1;
         _numStuckActive.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckActive.Location = new Point(118, 9);
+        _numStuckActive.Location = new Point(123, 7);
         _numStuckActive.Margin = new Padding(4, 0, 4, 0);
         _numStuckActive.Maximum = new decimal(new int[] { 600, 0, 0, 0 });
         _numStuckActive.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numStuckActive.Name = "_numStuckActive";
-        _numStuckActive.Size = new Size(80, 29);
+        _numStuckActive.Size = new Size(84, 34);
         _numStuckActive.TabIndex = 1;
         _numStuckActive.Value = new decimal(new int[] { 3, 0, 0, 0 });
         _numStuckActive.ValueChanged += NumStuckActive_ValueChanged;
@@ -871,9 +871,9 @@ partial class DynamicFaultForm
         // _lblStuckMode
         // 
         _lblStuckMode.Dock = DockStyle.Fill;
-        _lblStuckMode.Location = new Point(206, 1);
+        _lblStuckMode.Location = new Point(215, 1);
         _lblStuckMode.Name = "_lblStuckMode";
-        _lblStuckMode.Size = new Size(89, 45);
+        _lblStuckMode.Size = new Size(93, 46);
         _lblStuckMode.TabIndex = 2;
         _lblStuckMode.Text = "Режим";
         _lblStuckMode.TextAlign = ContentAlignment.MiddleRight;
@@ -883,19 +883,19 @@ partial class DynamicFaultForm
         _cmbStuckMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStuckMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbStuckMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbStuckMode.Location = new Point(303, 9);
+        _cmbStuckMode.Location = new Point(316, 10);
         _cmbStuckMode.Margin = new Padding(4, 0, 4, 0);
         _cmbStuckMode.Name = "_cmbStuckMode";
-        _cmbStuckMode.Size = new Size(185, 29);
+        _cmbStuckMode.Size = new Size(193, 36);
         _cmbStuckMode.TabIndex = 3;
         _cmbStuckMode.SelectedIndexChanged += CmbStuckMode_SelectedIndexChanged;
         // 
         // _lblStuckGap
         // 
         _lblStuckGap.Dock = DockStyle.Fill;
-        _lblStuckGap.Location = new Point(4, 47);
+        _lblStuckGap.Location = new Point(4, 48);
         _lblStuckGap.Name = "_lblStuckGap";
-        _lblStuckGap.Size = new Size(106, 45);
+        _lblStuckGap.Size = new Size(111, 46);
         _lblStuckGap.TabIndex = 4;
         _lblStuckGap.Text = "Пауза, с";
         _lblStuckGap.TextAlign = ContentAlignment.MiddleRight;
@@ -905,12 +905,12 @@ partial class DynamicFaultForm
         _numStuckGap.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numStuckGap.DecimalPlaces = 1;
         _numStuckGap.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-        _numStuckGap.Location = new Point(118, 55);
+        _numStuckGap.Location = new Point(123, 54);
         _numStuckGap.Margin = new Padding(4, 0, 4, 0);
         _numStuckGap.Maximum = new decimal(new int[] { 3600, 0, 0, 0 });
         _numStuckGap.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
         _numStuckGap.Name = "_numStuckGap";
-        _numStuckGap.Size = new Size(80, 29);
+        _numStuckGap.Size = new Size(84, 34);
         _numStuckGap.TabIndex = 5;
         _numStuckGap.Value = new decimal(new int[] { 15, 0, 0, 0 });
         _numStuckGap.ValueChanged += NumStuckGap_ValueChanged;
@@ -918,9 +918,9 @@ partial class DynamicFaultForm
         // _lblStuckMagnitude
         // 
         _lblStuckMagnitude.Dock = DockStyle.Fill;
-        _lblStuckMagnitude.Location = new Point(4, 93);
+        _lblStuckMagnitude.Location = new Point(4, 95);
         _lblStuckMagnitude.Name = "_lblStuckMagnitude";
-        _lblStuckMagnitude.Size = new Size(106, 48);
+        _lblStuckMagnitude.Size = new Size(111, 48);
         _lblStuckMagnitude.TabIndex = 6;
         _lblStuckMagnitude.Text = "Код АЦП";
         _lblStuckMagnitude.TextAlign = ContentAlignment.MiddleRight;
@@ -929,11 +929,11 @@ partial class DynamicFaultForm
         // 
         _numStuckMagnitude.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _numStuckMagnitude.Increment = new decimal(new int[] { 100, 0, 0, 0 });
-        _numStuckMagnitude.Location = new Point(118, 102);
+        _numStuckMagnitude.Location = new Point(123, 102);
         _numStuckMagnitude.Margin = new Padding(4, 0, 4, 0);
         _numStuckMagnitude.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
         _numStuckMagnitude.Name = "_numStuckMagnitude";
-        _numStuckMagnitude.Size = new Size(80, 29);
+        _numStuckMagnitude.Size = new Size(84, 34);
         _numStuckMagnitude.TabIndex = 7;
         _numStuckMagnitude.ValueChanged += NumStuckMagnitude_ValueChanged;
         // 
@@ -941,9 +941,9 @@ partial class DynamicFaultForm
         // 
         _btnStuckManual.Dock = DockStyle.Fill;
         _btnStuckManual.FlatStyle = FlatStyle.Flat;
-        _btnStuckManual.Location = new Point(302, 96);
+        _btnStuckManual.Location = new Point(315, 98);
         _btnStuckManual.Name = "_btnStuckManual";
-        _btnStuckManual.Size = new Size(187, 42);
+        _btnStuckManual.Size = new Size(195, 42);
         _btnStuckManual.TabIndex = 8;
         _btnStuckManual.Text = "Вкл/выкл сейчас";
         _btnStuckManual.Click += BtnStuckManual_Click;
@@ -955,7 +955,7 @@ partial class DynamicFaultForm
         _pnlStuckHeader.Dock = DockStyle.Top;
         _pnlStuckHeader.Location = new Point(0, 0);
         _pnlStuckHeader.Name = "_pnlStuckHeader";
-        _pnlStuckHeader.Size = new Size(493, 35);
+        _pnlStuckHeader.Size = new Size(514, 35);
         _pnlStuckHeader.TabIndex = 0;
         // 
         // _tlpStuckHeader
@@ -969,7 +969,7 @@ partial class DynamicFaultForm
         _tlpStuckHeader.Name = "_tlpStuckHeader";
         _tlpStuckHeader.RowCount = 1;
         _tlpStuckHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpStuckHeader.Size = new Size(493, 35);
+        _tlpStuckHeader.Size = new Size(514, 35);
         _tlpStuckHeader.TabIndex = 0;
         // 
         // _lblStuckTitle
@@ -978,7 +978,7 @@ partial class DynamicFaultForm
         _lblStuckTitle.Dock = DockStyle.Fill;
         _lblStuckTitle.Location = new Point(4, 1);
         _lblStuckTitle.Name = "_lblStuckTitle";
-        _lblStuckTitle.Size = new Size(485, 33);
+        _lblStuckTitle.Size = new Size(506, 33);
         _lblStuckTitle.TabIndex = 0;
         _lblStuckTitle.Text = "Застрявший датчик (Stuck)";
         _lblStuckTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -1022,16 +1022,16 @@ partial class DynamicFaultForm
         _tlpSilenceParams.RowCount = 2;
         _tlpSilenceParams.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _tlpSilenceParams.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _tlpSilenceParams.Size = new Size(493, 95);
+        _tlpSilenceParams.Size = new Size(514, 103);
         _tlpSilenceParams.TabIndex = 8;
         // 
         // _btnSilenceManual
         // 
         _btnSilenceManual.Dock = DockStyle.Fill;
         _btnSilenceManual.FlatStyle = FlatStyle.Flat;
-        _btnSilenceManual.Location = new Point(302, 51);
+        _btnSilenceManual.Location = new Point(315, 55);
         _btnSilenceManual.Name = "_btnSilenceManual";
-        _btnSilenceManual.Size = new Size(187, 40);
+        _btnSilenceManual.Size = new Size(195, 44);
         _btnSilenceManual.TabIndex = 3;
         _btnSilenceManual.Text = "Вкл/выкл сейчас";
         _btnSilenceManual.Click += BtnSilenceManual_Click;
@@ -1041,10 +1041,10 @@ partial class DynamicFaultForm
         _cmbSilenceMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbSilenceMode.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSilenceMode.Items.AddRange(new object[] { "Выкл", "Периодично", "Случайно" });
-        _cmbSilenceMode.Location = new Point(303, 12);
+        _cmbSilenceMode.Location = new Point(316, 12);
         _cmbSilenceMode.Margin = new Padding(4, 0, 4, 0);
         _cmbSilenceMode.Name = "_cmbSilenceMode";
-        _cmbSilenceMode.Size = new Size(185, 29);
+        _cmbSilenceMode.Size = new Size(193, 36);
         _cmbSilenceMode.TabIndex = 2;
         _cmbSilenceMode.SelectedIndexChanged += CmbSilenceMode_SelectedIndexChanged;
         // 
@@ -1065,7 +1065,7 @@ partial class DynamicFaultForm
         _pnlSilenceBody.Dock = DockStyle.Fill;
         _pnlSilenceBody.Location = new Point(0, 35);
         _pnlSilenceBody.Name = "_pnlSilenceBody";
-        _pnlSilenceBody.Size = new Size(493, 95);
+        _pnlSilenceBody.Size = new Size(514, 103);
         _pnlSilenceBody.TabIndex = 10;
         // 
         // _pnlSilenceHeader
@@ -1075,7 +1075,7 @@ partial class DynamicFaultForm
         _pnlSilenceHeader.Dock = DockStyle.Top;
         _pnlSilenceHeader.Location = new Point(0, 0);
         _pnlSilenceHeader.Name = "_pnlSilenceHeader";
-        _pnlSilenceHeader.Size = new Size(493, 35);
+        _pnlSilenceHeader.Size = new Size(514, 35);
         _pnlSilenceHeader.TabIndex = 9;
         // 
         // _tlpSilenceHeader
@@ -1091,7 +1091,7 @@ partial class DynamicFaultForm
         _tlpSilenceHeader.RowCount = 1;
         _tlpSilenceHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _tlpSilenceHeader.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _tlpSilenceHeader.Size = new Size(493, 35);
+        _tlpSilenceHeader.Size = new Size(514, 35);
         _tlpSilenceHeader.TabIndex = 0;
         // 
         // _lblSilenceTitle
@@ -1100,13 +1100,13 @@ partial class DynamicFaultForm
         _lblSilenceTitle.Dock = DockStyle.Fill;
         _lblSilenceTitle.Location = new Point(4, 1);
         _lblSilenceTitle.Name = "_lblSilenceTitle";
-        _lblSilenceTitle.Size = new Size(485, 33);
+        _lblSilenceTitle.Size = new Size(506, 33);
         _lblSilenceTitle.TabIndex = 0;
         _lblSilenceTitle.Text = "Тишина (Silence) — эмулятор не отвечает";
         _lblSilenceTitle.TextAlign = ContentAlignment.MiddleCenter;
-        //
+        // 
         // _pnlMain
-        //
+        // 
         _pnlMain.Controls.Add(_pnlMiddle);
         _pnlMain.Controls.Add(_pnlBottom);
         _pnlMain.Dock = DockStyle.Fill;
@@ -1114,18 +1114,18 @@ partial class DynamicFaultForm
         _pnlMain.Name = "_pnlMain";
         _pnlMain.Size = new Size(1292, 953);
         _pnlMain.TabIndex = 10;
-        //
+        // 
         // _pnlMiddle
-        //
+        // 
         _pnlMiddle.Controls.Add(_tlpContent);
         _pnlMiddle.Dock = DockStyle.Fill;
         _pnlMiddle.Location = new Point(0, 0);
         _pnlMiddle.Name = "_pnlMiddle";
         _pnlMiddle.Size = new Size(1292, 892);
         _pnlMiddle.TabIndex = 10;
-        //
+        // 
         // _tlpContent
-        //
+        // 
         _tlpContent.ColumnCount = 2;
         _tlpContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.78125F));
         _tlpContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 59.21875F));
@@ -1139,9 +1139,9 @@ partial class DynamicFaultForm
         _tlpContent.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _tlpContent.Size = new Size(1292, 892);
         _tlpContent.TabIndex = 0;
-        //
+        // 
         // _pnlHistory
-        //
+        // 
         _pnlHistory.BorderStyle = BorderStyle.FixedSingle;
         _pnlHistory.Controls.Add(_history);
         _pnlHistory.Dock = DockStyle.Fill;
@@ -1150,18 +1150,18 @@ partial class DynamicFaultForm
         _pnlHistory.Name = "_pnlHistory";
         _pnlHistory.Size = new Size(754, 880);
         _pnlHistory.TabIndex = 0;
-        //
+        // 
         // _pnlFaults
-        //
+        // 
         _pnlFaults.Controls.Add(_tlpFaults);
         _pnlFaults.Dock = DockStyle.Fill;
         _pnlFaults.Location = new Point(3, 3);
         _pnlFaults.Name = "_pnlFaults";
         _pnlFaults.Size = new Size(520, 886);
         _pnlFaults.TabIndex = 1;
-        //
+        // 
         // _tlpFaults
-        //
+        // 
         _tlpFaults.ColumnCount = 1;
         _tlpFaults.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         _tlpFaults.Controls.Add(_pnlSpike, 0, 0);
@@ -1180,9 +1180,9 @@ partial class DynamicFaultForm
         _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1142864F));
         _tlpFaults.Size = new Size(520, 886);
         _tlpFaults.TabIndex = 0;
-        //
+        // 
         // _pnlBottom
-        //
+        // 
         _pnlBottom.Controls.Add(_btnCycle);
         _pnlBottom.Controls.Add(_btnClearHistory);
         _pnlBottom.Dock = DockStyle.Bottom;
@@ -1190,9 +1190,9 @@ partial class DynamicFaultForm
         _pnlBottom.Name = "_pnlBottom";
         _pnlBottom.Size = new Size(1292, 61);
         _pnlBottom.TabIndex = 2;
-        //
+        // 
         // DynamicFaultForm
-        //
+        // 
         BackColor = Color.FromArgb(255, 250, 240);
         ClientSize = new Size(1292, 953);
         Controls.Add(_pnlMain);
