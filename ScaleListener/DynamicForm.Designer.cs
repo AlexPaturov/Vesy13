@@ -135,7 +135,7 @@ partial class DynamicForm
         _cmbScenario.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbScenario.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbScenario.Font = new Font("Segoe UI", 12F);
-        _cmbScenario.Items.AddRange(new object[] { "Постоянная", "Две тележки", "Битые сэмплы" });
+        _cmbScenario.Items.AddRange(new object[] { "Постоянная", "Две тележки" });
         _cmbScenario.Location = new Point(644, 7);
         _cmbScenario.Margin = new Padding(4, 0, 4, 0);
         _cmbScenario.Name = "_cmbScenario";

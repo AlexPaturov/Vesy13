@@ -230,9 +230,6 @@ public partial class DynamicForm : Form
 
         byte[] buf = BuildSample(ch0, ch1);
 
-        if (_cmbScenario.Text == "Битые сэмплы" && _sampleIndex > 0 && _sampleIndex % 50 == 0)
-            buf[4]++;
-
         if (_faultEngine.ShouldFireDiscrete(FaultType.Corrupt))
         {
             string correctBytes = string.Join(" ", buf);
