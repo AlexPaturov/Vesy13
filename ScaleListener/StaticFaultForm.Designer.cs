@@ -93,13 +93,13 @@ partial class StaticFaultForm
         _pnlSilenceHeader = new Panel();
         _tlpSilenceHeader = new TableLayoutPanel();
         _lblSilenceTitle = new Label();
-        _panMain = new Panel();
-        _panMiddle = new Panel();
-        tableLayoutPanel1 = new TableLayoutPanel();
-        _panLeft = new Panel();
-        _panRight = new Panel();
-        tableLayoutPanel2 = new TableLayoutPanel();
-        _panBottom = new Panel();
+        _pnlMain = new Panel();
+        _pnlMiddle = new Panel();
+        _tlpContent = new TableLayoutPanel();
+        _pnlHistory = new Panel();
+        _pnlFaults = new Panel();
+        _tlpFaults = new TableLayoutPanel();
+        _pnlBottom = new Panel();
         ((System.ComponentModel.ISupportInitialize)_numSilenceActive).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_numSilenceGap).BeginInit();
         _pnlSpike.SuspendLayout();
@@ -139,13 +139,13 @@ partial class StaticFaultForm
         _pnlSilenceBody.SuspendLayout();
         _pnlSilenceHeader.SuspendLayout();
         _tlpSilenceHeader.SuspendLayout();
-        _panMain.SuspendLayout();
-        _panMiddle.SuspendLayout();
-        tableLayoutPanel1.SuspendLayout();
-        _panLeft.SuspendLayout();
-        _panRight.SuspendLayout();
-        tableLayoutPanel2.SuspendLayout();
-        _panBottom.SuspendLayout();
+        _pnlMain.SuspendLayout();
+        _pnlMiddle.SuspendLayout();
+        _tlpContent.SuspendLayout();
+        _pnlHistory.SuspendLayout();
+        _pnlFaults.SuspendLayout();
+        _tlpFaults.SuspendLayout();
+        _pnlBottom.SuspendLayout();
         SuspendLayout();
         // 
         // _btnCycle
@@ -1105,97 +1105,97 @@ partial class StaticFaultForm
         _lblSilenceTitle.Text = "Тишина (Silence) — нет ответа на poll";
         _lblSilenceTitle.TextAlign = ContentAlignment.MiddleCenter;
         // 
-        // _panMain
+        // _pnlMain
         // 
-        _panMain.Controls.Add(_panMiddle);
-        _panMain.Controls.Add(_panBottom);
-        _panMain.Dock = DockStyle.Fill;
-        _panMain.Location = new Point(0, 0);
-        _panMain.Name = "_panMain";
-        _panMain.Size = new Size(1292, 953);
-        _panMain.TabIndex = 10;
+        _pnlMain.Controls.Add(_pnlMiddle);
+        _pnlMain.Controls.Add(_pnlBottom);
+        _pnlMain.Dock = DockStyle.Fill;
+        _pnlMain.Location = new Point(0, 0);
+        _pnlMain.Name = "_pnlMain";
+        _pnlMain.Size = new Size(1292, 953);
+        _pnlMain.TabIndex = 10;
         // 
-        // _panMiddle
+        // _pnlMiddle
         // 
-        _panMiddle.Controls.Add(tableLayoutPanel1);
-        _panMiddle.Dock = DockStyle.Fill;
-        _panMiddle.Location = new Point(0, 0);
-        _panMiddle.Name = "_panMiddle";
-        _panMiddle.Size = new Size(1292, 892);
-        _panMiddle.TabIndex = 10;
+        _pnlMiddle.Controls.Add(_tlpContent);
+        _pnlMiddle.Dock = DockStyle.Fill;
+        _pnlMiddle.Location = new Point(0, 0);
+        _pnlMiddle.Name = "_pnlMiddle";
+        _pnlMiddle.Size = new Size(1292, 892);
+        _pnlMiddle.TabIndex = 10;
         // 
-        // tableLayoutPanel1
+        // _tlpContent
         // 
-        tableLayoutPanel1.ColumnCount = 2;
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.78125F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 59.21875F));
-        tableLayoutPanel1.Controls.Add(_panLeft, 1, 0);
-        tableLayoutPanel1.Controls.Add(_panRight, 0, 0);
-        tableLayoutPanel1.Dock = DockStyle.Fill;
-        tableLayoutPanel1.Location = new Point(0, 0);
-        tableLayoutPanel1.Name = "tableLayoutPanel1";
-        tableLayoutPanel1.RowCount = 1;
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.Size = new Size(1292, 892);
-        tableLayoutPanel1.TabIndex = 0;
+        _tlpContent.ColumnCount = 2;
+        _tlpContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40.78125F));
+        _tlpContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 59.21875F));
+        _tlpContent.Controls.Add(_pnlHistory, 1, 0);
+        _tlpContent.Controls.Add(_pnlFaults, 0, 0);
+        _tlpContent.Dock = DockStyle.Fill;
+        _tlpContent.Location = new Point(0, 0);
+        _tlpContent.Name = "_tlpContent";
+        _tlpContent.RowCount = 1;
+        _tlpContent.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpContent.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        _tlpContent.Size = new Size(1292, 892);
+        _tlpContent.TabIndex = 0;
         // 
-        // _panLeft
+        // _pnlHistory
         // 
-        _panLeft.BorderStyle = BorderStyle.FixedSingle;
-        _panLeft.Controls.Add(_history);
-        _panLeft.Dock = DockStyle.Fill;
-        _panLeft.Location = new Point(532, 6);
-        _panLeft.Margin = new Padding(6);
-        _panLeft.Name = "_panLeft";
-        _panLeft.Size = new Size(754, 880);
-        _panLeft.TabIndex = 0;
+        _pnlHistory.BorderStyle = BorderStyle.FixedSingle;
+        _pnlHistory.Controls.Add(_history);
+        _pnlHistory.Dock = DockStyle.Fill;
+        _pnlHistory.Location = new Point(532, 6);
+        _pnlHistory.Margin = new Padding(6);
+        _pnlHistory.Name = "_pnlHistory";
+        _pnlHistory.Size = new Size(754, 880);
+        _pnlHistory.TabIndex = 0;
         // 
-        // _panRight
+        // _pnlFaults
         // 
-        _panRight.Controls.Add(tableLayoutPanel2);
-        _panRight.Dock = DockStyle.Fill;
-        _panRight.Location = new Point(3, 3);
-        _panRight.Name = "_panRight";
-        _panRight.Size = new Size(520, 886);
-        _panRight.TabIndex = 1;
+        _pnlFaults.Controls.Add(_tlpFaults);
+        _pnlFaults.Dock = DockStyle.Fill;
+        _pnlFaults.Location = new Point(3, 3);
+        _pnlFaults.Name = "_pnlFaults";
+        _pnlFaults.Size = new Size(520, 886);
+        _pnlFaults.TabIndex = 1;
         // 
-        // tableLayoutPanel2
+        // _tlpFaults
         // 
-        tableLayoutPanel2.ColumnCount = 1;
-        tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tableLayoutPanel2.Controls.Add(_pnlSpike, 0, 0);
-        tableLayoutPanel2.Controls.Add(_pnlSilence, 0, 4);
-        tableLayoutPanel2.Controls.Add(_pnlDrift, 0, 1);
-        tableLayoutPanel2.Controls.Add(_pnlStuck, 0, 3);
-        tableLayoutPanel2.Controls.Add(_pnlCorrupt, 0, 2);
-        tableLayoutPanel2.Dock = DockStyle.Fill;
-        tableLayoutPanel2.Location = new Point(0, 0);
-        tableLayoutPanel2.Name = "tableLayoutPanel2";
-        tableLayoutPanel2.RowCount = 5;
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 21.0285721F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 20.8F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 21.1428566F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 20.9142857F));
-        tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1142864F));
-        tableLayoutPanel2.Size = new Size(520, 886);
-        tableLayoutPanel2.TabIndex = 0;
+        _tlpFaults.ColumnCount = 1;
+        _tlpFaults.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpFaults.Controls.Add(_pnlSpike, 0, 0);
+        _tlpFaults.Controls.Add(_pnlSilence, 0, 4);
+        _tlpFaults.Controls.Add(_pnlDrift, 0, 1);
+        _tlpFaults.Controls.Add(_pnlStuck, 0, 3);
+        _tlpFaults.Controls.Add(_pnlCorrupt, 0, 2);
+        _tlpFaults.Dock = DockStyle.Fill;
+        _tlpFaults.Location = new Point(0, 0);
+        _tlpFaults.Name = "_tlpFaults";
+        _tlpFaults.RowCount = 5;
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 21.0285721F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 20.8F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 21.1428566F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 20.9142857F));
+        _tlpFaults.RowStyles.Add(new RowStyle(SizeType.Percent, 16.1142864F));
+        _tlpFaults.Size = new Size(520, 886);
+        _tlpFaults.TabIndex = 0;
         // 
-        // _panBottom
+        // _pnlBottom
         // 
-        _panBottom.Controls.Add(_btnCycle);
-        _panBottom.Controls.Add(_btnClearHistory);
-        _panBottom.Dock = DockStyle.Bottom;
-        _panBottom.Location = new Point(0, 892);
-        _panBottom.Name = "_panBottom";
-        _panBottom.Size = new Size(1292, 61);
-        _panBottom.TabIndex = 2;
+        _pnlBottom.Controls.Add(_btnCycle);
+        _pnlBottom.Controls.Add(_btnClearHistory);
+        _pnlBottom.Dock = DockStyle.Bottom;
+        _pnlBottom.Location = new Point(0, 892);
+        _pnlBottom.Name = "_pnlBottom";
+        _pnlBottom.Size = new Size(1292, 61);
+        _pnlBottom.TabIndex = 2;
         // 
         // StaticFaultForm
         // 
         BackColor = Color.FromArgb(255, 250, 240);
         ClientSize = new Size(1292, 953);
-        Controls.Add(_panMain);
+        Controls.Add(_pnlMain);
         Font = new Font("Segoe UI", 12F);
         MinimumSize = new Size(760, 700);
         Name = "StaticFaultForm";
@@ -1244,13 +1244,13 @@ partial class StaticFaultForm
         _pnlSilenceHeader.ResumeLayout(false);
         _tlpSilenceHeader.ResumeLayout(false);
         _tlpSilenceHeader.PerformLayout();
-        _panMain.ResumeLayout(false);
-        _panMiddle.ResumeLayout(false);
-        tableLayoutPanel1.ResumeLayout(false);
-        _panLeft.ResumeLayout(false);
-        _panRight.ResumeLayout(false);
-        tableLayoutPanel2.ResumeLayout(false);
-        _panBottom.ResumeLayout(false);
+        _pnlMain.ResumeLayout(false);
+        _pnlMiddle.ResumeLayout(false);
+        _tlpContent.ResumeLayout(false);
+        _pnlHistory.ResumeLayout(false);
+        _pnlFaults.ResumeLayout(false);
+        _tlpFaults.ResumeLayout(false);
+        _pnlBottom.ResumeLayout(false);
         ResumeLayout(false);
     }
 
@@ -1335,11 +1335,11 @@ partial class StaticFaultForm
     private Panel _pnlSilenceBody;
     private ComboBox _cmbSilenceMode;
     private Button _btnSilenceManual;
-    private Panel _panMain;
-    private Panel _panLeft;
-    private Panel _panBottom;
-    private Panel _panRight;
-    private Panel _panMiddle;
-    private TableLayoutPanel tableLayoutPanel1;
-    private TableLayoutPanel tableLayoutPanel2;
+    private Panel _pnlMain;
+    private Panel _pnlHistory;
+    private Panel _pnlBottom;
+    private Panel _pnlFaults;
+    private Panel _pnlMiddle;
+    private TableLayoutPanel _tlpContent;
+    private TableLayoutPanel _tlpFaults;
 }
