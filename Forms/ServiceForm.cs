@@ -346,6 +346,71 @@ public partial class ServiceForm : Form
         _btnSaveSettings.Font = ServiceUiFonts.Medium;
         _btnSaveSettings.BackColor = ServiceUiColors.PrimaryAction;
         _btnSaveSettings.ForeColor = ServiceUiColors.TextOnDark;
+
+        _lblFilterStaticCap.Font = ServiceUiFonts.MediumBold;
+        _lblFilterStaticCap.ForeColor = ServiceUiColors.TextSection;
+        _chkStaticClamp.Font = ServiceUiFonts.Medium;
+        _chkStaticClamp.ForeColor = ServiceUiColors.TextPrimary;
+        _lblStaticClampMinCap.Font = ServiceUiFonts.Medium;
+        _lblStaticClampMinCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtStaticClampMin.Font = ServiceUiFonts.Body;
+        _txtStaticClampMin.BackColor = ServiceUiColors.InputBack;
+        _txtStaticClampMin.ForeColor = ServiceUiColors.InputFore;
+        _lblStaticClampMaxCap.Font = ServiceUiFonts.Medium;
+        _lblStaticClampMaxCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtStaticClampMax.Font = ServiceUiFonts.Body;
+        _txtStaticClampMax.BackColor = ServiceUiColors.InputBack;
+        _txtStaticClampMax.ForeColor = ServiceUiColors.InputFore;
+        _chkStaticDelta.Font = ServiceUiFonts.Medium;
+        _chkStaticDelta.ForeColor = ServiceUiColors.TextPrimary;
+        _lblStaticDeltaMaxCap.Font = ServiceUiFonts.Medium;
+        _lblStaticDeltaMaxCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtStaticDeltaMax.Font = ServiceUiFonts.Body;
+        _txtStaticDeltaMax.BackColor = ServiceUiColors.InputBack;
+        _txtStaticDeltaMax.ForeColor = ServiceUiColors.InputFore;
+        _chkStaticEma.Font = ServiceUiFonts.Medium;
+        _chkStaticEma.ForeColor = ServiceUiColors.TextPrimary;
+        _lblStaticEmaAlphaCap.Font = ServiceUiFonts.Medium;
+        _lblStaticEmaAlphaCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtStaticEmaAlpha.Font = ServiceUiFonts.Body;
+        _txtStaticEmaAlpha.BackColor = ServiceUiColors.InputBack;
+        _txtStaticEmaAlpha.ForeColor = ServiceUiColors.InputFore;
+
+        _lblFilterDynamicCap.Font = ServiceUiFonts.MediumBold;
+        _lblFilterDynamicCap.ForeColor = ServiceUiColors.TextSection;
+        _chkDynamicClamp.Font = ServiceUiFonts.Medium;
+        _chkDynamicClamp.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDynamicClampMinCap.Font = ServiceUiFonts.Medium;
+        _lblDynamicClampMinCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtDynamicClampMin.Font = ServiceUiFonts.Body;
+        _txtDynamicClampMin.BackColor = ServiceUiColors.InputBack;
+        _txtDynamicClampMin.ForeColor = ServiceUiColors.InputFore;
+        _lblDynamicClampMaxCap.Font = ServiceUiFonts.Medium;
+        _lblDynamicClampMaxCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtDynamicClampMax.Font = ServiceUiFonts.Body;
+        _txtDynamicClampMax.BackColor = ServiceUiColors.InputBack;
+        _txtDynamicClampMax.ForeColor = ServiceUiColors.InputFore;
+        _chkDynamicDelta.Font = ServiceUiFonts.Medium;
+        _chkDynamicDelta.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDynamicDeltaMaxCap.Font = ServiceUiFonts.Medium;
+        _lblDynamicDeltaMaxCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtDynamicDeltaMax.Font = ServiceUiFonts.Body;
+        _txtDynamicDeltaMax.BackColor = ServiceUiColors.InputBack;
+        _txtDynamicDeltaMax.ForeColor = ServiceUiColors.InputFore;
+        _chkDynamicStuck.Font = ServiceUiFonts.Medium;
+        _chkDynamicStuck.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDynamicStuckSamplesCap.Font = ServiceUiFonts.Medium;
+        _lblDynamicStuckSamplesCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtDynamicStuckSamples.Font = ServiceUiFonts.Body;
+        _txtDynamicStuckSamples.BackColor = ServiceUiColors.InputBack;
+        _txtDynamicStuckSamples.ForeColor = ServiceUiColors.InputFore;
+        _chkDynamicEma.Font = ServiceUiFonts.Medium;
+        _chkDynamicEma.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDynamicEmaAlphaCap.Font = ServiceUiFonts.Medium;
+        _lblDynamicEmaAlphaCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtDynamicEmaAlpha.Font = ServiceUiFonts.Body;
+        _txtDynamicEmaAlpha.BackColor = ServiceUiColors.InputBack;
+        _txtDynamicEmaAlpha.ForeColor = ServiceUiColors.InputFore;
     }
 
     // ── Lifecycle ───────────────────────────────────────────────────────────
@@ -630,6 +695,24 @@ public partial class ServiceForm : Form
         SelectComboValue(_cmbDisc, FormatDiscretization(_settings.Current.WeightDiscretizationTonnes));
         _txtZeroLimit.Text = _settings.Current.OperatorZeroLimitPercent.ToString("G", CultureInfo.InvariantCulture);
         _txtNewPassword.Clear();
+
+        _chkStaticClamp.Checked = _settings.Current.StaticClampEnabled;
+        _txtStaticClampMin.Text = _settings.Current.StaticClampMinCode.ToString(CultureInfo.InvariantCulture);
+        _txtStaticClampMax.Text = _settings.Current.StaticClampMaxCode.ToString(CultureInfo.InvariantCulture);
+        _chkStaticDelta.Checked = _settings.Current.StaticDeltaEnabled;
+        _txtStaticDeltaMax.Text = _settings.Current.StaticDeltaMaxCodes.ToString(CultureInfo.InvariantCulture);
+        _chkStaticEma.Checked = _settings.Current.StaticEmaEnabled;
+        _txtStaticEmaAlpha.Text = _settings.Current.StaticEmaAlpha.ToString("G", CultureInfo.InvariantCulture);
+
+        _chkDynamicClamp.Checked = _settings.Current.DynamicClampEnabled;
+        _txtDynamicClampMin.Text = _settings.Current.DynamicClampMinCode.ToString(CultureInfo.InvariantCulture);
+        _txtDynamicClampMax.Text = _settings.Current.DynamicClampMaxCode.ToString(CultureInfo.InvariantCulture);
+        _chkDynamicDelta.Checked = _settings.Current.DynamicDeltaEnabled;
+        _txtDynamicDeltaMax.Text = _settings.Current.DynamicDeltaMaxCodes.ToString(CultureInfo.InvariantCulture);
+        _chkDynamicStuck.Checked = _settings.Current.DynamicStuckEnabled;
+        _txtDynamicStuckSamples.Text = _settings.Current.DynamicStuckSamples.ToString(CultureInfo.InvariantCulture);
+        _chkDynamicEma.Checked = _settings.Current.DynamicEmaEnabled;
+        _txtDynamicEmaAlpha.Text = _settings.Current.DynamicEmaAlpha.ToString("G", CultureInfo.InvariantCulture);
     }
 
     private void SaveSettingsFromUi()
@@ -660,9 +743,56 @@ public partial class ServiceForm : Form
             return;
         }
 
+        if (!TryReadCode(_txtStaticClampMin, "Мин. код клэмпа статики", out int staticClampMin) ||
+            !TryReadCode(_txtStaticClampMax, "Макс. код клэмпа статики", out int staticClampMax) ||
+            !TryReadCode(_txtDynamicClampMin, "Мин. код клэмпа динамики", out int dynamicClampMin) ||
+            !TryReadCode(_txtDynamicClampMax, "Макс. код клэмпа динамики", out int dynamicClampMax))
+            return;
+
+        if (staticClampMax <= staticClampMin)
+        {
+            MessageBox.Show("Макс. код клэмпа статики должен быть больше мин. кода.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtStaticClampMax.Focus();
+            return;
+        }
+
+        if (dynamicClampMax <= dynamicClampMin)
+        {
+            MessageBox.Show("Макс. код клэмпа динамики должен быть больше мин. кода.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            _txtDynamicClampMax.Focus();
+            return;
+        }
+
+        if (!TryReadInt(_txtStaticDeltaMax, "Макс. скачок статики", 1, 65535, out int staticDeltaMax) ||
+            !TryReadInt(_txtDynamicDeltaMax, "Макс. скачок динамики", 1, 65535, out int dynamicDeltaMax) ||
+            !TryReadInt(_txtDynamicStuckSamples, "Порог застрявшего датчика", 2, 100000, out int dynamicStuckSamples))
+            return;
+
+        if (!TryReadAlpha(_txtStaticEmaAlpha, "Альфа EMA статики", out double staticEmaAlpha) ||
+            !TryReadAlpha(_txtDynamicEmaAlpha, "Альфа EMA динамики", out double dynamicEmaAlpha))
+            return;
+
         _settings.Current.MaxCapacityTonnes = npv;
         _settings.Current.WeightDiscretizationTonnes = discretization;
         _settings.Current.OperatorZeroLimitPercent = zeroLimit;
+
+        _settings.Current.StaticClampEnabled = _chkStaticClamp.Checked;
+        _settings.Current.StaticClampMinCode = staticClampMin;
+        _settings.Current.StaticClampMaxCode = staticClampMax;
+        _settings.Current.StaticDeltaEnabled = _chkStaticDelta.Checked;
+        _settings.Current.StaticDeltaMaxCodes = staticDeltaMax;
+        _settings.Current.StaticEmaEnabled = _chkStaticEma.Checked;
+        _settings.Current.StaticEmaAlpha = staticEmaAlpha;
+
+        _settings.Current.DynamicClampEnabled = _chkDynamicClamp.Checked;
+        _settings.Current.DynamicClampMinCode = dynamicClampMin;
+        _settings.Current.DynamicClampMaxCode = dynamicClampMax;
+        _settings.Current.DynamicDeltaEnabled = _chkDynamicDelta.Checked;
+        _settings.Current.DynamicDeltaMaxCodes = dynamicDeltaMax;
+        _settings.Current.DynamicStuckEnabled = _chkDynamicStuck.Checked;
+        _settings.Current.DynamicStuckSamples = dynamicStuckSamples;
+        _settings.Current.DynamicEmaEnabled = _chkDynamicEma.Checked;
+        _settings.Current.DynamicEmaAlpha = dynamicEmaAlpha;
 
         string newPassword = _txtNewPassword.Text;
         if (!string.IsNullOrWhiteSpace(newPassword))
@@ -679,6 +809,29 @@ public partial class ServiceForm : Form
         int idx = combo.Items.IndexOf(value);
         if (idx >= 0)
             combo.SelectedIndex = idx;
+    }
+
+    private static bool TryReadCode(TextBox box, string caption, out int value)
+        => TryReadInt(box, caption, 0, 65535, out value);
+
+    private static bool TryReadInt(TextBox box, string caption, int min, int max, out int value)
+    {
+        if (int.TryParse(box.Text.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value) && value >= min && value <= max)
+            return true;
+
+        MessageBox.Show($"{caption}: введите целое число от {min} до {max}.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        box.Focus();
+        return false;
+    }
+
+    private static bool TryReadAlpha(TextBox box, string caption, out double value)
+    {
+        if (double.TryParse(box.Text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out value) && value is > 0 and <= 1)
+            return true;
+
+        MessageBox.Show($"{caption}: введите число больше 0 и не больше 1.", "Настройки", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        box.Focus();
+        return false;
     }
 
     private static string FormatDiscretization(double value) => value.ToString("0.##", CultureInfo.InvariantCulture) + " т";

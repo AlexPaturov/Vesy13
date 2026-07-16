@@ -2295,6 +2295,7 @@ partial class ServiceForm
         _txtStaticClampMin.Name = "_txtStaticClampMin";
         _txtStaticClampMin.Size = new Size(150, 34);
         _txtStaticClampMin.TabIndex = 14;
+        _txtStaticClampMin.Text = "0";
         //
         // _lblStaticClampMaxCap
         //
@@ -2314,6 +2315,7 @@ partial class ServiceForm
         _txtStaticClampMax.Name = "_txtStaticClampMax";
         _txtStaticClampMax.Size = new Size(150, 34);
         _txtStaticClampMax.TabIndex = 16;
+        _txtStaticClampMax.Text = "65535";
         //
         // _chkStaticDelta
         //
@@ -2344,6 +2346,7 @@ partial class ServiceForm
         _txtStaticDeltaMax.Name = "_txtStaticDeltaMax";
         _txtStaticDeltaMax.Size = new Size(150, 34);
         _txtStaticDeltaMax.TabIndex = 19;
+        _txtStaticDeltaMax.Text = "5000";
         //
         // _chkStaticEma
         //
@@ -2374,6 +2377,7 @@ partial class ServiceForm
         _txtStaticEmaAlpha.Name = "_txtStaticEmaAlpha";
         _txtStaticEmaAlpha.Size = new Size(150, 34);
         _txtStaticEmaAlpha.TabIndex = 22;
+        _txtStaticEmaAlpha.Text = "0.3";
         //
         // _lblFilterDynamicCap
         //
@@ -2414,6 +2418,7 @@ partial class ServiceForm
         _txtDynamicClampMin.Name = "_txtDynamicClampMin";
         _txtDynamicClampMin.Size = new Size(150, 34);
         _txtDynamicClampMin.TabIndex = 26;
+        _txtDynamicClampMin.Text = "0";
         //
         // _lblDynamicClampMaxCap
         //
@@ -2433,6 +2438,7 @@ partial class ServiceForm
         _txtDynamicClampMax.Name = "_txtDynamicClampMax";
         _txtDynamicClampMax.Size = new Size(150, 34);
         _txtDynamicClampMax.TabIndex = 28;
+        _txtDynamicClampMax.Text = "65535";
         //
         // _chkDynamicDelta
         //
@@ -2463,6 +2469,7 @@ partial class ServiceForm
         _txtDynamicDeltaMax.Name = "_txtDynamicDeltaMax";
         _txtDynamicDeltaMax.Size = new Size(150, 34);
         _txtDynamicDeltaMax.TabIndex = 31;
+        _txtDynamicDeltaMax.Text = "5000";
         //
         // _chkDynamicStuck
         //
@@ -2493,6 +2500,7 @@ partial class ServiceForm
         _txtDynamicStuckSamples.Name = "_txtDynamicStuckSamples";
         _txtDynamicStuckSamples.Size = new Size(150, 34);
         _txtDynamicStuckSamples.TabIndex = 34;
+        _txtDynamicStuckSamples.Text = "150";
         //
         // _chkDynamicEma
         //
@@ -2523,6 +2531,7 @@ partial class ServiceForm
         _txtDynamicEmaAlpha.Name = "_txtDynamicEmaAlpha";
         _txtDynamicEmaAlpha.Size = new Size(150, 34);
         _txtDynamicEmaAlpha.TabIndex = 37;
+        _txtDynamicEmaAlpha.Text = "0.2";
         //
         // _rateTimer
         // 
