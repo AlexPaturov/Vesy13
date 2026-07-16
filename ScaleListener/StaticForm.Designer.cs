@@ -20,7 +20,7 @@ partial class StaticForm
         _lblTolerance = new Label();
         _numTolerance = new NumericUpDown();
         _lblCode = new Label();
-        _log = new RichTextBox();
+        _log = new ListBox();
         _btnConnect = new Button();
         _btnFaults = new Button();
         _btnClear = new Button();
@@ -127,16 +127,16 @@ partial class StaticForm
         // _log
         //
         _log.BackColor = Color.LightGray;
-        _log.DetectUrls = false;
         _log.Dock = DockStyle.Fill;
+        _log.DrawMode = DrawMode.OwnerDrawFixed;
         _log.Font = new Font("Courier New", 12F);
+        _log.IntegralHeight = false;
+        _log.ItemHeight = 20;
         _log.Location = new Point(0, 50);
         _log.Name = "_log";
-        _log.ReadOnly = true;
-        _log.ScrollBars = RichTextBoxScrollBars.Vertical;
         _log.Size = new Size(730, 324);
         _log.TabIndex = 5;
-        _log.Text = "";
+        _log.DrawItem += Log_DrawItem;
         //
         // _btnConnect
         //
@@ -226,7 +226,7 @@ partial class StaticForm
     private Label _lblTolerance;
     private NumericUpDown _numTolerance;
     private Label _lblCode;
-    private RichTextBox _log;
+    private ListBox _log;
     private Button _btnConnect;
     private Button _btnFaults;
     private Button _btnClear;

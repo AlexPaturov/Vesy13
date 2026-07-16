@@ -28,7 +28,7 @@ partial class DynamicForm
         _cmbPacketLog = new ComboBox();
         _lblCode = new Label();
         _lblState = new Label();
-        _log = new RichTextBox();
+        _log = new ListBox();
         _btnConnect = new Button();
         _btnStopStream = new Button();
         _btnClear = new Button();
@@ -221,16 +221,16 @@ partial class DynamicForm
         // _log
         //
         _log.BackColor = Color.LightGray;
-        _log.DetectUrls = false;
         _log.Dock = DockStyle.Fill;
+        _log.DrawMode = DrawMode.OwnerDrawFixed;
         _log.Font = new Font("Courier New", 12F);
+        _log.IntegralHeight = false;
+        _log.ItemHeight = 20;
         _log.Location = new Point(0, 90);
         _log.Name = "_log";
-        _log.ReadOnly = true;
-        _log.ScrollBars = RichTextBoxScrollBars.Vertical;
         _log.Size = new Size(968, 374);
         _log.TabIndex = 11;
-        _log.Text = "";
+        _log.DrawItem += Log_DrawItem;
         //
         // _btnConnect
         //
@@ -357,7 +357,7 @@ partial class DynamicForm
     private ComboBox _cmbPacketLog;
     private Label _lblCode;
     private Label _lblState;
-    private RichTextBox _log;
+    private ListBox _log;
     private Button _btnConnect;
     private Button _btnStopStream;
     private Button _btnClear;

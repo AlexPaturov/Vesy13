@@ -22,7 +22,6 @@ public partial class DynamicForm : Form
     private volatile bool _isShuttingDown;
     private bool _streaming;
     private int _sampleIndex;
-    private int _logLineCount;
 
     public DynamicForm()
     {
@@ -329,38 +328,36 @@ public partial class DynamicForm : Form
         _lblCode.Text = $"ADC={code}  bytes={string.Join(" ", buf)}";
     }
 
+    private sealed class LogLine
+    {
+        public readonly string Text;
+        public readonly Color Color;
+        public LogLine(string text, Color color) { Text = text; Color = color; }
+        public override string ToString() => Text;
+    }
+
+    // Новая строка — сверху (index 0); лишние старые снимаются с конца.
     private void AppendMsg(string text, Color? color = null)
     {
-        if (_logLineCount >= MaxLogLines)
-        {
-            var endOfFirstLine = _log.Text.IndexOf('\n');
-            if (endOfFirstLine < 0)
-            {
-                ClearLog();
-            }
-            else
-            {
-                _log.Select(0, endOfFirstLine + 1);
-                _log.SelectedText = string.Empty;
-                _logLineCount--;
-            }
-        }
+        _log.Items.Insert(0, new LogLine(text, color ?? _log.ForeColor));
+        while (_log.Items.Count > MaxLogLines)
+            _log.Items.RemoveAt(_log.Items.Count - 1);
+        _log.TopIndex = 0;
+    }
 
-        var prev = _log.SelectionColor;
-        _log.SelectionColor = color ?? prev;
-        _log.AppendText(text + "\r\n");
-        _logLineCount++;
-        _log.SelectionColor = prev;
-        _log.ScrollToCaret();
+    // Рисуется только для видимых строк — ListBox виртуализирует отрисовку.
+    private void Log_DrawItem(object? sender, DrawItemEventArgs e)
+    {
+        if (e.Index < 0 || e.Index >= _log.Items.Count) return;
+        e.DrawBackground();
+        if (_log.Items[e.Index] is LogLine line)
+            TextRenderer.DrawText(e.Graphics, line.Text, _log.Font, e.Bounds, line.Color,
+                TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.NoPadding);
     }
 
     private int PacketLogStep => _cmbPacketLog.SelectedIndex == 0 ? 1 : 10;
 
-    private void ClearLog()
-    {
-        _log.Clear();
-        _logLineCount = 0;
-    }
+    private void ClearLog() => _log.Items.Clear();
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {

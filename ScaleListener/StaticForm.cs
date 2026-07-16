@@ -7,6 +7,7 @@ public partial class StaticForm : Form
 {
     private const decimal MaxWeightTonnes = 140m;
     private const int MaxAdcCode = 65535;
+    private const int MaxLogLines = 500;
 
     // ── Serial ────────────────────────────────────────────────────────────
     private readonly SerialPort _port;
@@ -35,7 +36,7 @@ public partial class StaticForm : Form
 
     private void NumWeight_ValueChanged(object? sender, EventArgs e) => UpdateCodePreview();
     private void NumTolerance_ValueChanged(object? sender, EventArgs e) => UpdateCodePreview();
-    private void BtnClear_Click(object? sender, EventArgs e) => _log.Clear();
+    private void BtnClear_Click(object? sender, EventArgs e) => _log.Items.Clear();
     private void BtnFaults_Click(object? sender, EventArgs e) => OpenFaultForm();
 
     private void OpenFaultForm()
@@ -229,13 +230,31 @@ public partial class StaticForm : Form
         _lblCode.Text = $"ADC={code}  bytes={string.Join(" ", buf)}";
     }
 
+    private sealed class LogLine
+    {
+        public readonly string Text;
+        public readonly Color Color;
+        public LogLine(string text, Color color) { Text = text; Color = color; }
+        public override string ToString() => Text;
+    }
+
+    // Новая строка — сверху (index 0); лишние старые снимаются с конца.
     private void AppendMsg(string text, Color? color = null)
     {
-        var prev = _log.SelectionColor;
-        _log.SelectionColor = color ?? prev;
-        _log.AppendText(text + "\r\n");
-        _log.SelectionColor = prev;
-        _log.ScrollToCaret();
+        _log.Items.Insert(0, new LogLine(text, color ?? _log.ForeColor));
+        while (_log.Items.Count > MaxLogLines)
+            _log.Items.RemoveAt(_log.Items.Count - 1);
+        _log.TopIndex = 0;
+    }
+
+    // Рисуется только для видимых строк — ListBox виртуализирует отрисовку.
+    private void Log_DrawItem(object? sender, DrawItemEventArgs e)
+    {
+        if (e.Index < 0 || e.Index >= _log.Items.Count) return;
+        e.DrawBackground();
+        if (_log.Items[e.Index] is LogLine line)
+            TextRenderer.DrawText(e.Graphics, line.Text, _log.Font, e.Bounds, line.Color,
+                TextFormatFlags.Left | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine | TextFormatFlags.NoPadding);
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
