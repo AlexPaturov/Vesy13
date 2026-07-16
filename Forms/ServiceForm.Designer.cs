@@ -171,6 +171,33 @@ partial class ServiceForm
         _lblPasswordCap = new Label();
         _txtNewPassword = new TextBox();
         _btnSaveSettings = new Button();
+        _lblFilterStaticCap = new Label();
+        _chkStaticClamp = new CheckBox();
+        _lblStaticClampMinCap = new Label();
+        _txtStaticClampMin = new TextBox();
+        _lblStaticClampMaxCap = new Label();
+        _txtStaticClampMax = new TextBox();
+        _chkStaticDelta = new CheckBox();
+        _lblStaticDeltaMaxCap = new Label();
+        _txtStaticDeltaMax = new TextBox();
+        _chkStaticEma = new CheckBox();
+        _lblStaticEmaAlphaCap = new Label();
+        _txtStaticEmaAlpha = new TextBox();
+        _lblFilterDynamicCap = new Label();
+        _chkDynamicClamp = new CheckBox();
+        _lblDynamicClampMinCap = new Label();
+        _txtDynamicClampMin = new TextBox();
+        _lblDynamicClampMaxCap = new Label();
+        _txtDynamicClampMax = new TextBox();
+        _chkDynamicDelta = new CheckBox();
+        _lblDynamicDeltaMaxCap = new Label();
+        _txtDynamicDeltaMax = new TextBox();
+        _chkDynamicStuck = new CheckBox();
+        _lblDynamicStuckSamplesCap = new Label();
+        _txtDynamicStuckSamples = new TextBox();
+        _chkDynamicEma = new CheckBox();
+        _lblDynamicEmaAlphaCap = new Label();
+        _txtDynamicEmaAlpha = new TextBox();
         _rateTimer = new System.Windows.Forms.Timer(components);
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
@@ -2081,6 +2108,33 @@ partial class ServiceForm
         _tabSett.Controls.Add(_lblPasswordCap);
         _tabSett.Controls.Add(_txtNewPassword);
         _tabSett.Controls.Add(_btnSaveSettings);
+        _tabSett.Controls.Add(_lblFilterStaticCap);
+        _tabSett.Controls.Add(_chkStaticClamp);
+        _tabSett.Controls.Add(_lblStaticClampMinCap);
+        _tabSett.Controls.Add(_txtStaticClampMin);
+        _tabSett.Controls.Add(_lblStaticClampMaxCap);
+        _tabSett.Controls.Add(_txtStaticClampMax);
+        _tabSett.Controls.Add(_chkStaticDelta);
+        _tabSett.Controls.Add(_lblStaticDeltaMaxCap);
+        _tabSett.Controls.Add(_txtStaticDeltaMax);
+        _tabSett.Controls.Add(_chkStaticEma);
+        _tabSett.Controls.Add(_lblStaticEmaAlphaCap);
+        _tabSett.Controls.Add(_txtStaticEmaAlpha);
+        _tabSett.Controls.Add(_lblFilterDynamicCap);
+        _tabSett.Controls.Add(_chkDynamicClamp);
+        _tabSett.Controls.Add(_lblDynamicClampMinCap);
+        _tabSett.Controls.Add(_txtDynamicClampMin);
+        _tabSett.Controls.Add(_lblDynamicClampMaxCap);
+        _tabSett.Controls.Add(_txtDynamicClampMax);
+        _tabSett.Controls.Add(_chkDynamicDelta);
+        _tabSett.Controls.Add(_lblDynamicDeltaMaxCap);
+        _tabSett.Controls.Add(_txtDynamicDeltaMax);
+        _tabSett.Controls.Add(_chkDynamicStuck);
+        _tabSett.Controls.Add(_lblDynamicStuckSamplesCap);
+        _tabSett.Controls.Add(_txtDynamicStuckSamples);
+        _tabSett.Controls.Add(_chkDynamicEma);
+        _tabSett.Controls.Add(_lblDynamicEmaAlphaCap);
+        _tabSett.Controls.Add(_txtDynamicEmaAlpha);
         _tabSett.Location = new Point(4, 32);
         _tabSett.Margin = new Padding(3, 4, 3, 4);
         _tabSett.Name = "_tabSett";
@@ -2201,7 +2255,275 @@ partial class ServiceForm
         _btnSaveSettings.Text = "Сохранить";
         _btnSaveSettings.UseVisualStyleBackColor = false;
         _btnSaveSettings.Click += BtnSaveSettings_Click;
-        // 
+        //
+        // _lblFilterStaticCap
+        //
+        _lblFilterStaticCap.AutoSize = true;
+        _lblFilterStaticCap.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _lblFilterStaticCap.Location = new Point(560, 27);
+        _lblFilterStaticCap.Name = "_lblFilterStaticCap";
+        _lblFilterStaticCap.Size = new Size(190, 23);
+        _lblFilterStaticCap.TabIndex = 11;
+        _lblFilterStaticCap.Text = "Фильтры потока — статика";
+        //
+        // _chkStaticClamp
+        //
+        _chkStaticClamp.AutoSize = true;
+        _chkStaticClamp.Font = new Font("Segoe UI", 10F);
+        _chkStaticClamp.Location = new Point(560, 75);
+        _chkStaticClamp.Name = "_chkStaticClamp";
+        _chkStaticClamp.Size = new Size(200, 27);
+        _chkStaticClamp.TabIndex = 12;
+        _chkStaticClamp.Text = "Клэмп кодов АЦП";
+        _chkStaticClamp.UseVisualStyleBackColor = true;
+        //
+        // _lblStaticClampMinCap
+        //
+        _lblStaticClampMinCap.AutoSize = true;
+        _lblStaticClampMinCap.Font = new Font("Segoe UI", 10F);
+        _lblStaticClampMinCap.Location = new Point(600, 123);
+        _lblStaticClampMinCap.Name = "_lblStaticClampMinCap";
+        _lblStaticClampMinCap.Size = new Size(90, 23);
+        _lblStaticClampMinCap.TabIndex = 13;
+        _lblStaticClampMinCap.Text = "Мин. код:";
+        //
+        // _txtStaticClampMin
+        //
+        _txtStaticClampMin.Font = new Font("Segoe UI", 12F);
+        _txtStaticClampMin.Location = new Point(800, 117);
+        _txtStaticClampMin.Margin = new Padding(3, 4, 3, 4);
+        _txtStaticClampMin.Name = "_txtStaticClampMin";
+        _txtStaticClampMin.Size = new Size(150, 34);
+        _txtStaticClampMin.TabIndex = 14;
+        //
+        // _lblStaticClampMaxCap
+        //
+        _lblStaticClampMaxCap.AutoSize = true;
+        _lblStaticClampMaxCap.Font = new Font("Segoe UI", 10F);
+        _lblStaticClampMaxCap.Location = new Point(600, 171);
+        _lblStaticClampMaxCap.Name = "_lblStaticClampMaxCap";
+        _lblStaticClampMaxCap.Size = new Size(100, 23);
+        _lblStaticClampMaxCap.TabIndex = 15;
+        _lblStaticClampMaxCap.Text = "Макс. код:";
+        //
+        // _txtStaticClampMax
+        //
+        _txtStaticClampMax.Font = new Font("Segoe UI", 12F);
+        _txtStaticClampMax.Location = new Point(800, 165);
+        _txtStaticClampMax.Margin = new Padding(3, 4, 3, 4);
+        _txtStaticClampMax.Name = "_txtStaticClampMax";
+        _txtStaticClampMax.Size = new Size(150, 34);
+        _txtStaticClampMax.TabIndex = 16;
+        //
+        // _chkStaticDelta
+        //
+        _chkStaticDelta.AutoSize = true;
+        _chkStaticDelta.Font = new Font("Segoe UI", 10F);
+        _chkStaticDelta.Location = new Point(560, 219);
+        _chkStaticDelta.Name = "_chkStaticDelta";
+        _chkStaticDelta.Size = new Size(200, 27);
+        _chkStaticDelta.TabIndex = 17;
+        _chkStaticDelta.Text = "Фильтр скачков";
+        _chkStaticDelta.UseVisualStyleBackColor = true;
+        //
+        // _lblStaticDeltaMaxCap
+        //
+        _lblStaticDeltaMaxCap.AutoSize = true;
+        _lblStaticDeltaMaxCap.Font = new Font("Segoe UI", 10F);
+        _lblStaticDeltaMaxCap.Location = new Point(600, 267);
+        _lblStaticDeltaMaxCap.Name = "_lblStaticDeltaMaxCap";
+        _lblStaticDeltaMaxCap.Size = new Size(180, 23);
+        _lblStaticDeltaMaxCap.TabIndex = 18;
+        _lblStaticDeltaMaxCap.Text = "Макс. скачок (коды):";
+        //
+        // _txtStaticDeltaMax
+        //
+        _txtStaticDeltaMax.Font = new Font("Segoe UI", 12F);
+        _txtStaticDeltaMax.Location = new Point(800, 261);
+        _txtStaticDeltaMax.Margin = new Padding(3, 4, 3, 4);
+        _txtStaticDeltaMax.Name = "_txtStaticDeltaMax";
+        _txtStaticDeltaMax.Size = new Size(150, 34);
+        _txtStaticDeltaMax.TabIndex = 19;
+        //
+        // _chkStaticEma
+        //
+        _chkStaticEma.AutoSize = true;
+        _chkStaticEma.Font = new Font("Segoe UI", 10F);
+        _chkStaticEma.Location = new Point(560, 315);
+        _chkStaticEma.Name = "_chkStaticEma";
+        _chkStaticEma.Size = new Size(200, 27);
+        _chkStaticEma.TabIndex = 20;
+        _chkStaticEma.Text = "Сглаживание EMA";
+        _chkStaticEma.UseVisualStyleBackColor = true;
+        //
+        // _lblStaticEmaAlphaCap
+        //
+        _lblStaticEmaAlphaCap.AutoSize = true;
+        _lblStaticEmaAlphaCap.Font = new Font("Segoe UI", 10F);
+        _lblStaticEmaAlphaCap.Location = new Point(600, 363);
+        _lblStaticEmaAlphaCap.Name = "_lblStaticEmaAlphaCap";
+        _lblStaticEmaAlphaCap.Size = new Size(140, 23);
+        _lblStaticEmaAlphaCap.TabIndex = 21;
+        _lblStaticEmaAlphaCap.Text = "Альфа (0..1):";
+        //
+        // _txtStaticEmaAlpha
+        //
+        _txtStaticEmaAlpha.Font = new Font("Segoe UI", 12F);
+        _txtStaticEmaAlpha.Location = new Point(800, 357);
+        _txtStaticEmaAlpha.Margin = new Padding(3, 4, 3, 4);
+        _txtStaticEmaAlpha.Name = "_txtStaticEmaAlpha";
+        _txtStaticEmaAlpha.Size = new Size(150, 34);
+        _txtStaticEmaAlpha.TabIndex = 22;
+        //
+        // _lblFilterDynamicCap
+        //
+        _lblFilterDynamicCap.AutoSize = true;
+        _lblFilterDynamicCap.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+        _lblFilterDynamicCap.Location = new Point(1000, 27);
+        _lblFilterDynamicCap.Name = "_lblFilterDynamicCap";
+        _lblFilterDynamicCap.Size = new Size(200, 23);
+        _lblFilterDynamicCap.TabIndex = 23;
+        _lblFilterDynamicCap.Text = "Фильтры потока — динамика";
+        //
+        // _chkDynamicClamp
+        //
+        _chkDynamicClamp.AutoSize = true;
+        _chkDynamicClamp.Font = new Font("Segoe UI", 10F);
+        _chkDynamicClamp.Location = new Point(1000, 75);
+        _chkDynamicClamp.Name = "_chkDynamicClamp";
+        _chkDynamicClamp.Size = new Size(200, 27);
+        _chkDynamicClamp.TabIndex = 24;
+        _chkDynamicClamp.Text = "Клэмп кодов АЦП";
+        _chkDynamicClamp.UseVisualStyleBackColor = true;
+        //
+        // _lblDynamicClampMinCap
+        //
+        _lblDynamicClampMinCap.AutoSize = true;
+        _lblDynamicClampMinCap.Font = new Font("Segoe UI", 10F);
+        _lblDynamicClampMinCap.Location = new Point(1040, 123);
+        _lblDynamicClampMinCap.Name = "_lblDynamicClampMinCap";
+        _lblDynamicClampMinCap.Size = new Size(90, 23);
+        _lblDynamicClampMinCap.TabIndex = 25;
+        _lblDynamicClampMinCap.Text = "Мин. код:";
+        //
+        // _txtDynamicClampMin
+        //
+        _txtDynamicClampMin.Font = new Font("Segoe UI", 12F);
+        _txtDynamicClampMin.Location = new Point(1240, 117);
+        _txtDynamicClampMin.Margin = new Padding(3, 4, 3, 4);
+        _txtDynamicClampMin.Name = "_txtDynamicClampMin";
+        _txtDynamicClampMin.Size = new Size(150, 34);
+        _txtDynamicClampMin.TabIndex = 26;
+        //
+        // _lblDynamicClampMaxCap
+        //
+        _lblDynamicClampMaxCap.AutoSize = true;
+        _lblDynamicClampMaxCap.Font = new Font("Segoe UI", 10F);
+        _lblDynamicClampMaxCap.Location = new Point(1040, 171);
+        _lblDynamicClampMaxCap.Name = "_lblDynamicClampMaxCap";
+        _lblDynamicClampMaxCap.Size = new Size(100, 23);
+        _lblDynamicClampMaxCap.TabIndex = 27;
+        _lblDynamicClampMaxCap.Text = "Макс. код:";
+        //
+        // _txtDynamicClampMax
+        //
+        _txtDynamicClampMax.Font = new Font("Segoe UI", 12F);
+        _txtDynamicClampMax.Location = new Point(1240, 165);
+        _txtDynamicClampMax.Margin = new Padding(3, 4, 3, 4);
+        _txtDynamicClampMax.Name = "_txtDynamicClampMax";
+        _txtDynamicClampMax.Size = new Size(150, 34);
+        _txtDynamicClampMax.TabIndex = 28;
+        //
+        // _chkDynamicDelta
+        //
+        _chkDynamicDelta.AutoSize = true;
+        _chkDynamicDelta.Font = new Font("Segoe UI", 10F);
+        _chkDynamicDelta.Location = new Point(1000, 219);
+        _chkDynamicDelta.Name = "_chkDynamicDelta";
+        _chkDynamicDelta.Size = new Size(200, 27);
+        _chkDynamicDelta.TabIndex = 29;
+        _chkDynamicDelta.Text = "Фильтр скачков";
+        _chkDynamicDelta.UseVisualStyleBackColor = true;
+        //
+        // _lblDynamicDeltaMaxCap
+        //
+        _lblDynamicDeltaMaxCap.AutoSize = true;
+        _lblDynamicDeltaMaxCap.Font = new Font("Segoe UI", 10F);
+        _lblDynamicDeltaMaxCap.Location = new Point(1040, 267);
+        _lblDynamicDeltaMaxCap.Name = "_lblDynamicDeltaMaxCap";
+        _lblDynamicDeltaMaxCap.Size = new Size(180, 23);
+        _lblDynamicDeltaMaxCap.TabIndex = 30;
+        _lblDynamicDeltaMaxCap.Text = "Макс. скачок (коды):";
+        //
+        // _txtDynamicDeltaMax
+        //
+        _txtDynamicDeltaMax.Font = new Font("Segoe UI", 12F);
+        _txtDynamicDeltaMax.Location = new Point(1240, 261);
+        _txtDynamicDeltaMax.Margin = new Padding(3, 4, 3, 4);
+        _txtDynamicDeltaMax.Name = "_txtDynamicDeltaMax";
+        _txtDynamicDeltaMax.Size = new Size(150, 34);
+        _txtDynamicDeltaMax.TabIndex = 31;
+        //
+        // _chkDynamicStuck
+        //
+        _chkDynamicStuck.AutoSize = true;
+        _chkDynamicStuck.Font = new Font("Segoe UI", 10F);
+        _chkDynamicStuck.Location = new Point(1000, 315);
+        _chkDynamicStuck.Name = "_chkDynamicStuck";
+        _chkDynamicStuck.Size = new Size(220, 27);
+        _chkDynamicStuck.TabIndex = 32;
+        _chkDynamicStuck.Text = "Застрявший датчик";
+        _chkDynamicStuck.UseVisualStyleBackColor = true;
+        //
+        // _lblDynamicStuckSamplesCap
+        //
+        _lblDynamicStuckSamplesCap.AutoSize = true;
+        _lblDynamicStuckSamplesCap.Font = new Font("Segoe UI", 10F);
+        _lblDynamicStuckSamplesCap.Location = new Point(1040, 363);
+        _lblDynamicStuckSamplesCap.Name = "_lblDynamicStuckSamplesCap";
+        _lblDynamicStuckSamplesCap.Size = new Size(180, 23);
+        _lblDynamicStuckSamplesCap.TabIndex = 33;
+        _lblDynamicStuckSamplesCap.Text = "Порог (сэмплов):";
+        //
+        // _txtDynamicStuckSamples
+        //
+        _txtDynamicStuckSamples.Font = new Font("Segoe UI", 12F);
+        _txtDynamicStuckSamples.Location = new Point(1240, 357);
+        _txtDynamicStuckSamples.Margin = new Padding(3, 4, 3, 4);
+        _txtDynamicStuckSamples.Name = "_txtDynamicStuckSamples";
+        _txtDynamicStuckSamples.Size = new Size(150, 34);
+        _txtDynamicStuckSamples.TabIndex = 34;
+        //
+        // _chkDynamicEma
+        //
+        _chkDynamicEma.AutoSize = true;
+        _chkDynamicEma.Font = new Font("Segoe UI", 10F);
+        _chkDynamicEma.Location = new Point(1000, 411);
+        _chkDynamicEma.Name = "_chkDynamicEma";
+        _chkDynamicEma.Size = new Size(200, 27);
+        _chkDynamicEma.TabIndex = 35;
+        _chkDynamicEma.Text = "Сглаживание EMA";
+        _chkDynamicEma.UseVisualStyleBackColor = true;
+        //
+        // _lblDynamicEmaAlphaCap
+        //
+        _lblDynamicEmaAlphaCap.AutoSize = true;
+        _lblDynamicEmaAlphaCap.Font = new Font("Segoe UI", 10F);
+        _lblDynamicEmaAlphaCap.Location = new Point(1040, 459);
+        _lblDynamicEmaAlphaCap.Name = "_lblDynamicEmaAlphaCap";
+        _lblDynamicEmaAlphaCap.Size = new Size(140, 23);
+        _lblDynamicEmaAlphaCap.TabIndex = 36;
+        _lblDynamicEmaAlphaCap.Text = "Альфа (0..1):";
+        //
+        // _txtDynamicEmaAlpha
+        //
+        _txtDynamicEmaAlpha.Font = new Font("Segoe UI", 12F);
+        _txtDynamicEmaAlpha.Location = new Point(1240, 453);
+        _txtDynamicEmaAlpha.Margin = new Padding(3, 4, 3, 4);
+        _txtDynamicEmaAlpha.Name = "_txtDynamicEmaAlpha";
+        _txtDynamicEmaAlpha.Size = new Size(150, 34);
+        _txtDynamicEmaAlpha.TabIndex = 37;
+        //
         // _rateTimer
         // 
         _rateTimer.Tick += RateTimer_Tick;
@@ -2402,6 +2724,33 @@ partial class ServiceForm
     private Label    _lblPasswordCap;
     private TextBox  _txtNewPassword;
     private Button   _btnSaveSettings;
+    private Label    _lblFilterStaticCap;
+    private CheckBox _chkStaticClamp;
+    private Label    _lblStaticClampMinCap;
+    private TextBox  _txtStaticClampMin;
+    private Label    _lblStaticClampMaxCap;
+    private TextBox  _txtStaticClampMax;
+    private CheckBox _chkStaticDelta;
+    private Label    _lblStaticDeltaMaxCap;
+    private TextBox  _txtStaticDeltaMax;
+    private CheckBox _chkStaticEma;
+    private Label    _lblStaticEmaAlphaCap;
+    private TextBox  _txtStaticEmaAlpha;
+    private Label    _lblFilterDynamicCap;
+    private CheckBox _chkDynamicClamp;
+    private Label    _lblDynamicClampMinCap;
+    private TextBox  _txtDynamicClampMin;
+    private Label    _lblDynamicClampMaxCap;
+    private TextBox  _txtDynamicClampMax;
+    private CheckBox _chkDynamicDelta;
+    private Label    _lblDynamicDeltaMaxCap;
+    private TextBox  _txtDynamicDeltaMax;
+    private CheckBox _chkDynamicStuck;
+    private Label    _lblDynamicStuckSamplesCap;
+    private TextBox  _txtDynamicStuckSamples;
+    private CheckBox _chkDynamicEma;
+    private Label    _lblDynamicEmaAlphaCap;
+    private TextBox  _txtDynamicEmaAlpha;
 
     private System.Windows.Forms.Timer _rateTimer;
     private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
