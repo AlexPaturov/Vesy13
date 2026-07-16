@@ -30,7 +30,6 @@ public static class AuditLogger
     public const int CalibrationFallback = 1008;
     public const int AdcConnected      = 2001;
     public const int AdcDisconnected   = 2002;
-    public const int AdcStaticRawFrame = 2010;
     public const int AdcStaticCalc     = 2011;
     public const int FilterClamp       = 2020;
     public const int FilterDelta       = 2021;

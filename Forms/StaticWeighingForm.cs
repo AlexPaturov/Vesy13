@@ -25,8 +25,6 @@ public partial class StaticWeighingForm : Form
     private int        _bogie1Code;
     private SimA04Frame   _lastFrame;
     private double     _zeroOffsetTonnes;
-    private DateTime   _lastRawDiagAt = DateTime.MinValue;
-    private DateTime   _lastCalcDiagAt = DateTime.MinValue;
     private string     _lastRawBytes = "";
     private bool       _weighingStorageAvailable = true;
 
@@ -271,20 +269,8 @@ public partial class StaticWeighingForm : Form
 
     // ── ADC events ─────────────────────────────────────────────────────────
 
-    private void OnRawFrame(object? sender, byte[] raw)
-    {
-        _lastRawBytes = string.Join(" ", raw);
-        var now = DateTime.Now;
-        if ((now - _lastRawDiagAt).TotalSeconds < 1) return;
-        _lastRawDiagAt = now;
-
-        var frame = SimA04Frame.Parse(raw);
-        AuditLogger.Action(AuditLogger.AdcStaticRawFrame,
-            "StaticRawFrame",
-            $"len={raw.Length} valid={frame.Valid} bytes=[{_lastRawBytes}] ch0={frame.Ch0} ch1={frame.Ch1}",
-            _sim.PortName,
-            _sim.Channel.ToString());
-    }
+    // Сырые байты запоминаются для записей аудита на нажатие «Взвесить»; сам поток в аудит не пишется.
+    private void OnRawFrame(object? sender, byte[] raw) => _lastRawBytes = string.Join(" ", raw);
 
     private void OnFrame(object? sender, SimA04Frame frame)
     {
@@ -313,8 +299,6 @@ public partial class StaticWeighingForm : Form
             if (_state == WeighState.Bogie1Captured)
                 SetBogieValue(_lblBogie2Value, tonnes);
         }
-
-        WriteCalcDiagnostic(frame, code, tonnes);
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
@@ -388,21 +372,6 @@ public partial class StaticWeighingForm : Form
     {
         int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
         return _ldb.CalibPoints.Count(p => p.Channel == channel && p.IsActive);
-    }
-
-    private void WriteCalcDiagnostic(SimA04Frame frame, int activeCode, double tonnes)
-    {
-        var now = DateTime.Now;
-        if ((now - _lastCalcDiagAt).TotalSeconds < 1) return;
-        _lastCalcDiagAt = now;
-
-        double rawTonnes = ReadRawTonnes(activeCode);
-        string calc = BuildStaticCalcDiagnostic(activeCode, rawTonnes, tonnes);
-        AuditLogger.Action(AuditLogger.AdcStaticCalc,
-            "StaticCalc",
-            $"channel={_sim.Channel} activeCode={activeCode} tonnes={tonnes:F2} ch0={frame.Ch0} ch1={frame.Ch1} {calc}",
-            _sim.PortName,
-            $"raw=[{_lastRawBytes}]");
     }
 
     // ── Weighing logic ─────────────────────────────────────────────────────
