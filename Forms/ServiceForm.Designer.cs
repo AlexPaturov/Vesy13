@@ -2180,7 +2180,7 @@ partial class ServiceForm
         _txtNpv.Name = "_txtNpv";
         _txtNpv.Size = new Size(228, 34);
         _txtNpv.TabIndex = 3;
-        _txtNpv.Text = "150";
+        _txtNpv.Text = "140";
         // 
         // _lblDiscCap
         // 
