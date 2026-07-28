@@ -52,6 +52,7 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 | Поле | Назначение | Значение по умолчанию |
 | --- | --- | --- |
 | `AdcPortName` | COM-порт АЦП | prod: `COM1`, dev: `COM3` |
+| `ActiveChannel` | активный канал АЦП, значение которого идёт в вес: `Main` (CH0) или `Backup` (CH1); переключается весовщиком на вкладке `Канал` и переживает перезапуск | `Main` |
 | `MaxCapacityTonnes` | НПВ, максимальная грузоподъемность в тоннах | `140.0` |
 | `WeightDiscretizationTonnes` | шаг округления веса | `0.05` |
 | `OperatorZeroLimitPercent` | предел установки нуля оператором, % от НПВ | `2.0` |

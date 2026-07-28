@@ -1,10 +1,8 @@
 # Текущие потоки данных: сервисная динамика и калибровка динамики
 
-Дата фиксации: 2026-07-01.
+Дата фиксации: 2026-07-01. Актуализировано 2026-07-28 (см. правки «Точки входа» и «Путь raw-log»).
 
 Документ описывает текущее фактическое устройство `ServiceForm` после выполнения групп 1, 2 и 3: обработчики данных, workflow подключения и диагностические счётчики разделены по вкладкам.
-
-> Обновление 2026-07-11: `_dynamicServiceSim` больше не приходит извне (было общим экземпляром с `MainForm._dynamicSim`) — после рефакторинга развязки reader-ов (`docs/status_2026-07-03.md`) он создаётся внутри `ServiceForm` точно так же, как `_dynamicCalibSim`. Раздел «Точки входа» ниже описывает состояние на 2026-07-01 и в этой части устарел.
 
 ## Точки входа
 
@@ -15,8 +13,7 @@ ServiceForm._dynamicServiceSim : SimA04ReaderDynamic
 ServiceForm._dynamicCalibSim   : SimA04ReaderDynamic
 ```
 
-`_dynamicServiceSim` приходит извне, как и раньше, и обслуживает вкладку `Сервисный режим Динамика`.
-`_dynamicCalibSim` создаётся внутри `ServiceForm` и обслуживает только вкладку `Калибровка Динамика`.
+Оба reader-а создаются внутри самой `ServiceForm` (`new SimA04ReaderDynamic`) — после рефакторинга развязки reader-ов (`docs/status_2026-07-03.md`) ни один не приходит извне; раньше `_dynamicServiceSim` был общим экземпляром с `MainForm._dynamicSim`. `_dynamicServiceSim` обслуживает вкладку `Сервисный режим Динамика`, `_dynamicCalibSim` — только вкладку `Калибровка Динамика`.
 
 Каждый `SimA04ReaderDynamic` читает свой открытый COM-порт, собирает 5-байтовый динамический сэмпл и публикует события:
 
@@ -83,17 +80,25 @@ _dynamicServiceSim.SampleReceived
 
 ```text
 _dynamicServiceSim.RawSampleReceived
-  -> OnDynamicServiceRawSample(raw)
-  -> BeginInvoke(...), если событие пришло не на UI-потоке
-  -> guard: активная вкладка должна быть _tabDynamicService
-  -> if (_chkDynamicLog.Checked)
+  -> OnDynamicServiceRawSample(raw)   // приходит на потоке reader-а, не на UI
+  -> if (!_chkDynamicLog.Checked) return
   -> SimA04DynamicSample.Parse(raw)
-  -> AppendDynamicLog(...)
-  -> _rtbDynamicLog.AppendText(...)
-  -> _rtbDynamicLog.ScrollToCaret()
+  -> FormatDynamicServiceLogLine(raw, sample)
+  -> Enqueue в _dynamicServiceLogQueue (лимит 500, лишнее вытесняется)
 ```
 
-`_rtbDynamicLog` физически находится на вкладке `_tabDynamicService`.
+Очередь дренируется на UI-потоке по таймеру:
+
+```text
+таймер -> FlushDynamicServiceLogQueue()
+  -> перелить очередь в _dynamicServiceLogBatch под локом
+  -> _lstDynamicLog.BeginUpdate()
+  -> AddDynamicLogLine(...) для каждой строки  // Insert(0), лимит DynamicServiceLogLineLimit = 300
+  -> _lstDynamicLog.TopIndex = 0
+  -> _lstDynamicLog.EndUpdate()
+```
+
+Лог сервисной динамики — owner-drawn `ListBox` `_lstDynamicLog` (элементы `DynamicServiceLogLine`), физически на вкладке `_tabDynamicService`. Цвет хранится на самом элементе, `RichTextBox` (`_rtbDynamicLog`) больше не используется. Гейтинг по активной вкладке выполняется на уровне подписки (`SetDynamicServiceDataSubscription`), а не внутри обработчика.
 
 ## Вкладка "Калибровка Динамика"
 
@@ -166,7 +171,7 @@ Tabs_SelectedIndexChanged
   OnDynamicServiceSample                             latest sample buffer
           |                                                     |
           v                                                     v
-  _rtbDynamicLog                                     RefreshDynamicSampleDisplay
+  _lstDynamicLog (через очередь + таймер)            RefreshDynamicSampleDisplay
   _lblDynamicCh0/Ch1                                 timer 100 ms
                                                                 |
                                                                 v
