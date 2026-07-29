@@ -123,7 +123,6 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 2. Выполнить миграции из `migrations/` по порядку:
    - `migration_v2.sql`
    - `002_calibration_points.sql`
-   - `003_calibration_points_deleted_at.sql`
    - `004_calibration_dynamic_history.sql`
    - `005_calibration_points_created_at.sql`
 3. Запустить приложение.

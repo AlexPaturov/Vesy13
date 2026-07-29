@@ -41,7 +41,10 @@ docs/
 
 1. `migration_v2.sql`
 2. `002_calibration_points.sql`
-3. `003_calibration_points_deleted_at.sql`
+3. `004_calibration_dynamic_history.sql`
+4. `005_calibration_points_created_at.sql`
+
+Нумерация файлов не сплошная: номер `003` не занят.
 
 ## Ошибки и аудит
 
