@@ -11,7 +11,7 @@ namespace Vesy13.Services.Repositories;
 public class LocalRepository
 {
     private const string ConnStr =
-        "Host=localhost;Port=5432;Database=scale_db;Username=scale_user;Password=fluffyBunny";
+        "Host=localhost;Port=5432;Database=scale_db;Username=scale_user";
 
     /// <summary>Кэш всех калибровочных точек. Обновляется после каждого сохранения и при восстановлении последнего известного состояния.</summary>
     public IReadOnlyList<CalibPoint> CalibPoints { get; private set; } = [];

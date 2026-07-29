@@ -47,7 +47,7 @@ public static class AuditLogger
     public const int ErrorGeneral      = 9099;
 
     private const string ConnStr =
-        "Host=localhost;Port=5432;Database=scale_db;Username=scale_user;Password=fluffyBunny";
+        "Host=localhost;Port=5432;Database=scale_db;Username=scale_user";
 
     private const string AppInsightsConnStr =
         "InstrumentationKey=0dfea935-2abc-4952-b8c8-24d409bae62d;" +
