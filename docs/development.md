@@ -14,7 +14,7 @@ Services/
   Configuration/
   Hardware/
   Repositories/
-migrations/
+install/
 ScaleListener/
 docs/
 ```
@@ -31,20 +31,22 @@ docs/
 - `Serilog` и `Serilog.Sinks.ApplicationInsights` - телеметрия и аудит.
 - `System.IO.Ports` - COM-порт.
 
-## Работа с миграциями
+## Установка базы
 
-Миграции лежат в `migrations/` и применяются вручную. В проекте нет
-автоматического мигратора, поэтому при развертывании нужно явно выполнять SQL в
-правильном порядке.
+Схема локальной базы задана одним файлом `install/scale_db.sql`. Он создаёт роль
+`scale_user`, базу `scale_db` и четыре таблицы в готовом виде, выполняется
+суперпользователем и один раз при развёртывании станции:
 
-Текущий порядок:
+```bash
+psql -U postgres -f install/scale_db.sql
+```
 
-1. `migration_v2.sql`
-2. `002_calibration_points.sql`
-3. `004_calibration_dynamic_history.sql`
-4. `005_calibration_points_created_at.sql`
+Таблицы создаются пустыми. Признаком заданной динамической калибровки служит наличие
+активной строки в `calibration_dynamic`, поэтому на новой станции таблица остаётся
+пустой до первой калибровки на эталонных грузах.
 
-Нумерация файлов не сплошная: номер `003` не занят.
+История изменений схемы живёт в git (`git log -- migrations/` до коммита, удалившего
+каталог).
 
 ## Ошибки и аудит
 
@@ -94,7 +96,7 @@ docs/
 | Статическое взвешивание | `Forms/StaticWeighingForm.cs` |
 | Динамическое взвешивание | `Forms/DynamicWeighingForm.cs` |
 | Калибровка и сервис | `Forms/ServiceForm.cs`, `Application/CalibrationCalculator.cs` |
-| Локальная БД | `Services/Repositories/LocalRepository.cs`, `migrations/` |
+| Локальная БД | `Services/Repositories/LocalRepository.cs`, `install/scale_db.sql` |
 | Firebird | `Services/Repositories/FactoryRepository.cs` |
 | Перенос и корректировка | `Forms/CorrectionsForm.cs` |
 | Печать PDF | `Forms/PrintForm.cs`, `Application/WeighingSlipDocument.cs` |

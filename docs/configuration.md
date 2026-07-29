@@ -138,13 +138,9 @@ host  scale_db  scale_user  ::1/128       trust
 
 ## Первый запуск
 
-1. Создать PostgreSQL-базу и пользователя согласно фактической строке
-   подключения.
-2. Выполнить миграции из `migrations/` по порядку:
-   - `migration_v2.sql`
-   - `002_calibration_points.sql`
-   - `004_calibration_dynamic_history.sql`
-   - `005_calibration_points_created_at.sql`
+1. Создать роль, базу и схему: `psql -U postgres -f install/scale_db.sql`.
+2. Добавить в `pg_hba.conf` правила `trust` (см. раздел выше) и выполнить
+   `SELECT pg_reload_conf();`.
 3. Запустить приложение.
 4. Открыть сервисную форму.
 5. Проверить COM-порт и сохранить настройки.
