@@ -1,14 +1,15 @@
--- Vesy13 — установка локальной базы scale_db.
+-- Vesy13 - local database installation.
 --
--- Выполняется один раз при развёртывании станции, суперпользователем:
+-- Runs once when a station is deployed, as a superuser:
 --     psql -U postgres -f install/scale_db.sql
 --
--- Роль создаётся без пароля: петлевые подключения аутентифицируются методом
--- trust, правила pg_hba.conf описаны в docs/configuration.md.
+-- The role is created without a password: loopback connections authenticate
+-- with the trust method, the pg_hba.conf rules are described in
+-- docs/configuration.md.
 --
--- Таблицы создаются пустыми. Признаком заданной динамической калибровки служит
--- наличие активной строки в calibration_dynamic, поэтому на новой станции
--- таблица остаётся пустой до первой калибровки на эталонных грузах.
+-- Tables are created empty. An active row in calibration_dynamic is what marks
+-- the dynamic calibration as set, so on a new station the table stays empty
+-- until the first calibration with reference loads.
 
 CREATE ROLE scale_user LOGIN;
 
@@ -16,12 +17,12 @@ CREATE DATABASE scale_db OWNER scale_user;
 
 \connect scale_db
 
--- Владельцем таблиц становится scale_user: приложение работает под этой ролью
--- и создаёт audit_log самостоятельно, если её нет (AuditLogger.EnsureTableAsync).
+-- scale_user owns the tables: the application works under this role and creates
+-- audit_log on its own when it is absent (AuditLogger.EnsureTableAsync).
 SET ROLE scale_user;
 
--- Потележечные взвешивания вагонов, в тоннах.
--- transferred = false — запись ещё не перенесена в систему учёта предприятия.
+-- Bogie-by-bogie wagon weighings, in tonnes.
+-- transferred = false marks a record still to be moved into the plant system.
 CREATE TABLE wagon_weighing (
     id          SERIAL       PRIMARY KEY,
     train_time  TIMESTAMP    NOT NULL,
@@ -36,9 +37,9 @@ CREATE TABLE wagon_weighing (
     when_insert TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
--- Точки статической калибровки по каналам.
--- Несколько активных точек на канал — штатная ситуация, снятые точки
--- не удаляются физически, им проставляется deleted_at.
+-- Static calibration points per channel.
+-- Several active points on a channel are normal; retired points keep their row
+-- and carry deleted_at.
 CREATE TABLE calibration_points (
     id         SERIAL PRIMARY KEY,
     channel    SMALLINT     NOT NULL CHECK (channel IN (0, 1)),
@@ -51,9 +52,9 @@ CREATE TABLE calibration_points (
 
 COMMENT ON COLUMN calibration_points.created_at IS 'Time when the calibration point was added.';
 
--- История коэффициентов динамической калибровки.
--- Рабочая строка выбирается условием is_active = TRUE AND deleted_at IS NULL;
--- created_at проставляет приложение (LocalRepository.SaveDynamicCalibAsync).
+-- History of the dynamic calibration coefficients.
+-- The working row is selected by is_active = TRUE AND deleted_at IS NULL;
+-- created_at is supplied by the application (LocalRepository.SaveDynamicCalibAsync).
 CREATE TABLE calibration_dynamic (
     id         SERIAL PRIMARY KEY,
     k_plus     DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -71,7 +72,7 @@ CREATE UNIQUE INDEX ux_calibration_dynamic_active
     ON calibration_dynamic (is_active)
     WHERE is_active = TRUE AND deleted_at IS NULL;
 
--- Журнал аудита: события форм, сервисов и ошибки.
+-- Audit trail: form and service events, and errors.
 CREATE TABLE audit_log (
     id                  BIGSERIAL    PRIMARY KEY,
     time_created        TIMESTAMPTZ,

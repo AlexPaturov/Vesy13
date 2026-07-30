@@ -1,20 +1,25 @@
 <#
 .SYNOPSIS
-    Установка локальной базы Vesy13 на весовую станцию.
+    Installs the Vesy13 local database on a weighing station.
 
 .DESCRIPTION
-    Разворачивает PostgreSQL, схему scale_db, правила trust и задание очистки
-    в планировщике Windows. Рассчитан на запуск агентом SCCM от имени SYSTEM,
-    без интерактива.
+    Deploys PostgreSQL, the scale_db schema, the trust rules and the purge task
+    in the Windows scheduler. Runs unattended, so the SCCM agent can execute it
+    as SYSTEM.
 
-    Каждый шаг проверяет своё состояние перед выполнением, поэтому повторный
-    запуск на уже настроенной машине проходит вхолостую и завершается успехом.
+    Every step checks its own state first, so a repeated run on an already
+    configured machine passes through and reports success.
 
-    Код возврата 0 — установка завершена, отличный от нуля — SCCM показывает
-    сбой. Ход работы пишется в C:\ProgramData\Vesy13\install-db.log.
+    Exit code 0 means the installation is complete, anything else makes SCCM
+    report a failure. Progress goes to C:\ProgramData\Vesy13\install-db.log.
+
+    Text in this file stays ASCII: Windows PowerShell 5.1 reads a script without
+    a byte order mark in the system ANSI codepage, which corrupts multibyte
+    characters and can break parsing.
 
 .PARAMETER PostgresInstaller
-    Инсталлятор PostgreSQL от EDB, лежит рядом со скриптом в составе пакета.
+    EDB PostgreSQL installer. Defaults to postgresql-*windows-x64.exe found next
+    to this script inside the package.
 
 .EXAMPLE
     powershell.exe -ExecutionPolicy Bypass -NoProfile -File install.ps1
@@ -22,7 +27,7 @@
 
 [CmdletBinding()]
 param(
-    [string] $PostgresInstaller = (Join-Path $PSScriptRoot 'postgresql-17.10-1-windows-x64.exe'),
+    [string] $PostgresInstaller,
     [string] $PgRoot            = 'C:\Program Files\PostgreSQL\17',
     [string] $DataDir           = 'C:\Program Files\PostgreSQL\17\data',
     [int]    $Port              = 5432,
@@ -33,6 +38,16 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+# Windows PowerShell 5.1 fills $PSScriptRoot after the param block is parsed,
+# so the script directory is resolved here and defaults are applied below.
+$ScriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Definition }
+
+if (-not $PostgresInstaller) {
+    $found = Get-ChildItem -LiteralPath $ScriptDir -Filter 'postgresql-*windows-x64.exe' -File -ErrorAction SilentlyContinue |
+             Sort-Object Name | Select-Object -First 1
+    if ($found) { $PostgresInstaller = $found.FullName }
+}
+
 $MarkerKey     = 'HKLM:\SOFTWARE\Vesy13\Database'
 $SchemaVersion = '1'
 $PasswordFile  = Join-Path $StateDir 'postgres_password.txt'
@@ -42,7 +57,10 @@ $PurgeCmd      = Join-Path $StateDir 'purge.cmd'
 $PurgeLog      = Join-Path $StateDir 'purge.log'
 $Psql          = Join-Path $PgRoot 'bin\psql.exe'
 
-# ── Вспомогательное ───────────────────────────────────────────────────────────
+$TempTrustTag  = '# Vesy13 temporary superuser trust'
+$ScaleTrustTag = '# Vesy13 application access'
+
+# -- Helpers ------------------------------------------------------------------
 
 function Write-Log {
     param([string] $Message)
@@ -52,16 +70,21 @@ function Write-Log {
 }
 
 function New-Password {
-    # 32 символа из алфавита, безопасного для командной строки и файлов конфигурации.
+    # 32 characters from an alphabet that is safe on a command line, in files and
+    # inside a single-quoted SQL literal.
+    # Create()/GetBytes() exists on .NET Framework, which Windows PowerShell 5.1
+    # runs on; the static Fill() helper arrived only with .NET Core.
     $alphabet = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'
-    $bytes    = [byte[]]::new(32)
-    [System.Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+    $bytes    = New-Object byte[] 32
+    $rng      = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+    try     { $rng.GetBytes($bytes) }
+    finally { $rng.Dispose() }
     -join ($bytes | ForEach-Object { $alphabet[$_ % $alphabet.Length] })
 }
 
 function Protect-File {
     param([string] $Path)
-    # Доступ остаётся у SYSTEM и администраторов, наследование отключается.
+    # Access is kept for SYSTEM and administrators, inheritance is turned off.
     $acl = New-Object System.Security.AccessControl.FileSecurity
     $acl.SetAccessRuleProtection($true, $false)
     foreach ($account in 'NT AUTHORITY\SYSTEM', 'BUILTIN\Administrators') {
@@ -69,6 +92,95 @@ function Protect-File {
             $account, 'FullControl', 'Allow')))
     }
     Set-Acl -LiteralPath $Path -AclObject $acl
+}
+
+function Get-PgDataDir {
+    # The service command line carries the real data directory, which survives an
+    # install that used different paths than this script's defaults.
+    $svc = Get-CimInstance -ClassName Win32_Service -Filter "Name='$ServiceName'" -ErrorAction SilentlyContinue
+    if ($svc -and $svc.PathName -match '-D\s+"([^"]+)"') { return $Matches[1] }
+    return $DataDir
+}
+
+function Get-PgHbaPath { Join-Path (Get-PgDataDir) 'pg_hba.conf' }
+
+function Add-PgHbaRules {
+    # Rules go above the general ones: pg_hba.conf applies the first match.
+    # The block is fenced by BEGIN/END comments so removal takes exactly the
+    # lines it added and leaves neighbouring records alone.
+    param([string] $Tag, [string[]] $Rules)
+
+    $path = Get-PgHbaPath
+    $hba  = Get-Content -LiteralPath $path
+    if ($hba -match [regex]::Escape("$Tag BEGIN")) { return $false }
+
+    $block  = @("$Tag BEGIN") + $Rules + @("$Tag END")
+    $anchor = ($hba | Select-String -Pattern '^\s*host\s+all\s+all' | Select-Object -First 1)
+    if ($anchor) {
+        $index  = $anchor.LineNumber - 1
+        $result = @($hba[0..($index - 1)]) + $block + @($hba[$index..($hba.Count - 1)])
+    }
+    else {
+        $result = $block + $hba
+    }
+
+    if (-not (Test-Path "$path.vesy13.bak")) { Copy-Item -LiteralPath $path -Destination "$path.vesy13.bak" -Force }
+    Set-Content -LiteralPath $path -Value $result -Encoding ASCII
+    return $true
+}
+
+function Remove-PgHbaRules {
+    param([string] $Tag)
+
+    $path  = Get-PgHbaPath
+    $hba   = Get-Content -LiteralPath $path
+    $start = ($hba | Select-String -Pattern ([regex]::Escape("$Tag BEGIN")) | Select-Object -First 1)
+    $stop  = ($hba | Select-String -Pattern ([regex]::Escape("$Tag END"))   | Select-Object -First 1)
+    if (-not $start -or -not $stop) { return $false }
+
+    $first = $start.LineNumber - 1
+    $last  = $stop.LineNumber - 1
+    if ($last -lt $first) { throw "Malformed block '$Tag' in $path." }
+
+    $result = @()
+    if ($first -gt 0)           { $result += $hba[0..($first - 1)] }
+    if ($last + 1 -lt $hba.Count) { $result += $hba[($last + 1)..($hba.Count - 1)] }
+    Set-Content -LiteralPath $path -Value $result -Encoding ASCII
+    return $true
+}
+
+function Test-PgConnection {
+    # Probes the server and reports success as a value. With
+    # $ErrorActionPreference = 'Stop' PowerShell turns anything a native command
+    # writes to stderr into a terminating error before the exit code can be
+    # read, so the preference is relaxed for the duration of the call.
+    param([string] $Password)
+
+    $prevPreference        = $ErrorActionPreference
+    $prevPassword          = $env:PGPASSWORD
+    $ErrorActionPreference = 'Continue'
+    if ($Password) { $env:PGPASSWORD = $Password }
+    else           { Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue }
+    try {
+        & $Psql -X -q -h 127.0.0.1 -p $Port -U postgres -d postgres -c 'SELECT 1' 2>&1 | Out-Null
+        return ($LASTEXITCODE -eq 0)
+    }
+    finally {
+        $ErrorActionPreference = $prevPreference
+        if ($prevPassword) { $env:PGPASSWORD = $prevPassword }
+        else               { Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue }
+    }
+}
+
+function Restart-PgService {
+    param([string] $Password)
+    Restart-Service -Name $ServiceName -Force
+    # The service reports running before the postmaster accepts connections.
+    for ($i = 0; $i -lt 30; $i++) {
+        Start-Sleep -Seconds 1
+        if (Test-PgConnection -Password $Password) { return $true }
+    }
+    return $false
 }
 
 function Invoke-Psql {
@@ -79,138 +191,167 @@ function Invoke-Psql {
         [string] $Command,
         [string] $Password
     )
-    $args = @('-v', 'ON_ERROR_STOP=1', '-X', '-q', '-h', '127.0.0.1', '-p', $Port, '-U', $User, '-d', $Database)
-    if ($File)    { $args += @('-f', $File) }
-    if ($Command) { $args += @('-t', '-A', '-c', $Command) }
+    # $args is an automatic PowerShell variable, hence the explicit name.
+    $psqlArgs = @('-v', 'ON_ERROR_STOP=1', '-X', '-q', '-h', '127.0.0.1', '-p', $Port, '-U', $User, '-d', $Database)
+    if ($File)    { $psqlArgs += @('-f', $File) }
+    if ($Command) { $psqlArgs += @('-t', '-A', '-c', $Command) }
 
-    # Пароль передаётся окружением процесса: в командной строке он был бы виден
-    # в списке процессов и в логах SCCM.
-    $previous = $env:PGPASSWORD
+    # The password travels in the process environment: on a command line it
+    # would show up in the process list and in SCCM logs.
+    $previous             = $env:PGPASSWORD
+    $prevPreference       = $ErrorActionPreference
     $env:PGPASSWORD       = $Password
     $env:PGCLIENTENCODING = 'UTF8'
+    # Relaxed for the same reason as in Test-PgConnection: psql writing to stderr
+    # would otherwise abort the script before its exit code is examined.
+    $ErrorActionPreference = 'Continue'
     try {
-        $output = & $Psql @args 2>&1
+        $output = & $Psql @psqlArgs 2>&1
         if ($LASTEXITCODE -ne 0) {
-            throw "psql завершился с кодом ${LASTEXITCODE}: $output"
+            throw "psql exited with code ${LASTEXITCODE}: $output"
         }
         return ($output | Out-String).Trim()
     }
     finally {
-        $env:PGPASSWORD = $previous
+        $ErrorActionPreference = $prevPreference
+        $env:PGPASSWORD        = $previous
     }
 }
 
-# ── Подготовка ────────────────────────────────────────────────────────────────
+# -- Preparation --------------------------------------------------------------
 
 New-Item -ItemType Directory -Path $StateDir -Force | Out-Null
-Write-Log '=== Установка базы Vesy13 ==='
+Write-Log '=== Vesy13 database installation ==='
 
 if (Test-Path $MarkerKey) {
     $installed = (Get-ItemProperty -Path $MarkerKey).SchemaVersion
     if ($installed -eq $SchemaVersion) {
-        Write-Log "База уже установлена, версия схемы $installed. Установка завершена."
+        Write-Log "Database already installed, schema version $installed. Nothing to do."
         exit 0
     }
-    Write-Log "Найдена версия схемы $installed, ожидается $SchemaVersion. Продолжаю."
+    Write-Log "Found schema version $installed, expected $SchemaVersion. Continuing."
 }
 
-# ── 1. PostgreSQL ─────────────────────────────────────────────────────────────
+# -- 1. PostgreSQL ------------------------------------------------------------
 
 if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) {
-    Write-Log "Служба $ServiceName найдена, установка PostgreSQL пропущена."
-    if (-not (Test-Path $PasswordFile)) {
-        throw "Служба $ServiceName есть, а $PasswordFile отсутствует — пароль суперпользователя неизвестен. Задайте его вручную и повторите."
-    }
-    $superPassword = Get-Content -LiteralPath $PasswordFile -Raw
+    Write-Log "Service $ServiceName found, skipping the PostgreSQL installer."
 }
 else {
-    Write-Log 'Устанавливаю PostgreSQL.'
-    if (-not (Test-Path $PostgresInstaller)) { throw "Инсталлятор PostgreSQL отсутствует: $PostgresInstaller" }
+    Write-Log 'Installing PostgreSQL.'
+    if (-not $PostgresInstaller) {
+        throw "PostgreSQL installer not found in $ScriptDir. Put postgresql-*windows-x64.exe next to this script or pass -PostgresInstaller."
+    }
+    if (-not (Test-Path $PostgresInstaller)) { throw "PostgreSQL installer is missing: $PostgresInstaller" }
 
-    $superPassword = New-Password
-    Set-Content -LiteralPath $PasswordFile -Value $superPassword -NoNewline -Encoding ASCII
-    Protect-File -Path $PasswordFile
-    Write-Log "Пароль суперпользователя сохранён в $PasswordFile, доступ у SYSTEM и администраторов."
-
+    # Paths holding a space carry their own quotes: Start-Process joins the
+    # array with spaces and quotes nothing.
     $installArgs = @(
         '--mode', 'unattended',
         '--unattendedmodeui', 'none',
-        '--superpassword', $superPassword,
-        '--prefix', $PgRoot,
-        '--datadir', $DataDir,
+        '--prefix', "`"$PgRoot`"",
+        '--datadir', "`"$DataDir`"",
         '--serverport', $Port,
         '--disable-components', 'stackbuilder'
     )
     $proc = Start-Process -FilePath $PostgresInstaller -ArgumentList $installArgs -Wait -PassThru
-    if ($proc.ExitCode -ne 0) { throw "Инсталлятор PostgreSQL завершился с кодом $($proc.ExitCode)." }
-    Write-Log 'PostgreSQL установлен.'
+    if ($proc.ExitCode -ne 0) {
+        $installerLogs = Get-ChildItem -Path $env:TEMP -Filter '*install*.log' -File -ErrorAction SilentlyContinue |
+                         Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-30) }
+        foreach ($log in $installerLogs) {
+            $copy = Join-Path $StateDir "postgres-$($log.Name)"
+            Copy-Item -LiteralPath $log.FullName -Destination $copy -Force -ErrorAction SilentlyContinue
+            Write-Log "Installer log copied to $copy"
+        }
+        throw "PostgreSQL installer exited with code $($proc.ExitCode)."
+    }
+    Write-Log 'PostgreSQL installed.'
 }
 
-if (-not (Test-Path $Psql)) { throw "psql отсутствует: $Psql" }
+if (-not (Test-Path $Psql)) { throw "psql is missing: $Psql" }
 
-# ── 2. Схема scale_db ─────────────────────────────────────────────────────────
+# -- 2. Superuser password ----------------------------------------------------
+
+# The password is set from here rather than taken from the installer, so the
+# stored value and the server always agree.
+
+$superPassword = $null
+if (Test-Path $PasswordFile) {
+    $stored = (Get-Content -LiteralPath $PasswordFile -Raw).Trim()
+    if (Test-PgConnection -Password $stored) {
+        $superPassword = $stored
+        Write-Log 'Stored superuser password accepted.'
+    }
+}
+
+if (-not $superPassword) {
+    Write-Log 'Setting the superuser password through a temporary trust rule.'
+    $superPassword = New-Password
+
+    Add-PgHbaRules -Tag $TempTrustTag -Rules @(
+        "host    all    postgres    127.0.0.1/32    trust",
+        "host    all    postgres    ::1/128         trust"
+    ) | Out-Null
+    if (-not (Restart-PgService)) {
+        throw "The temporary trust rule did not take effect: connecting as postgres still fails. Check $(Get-PgHbaPath)."
+    }
+
+    try {
+        Invoke-Psql -Database 'postgres' -User 'postgres' `
+            -Command "ALTER ROLE postgres PASSWORD '$superPassword'" | Out-Null
+    }
+    finally {
+        Remove-PgHbaRules -Tag $TempTrustTag | Out-Null
+        Restart-PgService -Password $superPassword | Out-Null
+    }
+
+    Set-Content -LiteralPath $PasswordFile -Value $superPassword -NoNewline -Encoding ASCII
+    Protect-File -Path $PasswordFile
+    Write-Log "Superuser password stored in $PasswordFile, readable by SYSTEM and administrators."
+}
+
+# -- 3. The scale_db schema ---------------------------------------------------
 
 $dbExists = Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword `
     -Command "SELECT 1 FROM pg_database WHERE datname = 'scale_db'"
 
 if ($dbExists -eq '1') {
-    Write-Log 'База scale_db существует, скрипт схемы пропущен.'
+    Write-Log 'Database scale_db exists, skipping the schema script.'
 }
 else {
-    Write-Log 'Создаю базу scale_db.'
+    Write-Log 'Creating database scale_db.'
     Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword `
-        -File (Join-Path $PSScriptRoot 'scale_db.sql') | Out-Null
-    Write-Log 'База scale_db создана.'
+        -File (Join-Path $ScriptDir 'scale_db.sql') | Out-Null
+    Write-Log 'Database scale_db created.'
 }
 
-# ── 3. Правила trust ──────────────────────────────────────────────────────────
+# -- 4. Trust rules for the application ---------------------------------------
 
-$hbaPath = Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword -Command 'SHOW hba_file'
-$hba     = Get-Content -LiteralPath $hbaPath
-
-if ($hba -match 'scale_db\s+scale_user') {
-    Write-Log 'Правила trust уже в pg_hba.conf.'
+$added = Add-PgHbaRules -Tag $ScaleTrustTag -Rules @(
+    'host    scale_db    scale_user    127.0.0.1/32    trust',
+    'host    scale_db    scale_user    ::1/128         trust'
+)
+if ($added) {
+    Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword -Command 'SELECT pg_reload_conf()' | Out-Null
+    Write-Log 'Trust rules added, configuration reloaded.'
 }
 else {
-    Write-Log "Дописываю правила trust в $hbaPath."
-    $rules = @(
-        '# Vesy13: приложение подключается к локальной базе под ролью без пароля.',
-        'host    scale_db    scale_user    127.0.0.1/32    trust',
-        'host    scale_db    scale_user    ::1/128         trust'
-    )
-
-    # Правила ставятся выше общих: pg_hba.conf применяет первое совпавшее.
-    $anchor = ($hba | Select-String -Pattern '^\s*host\s+all\s+all' | Select-Object -First 1).LineNumber
-    if ($anchor) {
-        $index  = $anchor - 1
-        $result = @($hba[0..($index - 1)]) + $rules + @($hba[$index..($hba.Count - 1)])
-    }
-    else {
-        $result = $rules + $hba
-    }
-
-    Copy-Item -LiteralPath $hbaPath -Destination "$hbaPath.vesy13.bak" -Force
-    Set-Content -LiteralPath $hbaPath -Value $result -Encoding ASCII
-    Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword -Command 'SELECT pg_reload_conf()' | Out-Null
-    Write-Log 'Правила добавлены, конфигурация перечитана.'
+    Write-Log 'Trust rules already present in pg_hba.conf.'
 }
 
-# Подключение под scale_user без пароля подтверждает, что правило действует.
+# Connecting as scale_user without a password confirms the rule is in effect.
 $who = Invoke-Psql -Database 'scale_db' -User 'scale_user' -Command 'SELECT current_user'
-if ($who -ne 'scale_user') { throw "Подключение под scale_user вернуло '$who'." }
-Write-Log 'Подключение под scale_user без пароля работает.'
+if ($who -ne 'scale_user') { throw "Connecting as scale_user returned '$who'." }
+Write-Log 'Passwordless connection as scale_user works.'
 
-# ── 4. Задание очистки ────────────────────────────────────────────────────────
+# -- 5. Purge task ------------------------------------------------------------
 
-# Скрипт очистки и обёртка к нему живут в ProgramData: папка пакета SCCM
-# существует только на время установки.
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'purge.sql') -Destination $PurgeSql -Force
+# The purge script and its wrapper live in ProgramData: the SCCM package folder
+# exists only while the installation runs.
+Copy-Item -LiteralPath (Join-Path $ScriptDir 'purge.sql') -Destination $PurgeSql -Force
 
-# Обёртка задаёт кодировку клиента: консоль Windows работает не в UTF-8,
-# а в purge.sql есть кириллица.
 $wrapper = @"
 @echo off
-set PGCLIENTENCODING=UTF8
 "$Psql" -X -q -v ON_ERROR_STOP=1 -h 127.0.0.1 -p $Port -U scale_user -d scale_db -f "$PurgeSql" >> "$PurgeLog" 2>&1
 "@
 Set-Content -LiteralPath $PurgeCmd -Value $wrapper -Encoding ASCII
@@ -218,10 +359,10 @@ Set-Content -LiteralPath $PurgeCmd -Value $wrapper -Encoding ASCII
 $taskName = 'Vesy13 purge'
 if (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue) {
     Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
-    Write-Log 'Прежнее задание очистки снято с регистрации.'
+    Write-Log 'Previous purge task unregistered.'
 }
 
-Write-Log 'Регистрирую задание очистки.'
+Write-Log 'Registering the purge task.'
 $schtasks = @(
     '/Create',
     '/TN', $taskName,
@@ -234,17 +375,17 @@ $schtasks = @(
     '/F'
 )
 & schtasks.exe @schtasks
-if ($LASTEXITCODE -ne 0) { throw "Регистрация задания завершилась с кодом $LASTEXITCODE." }
+if ($LASTEXITCODE -ne 0) { throw "Registering the task exited with code $LASTEXITCODE." }
 
 $nextRun = (Get-ScheduledTaskInfo -TaskName $taskName).NextRunTime
-Write-Log "Задание «$taskName» зарегистрировано, следующий запуск — $nextRun."
+Write-Log "Task '$taskName' registered, next run $nextRun."
 
-# ── 6. Метка установки ────────────────────────────────────────────────────────
+# -- 6. Installation marker ---------------------------------------------------
 
 New-Item -Path $MarkerKey -Force | Out-Null
 Set-ItemProperty -Path $MarkerKey -Name 'SchemaVersion' -Value $SchemaVersion
 Set-ItemProperty -Path $MarkerKey -Name 'InstalledOn'   -Value (Get-Date -Format 's')
-Set-ItemProperty -Path $MarkerKey -Name 'DataDir'       -Value $DataDir
+Set-ItemProperty -Path $MarkerKey -Name 'DataDir'       -Value (Get-PgDataDir)
 
-Write-Log '=== Установка завершена ==='
+Write-Log '=== Installation complete ==='
 exit 0

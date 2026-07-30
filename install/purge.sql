@@ -1,13 +1,12 @@
--- Vesy13 — очистка локальной базы, глубина хранения 30 дней.
+-- Vesy13 - local database purge, retention 30 days.
 --
--- Выполняется заданием планировщика Windows «Vesy13 purge», которое создаёт
--- install.ps1. Ручной запуск:
+-- Executed by the Windows scheduled task "Vesy13 purge" that install.ps1
+-- creates. Manual run:
 --     psql -h 127.0.0.1 -U scale_user -d scale_db -f purge.sql
 --
--- Взвешивания отбираются по when_insert, события журнала — по time_created.
--- Калибровочные таблицы calibration_points и calibration_dynamic хранят
--- настройку весов: активные точки живут годами, поэтому очистка работает
--- с двумя таблицами данных.
+-- Weighings are selected by when_insert, audit events by time_created.
+-- calibration_points and calibration_dynamic hold the scale configuration:
+-- active points live for years, so the purge works on the two data tables.
 
 DELETE FROM wagon_weighing WHERE when_insert  < LOCALTIMESTAMP - INTERVAL '30 days';
 
