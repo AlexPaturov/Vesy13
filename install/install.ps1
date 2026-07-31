@@ -85,11 +85,20 @@ function New-Password {
 function Protect-File {
     param([string] $Path)
     # Access is kept for SYSTEM and administrators, inheritance is turned off.
-    $acl = New-Object System.Security.AccessControl.FileSecurity
+    # Well-known SIDs are used because account names are localized: on a Russian
+    # Windows "NT AUTHORITY\SYSTEM" and "BUILTIN\Administrators" carry different
+    # names and fail to translate.
+    $system = New-Object System.Security.Principal.SecurityIdentifier(
+        [System.Security.Principal.WellKnownSidType]::LocalSystemSid, $null)
+    $admins = New-Object System.Security.Principal.SecurityIdentifier(
+        [System.Security.Principal.WellKnownSidType]::BuiltinAdministratorsSid, $null)
+
+    $acl = Get-Acl -LiteralPath $Path
     $acl.SetAccessRuleProtection($true, $false)
-    foreach ($account in 'NT AUTHORITY\SYSTEM', 'BUILTIN\Administrators') {
+    foreach ($rule in @($acl.Access)) { $acl.RemoveAccessRule($rule) | Out-Null }
+    foreach ($sid in @($system, $admins)) {
         $acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
-            $account, 'FullControl', 'Allow')))
+            $sid, 'FullControl', 'Allow')))
     }
     Set-Acl -LiteralPath $Path -AclObject $acl
 }
@@ -363,6 +372,10 @@ if (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue) {
 }
 
 Write-Log 'Registering the purge task.'
+
+# schtasks.exe creates the trigger: New-ScheduledTaskTrigger covers once, daily
+# and weekly only, and a monthly schedule expressed as "every four weeks" would
+# drift away from the first day of the month.
 $schtasks = @(
     '/Create',
     '/TN', $taskName,
@@ -376,6 +389,14 @@ $schtasks = @(
 )
 & schtasks.exe @schtasks
 if ($LASTEXITCODE -ne 0) { throw "Registering the task exited with code $LASTEXITCODE." }
+
+# The defaults schtasks applies skip a run on battery power and drop a run that
+# was missed while the station was off, which on a monthly schedule means
+# waiting another month.
+$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries `
+                                         -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Hours 1)
+Set-ScheduledTask -TaskName $taskName -Settings $settings | Out-Null
+Write-Log 'Task settings adjusted: runs when available, battery state ignored.'
 
 $nextRun = (Get-ScheduledTaskInfo -TaskName $taskName).NextRunTime
 Write-Log "Task '$taskName' registered, next run $nextRun."
