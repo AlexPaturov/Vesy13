@@ -85,21 +85,16 @@ function New-Password {
 function Protect-File {
     param([string] $Path)
     # Access is kept for SYSTEM and administrators, inheritance is turned off.
-    # Well-known SIDs are used because account names are localized: on a Russian
-    # Windows "NT AUTHORITY\SYSTEM" and "BUILTIN\Administrators" carry different
-    # names and fail to translate.
-    $system = New-Object System.Security.Principal.SecurityIdentifier(
-        [System.Security.Principal.WellKnownSidType]::LocalSystemSid, $null)
-    $admins = New-Object System.Security.Principal.SecurityIdentifier(
-        [System.Security.Principal.WellKnownSidType]::BuiltinAdministratorsSid, $null)
-
+    #
+    # The rights are written as SDDL so no account name is ever translated:
+    # account names are localized, and reading or building rules through
+    # FileSystemAccessRule raises IdentityNotMappedException when a name cannot
+    # be resolved. In SDDL, SY is the local system and BA the builtin
+    # administrators, and both are locale independent.
+    #   D:P        - the list is protected, inherited entries are dropped
+    #   (A;;FA;;;) - allow full access
     $acl = Get-Acl -LiteralPath $Path
-    $acl.SetAccessRuleProtection($true, $false)
-    foreach ($rule in @($acl.Access)) { $acl.RemoveAccessRule($rule) | Out-Null }
-    foreach ($sid in @($system, $admins)) {
-        $acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
-            $sid, 'FullControl', 'Allow')))
-    }
+    $acl.SetSecurityDescriptorSddlForm('D:P(A;;FA;;;SY)(A;;FA;;;BA)')
     Set-Acl -LiteralPath $Path -AclObject $acl
 }
 
