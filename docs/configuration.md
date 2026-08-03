@@ -44,8 +44,12 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 
 ## `settings.json`
 
-`SettingsService` ищет файл `settings.json` рядом с исполняемым файлом. Если
-файла нет или он поврежден, создается новый с настройками по умолчанию.
+`SettingsService` хранит файл в `%ProgramData%\Vesy13\settings.json` (обычно
+`C:\ProgramData\Vesy13\settings.json`). Если при первом запуске версии с этим
+расположением рядом с исполняемым файлом найден прежний `settings.json`, он
+копируется в `%ProgramData%` до загрузки. Поэтому сохраняются пароль администратора
+и локальный кэш калибровки. Если файла нет или он поврежден, создается новый с
+настройками по умолчанию.
 
 Поля:
 

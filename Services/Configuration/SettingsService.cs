@@ -6,6 +6,8 @@ namespace Vesy13.Services.Configuration;
 public sealed class SettingsService
 {
     private const string DefaultAdminPassword = "vesy13fuck";
+    private const string SettingsFileName = "settings.json";
+    private const string SettingsDirectoryName = "Vesy13";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     private readonly string _path;
@@ -13,7 +15,7 @@ public sealed class SettingsService
 
     public SettingsService(string? path = null)
     {
-        _path = path ?? System.IO.Path.Combine(AppContext.BaseDirectory, "settings.json");
+        _path = path ?? GetDefaultPath();
     }
 
     public AppSettings Current => _settings;
@@ -21,6 +23,9 @@ public sealed class SettingsService
 
     public void LoadOrCreate()
     {
+        EnsureSettingsDirectoryExists();
+        MigrateLegacySettingsFile();
+
         if (!File.Exists(_path))
         {
             _settings = CreateDefault();
@@ -71,6 +76,44 @@ public sealed class SettingsService
         settings.AdminPasswordHash = hash;
         settings.AdminPasswordSalt = salt;
         return settings;
+    }
+
+    private static string GetDefaultPath()
+    {
+        string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+        return System.IO.Path.Combine(programData, SettingsDirectoryName, SettingsFileName);
+    }
+
+    /// <summary>
+    /// Создаёт каталог для файла настроек, если путь содержит каталог.
+    /// </summary>
+    private void EnsureSettingsDirectoryExists()
+    {
+        string? directory = System.IO.Path.GetDirectoryName(_path);
+        if (!string.IsNullOrWhiteSpace(directory))
+            Directory.CreateDirectory(directory);
+    }
+
+    private void MigrateLegacySettingsFile()
+    {
+        if (!string.Equals(_path, GetDefaultPath(), StringComparison.OrdinalIgnoreCase) || File.Exists(_path))
+            return;
+
+        string legacyPath = System.IO.Path.Combine(AppContext.BaseDirectory, SettingsFileName);
+        if (string.Equals(legacyPath, _path, StringComparison.OrdinalIgnoreCase) || !File.Exists(legacyPath))
+            return;
+
+        EnsureSettingsDirectoryExists();
+
+        try
+        {
+            File.Copy(legacyPath, _path, overwrite: false);
+        }
+        catch (IOException) when (File.Exists(_path))
+        {
+            // Два экземпляра могли одновременно выполнить первичный перенос.
+            // Файл, созданный первым экземпляром, уже является источником истины.
+        }
     }
 
     private static bool EnsureDefaults(AppSettings settings)

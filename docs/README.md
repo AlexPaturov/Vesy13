@@ -35,6 +35,7 @@ dotnet build Vesy13.sln
 ## Важные замечания
 
 - Строки подключения к PostgreSQL, Firebird и Application Insights сейчас находятся в коде.
-- `settings.json` создается рядом с исполняемым файлом при первом запуске.
+- `settings.json` создается в `%ProgramData%\Vesy13` при первом запуске. При
+  обновлении прежний файл рядом с `.exe` переносится туда автоматически.
 - Настройки администратора хранятся в `settings.json` как PBKDF2-хеш и соль.
 - Приложение рассчитано на Windows: WinForms, COM-порт, Firebird-путь Windows и P/Invoke для аудита пользователя.
