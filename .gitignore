@@ -3,6 +3,7 @@ obj/
 *.user
 .vs/
 .idea/
+/Properties/PublishProfiles/
 *.suo
 /settings.json
 # Empty WinForms designer resources generated without actual resources
