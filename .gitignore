@@ -14,4 +14,5 @@ obj/
 /ScaleListener/StaticForm.resx
 
 # Installer payload: kept next to install.ps1 on the build machine, never committed
-install/*.exe
+install/database/*.exe
+install/application/publish/
