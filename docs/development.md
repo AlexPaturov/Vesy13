@@ -33,12 +33,12 @@ docs/
 
 ## Установка базы
 
-Схема локальной базы задана одним файлом `install/scale_db.sql`. Он создаёт роль
+Схема локальной базы задана одним файлом `install/database/scale_db.sql`. Он создаёт роль
 `scale_user`, базу `scale_db` и четыре таблицы в готовом виде, выполняется
 суперпользователем и один раз при развёртывании станции:
 
 ```bash
-psql -U postgres -f install/scale_db.sql
+psql -U postgres -f install/database/scale_db.sql
 ```
 
 Таблицы создаются пустыми. Признаком заданной динамической калибровки служит наличие
@@ -96,7 +96,7 @@ psql -U postgres -f install/scale_db.sql
 | Статическое взвешивание | `Forms/StaticWeighingForm.cs` |
 | Динамическое взвешивание | `Forms/DynamicWeighingForm.cs` |
 | Калибровка и сервис | `Forms/ServiceForm.cs`, `Application/CalibrationCalculator.cs` |
-| Локальная БД | `Services/Repositories/LocalRepository.cs`, `install/scale_db.sql` |
+| Локальная БД | `Services/Repositories/LocalRepository.cs`, `install/database/scale_db.sql` |
 | Firebird | `Services/Repositories/FactoryRepository.cs` |
 | Перенос и корректировка | `Forms/CorrectionsForm.cs` |
 | Печать PDF | `Forms/PrintForm.cs`, `Application/WeighingSlipDocument.cs` |

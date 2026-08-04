@@ -19,7 +19,7 @@ Vesy13 - WinForms-приложение для вагонных весов N13. �
 ## Быстрый старт для разработчика
 
 1. Установить .NET SDK 8 с поддержкой Windows Desktop.
-2. Создать локальную PostgreSQL-базу `scale_db`: `psql -U postgres -f install/scale_db.sql`.
+2. Создать локальную PostgreSQL-базу `scale_db`: `psql -U postgres -f install/database/scale_db.sql`.
 3. Проверить доступность Firebird-базы `DC_OPER.FDB`, если нужны перенос, корректировки и печать.
 4. Проверить имя COM-порта АЦП в `settings.json` или через сервисную форму.
 5. Собрать решение:
@@ -39,3 +39,14 @@ dotnet build Vesy13.sln
   обновлении прежний файл рядом с `.exe` переносится туда автоматически.
 - Настройки администратора хранятся в `settings.json` как PBKDF2-хеш и соль.
 - Приложение рассчитано на Windows: WinForms, COM-порт, Firebird-путь Windows и P/Invoke для аудита пользователя.
+
+## Развёртывание приложения через SCCM
+
+1. На Windows-машине сборки выполнить `powershell -ExecutionPolicy Bypass -File install\application\Publish-Vesy13App.ps1`. Скрипт создаёт self-contained публикацию `win-x64` в `install\application\publish`.
+2. В SCCM для приложения «Vesy13» указать source path на готовый каталог `install\application`. Команда установки: `powershell.exe -ExecutionPolicy Bypass -NoProfile -File Install-Vesy13App.ps1`.
+3. Правило detection: ключ `HKLM\SOFTWARE\Vesy13\Application`, строковое значение `Version` существует. Для контроля конкретного релиза можно указать его фактическое значение.
+4. Команда удаления: `powershell.exe -ExecutionPolicy Bypass -NoProfile -File Uninstall-Vesy13App.ps1`. Она сохраняет `%ProgramData%\Vesy13`; для полного удаления состояния добавить `-RemoveState`.
+
+Установщик кладёт приложение в `C:\Program Files\Vesy13`, создаёт общий ярлык меню «Пуск» и выдаёт встроенной группе `Users` право `Modify` только на `%ProgramData%\Vesy13`. Поэтому оператор может перезаписывать `settings.json`, созданный при установке от SYSTEM.
+
+Проверка каждого независимого пакета на чистой ВМ: установить его через SCCM, затем войти под учётной записью оператора, изменить и сохранить настройки, перезапустить приложение и выполнить контрольное взвешивание.
