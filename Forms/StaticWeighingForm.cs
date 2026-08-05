@@ -27,6 +27,7 @@ public partial class StaticWeighingForm : Form
     private double     _zeroOffsetTonnes;
     private string     _lastRawBytes = "";
     private bool       _weighingStorageAvailable = true;
+    private bool       _adcConnectionEstablished;
 
     public StaticWeighingForm()
     {
@@ -311,6 +312,20 @@ public partial class StaticWeighingForm : Form
             BeginInvoke(() => OnConnectionChanged(sender, connected)); 
             return; 
         }
+
+        if (connected)
+        {
+            string state = _adcConnectionEstablished ? "connection restored" : "connection established";
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", state,
+                "SimA04Static", _sim.PortName);
+            _adcConnectionEstablished = true;
+        }
+        else if (_adcConnectionEstablished)
+        {
+            AuditLogger.Error(AuditLogger.AdcDisconnected, "AdcConnection", "connection lost",
+                "SimA04Static", _sim.PortName);
+        }
+
         UpdateConn(connected);
     }
 

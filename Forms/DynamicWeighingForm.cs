@@ -30,6 +30,7 @@ public partial class DynamicWeighingForm : Form
     private long _latestSampleVersion;
     private long _displayedSampleVersion;
     private bool _weighingStorageAvailable = true;
+    private bool _adcConnectionEstablished;
 
     public DynamicWeighingForm()
     {
@@ -313,6 +314,19 @@ public partial class DynamicWeighingForm : Form
         { 
             BeginInvoke(() => OnConnectionChanged(sender, connected)); 
             return; 
+        }
+
+        if (connected)
+        {
+            string state = _adcConnectionEstablished ? "connection restored" : "connection established";
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", state,
+                "SimA04Dynamic", _sim.PortName);
+            _adcConnectionEstablished = true;
+        }
+        else if (_adcConnectionEstablished)
+        {
+            AuditLogger.Error(AuditLogger.AdcDisconnected, "AdcConnection", "connection lost",
+                "SimA04Dynamic", _sim.PortName);
         }
 
         UpdateConn(connected);

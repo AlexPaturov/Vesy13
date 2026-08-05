@@ -49,6 +49,10 @@ public partial class ServiceForm : Form
     private bool _dynamicServiceDataSubscribed;
     private bool _dynamicCalibDataSubscribed;
     private bool _dynamicCalibTabActive;
+    private bool _staticServiceConnectionEstablished;
+    private bool _staticCalibConnectionEstablished;
+    private bool _dynamicServiceConnectionEstablished;
+    private bool _dynamicCalibConnectionEstablished;
     private int _lastCh0;
     private int _lastCh1;
     private int _lastStaticCalibCh0;
@@ -910,7 +914,6 @@ public partial class ServiceForm : Form
             if (_staticServiceSim.IsPoisoned)
                 ReplaceStaticServiceSim();
             _staticServiceSim.Open(selectedPort);
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
             UpdateStaticServiceMonitorConn(_staticServiceSim.IsConnected);
         }
         catch (Exception ex)
@@ -937,7 +940,6 @@ public partial class ServiceForm : Form
             if (_staticCalibSim.IsPoisoned)
                 ReplaceStaticCalibSim();
             _staticCalibSim.Open(selectedPort);
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04StaticCalib", selectedPort);
             UpdateStaticCalibMonitorConn(_staticCalibSim.IsConnected);
         }
         catch (Exception ex)
@@ -1051,7 +1053,6 @@ public partial class ServiceForm : Form
             if (_dynamicServiceSim.IsPoisoned)
                 ReplaceDynamicServiceSim();
             _dynamicServiceSim.Open(selectedPort);
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort);
             UpdateDynamicServiceMonitorConn(_dynamicServiceSim.IsConnected);
         }
         catch (Exception ex)
@@ -1077,7 +1078,6 @@ public partial class ServiceForm : Form
             if (_dynamicCalibSim.IsPoisoned)
                 ReplaceDynamicCalibSim();
             _dynamicCalibSim.Open(selectedPort);
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort);
             UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);
         }
         catch (Exception ex)
@@ -1098,8 +1098,9 @@ public partial class ServiceForm : Form
         if (!_staticServiceSim.IsPortOpen) return;
 
         var port = _staticServiceSim.PortName;
+        _staticServiceConnectionEstablished = false;
         _staticServiceSim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04StaticService", port);
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcPort", "port closed", "SimA04StaticService", port);
         UpdateStaticServiceMonitorConn(false);
     }
 
@@ -1108,8 +1109,9 @@ public partial class ServiceForm : Form
         if (!_staticCalibSim.IsPortOpen) return;
 
         var port = _staticCalibSim.PortName;
+        _staticCalibConnectionEstablished = false;
         _staticCalibSim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04StaticCalib", port);
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcPort", "port closed", "SimA04StaticCalib", port);
         UpdateStaticCalibMonitorConn(false);
     }
 
@@ -1124,8 +1126,9 @@ public partial class ServiceForm : Form
         if (!_dynamicServiceSim.IsPortOpen) return;
 
         var port = _dynamicServiceSim.PortName;
+        _dynamicServiceConnectionEstablished = false;
         _dynamicServiceSim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04DynamicService", port);
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcPort", "port closed", "SimA04DynamicService", port);
         UpdateDynamicServiceMonitorConn(false);
     }
 
@@ -1134,8 +1137,9 @@ public partial class ServiceForm : Form
         if (!_dynamicCalibSim.IsPortOpen) return;
 
         var port = _dynamicCalibSim.PortName;
+        _dynamicCalibConnectionEstablished = false;
         _dynamicCalibSim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcConnection", port, "SimA04DynamicCalib", port);
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcPort", "port closed", "SimA04DynamicCalib", port);
         UpdateDynamicCalibMonitorConn(false);
     }
 
@@ -1254,13 +1258,32 @@ public partial class ServiceForm : Form
     private void OnDynamicServiceConnectionChanged(object? sender, bool connected)
     {
         if (InvokeRequired) { BeginInvoke(() => OnDynamicServiceConnectionChanged(sender, connected)); return; }
+        AuditAdcConnectionTransition(connected, ref _dynamicServiceConnectionEstablished,
+            "SimA04DynamicService", _dynamicServiceSim.PortName);
         UpdateDynamicServiceMonitorConn(connected);
     }
 
     private void OnDynamicCalibConnectionChanged(object? sender, bool connected)
     {
         if (InvokeRequired) { BeginInvoke(() => OnDynamicCalibConnectionChanged(sender, connected)); return; }
+        AuditAdcConnectionTransition(connected, ref _dynamicCalibConnectionEstablished,
+            "SimA04DynamicCalib", _dynamicCalibSim.PortName);
         UpdateDynamicCalibMonitorConn(connected);
+    }
+
+    private static void AuditAdcConnectionTransition(bool connected, ref bool connectionEstablished,
+        string objectServer, string portName)
+    {
+        if (connected)
+        {
+            string state = connectionEstablished ? "connection restored" : "connection established";
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", state, objectServer, portName);
+            connectionEstablished = true;
+        }
+        else if (connectionEstablished)
+        {
+            AuditLogger.Error(AuditLogger.AdcDisconnected, "AdcConnection", "connection lost", objectServer, portName);
+        }
     }
 
     private void OnDynamicServiceSample(object? sender, SimA04DynamicSample sample)
@@ -1485,12 +1508,16 @@ public partial class ServiceForm : Form
     private void OnStaticServiceConnectionChanged(object? sender, bool connected)
     {
         if (InvokeRequired) { BeginInvoke(() => OnStaticServiceConnectionChanged(sender, connected)); return; }
+        AuditAdcConnectionTransition(connected, ref _staticServiceConnectionEstablished,
+            "SimA04StaticService", _staticServiceSim.PortName);
         UpdateStaticServiceMonitorConn(connected);
     }
 
     private void OnStaticCalibConnectionChanged(object? sender, bool connected)
     {
         if (InvokeRequired) { BeginInvoke(() => OnStaticCalibConnectionChanged(sender, connected)); return; }
+        AuditAdcConnectionTransition(connected, ref _staticCalibConnectionEstablished,
+            "SimA04StaticCalib", _staticCalibSim.PortName);
         UpdateStaticCalibMonitorConn(connected);
     }
 
