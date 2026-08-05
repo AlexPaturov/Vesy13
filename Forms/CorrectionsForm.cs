@@ -317,7 +317,14 @@ public partial class CorrectionsForm : Form
         }
         if (DesignMode) return;
         UpdateContextUi();
-        AuditLogger.Action(AuditLogger.FormOpened, "Form", "CorrectionsForm");
+        AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "CorrectionsForm");
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "CorrectionsForm");
+        base.OnFormClosed(e);
     }
 
     private void ApplyGridDpiSizing()

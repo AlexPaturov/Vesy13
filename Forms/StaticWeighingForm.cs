@@ -180,7 +180,7 @@ public partial class StaticWeighingForm : Form
         base.OnLoad(e);
         ApplyTheme();
         if (DesignMode || _sim is null) return;
-        AuditLogger.Action(AuditLogger.FormOpened, "Form", "StaticWeighingForm");
+        AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "StaticWeighingForm");
         _sim.ConnectionTimeoutMs = 2000;
         SetupGridColumns();
         _filter.FilteredFrameReceived += OnFrame;
@@ -227,6 +227,8 @@ public partial class StaticWeighingForm : Form
             AuditLogger.QueueStatusChanged -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "StaticWeighingForm");
         base.OnFormClosed(e);
     }
 

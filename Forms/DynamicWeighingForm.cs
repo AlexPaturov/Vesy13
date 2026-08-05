@@ -164,7 +164,7 @@ public partial class DynamicWeighingForm : Form
         base.OnLoad(e);
         ApplyTheme();
         if (DesignMode || _sim is null) return;
-        AuditLogger.Action(AuditLogger.FormOpened, "Form", "DynamicWeighingForm");
+        AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "DynamicWeighingForm");
         _sim.ConnectionTimeoutMs = 5000;
         SetupGridColumns();
         _filter.FilteredSampleReceived += OnSample;
@@ -216,6 +216,8 @@ public partial class DynamicWeighingForm : Form
             AuditLogger.QueueStatusChanged  -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "DynamicWeighingForm");
 
         base.OnFormClosed(e);
     }

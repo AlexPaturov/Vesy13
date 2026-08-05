@@ -59,6 +59,14 @@ public partial class MainForm : Form
         base.OnLoad(e);
         ApplyTheme();
         if (DesignMode || _ldb is null) return;
+        AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "MainForm");
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "MainForm");
+        base.OnFormClosed(e);
     }
     // ── Navigation ──────────────────────────────────────────────────────────
 

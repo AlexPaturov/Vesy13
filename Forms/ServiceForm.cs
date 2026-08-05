@@ -420,7 +420,7 @@ public partial class ServiceForm : Form
         base.OnLoad(e);
         ApplyTheme();
         if (DesignMode || _staticServiceSim is null) return;
-        AuditLogger.Action(AuditLogger.FormOpened, "Form", "ServiceForm");
+        AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "ServiceForm");
         _staticServiceSim.ConnectionTimeoutMs = 1000;
         _staticCalibSim.ConnectionTimeoutMs = 1000;
         _dynamicServiceSim.ConnectionTimeoutMs = 5000;
@@ -484,6 +484,8 @@ public partial class ServiceForm : Form
             _dynamicServiceDisplayTimer.Stop();
             _dynamicServiceDisplayTimer.Dispose();
         }
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "ServiceForm");
         base.OnFormClosed(e);
     }
 

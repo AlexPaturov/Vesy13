@@ -29,6 +29,15 @@ public partial class LogsForm : Form
         btnCsvImport.Click += BtnCsvImport_Click;
         _dtpFrom.Value = DateTime.Today;
         _dtpTo.Value = DateTime.Now;
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "LogsForm");
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "LogsForm");
+        base.OnFormClosed(e);
     }
 
     private void ApplyTheme()

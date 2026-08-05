@@ -22,6 +22,7 @@ public static class AuditLogger
 {
     // ── Event IDs ─────────────────────────────────────────────────────────────
     public const int FormOpened        = 1001;
+    public const int FormClosed        = 1009;
     public const int WeighingSaved     = 1002;
     public const int RecordTransferred = 1003;
     public const int SlipGenerated     = 1004;

@@ -1,4 +1,5 @@
 using Vesy13.Services.Configuration;
+using Vesy13.Services.Repositories;
 
 namespace Vesy13.Forms;
 
@@ -21,6 +22,15 @@ public partial class PasswordDialog : Form
     {
         base.OnLoad(e);
         ApplyTheme();
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "PasswordDialog");
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "PasswordDialog");
+        base.OnFormClosed(e);
     }
 
     private void ApplyTheme()

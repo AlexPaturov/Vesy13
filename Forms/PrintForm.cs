@@ -110,7 +110,14 @@ public partial class PrintForm : Form
         _dtpFrom.Value = DateTime.Today.AddDays(-7);
         _dtpTo.Value   = DateTime.Today;
         _rbGpri.Checked = true;
-        AuditLogger.Action(AuditLogger.FormOpened, "Form", "PrintForm");
+        AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "PrintForm");
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        if (!DesignMode)
+            AuditLogger.Action(AuditLogger.FormClosed, "Form Close", "PrintForm");
+        base.OnFormClosed(e);
     }
 
     private void SetupGridColumns()
