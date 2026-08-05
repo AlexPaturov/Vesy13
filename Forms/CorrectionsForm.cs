@@ -780,7 +780,7 @@ public partial class CorrectionsForm : Form
         if (IsOverCapacity(_selected))
         {
             MessageBox.Show("Превышен максимально допустимый порог взвешивания.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            AuditLogger.Exception(AuditLogger.ErrorGeneral, "LocalWagon", $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
+            AuditLogger.Error(AuditLogger.ErrorGeneral, "LocalWagon",  id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
             ClearTopPanel(clearGridSelection: false);
             return;
         }

@@ -102,7 +102,7 @@ CSV.
 
 `AuditLogger.Exception` использует те же поля без миграции схемы: `object_server` — подсистема, `object_type` — операция или тип объекта, `object_handle` — короткий идентификатор, а в `object_name` помещаются контекст и полный `Exception.ToString()`.
 
-Если PostgreSQL недоступна, только запись исключения сохраняется в UTF-8 файл `%ProgramData%\Vesy13\logs\audit-exceptions-YYYY-MM-DD.log`. Формат — читаемый блок с UTC-временем, `event_id`, контекстными полями и `Exception.ToString()`; обычные события аудита в файл не дублируются.
+Если PostgreSQL недоступна, только запись исключения сохраняется в UTF-8 файл `%ProgramData%\Vesy13\logs\audit-exceptions-YYYY-MM-DD.log`. Формат — читаемый блок с UTC-временем, `event_id`, контекстными полями и `Exception.ToString()`; обычные события аудита в файл не дублируются. Файлы хранятся 30 дней и удаляются при очередной аварийной записи.
 
 ## Очистка данных
 

@@ -72,8 +72,10 @@ public static class AuditLogger
     private const int DbTimeoutSeconds = 3;
     private const string FallbackDirectoryName = "Vesy13";
     private const string FallbackLogsDirectoryName = "logs";
+    private const int FallbackRetentionDays = 30;
     private static readonly object QueueSync = new();
     private static readonly object FallbackFileSync = new();
+    private static DateTime NextFallbackCleanupAt = DateTime.MinValue;
     private static readonly LinkedList<AuditEntry> AuditQueue = new();
     private static readonly SemaphoreSlim QueueSignal = new(0);
     private static int _workerStarted;
@@ -173,7 +175,7 @@ public static class AuditLogger
     public static void UnhandledException(Exception exception, string source)
     {
         ArgumentNullException.ThrowIfNull(exception);
-        string details = ";
+        string details = $"{source}{Environment.NewLine}{exception}";
         Write(ErrorGeneral, "Audit Failure", "UnhandledException", details, "Vesy13", null,
             isException: true, writeFallbackImmediately: true);
     }
@@ -233,7 +235,7 @@ public static class AuditLogger
         bool isException = false, bool writeFallbackImmediately = false)
     {
         EnsureWorkerStarted();
-        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle, isException, writeFallbackImmediately)
+        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle, isException, writeFallbackImmediately);
         if (writeFallbackImmediately)
             WriteExceptionFallback(entry);
 
@@ -371,6 +373,18 @@ public static class AuditLogger
         catch { }
     }
 
+    private static void CleanupFallbackFiles(string directory, DateTime now)
+    {
+        if (now < NextFallbackCleanupAt) return;
+        NextFallbackCleanupAt = now.AddHours(1);
+
+        foreach (string path in Directory.EnumerateFiles(directory, "audit-exceptions-*.log"))
+        {
+            if (File.GetLastWriteTimeUtc(path) < now.AddDays(-FallbackRetentionDays))
+                File.Delete(path);
+        }
+    }
+
     private static void WriteExceptionFallback(AuditEntry entry)
     {
         try
@@ -390,7 +404,11 @@ public static class AuditLogger
                 .ToString();
 
             lock (FallbackFileSync)
+            {
+                try { CleanupFallbackFiles(directory, DateTime.UtcNow); }
+                catch { /* Очистка не должна помешать сохранению нового исключения. */ }
                 File.AppendAllText(path, content, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            }
         }
         catch
         {
