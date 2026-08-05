@@ -261,7 +261,7 @@ public partial class StaticWeighingForm : Form
             UpdateConn(false);
             if (showError)
             {
-                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка",
+                MessageBox.Show("Не удалось подключить АЦП. Обратитесь к администратору.", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;

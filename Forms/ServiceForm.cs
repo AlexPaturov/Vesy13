@@ -882,13 +882,13 @@ public partial class ServiceForm : Form
 
     private void BtnMonConn_Click(object? sender, EventArgs e)
     {
-        ToggleStaticServiceConnection(_cmbPort.SelectedItem as string, ex => AppendLog($"ОШИБКА: {ex.Message}", ServiceUiColors.Error));
+        ToggleStaticServiceConnection(_cmbPort.SelectedItem as string, _ => AppendLog("ОШИБКА: Не удалось подключить АЦП.", ServiceUiColors.Error));
     }
 
     private void BtnStaticCalibConn_Click(object? sender, EventArgs e)
     {
         ToggleStaticCalibConnection(_cmbStaticCalibPort.SelectedItem as string,
-            ex => MessageBox.Show($"Не удалось подключить АЦП статики.\n{ex.Message}", "АЦП статики", MessageBoxButtons.OK, MessageBoxIcon.Error));
+            _ => MessageBox.Show("Не удалось подключить АЦП статики. Обратитесь к администратору.", "АЦП статики", MessageBoxButtons.OK, MessageBoxIcon.Error));
     }
 
     private void ToggleStaticServiceConnection(string? selectedPort, Action<Exception> onError)
@@ -1010,7 +1010,7 @@ public partial class ServiceForm : Form
 
     private void BtnDynamicConn_Click(object? sender, EventArgs e)
     {
-        ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem as string, ex => AppendDynamicLog($"ОШИБКА: {ex.Message}", ServiceUiColors.Error));
+        ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem as string, _ => AppendDynamicLog("ОШИБКА: Не удалось подключить АЦП.", ServiceUiColors.Error));
     }
 
     private void BtnDynamicPortRefresh_Click(object? sender, EventArgs e)
@@ -1030,7 +1030,7 @@ public partial class ServiceForm : Form
     private void BtnDynamicCalibConn_Click(object? sender, EventArgs e)
     {
         ToggleDynamicCalibConnection(_cmbDynamicCalibPort.SelectedItem as string,
-            ex => MessageBox.Show($"Не удалось подключить АЦП динамики.\n{ex.Message}", "АЦП динамики", MessageBoxButtons.OK, MessageBoxIcon.Error));
+            _ => MessageBox.Show("Не удалось подключить АЦП динамики. Обратитесь к администратору.", "АЦП динамики", MessageBoxButtons.OK, MessageBoxIcon.Error));
     }
 
     private void ToggleDynamicServiceConnection(string? selectedPort, Action<Exception> onError)

@@ -118,7 +118,7 @@ public partial class LogsForm : Form
         catch (Exception ex)
         {
             AuditLogger.Exception(AuditLogger.ErrorGeneral, "LogsForm", "операция с журналом аудита", ex);
-            MessageBox.Show($"Ошибка загрузки логов:\r\n{ex.Message}", "Логи",
+            MessageBox.Show("Не удалось загрузить журнал. Обратитесь к администратору.", "Логи",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
@@ -190,7 +190,7 @@ public partial class LogsForm : Form
         catch (Exception ex)
         {
             AuditLogger.Exception(AuditLogger.ErrorGeneral, "LogsForm", "операция с журналом аудита", ex);
-            MessageBox.Show($"Не удалось выгрузить CSV:\r\n{ex.Message}", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось выгрузить файл. Обратитесь к администратору.", "CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

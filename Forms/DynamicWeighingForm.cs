@@ -259,7 +259,7 @@ public partial class DynamicWeighingForm : Form
             UpdateConn(false);
             if (showError)
             {
-                MessageBox.Show($"Ошибка подключения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Не удалось подключить АЦП. Обратитесь к администратору.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;
         }
