@@ -85,7 +85,7 @@ public static class AuditLogger
     private sealed record AuditEntry(
         DateTime TimeCreated, int EventId, string Keywords,
         string? ObjectServer, string? ObjectType, string? ObjectName, string? ObjectHandle,
-        bool IsException = false);
+        bool IsException = false, bool IsFallbackPersisted = false);
 
     public static event EventHandler<AuditQueueStatus>? QueueStatusChanged;
 
@@ -169,6 +169,15 @@ public static class AuditLogger
         Write(eventId, "Audit Failure", objectType, details, objectServer, objectHandle, isException: true);
     }
 
+    /// <summary>Записывает непойманное исключение в fallback до завершения процесса.</summary>
+    public static void UnhandledException(Exception exception, string source)
+    {
+        ArgumentNullException.ThrowIfNull(exception);
+        string details = ";
+        Write(ErrorGeneral, "Audit Failure", "UnhandledException", details, "Vesy13", null,
+            isException: true, writeFallbackImmediately: true);
+    }
+
     public static void Exception(int eventId, string objectType, string objectName,
         string objectServer, Exception exception)
         => Exception(eventId, objectType, objectName, exception, objectServer);
@@ -221,10 +230,12 @@ public static class AuditLogger
 
     private static void Write(int eventId, string keywords,
         string? objectType, string? objectName, string? objectServer, string? objectHandle,
-        bool isException = false)
+        bool isException = false, bool writeFallbackImmediately = false)
     {
         EnsureWorkerStarted();
-        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle, isException);
+        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle, isException, writeFallbackImmediately)
+        if (writeFallbackImmediately)
+            WriteExceptionFallback(entry);
 
         lock (QueueSync)
         {
@@ -272,7 +283,8 @@ public static class AuditLogger
             Volatile.Write(ref _databaseAvailable, 0);
             if (entry.IsException)
             {
-                WriteExceptionFallback(entry);
+                if (!entry.IsFallbackPersisted)
+                    WriteExceptionFallback(entry);
                 PublishQueueStatus();
                 continue;
             }

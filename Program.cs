@@ -6,11 +6,33 @@ namespace Vesy13;
 
 static class Program
 {
+    private static void ConfigureUnhandledExceptionLogging()
+    {
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        Application.ThreadException += (_, args) =>
+        {
+            AuditLogger.UnhandledException(args.Exception, "Application.ThreadException");
+            MessageBox.Show("Произошла критическая ошибка. Подробности сохранены в журнале.", "Vesy13", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Application.Exit();
+        };
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            var exception = args.ExceptionObject as Exception ?? new InvalidOperationException(args.ExceptionObject?.ToString());
+            AuditLogger.UnhandledException(exception, "AppDomain.UnhandledException");
+        };
+        TaskScheduler.UnobservedTaskException += (_, args) =>
+        {
+            AuditLogger.UnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException");
+            args.SetObserved();
+        };
+    }
+
     [STAThread]
     static void Main()
     {
         QuestPDF.Settings.License = LicenseType.Community;
         ApplicationConfiguration.Initialize();
+        ConfigureUnhandledExceptionLogging();
         var settings = new SettingsService();
         settings.LoadOrCreate();
         var ldb = new LocalRepository();

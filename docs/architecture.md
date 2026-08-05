@@ -103,3 +103,8 @@ PrintForm
 
 `AuditLogger` не пробрасывает исключения наружу: ошибки записи журнала не должны
 ломать основной сценарий оператора.
+
+`Program` также перехватывает `Application.ThreadException`, `AppDomain.UnhandledException`
+и `TaskScheduler.UnobservedTaskException`. Для них fallback-файл исключений записывается
+синхронно до возможного завершения процесса; затем та же запись остаётся в очереди
+для PostgreSQL.
