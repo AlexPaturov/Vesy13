@@ -8,12 +8,12 @@ static class Program
 {
     private static void ConfigureUnhandledExceptionLogging()
     {
-        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-        Application.ThreadException += (_, args) =>
+        System.Windows.Forms.Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        System.Windows.Forms.Application.ThreadException += (_, args) =>
         {
             AuditLogger.UnhandledException(args.Exception, "Application.ThreadException");
             MessageBox.Show("Произошла критическая ошибка. Подробности сохранены в журнале.", "Vesy13", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Application.Exit();
+            System.Windows.Forms.Application.Exit();
         };
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
         {

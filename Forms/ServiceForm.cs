@@ -914,7 +914,7 @@ public partial class ServiceForm : Form
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort, ex);
         }
     }
 
