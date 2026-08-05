@@ -80,7 +80,7 @@ public sealed class StaticFilterPipeline : IDisposable
             (code < _settings.StaticClampMinCode || code > _settings.StaticClampMaxCode))
         {
             ClampDropped++;
-            AuditLogger.Action(AuditLogger.FilterClamp, ObjectType,
+            AuditLogger.Error(AuditLogger.FilterClamp, ObjectType,
                 $"{channel} code={code} range=[{_settings.StaticClampMinCode}..{_settings.StaticClampMaxCode}]");
             return false;
         }
@@ -91,7 +91,7 @@ public sealed class StaticFilterPipeline : IDisposable
             if (delta > _settings.StaticDeltaMaxCodes)
             {
                 DeltaDropped++;
-                AuditLogger.Action(AuditLogger.FilterDelta, ObjectType,
+                AuditLogger.Error(AuditLogger.FilterDelta, ObjectType,
                     $"{channel} code={code} prev={prev} delta={delta} max={_settings.StaticDeltaMaxCodes}");
                 return false;
             }

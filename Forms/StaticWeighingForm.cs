@@ -426,9 +426,6 @@ public partial class StaticWeighingForm : Form
             };
             AddToGrid(record);
             SaveAsync(record);
-            AuditLogger.Action(AuditLogger.WeighingSaved,
-                "LocalWagon", $"вагон №{_wagonNumber} total={record.Total:F2}",
-                "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
             SetBogieValue(_lblBogie1Value, bogie1Tonnes);
             SetBogieValue(_lblBogie2Value, bogie2Tonnes);
@@ -499,6 +496,10 @@ public partial class StaticWeighingForm : Form
         try
         {
             await _ldb.SaveWagonAsync(record);
+            AuditLogger.Action(AuditLogger.WeighingSaved,
+                "LocalWagon", $"вагон №{record.Number} total={record.Total:F2}",
+                "PostgreSQL", record.Number.ToString());
+
             _weighingStorageAvailable = true;
             UpdateConn(_sim.IsConnected);
             if (_state == WeighState.Idle && _wagonNumber == record.Number)

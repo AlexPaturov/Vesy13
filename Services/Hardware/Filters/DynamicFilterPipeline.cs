@@ -61,7 +61,7 @@ public sealed class DynamicFilterPipeline : IDisposable
     private void OnChecksumRejected(object? sender, byte[] raw)
     {
         ChecksumRejected++;
-        AuditLogger.Action(AuditLogger.FilterChecksum, ObjectType, $"bytes={string.Join(" ", raw)}");
+        AuditLogger.Error(AuditLogger.FilterChecksum, ObjectType, $"bytes={string.Join(" ", raw)}");
     }
 
     private void OnSample(object? sender, SimA04DynamicSample sample)
@@ -92,7 +92,7 @@ public sealed class DynamicFilterPipeline : IDisposable
             (code < _settings.DynamicClampMinCode || code > _settings.DynamicClampMaxCode))
         {
             ClampDropped++;
-            AuditLogger.Action(AuditLogger.FilterClamp, ObjectType,
+            AuditLogger.Error(AuditLogger.FilterClamp, ObjectType,
                 $"{channel} code={code} range=[{_settings.DynamicClampMinCode}..{_settings.DynamicClampMaxCode}]");
             return false;
         }
@@ -106,7 +106,7 @@ public sealed class DynamicFilterPipeline : IDisposable
             if (delta > _settings.DynamicDeltaMaxCodes)
             {
                 DeltaDropped++;
-                AuditLogger.Action(AuditLogger.FilterDelta, ObjectType,
+                AuditLogger.Error(AuditLogger.FilterDelta, ObjectType,
                     $"{channel} code={code} prev={prev} delta={delta} max={_settings.DynamicDeltaMaxCodes}");
                 return false;
             }
@@ -142,7 +142,7 @@ public sealed class DynamicFilterPipeline : IDisposable
             return true;
 
         StuckDropped++;
-        AuditLogger.Action(AuditLogger.FilterStuck, ObjectType,
+        AuditLogger.Error(AuditLogger.FilterStuck, ObjectType,
             $"{channel} code={code} samples={stuckCount} threshold={_settings.DynamicStuckSamples}");
         return false;
     }

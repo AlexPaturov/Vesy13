@@ -422,7 +422,6 @@ public partial class DynamicWeighingForm : Form
             };
             AddToGrid(record);
             SaveAsync(record);
-            AuditLogger.Action(AuditLogger.WeighingSaved, "LocalWagon", $"вагон №{_wagonNumber} dir={record.Direction} total={record.Total:F2}", "PostgreSQL", _wagonNumber.ToString());
             _state              = WeighState.Idle;
             ResetBogieValues();
             _lblValue.Text      = record.Total.ToString("F2");
@@ -498,6 +497,8 @@ public partial class DynamicWeighingForm : Form
         try
         {
             await _ldb.SaveWagonAsync(record);
+            AuditLogger.Action(AuditLogger.WeighingSaved, "LocalWagon", $"вагон №{record.Number} dir={record.Direction} total={record.Total:F2}", "PostgreSQL", record.Number.ToString());
+
             _weighingStorageAvailable = true;
             UpdateAdcStatus();
         }
