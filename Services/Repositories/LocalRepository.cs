@@ -81,43 +81,72 @@ public class LocalRepository
     }
 
     /// <summary>
-    /// Сохраняет точки канала без физического удаления: существующие обновляются, новые добавляются.
-    /// Неактивные точки получают deleted_at как отметку мягкого удаления.
+    /// Сохраняет неизменяемые точки канала: новые добавляются, существующие можно только снять.
+    /// Код АЦП и масса сохранённой точки никогда не обновляются.
     /// </summary>
-    public async Task SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)
+    public async Task<(int Added, int Retired)> SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
 
-        foreach (var p in points)
+        var requested = points.ToList();
+        var current = (await conn.QueryAsync<CalibPoint>(@"
+            SELECT id,
+                   adc_code AS AdcCode,
+                   mass AS Mass,
+                   is_active AS IsActive,
+                   created_at AS CreatedAt,
+                   deleted_at AS DeletedAt
+            FROM calibration_points
+            WHERE channel = @channel
+            FOR UPDATE", new { channel }, tx))
+            .ToDictionary(point => point.Id);
+
+        int retired = 0;
+        foreach (var p in requested.Where(point => point.Id > 0))
         {
-            DateTime? deletedAt = p.IsActive ? null : p.DeletedAt ?? DateTime.Now;
-            if (p.Id > 0)
+            if (!current.TryGetValue(p.Id, out var stored))
+                throw new InvalidOperationException($"Calibration point {p.Id} does not belong to channel {channel}.");
+
+            if (stored.AdcCode != p.AdcCode || stored.Mass != p.Mass)
+                throw new InvalidOperationException($"Calibration point {p.Id} is immutable.");
+
+            bool storedActive = stored.IsActive && stored.DeletedAt is null;
+            if (storedActive && !p.IsActive)
             {
-                await conn.ExecuteAsync(@"
+                int affected = await conn.ExecuteAsync(@"
                     UPDATE calibration_points
-                    SET adc_code = @AdcCode,
-                        mass = @Mass,
-                        is_active = CASE WHEN deleted_at IS NOT NULL THEN FALSE ELSE @IsActive END,
-                        deleted_at = CASE
-                            WHEN deleted_at IS NOT NULL THEN deleted_at
-                            ELSE @DeletedAt
-                        END
-                    WHERE id = @Id AND channel = @channel",
-                    new { p.Id, channel, p.AdcCode, p.Mass, p.IsActive, DeletedAt = deletedAt }, tx);
+                    SET is_active = FALSE,
+                        deleted_at = NOW()
+                    WHERE id = @Id
+                      AND channel = @channel
+                      AND is_active = TRUE
+                      AND deleted_at IS NULL",
+                    new { p.Id, channel }, tx);
+                if (affected != 1)
+                    throw new InvalidOperationException($"Calibration point {p.Id} could not be retired.");
+                retired++;
             }
-            else
+            else if (!storedActive && p.IsActive)
             {
-                await conn.ExecuteAsync(@"
-                    INSERT INTO calibration_points (channel, adc_code, mass, is_active, created_at, deleted_at)
-                    VALUES (@channel, @AdcCode, @Mass, @IsActive, NOW(), @DeletedAt)",
-                    new { channel, p.AdcCode, p.Mass, p.IsActive, DeletedAt = deletedAt }, tx);
+                throw new InvalidOperationException($"Retired calibration point {p.Id} cannot be reactivated.");
             }
+        }
+
+        int added = 0;
+        foreach (var p in requested.Where(point => point.Id == 0 && point.IsActive))
+        {
+            await conn.ExecuteAsync(@"
+                INSERT INTO calibration_points (channel, adc_code, mass, is_active, created_at, deleted_at)
+                VALUES (@channel, @AdcCode, @Mass, TRUE, NOW(), NULL)",
+                new { channel, p.AdcCode, p.Mass }, tx);
+            added++;
         }
 
         await tx.CommitAsync();
         await ReloadCacheAsync(conn);
+        return (added, retired);
     }
 
     /// <summary>Переключает флаг активности одной точки и обновляет кэш.</summary>

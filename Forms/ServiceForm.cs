@@ -1598,14 +1598,26 @@ public partial class ServiceForm : Form
             MessageBox.Show("Нет точек для сохранения.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
+
+        var duplicateMass = pts.Where(p => p.IsActive)
+            .GroupBy(p => p.Mass)
+            .FirstOrDefault(group => group.Count() > 1);
+        if (duplicateMass is not null)
+        {
+            MessageBox.Show($"Для массы {duplicateMass.Key:G} т уже существует активная калибровочная точка.\nСнимите прежнюю точку или укажите другую массу.",
+                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
         int channel = _calibUseCh0 ? 0 : 1;
         try
         {
-            await _calib.SaveCalibPointsAsync(channel, pts);
+            var saveResult = await _calib.SaveCalibPointsAsync(channel, pts);
             _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
             _settings.Save();
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points", $"ch={(_calibUseCh0 ? "CH0" : "CH1")} rows={pts.Count}");
+            AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points",
+                $"ch={(_calibUseCh0 ? "CH0" : "CH1")} added={saveResult.Added} retired={saveResult.Retired}");
             await LoadCalibPointsAsync();
         }
         catch (Exception ex)
@@ -1683,21 +1695,22 @@ public partial class ServiceForm : Form
     private static void ApplyCalibRowStyle(DataGridViewRow row)
     {
         bool active = row.Cells[0].Value?.ToString() == "Да";
+        bool immutable = row.Tag is CalibPoint { Id: > 0 };
         if (active)
         {
             row.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
             row.DefaultCellStyle.ForeColor = row.DataGridView?.DefaultCellStyle.ForeColor ?? ServiceUiColors.TextPrimary;
-            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridRowBack;
-            row.DefaultCellStyle.SelectionForeColor = row.DataGridView?.DefaultCellStyle.SelectionForeColor ?? ServiceUiColors.GridSelectionText;
-            row.ReadOnly = false;
+            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
+            row.ReadOnly = immutable;
             return;
         }
 
         var deletedBack = Color.FromArgb(255, 228, 232);
         row.DefaultCellStyle.BackColor = deletedBack;
         row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
-        row.DefaultCellStyle.SelectionBackColor = deletedBack;
-        row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+        row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
         row.ReadOnly = true;
     }
 

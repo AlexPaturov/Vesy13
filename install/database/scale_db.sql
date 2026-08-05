@@ -50,6 +50,10 @@ CREATE TABLE calibration_points (
     deleted_at TIMESTAMPTZ
 );
 
+CREATE UNIQUE INDEX ux_calibration_points_active_channel_mass
+    ON calibration_points (channel, mass)
+    WHERE is_active = TRUE AND deleted_at IS NULL;
+
 COMMENT ON COLUMN calibration_points.created_at IS 'Time when the calibration point was added.';
 
 -- History of the dynamic calibration coefficients.

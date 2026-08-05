@@ -49,7 +49,7 @@ if (-not $PostgresInstaller) {
 }
 
 $MarkerKey     = 'HKLM:\SOFTWARE\Vesy13\Database'
-$SchemaVersion = '1'
+$SchemaVersion = '2'
 $PasswordFile  = Join-Path $StateDir 'postgres_password.txt'
 $LogFile       = Join-Path $StateDir 'install-db.log'
 $PurgeSql      = Join-Path $StateDir 'purge.sql'
@@ -328,6 +328,12 @@ else {
         -File (Join-Path $ScriptDir 'scale_db.sql') | Out-Null
     Write-Log 'Database scale_db created.'
 }
+
+# -- 3a. Schema upgrade: unique active static calibration mass ----------------
+
+Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
+    -Command 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calibration_points_active_channel_mass ON calibration_points (channel, mass) WHERE is_active = TRUE AND deleted_at IS NULL' | Out-Null
+Write-Log 'Unique active static calibration mass index verified.'
 
 # -- 4. Trust rules for the application ---------------------------------------
 
