@@ -156,7 +156,7 @@ public partial class PrintForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdTable", table, "Firebird", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "FirebirdTable", table, "Firebird", ex);
             MessageBox.Show("Не удалось загрузить данные из системы учёта.\nОбратитесь к администратору.", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
@@ -199,7 +199,7 @@ public partial class PrintForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorPdf, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()}", "QuestPDF", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorPdf, "WeighingSlip", $"№{_txtSlipNum.Text.Trim()}", "QuestPDF", ex);
             MessageBox.Show("Не удалось сформировать PDF.\nОбратитесь к администратору.", "Печать", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally

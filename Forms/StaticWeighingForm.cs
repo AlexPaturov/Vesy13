@@ -257,6 +257,7 @@ public partial class StaticWeighingForm : Form
         }
         catch (Exception ex)
         {
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", _settings.Current.AdcPortName, ex, "SimA04Static");
             UpdateConn(false);
             if (showError)
             {
@@ -507,8 +508,8 @@ public partial class StaticWeighingForm : Form
         {
             _weighingStorageAvailable = false;
             UpdateConn(_sim.IsConnected);
-            AuditLogger.Error(AuditLogger.ErrorDb,
-                "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb,
+                "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex);
         }
     }
 }

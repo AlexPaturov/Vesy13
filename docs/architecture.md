@@ -95,8 +95,9 @@ PrintForm
 
 ```text
 Формы / сервисы
-  -> AuditLogger.Action или AuditLogger.Error
+  -> AuditLogger.Action / Error / Exception
   -> PostgreSQL.audit_log
+  -> при недоступности PostgreSQL: только Exception -> %ProgramData%\Vesy13\logs\audit-exceptions-YYYY-MM-DD.log
   -> Serilog Application Insights sink
 ```
 

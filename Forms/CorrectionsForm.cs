@@ -367,7 +367,7 @@ public partial class CorrectionsForm : Form
         {
             hadError = true;
             string op = trainMode ? "GetAllByTrainTimeAsync" : "GetAllByDateAsync";
-            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "LocalWagon", op, "PostgreSQL", ex);
             MessageBox.Show("Не удалось загрузить список не обработанных взвешиваний.\nОбратитесь к администратору.", "База данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -385,7 +385,7 @@ public partial class CorrectionsForm : Form
         {
             hadError = true;
             string op = trainMode ? "GetByTrainTimeAsync" : "GetByDateAsync";
-            AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", op, "Firebird", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "GpriGras", op, "Firebird", ex);
             MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -761,7 +761,7 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "GpriGras", "GridDone_SelectionChanged", "Firebird", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "GpriGras", "GridDone_SelectionChanged", "Firebird", ex);
             MessageBox.Show("Данные из системы учёта предприятия недоступны.\nПроверьте подключение к серверу.", "Firebird", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -780,7 +780,7 @@ public partial class CorrectionsForm : Form
         if (IsOverCapacity(_selected))
         {
             MessageBox.Show("Превышен максимально допустимый порог взвешивания.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            AuditLogger.Error(AuditLogger.ErrorGeneral, "LocalWagon", $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
+            AuditLogger.Exception(AuditLogger.ErrorGeneral, "LocalWagon", $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
             ClearTopPanel(clearGridSelection: false);
             return;
         }
@@ -831,7 +831,7 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", transfer.Table, "Firebird", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "FirebirdRecord", transfer.Table, "Firebird", ex);
             MessageBox.Show("Не удалось перенести запись в систему учёта.\nОбратитесь к администратору.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnTransfer.Enabled = true;
             return;
@@ -846,7 +846,7 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", "MarkTransferredAsync", "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "LocalWagon", "MarkTransferredAsync", "PostgreSQL", ex);
             MessageBox.Show("Запись перенесена в систему учёта, но локальная запись не помечена как переданная.\nОбновите список или обратитесь к администратору.",
                 "Локальная база", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
@@ -908,7 +908,7 @@ public partial class CorrectionsForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "FirebirdRecord", _selectedFb?.Table ?? "GPRI", "Firebird", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "FirebirdRecord", _selectedFb?.Table ?? "GPRI", "Firebird", ex);
             MessageBox.Show("Не удалось сохранить изменения в системе учёта.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _btnSave.Enabled = true;
         }

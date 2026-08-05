@@ -255,6 +255,7 @@ public partial class DynamicWeighingForm : Form
         }
         catch (Exception ex)
         {
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", _settings.Current.AdcPortName, ex, "SimA04Dynamic");
             UpdateConn(false);
             if (showError)
             {
@@ -504,7 +505,7 @@ public partial class DynamicWeighingForm : Form
         {
             _weighingStorageAvailable = false;
             UpdateAdcStatus();
-            AuditLogger.Error(AuditLogger.ErrorDb, "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex);
         }
     }
 

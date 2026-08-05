@@ -914,7 +914,7 @@ public partial class ServiceForm : Form
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticService", selectedPort);
         }
     }
 
@@ -941,7 +941,7 @@ public partial class ServiceForm : Form
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticCalib", selectedPort);
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04StaticCalib", selectedPort, ex);
         }
     }
 
@@ -1055,7 +1055,7 @@ public partial class ServiceForm : Form
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort);
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicService", selectedPort, ex);
         }
     }
 
@@ -1081,7 +1081,7 @@ public partial class ServiceForm : Form
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Error(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort);
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort, ex);
         }
     }
 
@@ -1581,7 +1581,7 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "calibration_points", "static", "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "calibration_points", "static", "PostgreSQL", ex);
             MessageBox.Show("Не удалось сохранить калибровку.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
@@ -1839,7 +1839,7 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic", "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "CalibProfile", "dynamic", "PostgreSQL", ex);
             MessageBox.Show("Не удалось сохранить калибровку динамики.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
@@ -1891,7 +1891,7 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Error(AuditLogger.ErrorDb, "CalibProfile", "dynamic history", "PostgreSQL", ex.Message);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "CalibProfile", "dynamic history", "PostgreSQL", ex);
         }
     }
 

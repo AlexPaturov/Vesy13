@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Text;
 using Dapper;
 using Microsoft.ApplicationInsights.Extensibility;
 using Npgsql;
@@ -69,7 +70,10 @@ public static class AuditLogger
     public const int QueueCapacity = 30000;
     private const int RetryDelayMs = 5000;
     private const int DbTimeoutSeconds = 3;
+    private const string FallbackDirectoryName = "Vesy13";
+    private const string FallbackLogsDirectoryName = "logs";
     private static readonly object QueueSync = new();
+    private static readonly object FallbackFileSync = new();
     private static readonly LinkedList<AuditEntry> AuditQueue = new();
     private static readonly SemaphoreSlim QueueSignal = new(0);
     private static int _workerStarted;
@@ -80,7 +84,8 @@ public static class AuditLogger
 
     private sealed record AuditEntry(
         DateTime TimeCreated, int EventId, string Keywords,
-        string? ObjectServer, string? ObjectType, string? ObjectName, string? ObjectHandle);
+        string? ObjectServer, string? ObjectType, string? ObjectName, string? ObjectHandle,
+        bool IsException = false);
 
     public static event EventHandler<AuditQueueStatus>? QueueStatusChanged;
 
@@ -150,6 +155,28 @@ public static class AuditLogger
         string objectServer = "Vesy13", string? objectHandle = null)
         => Write(eventId, "Audit Failure", objectType, objectName, objectServer, objectHandle);
 
+    /// <summary>
+    /// Записывает исключение с полным stack trace в <c>audit_log.object_name</c>.
+    /// Если локальная БД недоступна, запись сохраняется в аварийный файл ProgramData.
+    /// </summary>
+    public static void Exception(int eventId, string objectType, string objectName, Exception exception,
+        string objectServer = "Vesy13", string? objectHandle = null)
+    {
+        ArgumentNullException.ThrowIfNull(exception);
+        string details = string.IsNullOrWhiteSpace(objectName)
+            ? exception.ToString()
+            : $"{objectName}{Environment.NewLine}{exception}";
+        Write(eventId, "Audit Failure", objectType, details, objectServer, objectHandle, isException: true);
+    }
+
+    public static void Exception(int eventId, string objectType, string objectName,
+        string objectServer, Exception exception)
+        => Exception(eventId, objectType, objectName, exception, objectServer);
+
+    public static void Exception(int eventId, string objectType, string objectName,
+        string objectServer, string? objectHandle, Exception exception)
+        => Exception(eventId, objectType, objectName, exception, objectServer, objectHandle);
+
     public static AuditQueueStatus GetQueueStatus()
     {
         lock (QueueSync)
@@ -193,10 +220,11 @@ public static class AuditLogger
     // ── Private ───────────────────────────────────────────────────────────────
 
     private static void Write(int eventId, string keywords,
-        string? objectType, string? objectName, string? objectServer, string? objectHandle)
+        string? objectType, string? objectName, string? objectServer, string? objectHandle,
+        bool isException = false)
     {
         EnsureWorkerStarted();
-        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle);
+        var entry = new AuditEntry(DateTime.UtcNow, eventId, keywords, objectServer, objectType, objectName, objectHandle, isException);
 
         lock (QueueSync)
         {
@@ -242,6 +270,13 @@ public static class AuditLogger
             }
 
             Volatile.Write(ref _databaseAvailable, 0);
+            if (entry.IsException)
+            {
+                WriteExceptionFallback(entry);
+                PublishQueueStatus();
+                continue;
+            }
+
             var requeued = false;
             lock (QueueSync)
             {
@@ -322,6 +357,33 @@ public static class AuditLogger
                     entry.EventId, entry.Keywords, entry.ObjectType, entry.ObjectName);
         }
         catch { }
+    }
+
+    private static void WriteExceptionFallback(AuditEntry entry)
+    {
+        try
+        {
+            string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string directory = Path.Combine(programData, FallbackDirectoryName, FallbackLogsDirectoryName);
+            Directory.CreateDirectory(directory);
+            string path = Path.Combine(directory, $"audit-exceptions-{entry.TimeCreated:yyyy-MM-dd}.log");
+            string content = new StringBuilder()
+                .Append("--- ").Append(entry.TimeCreated.ToString("O")).AppendLine(" ---")
+                .Append("EventId: ").AppendLine(entry.EventId.ToString())
+                .Append("ObjectServer: ").AppendLine(entry.ObjectServer)
+                .Append("ObjectType: ").AppendLine(entry.ObjectType)
+                .Append("ObjectHandle: ").AppendLine(entry.ObjectHandle)
+                .AppendLine(entry.ObjectName)
+                .AppendLine()
+                .ToString();
+
+            lock (FallbackFileSync)
+                File.AppendAllText(path, content, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        }
+        catch
+        {
+            // Нельзя допустить, чтобы отказ аварийного журнала остановил worker аудита.
+        }
     }
 
     private static void PublishQueueStatus()
