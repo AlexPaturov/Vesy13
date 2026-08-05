@@ -76,6 +76,8 @@ public static class AuditLogger
     private static readonly object QueueSync = new();
     private static readonly object FallbackFileSync = new();
     private static DateTime NextFallbackCleanupAt = DateTime.MinValue;
+    private static DateTime NextInternalFailureFallbackAt = DateTime.MinValue;
+    private static readonly TimeSpan InternalFailureFallbackInterval = TimeSpan.FromMinutes(5);
     private static readonly LinkedList<AuditEntry> AuditQueue = new();
     private static readonly SemaphoreSlim QueueSignal = new(0);
     private static int _workerStarted;
@@ -88,6 +90,8 @@ public static class AuditLogger
         DateTime TimeCreated, int EventId, string Keywords,
         string? ObjectServer, string? ObjectType, string? ObjectName, string? ObjectHandle,
         bool IsException = false, bool IsFallbackPersisted = false);
+
+    private readonly record struct AuditWriteResult(bool Succeeded, Exception? Error);
 
     public static event EventHandler<AuditQueueStatus>? QueueStatusChanged;
 
@@ -141,7 +145,10 @@ public static class AuditLogger
                 .WriteTo.ApplicationInsights(aiConfig, new TraceTelemetryConverter())
                 .CreateLogger();
         }
-        catch { /* AI unavailable — logger stays as no-op */ }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "ApplicationInsights", "AuditLogger.Initialize", ex);
+        }
 
         EnsureWorkerStarted();
         _ = EnsureTableAsync();
@@ -225,7 +232,11 @@ public static class AuditLogger
                 new { from = from.ToUniversalTime(), to = to.ToUniversalTime() });
             return rows.ToList();
         }
-        catch { return []; }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorDb, "PostgreSQL", "AuditLogger.GetLogsAsync", ex);
+            return [];
+        }
     }
 
     // ── Private ───────────────────────────────────────────────────────────────
@@ -275,7 +286,8 @@ public static class AuditLogger
             }
 
             PublishQueueStatus();
-            if (await TryWriteEntryAsync(entry))
+            AuditWriteResult writeResult = await TryWriteEntryAsync(entry);
+            if (writeResult.Succeeded)
             {
                 Volatile.Write(ref _databaseAvailable, 1);
                 PublishQueueStatus();
@@ -283,6 +295,9 @@ public static class AuditLogger
             }
 
             Volatile.Write(ref _databaseAvailable, 0);
+            if (writeResult.Error is not null)
+                WriteInternalFailureFallback(ErrorDb, "PostgreSQL", "AuditLogger.TryWriteEntryAsync", writeResult.Error);
+
             if (entry.IsException)
             {
                 if (!entry.IsFallbackPersisted)
@@ -311,7 +326,7 @@ public static class AuditLogger
         }
     }
 
-    private static async Task<bool> TryWriteEntryAsync(AuditEntry entry)
+    private static async Task<AuditWriteResult> TryWriteEntryAsync(AuditEntry entry)
     {
         try
         {
@@ -349,11 +364,11 @@ public static class AuditLogger
                 }, cancellationToken: timeout.Token));
 
             WriteToApplicationInsights(entry);
-            return true;
+            return new AuditWriteResult(true, null);
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            return new AuditWriteResult(false, ex);
         }
     }
 
@@ -370,7 +385,39 @@ public static class AuditLogger
                 .Information("[{EventId}] {Keywords} | {ObjectType} | {ObjectName}",
                     entry.EventId, entry.Keywords, entry.ObjectType, entry.ObjectName);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "ApplicationInsights", "AuditLogger.WriteToApplicationInsights", ex);
+        }
+    }
+
+    private static void WriteInternalFailureFallback(int eventId, string objectServer, string operation, Exception exception)
+    {
+        try
+        {
+            DateTime now = DateTime.UtcNow;
+            lock (FallbackFileSync)
+            {
+                if (now < NextInternalFailureFallbackAt) return;
+                NextInternalFailureFallbackAt = now + InternalFailureFallbackInterval;
+            }
+
+            var entry = new AuditEntry(
+                now,
+                eventId,
+                "Audit Failure",
+                objectServer,
+                "AuditLogger",
+                $"{operation}{Environment.NewLine}{exception}",
+                null,
+                IsException: true,
+                IsFallbackPersisted: true);
+            WriteExceptionFallback(entry);
+        }
+        catch (Exception fallbackException)
+        {
+            Debug.WriteLine($"AuditLogger internal fallback failed: {fallbackException}");
+        }
     }
 
     private static void CleanupFallbackFiles(string directory, DateTime now)
@@ -406,20 +453,23 @@ public static class AuditLogger
             lock (FallbackFileSync)
             {
                 try { CleanupFallbackFiles(directory, DateTime.UtcNow); }
-                catch { /* Очистка не должна помешать сохранению нового исключения. */ }
+                catch (Exception ex) { Debug.WriteLine($"AuditLogger cleanup failed: {ex}"); }
                 File.AppendAllText(path, content, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // Нельзя допустить, чтобы отказ аварийного журнала остановил worker аудита.
+            Debug.WriteLine($"AuditLogger fallback write failed: {ex}");
         }
     }
 
     private static void PublishQueueStatus()
     {
         try { QueueStatusChanged?.Invoke(null, GetQueueStatus()); }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "Vesy13", "AuditLogger.QueueStatusChanged", ex);
+        }
     }
 
     private static async Task EnsureTableAsync()
@@ -449,7 +499,10 @@ public static class AuditLogger
                     ip_address          VARCHAR(50)
                 )");
         }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorDb, "PostgreSQL", "AuditLogger.EnsureTableAsync", ex);
+        }
     }
 
     private static void CollectContext()
@@ -464,9 +517,13 @@ public static class AuditLogger
             _userName   = slash > 0 ? name[(slash + 1)..] : name;
             _logonId    = GetLogonId(identity.Token);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext user", ex);
+        }
 
-        try { _computer = Environment.MachineName; } catch { }
+        try { _computer = Environment.MachineName; }
+        catch (Exception ex) { WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext computer", ex); }
 
         try
         {
@@ -474,7 +531,10 @@ public static class AuditLogger
                 .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork)
                 ?.ToString();
         }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext network", ex);
+        }
 
         try
         {
@@ -482,7 +542,10 @@ public static class AuditLogger
             _pid   = proc.Id;
             _pname = proc.MainModule?.FileName;
         }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext process", ex);
+        }
     }
 
     private static string? GetLogonId(IntPtr token)
@@ -494,7 +557,10 @@ public static class AuditLogger
                 ref stats, (uint)Marshal.SizeOf<TokenStatistics>(), out _))
                 return $"{stats.AuthenticationId.HighPart:X8}-{stats.AuthenticationId.LowPart:X8}";
         }
-        catch { }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.GetLogonId", ex);
+        }
         return null;
     }
 }
