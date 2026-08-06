@@ -84,7 +84,7 @@ public class LocalRepository
     /// Сохраняет неизменяемые точки канала: новые добавляются, существующие можно только снять.
     /// Код АЦП и масса сохранённой точки никогда не обновляются.
     /// </summary>
-    public async Task<(int Added, int Retired)> SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)
+    public async Task<IReadOnlyList<CalibPoint>> SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
@@ -103,7 +103,7 @@ public class LocalRepository
             FOR UPDATE", new { channel }, tx))
             .ToDictionary(point => point.Id);
 
-        int retired = 0;
+        var changed = new List<CalibPoint>();
         foreach (var p in requested.Where(point => point.Id > 0))
         {
             if (!current.TryGetValue(p.Id, out var stored))
@@ -115,18 +115,23 @@ public class LocalRepository
             bool storedActive = stored.IsActive && stored.DeletedAt is null;
             if (storedActive && !p.IsActive)
             {
-                int affected = await conn.ExecuteAsync(@"
+                var retiredPoint = await conn.QuerySingleAsync<CalibPoint>(@"
                     UPDATE calibration_points
                     SET is_active = FALSE,
                         deleted_at = NOW()
                     WHERE id = @Id
                       AND channel = @channel
                       AND is_active = TRUE
-                      AND deleted_at IS NULL",
+                      AND deleted_at IS NULL
+                    RETURNING id,
+                              channel,
+                              adc_code AS AdcCode,
+                              mass AS Mass,
+                              is_active AS IsActive,
+                              created_at AS CreatedAt,
+                              deleted_at AS DeletedAt",
                     new { p.Id, channel }, tx);
-                if (affected != 1)
-                    throw new InvalidOperationException($"Calibration point {p.Id} could not be retired.");
-                retired++;
+                changed.Add(retiredPoint);
             }
             else if (!storedActive && p.IsActive)
             {
@@ -134,19 +139,25 @@ public class LocalRepository
             }
         }
 
-        int added = 0;
         foreach (var p in requested.Where(point => point.Id == 0 && point.IsActive))
         {
-            await conn.ExecuteAsync(@"
+            var addedPoint = await conn.QuerySingleAsync<CalibPoint>(@"
                 INSERT INTO calibration_points (channel, adc_code, mass, is_active, created_at, deleted_at)
-                VALUES (@channel, @AdcCode, @Mass, TRUE, NOW(), NULL)",
+                VALUES (@channel, @AdcCode, @Mass, TRUE, NOW(), NULL)
+                RETURNING id,
+                          channel,
+                          adc_code AS AdcCode,
+                          mass AS Mass,
+                          is_active AS IsActive,
+                          created_at AS CreatedAt,
+                          deleted_at AS DeletedAt",
                 new { channel, p.AdcCode, p.Mass }, tx);
-            added++;
+            changed.Add(addedPoint);
         }
 
         await tx.CommitAsync();
         await ReloadCacheAsync(conn);
-        return (added, retired);
+        return changed;
     }
 
     /// <summary>Переключает флаг активности одной точки и обновляет кэш.</summary>

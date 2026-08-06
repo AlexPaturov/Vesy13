@@ -1612,12 +1612,18 @@ public partial class ServiceForm : Form
         int channel = _calibUseCh0 ? 0 : 1;
         try
         {
-            var saveResult = await _calib.SaveCalibPointsAsync(channel, pts);
+            var changedPoints = await _calib.SaveCalibPointsAsync(channel, pts);
             _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
             _settings.Save();
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points",
-                $"ch={(_calibUseCh0 ? "CH0" : "CH1")} added={saveResult.Added} retired={saveResult.Retired}");
+            foreach (var point in changedPoints)
+            {
+                string operation = point.IsActive ? "added" : "retired";
+                AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points",
+                    $"operation={operation}; id={point.Id}; channel=CH{point.Channel}; adc_code={point.AdcCode}; " +
+                    $"mass={point.Mass.ToString("G", CultureInfo.InvariantCulture)}; is_active={point.IsActive}; " +
+                    $"created_at={point.CreatedAt.ToUniversalTime():O}; deleted_at={point.DeletedAt?.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture) ?? "null"}");
+            }
             await LoadCalibPointsAsync();
         }
         catch (Exception ex)
