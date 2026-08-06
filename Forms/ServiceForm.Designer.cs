@@ -86,14 +86,14 @@ partial class ServiceForm
         _pnlCalibSForm = new Panel();
         _pnlCalibSFormInner = new Panel();
         _tlpCalibSForm = new TableLayoutPanel();
-        _txtK = new TextBox();
-        _lblKEquals = new Label();
-        _txtB = new TextBox();
-        _lblBEquals = new Label();
+        _txtCoefficient = new TextBox();
+        _lblCoefficientEquals = new Label();
+        _txtOffset = new TextBox();
+        _lblOffsetEquals = new Label();
         _btnAddRow = new Button();
         _btnDelRow = new Button();
         _btnLsq = new Button();
-        _lblFormula = new Label();
+        _lblStaticLsqFormula = new Label();
         _btnCalibSave = new Button();
         _pnlCalibSHead = new Panel();
         tlpCalibSHead = new TableLayoutPanel();
@@ -199,6 +199,7 @@ partial class ServiceForm
         _lblDynamicEmaAlphaCap = new Label();
         _txtDynamicEmaAlpha = new TextBox();
         _rateTimer = new System.Windows.Forms.Timer(components);
+        _chbCalibCounter = new CheckBox();
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
         _tabMonitor.SuspendLayout();
@@ -1011,10 +1012,9 @@ partial class ServiceForm
         // dataGridViewTextBoxColumn3
         // 
         dataGridViewTextBoxColumn3.FillWeight = 25F;
-        dataGridViewTextBoxColumn3.HeaderText = "K/65535";
-        dataGridViewTextBoxColumn3.MinimumWidth = 105;
+        dataGridViewTextBoxColumn3.HeaderText = "Калибр. число";
+        dataGridViewTextBoxColumn3.MinimumWidth = 135;
         dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-        dataGridViewTextBoxColumn3.ReadOnly = true;
         // 
         // dataGridViewTextBoxColumnCalibCreated
         // 
@@ -1058,15 +1058,16 @@ partial class ServiceForm
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.51445F));
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.0578041F));
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 37.4277458F));
-        _tlpCalibSForm.Controls.Add(_txtK, 1, 0);
-        _tlpCalibSForm.Controls.Add(_lblKEquals, 0, 0);
-        _tlpCalibSForm.Controls.Add(_txtB, 1, 1);
-        _tlpCalibSForm.Controls.Add(_lblBEquals, 0, 1);
+        _tlpCalibSForm.Controls.Add(_txtCoefficient, 1, 0);
+        _tlpCalibSForm.Controls.Add(_lblCoefficientEquals, 0, 0);
+        _tlpCalibSForm.Controls.Add(_txtOffset, 1, 1);
+        _tlpCalibSForm.Controls.Add(_lblOffsetEquals, 0, 1);
         _tlpCalibSForm.Controls.Add(_btnAddRow, 2, 4);
         _tlpCalibSForm.Controls.Add(_btnDelRow, 2, 5);
         _tlpCalibSForm.Controls.Add(_btnLsq, 2, 1);
-        _tlpCalibSForm.Controls.Add(_lblFormula, 0, 8);
+        _tlpCalibSForm.Controls.Add(_lblStaticLsqFormula, 0, 8);
         _tlpCalibSForm.Controls.Add(_btnCalibSave, 1, 8);
+        _tlpCalibSForm.Controls.Add(_chbCalibCounter, 0, 2);
         _tlpCalibSForm.Dock = DockStyle.Fill;
         _tlpCalibSForm.Location = new Point(0, 0);
         _tlpCalibSForm.Name = "_tlpCalibSForm";
@@ -1083,51 +1084,51 @@ partial class ServiceForm
         _tlpCalibSForm.Size = new Size(693, 569);
         _tlpCalibSForm.TabIndex = 6;
         // 
-        // _txtK
+        // _txtCoefficient
         // 
-        _txtK.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _txtK.Font = new Font("Courier New", 12F);
-        _txtK.Location = new Point(231, 17);
-        _txtK.Margin = new Padding(5, 0, 5, 0);
-        _txtK.Name = "_txtK";
-        _txtK.Size = new Size(197, 30);
-        _txtK.TabIndex = 9;
-        _txtK.Text = "0";
+        _txtCoefficient.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _txtCoefficient.Font = new Font("Courier New", 12F);
+        _txtCoefficient.Location = new Point(231, 17);
+        _txtCoefficient.Margin = new Padding(5, 0, 5, 0);
+        _txtCoefficient.Name = "_txtCoefficient";
+        _txtCoefficient.Size = new Size(197, 30);
+        _txtCoefficient.TabIndex = 9;
+        _txtCoefficient.Text = "0";
         // 
-        // _lblKEquals
+        // _lblCoefficientEquals
         // 
-        _lblKEquals.AutoSize = true;
-        _lblKEquals.Dock = DockStyle.Fill;
-        _lblKEquals.Font = new Font("Segoe UI", 12F);
-        _lblKEquals.Location = new Point(4, 1);
-        _lblKEquals.Name = "_lblKEquals";
-        _lblKEquals.Size = new Size(218, 62);
-        _lblKEquals.TabIndex = 8;
-        _lblKEquals.Text = "k  =";
-        _lblKEquals.TextAlign = ContentAlignment.MiddleRight;
+        _lblCoefficientEquals.AutoSize = true;
+        _lblCoefficientEquals.Dock = DockStyle.Fill;
+        _lblCoefficientEquals.Font = new Font("Segoe UI", 12F);
+        _lblCoefficientEquals.Location = new Point(4, 1);
+        _lblCoefficientEquals.Name = "_lblCoefficientEquals";
+        _lblCoefficientEquals.Size = new Size(218, 62);
+        _lblCoefficientEquals.TabIndex = 8;
+        _lblCoefficientEquals.Text = "Коэффициент =";
+        _lblCoefficientEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
-        // _txtB
+        // _txtOffset
         // 
-        _txtB.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _txtB.Font = new Font("Courier New", 12F);
-        _txtB.Location = new Point(231, 80);
-        _txtB.Margin = new Padding(5, 0, 5, 0);
-        _txtB.Name = "_txtB";
-        _txtB.Size = new Size(197, 30);
-        _txtB.TabIndex = 11;
-        _txtB.Text = "0";
+        _txtOffset.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _txtOffset.Font = new Font("Courier New", 12F);
+        _txtOffset.Location = new Point(231, 80);
+        _txtOffset.Margin = new Padding(5, 0, 5, 0);
+        _txtOffset.Name = "_txtOffset";
+        _txtOffset.Size = new Size(197, 30);
+        _txtOffset.TabIndex = 11;
+        _txtOffset.Text = "0";
         // 
-        // _lblBEquals
+        // _lblOffsetEquals
         // 
-        _lblBEquals.AutoSize = true;
-        _lblBEquals.Dock = DockStyle.Fill;
-        _lblBEquals.Font = new Font("Segoe UI", 12F);
-        _lblBEquals.Location = new Point(4, 64);
-        _lblBEquals.Name = "_lblBEquals";
-        _lblBEquals.Size = new Size(218, 62);
-        _lblBEquals.TabIndex = 10;
-        _lblBEquals.Text = "b  =";
-        _lblBEquals.TextAlign = ContentAlignment.MiddleRight;
+        _lblOffsetEquals.AutoSize = true;
+        _lblOffsetEquals.Dock = DockStyle.Fill;
+        _lblOffsetEquals.Font = new Font("Segoe UI", 12F);
+        _lblOffsetEquals.Location = new Point(4, 64);
+        _lblOffsetEquals.Name = "_lblOffsetEquals";
+        _lblOffsetEquals.Size = new Size(218, 62);
+        _lblOffsetEquals.TabIndex = 10;
+        _lblOffsetEquals.Text = "Смещение =";
+        _lblOffsetEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _btnAddRow
         // 
@@ -1175,17 +1176,17 @@ partial class ServiceForm
         _btnLsq.UseVisualStyleBackColor = false;
         _btnLsq.Click += BtnLsq_Click;
         // 
-        // _lblFormula
+        // _lblStaticLsqFormula
         // 
-        _lblFormula.AutoSize = true;
-        _lblFormula.Dock = DockStyle.Fill;
-        _lblFormula.Font = new Font("Segoe UI", 12F);
-        _lblFormula.Location = new Point(4, 505);
-        _lblFormula.Name = "_lblFormula";
-        _lblFormula.Size = new Size(218, 63);
-        _lblFormula.TabIndex = 12;
-        _lblFormula.Text = "Масса = k × Код + b";
-        _lblFormula.TextAlign = ContentAlignment.MiddleCenter;
+        _lblStaticLsqFormula.AutoSize = true;
+        _lblStaticLsqFormula.Dock = DockStyle.Fill;
+        _lblStaticLsqFormula.Font = new Font("Segoe UI", 12F);
+        _lblStaticLsqFormula.Location = new Point(4, 505);
+        _lblStaticLsqFormula.Name = "_lblStaticLsqFormula";
+        _lblStaticLsqFormula.Size = new Size(218, 63);
+        _lblStaticLsqFormula.TabIndex = 12;
+        _lblStaticLsqFormula.Text = "Масса = Коэффициент × Код + Смещение";
+        _lblStaticLsqFormula.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _btnCalibSave
         // 
@@ -2255,40 +2256,40 @@ partial class ServiceForm
         _btnSaveSettings.Text = "Сохранить";
         _btnSaveSettings.UseVisualStyleBackColor = false;
         _btnSaveSettings.Click += BtnSaveSettings_Click;
-        //
+        // 
         // _lblFilterStaticCap
-        //
+        // 
         _lblFilterStaticCap.AutoSize = true;
         _lblFilterStaticCap.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
         _lblFilterStaticCap.Location = new Point(560, 27);
         _lblFilterStaticCap.Name = "_lblFilterStaticCap";
-        _lblFilterStaticCap.Size = new Size(190, 23);
+        _lblFilterStaticCap.Size = new Size(239, 23);
         _lblFilterStaticCap.TabIndex = 11;
         _lblFilterStaticCap.Text = "Фильтры потока — статика";
-        //
+        // 
         // _chkStaticClamp
-        //
+        // 
         _chkStaticClamp.AutoSize = true;
         _chkStaticClamp.Font = new Font("Segoe UI", 10F);
         _chkStaticClamp.Location = new Point(560, 75);
         _chkStaticClamp.Name = "_chkStaticClamp";
-        _chkStaticClamp.Size = new Size(200, 27);
+        _chkStaticClamp.Size = new Size(173, 27);
         _chkStaticClamp.TabIndex = 12;
         _chkStaticClamp.Text = "Клэмп кодов АЦП";
         _chkStaticClamp.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblStaticClampMinCap
-        //
+        // 
         _lblStaticClampMinCap.AutoSize = true;
         _lblStaticClampMinCap.Font = new Font("Segoe UI", 10F);
         _lblStaticClampMinCap.Location = new Point(600, 123);
         _lblStaticClampMinCap.Name = "_lblStaticClampMinCap";
-        _lblStaticClampMinCap.Size = new Size(90, 23);
+        _lblStaticClampMinCap.Size = new Size(85, 23);
         _lblStaticClampMinCap.TabIndex = 13;
         _lblStaticClampMinCap.Text = "Мин. код:";
-        //
+        // 
         // _txtStaticClampMin
-        //
+        // 
         _txtStaticClampMin.Font = new Font("Segoe UI", 12F);
         _txtStaticClampMin.Location = new Point(800, 117);
         _txtStaticClampMin.Margin = new Padding(3, 4, 3, 4);
@@ -2296,19 +2297,19 @@ partial class ServiceForm
         _txtStaticClampMin.Size = new Size(150, 34);
         _txtStaticClampMin.TabIndex = 14;
         _txtStaticClampMin.Text = "0";
-        //
+        // 
         // _lblStaticClampMaxCap
-        //
+        // 
         _lblStaticClampMaxCap.AutoSize = true;
         _lblStaticClampMaxCap.Font = new Font("Segoe UI", 10F);
         _lblStaticClampMaxCap.Location = new Point(600, 171);
         _lblStaticClampMaxCap.Name = "_lblStaticClampMaxCap";
-        _lblStaticClampMaxCap.Size = new Size(100, 23);
+        _lblStaticClampMaxCap.Size = new Size(90, 23);
         _lblStaticClampMaxCap.TabIndex = 15;
         _lblStaticClampMaxCap.Text = "Макс. код:";
-        //
+        // 
         // _txtStaticClampMax
-        //
+        // 
         _txtStaticClampMax.Font = new Font("Segoe UI", 12F);
         _txtStaticClampMax.Location = new Point(800, 165);
         _txtStaticClampMax.Margin = new Padding(3, 4, 3, 4);
@@ -2316,30 +2317,30 @@ partial class ServiceForm
         _txtStaticClampMax.Size = new Size(150, 34);
         _txtStaticClampMax.TabIndex = 16;
         _txtStaticClampMax.Text = "65535";
-        //
+        // 
         // _chkStaticDelta
-        //
+        // 
         _chkStaticDelta.AutoSize = true;
         _chkStaticDelta.Font = new Font("Segoe UI", 10F);
         _chkStaticDelta.Location = new Point(560, 219);
         _chkStaticDelta.Name = "_chkStaticDelta";
-        _chkStaticDelta.Size = new Size(200, 27);
+        _chkStaticDelta.Size = new Size(156, 27);
         _chkStaticDelta.TabIndex = 17;
         _chkStaticDelta.Text = "Фильтр скачков";
         _chkStaticDelta.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblStaticDeltaMaxCap
-        //
+        // 
         _lblStaticDeltaMaxCap.AutoSize = true;
         _lblStaticDeltaMaxCap.Font = new Font("Segoe UI", 10F);
         _lblStaticDeltaMaxCap.Location = new Point(600, 267);
         _lblStaticDeltaMaxCap.Name = "_lblStaticDeltaMaxCap";
-        _lblStaticDeltaMaxCap.Size = new Size(180, 23);
+        _lblStaticDeltaMaxCap.Size = new Size(170, 23);
         _lblStaticDeltaMaxCap.TabIndex = 18;
         _lblStaticDeltaMaxCap.Text = "Макс. скачок (коды):";
-        //
+        // 
         // _txtStaticDeltaMax
-        //
+        // 
         _txtStaticDeltaMax.Font = new Font("Segoe UI", 12F);
         _txtStaticDeltaMax.Location = new Point(800, 261);
         _txtStaticDeltaMax.Margin = new Padding(3, 4, 3, 4);
@@ -2347,30 +2348,30 @@ partial class ServiceForm
         _txtStaticDeltaMax.Size = new Size(150, 34);
         _txtStaticDeltaMax.TabIndex = 19;
         _txtStaticDeltaMax.Text = "5000";
-        //
+        // 
         // _chkStaticEma
-        //
+        // 
         _chkStaticEma.AutoSize = true;
         _chkStaticEma.Font = new Font("Segoe UI", 10F);
         _chkStaticEma.Location = new Point(560, 315);
         _chkStaticEma.Name = "_chkStaticEma";
-        _chkStaticEma.Size = new Size(200, 27);
+        _chkStaticEma.Size = new Size(178, 27);
         _chkStaticEma.TabIndex = 20;
         _chkStaticEma.Text = "Сглаживание EMA";
         _chkStaticEma.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblStaticEmaAlphaCap
-        //
+        // 
         _lblStaticEmaAlphaCap.AutoSize = true;
         _lblStaticEmaAlphaCap.Font = new Font("Segoe UI", 10F);
         _lblStaticEmaAlphaCap.Location = new Point(600, 363);
         _lblStaticEmaAlphaCap.Name = "_lblStaticEmaAlphaCap";
-        _lblStaticEmaAlphaCap.Size = new Size(140, 23);
+        _lblStaticEmaAlphaCap.Size = new Size(105, 23);
         _lblStaticEmaAlphaCap.TabIndex = 21;
         _lblStaticEmaAlphaCap.Text = "Альфа (0..1):";
-        //
+        // 
         // _txtStaticEmaAlpha
-        //
+        // 
         _txtStaticEmaAlpha.Font = new Font("Segoe UI", 12F);
         _txtStaticEmaAlpha.Location = new Point(800, 357);
         _txtStaticEmaAlpha.Margin = new Padding(3, 4, 3, 4);
@@ -2378,40 +2379,40 @@ partial class ServiceForm
         _txtStaticEmaAlpha.Size = new Size(150, 34);
         _txtStaticEmaAlpha.TabIndex = 22;
         _txtStaticEmaAlpha.Text = "0.3";
-        //
+        // 
         // _lblFilterDynamicCap
-        //
+        // 
         _lblFilterDynamicCap.AutoSize = true;
         _lblFilterDynamicCap.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
         _lblFilterDynamicCap.Location = new Point(1000, 27);
         _lblFilterDynamicCap.Name = "_lblFilterDynamicCap";
-        _lblFilterDynamicCap.Size = new Size(200, 23);
+        _lblFilterDynamicCap.Size = new Size(260, 23);
         _lblFilterDynamicCap.TabIndex = 23;
         _lblFilterDynamicCap.Text = "Фильтры потока — динамика";
-        //
+        // 
         // _chkDynamicClamp
-        //
+        // 
         _chkDynamicClamp.AutoSize = true;
         _chkDynamicClamp.Font = new Font("Segoe UI", 10F);
         _chkDynamicClamp.Location = new Point(1000, 75);
         _chkDynamicClamp.Name = "_chkDynamicClamp";
-        _chkDynamicClamp.Size = new Size(200, 27);
+        _chkDynamicClamp.Size = new Size(173, 27);
         _chkDynamicClamp.TabIndex = 24;
         _chkDynamicClamp.Text = "Клэмп кодов АЦП";
         _chkDynamicClamp.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblDynamicClampMinCap
-        //
+        // 
         _lblDynamicClampMinCap.AutoSize = true;
         _lblDynamicClampMinCap.Font = new Font("Segoe UI", 10F);
         _lblDynamicClampMinCap.Location = new Point(1040, 123);
         _lblDynamicClampMinCap.Name = "_lblDynamicClampMinCap";
-        _lblDynamicClampMinCap.Size = new Size(90, 23);
+        _lblDynamicClampMinCap.Size = new Size(85, 23);
         _lblDynamicClampMinCap.TabIndex = 25;
         _lblDynamicClampMinCap.Text = "Мин. код:";
-        //
+        // 
         // _txtDynamicClampMin
-        //
+        // 
         _txtDynamicClampMin.Font = new Font("Segoe UI", 12F);
         _txtDynamicClampMin.Location = new Point(1240, 117);
         _txtDynamicClampMin.Margin = new Padding(3, 4, 3, 4);
@@ -2419,19 +2420,19 @@ partial class ServiceForm
         _txtDynamicClampMin.Size = new Size(150, 34);
         _txtDynamicClampMin.TabIndex = 26;
         _txtDynamicClampMin.Text = "0";
-        //
+        // 
         // _lblDynamicClampMaxCap
-        //
+        // 
         _lblDynamicClampMaxCap.AutoSize = true;
         _lblDynamicClampMaxCap.Font = new Font("Segoe UI", 10F);
         _lblDynamicClampMaxCap.Location = new Point(1040, 171);
         _lblDynamicClampMaxCap.Name = "_lblDynamicClampMaxCap";
-        _lblDynamicClampMaxCap.Size = new Size(100, 23);
+        _lblDynamicClampMaxCap.Size = new Size(90, 23);
         _lblDynamicClampMaxCap.TabIndex = 27;
         _lblDynamicClampMaxCap.Text = "Макс. код:";
-        //
+        // 
         // _txtDynamicClampMax
-        //
+        // 
         _txtDynamicClampMax.Font = new Font("Segoe UI", 12F);
         _txtDynamicClampMax.Location = new Point(1240, 165);
         _txtDynamicClampMax.Margin = new Padding(3, 4, 3, 4);
@@ -2439,30 +2440,30 @@ partial class ServiceForm
         _txtDynamicClampMax.Size = new Size(150, 34);
         _txtDynamicClampMax.TabIndex = 28;
         _txtDynamicClampMax.Text = "65535";
-        //
+        // 
         // _chkDynamicDelta
-        //
+        // 
         _chkDynamicDelta.AutoSize = true;
         _chkDynamicDelta.Font = new Font("Segoe UI", 10F);
         _chkDynamicDelta.Location = new Point(1000, 219);
         _chkDynamicDelta.Name = "_chkDynamicDelta";
-        _chkDynamicDelta.Size = new Size(200, 27);
+        _chkDynamicDelta.Size = new Size(156, 27);
         _chkDynamicDelta.TabIndex = 29;
         _chkDynamicDelta.Text = "Фильтр скачков";
         _chkDynamicDelta.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblDynamicDeltaMaxCap
-        //
+        // 
         _lblDynamicDeltaMaxCap.AutoSize = true;
         _lblDynamicDeltaMaxCap.Font = new Font("Segoe UI", 10F);
         _lblDynamicDeltaMaxCap.Location = new Point(1040, 267);
         _lblDynamicDeltaMaxCap.Name = "_lblDynamicDeltaMaxCap";
-        _lblDynamicDeltaMaxCap.Size = new Size(180, 23);
+        _lblDynamicDeltaMaxCap.Size = new Size(170, 23);
         _lblDynamicDeltaMaxCap.TabIndex = 30;
         _lblDynamicDeltaMaxCap.Text = "Макс. скачок (коды):";
-        //
+        // 
         // _txtDynamicDeltaMax
-        //
+        // 
         _txtDynamicDeltaMax.Font = new Font("Segoe UI", 12F);
         _txtDynamicDeltaMax.Location = new Point(1240, 261);
         _txtDynamicDeltaMax.Margin = new Padding(3, 4, 3, 4);
@@ -2470,30 +2471,30 @@ partial class ServiceForm
         _txtDynamicDeltaMax.Size = new Size(150, 34);
         _txtDynamicDeltaMax.TabIndex = 31;
         _txtDynamicDeltaMax.Text = "5000";
-        //
+        // 
         // _chkDynamicStuck
-        //
+        // 
         _chkDynamicStuck.AutoSize = true;
         _chkDynamicStuck.Font = new Font("Segoe UI", 10F);
         _chkDynamicStuck.Location = new Point(1000, 315);
         _chkDynamicStuck.Name = "_chkDynamicStuck";
-        _chkDynamicStuck.Size = new Size(220, 27);
+        _chkDynamicStuck.Size = new Size(185, 27);
         _chkDynamicStuck.TabIndex = 32;
         _chkDynamicStuck.Text = "Застрявший датчик";
         _chkDynamicStuck.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblDynamicStuckSamplesCap
-        //
+        // 
         _lblDynamicStuckSamplesCap.AutoSize = true;
         _lblDynamicStuckSamplesCap.Font = new Font("Segoe UI", 10F);
         _lblDynamicStuckSamplesCap.Location = new Point(1040, 363);
         _lblDynamicStuckSamplesCap.Name = "_lblDynamicStuckSamplesCap";
-        _lblDynamicStuckSamplesCap.Size = new Size(180, 23);
+        _lblDynamicStuckSamplesCap.Size = new Size(144, 23);
         _lblDynamicStuckSamplesCap.TabIndex = 33;
         _lblDynamicStuckSamplesCap.Text = "Порог (сэмплов):";
-        //
+        // 
         // _txtDynamicStuckSamples
-        //
+        // 
         _txtDynamicStuckSamples.Font = new Font("Segoe UI", 12F);
         _txtDynamicStuckSamples.Location = new Point(1240, 357);
         _txtDynamicStuckSamples.Margin = new Padding(3, 4, 3, 4);
@@ -2501,30 +2502,30 @@ partial class ServiceForm
         _txtDynamicStuckSamples.Size = new Size(150, 34);
         _txtDynamicStuckSamples.TabIndex = 34;
         _txtDynamicStuckSamples.Text = "150";
-        //
+        // 
         // _chkDynamicEma
-        //
+        // 
         _chkDynamicEma.AutoSize = true;
         _chkDynamicEma.Font = new Font("Segoe UI", 10F);
         _chkDynamicEma.Location = new Point(1000, 411);
         _chkDynamicEma.Name = "_chkDynamicEma";
-        _chkDynamicEma.Size = new Size(200, 27);
+        _chkDynamicEma.Size = new Size(178, 27);
         _chkDynamicEma.TabIndex = 35;
         _chkDynamicEma.Text = "Сглаживание EMA";
         _chkDynamicEma.UseVisualStyleBackColor = true;
-        //
+        // 
         // _lblDynamicEmaAlphaCap
-        //
+        // 
         _lblDynamicEmaAlphaCap.AutoSize = true;
         _lblDynamicEmaAlphaCap.Font = new Font("Segoe UI", 10F);
         _lblDynamicEmaAlphaCap.Location = new Point(1040, 459);
         _lblDynamicEmaAlphaCap.Name = "_lblDynamicEmaAlphaCap";
-        _lblDynamicEmaAlphaCap.Size = new Size(140, 23);
+        _lblDynamicEmaAlphaCap.Size = new Size(105, 23);
         _lblDynamicEmaAlphaCap.TabIndex = 36;
         _lblDynamicEmaAlphaCap.Text = "Альфа (0..1):";
-        //
+        // 
         // _txtDynamicEmaAlpha
-        //
+        // 
         _txtDynamicEmaAlpha.Font = new Font("Segoe UI", 12F);
         _txtDynamicEmaAlpha.Location = new Point(1240, 453);
         _txtDynamicEmaAlpha.Margin = new Padding(3, 4, 3, 4);
@@ -2532,10 +2533,21 @@ partial class ServiceForm
         _txtDynamicEmaAlpha.Size = new Size(150, 34);
         _txtDynamicEmaAlpha.TabIndex = 37;
         _txtDynamicEmaAlpha.Text = "0.2";
-        //
+        // 
         // _rateTimer
         // 
         _rateTimer.Tick += RateTimer_Tick;
+        // 
+        // _chbCalibCounter
+        // 
+        _chbCalibCounter.AutoSize = true;
+        _chbCalibCounter.Dock = DockStyle.Fill;
+        _chbCalibCounter.Location = new Point(4, 130);
+        _chbCalibCounter.Name = "_chbCalibCounter";
+        _chbCalibCounter.Size = new Size(218, 56);
+        _chbCalibCounter.TabIndex = 15;
+        _chbCalibCounter.Text = "Отключить расчёт калибровочного числа";
+        _chbCalibCounter.UseVisualStyleBackColor = true;
         // 
         // ServiceForm
         // 
@@ -2688,11 +2700,11 @@ partial class ServiceForm
     private DataGridView _dgvCalib;
     private Button       _btnAddRow;
     private Button       _btnDelRow;
-    private Label        _lblKEquals;
-    private TextBox      _txtK;
-    private Label        _lblBEquals;
-    private TextBox      _txtB;
-    private Label        _lblFormula;
+    private Label        _lblCoefficientEquals;
+    private TextBox      _txtCoefficient;
+    private Label        _lblOffsetEquals;
+    private TextBox      _txtOffset;
+    private Label        _lblStaticLsqFormula;
     private Button       _btnLsq;
     private Button       _btnCalibSave;
 
@@ -2797,4 +2809,5 @@ partial class ServiceForm
     private TableLayoutPanel _tlpCalibSForm;
     private Panel _pnlCalibSForm;
     private Panel _pnlCalibSFormInner;
+    private CheckBox _chbCalibCounter;
 }

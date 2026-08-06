@@ -1,3 +1,4 @@
+using System.Globalization;
 using Vesy13.Application;
 using Vesy13.Models;
 using Vesy13.Services.Configuration;
@@ -95,9 +96,9 @@ public partial class StaticWeighingForm : Form
         if (point is null)
             return $"{common} calibPoint=none";
 
-        double k = point.AdcCode == 0 ? 0 : (double)point.Mass / point.AdcCode;
         return $"{common} calibPointId={point.Id} calibPointChannel={point.Channel} " +
-               $"calibPointCode={point.AdcCode} calibPointMass={(double)point.Mass:F4} calibK={k:F8}";
+               $"calibPointCode={point.AdcCode} calibPointMass={(double)point.Mass:F4} " +
+               $"calibrationValue={point.CalibrationValue.ToString("F5", CultureInfo.InvariantCulture)}";
     }
 
     private double ToTonnes(int adcCode) =>

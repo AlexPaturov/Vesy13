@@ -329,7 +329,13 @@ else {
     Write-Log 'Database scale_db created.'
 }
 
-# -- 3a. Schema upgrade: unique active static calibration mass ----------------
+# -- 3a. Schema upgrade: static calibration value ----------------------------
+
+Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
+    -Command 'ALTER TABLE calibration_points ADD COLUMN IF NOT EXISTS calibration_value NUMERIC(12,5) NOT NULL' | Out-Null
+Write-Log 'Static calibration value column verified.'
+
+# -- 3b. Schema upgrade: unique active static calibration mass ----------------
 
 Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
     -Command 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calibration_points_active_channel_mass ON calibration_points (channel, mass) WHERE is_active = TRUE AND deleted_at IS NULL' | Out-Null

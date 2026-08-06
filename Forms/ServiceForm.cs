@@ -194,24 +194,26 @@ public partial class ServiceForm : Form
         _dgvCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
         _dgvCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
         _dgvCalib.GridColor = ServiceUiColors.GridLine;
+        _chbCalibCounter.Font = ServiceUiFonts.Body;
+        _chbCalibCounter.UseVisualStyleBackColor = false;
         _btnAddRow.Font = ServiceUiFonts.Body;
         _btnAddRow.BackColor = ServiceUiColors.NeutralAction;
         _btnAddRow.ForeColor = ServiceUiColors.TextPrimary;
         _btnDelRow.Font = ServiceUiFonts.Body;
         _btnDelRow.BackColor = ServiceUiColors.NeutralAction;
         _btnDelRow.ForeColor = ServiceUiColors.TextPrimary;
-        _lblKEquals.Font = ServiceUiFonts.Medium;
-        _lblKEquals.ForeColor = ServiceUiColors.TextPrimary;
-        _txtK.Font = ServiceUiFonts.Mono;
-        _txtK.BackColor = ServiceUiColors.InputBack;
-        _txtK.ForeColor = ServiceUiColors.InputFore;
-        _lblBEquals.Font = ServiceUiFonts.Medium;
-        _lblBEquals.ForeColor = ServiceUiColors.TextPrimary;
-        _txtB.Font = ServiceUiFonts.Mono;
-        _txtB.BackColor = ServiceUiColors.InputBack;
-        _txtB.ForeColor = ServiceUiColors.InputFore;
-        _lblFormula.Font = ServiceUiFonts.Body;
-        _lblFormula.ForeColor = ServiceUiColors.TextMuted;
+        _lblCoefficientEquals.Font = ServiceUiFonts.Medium;
+        _lblCoefficientEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _txtCoefficient.Font = ServiceUiFonts.Mono;
+        _txtCoefficient.BackColor = ServiceUiColors.InputBack;
+        _txtCoefficient.ForeColor = ServiceUiColors.InputFore;
+        _lblOffsetEquals.Font = ServiceUiFonts.Medium;
+        _lblOffsetEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _txtOffset.Font = ServiceUiFonts.Mono;
+        _txtOffset.BackColor = ServiceUiColors.InputBack;
+        _txtOffset.ForeColor = ServiceUiColors.InputFore;
+        _lblStaticLsqFormula.Font = ServiceUiFonts.Body;
+        _lblStaticLsqFormula.ForeColor = ServiceUiColors.TextMuted;
         _btnLsq.Font = ServiceUiFonts.Medium;
         _btnLsq.BackColor = ServiceUiColors.SecondaryAction;
         _btnLsq.ForeColor = ServiceUiColors.TextOnDark;
@@ -438,6 +440,8 @@ public partial class ServiceForm : Form
         _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
+        _chbCalibCounter.CheckedChanged += ChbCalibCounter_CheckedChanged;
+        UpdateCalibCounterMode(recalculateNewRows: false);
         _rateTimer.Start();
         _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.Backup;
@@ -527,9 +531,9 @@ public partial class ServiceForm : Form
             MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
-        var (k, b) = CalibrationCalculator.CalculateLsq(pts.Select(p => (p.AdcCode, p.Mass, p.IsActive)));
-        _txtK.Text = k.ToString("G8", CultureInfo.InvariantCulture);
-        _txtB.Text = b.ToString("G8", CultureInfo.InvariantCulture);
+        var (coefficient, offset) = CalibrationCalculator.CalculateLsq(pts.Select(p => (p.AdcCode, p.Mass, p.IsActive)));
+        _txtCoefficient.Text = coefficient.ToString("G8", CultureInfo.InvariantCulture);
+        _txtOffset.Text = offset.ToString("G8", CultureInfo.InvariantCulture);
     }
 
     private void BtnCapPlus_Click(object? sender, EventArgs e)
@@ -1621,7 +1625,8 @@ public partial class ServiceForm : Form
                 string operation = point.IsActive ? "added" : "retired";
                 AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points",
                     $"operation={operation}; id={point.Id}; channel=CH{point.Channel}; adc_code={point.AdcCode}; " +
-                    $"mass={point.Mass.ToString("G", CultureInfo.InvariantCulture)}; is_active={point.IsActive}; " +
+                    $"mass={point.Mass.ToString("G", CultureInfo.InvariantCulture)}; " +
+                    $"calibration_value={point.CalibrationValue.ToString("F5", CultureInfo.InvariantCulture)}; is_active={point.IsActive}; " +
                     $"created_at={point.CreatedAt.ToUniversalTime():O}; deleted_at={point.DeletedAt?.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture) ?? "null"}");
             }
             await LoadCalibPointsAsync();
@@ -1646,8 +1651,7 @@ public partial class ServiceForm : Form
             _dgvCalib.Rows[row].Cells[0].Value = p.IsActive ? "Да" : "Нет";
             _dgvCalib.Rows[row].Cells[1].Value = p.AdcCode;
             _dgvCalib.Rows[row].Cells[2].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
-            if (p.AdcCode != 0)
-                _dgvCalib.Rows[row].Cells[3].Value = ((double)p.Mass / p.AdcCode * 65535).ToString("F4", CultureInfo.InvariantCulture);
+            _dgvCalib.Rows[row].Cells[3].Value = p.CalibrationValue.ToString("F5", CultureInfo.InvariantCulture);
             _dgvCalib.Rows[row].Cells[4].Value = p.CreatedAt == default ? "" : p.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm");
             _dgvCalib.Rows[row].Cells[5].Value = p.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "";
             ApplyCalibRowStyle(_dgvCalib.Rows[row]);
@@ -1665,9 +1669,12 @@ public partial class ServiceForm : Form
     private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
     {
         if (e.RowIndex < 0) return;
-        if (e.ColumnIndex == 1 || e.ColumnIndex == 2)
+        if (!_chbCalibCounter.Checked && (e.ColumnIndex == 1 || e.ColumnIndex == 2))
             RefreshCalibK(e.RowIndex);
     }
+
+    private void ChbCalibCounter_CheckedChanged(object? sender, EventArgs e) =>
+        UpdateCalibCounterMode(recalculateNewRows: true);
 
     private void RefreshCalibK(int rowIndex)
     {
@@ -1675,9 +1682,35 @@ public partial class ServiceForm : Form
         if (int.TryParse(row.Cells[1].Value?.ToString(), out int code) &&
             double.TryParse(row.Cells[2].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
             code != 0)
-            row.Cells[3].Value = (mass / code * 65535).ToString("F4", CultureInfo.InvariantCulture);
+            row.Cells[3].Value = (mass / code * 65535).ToString("F5", CultureInfo.InvariantCulture);
         else
             row.Cells[3].Value = "";
+    }
+
+    private void UpdateCalibCounterMode(bool recalculateNewRows)
+    {
+        bool manualMode = _chbCalibCounter.Checked;
+        _dgvCalib.Columns[3].ReadOnly = !manualMode;
+
+        var backColor = manualMode ? ServiceUiColors.GridAlertRow : ServiceUiColors.Surface;
+        _pnlCalibSForm.BackColor = backColor;
+        _pnlCalibSFormInner.BackColor = backColor;
+        _tlpCalibSForm.BackColor = backColor;
+        _chbCalibCounter.BackColor = backColor;
+        _chbCalibCounter.ForeColor = manualMode ? ServiceUiColors.Error : ServiceUiColors.TextPrimary;
+
+        if (!manualMode && recalculateNewRows)
+        {
+            foreach (DataGridViewRow row in _dgvCalib.Rows)
+            {
+                if (row.Tag is CalibPoint { Id: > 0 })
+                    continue;
+
+                RefreshCalibK(row.Index);
+            }
+        }
+
+        UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
     }
 
     private void SetCalibRowActive(DataGridViewRow row, bool isActive, DateTime? deletedAt = null)
@@ -1731,6 +1764,8 @@ public partial class ServiceForm : Form
                 continue;
             if (!decimal.TryParse(row.Cells[2].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
                 continue;
+            if (!decimal.TryParse(row.Cells[3].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal calibrationValue))
+                continue;
 
             bool active = row.Cells[0].Value?.ToString() == "Да";
             var existing = row.Tag as CalibPoint;
@@ -1742,6 +1777,7 @@ public partial class ServiceForm : Form
                 Channel = channel,
                 AdcCode = code,
                 Mass = mass,
+                CalibrationValue = calibrationValue,
                 IsActive = active,
                 CreatedAt = existing?.CreatedAt ?? default,
                 DeletedAt = deletedAt,

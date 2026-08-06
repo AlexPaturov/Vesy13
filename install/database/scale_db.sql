@@ -46,6 +46,7 @@ CREATE TABLE calibration_points (
     adc_code   INTEGER      NOT NULL,
     mass       NUMERIC(6,2) NOT NULL CHECK (mass >= 0 AND mass <= 150),
     is_active  BOOLEAN      NOT NULL DEFAULT TRUE,
+    calibration_value NUMERIC(12,5) NOT NULL,
     created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ
 );

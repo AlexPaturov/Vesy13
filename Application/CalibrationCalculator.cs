@@ -5,11 +5,11 @@ namespace Vesy13.Application;
 
 /// <summary>
 /// Пересчёт кода АЦП в тонны по активным калибровочным точкам текущего канала.
-/// Каждая точка задаёт собственный коэффициент: масса_точки / код_АЦП_точки.
+/// Каждая точка задаёт собственное калибровочное число.
 /// Точки сортируются по коду АЦП. Для расчёта выбирается последняя точка,
 /// код которой меньше или равен текущему коду АЦП. Если текущий код ниже первой
 /// точки, используется первая точка; если выше последней — последняя.
-/// Вес считается без интерполяции: текущий_код_АЦП * коэффициент_выбранной_точки.
+/// Вес считается без интерполяции: текущий_код_АЦП * калибровочное_число / 65535.
 /// </summary>
 public static class CalibrationCalculator
 {
@@ -36,12 +36,10 @@ public static class CalibrationCalculator
                 break;
         }
 
-        return point.AdcCode == 0
-            ? 0
-            : adcCode * ((double)point.Mass / point.AdcCode);
+        return adcCode * ((double)point.CalibrationValue / 65535d);
     }
 
-    public static (double K, double B) CalculateLsq(IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> points)
+    public static (double Coefficient, double Offset) CalculateLsq(IEnumerable<(int AdcCode, decimal Mass, bool IsActive)> points)
     {
         var list = points.ToList();
         int n = list.Count;
@@ -52,9 +50,9 @@ public static class CalibrationCalculator
         double sumX2 = list.Sum(p => (double)p.AdcCode * (double)p.AdcCode);
         double denom = n * sumX2 - sumX * sumX;
         if (denom == 0) return (0, 0);
-        double k = (n * sumXY - sumX * sumY) / denom;
-        double b = (sumY - k * sumX) / n;
-        return (k, b);
+        double coefficient = (n * sumXY - sumX * sumY) / denom;
+        double offset = (sumY - coefficient * sumX) / n;
+        return (coefficient, offset);
     }
 
     public static double ConvertDynamic(DynamicCalib calib, int adcCode, string direction)

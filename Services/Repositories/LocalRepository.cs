@@ -30,8 +30,14 @@ public class LocalRepository
             await conn.OpenAsync();
 
             var pts = await conn.QueryAsync<CalibPoint>(@"
-                SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive,
-                       created_at AS CreatedAt, deleted_at AS DeletedAt
+                SELECT id,
+                       channel,
+                       adc_code AS AdcCode,
+                       mass AS Mass,
+                       calibration_value AS CalibrationValue,
+                       is_active AS IsActive,
+                       created_at AS CreatedAt,
+                       deleted_at AS DeletedAt
                 FROM calibration_points
                 ORDER BY channel, adc_code");
             CalibPoints = pts.ToList().AsReadOnly();
@@ -69,7 +75,8 @@ public class LocalRepository
                 id,
                 channel,
                 adc_code AS AdcCode,
-                CAST(mass AS float8) AS Mass,
+                mass AS Mass,
+                calibration_value AS CalibrationValue,
                 is_active AS IsActive,
                 created_at AS CreatedAt,
                 deleted_at AS DeletedAt
@@ -82,7 +89,7 @@ public class LocalRepository
 
     /// <summary>
     /// Сохраняет неизменяемые точки канала: новые добавляются, существующие можно только снять.
-    /// Код АЦП и масса сохранённой точки никогда не обновляются.
+    /// Код АЦП, масса и калибровочное число сохранённой точки никогда не обновляются.
     /// </summary>
     public async Task<IReadOnlyList<CalibPoint>> SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)
     {
@@ -95,6 +102,7 @@ public class LocalRepository
             SELECT id,
                    adc_code AS AdcCode,
                    mass AS Mass,
+                   calibration_value AS CalibrationValue,
                    is_active AS IsActive,
                    created_at AS CreatedAt,
                    deleted_at AS DeletedAt
@@ -109,7 +117,7 @@ public class LocalRepository
             if (!current.TryGetValue(p.Id, out var stored))
                 throw new InvalidOperationException($"Calibration point {p.Id} does not belong to channel {channel}.");
 
-            if (stored.AdcCode != p.AdcCode || stored.Mass != p.Mass)
+            if (stored.AdcCode != p.AdcCode || stored.Mass != p.Mass || stored.CalibrationValue != p.CalibrationValue)
                 throw new InvalidOperationException($"Calibration point {p.Id} is immutable.");
 
             bool storedActive = stored.IsActive && stored.DeletedAt is null;
@@ -127,6 +135,7 @@ public class LocalRepository
                               channel,
                               adc_code AS AdcCode,
                               mass AS Mass,
+                              calibration_value AS CalibrationValue,
                               is_active AS IsActive,
                               created_at AS CreatedAt,
                               deleted_at AS DeletedAt",
@@ -142,16 +151,17 @@ public class LocalRepository
         foreach (var p in requested.Where(point => point.Id == 0 && point.IsActive))
         {
             var addedPoint = await conn.QuerySingleAsync<CalibPoint>(@"
-                INSERT INTO calibration_points (channel, adc_code, mass, is_active, created_at, deleted_at)
-                VALUES (@channel, @AdcCode, @Mass, TRUE, NOW(), NULL)
+                INSERT INTO calibration_points (channel, adc_code, mass, calibration_value, is_active, created_at, deleted_at)
+                VALUES (@channel, @AdcCode, @Mass, @CalibrationValue, TRUE, NOW(), NULL)
                 RETURNING id,
                           channel,
                           adc_code AS AdcCode,
                           mass AS Mass,
+                          calibration_value AS CalibrationValue,
                           is_active AS IsActive,
                           created_at AS CreatedAt,
                           deleted_at AS DeletedAt",
-                new { channel, p.AdcCode, p.Mass }, tx);
+                new { channel, p.AdcCode, p.Mass, p.CalibrationValue }, tx);
             changed.Add(addedPoint);
         }
 
@@ -400,7 +410,14 @@ public class LocalRepository
     private async Task ReloadCacheAsync(NpgsqlConnection conn)
     {
         var pts = await conn.QueryAsync<CalibPoint>(@"
-            SELECT id, channel, adc_code AS AdcCode, CAST(mass AS float8) AS Mass, is_active AS IsActive, deleted_at AS DeletedAt
+            SELECT id,
+                   channel,
+                   adc_code AS AdcCode,
+                   mass AS Mass,
+                   calibration_value AS CalibrationValue,
+                   is_active AS IsActive,
+                   created_at AS CreatedAt,
+                   deleted_at AS DeletedAt
             FROM calibration_points
             ORDER BY channel, adc_code");
         CalibPoints = pts.ToList().AsReadOnly();
