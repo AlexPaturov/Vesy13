@@ -203,6 +203,9 @@ public class LocalRepository
         await using var tx = await conn.BeginTransactionAsync();
 
         var changed = new List<DynamicCalib>();
+        double kPlus = Math.Round(calib.KPlus, 5, MidpointRounding.AwayFromZero);
+        double kMinus = Math.Round(calib.KMinus, 5, MidpointRounding.AwayFromZero);
+
         var retired = await conn.QueryAsync<DynamicCalib>(@"
             UPDATE calibration_dynamic
             SET is_active = FALSE,
@@ -225,7 +228,7 @@ public class LocalRepository
                       is_active AS IsActive,
                       created_at AS CreatedAt,
                       deleted_at AS DeletedAt",
-            new { calib.KPlus, calib.KMinus }, tx);
+            new { KPlus = kPlus, KMinus = kMinus }, tx);
         changed.Add(added);
 
         await tx.CommitAsync();

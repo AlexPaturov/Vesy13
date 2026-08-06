@@ -1887,8 +1887,8 @@ public partial class ServiceForm : Form
             {
                 string operation = profile.IsActive ? "added" : "retired";
                 AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_dynamic",
-                    $"operation={operation}; id={profile.Id}; k_plus={profile.KPlus.ToString("G17", CultureInfo.InvariantCulture)}; " +
-                    $"k_minus={profile.KMinus.ToString("G17", CultureInfo.InvariantCulture)}; is_active={profile.IsActive}; " +
+                    $"operation={operation}; id={profile.Id}; k_plus={profile.KPlus.ToString("F5", CultureInfo.InvariantCulture)}; " +
+                    $"k_minus={profile.KMinus.ToString("F5", CultureInfo.InvariantCulture)}; is_active={profile.IsActive}; " +
                     $"created_at={profile.CreatedAt.ToUniversalTime():O}; deleted_at={profile.DeletedAt?.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture) ?? "null"}");
             }
         }
@@ -1905,8 +1905,8 @@ public partial class ServiceForm : Form
         {
             row.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
             row.DefaultCellStyle.ForeColor = row.DataGridView?.DefaultCellStyle.ForeColor ?? ServiceUiColors.TextPrimary;
-            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridRowBack;
-            row.DefaultCellStyle.SelectionForeColor = row.DataGridView?.DefaultCellStyle.SelectionForeColor ?? ServiceUiColors.GridSelectionText;
+            row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+            row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
             row.ReadOnly = false;
             return;
         }
@@ -1914,8 +1914,8 @@ public partial class ServiceForm : Form
         var deletedBack = Color.FromArgb(255, 228, 232);
         row.DefaultCellStyle.BackColor = deletedBack;
         row.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
-        row.DefaultCellStyle.SelectionBackColor = deletedBack;
-        row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.TextPrimary;
+        row.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+        row.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
         row.ReadOnly = true;
     }
 
