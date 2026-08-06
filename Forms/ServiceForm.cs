@@ -1878,12 +1878,19 @@ public partial class ServiceForm : Form
 
         try
         {
-            await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
+            var changedProfiles = await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
             _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
             _settings.Save();
             await LoadCalibDynamicAsync();
             MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            AuditLogger.Action(AuditLogger.CalibrationSaved, "CalibProfile", $"dynamic id={_calib.Dynamic.Id} kp={kp:G4} km={km:G4}");
+            foreach (var profile in changedProfiles)
+            {
+                string operation = profile.IsActive ? "added" : "retired";
+                AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_dynamic",
+                    $"operation={operation}; id={profile.Id}; k_plus={profile.KPlus.ToString("G17", CultureInfo.InvariantCulture)}; " +
+                    $"k_minus={profile.KMinus.ToString("G17", CultureInfo.InvariantCulture)}; is_active={profile.IsActive}; " +
+                    $"created_at={profile.CreatedAt.ToUniversalTime():O}; deleted_at={profile.DeletedAt?.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture) ?? "null"}");
+            }
         }
         catch (Exception ex)
         {

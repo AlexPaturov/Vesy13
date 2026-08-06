@@ -196,27 +196,41 @@ public class LocalRepository
         return rows.ToList();
     }
 
-    public async Task SaveDynamicCalibAsync(DynamicCalib calib)
+    public async Task<IReadOnlyList<DynamicCalib>> SaveDynamicCalibAsync(DynamicCalib calib)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
 
-        await conn.ExecuteAsync(@"
+        var changed = new List<DynamicCalib>();
+        var retired = await conn.QueryAsync<DynamicCalib>(@"
             UPDATE calibration_dynamic
             SET is_active = FALSE,
                 deleted_at = COALESCE(deleted_at, NOW())
-            WHERE is_active = TRUE AND deleted_at IS NULL", transaction: tx);
+            WHERE is_active = TRUE AND deleted_at IS NULL
+            RETURNING id,
+                      k_plus AS KPlus,
+                      k_minus AS KMinus,
+                      is_active AS IsActive,
+                      created_at AS CreatedAt,
+                      deleted_at AS DeletedAt", transaction: tx);
+        changed.AddRange(retired);
 
-        int id = await conn.ExecuteScalarAsync<int>(@"
+        var added = await conn.QuerySingleAsync<DynamicCalib>(@"
             INSERT INTO calibration_dynamic (k_plus, k_minus, is_active, created_at, deleted_at)
             VALUES (@KPlus, @KMinus, TRUE, NOW(), NULL)
-            RETURNING id",
+            RETURNING id,
+                      k_plus AS KPlus,
+                      k_minus AS KMinus,
+                      is_active AS IsActive,
+                      created_at AS CreatedAt,
+                      deleted_at AS DeletedAt",
             new { calib.KPlus, calib.KMinus }, tx);
+        changed.Add(added);
 
         await tx.CommitAsync();
         Dynamic = await LoadActiveDynamicCalibAsync(conn);
-        calib.Id = id;
+        return changed;
     }
 
     // ── Wagon weighing ─────────────────────────────────────────────────────
