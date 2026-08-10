@@ -1123,7 +1123,8 @@ partial class ServiceForm
         // _chbCalibCounter
         // 
         _chbCalibCounter.AutoSize = true;
-        _chbCalibCounter.Dock = DockStyle.Fill;
+        _chbCalibCounter.Dock = DockStyle.Right;
+        _chbCalibCounter.Margin = new Padding(0);
         _chbCalibCounter.Location = new Point(4, 130);
         _chbCalibCounter.Name = "_chbCalibCounter";
         _chbCalibCounter.Size = new Size(218, 56);
@@ -1135,13 +1136,14 @@ partial class ServiceForm
         // _lblCalibCounterSuffix
         // 
         _lblCalibCounterSuffix.AutoSize = true;
-        _lblCalibCounterSuffix.Dock = DockStyle.Fill;
+        _lblCalibCounterSuffix.Dock = DockStyle.Left;
+        _lblCalibCounterSuffix.Margin = new Padding(0);
         _lblCalibCounterSuffix.Location = new Point(229, 127);
         _lblCalibCounterSuffix.Name = "_lblCalibCounterSuffix";
         _lblCalibCounterSuffix.Size = new Size(201, 62);
         _lblCalibCounterSuffix.TabIndex = 21;
         _lblCalibCounterSuffix.Text = " калибровочного числа";
-        _lblCalibCounterSuffix.TextAlign = ContentAlignment.MiddleCenter;
+        _lblCalibCounterSuffix.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _pnlCalibSHead
         // 
