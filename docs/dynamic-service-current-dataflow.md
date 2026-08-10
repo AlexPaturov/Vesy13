@@ -13,7 +13,7 @@ ServiceForm._dynamicServiceSim : SimA04ReaderDynamic
 ServiceForm._dynamicCalibSim   : SimA04ReaderDynamic
 ```
 
-Оба reader-а создаются внутри самой `ServiceForm` (`new SimA04ReaderDynamic`) — после рефакторинга развязки reader-ов (`docs/status_2026-07-03.md`) ни один не приходит извне; раньше `_dynamicServiceSim` был общим экземпляром с `MainForm._dynamicSim`. `_dynamicServiceSim` обслуживает вкладку `Сервисный режим Динамика`, `_dynamicCalibSim` — только вкладку `Калибровка Динамика`.
+Оба reader-а создаются внутри самой `ServiceForm` (`new SimA04ReaderDynamic`) — после рефакторинга развязки reader-ов (`docs/status_2026-08-07.md`) ни один не приходит извне; раньше `_dynamicServiceSim` был общим экземпляром с `MainForm._dynamicSim`. `_dynamicServiceSim` обслуживает вкладку `Сервисный режим Динамика`, `_dynamicCalibSim` — только вкладку `Калибровка Динамика`.
 
 Каждый `SimA04ReaderDynamic` читает свой открытый COM-порт, собирает 5-байтовый динамический сэмпл и публикует события:
 
