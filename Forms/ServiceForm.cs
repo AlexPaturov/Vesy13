@@ -15,6 +15,28 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class ServiceForm : Form
 {
+    private sealed class CalibCounterSuffixLabel : Label
+    {
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (Enabled)
+            {
+                base.OnPaint(e);
+                return;
+            }
+
+            e.Graphics.Clear(BackColor);
+            TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, ForeColor,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.WordBreak);
+        }
+    }
+
     private SimA04ReaderStatic _staticServiceSim = null!;
     private SimA04ReaderStatic _staticCalibSim = null!;
     private SimA04ReaderDynamic _dynamicServiceSim = null!;
@@ -196,27 +218,15 @@ public partial class ServiceForm : Form
         _dgvCalib.GridColor = ServiceUiColors.GridLine;
         _chbCalibCounter.Font = ServiceUiFonts.Body;
         _chbCalibCounter.UseVisualStyleBackColor = false;
+        _lblCalibCounterSuffix.Font = ServiceUiFonts.Body;
+        _lblCalibCounterSuffix.BackColor = _chbCalibCounter.BackColor;
+        _lblCalibCounterSuffix.ForeColor = _chbCalibCounter.ForeColor;
         _btnAddRow.Font = ServiceUiFonts.Body;
         _btnAddRow.BackColor = ServiceUiColors.NeutralAction;
         _btnAddRow.ForeColor = ServiceUiColors.TextPrimary;
         _btnDelRow.Font = ServiceUiFonts.Body;
         _btnDelRow.BackColor = ServiceUiColors.NeutralAction;
         _btnDelRow.ForeColor = ServiceUiColors.TextPrimary;
-        _lblCoefficientEquals.Font = ServiceUiFonts.Medium;
-        _lblCoefficientEquals.ForeColor = ServiceUiColors.TextPrimary;
-        _txtCoefficient.Font = ServiceUiFonts.Mono;
-        _txtCoefficient.BackColor = ServiceUiColors.InputBack;
-        _txtCoefficient.ForeColor = ServiceUiColors.InputFore;
-        _lblOffsetEquals.Font = ServiceUiFonts.Medium;
-        _lblOffsetEquals.ForeColor = ServiceUiColors.TextPrimary;
-        _txtOffset.Font = ServiceUiFonts.Mono;
-        _txtOffset.BackColor = ServiceUiColors.InputBack;
-        _txtOffset.ForeColor = ServiceUiColors.InputFore;
-        _lblStaticLsqFormula.Font = ServiceUiFonts.Body;
-        _lblStaticLsqFormula.ForeColor = ServiceUiColors.TextMuted;
-        _btnLsq.Font = ServiceUiFonts.Medium;
-        _btnLsq.BackColor = ServiceUiColors.SecondaryAction;
-        _btnLsq.ForeColor = ServiceUiColors.TextOnDark;
         _btnCalibSave.Font = ServiceUiFonts.Body;
         _btnCalibSave.BackColor = ServiceUiColors.PrimaryAction;
         _btnCalibSave.ForeColor = ServiceUiColors.TextOnDark;
@@ -439,6 +449,7 @@ public partial class ServiceForm : Form
         _dynamicServiceSim.ConnectionChanged += OnDynamicServiceConnectionChanged;
         _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
+        _dgvCalib.CellEndEdit += DgvCalib_CellEndEdit;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
         _chbCalibCounter.CheckedChanged += ChbCalibCounter_CheckedChanged;
         UpdateCalibCounterMode(recalculateNewRows: false);
@@ -516,36 +527,18 @@ public partial class ServiceForm : Form
     private void BtnCapture_Click(object? sender, EventArgs e)
     {
         int code = _calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1;
-        if (code == 0) return;
+        if (_staticCalibSim is null || !_staticCalibSim.IsConnected || code == 0) return;
         int row = _dgvCalib.Rows.Add();
         _dgvCalib.Rows[row].Cells[1].Value = code;
         SetCalibRowActive(_dgvCalib.Rows[row], true);
         _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[2];
         _dgvCalib.BeginEdit(true);
     }
-    private void BtnLsq_Click(object? sender, EventArgs e)
-    {
-        var pts = ReadGridPoints().Where(p => p.IsActive).ToList();
-        if (pts.Count < 2)
-        {
-            MessageBox.Show("Нужно минимум 2 точки.", "МНК", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-        var (coefficient, offset) = CalibrationCalculator.CalculateLsq(pts.Select(p => (p.AdcCode, p.Mass, p.IsActive)));
-        _txtCoefficient.Text = coefficient.ToString("G8", CultureInfo.InvariantCulture);
-        _txtOffset.Text = offset.ToString("G8", CultureInfo.InvariantCulture);
-    }
-
     private void BtnCapPlus_Click(object? sender, EventArgs e)
     {
         int code = CurrentDynamicAdcCode();
-        if (code != 0)
-        {
-            _txtCodePlus.Text = code.ToString();
-            return;
-        }
-
-        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.", "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (_dynamicCalibSim is null || !_dynamicCalibSim.IsConnected || code == 0) return;
+        _txtCodePlus.Text = code.ToString();
     }
 
     private void BtnCalcPlus_Click(object? sender, EventArgs e)
@@ -560,13 +553,8 @@ public partial class ServiceForm : Form
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
         int code = CurrentDynamicAdcCode();
-        if (code != 0)
-        {
-            _txtCodeMinus.Text = code.ToString();
-            return;
-        }
-
-        MessageBox.Show("Нет текущего кода АЦП динамики.\nПодключите АЦП на этой вкладке.", "Захват кода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (_dynamicCalibSim is null || !_dynamicCalibSim.IsConnected || code == 0) return;
+        _txtCodeMinus.Text = code.ToString();
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e)
     {
@@ -634,6 +622,7 @@ public partial class ServiceForm : Form
         _staticCalibSim = new SimA04ReaderStatic { Channel = _staticCalibSim.Channel };
         _staticCalibSim.RawFrameReceived += OnStaticCalibRawFrame;
         _staticCalibSim.ConnectionChanged += OnStaticCalibConnectionChanged;
+        UpdateCaptureButton();
     }
 
     private void ReplaceDynamicServiceSim()
@@ -664,6 +653,7 @@ public partial class ServiceForm : Form
         _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
         if (dataSubscribed)
             _dynamicCalibSim.SampleReceived += OnDynamicCalibSample;
+        UpdateDynamicCaptureButtons();
     }
 
     private void RbCh0Calib_CheckedChanged(object? sender, EventArgs e)
@@ -1257,6 +1247,7 @@ public partial class ServiceForm : Form
         _cmbDynamicCalibPort.Enabled = !_dynamicCalibSim.IsPortOpen;
         SelectComboValue(_cmbDynamicCalibPort, _dynamicCalibSim.PortName);
         UpdateDynamicCalibrationConnectionLabel();
+        UpdateDynamicCaptureButtons();
     }
 
     private void OnDynamicServiceConnectionChanged(object? sender, bool connected)
@@ -1272,6 +1263,12 @@ public partial class ServiceForm : Form
         if (InvokeRequired) { BeginInvoke(() => OnDynamicCalibConnectionChanged(sender, connected)); return; }
         AuditAdcConnectionTransition(connected, ref _dynamicCalibConnectionEstablished,
             "SimA04DynamicCalib", _dynamicCalibSim.PortName);
+        if (!connected)
+        {
+            _lastDynCh0 = 0;
+            _lastDynCh1 = 0;
+            UpdateLiveDynamicCalibrationLabels();
+        }
         UpdateDynamicCalibMonitorConn(connected);
     }
 
@@ -1486,6 +1483,7 @@ public partial class ServiceForm : Form
         _cmbStaticCalibPort.Enabled = !_staticCalibSim.IsPortOpen;
         SelectComboValue(_cmbStaticCalibPort, _staticCalibSim.PortName);
         UpdateStaticCalibConnectionLabel();
+        UpdateCaptureButton();
     }
 
     private void UpdateStaticCalibConnectionLabel()
@@ -1522,6 +1520,12 @@ public partial class ServiceForm : Form
         if (InvokeRequired) { BeginInvoke(() => OnStaticCalibConnectionChanged(sender, connected)); return; }
         AuditAdcConnectionTransition(connected, ref _staticCalibConnectionEstablished,
             "SimA04StaticCalib", _staticCalibSim.PortName);
+        if (!connected)
+        {
+            _lastStaticCalibCh0 = 0;
+            _lastStaticCalibCh1 = 0;
+            UpdateLiveAdcLabel();
+        }
         UpdateStaticCalibMonitorConn(connected);
     }
 
@@ -1596,6 +1600,9 @@ public partial class ServiceForm : Form
 
     private async void BtnCalibSave_Click(object? sender, EventArgs e)
     {
+        _dgvCalib.EndEdit();
+        if (!ValidateCalibGrid("сохранить калибровку")) return;
+
         var pts = ReadGridPoints();
         if (pts.Count == 0)
         {
@@ -1673,6 +1680,35 @@ public partial class ServiceForm : Form
             RefreshCalibK(e.RowIndex);
     }
 
+    private void DgvCalib_CellEndEdit(object? sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex < 0 || e.ColumnIndex is not (2 or 3)) return;
+
+        var cell = _dgvCalib.Rows[e.RowIndex].Cells[e.ColumnIndex];
+        string text = cell.Value?.ToString()?.Trim() ?? "";
+        if (text.Length == 0)
+        {
+            SetCalibCellError(cell, null);
+            return;
+        }
+
+        if (!TryParseCalibDecimal(text, out decimal value))
+        {
+            SetCalibCellError(cell, "Введите число с одним десятичным разделителем: , или .");
+            if (e.ColumnIndex == 2 && !_chbCalibCounter.Checked)
+                _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
+            UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
+            return;
+        }
+
+        SetCalibCellError(cell, null);
+        string normalized = e.ColumnIndex == 3
+            ? value.ToString("F5", CultureInfo.InvariantCulture)
+            : value.ToString("G29", CultureInfo.InvariantCulture);
+        if (!string.Equals(text, normalized, StringComparison.Ordinal))
+            cell.Value = normalized;
+    }
+
     private void ChbCalibCounter_CheckedChanged(object? sender, EventArgs e) =>
         UpdateCalibCounterMode(recalculateNewRows: true);
 
@@ -1680,9 +1716,9 @@ public partial class ServiceForm : Form
     {
         var row = _dgvCalib.Rows[rowIndex];
         if (int.TryParse(row.Cells[1].Value?.ToString(), out int code) &&
-            double.TryParse(row.Cells[2].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) &&
+            TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass) &&
             code != 0)
-            row.Cells[3].Value = (mass / code * 65535).ToString("F5", CultureInfo.InvariantCulture);
+            row.Cells[3].Value = ((double)mass / code * 65535).ToString("F5", CultureInfo.InvariantCulture);
         else
             row.Cells[3].Value = "";
     }
@@ -1698,6 +1734,8 @@ public partial class ServiceForm : Form
         _tlpCalibSForm.BackColor = backColor;
         _chbCalibCounter.BackColor = backColor;
         _chbCalibCounter.ForeColor = manualMode ? ServiceUiColors.Error : ServiceUiColors.TextPrimary;
+        _lblCalibCounterSuffix.BackColor = backColor;
+        _lblCalibCounterSuffix.ForeColor = manualMode ? ServiceUiColors.Error : ServiceUiColors.TextPrimary;
 
         if (!manualMode && recalculateNewRows)
         {
@@ -1762,9 +1800,9 @@ public partial class ServiceForm : Form
         {
             if (!int.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int code))
                 continue;
-            if (!decimal.TryParse(row.Cells[2].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal mass))
+            if (!TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass))
                 continue;
-            if (!decimal.TryParse(row.Cells[3].Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out decimal calibrationValue))
+            if (!TryParseCalibDecimal(row.Cells[3].Value?.ToString(), out decimal calibrationValue))
                 continue;
 
             bool active = row.Cells[0].Value?.ToString() == "Да";
@@ -1787,6 +1825,57 @@ public partial class ServiceForm : Form
         return SortCalibPoints(result).ToList();
     }
 
+    private static bool TryParseCalibDecimal(string? text, out decimal value)
+    {
+        string normalized = text?.Trim() ?? "";
+        if (normalized.Count(character => character == '.' || character == ',') > 1)
+        {
+            value = default;
+            return false;
+        }
+
+        normalized = normalized.Replace(',', '.');
+        return decimal.TryParse(normalized, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint,
+            CultureInfo.InvariantCulture, out value);
+    }
+
+    private static void SetCalibCellError(DataGridViewCell cell, string? message)
+    {
+        cell.ErrorText = message ?? "";
+        cell.Style.BackColor = message is null ? Color.Empty : ServiceUiColors.GridAlertRow;
+    }
+
+    private bool ValidateCalibGrid(string action)
+    {
+        var invalid = new List<(DataGridViewCell Cell, string Description)>();
+        foreach (DataGridViewRow row in _dgvCalib.Rows)
+        {
+            if (row.Cells[0].Value?.ToString() != "Да") continue;
+
+            string mass = row.Cells[2].Value?.ToString()?.Trim() ?? "";
+            if (mass.Length > 0 && !TryParseCalibDecimal(mass, out _))
+            {
+                SetCalibCellError(row.Cells[2], "Введите число с одним десятичным разделителем: , или .");
+                invalid.Add((row.Cells[2], string.Format("Строка {0}, «Масса, т»: «{1}».", row.Index + 1, mass)));
+            }
+
+            string calibrationValue = row.Cells[3].Value?.ToString()?.Trim() ?? "";
+            if (_chbCalibCounter.Checked && calibrationValue.Length > 0 && !TryParseCalibDecimal(calibrationValue, out _))
+            {
+                SetCalibCellError(row.Cells[3], "Введите число с одним десятичным разделителем: , или .");
+                invalid.Add((row.Cells[3], string.Format("Строка {0}, «Калибр. число»: «{1}».", row.Index + 1, calibrationValue)));
+            }
+        }
+
+        if (invalid.Count == 0) return true;
+
+        _dgvCalib.CurrentCell = invalid[0].Cell;
+        string details = string.Join(Environment.NewLine, invalid.Select(error => error.Description));
+        MessageBox.Show(string.Format("Нельзя {0}.\n\n{1}\n\nВведите одно число. Допустим один десятичный разделитель: , или .", action, details),
+            "Калибровка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        return false;
+    }
+
     private static IEnumerable<CalibPoint> SortCalibPoints(IEnumerable<CalibPoint> points)
     {
         return points
@@ -1795,10 +1884,17 @@ public partial class ServiceForm : Form
             .ThenBy(p => p.AdcCode);
     }
 
+    private void UpdateCaptureButton()
+    {
+        int code = _calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1;
+        _btnCapture.Enabled = _staticCalibSim is { IsConnected: true } && code != 0;
+    }
+
     private void UpdateLiveAdcLabel()
     {
         int code = _calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1;
         _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
+        UpdateCaptureButton();
         UpdateStaticCalibMassLabel(code);
         UpdateLiveDynamicCalibrationLabels();
     }
@@ -1827,6 +1923,13 @@ public partial class ServiceForm : Form
         return _dynamicCalibSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
     }
 
+    private void UpdateDynamicCaptureButtons()
+    {
+        bool canCapture = _dynamicCalibSim is { IsConnected: true } && CurrentDynamicAdcCode() != 0;
+        _btnCapPlus.Enabled = canCapture;
+        _btnCapMinus.Enabled = canCapture;
+    }
+
     private void UpdateLiveDynamicCalibrationLabels()
     {
         if (_lblLiveAdcD is null) return;
@@ -1834,6 +1937,7 @@ public partial class ServiceForm : Form
         int code = CurrentDynamicAdcCode();
         _lblLiveAdcD.Text = code == 0 ? "—" : code.ToString();
         _lblLiveAdcD.ForeColor = code == 0 ? ServiceUiColors.Disconnected : ServiceUiColors.Info;
+        UpdateDynamicCaptureButtons();
         UpdateLiveDynamicWeight(code);
     }
 

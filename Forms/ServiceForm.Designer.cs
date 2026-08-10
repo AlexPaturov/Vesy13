@@ -86,15 +86,11 @@ partial class ServiceForm
         _pnlCalibSForm = new Panel();
         _pnlCalibSFormInner = new Panel();
         _tlpCalibSForm = new TableLayoutPanel();
-        _txtCoefficient = new TextBox();
-        _lblCoefficientEquals = new Label();
-        _txtOffset = new TextBox();
-        _lblOffsetEquals = new Label();
         _btnAddRow = new Button();
         _btnDelRow = new Button();
-        _btnLsq = new Button();
-        _lblStaticLsqFormula = new Label();
         _btnCalibSave = new Button();
+        _chbCalibCounter = new CheckBox();
+        _lblCalibCounterSuffix = new CalibCounterSuffixLabel();
         _pnlCalibSHead = new Panel();
         tlpCalibSHead = new TableLayoutPanel();
         _lblStaticCalibConn = new Label();
@@ -199,7 +195,6 @@ partial class ServiceForm
         _lblDynamicEmaAlphaCap = new Label();
         _txtDynamicEmaAlpha = new TextBox();
         _rateTimer = new System.Windows.Forms.Timer(components);
-        _chbCalibCounter = new CheckBox();
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
         _tabMonitor.SuspendLayout();
@@ -1058,16 +1053,11 @@ partial class ServiceForm
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.51445F));
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.0578041F));
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 37.4277458F));
-        _tlpCalibSForm.Controls.Add(_txtCoefficient, 1, 0);
-        _tlpCalibSForm.Controls.Add(_lblCoefficientEquals, 0, 0);
-        _tlpCalibSForm.Controls.Add(_txtOffset, 1, 1);
-        _tlpCalibSForm.Controls.Add(_lblOffsetEquals, 0, 1);
         _tlpCalibSForm.Controls.Add(_btnAddRow, 2, 4);
         _tlpCalibSForm.Controls.Add(_btnDelRow, 2, 5);
-        _tlpCalibSForm.Controls.Add(_btnLsq, 2, 1);
-        _tlpCalibSForm.Controls.Add(_lblStaticLsqFormula, 0, 8);
         _tlpCalibSForm.Controls.Add(_btnCalibSave, 1, 8);
         _tlpCalibSForm.Controls.Add(_chbCalibCounter, 0, 2);
+        _tlpCalibSForm.Controls.Add(_lblCalibCounterSuffix, 1, 2);
         _tlpCalibSForm.Dock = DockStyle.Fill;
         _tlpCalibSForm.Location = new Point(0, 0);
         _tlpCalibSForm.Name = "_tlpCalibSForm";
@@ -1083,52 +1073,6 @@ partial class ServiceForm
         _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111116F));
         _tlpCalibSForm.Size = new Size(693, 569);
         _tlpCalibSForm.TabIndex = 6;
-        // 
-        // _txtCoefficient
-        // 
-        _txtCoefficient.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _txtCoefficient.Font = new Font("Courier New", 12F);
-        _txtCoefficient.Location = new Point(231, 17);
-        _txtCoefficient.Margin = new Padding(5, 0, 5, 0);
-        _txtCoefficient.Name = "_txtCoefficient";
-        _txtCoefficient.Size = new Size(197, 30);
-        _txtCoefficient.TabIndex = 9;
-        _txtCoefficient.Text = "0";
-        // 
-        // _lblCoefficientEquals
-        // 
-        _lblCoefficientEquals.AutoSize = true;
-        _lblCoefficientEquals.Dock = DockStyle.Fill;
-        _lblCoefficientEquals.Font = new Font("Segoe UI", 12F);
-        _lblCoefficientEquals.Location = new Point(4, 1);
-        _lblCoefficientEquals.Name = "_lblCoefficientEquals";
-        _lblCoefficientEquals.Size = new Size(218, 62);
-        _lblCoefficientEquals.TabIndex = 8;
-        _lblCoefficientEquals.Text = "Коэффициент =";
-        _lblCoefficientEquals.TextAlign = ContentAlignment.MiddleRight;
-        // 
-        // _txtOffset
-        // 
-        _txtOffset.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _txtOffset.Font = new Font("Courier New", 12F);
-        _txtOffset.Location = new Point(231, 80);
-        _txtOffset.Margin = new Padding(5, 0, 5, 0);
-        _txtOffset.Name = "_txtOffset";
-        _txtOffset.Size = new Size(197, 30);
-        _txtOffset.TabIndex = 11;
-        _txtOffset.Text = "0";
-        // 
-        // _lblOffsetEquals
-        // 
-        _lblOffsetEquals.AutoSize = true;
-        _lblOffsetEquals.Dock = DockStyle.Fill;
-        _lblOffsetEquals.Font = new Font("Segoe UI", 12F);
-        _lblOffsetEquals.Location = new Point(4, 64);
-        _lblOffsetEquals.Name = "_lblOffsetEquals";
-        _lblOffsetEquals.Size = new Size(218, 62);
-        _lblOffsetEquals.TabIndex = 10;
-        _lblOffsetEquals.Text = "Смещение =";
-        _lblOffsetEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _btnAddRow
         // 
@@ -1160,34 +1104,6 @@ partial class ServiceForm
         _btnDelRow.UseVisualStyleBackColor = false;
         _btnDelRow.Click += BtnDelRow_Click;
         // 
-        // _btnLsq
-        // 
-        _btnLsq.BackColor = SystemColors.ActiveBorder;
-        _btnLsq.Dock = DockStyle.Fill;
-        _btnLsq.FlatAppearance.BorderSize = 0;
-        _btnLsq.FlatStyle = FlatStyle.Flat;
-        _btnLsq.Font = new Font("Segoe UI", 12F);
-        _btnLsq.Location = new Point(448, 71);
-        _btnLsq.Margin = new Padding(14, 7, 14, 7);
-        _btnLsq.Name = "_btnLsq";
-        _btnLsq.Size = new Size(230, 48);
-        _btnLsq.TabIndex = 13;
-        _btnLsq.Text = "Рассчитать МНК";
-        _btnLsq.UseVisualStyleBackColor = false;
-        _btnLsq.Click += BtnLsq_Click;
-        // 
-        // _lblStaticLsqFormula
-        // 
-        _lblStaticLsqFormula.AutoSize = true;
-        _lblStaticLsqFormula.Dock = DockStyle.Fill;
-        _lblStaticLsqFormula.Font = new Font("Segoe UI", 12F);
-        _lblStaticLsqFormula.Location = new Point(4, 505);
-        _lblStaticLsqFormula.Name = "_lblStaticLsqFormula";
-        _lblStaticLsqFormula.Size = new Size(218, 63);
-        _lblStaticLsqFormula.TabIndex = 12;
-        _lblStaticLsqFormula.Text = "Масса = Коэффициент × Код + Смещение";
-        _lblStaticLsqFormula.TextAlign = ContentAlignment.MiddleCenter;
-        // 
         // _btnCalibSave
         // 
         _btnCalibSave.BackColor = SystemColors.ActiveBorder;
@@ -1203,6 +1119,29 @@ partial class ServiceForm
         _btnCalibSave.Text = "Сохранить";
         _btnCalibSave.UseVisualStyleBackColor = false;
         _btnCalibSave.Click += BtnCalibSave_Click;
+        // 
+        // _chbCalibCounter
+        // 
+        _chbCalibCounter.AutoSize = true;
+        _chbCalibCounter.Dock = DockStyle.Fill;
+        _chbCalibCounter.Location = new Point(4, 130);
+        _chbCalibCounter.Name = "_chbCalibCounter";
+        _chbCalibCounter.Size = new Size(218, 56);
+        _chbCalibCounter.TabIndex = 15;
+        _chbCalibCounter.Text = "Отключить расчёт";
+        _chbCalibCounter.TextAlign = ContentAlignment.MiddleRight;
+        _chbCalibCounter.UseVisualStyleBackColor = true;
+        // 
+        // _lblCalibCounterSuffix
+        // 
+        _lblCalibCounterSuffix.AutoSize = true;
+        _lblCalibCounterSuffix.Dock = DockStyle.Fill;
+        _lblCalibCounterSuffix.Location = new Point(229, 127);
+        _lblCalibCounterSuffix.Name = "_lblCalibCounterSuffix";
+        _lblCalibCounterSuffix.Size = new Size(201, 62);
+        _lblCalibCounterSuffix.TabIndex = 21;
+        _lblCalibCounterSuffix.Text = " калибровочного числа";
+        _lblCalibCounterSuffix.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _pnlCalibSHead
         // 
@@ -2538,17 +2477,6 @@ partial class ServiceForm
         // 
         _rateTimer.Tick += RateTimer_Tick;
         // 
-        // _chbCalibCounter
-        // 
-        _chbCalibCounter.AutoSize = true;
-        _chbCalibCounter.Dock = DockStyle.Fill;
-        _chbCalibCounter.Location = new Point(4, 130);
-        _chbCalibCounter.Name = "_chbCalibCounter";
-        _chbCalibCounter.Size = new Size(218, 56);
-        _chbCalibCounter.TabIndex = 15;
-        _chbCalibCounter.Text = "Отключить расчёт калибровочного числа";
-        _chbCalibCounter.UseVisualStyleBackColor = true;
-        // 
         // ServiceForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
@@ -2700,12 +2628,6 @@ partial class ServiceForm
     private DataGridView _dgvCalib;
     private Button       _btnAddRow;
     private Button       _btnDelRow;
-    private Label        _lblCoefficientEquals;
-    private TextBox      _txtCoefficient;
-    private Label        _lblOffsetEquals;
-    private TextBox      _txtOffset;
-    private Label        _lblStaticLsqFormula;
-    private Button       _btnLsq;
     private Button       _btnCalibSave;
 
     private Label   _lblLiveAdcCapD;
@@ -2810,4 +2732,5 @@ partial class ServiceForm
     private Panel _pnlCalibSForm;
     private Panel _pnlCalibSFormInner;
     private CheckBox _chbCalibCounter;
+    private CalibCounterSuffixLabel _lblCalibCounterSuffix;
 }
