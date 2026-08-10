@@ -178,6 +178,8 @@ Tabs_SelectedIndexChanged
                                                      _lblLiveAdcD/_lblLiveWeightD
 ```
 
-## Что ещё не разделено
+## Граница ответственности
 
-По checklist `dynamic-service-coupling-checklist.md` открытых точек связи больше нет.
+`Сервисный режим Динамика` и `Калибровка Динамика` используют отдельные reader-ы,
+подписки и workflow подключения. Они не должны снова делить reader, raw-поток,
+журнал или состояние подключения.
