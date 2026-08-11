@@ -786,7 +786,10 @@ public partial class CorrectionsForm : Form
 
         if (IsOverCapacity(_selected))
         {
-            MessageBox.Show("Превышен максимально допустимый порог взвешивания.", "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Нельзя передать взвешивание: общий вес " + _selected.Total.ToString("F2") +
+                " т превышает максимально допустимый вес " + _settings!.Current.MaxCapacityTonnes.ToString("F2") +
+                " т.\n\nПредел задаётся в разделе «Сервис» → «Настройки».",
+                "Перенос", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             AuditLogger.Error(AuditLogger.ErrorGeneral, "LocalWagon", $"id={_selected.Id} total={_selected.Total:F2} npv={_settings?.Current.MaxCapacityTonnes:F2}", "NPV");
 
