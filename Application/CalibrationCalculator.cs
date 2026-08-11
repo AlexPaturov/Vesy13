@@ -39,6 +39,8 @@ public static class CalibrationCalculator
         return adcCode * ((double)point.CalibrationValue / 65535d);
     }
 
-    public static double ConvertDynamic(DynamicCalib calib, int adcCode, string direction)
-        => (direction.StartsWith("→") ? calib.KPlus : calib.KMinus) * adcCode;
+    public static double ConvertDynamic(DirectionCorrectionProfile profile, int adcCode, Direction direction)
+        => (direction == Direction.Right
+            ? profile.RightDirectionCorrectionFactor
+            : profile.LeftDirectionCorrectionFactor) * adcCode;
 }

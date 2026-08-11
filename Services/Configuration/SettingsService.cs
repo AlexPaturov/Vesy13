@@ -5,6 +5,7 @@ namespace Vesy13.Services.Configuration;
 
 public sealed class SettingsService
 {
+    private const int DirectionCorrectionProfileCacheFormatVersion = 2;
     private const string DefaultAdminPassword = "vesy13fuck";
     private const string SettingsFileName = "settings.json";
     private const string SettingsDirectoryName = "Vesy13";
@@ -62,10 +63,10 @@ public sealed class SettingsService
     }
 
     /// <summary>Обновляет локальный fallback-кэш калибровки последним известным состоянием из БД. Не вызывает Save().</summary>
-    public void UpdateCalibrationCache(IReadOnlyList<CalibPoint> staticPoints, DynamicCalib dynamicCalib)
+    public void UpdateCalibrationCache(IReadOnlyList<CalibPoint> staticPoints, DirectionCorrectionProfile directionCorrectionProfile)
     {
         _settings.CachedStaticPoints = staticPoints.ToList();
-        _settings.CachedDynamicCalib = dynamicCalib;
+        _settings.CachedDirectionCorrectionProfile = directionCorrectionProfile;
         _settings.CalibCacheUpdatedAt = DateTime.Now;
     }
 
@@ -199,6 +200,13 @@ public sealed class SettingsService
         if (settings.DynamicEmaAlpha is <= 0 or > 1)
         {
             settings.DynamicEmaAlpha = 0.2;
+            changed = true;
+        }
+
+        if (settings.DirectionCorrectionProfileCacheFormatVersion < DirectionCorrectionProfileCacheFormatVersion)
+        {
+            settings.CachedDirectionCorrectionProfile = new DirectionCorrectionProfile();
+            settings.DirectionCorrectionProfileCacheFormatVersion = DirectionCorrectionProfileCacheFormatVersion;
             changed = true;
         }
 

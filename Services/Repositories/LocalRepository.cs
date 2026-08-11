@@ -16,8 +16,8 @@ public class LocalRepository
     /// <summary>Кэш всех калибровочных точек. Обновляется после каждого сохранения и при восстановлении последнего известного состояния.</summary>
     public IReadOnlyList<CalibPoint> CalibPoints { get; private set; } = [];
 
-    /// <summary>Коэффициенты динамической калибровки.</summary>
-    public DynamicCalib Dynamic { get; private set; } = new();
+    /// <summary>Активный профиль поправочных коэффициентов направления.</summary>
+    public DirectionCorrectionProfile ActiveDirectionCorrectionProfile { get; private set; } = new();
 
     // ── Load ───────────────────────────────────────────────────────────────
 
@@ -42,13 +42,13 @@ public class LocalRepository
                 ORDER BY channel, adc_code");
             CalibPoints = pts.ToList().AsReadOnly();
 
-            Dynamic = await LoadActiveDynamicCalibAsync(conn);
+            ActiveDirectionCorrectionProfile = await LoadActiveDirectionCorrectionProfileAsync(conn);
             return true;
         }
         catch
         {
             CalibPoints = [];
-            Dynamic     = new DynamicCalib();
+            ActiveDirectionCorrectionProfile = new DirectionCorrectionProfile();
             return false;
         }
     }
@@ -57,10 +57,10 @@ public class LocalRepository
     /// Заполняет калибровку последним известным состоянием, когда БД недоступна.
     /// В БД не пишет. Пустые значения оставляют весы незакалиброванными, как и неудачное чтение.
     /// </summary>
-    public void RestoreLastKnownCalibration(IReadOnlyList<CalibPoint> points, DynamicCalib dynamicCalib)
+    public void RestoreLastKnownCalibration(IReadOnlyList<CalibPoint> points, DirectionCorrectionProfile directionCorrectionProfile)
     {
         CalibPoints = points.ToList().AsReadOnly();
-        Dynamic     = dynamicCalib;
+        ActiveDirectionCorrectionProfile = directionCorrectionProfile;
     }
 
     // ── Calibration points ─────────────────────────────────────────────────
@@ -190,59 +190,59 @@ public class LocalRepository
 
     // ── Dynamic calibration ────────────────────────────────────────────────
 
-    public async Task<List<DynamicCalib>> GetDynamicCalibsAsync()
+    public async Task<List<DirectionCorrectionProfile>> GetDirectionCorrectionProfilesAsync()
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
-        var rows = await conn.QueryAsync<DynamicCalib>(@"
+        var rows = await conn.QueryAsync<DirectionCorrectionProfile>(@"
             SELECT id,
-                   k_plus     AS KPlus,
-                   k_minus    AS KMinus,
+                   right_direction_correction_factor AS RightDirectionCorrectionFactor,
+                   left_direction_correction_factor  AS LeftDirectionCorrectionFactor,
                    is_active  AS IsActive,
                    created_at AS CreatedAt,
                    deleted_at AS DeletedAt
-            FROM calibration_dynamic
+            FROM direction_correction_profiles
             ORDER BY is_active DESC, created_at DESC, id DESC");
         return rows.ToList();
     }
 
-    public async Task<IReadOnlyList<DynamicCalib>> SaveDynamicCalibAsync(DynamicCalib calib)
+    public async Task<IReadOnlyList<DirectionCorrectionProfile>> SaveDirectionCorrectionProfileAsync(DirectionCorrectionProfile profile)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
 
-        var changed = new List<DynamicCalib>();
-        double kPlus = Math.Round(calib.KPlus, 5, MidpointRounding.AwayFromZero);
-        double kMinus = Math.Round(calib.KMinus, 5, MidpointRounding.AwayFromZero);
+        var changed = new List<DirectionCorrectionProfile>();
+        double rightDirectionCorrectionFactor = Math.Round(profile.RightDirectionCorrectionFactor, 5, MidpointRounding.AwayFromZero);
+        double leftDirectionCorrectionFactor = Math.Round(profile.LeftDirectionCorrectionFactor, 5, MidpointRounding.AwayFromZero);
 
-        var retired = await conn.QueryAsync<DynamicCalib>(@"
-            UPDATE calibration_dynamic
+        var retired = await conn.QueryAsync<DirectionCorrectionProfile>(@"
+            UPDATE direction_correction_profiles
             SET is_active = FALSE,
                 deleted_at = COALESCE(deleted_at, NOW())
             WHERE is_active = TRUE AND deleted_at IS NULL
             RETURNING id,
-                      k_plus AS KPlus,
-                      k_minus AS KMinus,
+                      right_direction_correction_factor AS RightDirectionCorrectionFactor,
+                      left_direction_correction_factor  AS LeftDirectionCorrectionFactor,
                       is_active AS IsActive,
                       created_at AS CreatedAt,
                       deleted_at AS DeletedAt", transaction: tx);
         changed.AddRange(retired);
 
-        var added = await conn.QuerySingleAsync<DynamicCalib>(@"
-            INSERT INTO calibration_dynamic (k_plus, k_minus, is_active, created_at, deleted_at)
-            VALUES (@KPlus, @KMinus, TRUE, NOW(), NULL)
+        var added = await conn.QuerySingleAsync<DirectionCorrectionProfile>(@"
+            INSERT INTO direction_correction_profiles (right_direction_correction_factor, left_direction_correction_factor, is_active, created_at, deleted_at)
+            VALUES (@RightDirectionCorrectionFactor, @LeftDirectionCorrectionFactor, TRUE, NOW(), NULL)
             RETURNING id,
-                      k_plus AS KPlus,
-                      k_minus AS KMinus,
+                      right_direction_correction_factor AS RightDirectionCorrectionFactor,
+                      left_direction_correction_factor  AS LeftDirectionCorrectionFactor,
                       is_active AS IsActive,
                       created_at AS CreatedAt,
                       deleted_at AS DeletedAt",
-            new { KPlus = kPlus, KMinus = kMinus }, tx);
+            new { RightDirectionCorrectionFactor = rightDirectionCorrectionFactor, LeftDirectionCorrectionFactor = leftDirectionCorrectionFactor }, tx);
         changed.Add(added);
 
         await tx.CommitAsync();
-        Dynamic = await LoadActiveDynamicCalibAsync(conn);
+        ActiveDirectionCorrectionProfile = await LoadActiveDirectionCorrectionProfileAsync(conn);
         return changed;
     }
 
@@ -421,22 +421,22 @@ public class LocalRepository
             FROM calibration_points
             ORDER BY channel, adc_code");
         CalibPoints = pts.ToList().AsReadOnly();
-        Dynamic = await LoadActiveDynamicCalibAsync(conn);
+        ActiveDirectionCorrectionProfile = await LoadActiveDirectionCorrectionProfileAsync(conn);
     }
 
-    private static async Task<DynamicCalib> LoadActiveDynamicCalibAsync(NpgsqlConnection conn)
+    private static async Task<DirectionCorrectionProfile> LoadActiveDirectionCorrectionProfileAsync(NpgsqlConnection conn)
     {
-        var dyn = await conn.QueryFirstOrDefaultAsync<DynamicCalib>(@"
+        var profile = await conn.QueryFirstOrDefaultAsync<DirectionCorrectionProfile>(@"
             SELECT id,
-                   k_plus     AS KPlus,
-                   k_minus    AS KMinus,
+                   right_direction_correction_factor AS RightDirectionCorrectionFactor,
+                   left_direction_correction_factor  AS LeftDirectionCorrectionFactor,
                    is_active  AS IsActive,
                    created_at AS CreatedAt,
                    deleted_at AS DeletedAt
-            FROM calibration_dynamic
+            FROM direction_correction_profiles
             WHERE is_active = TRUE AND deleted_at IS NULL
             ORDER BY created_at DESC, id DESC
             LIMIT 1");
-        return dyn ?? new DynamicCalib();
+        return profile ?? new DirectionCorrectionProfile();
     }
 }

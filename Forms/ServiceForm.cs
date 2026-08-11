@@ -40,7 +40,7 @@ public partial class ServiceForm : Form
     private SimA04ReaderStatic _staticServiceSim = null!;
     private SimA04ReaderStatic _staticCalibSim = null!;
     private SimA04ReaderDynamic _dynamicServiceSim = null!;
-    private SimA04ReaderDynamic _dynamicCalibSim = null!;
+    private SimA04ReaderDynamic _directionCorrectionSim = null!;
     private LocalRepository _calib = null!;
     private SettingsService _settings = null!;
     private bool _adminUnlocked;
@@ -48,7 +48,7 @@ public partial class ServiceForm : Form
     private int _frameCount;
     private long _dynamicServiceSampleRateCount;
     private readonly object _dynamicSampleSync = new();
-    private readonly System.Windows.Forms.Timer _dynamicCalibDisplayTimer = new() { Interval = 100 };
+    private readonly System.Windows.Forms.Timer _directionCorrectionDisplayTimer = new() { Interval = 100 };
     private SimA04DynamicSample _latestDynamicSample;
     private long _latestDynamicSampleVersion;
     private long _displayedDynamicSampleVersion;
@@ -69,12 +69,12 @@ public partial class ServiceForm : Form
     private readonly StringBuilder _dynamicServiceLogBuilder = new(64);
     private readonly List<(string Text, Color Color)> _dynamicServiceLogBatch = new();
     private bool _dynamicServiceDataSubscribed;
-    private bool _dynamicCalibDataSubscribed;
-    private bool _dynamicCalibTabActive;
+    private bool _directionCorrectionDataSubscribed;
+    private bool _directionCorrectionTabActive;
     private bool _staticServiceConnectionEstablished;
     private bool _staticCalibConnectionEstablished;
     private bool _dynamicServiceConnectionEstablished;
-    private bool _dynamicCalibConnectionEstablished;
+    private bool _directionCorrectionConnectionEstablished;
     private int _lastCh0;
     private int _lastCh1;
     private int _lastStaticCalibCh0;
@@ -86,7 +86,7 @@ public partial class ServiceForm : Form
     public ServiceForm()
     {
         InitializeComponent();
-        InitializeDynamicCalibDisplayTimer();
+        InitializeDirectionCorrectionProfileDisplayTimer();
     }
 
     public ServiceForm(LocalRepository calib, SettingsService settings)
@@ -95,16 +95,16 @@ public partial class ServiceForm : Form
         _staticServiceSim = new SimA04ReaderStatic { Channel = channel };
         _staticCalibSim = new SimA04ReaderStatic { Channel = channel };
         _dynamicServiceSim = new SimA04ReaderDynamic { Channel = channel };
-        _dynamicCalibSim = new SimA04ReaderDynamic { Channel = channel };
+        _directionCorrectionSim = new SimA04ReaderDynamic { Channel = channel };
         _calib = calib;
         _settings = settings;
         InitializeComponent();
-        InitializeDynamicCalibDisplayTimer();
+        InitializeDirectionCorrectionProfileDisplayTimer();
     }
 
-    private void InitializeDynamicCalibDisplayTimer()
+    private void InitializeDirectionCorrectionProfileDisplayTimer()
     {
-        _dynamicCalibDisplayTimer.Tick += (_, _) => RefreshDynamicSampleDisplay();
+        _directionCorrectionDisplayTimer.Tick += (_, _) => RefreshDynamicSampleDisplay();
         _dynamicServiceDisplayTimer.Tick += (_, _) =>
         {
             RefreshDynamicServiceSampleDisplay();
@@ -232,11 +232,11 @@ public partial class ServiceForm : Form
         _btnCalibSave.ForeColor = ServiceUiColors.TextOnDark;
 
         // CalibDynamic tab
-        _tabCalibD.BackColor = ServiceUiColors.Surface;
-        _pnlCalibD.BackColor = ServiceUiColors.Surface;
-        _pnlCalibDHead.BackColor = ServiceUiColors.Surface;
-        _pnlCalibDBody.BackColor = ServiceUiColors.Surface;
-        _pnlCalibDBottom.BackColor = ServiceUiColors.Surface;
+        _tabDirectionCorrections.BackColor = ServiceUiColors.Surface;
+        _pnlDirectionCorrections.BackColor = ServiceUiColors.Surface;
+        _pnlDirectionCorrectionsHead.BackColor = ServiceUiColors.Surface;
+        _pnlDirectionCorrectionsBody.BackColor = ServiceUiColors.Surface;
+        _pnlDirectionCorrectionsBottom.BackColor = ServiceUiColors.Surface;
         _lblLiveAdcCapD.Font = ServiceUiFonts.Body;
         _lblLiveAdcCapD.ForeColor = ServiceUiColors.TextPrimary;
         _lblLiveAdcD.Font = ServiceUiFonts.MonoLiveAdc;
@@ -245,17 +245,17 @@ public partial class ServiceForm : Form
         _lblLiveWeightCapD.ForeColor = ServiceUiColors.TextPrimary;
         _lblLiveWeightD.Font = ServiceUiFonts.MonoLiveAdc;
         _lblLiveWeightD.ForeColor = ServiceUiColors.TextOnDark;
-        _cmbDynamicCalibPort.Font = ServiceUiFonts.Medium;
-        _cmbDynamicCalibPort.BackColor = ServiceUiColors.InputBack;
-        _cmbDynamicCalibPort.ForeColor = ServiceUiColors.InputFore;
-        _btnDynamicCalibConn.Font = ServiceUiFonts.Body;
-        _btnDynamicCalibConn.BackColor = ServiceUiColors.PrimaryAction;
-        _btnDynamicCalibConn.ForeColor = ServiceUiColors.TextOnDark;
-        _btnDynamicCalibPortRefresh.Font = ServiceUiFonts.SubHeader;
-        _btnDynamicCalibPortRefresh.BackColor = ServiceUiColors.NeutralAction;
-        _btnDynamicCalibPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
-        _lblDynamicCalibConn.Font = ServiceUiFonts.Body;
-        _lblDynamicCalibConn.ForeColor = ServiceUiColors.TextPrimary;
+        _cmbDirectionCorrectionPort.Font = ServiceUiFonts.Medium;
+        _cmbDirectionCorrectionPort.BackColor = ServiceUiColors.InputBack;
+        _cmbDirectionCorrectionPort.ForeColor = ServiceUiColors.InputFore;
+        _btnDirectionCorrectionConn.Font = ServiceUiFonts.Body;
+        _btnDirectionCorrectionConn.BackColor = ServiceUiColors.PrimaryAction;
+        _btnDirectionCorrectionConn.ForeColor = ServiceUiColors.TextOnDark;
+        _btnDirectionCorrectionPortRefresh.Font = ServiceUiFonts.SubHeader;
+        _btnDirectionCorrectionPortRefresh.BackColor = ServiceUiColors.NeutralAction;
+        _btnDirectionCorrectionPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
+        _lblDirectionCorrectionConn.Font = ServiceUiFonts.Body;
+        _lblDirectionCorrectionConn.ForeColor = ServiceUiColors.TextPrimary;
         _lblSecPlus_00.Font = ServiceUiFonts.BodyBold;
         _lblSecPlus_00.ForeColor = ServiceUiColors.TextPrimary;
         _lblSecPlus_01.Font = ServiceUiFonts.BodyBold;
@@ -316,21 +316,21 @@ public partial class ServiceForm : Form
         _btnCalcMinus.ForeColor = ServiceUiColors.TextOnDark;
         _lblFormulaD.Font = ServiceUiFonts.Body;
         _lblFormulaD.ForeColor = ServiceUiColors.TextMuted;
-        _btnCalibDynSave.Font = ServiceUiFonts.Body;
-        _btnCalibDynSave.BackColor = ServiceUiColors.PrimaryAction;
-        _btnCalibDynSave.ForeColor = ServiceUiColors.TextOnDark;
-        _dgvDynCalib.Font = ServiceUiFonts.GridBody;
-        _dgvDynCalib.BackgroundColor = ServiceUiColors.Surface;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.BackColor = ServiceUiColors.GridHeaderBack;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.ForeColor = ServiceUiColors.GridHeaderText;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.Font = ServiceUiFonts.GridHeader;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBack;
-        _dgvDynCalib.ColumnHeadersDefaultCellStyle.SelectionForeColor = ServiceUiColors.GridHeaderText;
-        _dgvDynCalib.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
-        _dgvDynCalib.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
-        _dgvDynCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
-        _dgvDynCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
-        _dgvDynCalib.GridColor = ServiceUiColors.GridLine;
+        _btnDirectionCorrectionProfileSave.Font = ServiceUiFonts.Body;
+        _btnDirectionCorrectionProfileSave.BackColor = ServiceUiColors.PrimaryAction;
+        _btnDirectionCorrectionProfileSave.ForeColor = ServiceUiColors.TextOnDark;
+        _dgvDirectionCorrectionProfiles.Font = ServiceUiFonts.GridBody;
+        _dgvDirectionCorrectionProfiles.BackgroundColor = ServiceUiColors.Surface;
+        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle.BackColor = ServiceUiColors.GridHeaderBack;
+        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle.ForeColor = ServiceUiColors.GridHeaderText;
+        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle.Font = ServiceUiFonts.GridHeader;
+        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle.SelectionBackColor = ServiceUiColors.GridHeaderBack;
+        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle.SelectionForeColor = ServiceUiColors.GridHeaderText;
+        _dgvDirectionCorrectionProfiles.DefaultCellStyle.BackColor = ServiceUiColors.GridRowBack;
+        _dgvDirectionCorrectionProfiles.DefaultCellStyle.ForeColor = ServiceUiColors.TextPrimary;
+        _dgvDirectionCorrectionProfiles.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
+        _dgvDirectionCorrectionProfiles.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
+        _dgvDirectionCorrectionProfiles.GridColor = ServiceUiColors.GridLine;
 
         // Settings tab
         _tabSett.BackColor = ServiceUiColors.Surface;
@@ -440,14 +440,14 @@ public partial class ServiceForm : Form
         _staticServiceSim.ConnectionTimeoutMs = 1000;
         _staticCalibSim.ConnectionTimeoutMs = 1000;
         _dynamicServiceSim.ConnectionTimeoutMs = 5000;
-        _dynamicCalibSim.ConnectionTimeoutMs = 5000;
+        _directionCorrectionSim.ConnectionTimeoutMs = 5000;
         _tabs.SelectedIndexChanged += Tabs_SelectedIndexChanged;
         _staticServiceSim.RawFrameReceived += OnStaticServiceRawFrame;
         _staticServiceSim.ConnectionChanged += OnStaticServiceConnectionChanged;
         _staticCalibSim.RawFrameReceived += OnStaticCalibRawFrame;
         _staticCalibSim.ConnectionChanged += OnStaticCalibConnectionChanged;
         _dynamicServiceSim.ConnectionChanged += OnDynamicServiceConnectionChanged;
-        _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
+        _directionCorrectionSim.ConnectionChanged += OnDirectionCorrectionProfileConnectionChanged;
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CellEndEdit += DgvCalib_CellEndEdit;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
@@ -460,12 +460,12 @@ public partial class ServiceForm : Form
         RefreshDynamicPorts();
         LoadSettingsUi();
         LoadCalibPoints();
-        LoadCalibDynamic();
+        LoadDirectionCorrectionProfile();
         SetAdminTabs(false);
         UpdateStaticServiceMonitorConn(_staticServiceSim.IsConnected);
         UpdateStaticCalibMonitorConn(_staticCalibSim.IsConnected);
         UpdateDynamicServiceMonitorConn(_dynamicServiceSim.IsConnected);
-        UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);
+        UpdateDirectionCorrectionProfileMonitorConn(_directionCorrectionSim.IsConnected);
         UpdateDynamicDataSubscriptions();
     }
 
@@ -487,19 +487,19 @@ public partial class ServiceForm : Form
             _staticCalibSim.Dispose();
 
             SetDynamicServiceDataSubscription(false);
-            SetDynamicCalibDataSubscription(false);
+            SetDirectionCorrectionProfileDataSubscription(false);
             _dynamicServiceSim.ConnectionChanged -= OnDynamicServiceConnectionChanged;
-            _dynamicCalibSim.ConnectionChanged -= OnDynamicCalibConnectionChanged;
+            _directionCorrectionSim.ConnectionChanged -= OnDirectionCorrectionProfileConnectionChanged;
             if (_dynamicServiceSim.IsPortOpen)
                 _dynamicServiceSim.Close();
             _dynamicServiceSim.Dispose();
-            if (_dynamicCalibSim.IsPortOpen)
-                _dynamicCalibSim.Close();
-            _dynamicCalibSim.Dispose();
+            if (_directionCorrectionSim.IsPortOpen)
+                _directionCorrectionSim.Close();
+            _directionCorrectionSim.Dispose();
 
             _rateTimer.Stop();
-            _dynamicCalibDisplayTimer.Stop();
-            _dynamicCalibDisplayTimer.Dispose();
+            _directionCorrectionDisplayTimer.Stop();
+            _directionCorrectionDisplayTimer.Dispose();
             _dynamicServiceDisplayTimer.Stop();
             _dynamicServiceDisplayTimer.Dispose();
         }
@@ -537,7 +537,7 @@ public partial class ServiceForm : Form
     private void BtnCapPlus_Click(object? sender, EventArgs e)
     {
         int code = CurrentDynamicAdcCode();
-        if (_dynamicCalibSim is null || !_dynamicCalibSim.IsConnected || code == 0) return;
+        if (_directionCorrectionSim is null || !_directionCorrectionSim.IsConnected || code == 0) return;
         _txtCodePlus.Text = code.ToString();
     }
 
@@ -553,7 +553,7 @@ public partial class ServiceForm : Form
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
         int code = CurrentDynamicAdcCode();
-        if (_dynamicCalibSim is null || !_dynamicCalibSim.IsConnected || code == 0) return;
+        if (_directionCorrectionSim is null || !_directionCorrectionSim.IsConnected || code == 0) return;
         _txtCodeMinus.Text = code.ToString();
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e)
@@ -585,7 +585,7 @@ public partial class ServiceForm : Form
         if (_staticServiceSim.Channel == channel &&
             (_staticCalibSim is null || _staticCalibSim.Channel == channel) &&
             (_dynamicServiceSim is null || _dynamicServiceSim.Channel == channel) &&
-            (_dynamicCalibSim is null || _dynamicCalibSim.Channel == channel)) return;
+            (_directionCorrectionSim is null || _directionCorrectionSim.Channel == channel)) return;
 
         ActiveChannel old = _staticServiceSim.Channel;
         _staticServiceSim.Channel = channel;
@@ -593,8 +593,8 @@ public partial class ServiceForm : Form
             _staticCalibSim.Channel = channel;
         if (_dynamicServiceSim is not null)
             _dynamicServiceSim.Channel = channel;
-        if (_dynamicCalibSim is not null)
-            _dynamicCalibSim.Channel = channel;
+        if (_directionCorrectionSim is not null)
+            _directionCorrectionSim.Channel = channel;
         _settings.Current.ActiveChannel = channel;
         _settings.Save();
         UpdateLiveAdcLabel();
@@ -643,16 +643,16 @@ public partial class ServiceForm : Form
         }
     }
 
-    private void ReplaceDynamicCalibSim()
+    private void ReplaceDirectionCorrectionProfileSim()
     {
-        _dynamicCalibSim.ConnectionChanged -= OnDynamicCalibConnectionChanged;
-        bool dataSubscribed = _dynamicCalibDataSubscribed;
+        _directionCorrectionSim.ConnectionChanged -= OnDirectionCorrectionProfileConnectionChanged;
+        bool dataSubscribed = _directionCorrectionDataSubscribed;
         if (dataSubscribed)
-            _dynamicCalibSim.SampleReceived -= OnDynamicCalibSample;
-        _dynamicCalibSim = new SimA04ReaderDynamic { Channel = _dynamicCalibSim.Channel };
-        _dynamicCalibSim.ConnectionChanged += OnDynamicCalibConnectionChanged;
+            _directionCorrectionSim.SampleReceived -= OnDirectionCorrectionProfileSample;
+        _directionCorrectionSim = new SimA04ReaderDynamic { Channel = _directionCorrectionSim.Channel };
+        _directionCorrectionSim.ConnectionChanged += OnDirectionCorrectionProfileConnectionChanged;
         if (dataSubscribed)
-            _dynamicCalibSim.SampleReceived += OnDynamicCalibSample;
+            _directionCorrectionSim.SampleReceived += OnDirectionCorrectionProfileSample;
         UpdateDynamicCaptureButtons();
     }
 
@@ -984,14 +984,14 @@ public partial class ServiceForm : Form
 
     private void RefreshDynamicPorts()
     {
-        if (_dynamicServiceSim is null || _dynamicCalibSim is null) return;
+        if (_dynamicServiceSim is null || _directionCorrectionSim is null) return;
         var ports = SerialPort.GetPortNames();
         FillDynamicPortCombo(_cmbDynamicPort, ports, _dynamicServiceSim.PortName);
-        FillDynamicPortCombo(_cmbDynamicCalibPort, ports, _dynamicCalibSim.PortName);
+        FillDynamicPortCombo(_cmbDirectionCorrectionPort, ports, _directionCorrectionSim.PortName);
         if (_btnDynamicConn is not null)
             _btnDynamicConn.Enabled = ports.Length > 0;
-        if (_btnDynamicCalibConn is not null)
-            _btnDynamicCalibConn.Enabled = ports.Length > 0;
+        if (_btnDirectionCorrectionConn is not null)
+            _btnDirectionCorrectionConn.Enabled = ports.Length > 0;
     }
 
     private static void FillDynamicPortCombo(ComboBox? combo, string[] ports, string fallbackPort)
@@ -1025,9 +1025,9 @@ public partial class ServiceForm : Form
         _lstDynamicLog.Items.Clear();
     }
 
-    private void BtnDynamicCalibConn_Click(object? sender, EventArgs e)
+    private void BtnDirectionCorrectionConn_Click(object? sender, EventArgs e)
     {
-        ToggleDynamicCalibConnection(_cmbDynamicCalibPort.SelectedItem as string,
+        ToggleDirectionCorrectionProfileConnection(_cmbDirectionCorrectionPort.SelectedItem as string,
             _ => MessageBox.Show("Не удалось подключить АЦП динамики. Обратитесь к администратору.", "АЦП динамики", MessageBoxButtons.OK, MessageBoxIcon.Error));
     }
 
@@ -1043,7 +1043,7 @@ public partial class ServiceForm : Form
         try
         {
             CloseStaticConnections();
-            CloseDynamicCalibConnection();
+            CloseDirectionCorrectionProfileConnection();
             if (_dynamicServiceSim.IsPoisoned)
                 ReplaceDynamicServiceSim();
             _dynamicServiceSim.Open(selectedPort);
@@ -1056,11 +1056,11 @@ public partial class ServiceForm : Form
         }
     }
 
-    private void ToggleDynamicCalibConnection(string? selectedPort, Action<Exception> onError)
+    private void ToggleDirectionCorrectionProfileConnection(string? selectedPort, Action<Exception> onError)
     {
-        if (_dynamicCalibSim.IsPortOpen)
+        if (_directionCorrectionSim.IsPortOpen)
         {
-            CloseDynamicCalibConnection();
+            CloseDirectionCorrectionProfileConnection();
             return;
         }
 
@@ -1069,15 +1069,15 @@ public partial class ServiceForm : Form
         {
             CloseStaticConnections();
             CloseDynamicServiceConnection();
-            if (_dynamicCalibSim.IsPoisoned)
-                ReplaceDynamicCalibSim();
-            _dynamicCalibSim.Open(selectedPort);
-            UpdateDynamicCalibMonitorConn(_dynamicCalibSim.IsConnected);
+            if (_directionCorrectionSim.IsPoisoned)
+                ReplaceDirectionCorrectionProfileSim();
+            _directionCorrectionSim.Open(selectedPort);
+            UpdateDirectionCorrectionProfileMonitorConn(_directionCorrectionSim.IsConnected);
         }
         catch (Exception ex)
         {
             onError(ex);
-            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DynamicCalib", selectedPort, ex);
+            AuditLogger.Exception(AuditLogger.ErrorAdc, "AdcConnection", selectedPort, "SimA04DirectionCorrectionProfile", selectedPort, ex);
         }
     }
 
@@ -1112,7 +1112,7 @@ public partial class ServiceForm : Form
     private void CloseDynamicConnections()
     {
         CloseDynamicServiceConnection();
-        CloseDynamicCalibConnection();
+        CloseDirectionCorrectionProfileConnection();
     }
 
     private void CloseDynamicServiceConnection()
@@ -1126,20 +1126,20 @@ public partial class ServiceForm : Form
         UpdateDynamicServiceMonitorConn(false);
     }
 
-    private void CloseDynamicCalibConnection()
+    private void CloseDirectionCorrectionProfileConnection()
     {
-        if (!_dynamicCalibSim.IsPortOpen) return;
+        if (!_directionCorrectionSim.IsPortOpen) return;
 
-        var port = _dynamicCalibSim.PortName;
-        _dynamicCalibConnectionEstablished = false;
-        _dynamicCalibSim.Close();
-        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcPort", "port closed", "SimA04DynamicCalib", port);
-        UpdateDynamicCalibMonitorConn(false);
+        var port = _directionCorrectionSim.PortName;
+        _directionCorrectionConnectionEstablished = false;
+        _directionCorrectionSim.Close();
+        AuditLogger.Action(AuditLogger.AdcDisconnected, "AdcPort", "port closed", "SimA04DirectionCorrectionProfile", port);
+        UpdateDirectionCorrectionProfileMonitorConn(false);
     }
 
     private void Tabs_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (DesignMode || _staticServiceSim is null || _staticCalibSim is null || _dynamicServiceSim is null || _dynamicCalibSim is null) return;
+        if (DesignMode || _staticServiceSim is null || _staticCalibSim is null || _dynamicServiceSim is null || _directionCorrectionSim is null) return;
         UpdateDynamicDataSubscriptions();
         var tab = _tabs.SelectedTab;
         if (tab == _tabMonitor)
@@ -1159,11 +1159,11 @@ public partial class ServiceForm : Form
         if (tab == _tabDynamicService)
         {
             CloseStaticConnections();
-            CloseDynamicCalibConnection();
+            CloseDirectionCorrectionProfileConnection();
             return;
         }
 
-        if (tab == _tabCalibD)
+        if (tab == _tabDirectionCorrections)
         {
             CloseStaticConnections();
             CloseDynamicServiceConnection();
@@ -1176,12 +1176,12 @@ public partial class ServiceForm : Form
 
     private void UpdateDynamicDataSubscriptions()
     {
-        if (DesignMode || _dynamicServiceSim is null || _dynamicCalibSim is null || _tabs is null) return;
+        if (DesignMode || _dynamicServiceSim is null || _directionCorrectionSim is null || _tabs is null) return;
         var tab = _tabs.SelectedTab;
-        bool calibTabActive = tab == _tabCalibD;
-        Volatile.Write(ref _dynamicCalibTabActive, calibTabActive);
+        bool calibTabActive = tab == _tabDirectionCorrections;
+        Volatile.Write(ref _directionCorrectionTabActive, calibTabActive);
         SetDynamicServiceDataSubscription(tab == _tabDynamicService);
-        SetDynamicCalibDataSubscription(calibTabActive);
+        SetDirectionCorrectionProfileDataSubscription(calibTabActive);
     }
 
     private void SetDynamicServiceDataSubscription(bool enabled)
@@ -1208,22 +1208,22 @@ public partial class ServiceForm : Form
         _dynamicServiceDataSubscribed = enabled;
     }
 
-    private void SetDynamicCalibDataSubscription(bool enabled)
+    private void SetDirectionCorrectionProfileDataSubscription(bool enabled)
     {
-        if (_dynamicCalibDataSubscribed == enabled) return;
+        if (_directionCorrectionDataSubscribed == enabled) return;
 
         if (enabled)
         {
-            _dynamicCalibSim.SampleReceived += OnDynamicCalibSample;
-            _dynamicCalibDisplayTimer.Start();
+            _directionCorrectionSim.SampleReceived += OnDirectionCorrectionProfileSample;
+            _directionCorrectionDisplayTimer.Start();
         }
         else
         {
-            _dynamicCalibSim.SampleReceived -= OnDynamicCalibSample;
-            _dynamicCalibDisplayTimer.Stop();
+            _directionCorrectionSim.SampleReceived -= OnDirectionCorrectionProfileSample;
+            _directionCorrectionDisplayTimer.Stop();
         }
 
-        _dynamicCalibDataSubscribed = enabled;
+        _directionCorrectionDataSubscribed = enabled;
     }
 
     private void UpdateDynamicServiceMonitorConn(bool connected)
@@ -1239,14 +1239,14 @@ public partial class ServiceForm : Form
         AppendDynamicLog(connected ? $"=== Подключено: {_dynamicServiceSim.PortName}  4800/Even/8/1 ===" : "=== Отключено ===", connected ? ServiceUiColors.PrimaryAction : ServiceUiColors.Disconnected);
     }
 
-    private void UpdateDynamicCalibMonitorConn(bool connected)
+    private void UpdateDirectionCorrectionProfileMonitorConn(bool connected)
     {
-        if (_btnDynamicCalibConn is null || _cmbDynamicCalibPort is null) return;
-        _btnDynamicCalibConn.Text = _dynamicCalibSim.IsPortOpen ? "Отключить" : "Подключить";
-        _btnDynamicCalibConn.BackColor = _dynamicCalibSim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
-        _cmbDynamicCalibPort.Enabled = !_dynamicCalibSim.IsPortOpen;
-        SelectComboValue(_cmbDynamicCalibPort, _dynamicCalibSim.PortName);
-        UpdateDynamicCalibrationConnectionLabel();
+        if (_btnDirectionCorrectionConn is null || _cmbDirectionCorrectionPort is null) return;
+        _btnDirectionCorrectionConn.Text = _directionCorrectionSim.IsPortOpen ? "Отключить" : "Подключить";
+        _btnDirectionCorrectionConn.BackColor = _directionCorrectionSim.IsPortOpen ? ServiceUiColors.DangerAction : ServiceUiColors.PrimaryAction;
+        _cmbDirectionCorrectionPort.Enabled = !_directionCorrectionSim.IsPortOpen;
+        SelectComboValue(_cmbDirectionCorrectionPort, _directionCorrectionSim.PortName);
+        UpdateDirectionCorrectionConnectionLabel();
         UpdateDynamicCaptureButtons();
     }
 
@@ -1258,18 +1258,18 @@ public partial class ServiceForm : Form
         UpdateDynamicServiceMonitorConn(connected);
     }
 
-    private void OnDynamicCalibConnectionChanged(object? sender, bool connected)
+    private void OnDirectionCorrectionProfileConnectionChanged(object? sender, bool connected)
     {
-        if (InvokeRequired) { BeginInvoke(() => OnDynamicCalibConnectionChanged(sender, connected)); return; }
-        AuditAdcConnectionTransition(connected, ref _dynamicCalibConnectionEstablished,
-            "SimA04DynamicCalib", _dynamicCalibSim.PortName);
+        if (InvokeRequired) { BeginInvoke(() => OnDirectionCorrectionProfileConnectionChanged(sender, connected)); return; }
+        AuditAdcConnectionTransition(connected, ref _directionCorrectionConnectionEstablished,
+            "SimA04DirectionCorrectionProfile", _directionCorrectionSim.PortName);
         if (!connected)
         {
             _lastDynCh0 = 0;
             _lastDynCh1 = 0;
-            UpdateLiveDynamicCalibrationLabels();
+            UpdateLiveDirectionCorrectionLabels();
         }
-        UpdateDynamicCalibMonitorConn(connected);
+        UpdateDirectionCorrectionProfileMonitorConn(connected);
     }
 
     private static void AuditAdcConnectionTransition(bool connected, ref bool connectionEstablished,
@@ -1317,7 +1317,7 @@ public partial class ServiceForm : Form
         _lblDynamicCh1.ForeColor = ServiceUiColors.Info;
     }
 
-    private void OnDynamicCalibSample(object? sender, SimA04DynamicSample sample)
+    private void OnDirectionCorrectionProfileSample(object? sender, SimA04DynamicSample sample)
     {
         lock (_dynamicSampleSync)
         {
@@ -1328,7 +1328,7 @@ public partial class ServiceForm : Form
 
     private void RefreshDynamicSampleDisplay()
     {
-        if (DesignMode || _dynamicCalibSim is null) return;
+        if (DesignMode || _directionCorrectionSim is null) return;
 
         SimA04DynamicSample sample;
         long version;
@@ -1342,7 +1342,7 @@ public partial class ServiceForm : Form
         _displayedDynamicSampleVersion = version;
         _lastDynCh0 = sample.Ch0;
         _lastDynCh1 = sample.Ch1;
-        UpdateLiveDynamicCalibrationLabels();
+        UpdateLiveDirectionCorrectionLabels();
     }
 
     private void OnDynamicServiceRawSample(object? sender, byte[] raw)
@@ -1645,7 +1645,7 @@ public partial class ServiceForm : Form
         try
         {
             var changedPoints = await _calib.SaveCalibPointsAsync(channel, pts);
-            _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
+            _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.ActiveDirectionCorrectionProfile);
             _settings.Save();
             MessageBox.Show("Калибровка сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             foreach (var point in changedPoints)
@@ -1917,7 +1917,7 @@ public partial class ServiceForm : Form
         _lblLiveAdc.Text = code == 0 ? "—" : code.ToString();
         UpdateCaptureButton();
         UpdateStaticCalibMassLabel(code);
-        UpdateLiveDynamicCalibrationLabels();
+        UpdateLiveDirectionCorrectionLabels();
     }
 
     private void UpdateStaticCalibMassLabel(int code)
@@ -1940,18 +1940,18 @@ public partial class ServiceForm : Form
 
     private int CurrentDynamicAdcCode()
     {
-        if (_dynamicCalibSim is null) return 0;
-        return _dynamicCalibSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
+        if (_directionCorrectionSim is null) return 0;
+        return _directionCorrectionSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
     }
 
     private void UpdateDynamicCaptureButtons()
     {
-        bool canCapture = _dynamicCalibSim is { IsConnected: true } && CurrentDynamicAdcCode() != 0;
+        bool canCapture = _directionCorrectionSim is { IsConnected: true } && CurrentDynamicAdcCode() != 0;
         _btnCapPlus.Enabled = canCapture;
         _btnCapMinus.Enabled = canCapture;
     }
 
-    private void UpdateLiveDynamicCalibrationLabels()
+    private void UpdateLiveDirectionCorrectionLabels()
     {
         if (_lblLiveAdcD is null) return;
 
@@ -1990,28 +1990,28 @@ public partial class ServiceForm : Form
         _lblLiveWeightD.ForeColor = ServiceUiColors.Info;
     }
 
-    private void UpdateDynamicCalibrationConnectionLabel()
+    private void UpdateDirectionCorrectionConnectionLabel()
     {
-        if (_lblDynamicCalibConn is null || _dynamicCalibSim is null) return;
+        if (_lblDirectionCorrectionConn is null || _directionCorrectionSim is null) return;
 
-        if (_dynamicCalibSim.IsConnected)
+        if (_directionCorrectionSim.IsConnected)
         {
-            _lblDynamicCalibConn.Text = $"Динамика: {_dynamicCalibSim.PortName}";
-            _lblDynamicCalibConn.ForeColor = ServiceUiColors.PrimaryAction;
+            _lblDirectionCorrectionConn.Text = $"Динамика: {_directionCorrectionSim.PortName}";
+            _lblDirectionCorrectionConn.ForeColor = ServiceUiColors.PrimaryAction;
         }
-        else if (_dynamicCalibSim.IsPortOpen)
+        else if (_directionCorrectionSim.IsPortOpen)
         {
-            _lblDynamicCalibConn.Text = $"Порт открыт: {_dynamicCalibSim.PortName}";
-            _lblDynamicCalibConn.ForeColor = ServiceUiColors.Warning;
+            _lblDirectionCorrectionConn.Text = $"Порт открыт: {_directionCorrectionSim.PortName}";
+            _lblDirectionCorrectionConn.ForeColor = ServiceUiColors.Warning;
         }
         else
         {
-            _lblDynamicCalibConn.Text = "Динамика: нет подключения";
-            _lblDynamicCalibConn.ForeColor = ServiceUiColors.Disconnected;
+            _lblDirectionCorrectionConn.Text = "Динамика: нет подключения";
+            _lblDirectionCorrectionConn.ForeColor = ServiceUiColors.Disconnected;
         }
     }
 
-    private async void BtnCalibDynSave_Click(object? sender, EventArgs e)
+    private async void BtnDirectionCorrectionProfileSave_Click(object? sender, EventArgs e)
     {
         string plusText = _txtKPlus.Text.Trim();
         string minusText = _txtKMinus.Text.Trim();
@@ -2024,8 +2024,8 @@ public partial class ServiceForm : Form
             return;
         }
 
-        double kp = _calib.Dynamic.KPlus;
-        double km = _calib.Dynamic.KMinus;
+        double kp = _calib.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor;
+        double km = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor;
         if (hasPlus && !double.TryParse(plusText, NumberStyles.Float, CultureInfo.InvariantCulture, out kp))
         {
             MessageBox.Show("Некорректное значение K→.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2039,28 +2039,28 @@ public partial class ServiceForm : Form
 
         try
         {
-            var changedProfiles = await _calib.SaveDynamicCalibAsync(new DynamicCalib { KPlus = kp, KMinus = km });
-            _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.Dynamic);
+            var changedProfiles = await _calib.SaveDirectionCorrectionProfileAsync(new DirectionCorrectionProfile { RightDirectionCorrectionFactor = kp, LeftDirectionCorrectionFactor = km });
+            _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.ActiveDirectionCorrectionProfile);
             _settings.Save();
-            await LoadCalibDynamicAsync();
-            MessageBox.Show("Калибровка динамики сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            await LoadDirectionCorrectionProfileAsync();
+            MessageBox.Show("Поправочные коэффициенты направления сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             foreach (var profile in changedProfiles)
             {
                 string operation = profile.IsActive ? "added" : "retired";
-                AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_dynamic",
-                    $"operation={operation}; id={profile.Id}; k_plus={profile.KPlus.ToString("F5", CultureInfo.InvariantCulture)}; " +
-                    $"k_minus={profile.KMinus.ToString("F5", CultureInfo.InvariantCulture)}; is_active={profile.IsActive}; " +
+                AuditLogger.Action(AuditLogger.CalibrationSaved, "direction_correction_profiles",
+                    $"operation={operation}; id={profile.Id}; right_direction_correction_factor={profile.RightDirectionCorrectionFactor.ToString("F5", CultureInfo.InvariantCulture)}; " +
+                    $"left_direction_correction_factor={profile.LeftDirectionCorrectionFactor.ToString("F5", CultureInfo.InvariantCulture)}; is_active={profile.IsActive}; " +
                     $"created_at={profile.CreatedAt.ToUniversalTime():O}; deleted_at={profile.DeletedAt?.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture) ?? "null"}");
             }
         }
         catch (Exception ex)
         {
             AuditLogger.Exception(AuditLogger.ErrorDb, "CalibProfile", "dynamic", "PostgreSQL", ex);
-            MessageBox.Show("Не удалось сохранить калибровку динамики.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Не удалось сохранить профиль поправочных коэффициентов направления.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    private static void ApplyDynamicCalibRowStyle(DataGridViewRow row, bool isActive)
+    private static void ApplyDirectionCorrectionProfileRowStyle(DataGridViewRow row, bool isActive)
     {
         if (isActive)
         {
@@ -2080,29 +2080,29 @@ public partial class ServiceForm : Form
         row.ReadOnly = true;
     }
 
-    private void LoadCalibDynamic() => _ = LoadCalibDynamicAsync();
+    private void LoadDirectionCorrectionProfile() => _ = LoadDirectionCorrectionProfileAsync();
 
-    private async Task LoadCalibDynamicAsync()
+    private async Task LoadDirectionCorrectionProfileAsync()
     {
         if (_calib is null) return;
 
-        _txtKPlus.Text = _calib.Dynamic.KPlus.ToString("G8", CultureInfo.InvariantCulture);
-        _txtKMinus.Text = _calib.Dynamic.KMinus.ToString("G8", CultureInfo.InvariantCulture);
+        _txtKPlus.Text = _calib.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture);
+        _txtKMinus.Text = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture);
 
         try
         {
-            var rows = await _calib.GetDynamicCalibsAsync();
-            _dgvDynCalib.Rows.Clear();
+            var rows = await _calib.GetDirectionCorrectionProfilesAsync();
+            _dgvDirectionCorrectionProfiles.Rows.Clear();
             foreach (var row in rows)
             {
-                int idx = _dgvDynCalib.Rows.Add(
+                int idx = _dgvDirectionCorrectionProfiles.Rows.Add(
                     row.IsActive ? "Да" : "Нет",
-                    row.KPlus.ToString("G8", CultureInfo.InvariantCulture),
-                    row.KMinus.ToString("G8", CultureInfo.InvariantCulture),
+                    row.RightDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture),
+                    row.LeftDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture),
                     row.CreatedAt == default ? "" : row.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm"),
                     row.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "");
 
-                ApplyDynamicCalibRowStyle(_dgvDynCalib.Rows[idx], row.IsActive);
+                ApplyDirectionCorrectionProfileRowStyle(_dgvDirectionCorrectionProfiles.Rows[idx], row.IsActive);
             }
         }
         catch (Exception ex)
@@ -2138,7 +2138,7 @@ public partial class ServiceForm : Form
     private void SetAdminTabs(bool enabled)
     {
         _tabCalibS.Enabled = enabled;
-        _tabCalibD.Enabled = enabled;
+        _tabDirectionCorrections.Enabled = enabled;
         _tabSett.Enabled = enabled;
     }
 }

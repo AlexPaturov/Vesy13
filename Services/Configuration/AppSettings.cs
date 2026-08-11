@@ -20,10 +20,13 @@ public sealed class AppSettings
     /// <summary>Последний успешно прочитанный/сохранённый снимок точек статической калибровки (fallback при недоступной БД).</summary>
     public List<CalibPoint> CachedStaticPoints { get; set; } = new();
 
-    /// <summary>Последняя известная активная строка динамической калибровки (fallback при недоступной БД).</summary>
-    public DynamicCalib CachedDynamicCalib { get; set; } = new();
+    /// <summary>Последняя известная активная строка поправочных коэффициентов направления (fallback при недоступной БД).</summary>
+    public DirectionCorrectionProfile CachedDirectionCorrectionProfile { get; set; } = new();
 
-    /// <summary>Время последнего обновления кэша калибровки выше.</summary>
+    /// <summary>Версия формата CachedDirectionCorrectionProfile. Нужна, чтобы не использовать коэффициенты с прежней размерностью.</summary>
+    public int DirectionCorrectionProfileCacheFormatVersion { get; set; } = 2;
+
+    /// <summary>Время последнего обновления кэша настроек взвешивания выше.</summary>
     public DateTime? CalibCacheUpdatedAt { get; set; }
 
     // ── Фильтры входного потока: статика (опрос 5 Гц) ─────────────────────────

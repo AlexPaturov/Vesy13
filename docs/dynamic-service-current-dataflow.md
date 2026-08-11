@@ -10,10 +10,10 @@
 
 ```text
 ServiceForm._dynamicServiceSim : SimA04ReaderDynamic
-ServiceForm._dynamicCalibSim   : SimA04ReaderDynamic
+ServiceForm._directionCorrectionSim   : SimA04ReaderDynamic
 ```
 
-Оба reader-а создаются внутри самой `ServiceForm` (`new SimA04ReaderDynamic`) — после рефакторинга развязки reader-ов (`docs/status_2026-08-07.md`) ни один не приходит извне; раньше `_dynamicServiceSim` был общим экземпляром с `MainForm._dynamicSim`. `_dynamicServiceSim` обслуживает вкладку `Сервисный режим Динамика`, `_dynamicCalibSim` — только вкладку `Калибровка Динамика`.
+Оба reader-а создаются внутри самой `ServiceForm` (`new SimA04ReaderDynamic`) — после рефакторинга развязки reader-ов (`docs/status_2026-08-07.md`) ни один не приходит извне; раньше `_dynamicServiceSim` был общим экземпляром с `MainForm._dynamicSim`. `_dynamicServiceSim` обслуживает вкладку `Сервисный режим Динамика`, `_directionCorrectionSim` — только вкладку `Коэффициенты направлений`.
 
 Каждый `SimA04ReaderDynamic` читает свой открытый COM-порт, собирает 5-байтовый динамический сэмпл и публикует события:
 
@@ -32,7 +32,7 @@ COM port bytes
 Tabs_SelectedIndexChanged
   -> UpdateDynamicDataSubscriptions()
   -> SetDynamicServiceDataSubscription(active tab == _tabDynamicService)
-  -> SetDynamicCalibDataSubscription(active tab == _tabCalibD)
+  -> SetDirectionCorrectionProfileDataSubscription(active tab == _tabDirectionCorrections)
 ```
 
 Для `Сервисный режим Динамика`:
@@ -42,10 +42,10 @@ _dynamicServiceSim.RawSampleReceived += OnDynamicServiceRawSample
 _dynamicServiceSim.SampleReceived    += OnDynamicServiceSample
 ```
 
-Для `Калибровка Динамика`:
+Для `Коэффициенты направлений`:
 
 ```text
-_dynamicCalibSim.SampleReceived += OnDynamicCalibSample
+_directionCorrectionSim.SampleReceived += OnDirectionCorrectionProfileSample
 ```
 
 Raw-подписки для калибровки динамики нет.
@@ -61,7 +61,7 @@ _btnDynamicConn.Click
   -> BtnDynamicConn_Click
   -> ToggleDynamicServiceConnection(_cmbDynamicPort.SelectedItem, ...)
   -> CloseStaticConnection()
-  -> CloseDynamicCalibConnection()
+  -> CloseDirectionCorrectionProfileConnection()
   -> _dynamicServiceSim.Open(port) / CloseDynamicServiceConnection()
   -> UpdateDynamicServiceMonitorConn(...)
 ```
@@ -100,31 +100,31 @@ _dynamicServiceSim.RawSampleReceived
 
 Лог сервисной динамики — owner-drawn `ListBox` `_lstDynamicLog` (элементы `DynamicServiceLogLine`), физически на вкладке `_tabDynamicService`. Цвет хранится на самом элементе, `RichTextBox` (`_rtbDynamicLog`) больше не используется. Гейтинг по активной вкладке выполняется на уровне подписки (`SetDynamicServiceDataSubscription`), а не внутри обработчика.
 
-## Вкладка "Калибровка Динамика"
+## Вкладка "Коэффициенты направлений"
 
 Назначение вкладки: калибровка коэффициентов динамики, просмотр текущего кода АЦП и расчёт live-веса.
 
 Путь подключения:
 
 ```text
-_btnDynamicCalibConn.Click
-  -> BtnDynamicCalibConn_Click
-  -> ToggleDynamicCalibConnection(_cmbDynamicCalibPort.SelectedItem, ...)
+_btnDirectionCorrectionProfileConn.Click
+  -> BtnDirectionCorrectionProfileConn_Click
+  -> ToggleDirectionCorrectionProfileConnection(_cmbDirectionCorrectionProfilePort.SelectedItem, ...)
   -> CloseStaticConnection()
   -> CloseDynamicServiceConnection()
-  -> _dynamicCalibSim.Open(port) / CloseDynamicCalibConnection()
-  -> UpdateDynamicCalibMonitorConn(...)
+  -> _directionCorrectionSim.Open(port) / CloseDirectionCorrectionProfileConnection()
+  -> UpdateDirectionCorrectionProfileMonitorConn(...)
 ```
 
 Путь parsed sample для калибровки:
 
 ```text
-_dynamicCalibSim.SampleReceived
-  -> OnDynamicCalibSample(sample)
+_directionCorrectionSim.SampleReceived
+  -> OnDirectionCorrectionProfileSample(sample)
   -> сохранить sample как latest
   -> RefreshDynamicSampleDisplay() по timer 100 ms
   -> _lastDynCh0 / _lastDynCh1
-  -> UpdateLiveDynamicCalibrationLabels()
+  -> UpdateLiveDirectionCorrectionLabels()
   -> _lblLiveAdcD.Text
   -> _lblLiveWeightD.Text
 ```
@@ -133,8 +133,8 @@ _dynamicCalibSim.SampleReceived
 
 ```text
 CurrentDynamicAdcCode()
-  -> выбранный канал из _dynamicCalibSim.Channel
-  -> code * KPlus / code * KMinus
+  -> выбранный канал из _directionCorrectionSim.Channel
+  -> code * right_direction_correction_factor / code * left_direction_correction_factor
   -> FormatServiceDynamicWeight(...)
   -> _lblLiveWeightD
 ```
@@ -149,25 +149,25 @@ Raw-log калибровка динамики не получает и не пи
 Tabs_SelectedIndexChanged
   -> UpdateDynamicDataSubscriptions()
   -> если вкладка _tabMonitor или _tabCalibS: CloseDynamicConnections()
-  -> если вкладка _tabDynamicService: CloseStaticConnection(); CloseDynamicCalibConnection()
-  -> если вкладка _tabCalibD: CloseStaticConnection(); CloseDynamicServiceConnection()
+  -> если вкладка _tabDynamicService: CloseStaticConnection(); CloseDirectionCorrectionProfileConnection()
+  -> если вкладка _tabDirectionCorrections: CloseStaticConnection(); CloseDynamicServiceConnection()
   -> иначе CloseStaticConnection(); CloseDynamicConnections()
 ```
 
-Переход между `_tabDynamicService` и `_tabCalibD` больше не удерживает общий stream.
+Переход между `_tabDynamicService` и `_tabDirectionCorrections` больше не удерживает общий stream.
 
 ## Текущая блок-схема
 
 ```text
-  _tabDynamicService                                      _tabCalibD
+  _tabDynamicService                                      _tabDirectionCorrections
           |                                                     |
           v                                                     v
-  _dynamicServiceSim                                   _dynamicCalibSim
+  _dynamicServiceSim                                   _directionCorrectionSim
           |                                                     |
           | RawSampleReceived + SampleReceived                  | SampleReceived only
           |                                                     |
           v                                                     v
-  OnDynamicServiceRawSample                          OnDynamicCalibSample
+  OnDynamicServiceRawSample                          OnDirectionCorrectionProfileSample
   OnDynamicServiceSample                             latest sample buffer
           |                                                     |
           v                                                     v
@@ -180,6 +180,6 @@ Tabs_SelectedIndexChanged
 
 ## Граница ответственности
 
-`Сервисный режим Динамика` и `Калибровка Динамика` используют отдельные reader-ы,
+`Сервисный режим Динамика` и `Коэффициенты направлений` используют отдельные reader-ы,
 подписки и workflow подключения. Они не должны снова делить reader, raw-поток,
 журнал или состояние подключения.

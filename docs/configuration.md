@@ -64,7 +64,8 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 | `AdminPasswordHash` | PBKDF2-хеш пароля администратора | создается при первом запуске |
 | `AdminPasswordSalt` | соль пароля администратора | создается при первом запуске |
 | `CachedStaticPoints` | локальный снимок всех точек статической калибровки (полные строки из БД, включая неактивные) — fallback на случай недоступности БД при старте | обновляется при каждой успешной загрузке/сохранении калибровки |
-| `CachedDynamicCalib` | локальный снимок активной строки динамической калибровки — тот же fallback | обновляется вместе с `CachedStaticPoints` |
+| `CachedDirectionCorrectionProfile` | локальный снимок активной строки поправочных коэффициентов направления — тот же fallback | обновляется вместе с `CachedStaticPoints` |
+| `DirectionCorrectionProfileCacheFormatVersion` | версия формата динамического fallback-кэша | при смене формулы старый динамический снимок сбрасывается |
 | `CalibCacheUpdatedAt` | время последнего обновления двух полей выше | `null`, пока калибровка ни разу не была успешно прочитана |
 
 Фильтры входного потока (подробности — `docs/hardware.md`, раздел «Обработка входного
@@ -98,7 +99,7 @@ dotnet run --project ScaleListener/ScaleListener.csproj
 После первого запуска пароль администратора нужно сменить через сервисную форму.
 
 Если БД недоступна при старте, `LocalRepository.RestoreLastKnownCalibration` подставляет
-`CachedStaticPoints`/`CachedDynamicCalib` вместо пустой калибровки; событие пишется в аудит
+`CachedStaticPoints`/`CachedDirectionCorrectionProfile` вместо пустой калибровки; событие пишется в аудит
 (`AuditLogger.CalibrationFallback`). Пустой кэш (калибровка никогда не была успешно прочитана)
 оставляет то же заблокированное состояние, что и обычная неудача чтения из БД.
 

@@ -60,7 +60,7 @@
 
 - `SimA04Frame` - один 4-байтовый статический кадр АЦП с каналами `Ch0`, `Ch1`.
 - `SimA04DynamicSample` - один 5-байтовый динамический сэмпл с каналами `Ch0`, `Ch1` и `AUX`.
-- `CalibPoint`, `DynamicCalib` - калибровка.
+- `CalibPoint`, `DirectionCorrectionProfile` - калибровка.
 - `LocalWagon` - локальное взвешивание вагона.
 - `GpriGras` - запись заводских таблиц Firebird.
 - `TaraOption` - вариант тары для выбора.

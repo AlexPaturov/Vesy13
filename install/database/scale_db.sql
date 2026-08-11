@@ -7,11 +7,15 @@
 -- with the trust method, the pg_hba.conf rules are described in
 -- docs/configuration.md.
 --
--- Tables are created empty. An active row in calibration_dynamic is what marks
--- the dynamic calibration as set, so on a new station the table stays empty
--- until the first calibration with reference loads.
+-- Tables are created empty. Direction correction profiles remain empty until
+-- the operator saves the first pair of direction correction factors.
 
-CREATE ROLE scale_user LOGIN;
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'scale_user') THEN
+        CREATE ROLE scale_user LOGIN;
+    END IF;
+END $$;
 
 CREATE DATABASE scale_db OWNER scale_user;
 
@@ -61,24 +65,23 @@ CREATE UNIQUE INDEX ux_calibration_points_active_channel_adc_code
 
 COMMENT ON COLUMN calibration_points.created_at IS 'Time when the calibration point was added.';
 
--- History of the dynamic calibration coefficients.
--- The working row is selected by is_active = TRUE AND deleted_at IS NULL;
--- created_at is supplied by the application (LocalRepository.SaveDynamicCalibAsync).
-CREATE TABLE calibration_dynamic (
-    id         SERIAL PRIMARY KEY,
-    k_plus     DOUBLE PRECISION NOT NULL DEFAULT 0,
-    k_minus    DOUBLE PRECISION NOT NULL DEFAULT 0,
-    is_active  BOOLEAN          NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMPTZ      NOT NULL,
-    deleted_at TIMESTAMPTZ
+-- History of direction correction profiles.
+-- The working profile is selected by is_active = TRUE AND deleted_at IS NULL.
+CREATE TABLE direction_correction_profiles (
+    id                                SERIAL PRIMARY KEY,
+    right_direction_correction_factor DOUBLE PRECISION NOT NULL DEFAULT 0,
+    left_direction_correction_factor  DOUBLE PRECISION NOT NULL DEFAULT 0,
+    is_active                         BOOLEAN          NOT NULL DEFAULT FALSE,
+    created_at                        TIMESTAMPTZ      NOT NULL,
+    deleted_at                        TIMESTAMPTZ
 );
 
-COMMENT ON COLUMN calibration_dynamic.is_active IS 'Current working dynamic calibration row.';
-COMMENT ON COLUMN calibration_dynamic.created_at IS 'Dynamic calibration row creation time.';
-COMMENT ON COLUMN calibration_dynamic.deleted_at IS 'Time when dynamic calibration row was deactivated.';
+COMMENT ON COLUMN direction_correction_profiles.is_active IS 'Current working direction correction profile.';
+COMMENT ON COLUMN direction_correction_profiles.created_at IS 'Direction correction profile creation time.';
+COMMENT ON COLUMN direction_correction_profiles.deleted_at IS 'Time when direction correction profile was deactivated.';
 
-CREATE UNIQUE INDEX ux_calibration_dynamic_active
-    ON calibration_dynamic (is_active)
+CREATE UNIQUE INDEX ux_direction_correction_profiles_active
+    ON direction_correction_profiles (is_active)
     WHERE is_active = TRUE AND deleted_at IS NULL;
 
 -- Audit trail: form and service events, and errors.

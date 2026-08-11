@@ -52,11 +52,13 @@ public partial class DynamicWeighingForm : Form
         };
     }
 
-    private string GetDirection() => _rbPlus.Checked ? "→ (+)" : "← (–)";
+    private Direction GetDirection() => _rbPlus.Checked ? Direction.Right : Direction.Left;
 
-    private bool HasDynamicCalibration() => _ldb.Dynamic.IsActive && _ldb.Dynamic.DeletedAt is null;
+    private string GetDirectionText() => GetDirection() == Direction.Right ? "→ (+)" : "← (–)";
 
-    private double ReadRawTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.Dynamic, adcCode, GetDirection());
+    private bool HasDirectionCorrectionProfile() => _ldb.ActiveDirectionCorrectionProfile.IsActive && _ldb.ActiveDirectionCorrectionProfile.DeletedAt is null;
+
+    private double ReadRawTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.ActiveDirectionCorrectionProfile, adcCode, GetDirection());
 
     private double ToTonnes(int adcCode) =>
         WeightFormatter.RoundToDiscretization(ReadRawTonnes(adcCode) - _zeroOffsetTonnes, _settings.Current.WeightDiscretizationTonnes);
@@ -75,8 +77,8 @@ public partial class DynamicWeighingForm : Form
             return false;
         }
 
-        if (HasDynamicCalibration()) return true;
-        MessageBox.Show($"Нет динамической калибровки для направления {GetDirection()}.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (HasDirectionCorrectionProfile()) return true;
+        MessageBox.Show($"Нет профиля поправочных коэффициентов направления для направления {GetDirectionText()}.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }
 
@@ -294,7 +296,7 @@ public partial class DynamicWeighingForm : Form
         _displayedSampleVersion = version;
         _lastSample = sample;
 
-        if (!HasDynamicCalibration())
+        if (!HasDirectionCorrectionProfile())
         {
             _lblValue.Text = "—";
             _lblValue.ForeColor = UiColors.Disconnected;
@@ -433,7 +435,7 @@ public partial class DynamicWeighingForm : Form
                 WagonTime = wagonTime,
                 Bogie1    = ToTonnes(_bogie1Code),
                 Bogie2    = ToTonnes(bogie2),
-                Direction = GetDirection(),
+                Direction = GetDirectionText(),
                 Mode      = "ДИНАМИКА",
             };
             AddToGrid(record);
@@ -488,7 +490,7 @@ public partial class DynamicWeighingForm : Form
 
     private void UpdateButtonStates()
     {
-        bool canWeigh = HasDynamicCalibration() && _sim.IsConnected;
+        bool canWeigh = HasDirectionCorrectionProfile() && _sim.IsConnected;
         _btnWeigh.Enabled  = canWeigh;
         _btnZero.Enabled   = _state == WeighState.Idle && canWeigh;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
@@ -530,12 +532,12 @@ public partial class DynamicWeighingForm : Form
     {
         var audit = AuditLogger.GetQueueStatus();
         var messages = new List<string>();
-        if (!HasDynamicCalibration())
-            messages.Add($"Динамическая калибровка: не задан коэффициент для {GetDirection()}");
+        if (!HasDirectionCorrectionProfile())
+            messages.Add($"Поправочные коэффициенты направления: не задан коэффициент для {GetDirectionText()}");
         if (!_weighingStorageAvailable)
             messages.Add("Взвешивание: БД недоступна, запись не сохранена");
 
-        var hasError = !HasDynamicCalibration() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
+        var hasError = !HasDirectionCorrectionProfile() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
         if (!audit.IsDatabaseAvailable)
             messages.Add(string.Format("БД недоступна; очередь {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
         else if (audit.PendingCount > 0 || audit.DroppedCount > 0)

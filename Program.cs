@@ -39,18 +39,18 @@ static class Program
         bool calibLoadedFromDb = ldb.LoadCalibrationFromDbAsync().GetAwaiter().GetResult();
         if (calibLoadedFromDb)
         {
-            settings.UpdateCalibrationCache(ldb.CalibPoints, ldb.Dynamic);
+            settings.UpdateCalibrationCache(ldb.CalibPoints, ldb.ActiveDirectionCorrectionProfile);
             settings.Save();
         }
         else
         {
-            ldb.RestoreLastKnownCalibration(settings.Current.CachedStaticPoints, settings.Current.CachedDynamicCalib);
+            ldb.RestoreLastKnownCalibration(settings.Current.CachedStaticPoints, settings.Current.CachedDirectionCorrectionProfile);
         }
         AuditLogger.Initialize();
         AuditLogger.Action(AuditLogger.AppStarted, "Application", "Vesy13");
         if (!calibLoadedFromDb)
             AuditLogger.Action(AuditLogger.CalibrationFallback, "LocalRepository",
-                $"БД недоступна на старте, калибровка восстановлена из локального кэша (обновлён {settings.Current.CalibCacheUpdatedAt:yyyy-MM-dd HH:mm:ss})");
+                $"БД недоступна на старте, настройки взвешивания восстановлены из локального кэша (обновлён {settings.Current.CalibCacheUpdatedAt:yyyy-MM-dd HH:mm:ss})");
         System.Windows.Forms.Application.Run(new MainForm(ldb, settings));
     }
 }
