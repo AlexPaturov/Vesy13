@@ -1615,7 +1615,28 @@ public partial class ServiceForm : Form
             .FirstOrDefault(group => group.Count() > 1);
         if (duplicateMass is not null)
         {
-            MessageBox.Show($"Для массы {duplicateMass.Key:G} т уже существует активная калибровочная точка.\nСнимите прежнюю точку или укажите другую массу.",
+            MessageBox.Show($"Для массы {duplicateMass.Key:G} т уже существует активная калибровочная точка.\nСделайте прежнюю точку неактивной или укажите другую массу.",
+                "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var duplicateCode = pts.Where(p => p.IsActive)
+            .GroupBy(p => p.AdcCode)
+            .FirstOrDefault(group => group.Count() > 1);
+        if (duplicateCode is not null)
+        {
+            var rows = _dgvCalib.Rows.Cast<DataGridViewRow>()
+                .Where(row => row.Cells[0].Value?.ToString() == "Да" &&
+                    int.TryParse(row.Cells[1].Value?.ToString(), NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out int code) && code == duplicateCode.Key)
+                .Select(row => row.Index + 1)
+                .ToArray();
+            if (rows.Length > 0)
+                _dgvCalib.CurrentCell = _dgvCalib.Rows[rows[0] - 1].Cells[1];
+
+            string rowsText = string.Join(" и ", rows);
+            MessageBox.Show("В строках " + rowsText + " указан одинаковый код АЦП: " + duplicateCode.Key +
+                ".\nДля одного канала активной может быть только одна точка с этим кодом.\nСделайте одну из точек неактивной или укажите другой код АЦП.",
                 "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }

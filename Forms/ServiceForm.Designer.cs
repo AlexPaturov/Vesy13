@@ -1022,7 +1022,7 @@ partial class ServiceForm
         // dataGridViewTextBoxColumnCalibDeleted
         // 
         dataGridViewTextBoxColumnCalibDeleted.FillWeight = 25F;
-        dataGridViewTextBoxColumnCalibDeleted.HeaderText = "Снята";
+        dataGridViewTextBoxColumnCalibDeleted.HeaderText = "Неактивна";
         dataGridViewTextBoxColumnCalibDeleted.MinimumWidth = 105;
         dataGridViewTextBoxColumnCalibDeleted.Name = "dataGridViewTextBoxColumnCalibDeleted";
         dataGridViewTextBoxColumnCalibDeleted.ReadOnly = true;
@@ -1846,7 +1846,7 @@ partial class ServiceForm
         // 
         dataGridViewTextBoxColumn8.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         dataGridViewTextBoxColumn8.FillWeight = 19F;
-        dataGridViewTextBoxColumn8.HeaderText = "Снят";
+        dataGridViewTextBoxColumn8.HeaderText = "Неактивен";
         dataGridViewTextBoxColumn8.MinimumWidth = 6;
         dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
         dataGridViewTextBoxColumn8.ReadOnly = true;

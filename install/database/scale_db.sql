@@ -38,7 +38,7 @@ CREATE TABLE wagon_weighing (
 );
 
 -- Static calibration points per channel.
--- Several active points on a channel are normal; retired points keep their row
+-- Several active points on a channel are normal; inactive points keep their row
 -- and carry deleted_at.
 CREATE TABLE calibration_points (
     id         SERIAL PRIMARY KEY,
@@ -53,6 +53,10 @@ CREATE TABLE calibration_points (
 
 CREATE UNIQUE INDEX ux_calibration_points_active_channel_mass
     ON calibration_points (channel, mass)
+    WHERE is_active = TRUE AND deleted_at IS NULL;
+
+CREATE UNIQUE INDEX ux_calibration_points_active_channel_adc_code
+    ON calibration_points (channel, adc_code)
     WHERE is_active = TRUE AND deleted_at IS NULL;
 
 COMMENT ON COLUMN calibration_points.created_at IS 'Time when the calibration point was added.';

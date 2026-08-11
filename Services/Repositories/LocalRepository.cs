@@ -88,7 +88,7 @@ public class LocalRepository
     }
 
     /// <summary>
-    /// Сохраняет неизменяемые точки канала: новые добавляются, существующие можно только снять.
+    /// Сохраняет неизменяемые точки канала: новые добавляются, существующие можно только сделать неактивными.
     /// Код АЦП, масса и калибровочное число сохранённой точки никогда не обновляются.
     /// </summary>
     public async Task<IReadOnlyList<CalibPoint>> SaveCalibPointsAsync(int channel, IEnumerable<CalibPoint> points)

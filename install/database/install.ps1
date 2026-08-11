@@ -49,7 +49,7 @@ if (-not $PostgresInstaller) {
 }
 
 $MarkerKey     = 'HKLM:\SOFTWARE\Vesy13\Database'
-$SchemaVersion = '2'
+$SchemaVersion = '3'
 $PasswordFile  = Join-Path $StateDir 'postgres_password.txt'
 $LogFile       = Join-Path $StateDir 'install-db.log'
 $PurgeSql      = Join-Path $StateDir 'purge.sql'
@@ -340,6 +340,18 @@ Write-Log 'Static calibration value column verified.'
 Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
     -Command 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calibration_points_active_channel_mass ON calibration_points (channel, mass) WHERE is_active = TRUE AND deleted_at IS NULL' | Out-Null
 Write-Log 'Unique active static calibration mass index verified.'
+
+# -- 3c. Schema upgrade: unique active static calibration ADC code -----------
+
+$duplicateActiveCodes = Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
+    -Command "SELECT channel::text || ':' || adc_code::text FROM calibration_points WHERE is_active = TRUE AND deleted_at IS NULL GROUP BY channel, adc_code HAVING COUNT(*) > 1 ORDER BY channel, adc_code"
+if ($duplicateActiveCodes) {
+    throw "Cannot add the unique active ADC code index. Duplicate active channel:code values: $duplicateActiveCodes. Make all but one point for each listed channel and code inactive, then rerun the installer."
+}
+
+Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
+    -Command 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calibration_points_active_channel_adc_code ON calibration_points (channel, adc_code) WHERE is_active = TRUE AND deleted_at IS NULL' | Out-Null
+Write-Log 'Unique active static calibration ADC code index verified.'
 
 # -- 4. Trust rules for the application ---------------------------------------
 
