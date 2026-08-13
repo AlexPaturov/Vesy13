@@ -1,9 +1,8 @@
--- Version 4: dynamic calibration is replaced by direction correction profiles.
--- Dynamic calibration coefficients have another meaning and are intentionally discarded.
+-- Version 5: replace obsolete dynamic calibration and guarantee application ownership.
+-- Existing direction correction profiles are retained on repeated installer runs.
 DROP TABLE IF EXISTS calibration_dynamic;
-DROP TABLE IF EXISTS direction_correction_profiles;
 
-CREATE TABLE direction_correction_profiles (
+CREATE TABLE IF NOT EXISTS direction_correction_profiles (
     id                                SERIAL PRIMARY KEY,
     right_direction_correction_factor DOUBLE PRECISION NOT NULL DEFAULT 0,
     left_direction_correction_factor  DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -12,6 +11,9 @@ CREATE TABLE direction_correction_profiles (
     deleted_at                        TIMESTAMPTZ
 );
 
-CREATE UNIQUE INDEX ux_direction_correction_profiles_active
+CREATE UNIQUE INDEX IF NOT EXISTS ux_direction_correction_profiles_active
     ON direction_correction_profiles (is_active)
     WHERE is_active = TRUE AND deleted_at IS NULL;
+
+ALTER TABLE direction_correction_profiles OWNER TO scale_user;
+ALTER SEQUENCE direction_correction_profiles_id_seq OWNER TO scale_user;

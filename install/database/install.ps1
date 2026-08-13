@@ -49,7 +49,7 @@ if (-not $PostgresInstaller) {
 }
 
 $MarkerKey     = 'HKLM:\SOFTWARE\Vesy13\Database'
-$SchemaVersion = '4'
+$SchemaVersion = '5'
 $PasswordFile  = Join-Path $StateDir 'postgres_password.txt'
 $LogFile       = Join-Path $StateDir 'install-db.log'
 $PurgeSql      = Join-Path $StateDir 'purge.sql'
@@ -356,8 +356,8 @@ Write-Log 'Unique active static calibration ADC code index verified.'
 # -- 3d. Schema upgrade: direction correction factor names -------------------
 
 Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
-    -File (Join-Path $ScriptDir 'migrate-v4-direction-correction-profiles.sql') | Out-Null
-Write-Log 'Direction correction profiles schema recreated; obsolete dynamic calibration table removed.'
+    -File (Join-Path $ScriptDir 'migrate-v5-direction-correction-profiles.sql') | Out-Null
+Write-Log 'Direction correction profiles schema verified; obsolete dynamic calibration table removed.'
 
 # -- 4. Trust rules for the application ---------------------------------------
 
