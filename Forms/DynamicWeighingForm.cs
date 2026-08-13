@@ -56,9 +56,29 @@ public partial class DynamicWeighingForm : Form
 
     private string GetDirectionText() => GetDirection() == Direction.Right ? "→ (+)" : "← (–)";
 
-    private bool HasDirectionCorrectionProfile() => _ldb.ActiveDirectionCorrectionProfile.IsActive && _ldb.ActiveDirectionCorrectionProfile.DeletedAt is null;
+    private bool HasDirectionCorrectionProfile() =>
+        _ldb.ActiveDirectionCorrectionProfile.IsActive && _ldb.ActiveDirectionCorrectionProfile.DeletedAt is null;
 
-    private double ReadRawTonnes(int adcCode) => CalibrationCalculator.ConvertDynamic(_ldb.ActiveDirectionCorrectionProfile, adcCode, GetDirection());
+    private StaticCalibrationResult? CalculateStatic(int adcCode) =>
+        CalibrationCalculator.CalculateStatic(_ldb.CalibPoints, adcCode, _sim.Channel);
+
+    private bool HasStaticCalibration() => _ldb.CalibPoints.Any(point =>
+        point.Channel == (_sim.Channel == ActiveChannel.Main ? 0 : 1) && point.IsActive);
+
+    private double SelectedDirectionCorrectionFactor() => GetDirection() == Direction.Right
+        ? _ldb.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor
+        : _ldb.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor;
+
+    private bool HasValidDirectionCorrectionFactor() =>
+        HasDirectionCorrectionProfile() && SelectedDirectionCorrectionFactor() > 0;
+
+    private double ReadRawTonnes(int adcCode)
+    {
+        var staticResult = CalculateStatic(adcCode);
+        return staticResult is null
+            ? 0
+            : CalibrationCalculator.ApplyDirectionCorrection(staticResult.Tonnes, _ldb.ActiveDirectionCorrectionProfile, GetDirection());
+    }
 
     private double ToTonnes(int adcCode) =>
         WeightFormatter.RoundToDiscretization(ReadRawTonnes(adcCode) - _zeroOffsetTonnes, _settings.Current.WeightDiscretizationTonnes);
@@ -77,8 +97,22 @@ public partial class DynamicWeighingForm : Form
             return false;
         }
 
-        if (HasDirectionCorrectionProfile()) return true;
-        MessageBox.Show($"Нет профиля поправочных коэффициентов направления для направления {GetDirectionText()}.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (!HasStaticCalibration())
+        {
+            string channel = _sim.Channel == ActiveChannel.Main ? "CH0" : "CH1";
+            MessageBox.Show($"Нет активной статической калибровки для канала {channel}.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        if (!HasDirectionCorrectionProfile())
+        {
+            MessageBox.Show("Нет активного профиля поправочных коэффициентов направления.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
+        }
+
+        if (HasValidDirectionCorrectionFactor()) return true;
+        MessageBox.Show($"Для направления {GetDirectionText()} не задан положительный поправочный коэффициент.",
+            "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }
 
@@ -296,7 +330,7 @@ public partial class DynamicWeighingForm : Form
         _displayedSampleVersion = version;
         _lastSample = sample;
 
-        if (!HasDirectionCorrectionProfile())
+        if (!HasStaticCalibration() || !HasValidDirectionCorrectionFactor())
         {
             _lblValue.Text = "—";
             _lblValue.ForeColor = UiColors.Disconnected;
@@ -306,8 +340,6 @@ public partial class DynamicWeighingForm : Form
         _lblValue.Text = ToTonnes(ActiveCode(sample)).ToString("F2");
         _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
 
-        if (_state == WeighState.Bogie1Captured)
-            SetBogieValue(_lblBogie2Value, ToTonnes(ActiveCode(sample)));
     }
 
     private void OnConnectionChanged(object? sender, bool connected)
@@ -419,31 +451,30 @@ public partial class DynamicWeighingForm : Form
             _state              = WeighState.Bogie1Captured;
             SetBogieValue(_lblBogie1Value, bogie1Tonnes);
             _lblBogie2Value.Text = "—";
-            _lblValue.Text      = bogie1Tonnes.ToString("F2");
-            _lblValue.ForeColor = UiColors.PendingAction;
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
             _btnWeigh.BackColor = UiColors.PendingAction;
         }
         else
         {
-            int      bogie2    = ActiveCode(_lastSample);
+            int      bogie2Code = ActiveCode(_lastSample);
+            double   bogie1Tonnes = ToTonnes(_bogie1Code);
+            double   bogie2Tonnes = ToTonnes(bogie2Code);
             DateTime wagonTime = DateTime.Now;
             var record = new LocalWagon
             {
                 Number    = _wagonNumber,
                 TrainTime = _trainStartTime!.Value,
                 WagonTime = wagonTime,
-                Bogie1    = ToTonnes(_bogie1Code),
-                Bogie2    = ToTonnes(bogie2),
+                Bogie1    = bogie1Tonnes,
+                Bogie2    = bogie2Tonnes,
                 Direction = GetDirectionText(),
                 Mode      = "ДИНАМИКА",
             };
             AddToGrid(record);
-            SaveAsync(record);
             _state              = WeighState.Idle;
-            ResetBogieValues();
-            _lblValue.Text      = record.Total.ToString("F2");
-            _lblValue.ForeColor = UiColors.Info;
+            SetBogieValue(_lblBogie1Value, bogie1Tonnes);
+            SetBogieValue(_lblBogie2Value, bogie2Tonnes);
+            SaveAsync(record);
             _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
             _btnWeigh.BackColor = UiColors.PrimaryAction;
         }
@@ -479,8 +510,6 @@ public partial class DynamicWeighingForm : Form
         _wagonNumber        = 0;
         _state              = WeighState.Idle;
         _grid.Rows.Clear();
-        _lblValue.Text      = "—";
-        _lblValue.ForeColor = _sim.IsConnected ? UiColors.PrimaryAction : UiColors.Disconnected;
         ResetBogieValues();
         _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 1";
         _btnWeigh.BackColor = UiColors.PrimaryAction;
@@ -490,7 +519,7 @@ public partial class DynamicWeighingForm : Form
 
     private void UpdateButtonStates()
     {
-        bool canWeigh = HasDirectionCorrectionProfile() && _sim.IsConnected;
+        bool canWeigh = HasStaticCalibration() && HasValidDirectionCorrectionFactor() && _sim.IsConnected;
         _btnWeigh.Enabled  = canWeigh;
         _btnZero.Enabled   = _state == WeighState.Idle && canWeigh;
         _btnFinish.Enabled = _state == WeighState.Idle && _wagonNumber > 0;
@@ -526,18 +555,26 @@ public partial class DynamicWeighingForm : Form
             UpdateAdcStatus();
             AuditLogger.Exception(AuditLogger.ErrorDb, "LocalWagon", $"вагон №{record.Number}", "PostgreSQL", ex);
         }
+        finally
+        {
+            ResetBogieValues();
+        }
     }
 
     private void UpdateStorageStatus()
     {
         var audit = AuditLogger.GetQueueStatus();
         var messages = new List<string>();
+        if (!HasStaticCalibration())
+            messages.Add("Статическая калибровка: нет активной точки для " + (_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1"));
         if (!HasDirectionCorrectionProfile())
-            messages.Add($"Поправочные коэффициенты направления: не задан коэффициент для {GetDirectionText()}");
+            messages.Add("Поправочные коэффициенты направления: нет активного профиля");
+        else if (!HasValidDirectionCorrectionFactor())
+            messages.Add("Поправочные коэффициенты направления: для " + GetDirectionText() + " нет положительного значения");
         if (!_weighingStorageAvailable)
             messages.Add("Взвешивание: БД недоступна, запись не сохранена");
 
-        var hasError = !HasDirectionCorrectionProfile() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
+        var hasError = !HasStaticCalibration() || !HasValidDirectionCorrectionFactor() || !_weighingStorageAvailable || !audit.IsDatabaseAvailable || audit.DroppedCount > 0;
         if (!audit.IsDatabaseAvailable)
             messages.Add(string.Format("БД недоступна; очередь {0}/{1}; потеряно {2}", audit.PendingCount, AuditLogger.QueueCapacity, audit.DroppedCount));
         else if (audit.PendingCount > 0 || audit.DroppedCount > 0)

@@ -44,8 +44,8 @@ public static class CalibrationCalculator
     public static double? Convert(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
         => CalculateStatic(points, adcCode, channel)?.Tonnes;
 
-    public static double ConvertDynamic(DirectionCorrectionProfile profile, int adcCode, Direction direction)
-        => (direction == Direction.Right
+    public static double ApplyDirectionCorrection(double staticTonnes, DirectionCorrectionProfile profile, Direction direction)
+        => staticTonnes * (direction == Direction.Right
             ? profile.RightDirectionCorrectionFactor
-            : profile.LeftDirectionCorrectionFactor) * adcCode;
+            : profile.LeftDirectionCorrectionFactor);
 }
