@@ -17,7 +17,7 @@ public static class CalibrationCalculator
     /// Возвращает null, если для канала нет ни одной активной калибровочной точки —
     /// это отличает «калибровка не задана» от легитимного нулевого результата расчёта.
     /// </summary>
-    public static double? Convert(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
+    public static StaticCalibrationResult? CalculateStatic(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
     {
         int ch = channel == ActiveChannel.Main ? 0 : 1;
         var active = points
@@ -36,8 +36,13 @@ public static class CalibrationCalculator
                 break;
         }
 
-        return adcCode * ((double)point.CalibrationValue / 65535d);
+        double tonnes = adcCode * ((double)point.CalibrationValue / 65535d);
+        return new StaticCalibrationResult(point, tonnes, active.Count);
     }
+
+    /// <summary>Возвращает только вес для существующих вызовов.</summary>
+    public static double? Convert(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
+        => CalculateStatic(points, adcCode, channel)?.Tonnes;
 
     public static double ConvertDynamic(DirectionCorrectionProfile profile, int adcCode, Direction direction)
         => (direction == Direction.Right

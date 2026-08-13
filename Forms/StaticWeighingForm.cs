@@ -44,8 +44,10 @@ public partial class StaticWeighingForm : Form
         InitializeComponent();
     }
 
-    private double ReadRawTonnes(int adcCode) =>
-        CalibrationCalculator.Convert(_ldb.CalibPoints, adcCode, _sim.Channel) ?? 0;
+    private StaticCalibrationResult? CalculateStatic(int adcCode) =>
+        CalibrationCalculator.CalculateStatic(_ldb.CalibPoints, adcCode, _sim.Channel);
+
+    private double ReadRawTonnes(int adcCode) => CalculateStatic(adcCode)?.Tonnes ?? 0;
 
     private bool HasStaticCalibration() => ActiveCalibPointCount() > 0;
 
@@ -62,33 +64,12 @@ public partial class StaticWeighingForm : Form
         return false;
     }
 
-    private (CalibPoint? Point, int ActiveCount) SelectStaticCalibPoint(int adcCode)
-    {
-        int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
-        var active = _ldb.CalibPoints
-            .Where(point => point.Channel == channel && point.IsActive)
-            .OrderBy(point => point.AdcCode)
-            .ToList();
-
-        if (active.Count == 0)
-            return (null, 0);
-
-        var selected = active[0];
-        foreach (var point in active)
-        {
-            if (adcCode >= point.AdcCode)
-                selected = point;
-            else
-                break;
-        }
-
-        return (selected, active.Count);
-    }
-
     private string BuildStaticCalcDiagnostic(int adcCode, double rawTonnes, double resultTonnes)
     {
         int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
-        var (point, activeCount) = SelectStaticCalibPoint(adcCode);
+        var staticResult = CalculateStatic(adcCode);
+        var point = staticResult?.Point;
+        int activeCount = staticResult?.ActivePointCount ?? 0;
         var common = $"calibChannel={channel} activeCalibPoints={activeCount} totalCalibPoints={_ldb.CalibPoints.Count} " +
                      $"rawTonnes={rawTonnes:F4} zeroOffset={_zeroOffsetTonnes:F4} resultTonnes={resultTonnes:F4} " +
                      $"discretization={_settings.Current.WeightDiscretizationTonnes:F4}";
