@@ -1124,10 +1124,10 @@ partial class ServiceForm
         // 
         _chbCalibCounter.AutoSize = true;
         _chbCalibCounter.Dock = DockStyle.Right;
+        _chbCalibCounter.Location = new Point(48, 127);
         _chbCalibCounter.Margin = new Padding(0);
-        _chbCalibCounter.Location = new Point(4, 130);
         _chbCalibCounter.Name = "_chbCalibCounter";
-        _chbCalibCounter.Size = new Size(218, 56);
+        _chbCalibCounter.Size = new Size(177, 62);
         _chbCalibCounter.TabIndex = 15;
         _chbCalibCounter.Text = "Отключить расчёт";
         _chbCalibCounter.TextAlign = ContentAlignment.MiddleRight;
@@ -1137,10 +1137,10 @@ partial class ServiceForm
         // 
         _lblCalibCounterSuffix.AutoSize = true;
         _lblCalibCounterSuffix.Dock = DockStyle.Left;
+        _lblCalibCounterSuffix.Location = new Point(226, 127);
         _lblCalibCounterSuffix.Margin = new Padding(0);
-        _lblCalibCounterSuffix.Location = new Point(229, 127);
         _lblCalibCounterSuffix.Name = "_lblCalibCounterSuffix";
-        _lblCalibCounterSuffix.Size = new Size(201, 62);
+        _lblCalibCounterSuffix.Size = new Size(198, 62);
         _lblCalibCounterSuffix.TabIndex = 21;
         _lblCalibCounterSuffix.Text = " калибровочного числа";
         _lblCalibCounterSuffix.TextAlign = ContentAlignment.MiddleLeft;
@@ -1334,7 +1334,7 @@ partial class ServiceForm
         _rbCh0Calib.CheckedChanged += RbCh0Calib_CheckedChanged;
         // 
         // _tabDirectionCorrections
-        //
+        // 
         _tabDirectionCorrections.Controls.Add(_pnlDirectionCorrections);
         _tabDirectionCorrections.Location = new Point(4, 32);
         _tabDirectionCorrections.Margin = new Padding(3, 4, 3, 4);
@@ -1342,9 +1342,9 @@ partial class ServiceForm
         _tabDirectionCorrections.Size = new Size(1533, 689);
         _tabDirectionCorrections.TabIndex = 4;
         _tabDirectionCorrections.Text = "Коэффициенты направлений";
-        //
+        // 
         // _pnlDirectionCorrections
-        //
+        // 
         _pnlDirectionCorrections.Controls.Add(_pnlDirectionCorrectionsBody);
         _pnlDirectionCorrections.Controls.Add(_pnlDirectionCorrectionsBottom);
         _pnlDirectionCorrections.Controls.Add(_pnlDirectionCorrectionsHead);
@@ -1354,9 +1354,9 @@ partial class ServiceForm
         _pnlDirectionCorrections.Name = "_pnlDirectionCorrections";
         _pnlDirectionCorrections.Size = new Size(1533, 689);
         _pnlDirectionCorrections.TabIndex = 0;
-        //
+        // 
         // _pnlDirectionCorrectionsBody
-        //
+        // 
         _pnlDirectionCorrectionsBody.AutoScroll = true;
         _pnlDirectionCorrectionsBody.BorderStyle = BorderStyle.FixedSingle;
         _pnlDirectionCorrectionsBody.Controls.Add(pnlDirectionCorrectionsMain);
@@ -1366,9 +1366,9 @@ partial class ServiceForm
         _pnlDirectionCorrectionsBody.Name = "_pnlDirectionCorrectionsBody";
         _pnlDirectionCorrectionsBody.Size = new Size(1533, 519);
         _pnlDirectionCorrectionsBody.TabIndex = 1;
-        //
+        // 
         // pnlDirectionCorrectionsMain
-        //
+        // 
         pnlDirectionCorrectionsMain.Controls.Add(tlpDirectionCorrectionsMain);
         pnlDirectionCorrectionsMain.Dock = DockStyle.Fill;
         pnlDirectionCorrectionsMain.Location = new Point(0, 0);
@@ -1376,9 +1376,9 @@ partial class ServiceForm
         pnlDirectionCorrectionsMain.Name = "pnlDirectionCorrectionsMain";
         pnlDirectionCorrectionsMain.Size = new Size(1531, 517);
         pnlDirectionCorrectionsMain.TabIndex = 26;
-        //
+        // 
         // tlpDirectionCorrectionsMain
-        //
+        // 
         tlpDirectionCorrectionsMain.ColumnCount = 2;
         tlpDirectionCorrectionsMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.9083F));
         tlpDirectionCorrectionsMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 51.0917F));
@@ -1410,7 +1410,7 @@ partial class ServiceForm
         tlpDirections.TabIndex = 25;
         // 
         // tlpDirectionCorrectionsRight
-        //
+        // 
         tlpDirectionCorrectionsRight.ColumnCount = 3;
         tlpDirectionCorrectionsRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
         tlpDirectionCorrectionsRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.4890976F));
@@ -1450,7 +1450,7 @@ partial class ServiceForm
         _lblSecPlus_01.Name = "_lblSecPlus_01";
         _lblSecPlus_01.Size = new Size(240, 39);
         _lblSecPlus_01.TabIndex = 27;
-        _lblSecPlus_01.Text = "Направление  →";
+        _lblSecPlus_01.Text = "Поправочный коэффициент →";
         _lblSecPlus_01.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _lblSecPlus_00
@@ -1498,7 +1498,7 @@ partial class ServiceForm
         _lblKPlusEquals.Name = "_lblKPlusEquals";
         _lblKPlusEquals.Size = new Size(239, 39);
         _lblKPlusEquals.TabIndex = 3;
-        _lblKPlusEquals.Text = "K→  =";
+        _lblKPlusEquals.Text = "Значение =";
         _lblKPlusEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _btnCalcPlus
@@ -1512,7 +1512,7 @@ partial class ServiceForm
         _btnCalcPlus.Name = "_btnCalcPlus";
         _btnCalcPlus.Size = new Size(218, 50);
         _btnCalcPlus.TabIndex = 11;
-        _btnCalcPlus.Text = "Рассчитать K→";
+        _btnCalcPlus.Text = "Рассчитать";
         _btnCalcPlus.UseVisualStyleBackColor = false;
         _btnCalcPlus.Click += BtnCalcPlus_Click;
         // 
@@ -1588,7 +1588,7 @@ partial class ServiceForm
         _lblAutoCalcPlus.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // tlpDirectionCorrectionsLeft
-        //
+        // 
         tlpDirectionCorrectionsLeft.ColumnCount = 3;
         tlpDirectionCorrectionsLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
         tlpDirectionCorrectionsLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
@@ -1628,7 +1628,7 @@ partial class ServiceForm
         _lblSecMinus_01.Name = "_lblSecMinus_01";
         _lblSecMinus_01.Size = new Size(239, 40);
         _lblSecMinus_01.TabIndex = 28;
-        _lblSecMinus_01.Text = "Направление  ←";
+        _lblSecMinus_01.Text = "Поправочный коэффициент ←";
         _lblSecMinus_01.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _lblSecMinus_00
@@ -1676,7 +1676,7 @@ partial class ServiceForm
         _lblKMinusEquals.Name = "_lblKMinusEquals";
         _lblKMinusEquals.Size = new Size(239, 40);
         _lblKMinusEquals.TabIndex = 13;
-        _lblKMinusEquals.Text = "K←  =";
+        _lblKMinusEquals.Text = "Значение =";
         _lblKMinusEquals.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _lblAutoCalcMinus
@@ -1702,7 +1702,7 @@ partial class ServiceForm
         _btnCalcMinus.Name = "_btnCalcMinus";
         _btnCalcMinus.Size = new Size(217, 46);
         _btnCalcMinus.TabIndex = 21;
-        _btnCalcMinus.Text = "Рассчитать K←";
+        _btnCalcMinus.Text = "Рассчитать";
         _btnCalcMinus.UseVisualStyleBackColor = false;
         _btnCalcMinus.Click += BtnCalcMinus_Click;
         // 
@@ -1819,7 +1819,7 @@ partial class ServiceForm
         // 
         dataGridViewTextBoxColumn5.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         dataGridViewTextBoxColumn5.FillWeight = 22F;
-        dataGridViewTextBoxColumn5.HeaderText = "K→";
+        dataGridViewTextBoxColumn5.HeaderText = "Коэфф. →";
         dataGridViewTextBoxColumn5.MinimumWidth = 6;
         dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
         dataGridViewTextBoxColumn5.ReadOnly = true;
@@ -1828,7 +1828,7 @@ partial class ServiceForm
         // 
         dataGridViewTextBoxColumn6.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         dataGridViewTextBoxColumn6.FillWeight = 22F;
-        dataGridViewTextBoxColumn6.HeaderText = "K←";
+        dataGridViewTextBoxColumn6.HeaderText = "Коэфф. ←";
         dataGridViewTextBoxColumn6.MinimumWidth = 6;
         dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
         dataGridViewTextBoxColumn6.ReadOnly = true;
@@ -1870,16 +1870,15 @@ partial class ServiceForm
         _lblFormulaD.Font = new Font("Segoe UI", 12F);
         _lblFormulaD.Location = new Point(18, 20);
         _lblFormulaD.Name = "_lblFormulaD";
-        _lblFormulaD.Size = new Size(210, 28);
+        _lblFormulaD.Size = new Size(540, 28);
         _lblFormulaD.TabIndex = 22;
-        _lblFormulaD.Text = "Масса = K × Код АЦП";
+        _lblFormulaD.Text = "Динамическая масса = статическая масса × коэффициент";
         // 
         // _btnDirectionCorrectionProfileSave
-        //
-        _btnDirectionCorrectionProfileSave.FlatAppearance.BorderSize = 0;
+        // 
         _btnDirectionCorrectionProfileSave.FlatStyle = FlatStyle.Flat;
         _btnDirectionCorrectionProfileSave.Font = new Font("Segoe UI", 12F);
-        _btnDirectionCorrectionProfileSave.Location = new Point(283, 13);
+        _btnDirectionCorrectionProfileSave.Location = new Point(673, 12);
         _btnDirectionCorrectionProfileSave.Margin = new Padding(3, 4, 3, 4);
         _btnDirectionCorrectionProfileSave.Name = "_btnDirectionCorrectionProfileSave";
         _btnDirectionCorrectionProfileSave.Size = new Size(251, 45);
@@ -1887,9 +1886,9 @@ partial class ServiceForm
         _btnDirectionCorrectionProfileSave.Text = "Применить и сохранить";
         _btnDirectionCorrectionProfileSave.UseVisualStyleBackColor = false;
         _btnDirectionCorrectionProfileSave.Click += BtnDirectionCorrectionProfileSave_Click;
-        //
+        // 
         // _pnlDirectionCorrectionsHead
-        //
+        // 
         _pnlDirectionCorrectionsHead.BackColor = Color.FromArgb(247, 249, 252);
         _pnlDirectionCorrectionsHead.BorderStyle = BorderStyle.FixedSingle;
         _pnlDirectionCorrectionsHead.Controls.Add(_tlpHeaders);
@@ -1968,7 +1967,7 @@ partial class ServiceForm
         _lblLiveAdcCapD.TextAlign = ContentAlignment.MiddleRight;
         // 
         // _btnDirectionCorrectionPortRefresh
-        //
+        // 
         _btnDirectionCorrectionPortRefresh.Anchor = AnchorStyles.Left;
         _btnDirectionCorrectionPortRefresh.FlatAppearance.BorderSize = 0;
         _btnDirectionCorrectionPortRefresh.FlatStyle = FlatStyle.Flat;
@@ -1981,9 +1980,9 @@ partial class ServiceForm
         _btnDirectionCorrectionPortRefresh.Text = "↺ Обновить";
         _btnDirectionCorrectionPortRefresh.UseVisualStyleBackColor = false;
         _btnDirectionCorrectionPortRefresh.Click += BtnDynamicPortRefresh_Click;
-        //
+        // 
         // _btnDirectionCorrectionConn
-        //
+        // 
         _btnDirectionCorrectionConn.Dock = DockStyle.Fill;
         _btnDirectionCorrectionConn.FlatAppearance.BorderSize = 0;
         _btnDirectionCorrectionConn.FlatStyle = FlatStyle.Flat;
@@ -1995,9 +1994,9 @@ partial class ServiceForm
         _btnDirectionCorrectionConn.Text = "Подключить";
         _btnDirectionCorrectionConn.UseVisualStyleBackColor = false;
         _btnDirectionCorrectionConn.Click += BtnDirectionCorrectionConn_Click;
-        //
+        // 
         // _lblDirectionCorrectionConn
-        //
+        // 
         _lblDirectionCorrectionConn.AutoSize = true;
         _lblDirectionCorrectionConn.BackColor = Color.Transparent;
         _lblDirectionCorrectionConn.Dock = DockStyle.Fill;

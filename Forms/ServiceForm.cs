@@ -541,14 +541,8 @@ public partial class ServiceForm : Form
         _txtCodePlus.Text = code.ToString();
     }
 
-    private void BtnCalcPlus_Click(object? sender, EventArgs e)
-    {
-        if (int.TryParse(_txtCodePlus.Text, out int code) &&
-            double.TryParse(_txtMassPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) && code != 0)
-            _txtKPlus.Text = (mass / code).ToString("G8", CultureInfo.InvariantCulture);
-        else
-            MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-    }
+    private void BtnCalcPlus_Click(object? sender, EventArgs e) =>
+        CalculateDirectionCorrection(_txtCodePlus, _txtMassPlus, _txtKPlus, "→");
 
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
@@ -556,13 +550,35 @@ public partial class ServiceForm : Form
         if (_directionCorrectionSim is null || !_directionCorrectionSim.IsConnected || code == 0) return;
         _txtCodeMinus.Text = code.ToString();
     }
-    private void BtnCalcMinus_Click(object? sender, EventArgs e)
+    private void BtnCalcMinus_Click(object? sender, EventArgs e) =>
+        CalculateDirectionCorrection(_txtCodeMinus, _txtMassMinus, _txtKMinus, "←");
+
+    private void CalculateDirectionCorrection(TextBox codeInput, TextBox massInput, TextBox factorOutput, string direction)
     {
-        if (int.TryParse(_txtCodeMinus.Text, out int code) &&
-            double.TryParse(_txtMassMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double mass) && code != 0)
-            _txtKMinus.Text = (mass / code).ToString("G8", CultureInfo.InvariantCulture);
-        else
-            MessageBox.Show("Введите корректный код АЦП и эталонную массу.", "Авторасчёт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (!int.TryParse(codeInput.Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int code) || code == 0 ||
+            !double.TryParse(massInput.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double referenceMass) || referenceMass <= 0)
+        {
+            MessageBox.Show("Введите ненулевой код АЦП и положительную эталонную массу.", $"Расчёт коэффициента {direction}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var staticResult = CalibrationCalculator.CalculateStatic(_calib.CalibPoints, code, _directionCorrectionSim.Channel);
+        if (staticResult is null)
+        {
+            string channel = _directionCorrectionSim.Channel == ActiveChannel.Main ? "CH0" : "CH1";
+            MessageBox.Show($"Для канала {channel} нет активной статической калибровочной точки.\nСначала сохраните статическую калибровку этого канала.",
+                $"Расчёт коэффициента {direction}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (staticResult.Tonnes <= 0)
+        {
+            MessageBox.Show($"Статический вес для кода {code} равен нулю.\nПроверьте статическую калибровочную точку.",
+                $"Расчёт коэффициента {direction}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        factorOutput.Text = (referenceMass / staticResult.Tonnes).ToString("G8", CultureInfo.InvariantCulture);
     }
 
     private void BtnSaveSettings_Click(object? sender, EventArgs e) => SaveSettingsFromUi();
@@ -1936,7 +1952,7 @@ public partial class ServiceForm : Form
             : mass.Value.ToString("F5", CultureInfo.InvariantCulture);
     }
 
-    // ── Calibration dynamic ─────────────────────────────────────────────────
+    // ── Direction correction profile ─────────────────────────────────────────────────
 
     private int CurrentDynamicAdcCode()
     {
@@ -1974,19 +1990,26 @@ public partial class ServiceForm : Form
             return;
         }
 
-        bool plusOk = double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double kp);
-        bool minusOk = double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double km);
+        var staticResult = CalibrationCalculator.CalculateStatic(_calib.CalibPoints, code, _directionCorrectionSim.Channel);
+        if (staticResult is null)
+        {
+            _lblLiveWeightD.Text = "нет стат. калибровки";
+            _lblLiveWeightD.ForeColor = ServiceUiColors.Warning;
+            return;
+        }
 
-        if (!plusOk && !minusOk)
+        bool rightOk = double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double rightFactor);
+        bool leftOk = double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double leftFactor);
+        if (!rightOk && !leftOk)
         {
             _lblLiveWeightD.Text = "—";
             _lblLiveWeightD.ForeColor = ServiceUiColors.Disconnected;
             return;
         }
 
-        string plus = plusOk ? FormatServiceDynamicWeight(code * kp) : "—";
-        string minus = minusOk ? FormatServiceDynamicWeight(code * km) : "—";
-        _lblLiveWeightD.Text = $"→ {plus} т  ← {minus} т";
+        string right = rightOk ? FormatServiceDynamicWeight(staticResult.Tonnes * rightFactor) : "—";
+        string left = leftOk ? FormatServiceDynamicWeight(staticResult.Tonnes * leftFactor) : "—";
+        _lblLiveWeightD.Text = $"→ {right} т  ← {left} т";
         _lblLiveWeightD.ForeColor = ServiceUiColors.Info;
     }
 
@@ -2020,7 +2043,7 @@ public partial class ServiceForm : Form
 
         if (!hasPlus && !hasMinus)
         {
-            MessageBox.Show("Введите K→ или K← для сохранения.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Введите коэффициент направления → или ← для сохранения.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -2028,12 +2051,12 @@ public partial class ServiceForm : Form
         double km = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor;
         if (hasPlus && !double.TryParse(plusText, NumberStyles.Float, CultureInfo.InvariantCulture, out kp))
         {
-            MessageBox.Show("Некорректное значение K→.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Некорректное значение коэффициента направления →.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
         if (hasMinus && !double.TryParse(minusText, NumberStyles.Float, CultureInfo.InvariantCulture, out km))
         {
-            MessageBox.Show("Некорректное значение K←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("Некорректное значение коэффициента направления ←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -2043,7 +2066,7 @@ public partial class ServiceForm : Form
             _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.ActiveDirectionCorrectionProfile);
             _settings.Save();
             await LoadDirectionCorrectionProfileAsync();
-            MessageBox.Show("Поправочные коэффициенты направления сохранена.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Профиль поправочных коэффициентов направления сохранён.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Information);
             foreach (var profile in changedProfiles)
             {
                 string operation = profile.IsActive ? "added" : "retired";
@@ -2055,7 +2078,7 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Exception(AuditLogger.ErrorDb, "CalibProfile", "dynamic", "PostgreSQL", ex);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "DirectionCorrectionProfile", "save", "PostgreSQL", ex);
             MessageBox.Show("Не удалось сохранить профиль поправочных коэффициентов направления.\nОбратитесь к администратору.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
@@ -2107,7 +2130,7 @@ public partial class ServiceForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Exception(AuditLogger.ErrorDb, "CalibProfile", "dynamic history", "PostgreSQL", ex);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "DirectionCorrectionProfile", "history", "PostgreSQL", ex);
         }
     }
 
