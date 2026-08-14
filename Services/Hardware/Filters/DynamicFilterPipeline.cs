@@ -40,6 +40,8 @@ public sealed class DynamicFilterPipeline : IDisposable
     // Состояние фильтров — своё на каждый канал.
     private int? _prevCh0;
     private int? _prevCh1;
+    private int? _deltaCandidateCh0;
+    private int? _deltaCandidateCh1;
     private double? _emaCh0;
     private double? _emaCh1;
     private int? _stuckCodeCh0;
@@ -68,8 +70,8 @@ public sealed class DynamicFilterPipeline : IDisposable
     {
         if (!sample.Valid) return;
 
-        bool ch0Dropped = !Accept(sample.Ch0, "CH0", ref _prevCh0, ref _stuckCodeCh0, ref _stuckCountCh0);
-        bool ch1Dropped = !Accept(sample.Ch1, "CH1", ref _prevCh1, ref _stuckCodeCh1, ref _stuckCountCh1);
+        bool ch0Dropped = !Accept(sample.Ch0, "CH0", ref _prevCh0, ref _deltaCandidateCh0, ref _stuckCodeCh0, ref _stuckCountCh0);
+        bool ch1Dropped = !Accept(sample.Ch1, "CH1", ref _prevCh1, ref _deltaCandidateCh1, ref _stuckCodeCh1, ref _stuckCountCh1);
 
         bool activeDropped = _reader.Channel == ActiveChannel.Main ? ch0Dropped : ch1Dropped;
         if (activeDropped) return;
@@ -86,7 +88,7 @@ public sealed class DynamicFilterPipeline : IDisposable
     /// Возвращает false, если код отбракован. Предыдущее значение обновляется только принятым
     /// кодом, иначе один выброс стал бы точкой отсчёта для следующей дельты.
     /// </summary>
-    private bool Accept(int code, string channel, ref int? previous, ref int? stuckCode, ref int stuckCount)
+    private bool Accept(int code, string channel, ref int? previous, ref int? deltaCandidate, ref int? stuckCode, ref int stuckCount)
     {
         if (_settings.DynamicClampEnabled &&
             (code < _settings.DynamicClampMinCode || code > _settings.DynamicClampMaxCode))
@@ -105,6 +107,15 @@ public sealed class DynamicFilterPipeline : IDisposable
             int delta = Math.Abs(code - prev);
             if (delta > _settings.DynamicDeltaMaxCodes)
             {
+                if (deltaCandidate is { } candidate &&
+                    Math.Abs(code - candidate) <= _settings.DynamicDeltaMaxCodes)
+                {
+                    deltaCandidate = null;
+                    previous = code;
+                    return true;
+                }
+
+                deltaCandidate = code;
                 DeltaDropped++;
                 AuditLogger.Error(AuditLogger.FilterDelta, ObjectType,
                     $"{channel} code={code} prev={prev} delta={delta} max={_settings.DynamicDeltaMaxCodes}");
@@ -112,6 +123,7 @@ public sealed class DynamicFilterPipeline : IDisposable
             }
         }
 
+        deltaCandidate = null;
         previous = code;
         return true;
     }
