@@ -1670,7 +1670,7 @@ public partial class ServiceForm : Form
                 AuditLogger.Action(AuditLogger.CalibrationSaved, "calibration_points",
                     $"operation={operation}; id={point.Id}; channel=CH{point.Channel}; adc_code={point.AdcCode}; " +
                     $"mass={point.Mass.ToString("G", CultureInfo.InvariantCulture)}; " +
-                    $"calibration_value={point.CalibrationValue.ToString("F5", CultureInfo.InvariantCulture)}; is_active={point.IsActive}; " +
+                    $"calibration_value={point.CalibrationValue.ToString(CultureInfo.InvariantCulture)}; is_active={point.IsActive}; " +
                     $"created_at={point.CreatedAt.ToUniversalTime():O}; deleted_at={point.DeletedAt?.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture) ?? "null"}");
             }
             await LoadCalibPointsAsync();
@@ -1695,7 +1695,7 @@ public partial class ServiceForm : Form
             _dgvCalib.Rows[row].Cells[0].Value = p.IsActive ? "Да" : "Нет";
             _dgvCalib.Rows[row].Cells[1].Value = p.AdcCode;
             _dgvCalib.Rows[row].Cells[2].Value = ((double)p.Mass).ToString("G8", CultureInfo.InvariantCulture);
-            _dgvCalib.Rows[row].Cells[3].Value = p.CalibrationValue.ToString("F5", CultureInfo.InvariantCulture);
+            _dgvCalib.Rows[row].Cells[3].Value = p.CalibrationValue.ToString(CultureInfo.InvariantCulture);
             _dgvCalib.Rows[row].Cells[4].Value = p.CreatedAt == default ? "" : p.CreatedAt.ToLocalTime().ToString("dd.MM.yy HH:mm");
             _dgvCalib.Rows[row].Cells[5].Value = p.DeletedAt?.ToLocalTime().ToString("dd.MM.yy HH:mm") ?? "";
             ApplyCalibRowStyle(_dgvCalib.Rows[row]);
@@ -1729,9 +1729,17 @@ public partial class ServiceForm : Form
             return;
         }
 
-        if (!TryParseCalibDecimal(text, out decimal value))
+        int calibrationValue = default;
+        decimal mass = default;
+        bool valid = e.ColumnIndex == 3
+            ? int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out calibrationValue)
+            : TryParseCalibDecimal(text, out mass);
+        if (!valid)
         {
-            SetCalibCellError(cell, "Введите число с одним десятичным разделителем: , или .");
+            string message = e.ColumnIndex == 3
+                ? "Введите целое калибровочное число."
+                : "Введите число с одним десятичным разделителем: , или .";
+            SetCalibCellError(cell, message);
             if (e.ColumnIndex == 2 && !_chbCalibCounter.Checked)
                 _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
             UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
@@ -1740,8 +1748,8 @@ public partial class ServiceForm : Form
 
         SetCalibCellError(cell, null);
         string normalized = e.ColumnIndex == 3
-            ? value.ToString("F5", CultureInfo.InvariantCulture)
-            : value.ToString("G29", CultureInfo.InvariantCulture);
+            ? calibrationValue.ToString(CultureInfo.InvariantCulture)
+            : mass.ToString("G29", CultureInfo.InvariantCulture);
         if (!string.Equals(text, normalized, StringComparison.Ordinal))
             cell.Value = normalized;
     }
@@ -1755,7 +1763,12 @@ public partial class ServiceForm : Form
         if (int.TryParse(row.Cells[1].Value?.ToString(), out int code) &&
             TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass) &&
             code != 0)
-            row.Cells[3].Value = ((double)mass / code * 65535).ToString("F5", CultureInfo.InvariantCulture);
+        {
+            double calculated = (double)mass / code * 65535;
+            row.Cells[3].Value = calculated >= int.MinValue && calculated <= int.MaxValue
+                ? Math.Round(calculated, MidpointRounding.AwayFromZero).ToString(CultureInfo.InvariantCulture)
+                : "";
+        }
         else
             row.Cells[3].Value = "";
     }
@@ -1839,7 +1852,7 @@ public partial class ServiceForm : Form
                 continue;
             if (!TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass))
                 continue;
-            if (!TryParseCalibDecimal(row.Cells[3].Value?.ToString(), out decimal calibrationValue))
+            if (!int.TryParse(row.Cells[3].Value?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int calibrationValue))
                 continue;
 
             bool active = row.Cells[0].Value?.ToString() == "Да";
@@ -1897,9 +1910,9 @@ public partial class ServiceForm : Form
             }
 
             string calibrationValue = row.Cells[3].Value?.ToString()?.Trim() ?? "";
-            if (_chbCalibCounter.Checked && calibrationValue.Length > 0 && !TryParseCalibDecimal(calibrationValue, out _))
+            if (_chbCalibCounter.Checked && calibrationValue.Length > 0 && !int.TryParse(calibrationValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out _))
             {
-                SetCalibCellError(row.Cells[3], "Введите число с одним десятичным разделителем: , или .");
+                SetCalibCellError(row.Cells[3], "Введите целое калибровочное число.");
                 invalid.Add((row.Cells[3], string.Format("Строка {0}, «Калибр. число»: «{1}».", row.Index + 1, calibrationValue)));
             }
         }
@@ -1908,7 +1921,7 @@ public partial class ServiceForm : Form
 
         _dgvCalib.CurrentCell = invalid[0].Cell;
         string details = string.Join(Environment.NewLine, invalid.Select(error => error.Description));
-        MessageBox.Show(string.Format("Нельзя {0}.\n\n{1}\n\nВведите одно число. Допустим один десятичный разделитель: , или .", action, details),
+        MessageBox.Show(string.Format("Нельзя {0}.\n\n{1}\n\nПроверьте значения, отмеченные в таблице.", action, details),
             "Калибровка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }

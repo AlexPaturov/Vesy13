@@ -34,10 +34,22 @@ public sealed class SettingsService
             return;
         }
 
+        bool staticCalibrationCacheCleared = false;
         try
         {
             string json = File.ReadAllText(_path);
             _settings = JsonSerializer.Deserialize<AppSettings>(json, JsonOptions) ?? CreateDefault();
+        }
+        catch (JsonException)
+        {
+            string json = File.ReadAllText(_path);
+            if (!TryLoadWithoutStaticCalibrationCache(json, out _settings))
+            {
+                _settings = CreateDefault();
+                Save();
+                return;
+            }
+            staticCalibrationCacheCleared = true;
         }
         catch
         {
@@ -46,11 +58,39 @@ public sealed class SettingsService
             return;
         }
 
-        if (EnsureDefaults(_settings))
+        if (EnsureDefaults(_settings) || staticCalibrationCacheCleared)
             Save();
     }
 
     public void Save() => File.WriteAllText(_path, JsonSerializer.Serialize(_settings, JsonOptions));
+
+    private static bool TryLoadWithoutStaticCalibrationCache(string json, out AppSettings settings)
+    {
+        settings = new AppSettings();
+        try
+        {
+            using JsonDocument document = JsonDocument.Parse(json);
+            var root = document.RootElement;
+            if (root.ValueKind != JsonValueKind.Object) return false;
+            using var stream = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(stream))
+            {
+                writer.WriteStartObject();
+                foreach (JsonProperty property in root.EnumerateObject())
+                {
+                    if (property.NameEquals(nameof(AppSettings.CachedStaticPoints))) continue;
+                    property.WriteTo(writer);
+                }
+                writer.WriteEndObject();
+            }
+            settings = JsonSerializer.Deserialize<AppSettings>(stream.ToArray(), JsonOptions) ?? new AppSettings();
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
 
     public bool VerifyAdminPassword(string password) =>
         PasswordHasher.Verify(password, _settings.AdminPasswordHash, _settings.AdminPasswordSalt);

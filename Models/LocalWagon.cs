@@ -12,6 +12,9 @@ public class LocalWagon
     public DateTime WagonTime { get; set; }
     public double   Bogie1    { get; set; }
     public double   Bogie2    { get; set; }
+    public int?     Bogie1CalibrationPointId { get; set; }
+    public int?     Bogie2CalibrationPointId { get; set; }
+    public int?     DirectionCorrectionProfileId { get; set; }
     public string   Direction { get; set; } = "";
     public string   Mode      { get; set; } = "";
     public bool     Transferred { get; set; }

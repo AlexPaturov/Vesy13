@@ -253,8 +253,8 @@ public class LocalRepository
         await using var conn = new NpgsqlConnection(ConnStr);
         await conn.OpenAsync();
         await conn.ExecuteAsync(@"
-            INSERT INTO wagon_weighing (train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode)
-            VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @Mode)",
+            INSERT INTO wagon_weighing (train_time, wagon_time, wagon_num, bogie1, bogie2, total, direction, mode, bogie1_calibration_point_id, bogie2_calibration_point_id, direction_correction_profile_id)
+            VALUES (@TrainTime, @WagonTime, @Number, @Bogie1, @Bogie2, @Total, @Direction, @Mode, @Bogie1CalibrationPointId, @Bogie2CalibrationPointId, @DirectionCorrectionProfileId)",
             new
             {
                 record.TrainTime,
@@ -265,6 +265,9 @@ public class LocalRepository
                 Total  = (decimal)record.Total,
                 record.Direction,
                 record.Mode,
+                record.Bogie1CalibrationPointId,
+                record.Bogie2CalibrationPointId,
+                record.DirectionCorrectionProfileId,
             });
     }
 
@@ -279,6 +282,9 @@ public class LocalRepository
                    wagon_num               AS Number,
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
+                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
+                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
+                   direction_correction_profile_id AS DirectionCorrectionProfileId,
                    COALESCE(direction, '') AS Direction,
                    mode                    AS Mode,
                    transferred             AS Transferred
@@ -300,6 +306,9 @@ public class LocalRepository
                    wagon_num               AS Number,
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
+                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
+                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
+                   direction_correction_profile_id AS DirectionCorrectionProfileId,
                    COALESCE(direction, '') AS Direction,
                    mode                    AS Mode,
                    transferred             AS Transferred
@@ -321,6 +330,9 @@ public class LocalRepository
                    wagon_num               AS Number,
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
+                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
+                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
+                   direction_correction_profile_id AS DirectionCorrectionProfileId,
                    COALESCE(direction, '') AS Direction,
                    mode                    AS Mode,
                    transferred             AS Transferred
@@ -342,6 +354,9 @@ public class LocalRepository
                    wagon_num               AS Number,
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
+                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
+                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
+                   direction_correction_profile_id AS DirectionCorrectionProfileId,
                    COALESCE(direction, '') AS Direction,
                    mode                    AS Mode,
                    transferred             AS Transferred
@@ -364,6 +379,9 @@ public class LocalRepository
                    wagon_num               AS Number,
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
+                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
+                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
+                   direction_correction_profile_id AS DirectionCorrectionProfileId,
                    COALESCE(direction, '') AS Direction,
                    mode                    AS Mode,
                    transferred             AS Transferred
@@ -395,6 +413,9 @@ public class LocalRepository
                    wagon_num               AS Number,
                    CAST(bogie1 AS float8)  AS Bogie1,
                    CAST(bogie2 AS float8)  AS Bogie2,
+                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
+                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
+                   direction_correction_profile_id AS DirectionCorrectionProfileId,
                    COALESCE(direction, '') AS Direction,
                    mode                    AS Mode,
                    transferred             AS Transferred

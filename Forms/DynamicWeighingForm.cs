@@ -22,6 +22,8 @@ public partial class DynamicWeighingForm : Form
     private DateTime?  _trainStartTime;
     private int        _wagonNumber;
     private int        _bogie1Code;
+    private int?       _bogie1CalibrationPointId;
+    private int?       _directionCorrectionProfileId;
     private SimA04DynamicSample _lastSample;
     private double     _zeroOffsetTonnes;
     private readonly System.Windows.Forms.Timer _uiRefreshTimer = new();
@@ -447,6 +449,8 @@ public partial class DynamicWeighingForm : Form
             if (_wagonNumber == 1)
                 _trainStartTime = DateTime.Now;
             _bogie1Code         = ActiveCode(_lastSample);
+            _bogie1CalibrationPointId = CalculateStatic(_bogie1Code)?.Point.Id;
+            _directionCorrectionProfileId = _ldb.ActiveDirectionCorrectionProfile.Id;
             double   bogie1Tonnes = ToTonnes(_bogie1Code);
             _state              = WeighState.Bogie1Captured;
             SetBogieValue(_lblBogie1Value, bogie1Tonnes);
@@ -467,6 +471,9 @@ public partial class DynamicWeighingForm : Form
                 WagonTime = wagonTime,
                 Bogie1    = bogie1Tonnes,
                 Bogie2    = bogie2Tonnes,
+                Bogie1CalibrationPointId = _bogie1CalibrationPointId,
+                Bogie2CalibrationPointId = CalculateStatic(bogie2Code)?.Point.Id,
+                DirectionCorrectionProfileId = _directionCorrectionProfileId,
                 Direction = GetDirectionText(),
                 Mode      = "ДИНАМИКА",
             };

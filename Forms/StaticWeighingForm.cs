@@ -24,6 +24,7 @@ public partial class StaticWeighingForm : Form
     private DateTime?  _trainStartTime;
     private int        _wagonNumber;
     private int        _bogie1Code;
+    private int?       _bogie1CalibrationPointId;
     private SimA04Frame   _lastFrame;
     private double     _zeroOffsetTonnes;
     private string     _lastRawBytes = "";
@@ -79,7 +80,7 @@ public partial class StaticWeighingForm : Form
 
         return $"{common} calibPointId={point.Id} calibPointChannel={point.Channel} " +
                $"calibPointCode={point.AdcCode} calibPointMass={(double)point.Mass:F4} " +
-               $"calibrationValue={point.CalibrationValue.ToString("F5", CultureInfo.InvariantCulture)}";
+               $"calibrationValue={point.CalibrationValue.ToString(CultureInfo.InvariantCulture)}";
     }
 
     private double ToTonnes(int adcCode) =>
@@ -386,6 +387,7 @@ public partial class StaticWeighingForm : Form
             if (_wagonNumber == 1)
                 _trainStartTime = DateTime.Now;
             _bogie1Code         = ActiveCode(_lastFrame);
+            _bogie1CalibrationPointId = CalculateStatic(_bogie1Code)?.Point.Id;
             double bogie1Tonnes = ToTonnes(_bogie1Code);
             double bogie1RawTonnes = ReadRawTonnes(_bogie1Code);
             string bogie1Calc = BuildStaticCalcDiagnostic(_bogie1Code, bogie1RawTonnes, bogie1Tonnes);
@@ -422,6 +424,8 @@ public partial class StaticWeighingForm : Form
                 Bogie1    = bogie1Tonnes,
                 Bogie2    = bogie2Tonnes,
                 Mode      = "СТАТИКА",
+                Bogie1CalibrationPointId = _bogie1CalibrationPointId,
+                Bogie2CalibrationPointId = CalculateStatic(bogie2)?.Point.Id,
             };
             AddToGrid(record);
             SaveAsync(record);
