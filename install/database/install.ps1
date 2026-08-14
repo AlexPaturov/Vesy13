@@ -7,8 +7,8 @@
     in the Windows scheduler. Runs unattended, so the SCCM agent can execute it
     as SYSTEM.
 
-    Every step checks its own state first, so a repeated run on an already
-    configured machine passes through and reports success.
+    Every run removes an existing scale_db database and creates the final schema
+    again. PostgreSQL itself, access rules and the purge task are then configured.
 
     Exit code 0 means the installation is complete, anything else makes SCCM
     report a failure. Progress goes to C:\ProgramData\Vesy13\install-db.log.
@@ -48,8 +48,6 @@ if (-not $PostgresInstaller) {
     if ($found) { $PostgresInstaller = $found.FullName }
 }
 
-$MarkerKey     = 'HKLM:\SOFTWARE\Vesy13\Database'
-$SchemaVersion = '5'
 $PasswordFile  = Join-Path $StateDir 'postgres_password.txt'
 $LogFile       = Join-Path $StateDir 'install-db.log'
 $PurgeSql      = Join-Path $StateDir 'purge.sql'
@@ -227,15 +225,6 @@ function Invoke-Psql {
 New-Item -ItemType Directory -Path $StateDir -Force | Out-Null
 Write-Log '=== Vesy13 database installation ==='
 
-if (Test-Path $MarkerKey) {
-    $installed = (Get-ItemProperty -Path $MarkerKey).SchemaVersion
-    if ($installed -eq $SchemaVersion) {
-        Write-Log "Database already installed, schema version $installed. Nothing to do."
-        exit 0
-    }
-    Write-Log "Found schema version $installed, expected $SchemaVersion. Continuing."
-}
-
 # -- 1. PostgreSQL ------------------------------------------------------------
 
 if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) {
@@ -320,45 +309,15 @@ $dbExists = Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPa
     -Command "SELECT 1 FROM pg_database WHERE datname = 'scale_db'"
 
 if ($dbExists -eq '1') {
-    Write-Log 'Database scale_db exists, skipping the schema script.'
-}
-else {
-    Write-Log 'Creating database scale_db.'
+    Write-Log 'Removing existing database scale_db.'
     Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword `
-        -File (Join-Path $ScriptDir 'scale_db.sql') | Out-Null
-    Write-Log 'Database scale_db created.'
+        -Command 'DROP DATABASE scale_db WITH (FORCE)' | Out-Null
 }
 
-# -- 3a. Schema upgrade: static calibration value ----------------------------
-
-Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
-    -Command 'ALTER TABLE calibration_points ADD COLUMN IF NOT EXISTS calibration_value NUMERIC(12,5) NOT NULL' | Out-Null
-Write-Log 'Static calibration value column verified.'
-
-# -- 3b. Schema upgrade: unique active static calibration mass ----------------
-
-Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
-    -Command 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calibration_points_active_channel_mass ON calibration_points (channel, mass) WHERE is_active = TRUE AND deleted_at IS NULL' | Out-Null
-Write-Log 'Unique active static calibration mass index verified.'
-
-# -- 3c. Schema upgrade: unique active static calibration ADC code -----------
-
-$duplicateActiveCodes = Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
-    -Command "SELECT channel::text || ':' || adc_code::text FROM calibration_points WHERE is_active = TRUE AND deleted_at IS NULL GROUP BY channel, adc_code HAVING COUNT(*) > 1 ORDER BY channel, adc_code"
-if ($duplicateActiveCodes) {
-    throw "Cannot add the unique active ADC code index. Duplicate active channel:code values: $duplicateActiveCodes. Make all but one point for each listed channel and code inactive, then rerun the installer."
-}
-
-Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
-    -Command 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calibration_points_active_channel_adc_code ON calibration_points (channel, adc_code) WHERE is_active = TRUE AND deleted_at IS NULL' | Out-Null
-Write-Log 'Unique active static calibration ADC code index verified.'
-
-# -- 3d. Schema upgrade: direction correction factor names -------------------
-
-Invoke-Psql -Database 'scale_db' -User 'postgres' -Password $superPassword `
-    -File (Join-Path $ScriptDir 'migrate-v5-direction-correction-profiles.sql') | Out-Null
-Write-Log 'Direction correction profiles schema verified; obsolete dynamic calibration table removed.'
-
+Write-Log 'Creating database scale_db.'
+Invoke-Psql -Database 'postgres' -User 'postgres' -Password $superPassword `
+    -File (Join-Path $ScriptDir 'scale_db.sql') | Out-Null
+Write-Log 'Database scale_db created.'
 # -- 4. Trust rules for the application ---------------------------------------
 
 $added = Add-PgHbaRules -Tag $ScaleTrustTag -Rules @(
@@ -425,13 +384,6 @@ Write-Log 'Task settings adjusted: runs when available, battery state ignored.'
 
 $nextRun = (Get-ScheduledTaskInfo -TaskName $taskName).NextRunTime
 Write-Log "Task '$taskName' registered, next run $nextRun."
-
-# -- 6. Installation marker ---------------------------------------------------
-
-New-Item -Path $MarkerKey -Force | Out-Null
-Set-ItemProperty -Path $MarkerKey -Name 'SchemaVersion' -Value $SchemaVersion
-Set-ItemProperty -Path $MarkerKey -Name 'InstalledOn'   -Value (Get-Date -Format 's')
-Set-ItemProperty -Path $MarkerKey -Name 'DataDir'       -Value (Get-PgDataDir)
 
 Write-Log '=== Installation complete ==='
 exit 0

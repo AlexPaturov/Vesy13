@@ -38,6 +38,9 @@ CREATE TABLE wagon_weighing (
     direction   VARCHAR(10),
     mode        VARCHAR(10)  NOT NULL,
     transferred BOOLEAN      NOT NULL DEFAULT FALSE,
+    bogie1_calibration_point_id INTEGER,
+    bogie2_calibration_point_id INTEGER,
+    direction_correction_profile_id INTEGER,
     when_insert TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
@@ -50,7 +53,7 @@ CREATE TABLE calibration_points (
     adc_code   INTEGER      NOT NULL,
     mass       NUMERIC(6,2) NOT NULL CHECK (mass >= 0 AND mass <= 150),
     is_active  BOOLEAN      NOT NULL DEFAULT TRUE,
-    calibration_value NUMERIC(12,5) NOT NULL,
+    calibration_value INTEGER      NOT NULL,
     created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ
 );
@@ -83,6 +86,14 @@ COMMENT ON COLUMN direction_correction_profiles.deleted_at IS 'Time when directi
 CREATE UNIQUE INDEX ux_direction_correction_profiles_active
     ON direction_correction_profiles (is_active)
     WHERE is_active = TRUE AND deleted_at IS NULL;
+
+ALTER TABLE wagon_weighing
+    ADD CONSTRAINT fk_wagon_weighing_bogie1_calibration_point
+        FOREIGN KEY (bogie1_calibration_point_id) REFERENCES calibration_points(id) ON DELETE RESTRICT,
+    ADD CONSTRAINT fk_wagon_weighing_bogie2_calibration_point
+        FOREIGN KEY (bogie2_calibration_point_id) REFERENCES calibration_points(id) ON DELETE RESTRICT,
+    ADD CONSTRAINT fk_wagon_weighing_direction_correction_profile
+        FOREIGN KEY (direction_correction_profile_id) REFERENCES direction_correction_profiles(id) ON DELETE RESTRICT;
 
 -- Audit trail: form and service events, and errors.
 CREATE TABLE audit_log (
