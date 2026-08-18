@@ -16,6 +16,7 @@ obj/
 
 # Installer payload: kept next to install.ps1 on the build machine, never committed
 install/database/*.exe
+install/win7/database/*.exe
 install/application/publish/
 /install/application/ScaleListenerPublish/
 /install/application/Vesy13Publish/
