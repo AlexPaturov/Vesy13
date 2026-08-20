@@ -6,7 +6,7 @@ namespace Vesy13.Services.Configuration;
 public sealed class SettingsService
 {
     private const int DirectionCorrectionProfileCacheFormatVersion = 2;
-    private const string DefaultAdminPassword = "vesy13fuck";
+    private const string DefaultAdminPassword = "1111";
     private const string SettingsFileName = "settings.json";
     private const string SettingsDirectoryName = "Vesy13";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
