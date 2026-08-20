@@ -236,7 +236,7 @@ public static class AuditLogger
         catch (Exception ex)
         {
             WriteInternalFailureFallback(ErrorDb, "PostgreSQL", "AuditLogger.GetLogsAsync", ex);
-            return [];
+            return new List<AuditRecord>();
         }
     }
 

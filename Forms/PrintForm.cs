@@ -13,7 +13,7 @@ namespace Vesy13.Forms;
 public partial class PrintForm : Form
 {
     private FactoryRepository? _fdb;
-    private List<GpriGras> _records = [];
+    private List<GpriGras> _records = new List<GpriGras>();
 
     public PrintForm()
     {
