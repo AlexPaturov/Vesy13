@@ -4,6 +4,8 @@ using Vesy13.Models;
 
 namespace Vesy13.Services.Repositories;
 
+public readonly record struct DatabaseCleanupResult(int DeletedWagonWeighings, int DeletedAuditRecords);
+
 /// <summary>
 /// Репозиторий локальной PostgreSQL-базы (scale_db).
 /// Хранит калибровочные точки и журнал взвешиваний вагонов.
@@ -424,6 +426,28 @@ public class LocalRepository
             ORDER BY wagon_time DESC
             LIMIT 200");
         return rows.ToList();
+    }
+
+    /// <summary>
+    /// Атомарно удаляет локальные результаты взвешивания и аудит старше 30 дней.
+    /// Исключения передаются вызывающему коду, чтобы он сохранил открытый период
+    /// очистки и повторил попытку в следующий день.
+    /// </summary>
+    public async Task<DatabaseCleanupResult> CleanupDataOlderThan30DaysAsync()
+    {
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
+        int deletedWagonWeighings = await conn.ExecuteAsync(@"
+            DELETE FROM wagon_weighing
+            WHERE when_insert < LOCALTIMESTAMP - INTERVAL '30 days'", transaction: tx);
+        int deletedAuditRecords = await conn.ExecuteAsync(@"
+            DELETE FROM audit_log
+            WHERE time_created < NOW() - INTERVAL '30 days'", transaction: tx);
+
+        await tx.CommitAsync();
+        return new DatabaseCleanupResult(deletedWagonWeighings, deletedAuditRecords);
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────
