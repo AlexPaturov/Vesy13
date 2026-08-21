@@ -153,7 +153,6 @@ public static class AuditLogger
         }
 
         EnsureWorkerStarted();
-        _ = EnsureTableAsync();
     }
 
     // ── Public API ────────────────────────────────────────────────────────────
@@ -471,39 +470,6 @@ public static class AuditLogger
         catch (Exception ex)
         {
             WriteInternalFailureFallback(ErrorGeneral, "Vesy13", "AuditLogger.QueueStatusChanged", ex);
-        }
-    }
-
-    private static async Task EnsureTableAsync()
-    {
-        try
-        {
-            await using var conn = new NpgsqlConnection(ConnStr);
-            await conn.OpenAsync();
-            await conn.ExecuteAsync(@"
-                CREATE TABLE IF NOT EXISTS audit_log (
-                    id                  BIGSERIAL       PRIMARY KEY,
-                    time_created        TIMESTAMPTZ,
-                    event_id            INTEGER,
-                    keywords            VARCHAR(20),
-                    computer            VARCHAR(100),
-                    subject_user_sid    VARCHAR(200),
-                    subject_user_name   VARCHAR(200),
-                    subject_domain_name VARCHAR(200),
-                    subject_logon_id    VARCHAR(100),
-                    object_server       VARCHAR(200),
-                    object_type         VARCHAR(100),
-                    object_name         TEXT,
-                    object_handle       VARCHAR(200),
-                    process_id          INTEGER,
-                    process_name        TEXT,
-                    workstation_name    VARCHAR(100),
-                    ip_address          VARCHAR(50)
-                )");
-        }
-        catch (Exception ex)
-        {
-            WriteInternalFailureFallback(ErrorDb, "PostgreSQL", "AuditLogger.EnsureTableAsync", ex);
         }
     }
 
