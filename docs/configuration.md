@@ -146,7 +146,7 @@ host  scale_db  scale_user  ::1/128       trust
 
 1. Развернуть базу: `powershell.exe -ExecutionPolicy Bypass -NoProfile -File install/database/install.ps1`.
    Скрипт ставит PostgreSQL, удаляет существующую `scale_db`, создаёт её по `install/database/scale_db.sql`, добавляет в `pg_hba.conf`
-   правила `trust` и регистрирует задание очистки (см. `docs/database.md`).
+   правила `trust`.
    Для ручного запуска рядом лежит `install/database/run-install.cmd` — он вызывает ту же
    команду от администратора и удерживает окно с результатом. Ключ
    `-ExecutionPolicy Bypass` снимает вопрос о «метке интернета», которую Windows

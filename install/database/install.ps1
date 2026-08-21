@@ -3,12 +3,11 @@
     Installs the Vesy13 local database on a weighing station.
 
 .DESCRIPTION
-    Deploys PostgreSQL, the scale_db schema, the trust rules and the purge task
-    in the Windows scheduler. Runs unattended, so the SCCM agent can execute it
-    as SYSTEM.
+    Deploys PostgreSQL, the scale_db schema and the trust rules. Runs unattended,
+    so the SCCM agent can execute it as SYSTEM.
 
     Every run removes an existing scale_db database and creates the final schema
-    again. PostgreSQL itself, access rules and the purge task are then configured.
+    again. PostgreSQL itself and the access rules are then configured.
 
     Exit code 0 means the installation is complete, anything else makes SCCM
     report a failure. Progress goes to C:\ProgramData\Vesy13\install-db.log.
@@ -50,9 +49,6 @@ if (-not $PostgresInstaller) {
 
 $PasswordFile  = Join-Path $StateDir 'postgres_password.txt'
 $LogFile       = Join-Path $StateDir 'install-db.log'
-$PurgeSql      = Join-Path $StateDir 'purge.sql'
-$PurgeCmd      = Join-Path $StateDir 'purge.cmd'
-$PurgeLog      = Join-Path $StateDir 'purge.log'
 $Psql          = Join-Path $PgRoot 'bin\psql.exe'
 
 $TempTrustTag  = '# Vesy13 temporary superuser trust'
@@ -336,54 +332,6 @@ else {
 $who = Invoke-Psql -Database 'scale_db' -User 'scale_user' -Command 'SELECT current_user'
 if ($who -ne 'scale_user') { throw "Connecting as scale_user returned '$who'." }
 Write-Log 'Passwordless connection as scale_user works.'
-
-# -- 5. Purge task ------------------------------------------------------------
-
-# The purge script and its wrapper live in ProgramData: the SCCM package folder
-# exists only while the installation runs.
-Copy-Item -LiteralPath (Join-Path $ScriptDir 'purge.sql') -Destination $PurgeSql -Force
-
-$wrapper = @"
-@echo off
-"$Psql" -X -q -v ON_ERROR_STOP=1 -h 127.0.0.1 -p $Port -U scale_user -d scale_db -f "$PurgeSql" >> "$PurgeLog" 2>&1
-"@
-Set-Content -LiteralPath $PurgeCmd -Value $wrapper -Encoding ASCII
-
-$taskName = 'Vesy13 purge'
-if (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue) {
-    Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
-    Write-Log 'Previous purge task unregistered.'
-}
-
-Write-Log 'Registering the purge task.'
-
-# schtasks.exe creates the trigger: New-ScheduledTaskTrigger covers once, daily
-# and weekly only, and a monthly schedule expressed as "every four weeks" would
-# drift away from the first day of the month.
-$schtasks = @(
-    '/Create',
-    '/TN', $taskName,
-    '/TR', "`"$PurgeCmd`"",
-    '/SC', 'MONTHLY',
-    '/D',  '1',
-    '/ST', '03:00',
-    '/RU', 'SYSTEM',
-    '/RL', 'HIGHEST',
-    '/F'
-)
-& schtasks.exe @schtasks
-if ($LASTEXITCODE -ne 0) { throw "Registering the task exited with code $LASTEXITCODE." }
-
-# The defaults schtasks applies skip a run on battery power and drop a run that
-# was missed while the station was off, which on a monthly schedule means
-# waiting another month.
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries `
-                                         -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Hours 1)
-Set-ScheduledTask -TaskName $taskName -Settings $settings | Out-Null
-Write-Log 'Task settings adjusted: runs when available, battery state ignored.'
-
-$nextRun = (Get-ScheduledTaskInfo -TaskName $taskName).NextRunTime
-Write-Log "Task '$taskName' registered, next run $nextRun."
 
 Write-Log '=== Installation complete ==='
 exit 0
