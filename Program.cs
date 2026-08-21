@@ -27,6 +27,41 @@ static class Program
         };
     }
 
+    private static async Task RunScheduledDatabaseCleanupAsync(LocalRepository ldb, SettingsService settings)
+    {
+        DateTime today = DateTime.Today;
+        DateTime periodStartedOn = settings.Current.DatabaseCleanupPeriodStartedOn ?? today;
+        if (today < periodStartedOn.AddDays(60) || settings.Current.DatabaseCleanupLastAttemptedOn?.Date == today)
+            return;
+
+        settings.Current.DatabaseCleanupLastAttemptedOn = today;
+        try
+        {
+            settings.Save();
+        }
+        catch (Exception ex)
+        {
+            AuditLogger.Exception(AuditLogger.ErrorDb, "DatabaseCleanup",
+                $"Не удалось сохранить дату попытки очистки; periodStartedOn={periodStartedOn:yyyy-MM-dd}", ex, "Settings");
+            return;
+        }
+
+        try
+        {
+            DatabaseCleanupResult result = await ldb.CleanupDataOlderThan30DaysAsync();
+            settings.Current.DatabaseCleanupPeriodStartedOn = today;
+            settings.Current.DatabaseCleanupLastAttemptedOn = today;
+            settings.Save();
+            AuditLogger.Action(AuditLogger.DatabaseCleanup, "DatabaseCleanup",
+                $"deletedWagonWeighings={result.DeletedWagonWeighings}; deletedAuditRecords={result.DeletedAuditRecords}", "PostgreSQL");
+        }
+        catch (Exception ex)
+        {
+            AuditLogger.Exception(AuditLogger.ErrorDb, "DatabaseCleanup",
+                $"Не удалось очистить БД; periodStartedOn={periodStartedOn:yyyy-MM-dd}; attemptOn={today:yyyy-MM-dd}", ex, "PostgreSQL");
+        }
+    }
+
     [STAThread]
     static void Main()
     {
@@ -51,6 +86,8 @@ static class Program
         if (!calibLoadedFromDb)
             AuditLogger.Action(AuditLogger.CalibrationFallback, "LocalRepository",
                 $"БД недоступна на старте, настройки взвешивания восстановлены из локального кэша (обновлён {settings.Current.CalibCacheUpdatedAt:yyyy-MM-dd HH:mm:ss})");
-        System.Windows.Forms.Application.Run(new MainForm(ldb, settings));
+        var mainForm = new MainForm(ldb, settings);
+        mainForm.Shown += async (_, _) => await RunScheduledDatabaseCleanupAsync(ldb, settings);
+        System.Windows.Forms.Application.Run(mainForm);
     }
 }
