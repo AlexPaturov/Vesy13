@@ -113,6 +113,7 @@ public sealed class SettingsService
     private static AppSettings CreateDefault()
     {
         var settings = new AppSettings();
+        settings.DatabaseCleanupPeriodStartedOn = DateTime.Today;
         var (hash, salt) = PasswordHasher.Create(DefaultAdminPassword);
         settings.AdminPasswordHash = hash;
         settings.AdminPasswordSalt = salt;
@@ -197,6 +198,32 @@ public sealed class SettingsService
             settings.AdminPasswordHash = hash;
             settings.AdminPasswordSalt = salt;
             changed = true;
+        }
+
+        DateTime today = DateTime.Today;
+        if (settings.DatabaseCleanupPeriodStartedOn is null || settings.DatabaseCleanupPeriodStartedOn.Value.Date > today)
+        {
+            settings.DatabaseCleanupPeriodStartedOn = today;
+            changed = true;
+        }
+        else if (settings.DatabaseCleanupPeriodStartedOn.Value != settings.DatabaseCleanupPeriodStartedOn.Value.Date)
+        {
+            settings.DatabaseCleanupPeriodStartedOn = settings.DatabaseCleanupPeriodStartedOn.Value.Date;
+            changed = true;
+        }
+
+        if (settings.DatabaseCleanupLastAttemptedOn is not null)
+        {
+            if (settings.DatabaseCleanupLastAttemptedOn.Value.Date > today)
+            {
+                settings.DatabaseCleanupLastAttemptedOn = null;
+                changed = true;
+            }
+            else if (settings.DatabaseCleanupLastAttemptedOn.Value != settings.DatabaseCleanupLastAttemptedOn.Value.Date)
+            {
+                settings.DatabaseCleanupLastAttemptedOn = settings.DatabaseCleanupLastAttemptedOn.Value.Date;
+                changed = true;
+            }
         }
 
         if (settings.StaticClampMaxCode <= settings.StaticClampMinCode)
