@@ -6,7 +6,7 @@ namespace Vesy13.Services.Configuration;
 public sealed class SettingsService
 {
     private const int DirectionCorrectionProfileCacheFormatVersion = 2;
-    private const string DefaultAdminPassword = "vesy13fuck";
+    private const string DefaultAdminPassword = "1111";
     private const string SettingsFileName = "settings.json";
     private const string SettingsDirectoryName = "Vesy13";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
@@ -35,6 +35,7 @@ public sealed class SettingsService
         }
 
         bool staticCalibrationCacheCleared = false;
+
         try
         {
             string json = File.ReadAllText(_path);
@@ -42,6 +43,7 @@ public sealed class SettingsService
         }
         catch (JsonException)
         {
+            // TODO create log
             string json = File.ReadAllText(_path);
             if (!TryLoadWithoutStaticCalibrationCache(json, out _settings))
             {
@@ -53,6 +55,7 @@ public sealed class SettingsService
         }
         catch
         {
+            // TODO create log
             _settings = CreateDefault();
             Save();
             return;
@@ -88,18 +91,16 @@ public sealed class SettingsService
         }
         catch (JsonException)
         {
+            // TODO create log
             return false;
         }
     }
 
-    public bool VerifyAdminPassword(string password) =>
-        PasswordHasher.Verify(password, _settings.AdminPasswordHash, _settings.AdminPasswordSalt);
+    public bool VerifyAdminPassword(string password) => PasswordHasher.Verify(password, _settings.AdminPasswordHash, _settings.AdminPasswordSalt);
 
     public void SetAdminPassword(string password)
     {
-        var (hash, salt) = PasswordHasher.Create(password);
-        _settings.AdminPasswordHash = hash;
-        _settings.AdminPasswordSalt = salt;
+        (_settings.AdminPasswordHash, _settings.AdminPasswordSalt) = PasswordHasher.Create(password);
     }
 
     /// <summary>Обновляет локальный fallback-кэш калибровки последним известным состоянием из БД. Не вызывает Save().</summary>
@@ -114,9 +115,7 @@ public sealed class SettingsService
     {
         var settings = new AppSettings();
         settings.DatabaseCleanupPeriodStartedOn = DateTime.Today;
-        var (hash, salt) = PasswordHasher.Create(DefaultAdminPassword);
-        settings.AdminPasswordHash = hash;
-        settings.AdminPasswordSalt = salt;
+        (settings.AdminPasswordHash, settings.AdminPasswordSalt) = PasswordHasher.Create(DefaultAdminPassword);
         return settings;
     }
 
@@ -194,9 +193,7 @@ public sealed class SettingsService
 
         if (string.IsNullOrWhiteSpace(settings.AdminPasswordHash) || string.IsNullOrWhiteSpace(settings.AdminPasswordSalt))
         {
-            var (hash, salt) = PasswordHasher.Create(DefaultAdminPassword);
-            settings.AdminPasswordHash = hash;
-            settings.AdminPasswordSalt = salt;
+            (settings.AdminPasswordHash, settings.AdminPasswordSalt) = PasswordHasher.Create(DefaultAdminPassword);
             changed = true;
         }
 

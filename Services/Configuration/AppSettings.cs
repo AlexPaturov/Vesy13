@@ -6,7 +6,7 @@ namespace Vesy13.Services.Configuration;
 
 public sealed class AppSettings
 {
-    public string AdcPortName { get; set; } = "COM3";
+    public string AdcPortName { get; set; } = "COM1";
 
     /// <summary>Активный канал АЦП (CH0/CH1), общий для статики и динамики. Переключается на вкладке «Канал» сервисной формы; переживает перезапуск программы.</summary>
     public ActiveChannel ActiveChannel { get; set; } = ActiveChannel.Main;
