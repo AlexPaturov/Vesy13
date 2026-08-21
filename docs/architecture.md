@@ -11,7 +11,13 @@
    при неудаче подставляет `LocalRepository.RestoreLastKnownCalibration` из локального
    кэша `settings.json` (см. `configuration.md`); при удаче — обновляет этот кэш;
 5. инициализирует аудит;
-6. открывает `MainForm`.
+6. открывает `MainForm`;
+7. после показа `MainForm` асинхронно проверяет срок очистки локальной БД.
+
+Проверка очистки использует даты из `settings.json`: на 60-й день периода удаляет в
+одной транзакции результаты взвешивания и записи аудита старше 30 дней. Дата попытки
+сохраняется до обращения к БД, поэтому после ошибки допускается только одна попытка в
+календарный день; новый 60-дневный период начинается после успешной очистки.
 
 `MainForm` — навигационный хаб, не создаёт и не хранит `SimA04ReaderStatic`/`SimA04ReaderDynamic`.
 Каждая форма, которой нужен АЦП (`StaticWeighingForm`, `DynamicWeighingForm`, `ServiceForm` — все
@@ -93,7 +99,7 @@ PrintForm
 ## Поток аудита
 
 ```text
-Формы / сервисы
+Формы / сервисы / плановая очистка БД
   -> AuditLogger.Action / Error / Exception
   -> PostgreSQL.audit_log
   -> при недоступности PostgreSQL: только Exception -> %ProgramData%\Vesy13\logs\audit-exceptions-YYYY-MM-DD.log
