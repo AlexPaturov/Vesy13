@@ -204,40 +204,32 @@ public static class AuditLogger
 
     public static async Task<List<AuditRecord>> GetLogsAsync(DateTime from, DateTime to)
     {
-        try
-        {
-            await using var conn = new NpgsqlConnection(ConnStr);
-            await conn.OpenAsync();
-            var rows = await conn.QueryAsync<AuditRecord>(@"
-                SELECT id,
-                       time_created        AS TimeCreated,
-                       event_id            AS EventId,
-                       keywords            AS Keywords,
-                       computer            AS Computer,
-                       subject_user_sid    AS SubjectUserSid,
-                       subject_user_name   AS SubjectUserName,
-                       subject_domain_name AS SubjectDomainName,
-                       subject_logon_id    AS SubjectLogonId,
-                       object_server       AS ObjectServer,
-                       object_type         AS ObjectType,
-                       object_name         AS ObjectName,
-                       object_handle       AS ObjectHandle,
-                       process_id          AS ProcessId,
-                       process_name        AS ProcessName,
-                       workstation_name    AS WorkstationName,
-                       ip_address          AS IpAddress
-                FROM audit_log
-                WHERE time_created >= @from AND time_created < @to
-                ORDER BY time_created DESC
-                LIMIT 5000",
-                new { from = from.ToUniversalTime(), to = to.ToUniversalTime() });
-            return rows.ToList();
-        }
-        catch (Exception ex)
-        {
-            WriteInternalFailureFallback(ErrorDb, "PostgreSQL", "AuditLogger.GetLogsAsync", ex);
-            return [];
-        }
+        await using var conn = new NpgsqlConnection(ConnStr);
+        await conn.OpenAsync();
+        var rows = await conn.QueryAsync<AuditRecord>(@"
+            SELECT id,
+                   time_created        AS TimeCreated,
+                   event_id            AS EventId,
+                   keywords            AS Keywords,
+                   computer            AS Computer,
+                   subject_user_sid    AS SubjectUserSid,
+                   subject_user_name   AS SubjectUserName,
+                   subject_domain_name AS SubjectDomainName,
+                   subject_logon_id    AS SubjectLogonId,
+                   object_server       AS ObjectServer,
+                   object_type         AS ObjectType,
+                   object_name         AS ObjectName,
+                   object_handle       AS ObjectHandle,
+                   process_id          AS ProcessId,
+                   process_name        AS ProcessName,
+                   workstation_name    AS WorkstationName,
+                   ip_address          AS IpAddress
+            FROM audit_log
+            WHERE time_created >= @from AND time_created < @to
+            ORDER BY time_created DESC
+            LIMIT 5000",
+            new { from = from.ToUniversalTime(), to = to.ToUniversalTime() });
+        return rows.ToList();
     }
 
     // ── Private ───────────────────────────────────────────────────────────────
@@ -466,7 +458,10 @@ public static class AuditLogger
 
     private static void PublishQueueStatus()
     {
-        try { QueueStatusChanged?.Invoke(null, GetQueueStatus()); }
+        try
+        {
+            QueueStatusChanged?.Invoke(null, GetQueueStatus());
+        }
         catch (Exception ex)
         {
             WriteInternalFailureFallback(ErrorGeneral, "Vesy13", "AuditLogger.QueueStatusChanged", ex);
@@ -478,9 +473,9 @@ public static class AuditLogger
         try
         {
             using var identity = WindowsIdentity.GetCurrent();
-            _sid     = identity.User?.Value;
-            var name = identity.Name ?? "";
-            var slash = name.IndexOf('\\');
+            _sid        = identity.User?.Value;
+            var name    = identity.Name ?? "";
+            var slash   = name.IndexOf('\\');
             _domainName = slash > 0 ? name[..slash] : Environment.UserDomainName;
             _userName   = slash > 0 ? name[(slash + 1)..] : name;
             _logonId    = GetLogonId(identity.Token);
@@ -490,14 +485,18 @@ public static class AuditLogger
             WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext user", ex);
         }
 
-        try { _computer = Environment.MachineName; }
-        catch (Exception ex) { WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext computer", ex); }
+        try
+        {
+            _computer = Environment.MachineName;
+        }
+        catch (Exception ex)
+        {
+            WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.CollectContext computer", ex);
+        }
 
         try
         {
-            _ipAddress = Dns.GetHostAddresses(Dns.GetHostName())
-                .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork)
-                ?.ToString();
+            _ipAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork)?.ToString();
         }
         catch (Exception ex)
         {
@@ -521,14 +520,14 @@ public static class AuditLogger
         try
         {
             var stats = new TokenStatistics();
-            if (GetTokenInformation(token, 10,
-                ref stats, (uint)Marshal.SizeOf<TokenStatistics>(), out _))
+            if (GetTokenInformation(token, 10, ref stats, (uint)Marshal.SizeOf<TokenStatistics>(), out _))
                 return $"{stats.AuthenticationId.HighPart:X8}-{stats.AuthenticationId.LowPart:X8}";
         }
         catch (Exception ex)
         {
             WriteInternalFailureFallback(ErrorGeneral, "Windows", "AuditLogger.GetLogonId", ex);
         }
+
         return null;
     }
 }

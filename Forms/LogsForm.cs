@@ -126,9 +126,9 @@ public partial class LogsForm : Form
         }
         catch (Exception ex)
         {
-            AuditLogger.Exception(AuditLogger.ErrorGeneral, "LogsForm", "операция с журналом аудита", ex);
-            MessageBox.Show("Не удалось загрузить журнал. Обратитесь к администратору.", "Логи",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuditLogger.Exception(AuditLogger.ErrorDb, "audit_log", "load", "PostgreSQL", ex);
+            MessageBox.Show("Не удалось загрузить журнал аудита.\nОбратитесь к администратору.", "База данных",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         finally
         {
