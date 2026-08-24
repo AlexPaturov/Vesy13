@@ -172,24 +172,6 @@ public class LocalRepository
         return changed;
     }
 
-    /// <summary>Переключает флаг активности одной точки и обновляет кэш.</summary>
-    public async Task SetActiveAsync(int id, bool isActive)
-    {
-        await using var conn = new NpgsqlConnection(ConnStr);
-        await conn.OpenAsync();
-        await conn.ExecuteAsync(@"
-            UPDATE calibration_points
-            SET is_active = CASE WHEN deleted_at IS NOT NULL THEN FALSE ELSE @isActive END,
-                deleted_at = CASE
-                    WHEN deleted_at IS NOT NULL THEN deleted_at
-                    WHEN @isActive THEN NULL
-                    ELSE NOW()
-                END
-            WHERE id = @id",
-            new { id, isActive });
-        await ReloadCacheAsync(conn);
-    }
-
     // ── Dynamic calibration ────────────────────────────────────────────────
 
     public async Task<List<DirectionCorrectionProfile>> GetDirectionCorrectionProfilesAsync()
@@ -273,30 +255,6 @@ public class LocalRepository
             });
     }
 
-    public async Task<List<LocalWagon>> GetPendingAsync()
-    {
-        await using var conn = new NpgsqlConnection(ConnStr);
-        await conn.OpenAsync();
-        var rows = await conn.QueryAsync<LocalWagon>(@"
-            SELECT id,
-                   train_time              AS TrainTime,
-                   wagon_time              AS WagonTime,
-                   wagon_num               AS Number,
-                   CAST(bogie1 AS float8)  AS Bogie1,
-                   CAST(bogie2 AS float8)  AS Bogie2,
-                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
-                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
-                   direction_correction_profile_id AS DirectionCorrectionProfileId,
-                   COALESCE(direction, '') AS Direction,
-                   mode                    AS Mode,
-                   transferred             AS Transferred
-            FROM wagon_weighing
-            WHERE transferred = false
-            ORDER BY train_time ASC, wagon_num ASC");
-        return rows.ToList();
-    }
-
-
     public async Task<List<LocalWagon>> GetAllByTrainTimeAsync(DateTime trainTime)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
@@ -345,56 +303,6 @@ public class LocalRepository
         return rows.ToList();
     }
 
-    public async Task<List<LocalWagon>> GetPendingByTrainTimeAsync(DateTime trainTime)
-    {
-        await using var conn = new NpgsqlConnection(ConnStr);
-        await conn.OpenAsync();
-        var rows = await conn.QueryAsync<LocalWagon>(@"
-            SELECT id,
-                   train_time              AS TrainTime,
-                   wagon_time              AS WagonTime,
-                   wagon_num               AS Number,
-                   CAST(bogie1 AS float8)  AS Bogie1,
-                   CAST(bogie2 AS float8)  AS Bogie2,
-                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
-                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
-                   direction_correction_profile_id AS DirectionCorrectionProfileId,
-                   COALESCE(direction, '') AS Direction,
-                   mode                    AS Mode,
-                   transferred             AS Transferred
-            FROM wagon_weighing
-            WHERE transferred = false
-              AND date_trunc('second', train_time) = date_trunc('second', @trainTime)
-            ORDER BY train_time ASC, wagon_num ASC",
-            new { trainTime });
-        return rows.ToList();
-    }
-
-    public async Task<List<LocalWagon>> GetPendingByDateAsync(DateTime date)
-    {
-        await using var conn = new NpgsqlConnection(ConnStr);
-        await conn.OpenAsync();
-        var rows = await conn.QueryAsync<LocalWagon>(@"
-            SELECT id,
-                   train_time              AS TrainTime,
-                   wagon_time              AS WagonTime,
-                   wagon_num               AS Number,
-                   CAST(bogie1 AS float8)  AS Bogie1,
-                   CAST(bogie2 AS float8)  AS Bogie2,
-                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
-                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
-                   direction_correction_profile_id AS DirectionCorrectionProfileId,
-                   COALESCE(direction, '') AS Direction,
-                   mode                    AS Mode,
-                   transferred             AS Transferred
-            FROM wagon_weighing
-            WHERE transferred = false
-              AND train_time::date = @date
-            ORDER BY train_time ASC, wagon_num ASC",
-            new { date = date.Date });
-        return rows.ToList();
-    }
-
     public async Task MarkTransferredAsync(int id)
     {
         await using var conn = new NpgsqlConnection(ConnStr);
@@ -402,30 +310,6 @@ public class LocalRepository
         await conn.ExecuteAsync(
             "UPDATE wagon_weighing SET transferred = true WHERE id = @id",
             new { id });
-    }
-
-    public async Task<List<LocalWagon>> GetTransferredAsync()
-    {
-        await using var conn = new NpgsqlConnection(ConnStr);
-        await conn.OpenAsync();
-        var rows = await conn.QueryAsync<LocalWagon>(@"
-            SELECT id,
-                   train_time              AS TrainTime,
-                   wagon_time              AS WagonTime,
-                   wagon_num               AS Number,
-                   CAST(bogie1 AS float8)  AS Bogie1,
-                   CAST(bogie2 AS float8)  AS Bogie2,
-                   bogie1_calibration_point_id AS Bogie1CalibrationPointId,
-                   bogie2_calibration_point_id AS Bogie2CalibrationPointId,
-                   direction_correction_profile_id AS DirectionCorrectionProfileId,
-                   COALESCE(direction, '') AS Direction,
-                   mode                    AS Mode,
-                   transferred             AS Transferred
-            FROM wagon_weighing
-            WHERE transferred = true
-            ORDER BY wagon_time DESC
-            LIMIT 200");
-        return rows.ToList();
     }
 
     /// <summary>
