@@ -20,5 +20,8 @@ install/application/publish/
 /install/application/ScaleListenerPublish/
 /install/application/Vesy13Publish/
 /ScaleListener/Properties/PublishProfiles/
+/DynamicDumpDec/DynamicDumpDec/Properties/PublishProfiles/
+/SerialProbe/SerialProbe/Properties/PublishProfiles/
+/StaticDumpDec/StaticDumpDec/Properties/PublishProfiles/
 /install/win7
 /install/win7x32
