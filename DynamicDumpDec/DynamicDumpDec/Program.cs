@@ -180,7 +180,7 @@ internal static class Program
     }
 
     private static bool IsValidSample(byte[] sample)
-        => sample[4] == ((sample[0] + sample[2] + AuxOffset) & 0xFF);
+        => sample[4] == ((sample[0] + sample[1] + sample[2] + sample[3]) & 0xFF);
 
     private static byte ReadByte(SerialPort sp)
     {
