@@ -137,7 +137,7 @@ internal static class Program
             auxCounts[aux]++;
 
             Console.WriteLine(
-                $"{index:000} {timeMs:000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
+                $"{index:000} {timeMs:0000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
 
             index++;
             sampleBytes = 0;
@@ -219,7 +219,7 @@ internal static class Program
         Console.WriteLine($"SYNC_RULE=AUX=(B0+B2+{AuxOffset})&0xFF");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
-        Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX");
+        Console.WriteLine($"{ "IDX",3} { "TIME_MS",7} { "B0",3} { "B1",3} { "B2",3} { "B3",3} { "B4",3} { "CH0",5} { "CH1",5} { "AUX",3}");
     }
 
     private static bool TryParseArgs(string[] args, out string portName, out int sampleCount)
