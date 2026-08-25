@@ -16,7 +16,7 @@ public class LocalRepository
         "Host=localhost;Port=5432;Database=scale_db;Username=scale_user";
 
     /// <summary>Кэш всех калибровочных точек. Обновляется после каждого сохранения и при восстановлении последнего известного состояния.</summary>
-    public IReadOnlyList<CalibPoint> CalibPoints { get; private set; } = [];
+    public IReadOnlyList<CalibPoint> CalibPoints { get; private set; } = Array.Empty<CalibPoint>();
 
     /// <summary>Активный профиль поправочных коэффициентов направления.</summary>
     public DirectionCorrectionProfile ActiveDirectionCorrectionProfile { get; private set; } = new();
@@ -49,7 +49,7 @@ public class LocalRepository
         }
         catch
         {
-            CalibPoints = [];
+            CalibPoints = Array.Empty<CalibPoint>();
             ActiveDirectionCorrectionProfile = new DirectionCorrectionProfile();
             return false;
         }
