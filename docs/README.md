@@ -19,7 +19,7 @@ Vesy13 - WinForms-приложение для вагонных весов N13. �
 
 ## Быстрый старт для разработчика
 
-1. Установить .NET SDK 8 с поддержкой Windows Desktop.
+1. Установить .NET SDK 6 с поддержкой Windows Desktop.
 2. Развернуть локальную PostgreSQL-базу `scale_db` штатным скриптом от имени
    администратора: `powershell.exe -ExecutionPolicy Bypass -NoProfile -File install/database/install.ps1`.
    Прямой запуск `scale_db.sql` допустим только в подготовленном тестовом окружении.

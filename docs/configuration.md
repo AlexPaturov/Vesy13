@@ -3,7 +3,7 @@
 ## Требования
 
 - Windows.
-- .NET SDK/Runtime 8 с Windows Desktop.
+- .NET SDK/Runtime 6 с Windows Desktop.
 - PostgreSQL на локальной машине. Текущая версия приложения подключается к
   `localhost:5432`; настройка сетевого подключения не реализована.
 - Firebird-клиент и доступ к заводской базе `DC_OPER.FDB`.
