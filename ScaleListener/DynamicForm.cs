@@ -1,5 +1,5 @@
-using System.IO.Ports;
 using ScaleListener.FaultInjection;
+using System.IO.Ports;
 
 namespace ScaleListener;
 
@@ -9,7 +9,6 @@ public partial class DynamicForm : Form
     private const int MaxAdcCode = 65535;
     private const byte SetByte = 126;
     private const byte ReqByte = 254;
-    private const int AuxOffset = 28;
     private const int DefaultHz = 47;
     private const int MaxLogLines = 500;
 
@@ -296,7 +295,7 @@ public partial class DynamicForm : Form
         var b1 = (byte)((ch0 >> 8) & 0xFF);
         var b2 = (byte)(ch1 & 0xFF);
         var b3 = (byte)((ch1 >> 8) & 0xFF);
-        var aux = (byte)((b0 + b2 + AuxOffset) & 0xFF);
+        var aux = (byte)((b0 + b1 + b2 + b3) & 0xFF);
 
         return new[] { b0, b1, b2, b3, aux };
     }

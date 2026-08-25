@@ -5,8 +5,6 @@ namespace Vesy13.Models;
 /// </summary>
 public readonly struct SimA04DynamicSample
 {
-    private const int AuxOffset = 28;
-
     public int Ch0 { get; }
     public int Ch1 { get; }
     public byte Aux { get; }
@@ -30,7 +28,7 @@ public readonly struct SimA04DynamicSample
     {
         if (data.Length != 5) return default;
 
-        var expectedAux = (data[0] + data[2] + AuxOffset) & 0xFF;
+        var expectedAux = (data[0] + data[1] + data[2] + data[3]) & 0xFF;
         if (data[4] != expectedAux) return default;
 
         return new SimA04DynamicSample(

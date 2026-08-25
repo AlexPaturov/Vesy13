@@ -11,7 +11,6 @@ internal static class Program
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
     private const int DefaultSampleCount = 240;
-    private const int AuxOffset = 28;
     private const string DefaultPort = "COM3";
     private const string ModeName = "DYNAMIC";
 
@@ -216,7 +215,7 @@ internal static class Program
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
         Console.WriteLine($"SAMPLES_TARGET={sampleCount}");
         Console.WriteLine($"SAMPLE_SIZE={SampleSize}");
-        Console.WriteLine($"SYNC_RULE=AUX=(B0+B2+{AuxOffset})&0xFF");
+        Console.WriteLine("SYNC_RULE=AUX=(B0+B1+B2+B3)&0xFF");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
         Console.WriteLine($"{ "IDX",3} { "TIME_MS",7} { "B0",3} { "B1",3} { "B2",3} { "B3",3} { "B4",3} { "CH0",5} { "CH1",5} { "AUX",3}");
