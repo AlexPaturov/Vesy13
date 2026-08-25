@@ -12,7 +12,7 @@ internal static class Program
     private const int WriteTimeoutMs = 500;
     private const int DefaultSampleCount = 240;
     private const int AuxOffset = 28;
-    private const string DefaultPort = "COM3";
+    private const string DefaultPort = "COM1";
     private const string ModeName = "DYNAMIC";
 
     private const byte Avg1SetByte = 14;
@@ -113,12 +113,12 @@ internal static class Program
             if (sampleBytes < SampleSize)
                 continue;
 
-            if (!IsValidSample(sample))
+           /* if (!IsValidSample(sample))
             {
                 ShiftLeft(sample, ref sampleBytes);
                 skippedBytes++;
                 continue;
-            }
+            }*/
 
             var timeMs = (int)Math.Round(sw.Elapsed.TotalMilliseconds);
             var ch0 = ReadUInt16Le(sample, 0);
@@ -137,7 +137,7 @@ internal static class Program
             auxCounts[aux]++;
 
             Console.WriteLine(
-                $"{index:000} {timeMs:000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
+                $"{index:000} {timeMs:0000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
 
             index++;
             sampleBytes = 0;
@@ -185,7 +185,10 @@ internal static class Program
     private static byte ReadByte(SerialPort sp)
     {
         var value = sp.ReadByte();
-        if (value < 0) throw new TimeoutException("COM read returned no data.");
+
+        if (value < 0)
+            throw new TimeoutException("COM read returned no data.");
+
         return (byte)value;
     }
 
@@ -219,7 +222,7 @@ internal static class Program
         Console.WriteLine($"SYNC_RULE=AUX=(B0+B2+{AuxOffset})&0xFF");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
-        Console.WriteLine("IDX TIME_MS B0 B1 B2 B3 B4 CH0 CH1 AUX");
+        Console.WriteLine($"{ "IDX",3} { "TIME_MS",7} { "B0",3} { "B1",3} { "B2",3} { "B3",3} { "B4",3} { "CH0",5} { "CH1",5} { "AUX",3}");
     }
 
     private static bool TryParseArgs(string[] args, out string portName, out int sampleCount)
@@ -238,7 +241,7 @@ internal static class Program
 
     private static void PrintUsage()
     {
-        Console.Error.WriteLine("USAGE=DynamicDumpDec COM3 240");
+        Console.Error.WriteLine("USAGE=DynamicDumpDec COM1 240");
     }
 
     private static void WaitBeforeExit()
