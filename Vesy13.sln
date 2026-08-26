@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticDumpDec", "StaticDump
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDumpDec", "DynamicDumpDec\DynamicDumpDec\DynamicDumpDec.csproj", "{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13.Protocol", "ADCProtocol\Vesy13.Protocol\Vesy13.Protocol.csproj", "{D741D909-741B-46BD-93B5-0A0064526987}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D741D909-741B-46BD-93B5-0A0064526987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D741D909-741B-46BD-93B5-0A0064526987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D741D909-741B-46BD-93B5-0A0064526987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D741D909-741B-46BD-93B5-0A0064526987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
