@@ -10,8 +10,8 @@ internal static class Program
     private const int SampleSize = 5;
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
-    private const int DefaultSampleCount = 240;
-    private const string DefaultPort = "COM3";
+    private const int DefaultSampleCount = 40;
+    private const string DefaultPort = "COM1";
     private const string ModeName = "DYNAMIC";
 
     private const byte Avg1SetByte = 14;
