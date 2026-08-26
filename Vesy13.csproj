@@ -1,58 +1,63 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows7.0</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>Vesy13</AssemblyName>
-    <RootNamespace>Vesy13</RootNamespace>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="QuestPDF" Version="2024.10.0" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
-    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.1.0" />
-    <PackageReference Include="Npgsql" Version="8.0.3" />
-    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="ScaleListener\**" />
-    <EmbeddedResource Remove="ScaleListener\**" />
-    <None Remove="ScaleListener\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="DynamicDumpDec\**" />
-    <EmbeddedResource Remove="DynamicDumpDec\**" />
-    <None Remove="DynamicDumpDec\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="StaticDumpDec\**" />
-    <EmbeddedResource Remove="StaticDumpDec\**" />
-    <None Remove="StaticDumpDec\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="HzCounter\**" />
-    <EmbeddedResource Remove="HzCounter\**" />
-    <None Remove="HzCounter\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="SerialProbe\**" />
-    <EmbeddedResource Remove="SerialProbe\**" />
-    <None Remove="SerialProbe\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows7.0</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Vesy13</AssemblyName>
+		<RootNamespace>Vesy13</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.1.35" />
+		<PackageReference Include="QuestPDF" Version="2024.10.0" />
+		<PackageReference Include="Serilog" Version="3.1.1" />
+		<PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
+		<PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.1.0" />
+		<PackageReference Include="Npgsql" Version="6.0.13" />
+		<PackageReference Include="System.IO.Ports" Version="6.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="ADCProtocol\**" />
+		<EmbeddedResource Remove="ADCProtocol\**" />
+		<None Remove="ADCProtocol\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="ScaleListener\**" />
+		<EmbeddedResource Remove="ScaleListener\**" />
+		<None Remove="ScaleListener\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="DynamicDumpDec\**" />
+		<EmbeddedResource Remove="DynamicDumpDec\**" />
+		<None Remove="DynamicDumpDec\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="StaticDumpDec\**" />
+		<EmbeddedResource Remove="StaticDumpDec\**" />
+		<None Remove="StaticDumpDec\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="HzCounter\**" />
+		<EmbeddedResource Remove="HzCounter\**" />
+		<None Remove="HzCounter\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="SerialProbe\**" />
+		<EmbeddedResource Remove="SerialProbe\**" />
+		<None Remove="SerialProbe\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 </Project>
