@@ -23,6 +23,11 @@
 		<None Remove="ADCProtocol\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="Vesy13.Protocol.Tests\**" />
+		<EmbeddedResource Remove="Vesy13.Protocol.Tests\**" />
+		<None Remove="Vesy13.Protocol.Tests\**" />
+	</ItemGroup>
+	<ItemGroup>
 		<Compile Remove="ScaleListener\**" />
 		<EmbeddedResource Remove="ScaleListener\**" />
 		<None Remove="ScaleListener\**" />

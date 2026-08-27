@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDumpDec", "DynamicDu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13.Protocol", "ADCProtocol\Vesy13.Protocol\Vesy13.Protocol.csproj", "{D741D909-741B-46BD-93B5-0A0064526987}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13.Protocol.Tests", "Vesy13.Protocol.Tests\Vesy13.Protocol.Tests.csproj", "{C8AF4483-3E6D-4AE5-B89A-000281E865FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{D741D909-741B-46BD-93B5-0A0064526987}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D741D909-741B-46BD-93B5-0A0064526987}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D741D909-741B-46BD-93B5-0A0064526987}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
