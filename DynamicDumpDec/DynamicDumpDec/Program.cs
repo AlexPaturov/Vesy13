@@ -132,10 +132,6 @@ internal static class Program
 
             var timeMs = (int)Math.Round(sw.Elapsed.TotalMilliseconds);
             
-            //var ch0 = ReadUInt16Le(incomFrame, 0);
-            //var ch1 = ReadUInt16Le(incomFrame, 2);
-            //var aux = incomFrame[4];
-
             #region Footer counters
             ch0Min = Math.Min(ch0Min, frame.Ch0!.Value);
             ch0Max = Math.Max(ch0Max, frame.Ch0!.Value);
