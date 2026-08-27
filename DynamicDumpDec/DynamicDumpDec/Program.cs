@@ -1,13 +1,14 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Ports;
+using Vesy13.Protocol;
 
 namespace DynamicDumpDec;
 
 internal static class Program
 {
     private const int BaudRate = 4800;
-    private const int SampleSize = 5;
+    private const int IncommingMessageSize = 5;
     private const int ReadTimeoutMs = 2000;
     private const int WriteTimeoutMs = 500;
     private const int DefaultSampleCount = 40;
@@ -65,7 +66,7 @@ internal static class Program
         return exitCode;
     }
 
-    private static void Dump(string portName, int sampleCount)
+    private static void Dump(string portName, int TargetFrameCount)
     {
         using var sp = new SerialPort
         {
@@ -81,12 +82,12 @@ internal static class Program
         sp.Open();
         sp.DiscardInBuffer();
         sp.DiscardOutBuffer();
-        sp.Write(new[] { SetByte }, 0, 1);
+        sp.Write(new[] { SetByte }, 0, 1);          // установили режим работы - динамика
         Thread.Sleep(50);
 
-        PrintHeader(portName, sampleCount);
-
-        var sample = new byte[SampleSize];
+        PrintHeader(portName, TargetFrameCount);
+        #region set: var's
+        var incomFrame = new byte[IncommingMessageSize];
         var sampleBytes = 0;
         var rawBytes = 0;
         var skippedBytes = 0;
@@ -101,73 +102,86 @@ internal static class Program
         long auxSum = 0;
         var auxCounts = new int[256];
         var sw = Stopwatch.StartNew();
+        #endregion
 
-        sp.Write(new[] { ReqByte }, 0, 1);
+        sp.Write(new[] { ReqByte }, 0, 1);                          // запустили прием потока
 
-        for (var index = 0; index < sampleCount;)
+        for (var index = 0; index < TargetFrameCount;)
         {
-            AddByte(sample, ref sampleBytes, ReadByte(sp));
+            AddByte(incomFrame, ref sampleBytes, ReadByte(sp));     // 
             rawBytes++;
 
-            if (sampleBytes < SampleSize)
+            if (sampleBytes < IncommingMessageSize)                 // пока меньше 5-ти крутим цикл
                 continue;
 
-            if (!IsValidSample(sample))
+            var frame = SimA04DynamicFrame.Parse(incomFrame);
+
+            switch (frame.State)
             {
-                ShiftLeft(sample, ref sampleBytes);
-                skippedBytes++;
-                continue;
+                case FrameState.InvalidChecksum:
+                    ShiftLeft(incomFrame, ref sampleBytes);
+                    skippedBytes++;
+                    continue;
+
+                case FrameState.Valid:
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unexpected frame state: {frame.State}");
             }
 
             var timeMs = (int)Math.Round(sw.Elapsed.TotalMilliseconds);
-            var ch0 = ReadUInt16Le(sample, 0);
-            var ch1 = ReadUInt16Le(sample, 2);
-            var aux = sample[4];
+            
+            //var ch0 = ReadUInt16Le(incomFrame, 0);
+            //var ch1 = ReadUInt16Le(incomFrame, 2);
+            //var aux = incomFrame[4];
 
-            ch0Min = Math.Min(ch0Min, ch0);
-            ch0Max = Math.Max(ch0Max, ch0);
-            ch1Min = Math.Min(ch1Min, ch1);
-            ch1Max = Math.Max(ch1Max, ch1);
-            auxMin = Math.Min(auxMin, aux);
-            auxMax = Math.Max(auxMax, aux);
-            ch0Sum += ch0;
-            ch1Sum += ch1;
-            auxSum += aux;
-            auxCounts[aux]++;
-
-            Console.WriteLine(
-                $"{index:000} {timeMs:0000000} {FormatSample(sample)} {ch0:00000} {ch1:00000} {aux:000}");
-
+            #region Footer counters
+            ch0Min = Math.Min(ch0Min, frame.Ch0!.Value);
+            ch0Max = Math.Max(ch0Max, frame.Ch0!.Value);
+            ch1Min = Math.Min(ch1Min, frame.Ch1!.Value);
+            ch1Max = Math.Max(ch1Max, frame.Ch1!.Value);
+            auxMin = Math.Min(auxMin, frame.Aux!.Value);
+            auxMax = Math.Max(auxMax, frame.Aux!.Value);
+            ch0Sum += frame.Ch0!.Value;
+            ch1Sum += frame.Ch1!.Value;
+            auxSum += frame.Aux!.Value;
+            auxCounts[frame.Aux!.Value]++;
+            Console.WriteLine($"{index:000} {timeMs:0000000} {FormatSample(incomFrame)} {frame.Ch0!.Value:00000} {frame.Ch1!.Value:00000} {frame.Aux!.Value:000}");
+            #endregion
             index++;
             sampleBytes = 0;
         }
 
         sw.Stop();
         var elapsedSec = Math.Max(sw.Elapsed.TotalSeconds, 0.001);
-        var hz = sampleCount / elapsedSec;
+        var hz = TargetFrameCount / elapsedSec;
 
+        #region Footer
         Console.WriteLine("SUMMARY");
         Console.WriteLine($"RAW_BYTES={rawBytes}");
-        Console.WriteLine($"SAMPLES={sampleCount}");
+        Console.WriteLine($"SAMPLES={TargetFrameCount}");
         Console.WriteLine($"SKIPPED_BYTES={skippedBytes}");
         Console.WriteLine("TAIL_BYTES=0");
         Console.WriteLine($"HZ={hz.ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"CH0_MIN={ch0Min}");
-        Console.WriteLine($"CH0_AVG={(ch0Sum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"CH0_AVG={(ch0Sum / (double)TargetFrameCount).ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"CH0_MAX={ch0Max}");
         Console.WriteLine($"CH1_MIN={ch1Min}");
-        Console.WriteLine($"CH1_AVG={(ch1Sum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"CH1_AVG={(ch1Sum / (double)TargetFrameCount).ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"CH1_MAX={ch1Max}");
         Console.WriteLine($"AUX_MIN={auxMin}");
-        Console.WriteLine($"AUX_AVG={(auxSum / (double)sampleCount).ToString("0.00", CultureInfo.InvariantCulture)}");
+        Console.WriteLine($"AUX_AVG={(auxSum / (double)TargetFrameCount).ToString("0.00", CultureInfo.InvariantCulture)}");
         Console.WriteLine($"AUX_MAX={auxMax}");
         Console.WriteLine($"AUX_COUNTS={FormatAuxCounts(auxCounts)}");
+        #endregion
     }
 
-    private static void AddByte(byte[] sample, ref int sampleBytes, byte value)
+    // при приходе нового байта добавляю в массив, увеличиваю счетчик
+    private static void AddByte(byte[] incomFrame, ref int frameBytes, byte value)
     {
-        sample[sampleBytes] = value;
-        sampleBytes++;
+        incomFrame[frameBytes] = value;
+        frameBytes++;
     }
 
     private static void ShiftLeft(byte[] sample, ref int sampleBytes)
@@ -178,8 +192,6 @@ internal static class Program
         sampleBytes--;
     }
 
-    private static bool IsValidSample(byte[] sample)
-        => sample[4] == ((sample[0] + sample[1] + sample[2] + sample[3]) & 0xFF);
 
     private static byte ReadByte(SerialPort sp)
     {
@@ -187,9 +199,6 @@ internal static class Program
         if (value < 0) throw new TimeoutException("COM read returned no data.");
         return (byte)value;
     }
-
-    private static int ReadUInt16Le(byte[] data, int offset)
-        => data[offset + 1] * 256 + data[offset];
 
     private static string FormatSample(byte[] data)
         => string.Join(" ", Array.ConvertAll(data, b => b.ToString("000", CultureInfo.InvariantCulture)));
@@ -214,7 +223,7 @@ internal static class Program
         Console.WriteLine($"REQ={ReqByte}");
         Console.WriteLine("REQUEST_MODE=STREAM_AFTER_SINGLE_REQ");
         Console.WriteLine($"SAMPLES_TARGET={sampleCount}");
-        Console.WriteLine($"SAMPLE_SIZE={SampleSize}");
+        Console.WriteLine($"SAMPLE_SIZE={IncommingMessageSize}");
         Console.WriteLine("SYNC_RULE=AUX=(B0+B1+B2+B3)&0xFF");
         Console.WriteLine("FORMAT=SAMPLE5_UINT16_LE");
         Console.WriteLine("SAMPLE=CH0_LO CH0_HI CH1_LO CH1_HI AUX");
@@ -237,7 +246,7 @@ internal static class Program
 
     private static void PrintUsage()
     {
-        Console.Error.WriteLine("USAGE=DynamicDumpDec COM3 240");
+        Console.Error.WriteLine("USAGE=DynamicDumpDec COM1 40");
     }
 
     private static void WaitBeforeExit()
