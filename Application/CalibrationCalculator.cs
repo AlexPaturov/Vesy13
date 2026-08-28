@@ -9,7 +9,8 @@ namespace Vesy13.Application;
 /// Точки сортируются по коду АЦП. Для расчёта выбирается последняя точка,
 /// код которой меньше или равен текущему коду АЦП. Если текущий код ниже первой
 /// точки, используется первая точка; если выше последней — последняя.
-/// Вес считается без интерполяции: текущий_код_АЦП * калибровочное_число / 65535.
+/// Нулевая точка массы задаёт тару (смещение кода АЦП) и не является точкой масштаба.
+/// Вес считается без интерполяции: (текущий_код_АЦП - код_тары) * калибровочное_число / 65535.
 /// </summary>
 public static class CalibrationCalculator
 {
@@ -25,10 +26,13 @@ public static class CalibrationCalculator
             .OrderBy(p => p.AdcCode)
             .ToList();
 
-        if (active.Count == 0) return null;
-        var point = active[0];
+        var scalePoints = active.Where(p => p.Mass != 0).ToList();
+        if (scalePoints.Count == 0) return null;
 
-        foreach (var p in active)
+        int zeroCode = active.FirstOrDefault(p => p.Mass == 0)?.AdcCode ?? 0;
+        var point = scalePoints[0];
+
+        foreach (var p in scalePoints)
         {
             if (adcCode >= p.AdcCode)
                 point = p;
@@ -36,7 +40,8 @@ public static class CalibrationCalculator
                 break;
         }
 
-        double tonnes = adcCode * ((double)point.CalibrationValue / 65535d);
+        int correctedCode = Math.Max(0, adcCode - zeroCode);
+        double tonnes = correctedCode * ((double)point.CalibrationValue / 65535d);
         return new StaticCalibrationResult(point, tonnes, active.Count);
     }
 

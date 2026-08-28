@@ -65,7 +65,8 @@ public partial class DynamicWeighingForm : Form
         CalibrationCalculator.CalculateStatic(_ldb.CalibPoints, adcCode, _sim.Channel);
 
     private bool HasStaticCalibration() => _ldb.CalibPoints.Any(point =>
-        point.Channel == (_sim.Channel == ActiveChannel.Main ? 0 : 1) && point.IsActive);
+        point.Channel == (_sim.Channel == ActiveChannel.Main ? 0 : 1) &&
+        point.IsActive && point.Mass > 0);
 
     private double SelectedDirectionCorrectionFactor() => GetDirection() == Direction.Right
         ? _ldb.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor

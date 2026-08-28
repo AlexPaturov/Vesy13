@@ -1714,7 +1714,7 @@ public partial class ServiceForm : Form
     {
         if (e.RowIndex < 0) return;
         if (!_chbCalibCounter.Checked && (e.ColumnIndex == 1 || e.ColumnIndex == 2))
-            RefreshCalibK(e.RowIndex);
+            RefreshNewCalibK();
     }
 
     private void DgvCalib_CellEndEdit(object? sender, DataGridViewCellEventArgs e)
@@ -1761,16 +1761,54 @@ public partial class ServiceForm : Form
     {
         var row = _dgvCalib.Rows[rowIndex];
         if (int.TryParse(row.Cells[1].Value?.ToString(), out int code) &&
-            TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass) &&
-            code != 0)
+            TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass))
         {
-            double calculated = (double)mass / code * 65535;
+            if (mass == 0)
+            {
+                row.Cells[3].Value = "0";
+                return;
+            }
+
+            int zeroCode = ReadZeroCalibCode() ?? 0;
+            int scaleCode = code - zeroCode;
+            if (scaleCode <= 0)
+            {
+                row.Cells[3].Value = "";
+                return;
+            }
+
+            double calculated = (double)mass / scaleCode * 65535;
             row.Cells[3].Value = calculated >= int.MinValue && calculated <= int.MaxValue
                 ? Math.Round(calculated, MidpointRounding.AwayFromZero).ToString(CultureInfo.InvariantCulture)
                 : "";
         }
         else
             row.Cells[3].Value = "";
+    }
+
+    private void RefreshNewCalibK()
+    {
+        foreach (DataGridViewRow row in _dgvCalib.Rows)
+        {
+            if (row.Tag is not CalibPoint { Id: > 0 })
+                RefreshCalibK(row.Index);
+        }
+    }
+
+    private int? ReadZeroCalibCode()
+    {
+        foreach (DataGridViewRow row in _dgvCalib.Rows)
+        {
+            if (row.Cells[0].Value?.ToString() != "Да")
+                continue;
+
+            if (int.TryParse(row.Cells[1].Value?.ToString(), out int code) &&
+                TryParseCalibDecimal(row.Cells[2].Value?.ToString(), out decimal mass) &&
+                mass == 0)
+                return code;
+        }
+
+        return null;
     }
 
     private void UpdateCalibCounterMode(bool recalculateNewRows)
@@ -1788,15 +1826,7 @@ public partial class ServiceForm : Form
         _lblCalibCounterSuffix.ForeColor = manualMode ? ServiceUiColors.Error : ServiceUiColors.TextPrimary;
 
         if (!manualMode && recalculateNewRows)
-        {
-            foreach (DataGridViewRow row in _dgvCalib.Rows)
-            {
-                if (row.Tag is CalibPoint { Id: > 0 })
-                    continue;
-
-                RefreshCalibK(row.Index);
-            }
-        }
+            RefreshNewCalibK();
 
         UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
     }

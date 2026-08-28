@@ -50,7 +50,9 @@ public partial class StaticWeighingForm : Form
 
     private double ReadRawTonnes(int adcCode) => CalculateStatic(adcCode)?.Tonnes ?? 0;
 
-    private bool HasStaticCalibration() => ActiveCalibPointCount() > 0;
+    private bool HasStaticCalibration() => _ldb.CalibPoints.Any(point =>
+        point.Channel == (_sim.Channel == ActiveChannel.Main ? 0 : 1) &&
+        point.IsActive && point.Mass > 0);
 
     private bool ValidateBeforeWeigh()
     {
@@ -367,12 +369,6 @@ public partial class StaticWeighingForm : Form
     {
         _lblBogie1Value.Text = "—";
         _lblBogie2Value.Text = "—";
-    }
-
-    private int ActiveCalibPointCount()
-    {
-        int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
-        return _ldb.CalibPoints.Count(p => p.Channel == channel && p.IsActive);
     }
 
     // ── Weighing logic ─────────────────────────────────────────────────────
