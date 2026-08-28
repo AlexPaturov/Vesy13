@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows7.0</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -51,9 +51,6 @@
 		<Compile Remove="SerialProbe\**" />
 		<EmbeddedResource Remove="SerialProbe\**" />
 		<None Remove="SerialProbe\**" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="ADCProtocol\Vesy13.Protocol\Vesy13.Protocol.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
