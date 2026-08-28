@@ -269,3 +269,55 @@ public class SimA04DynamicFrameTests
 
 
 }
+
+[TestClass]
+public class CalibrationCalculatorTests
+{
+    [TestMethod]
+    public void CalculateStatic_UsesFractionalCalibrationValueWithoutRounding()
+    {
+        var points = new[]
+        {
+            new CalibPoint { Channel = 0, AdcCode = 1400, Mass = 0, CalibrationValue = 0m },
+            new CalibPoint { Channel = 0, AdcCode = 2400, Mass = 10, CalibrationValue = 655.350m },
+        };
+
+        var result = CalibrationCalculator.CalculateStatic(points, 1900, ActiveChannel.Main);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(5d, result.Tonnes, 0.0000001d);
+        Assert.AreEqual(655.350m, result.Point.CalibrationValue);
+    }
+
+    [TestMethod]
+    public void CalculateStatic_ReturnsNegativeWeightBelowCalibrationTare()
+    {
+        var points = new[]
+        {
+            new CalibPoint { Channel = 0, AdcCode = 1400, Mass = 0, CalibrationValue = 0m },
+            new CalibPoint { Channel = 0, AdcCode = 2400, Mass = 10, CalibrationValue = 655.350m },
+        };
+
+        var result = CalibrationCalculator.CalculateStatic(points, 1200, ActiveChannel.Main);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(-2d, result.Tonnes, 0.0000001d);
+    }
+
+    [TestMethod]
+    public void CalculateStatic_UsesLastApplicableScalePoint()
+    {
+        var points = new[]
+        {
+            new CalibPoint { Channel = 0, AdcCode = 1000, Mass = 0, CalibrationValue = 0m },
+            new CalibPoint { Channel = 0, AdcCode = 2000, Mass = 10, CalibrationValue = 655.350m },
+            new CalibPoint { Channel = 0, AdcCode = 3000, Mass = 20, CalibrationValue = 655.350m },
+        };
+
+        var result = CalibrationCalculator.CalculateStatic(points, 3500, ActiveChannel.Main);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(25d, result.Tonnes, 0.0000001d);
+        Assert.AreEqual(3000, result.Point.AdcCode);
+    }
+}

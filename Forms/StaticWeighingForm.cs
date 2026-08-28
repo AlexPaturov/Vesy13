@@ -82,7 +82,7 @@ public partial class StaticWeighingForm : Form
 
         return $"{common} calibPointId={point.Id} calibPointChannel={point.Channel} " +
                $"calibPointCode={point.AdcCode} calibPointMass={(double)point.Mass:F4} " +
-               $"calibrationValue={point.CalibrationValue.ToString(CultureInfo.InvariantCulture)}";
+               $"calibrationValue={point.CalibrationValue.ToString("F3", CultureInfo.InvariantCulture)}";
     }
 
     private double ToTonnes(int adcCode) =>
