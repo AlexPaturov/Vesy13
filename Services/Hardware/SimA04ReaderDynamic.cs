@@ -11,6 +11,7 @@ public class SimA04ReaderDynamic : IDisposable
 {
     private const byte SetByte = 126;
     private const byte ReqByte = 254;
+    private const byte StaticModeSetByte = 86;
     private const int SampleSize = 5;
     private const int ReconnectIntervalMs = 5000;
 
@@ -90,6 +91,7 @@ public class SimA04ReaderDynamic : IDisposable
 
         if (_port is not null)
         {
+            Send(StaticModeSetByte);
             _port.DataReceived -= OnDataReceived;
             IsPoisoned = !SerialPortForceCloser.CloseWithTimeout(_port);
         }
