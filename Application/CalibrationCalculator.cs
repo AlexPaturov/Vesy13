@@ -11,6 +11,7 @@ namespace Vesy13.Application;
 /// точки, используется первая точка; если выше последней — последняя.
 /// Нулевая точка массы задаёт тару (смещение кода АЦП) и не является точкой масштаба.
 /// Вес считается без интерполяции: (текущий_код_АЦП - код_тары) * калибровочное_число / 65535.
+/// Результат может быть отрицательным, если текущий код ниже кода тары.
 /// </summary>
 public static class CalibrationCalculator
 {
@@ -40,7 +41,7 @@ public static class CalibrationCalculator
                 break;
         }
 
-        int correctedCode = Math.Max(0, adcCode - zeroCode);
+        int correctedCode = adcCode - zeroCode;
         double tonnes = correctedCode * ((double)point.CalibrationValue / 65535d);
         return new StaticCalibrationResult(point, tonnes, active.Count);
     }
