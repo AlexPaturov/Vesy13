@@ -63,6 +63,7 @@ internal static class SerialPortForceCloser
         catch
         {
             // best-effort: если не получилось - просто ждём forceGraceMs штатного завершения
+            // TODO - log event somewhere !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
         finally
         {
