@@ -15,28 +15,6 @@ namespace Vesy13.Forms;
 /// </summary>
 public partial class ServiceForm : Form
 {
-    private sealed class CalibCounterSuffixLabel : Label
-    {
-        protected override void OnEnabledChanged(EventArgs e)
-        {
-            base.OnEnabledChanged(e);
-            Invalidate();
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (Enabled)
-            {
-                base.OnPaint(e);
-                return;
-            }
-
-            e.Graphics.Clear(BackColor);
-            TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, ForeColor,
-                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.WordBreak);
-        }
-    }
-
     private SimA04ReaderStatic _staticServiceSim = null!;
     private SimA04ReaderStatic _staticCalibSim = null!;
     private SimA04ReaderDynamic _dynamicServiceSim = null!;
@@ -216,11 +194,7 @@ public partial class ServiceForm : Form
         _dgvCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
         _dgvCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
         _dgvCalib.GridColor = ServiceUiColors.GridLine;
-        _chbCalibCounter.Font = ServiceUiFonts.Body;
-        _chbCalibCounter.UseVisualStyleBackColor = false;
-        _lblCalibCounterSuffix.Font = ServiceUiFonts.Body;
-        _lblCalibCounterSuffix.BackColor = _chbCalibCounter.BackColor;
-        _lblCalibCounterSuffix.ForeColor = _chbCalibCounter.ForeColor;
+        _dgvCalib.Columns[3].ReadOnly = true;
         _btnAddRow.Font = ServiceUiFonts.Body;
         _btnAddRow.BackColor = ServiceUiColors.NeutralAction;
         _btnAddRow.ForeColor = ServiceUiColors.TextPrimary;
@@ -451,8 +425,6 @@ public partial class ServiceForm : Form
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CellEndEdit += DgvCalib_CellEndEdit;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
-        _chbCalibCounter.CheckedChanged += ChbCalibCounter_CheckedChanged;
-        UpdateCalibCounterMode(recalculateNewRows: false);
         _rateTimer.Start();
         _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.Backup;
@@ -1713,13 +1685,13 @@ public partial class ServiceForm : Form
     private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
     {
         if (e.RowIndex < 0) return;
-        if (!_chbCalibCounter.Checked && (e.ColumnIndex == 1 || e.ColumnIndex == 2))
+        if (e.ColumnIndex == 1 || e.ColumnIndex == 2)
             RefreshNewCalibK();
     }
 
     private void DgvCalib_CellEndEdit(object? sender, DataGridViewCellEventArgs e)
     {
-        if (e.RowIndex < 0 || e.ColumnIndex is not (2 or 3)) return;
+        if (e.RowIndex < 0 || e.ColumnIndex != 2) return;
 
         var cell = _dgvCalib.Rows[e.RowIndex].Cells[e.ColumnIndex];
         string text = cell.Value?.ToString()?.Trim() ?? "";
@@ -1729,33 +1701,21 @@ public partial class ServiceForm : Form
             return;
         }
 
-        decimal calibrationValue = default;
-        decimal mass = default;
-        bool valid = e.ColumnIndex == 3
-            ? TryParseCalibrationValue(text, out calibrationValue)
-            : TryParseCalibDecimal(text, out mass);
+        bool valid = TryParseCalibDecimal(text, out decimal mass);
         if (!valid)
         {
-            string message = e.ColumnIndex == 3
-                ? "Введите калибровочное число с точностью до 0,001."
-                : "Введите число с одним десятичным разделителем: , или .";
+            const string message = "Введите число с одним десятичным разделителем: , или .";
             SetCalibCellError(cell, message);
-            if (e.ColumnIndex == 2 && !_chbCalibCounter.Checked)
-                _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
+            _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
             UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
             return;
         }
 
         SetCalibCellError(cell, null);
-        string normalized = e.ColumnIndex == 3
-            ? calibrationValue.ToString("F3", CultureInfo.InvariantCulture)
-            : mass.ToString("G29", CultureInfo.InvariantCulture);
+        string normalized = mass.ToString("G29", CultureInfo.InvariantCulture);
         if (!string.Equals(text, normalized, StringComparison.Ordinal))
             cell.Value = normalized;
     }
-
-    private void ChbCalibCounter_CheckedChanged(object? sender, EventArgs e) =>
-        UpdateCalibCounterMode(recalculateNewRows: true);
 
     private void RefreshCalibK(int rowIndex)
     {
@@ -1809,26 +1769,6 @@ public partial class ServiceForm : Form
         }
 
         return null;
-    }
-
-    private void UpdateCalibCounterMode(bool recalculateNewRows)
-    {
-        bool manualMode = _chbCalibCounter.Checked;
-        _dgvCalib.Columns[3].ReadOnly = !manualMode;
-
-        var backColor = manualMode ? ServiceUiColors.GridAlertRow : ServiceUiColors.Surface;
-        _pnlCalibSForm.BackColor = backColor;
-        _pnlCalibSFormInner.BackColor = backColor;
-        _tlpCalibSForm.BackColor = backColor;
-        _chbCalibCounter.BackColor = backColor;
-        _chbCalibCounter.ForeColor = manualMode ? ServiceUiColors.Error : ServiceUiColors.TextPrimary;
-        _lblCalibCounterSuffix.BackColor = backColor;
-        _lblCalibCounterSuffix.ForeColor = manualMode ? ServiceUiColors.Error : ServiceUiColors.TextPrimary;
-
-        if (!manualMode && recalculateNewRows)
-            RefreshNewCalibK();
-
-        UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
     }
 
     private void SetCalibRowActive(DataGridViewRow row, bool isActive, DateTime? deletedAt = null)
@@ -1949,9 +1889,9 @@ public partial class ServiceForm : Form
             }
 
             string calibrationValue = row.Cells[3].Value?.ToString()?.Trim() ?? "";
-            if (_chbCalibCounter.Checked && calibrationValue.Length > 0 && !TryParseCalibrationValue(calibrationValue, out _))
+            if (calibrationValue.Length == 0 || !TryParseCalibrationValue(calibrationValue, out _))
             {
-                SetCalibCellError(row.Cells[3], "Введите калибровочное число с точностью до 0,001.");
+                SetCalibCellError(row.Cells[3], "Калибровочное число не рассчитано.");
                 invalid.Add((row.Cells[3], string.Format("Строка {0}, «Калибр. число»: «{1}».", row.Index + 1, calibrationValue)));
             }
         }
