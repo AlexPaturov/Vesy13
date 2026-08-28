@@ -425,6 +425,7 @@ public partial class ServiceForm : Form
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CellEndEdit += DgvCalib_CellEndEdit;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
+        chbShowHistory.CheckedChanged += ChbShowHistory_CheckedChanged;
         _rateTimer.Start();
         _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.Backup;
@@ -1658,7 +1659,11 @@ public partial class ServiceForm : Form
     {
         if (_dgvCalib == null || _calib is null) return;
         int channel = _calibUseCh0 ? 0 : 1;
-        var pts = SortCalibPoints(await _calib.GetCalibPointsAsync(channel));
+        var points = await _calib.GetCalibPointsAsync(channel);
+        if (!chbShowHistory.Checked)
+            points = points.Where(point => point.IsActive).ToList();
+
+        var pts = SortCalibPoints(points).Take(1000);
         _dgvCalib.Rows.Clear();
         foreach (var p in pts)
         {
@@ -1675,6 +1680,8 @@ public partial class ServiceForm : Form
     }
 
     private void LoadCalibPoints() => _ = LoadCalibPointsAsync();
+
+    private void ChbShowHistory_CheckedChanged(object? sender, EventArgs e) => LoadCalibPoints();
 
     private void DgvCalib_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
     {
@@ -1907,10 +1914,14 @@ public partial class ServiceForm : Form
 
     private static IEnumerable<CalibPoint> SortCalibPoints(IEnumerable<CalibPoint> points)
     {
-        return points
-            .OrderBy(p => !p.IsActive)
-            .ThenByDescending(p => p.IsActive ? p.Mass : decimal.MinValue)
-            .ThenBy(p => p.AdcCode);
+        var pointList = points.ToList();
+        return pointList
+            .Where(point => point.IsActive)
+            .OrderByDescending(point => point.Mass)
+            .ThenBy(point => point.AdcCode)
+            .Concat(pointList
+                .Where(point => !point.IsActive)
+                .OrderByDescending(point => point.CreatedAt));
     }
 
     private void UpdateCaptureButton()

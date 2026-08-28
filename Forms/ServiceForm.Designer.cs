@@ -89,6 +89,7 @@ partial class ServiceForm
         _btnAddRow = new Button();
         _btnDelRow = new Button();
         _btnCalibSave = new Button();
+        chbShowHistory = new CheckBox();
         _pnlCalibSHead = new Panel();
         tlpCalibSHead = new TableLayoutPanel();
         _lblStaticCalibConn = new Label();
@@ -493,7 +494,7 @@ partial class ServiceForm
         _cmbPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _cmbPort.Location = new Point(5, 5);
+        _cmbPort.Location = new Point(5, 4);
         _cmbPort.Margin = new Padding(4, 0, 4, 3);
         _cmbPort.Name = "_cmbPort";
         _cmbPort.Size = new Size(213, 25);
@@ -788,7 +789,7 @@ partial class ServiceForm
         _cmbDynamicPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDynamicPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         _cmbDynamicPort.ForeColor = Color.FromArgb(35, 49, 63);
-        _cmbDynamicPort.Location = new Point(5, 5);
+        _cmbDynamicPort.Location = new Point(5, 4);
         _cmbDynamicPort.Margin = new Padding(4, 0, 4, 3);
         _cmbDynamicPort.Name = "_cmbDynamicPort";
         _cmbDynamicPort.Size = new Size(213, 25);
@@ -1051,6 +1052,7 @@ partial class ServiceForm
         _tlpCalibSForm.Controls.Add(_btnAddRow, 0, 4);
         _tlpCalibSForm.Controls.Add(_btnDelRow, 0, 5);
         _tlpCalibSForm.Controls.Add(_btnCalibSave, 0, 8);
+        _tlpCalibSForm.Controls.Add(chbShowHistory, 0, 0);
         _tlpCalibSForm.Dock = DockStyle.Fill;
         _tlpCalibSForm.Location = new Point(0, 0);
         _tlpCalibSForm.Margin = new Padding(3, 2, 3, 2);
@@ -1114,6 +1116,16 @@ partial class ServiceForm
         _btnCalibSave.UseVisualStyleBackColor = false;
         _btnCalibSave.Click += BtnCalibSave_Click;
         // 
+        // chbShowHistory
+        // 
+        chbShowHistory.AutoSize = true;
+        chbShowHistory.Location = new Point(4, 4);
+        chbShowHistory.Name = "chbShowHistory";
+        chbShowHistory.Size = new Size(145, 23);
+        chbShowHistory.TabIndex = 15;
+        chbShowHistory.Text = "Показать историю";
+        chbShowHistory.UseVisualStyleBackColor = true;
+        // 
         // _pnlCalibSHead
         // 
         _pnlCalibSHead.BackColor = Color.Transparent;
@@ -1172,7 +1184,7 @@ partial class ServiceForm
         // 
         _cmbStaticCalibPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStaticCalibPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _cmbStaticCalibPort.Location = new Point(5, 4);
+        _cmbStaticCalibPort.Location = new Point(5, 3);
         _cmbStaticCalibPort.Margin = new Padding(4, 0, 4, 3);
         _cmbStaticCalibPort.Name = "_cmbStaticCalibPort";
         _cmbStaticCalibPort.Size = new Size(154, 25);
@@ -1997,7 +2009,7 @@ partial class ServiceForm
         _cmbDirectionCorrectionPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDirectionCorrectionPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         _cmbDirectionCorrectionPort.ForeColor = Color.FromArgb(35, 49, 63);
-        _cmbDirectionCorrectionPort.Location = new Point(5, 4);
+        _cmbDirectionCorrectionPort.Location = new Point(5, 3);
         _cmbDirectionCorrectionPort.Margin = new Padding(4, 0, 4, 3);
         _cmbDirectionCorrectionPort.Name = "_cmbDirectionCorrectionPort";
         _cmbDirectionCorrectionPort.Size = new Size(220, 25);
@@ -2483,6 +2495,7 @@ partial class ServiceForm
         _pnlCalibSForm.ResumeLayout(false);
         _pnlCalibSFormInner.ResumeLayout(false);
         _tlpCalibSForm.ResumeLayout(false);
+        _tlpCalibSForm.PerformLayout();
         _pnlCalibSHead.ResumeLayout(false);
         tlpCalibSHead.ResumeLayout(false);
         tlpCalibSHead.PerformLayout();
@@ -2688,4 +2701,5 @@ partial class ServiceForm
     private TableLayoutPanel _tlpCalibSForm;
     private Panel _pnlCalibSForm;
     private Panel _pnlCalibSFormInner;
+    private CheckBox chbShowHistory;
 }
