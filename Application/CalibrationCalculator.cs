@@ -5,12 +5,10 @@ namespace Vesy13.Application;
 
 /// <summary>
 /// Пересчёт кода АЦП в тонны по активным калибровочным точкам текущего канала.
-/// Каждая точка задаёт собственное калибровочное число.
-/// Точки сортируются по коду АЦП. Для расчёта выбирается последняя точка,
-/// код которой меньше или равен текущему коду АЦП. Если текущий код ниже первой
-/// точки, используется первая точка; если выше последней — последняя.
+/// Ненулевые точки образуют кусочно-линейную зависимость массы от кода АЦП.
+/// Для значений вне диапазона используется крайний отрезок.
 /// Нулевая точка массы задаёт тару (смещение кода АЦП) и не является точкой масштаба.
-/// Вес считается без интерполяции: (текущий_код_АЦП - код_тары) * калибровочное_число / 65535.
+/// Расчёт выполняется линейно между соседними точками.
 /// Результат может быть отрицательным, если текущий код ниже кода тары.
 /// </summary>
 public static class CalibrationCalculator
@@ -31,18 +29,37 @@ public static class CalibrationCalculator
         if (scalePoints.Count == 0) return null;
 
         int zeroCode = active.FirstOrDefault(p => p.Mass == 0)?.AdcCode ?? 0;
-        var point = scalePoints[0];
-
-        foreach (var p in scalePoints)
+        if (scalePoints.Count == 1)
         {
-            if (adcCode >= p.AdcCode)
-                point = p;
-            else
-                break;
+            var only = scalePoints[0];
+            double tonnes = (adcCode - zeroCode) * ((double)only.CalibrationValue / 65535d);
+            return new StaticCalibrationResult(only, tonnes, active.Count);
         }
 
-        int correctedCode = adcCode - zeroCode;
-        double tonnes = correctedCode * ((double)point.CalibrationValue / 65535d);
+        CalibPoint left;
+        CalibPoint right;
+        if (adcCode <= scalePoints[0].AdcCode)
+        {
+            left = scalePoints[0];
+            right = scalePoints[1];
+        }
+        else if (adcCode >= scalePoints[^1].AdcCode)
+        {
+            left = scalePoints[^2];
+            right = scalePoints[^1];
+        }
+        else
+        {
+            int rightIndex = scalePoints.FindIndex(p => p.AdcCode >= adcCode);
+            left = scalePoints[rightIndex - 1];
+            right = scalePoints[rightIndex];
+        }
+
+        double leftCode = left.AdcCode - zeroCode;
+        double rightCode = right.AdcCode - zeroCode;
+        double position = (adcCode - zeroCode - leftCode) / (rightCode - leftCode);
+        double tonnes = (double)left.Mass + position * ((double)right.Mass - (double)left.Mass);
+        var point = right;
         return new StaticCalibrationResult(point, tonnes, active.Count);
     }
 
