@@ -6,18 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13", "Vesy13.csproj", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleListener", "ScaleListener\ScaleListener.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HzCounter", "HzCounter\HzCounter\HzCounter.csproj", "{872A8D88-2CF0-4D7B-A976-00DCF414354C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialProbe", "SerialProbe\SerialProbe\SerialProbe.csproj", "{EFFD7719-9C03-417B-A3A2-66A2156D973F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticDumpDec", "StaticDumpDec\StaticDumpDec\StaticDumpDec.csproj", "{462EFC27-7A42-48FB-A4AB-1D5343329F6A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicDumpDec", "DynamicDumpDec\DynamicDumpDec\DynamicDumpDec.csproj", "{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13.Protocol", "ADCProtocol\Vesy13.Protocol\Vesy13.Protocol.csproj", "{D741D909-741B-46BD-93B5-0A0064526987}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vesy13.Protocol.Tests", "Vesy13.Protocol.Tests\Vesy13.Protocol.Tests.csproj", "{C8AF4483-3E6D-4AE5-B89A-000281E865FA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,30 +20,6 @@ Global
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
-		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{872A8D88-2CF0-4D7B-A976-00DCF414354C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFFD7719-9C03-417B-A3A2-66A2156D973F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{462EFC27-7A42-48FB-A4AB-1D5343329F6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7E43C73-BFC9-41F7-B622-B8F6C09C7932}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D741D909-741B-46BD-93B5-0A0064526987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D741D909-741B-46BD-93B5-0A0064526987}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D741D909-741B-46BD-93B5-0A0064526987}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D741D909-741B-46BD-93B5-0A0064526987}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8AF4483-3E6D-4AE5-B89A-000281E865FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
