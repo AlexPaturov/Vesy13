@@ -1,3 +1,5 @@
+using ScaleListener.CalibrationTesting;
+
 namespace ScaleListener;
 
 public partial class MainForm : Form
@@ -9,6 +11,7 @@ public partial class MainForm : Form
 
     private void BtnStatic_Click(object? sender, EventArgs e) => OpenForm(new StaticForm());
     private void BtnDynamic_Click(object? sender, EventArgs e) => OpenForm(new DynamicForm());
+    private void BtnCalibration_Click(object? sender, EventArgs e) => OpenForm(new CalibrationTestForm());
 
     private void OpenForm(Form form)
     {

@@ -18,6 +18,7 @@ partial class MainForm
         _lblTitle = new Label();
         _btnStatic = new Button();
         _btnDynamic = new Button();
+        _btnCalibration = new Button();
         _lblHint = new Label();
         SuspendLayout();
         //
@@ -27,7 +28,7 @@ partial class MainForm
         _lblTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         _lblTitle.Location = new Point(16, 16);
         _lblTitle.Name = "_lblTitle";
-        _lblTitle.Size = new Size(328, 32);
+        _lblTitle.Size = new Size(488, 32);
         _lblTitle.TabIndex = 0;
         _lblTitle.Text = "Эмулятор АЦП СИМ А04";
         _lblTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -48,6 +49,13 @@ partial class MainForm
         _btnDynamic.Location = new Point(198, 68);
         _btnDynamic.Name = "_btnDynamic";
         _btnDynamic.Size = new Size(130, 52);
+        _btnCalibration.FlatStyle = FlatStyle.Flat;
+        _btnCalibration.Location = new Point(364, 68);
+        _btnCalibration.Name = "_btnCalibration";
+        _btnCalibration.Size = new Size(160, 52);
+        _btnCalibration.TabIndex = 3;
+        _btnCalibration.Text = "Проверка калибровки";
+        _btnCalibration.Click += BtnCalibration_Click;
         _btnDynamic.TabIndex = 2;
         _btnDynamic.Text = "Динамика";
         _btnDynamic.Click += BtnDynamic_Click;
@@ -57,7 +65,7 @@ partial class MainForm
         _lblHint.AutoSize = false;
         _lblHint.Location = new Point(16, 136);
         _lblHint.Name = "_lblHint";
-        _lblHint.Size = new Size(328, 24);
+        _lblHint.Size = new Size(488, 24);
         _lblHint.TabIndex = 3;
         _lblHint.Text = "Открывайте один режим за раз: оба используют COM4.";
         _lblHint.TextAlign = ContentAlignment.MiddleCenter;
@@ -65,14 +73,15 @@ partial class MainForm
         // MainForm
         //
         Font = new Font("Segoe UI", 12F);
-        ClientSize = new Size(360, 180);
+        ClientSize = new Size(540, 180);
         Controls.Add(_lblTitle);
         Controls.Add(_btnStatic);
         Controls.Add(_btnDynamic);
+        Controls.Add(_btnCalibration);
         Controls.Add(_lblHint);
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
-        MinimumSize = new Size(360, 180);
+        MinimumSize = new Size(540, 180);
         Name = "MainForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Scale Listener - главное меню";
@@ -82,5 +91,6 @@ partial class MainForm
     private Label _lblTitle;
     private Button _btnStatic;
     private Button _btnDynamic;
+    private Button _btnCalibration;
     private Label _lblHint;
 }
