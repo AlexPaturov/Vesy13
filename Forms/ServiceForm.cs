@@ -59,6 +59,7 @@ public partial class ServiceForm : Form
     private int _lastStaticCalibCh1;
     private int _lastDynCh0;
     private int _lastDynCh1;
+    private bool _suppressCalibKRefresh;
 
 
     public ServiceForm()
@@ -194,7 +195,7 @@ public partial class ServiceForm : Form
         _dgvCalib.DefaultCellStyle.SelectionBackColor = ServiceUiColors.GridSelectionBack;
         _dgvCalib.DefaultCellStyle.SelectionForeColor = ServiceUiColors.GridSelectionText;
         _dgvCalib.GridColor = ServiceUiColors.GridLine;
-        _dgvCalib.Columns[3].ReadOnly = true;
+        _dgvCalib.Columns[1].ReadOnly = true;
         _btnAddRow.Font = ServiceUiFonts.Body;
         _btnAddRow.BackColor = ServiceUiColors.NeutralAction;
         _btnAddRow.ForeColor = ServiceUiColors.TextPrimary;
@@ -425,6 +426,7 @@ public partial class ServiceForm : Form
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CellEndEdit += DgvCalib_CellEndEdit;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
+        _dgvCalib.CellClick += DgvCalib_CellClick;
         chbShowHistory.CheckedChanged += ChbShowHistory_CheckedChanged;
         _rateTimer.Start();
         _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
@@ -494,7 +496,7 @@ public partial class ServiceForm : Form
     {
         int row = _dgvCalib.Rows.Add();
         SetCalibRowActive(_dgvCalib.Rows[row], true);
-        _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[1];
+        _dgvCalib.CurrentCell = _dgvCalib.Rows[row].Cells[2];
         _dgvCalib.BeginEdit(true);
     }
     private void BtnCapture_Click(object? sender, EventArgs e)
@@ -1692,34 +1694,69 @@ public partial class ServiceForm : Form
     private void DgvCalib_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
     {
         if (e.RowIndex < 0) return;
-        if (e.ColumnIndex == 1 || e.ColumnIndex == 2)
+        if (!_suppressCalibKRefresh && (e.ColumnIndex == 1 || e.ColumnIndex == 2))
+        {
             RefreshNewCalibK();
+            UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
+        }
+    }
+
+    private void DgvCalib_CellClick(object? sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex < 0 || e.ColumnIndex != 3) return;
+
+        var row = _dgvCalib.Rows[e.RowIndex];
+        if (row.Tag is CalibPoint { Id: > 0 } || row.Cells[0].Value?.ToString() != "Да") return;
+        if (!TryParseCalibDecimal(_lblStaticCalibMass.Text, out decimal mass)) return;
+
+        _suppressCalibKRefresh = true;
+        try
+        {
+            row.Cells[2].Value = mass.ToString("F3", CultureInfo.InvariantCulture);
+        }
+        finally
+        {
+            _suppressCalibKRefresh = false;
+        }
+
+        UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
     }
 
     private void DgvCalib_CellEndEdit(object? sender, DataGridViewCellEventArgs e)
     {
-        if (e.RowIndex < 0 || e.ColumnIndex != 2) return;
+        if (e.RowIndex < 0 || e.ColumnIndex is not (2 or 3)) return;
 
         var cell = _dgvCalib.Rows[e.RowIndex].Cells[e.ColumnIndex];
         string text = cell.Value?.ToString()?.Trim() ?? "";
         if (text.Length == 0)
         {
             SetCalibCellError(cell, null);
+            if (e.ColumnIndex == 2)
+                _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
             return;
         }
 
-        bool valid = TryParseCalibDecimal(text, out decimal mass);
+        decimal calibrationValue = default;
+        decimal mass = default;
+        bool valid = e.ColumnIndex == 3
+            ? TryParseCalibrationValue(text, out calibrationValue)
+            : TryParseCalibDecimal(text, out mass);
         if (!valid)
         {
-            const string message = "Введите число с одним десятичным разделителем: , или .";
+            string message = e.ColumnIndex == 3
+                ? "Введите калибровочное число с точностью до 0,001."
+                : "Введите число с одним десятичным разделителем: , или .";
             SetCalibCellError(cell, message);
-            _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
+            if (e.ColumnIndex == 2)
+                _dgvCalib.Rows[e.RowIndex].Cells[3].Value = "";
             UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
             return;
         }
 
         SetCalibCellError(cell, null);
-        string normalized = mass.ToString("G29", CultureInfo.InvariantCulture);
+        string normalized = e.ColumnIndex == 3
+            ? calibrationValue.ToString("F3", CultureInfo.InvariantCulture)
+            : mass.ToString("G29", CultureInfo.InvariantCulture);
         if (!string.Equals(text, normalized, StringComparison.Ordinal))
             cell.Value = normalized;
     }
@@ -1949,7 +1986,17 @@ public partial class ServiceForm : Form
         }
 
         var channel = _calibUseCh0 ? ActiveChannel.Main : ActiveChannel.Backup;
-        double? mass = CalibrationCalculator.Convert(ReadGridPoints(), code, channel);
+        var points = ReadGridPoints();
+        bool isZeroCalibrationPoint = points.Any(point =>
+            point.Channel == (channel == ActiveChannel.Main ? 0 : 1) &&
+            point.IsActive && point.Mass == 0 && point.AdcCode == code);
+        if (isZeroCalibrationPoint)
+        {
+            _lblStaticCalibMass.Text = "0";
+            return;
+        }
+
+        double? mass = CalibrationCalculator.Convert(points, code, channel);
         _lblStaticCalibMass.Text = mass is null
             ? "нет калибровки"
             : mass.Value.ToString("F5", CultureInfo.InvariantCulture);

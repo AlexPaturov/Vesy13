@@ -1119,9 +1119,11 @@ partial class ServiceForm
         // chbShowHistory
         // 
         chbShowHistory.AutoSize = true;
-        chbShowHistory.Location = new Point(4, 4);
+        chbShowHistory.Dock = DockStyle.Fill;
+        chbShowHistory.Location = new Point(16, 4);
+        chbShowHistory.Margin = new Padding(15, 3, 3, 3);
         chbShowHistory.Name = "chbShowHistory";
-        chbShowHistory.Size = new Size(145, 23);
+        chbShowHistory.Size = new Size(222, 39);
         chbShowHistory.TabIndex = 15;
         chbShowHistory.Text = "Показать историю";
         chbShowHistory.UseVisualStyleBackColor = true;
