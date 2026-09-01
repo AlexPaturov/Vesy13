@@ -26,3 +26,9 @@ install/application/publish/
 /StaticDumpDec/StaticDumpDec/Properties/PublishProfiles/
 /install/win7
 /install/win7x32
+
+# Same generated/host-specific files after moving projects under src
+/src/ScaleListener/*.resx
+/src/ScaleListener/Properties/PublishProfiles/
+/src/Vesy13/MainForm.resx
+/src/Vesy13/Properties/PublishProfiles/

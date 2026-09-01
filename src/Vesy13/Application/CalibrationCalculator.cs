@@ -32,8 +32,8 @@ public static class CalibrationCalculator
         if (scalePoints.Count == 1)
         {
             var only = scalePoints[0];
-            double tonnes = (adcCode - zeroCode) * ((double)only.CalibrationValue / 65535d);
-            return new StaticCalibrationResult(only, tonnes, active.Count);
+            double tonnesCalculatSataic = (adcCode - zeroCode) * ((double)only.CalibrationValue / 65535d);
+            return new StaticCalibrationResult(only, tonnesCalculatSataic, active.Count);
         }
 
         CalibPoint left;
