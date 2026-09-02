@@ -1,0 +1,6 @@
+  <Project>
+    <Target Name="DeepClean">
+    <RemoveDir Directories="$(BaseOutputPath)" />
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+  </Target>
+  </Project>
