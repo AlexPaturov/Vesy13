@@ -9,9 +9,9 @@ public static class CalibrationScenarioGenerator
 
         foreach (var point in ordered)
         {
-            Add(cases, point.AdcCode, $"Точка {point.Mass:G} т");
-            Add(cases, point.AdcCode - 1, $"Перед точкой {point.Mass:G} т");
-            Add(cases, point.AdcCode + 1, $"После точки {point.Mass:G} т");
+            Add(cases, point.AdcCode, $"Точка_{point.Mass:G}");
+            Add(cases, point.AdcCode - 1, $"Перед_точкой_{point.Mass:G}");
+            Add(cases, point.AdcCode + 1, $"После_точки_{point.Mass:G}");
         }
 
         for (int index = 0; index < ordered.Count - 1; index++)
@@ -40,7 +40,7 @@ public static class CalibrationScenarioGenerator
             (right.AdcCode - left.AdcCode) * fraction,
             0,
             MidpointRounding.AwayFromZero);
-        Add(cases, code, $"{fractionText}: {left.Mass:G}–{right.Mass:G} т");
+        Add(cases, code, $"{fractionText}: {left.Mass:G}–{right.Mass:G}");
     }
 
     private static void Add(IDictionary<int, string> cases, int code, string checkpoint)

@@ -128,8 +128,9 @@ public partial class CalibrationTestForm : Form
         _gridResults.Rows.Clear();
         foreach (var result in results)
         {
+            string checkpoint = result.Checkpoint.Replace("\t", " ").Replace("\r", " ").Replace("\n", " ");
             int rowIndex = _gridResults.Rows.Add(
-                result.Checkpoint,
+                checkpoint,
                 result.AdcCode.ToString(CultureInfo.InvariantCulture),
                 result.ExpectedMass.ToString("F5", CultureInfo.InvariantCulture),
                 result.ActualMass?.ToString("F5", CultureInfo.InvariantCulture) ?? "—",

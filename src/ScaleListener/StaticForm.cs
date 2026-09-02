@@ -6,7 +6,7 @@ namespace ScaleListener;
 public partial class StaticForm : Form
 {
     private const decimal MaxWeightTonnes = 140m;
-    private const int MaxAdcCode = 65535;
+    private const int MaxAdcCode = 65535; // Это максимальное число но оно не должно соответствовать максимальной грузоподъёмности весов
     private const int MaxLogLines = 500;
 
     // ── Serial ────────────────────────────────────────────────────────────
@@ -170,8 +170,7 @@ public partial class StaticForm : Form
             int spikeAdc = (int)((decimal)_faultEngine.Get(FaultType.Spike).Magnitude / MaxWeightTonnes * MaxAdcCode);
             ch0 = Math.Clamp(ch0 + spikeAdc, 0, MaxAdcCode);
             ch1 = Math.Clamp(ch1 + spikeAdc, 0, MaxAdcCode);
-            _faultEngine.AppendHistory(FaultType.Spike, FaultEventKind.Fired,
-                $"CH0={correctCh0} CH1={correctCh1}", $"CH0={ch0} CH1={ch1}");
+            _faultEngine.AppendHistory(FaultType.Spike, FaultEventKind.Fired, $"CH0={correctCh0} CH1={correctCh1}", $"CH0={ch0} CH1={ch1}");
         }
 
         byte[] buf = BuildFrame(ch0, ch1);

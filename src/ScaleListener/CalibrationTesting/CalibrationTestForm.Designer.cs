@@ -259,8 +259,11 @@ partial class CalibrationTestForm
         //
         // _colCheckpoint
         //
-        _colCheckpoint.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        _colCheckpoint.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
         _colCheckpoint.HeaderText = "Проверка";
+        _colCheckpoint.MinimumWidth = 220;
+        _colCheckpoint.Width = 220;
+        _colCheckpoint.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
         _colCheckpoint.Name = "_colCheckpoint";
         _colCheckpoint.ReadOnly = true;
         //
@@ -273,21 +276,21 @@ partial class CalibrationTestForm
         //
         // _colExpected
         //
-        _colExpected.HeaderText = "Эталон, т";
+        _colExpected.HeaderText = "Эталон (т)";
         _colExpected.Name = "_colExpected";
         _colExpected.ReadOnly = true;
         _colExpected.Width = 110;
         //
         // _colActual
         //
-        _colActual.HeaderText = "Текущий, т";
+        _colActual.HeaderText = "Текущий (т)";
         _colActual.Name = "_colActual";
         _colActual.ReadOnly = true;
         _colActual.Width = 110;
         //
         // _colError
         //
-        _colError.HeaderText = "Ошибка, т";
+        _colError.HeaderText = "Ошибка (т)";
         _colError.Name = "_colError";
         _colError.ReadOnly = true;
         _colError.Width = 105;

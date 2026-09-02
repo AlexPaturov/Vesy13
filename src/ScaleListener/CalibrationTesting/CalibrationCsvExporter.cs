@@ -13,7 +13,7 @@ public static class CalibrationCsvExporter
         };
 
         lines.AddRange(results.Select(result => string.Join(";",
-            Escape(result.Checkpoint),
+            Escape(result.Checkpoint.Replace("\t", " ").Replace("\r", " ").Replace("\n", " ")),
             result.AdcCode.ToString(CultureInfo.InvariantCulture),
             result.ExpectedMass.ToString("F5", CultureInfo.InvariantCulture),
             result.ActualMass?.ToString("F5", CultureInfo.InvariantCulture) ?? "",
