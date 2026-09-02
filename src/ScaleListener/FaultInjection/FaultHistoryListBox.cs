@@ -4,7 +4,7 @@ namespace ScaleListener.FaultInjection;
 /// Owner-drawn список истории сбоев. Сбои случаются редко (не на каждый сэмпл потока),
 /// но всё равно применяем тот же паттерн, что и в основном приложении для живого лога:
 /// без RichTextBox/RTF, лимит числа строк, минимум аллокаций на отрисовку - см. урок
-/// про GC-давление в Vesy13 (docs/status_2026-08-07.md, "Проблема GC-давления сервисного лога").
+/// про GC-давление в Vesy13 (src/Vesy13/docs/status_2026-08-07.md, "Проблема GC-давления сервисного лога").
 /// </summary>
 public sealed class FaultHistoryListBox : ListBox
 {
