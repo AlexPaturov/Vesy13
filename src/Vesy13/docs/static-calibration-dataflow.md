@@ -66,21 +66,34 @@ flowchart TD
     FILTER["Оставить точки:<br/>Channel == выбранный<br/>IsActive == true"]
     SORT["Сортировать по AdcCode"]
     SPLIT["Разделить:<br/>Mass == 0 — нулевая точка<br/>Mass != 0 — точки масштаба"]
-    HAS{"Есть точка<br/>масштаба?"}
+    HAS{"Есть точки<br/>масштаба?"}
     NULL["Вернуть null:<br/>калибровка отсутствует"]
     ZERO["zeroCode = AdcCode нулевой точки<br/>или 0, если её нет"]
-    POINT["Выбрать точку масштаба:<br/>последняя с AdcCode <= текущего кода<br/>ниже диапазона — первая<br/>выше диапазона — последняя"]
-    CORRECTED["correctedCode = adcCode - zeroCode"]
-    CALC["tonnes = correctedCode ×<br/>CalibrationValue / 65535"]
-    RESULT["StaticCalibrationResult:<br/>Point + Tonnes + ActivePointCount"]
+    SEGMENT["Выбрать lowerPoint и upperPoint:<br/>соседние точки по AdcCode<br/>за диапазоном — крайний отрезок"]
+    INTERPOLATE["Линейно вычислить position<br/>и массу между lowerPoint и upperPoint"]
+    RESULT["StaticCalibrationResult:<br/>upperPoint + Tonnes + ActivePointCount"]
 
     INPUT --> CHANNEL --> FILTER --> SORT --> SPLIT --> HAS
     HAS -- нет --> NULL
-    HAS -- да --> ZERO --> POINT --> CORRECTED --> CALC --> RESULT
+    HAS -- да --> ZERO --> SEGMENT --> INTERPOLATE --> RESULT
 ```
 
-Между точками интерполяция не выполняется. Калибровочное число выбирается
-кусочно-постоянно по диапазону кода АЦП.
+Для двух и более ненулевых точек используются точки `lowerPoint` (меньший
+`AdcCode`) и `upperPoint` (больший `AdcCode`). Их названия относятся только
+к порядку на шкале кодов, а не к направлению движения поезда. Нулевая точка
+задаёт смещение `zeroCode` и не является точкой масштаба.
+
+```text
+lowerCode = lowerPoint.AdcCode - zeroCode
+upperCode = upperPoint.AdcCode - zeroCode
+position = (adcCode - zeroCode - lowerCode) / (upperCode - lowerCode)
+tonnes = lowerPoint.Mass + position * (upperPoint.Mass - lowerPoint.Mass)
+```
+
+Ниже первой и выше последней точки используется крайний отрезок
+(линейная экстраполяция). Если есть только одна ненулевая точка, сохраняется
+расчёт через её `CalibrationValue`. Поправка направления в этом алгоритме не
+участвует и применяется отдельно после получения статического веса.
 
 ## Путь статического взвешивания
 
@@ -133,12 +146,9 @@ scaleCode = adcCode - zeroCode
 calibrationValue = mass / scaleCode * 65535
 ```
 
-Результат округляется до трёх знаков от нуля. Обратная формула в
-`CalibrationCalculator`:
-
-```text
-mass = (adcCode - zeroCode) * calibrationValue / 65535
-```
+Результат округляется до трёх знаков от нуля. `CalibrationValue` используется текущим алгоритмом только если в канале
+есть одна ненулевая точка. При нескольких точках расчёт выполняется по
+линейному отрезку между их массами и ADC-кодами (см. раздел выше).
 
 После сохранения `LocalRepository.SaveCalibPointsAsync()`:
 
