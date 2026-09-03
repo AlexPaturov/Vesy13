@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/ScaleListener/ScaleListener.csproj" />
+  <Project Path="src/Vesy13/Vesy13.csproj" />
+</Solution>
