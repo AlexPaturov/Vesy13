@@ -14,13 +14,13 @@ partial class ServiceForm
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-        DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
         _btnAdmin = new Button();
         _tabs = new TabControl();
         _tabChannel = new TabPage();
@@ -194,6 +194,8 @@ partial class ServiceForm
         _lblDynamicEmaAlphaCap = new Label();
         _txtDynamicEmaAlpha = new TextBox();
         _rateTimer = new System.Windows.Forms.Timer(components);
+        _rbCh0CalibDynamic = new RadioButton();
+        _rbCh1CalibDynamic = new RadioButton();
         _tabs.SuspendLayout();
         _tabChannel.SuspendLayout();
         _tabMonitor.SuspendLayout();
@@ -245,9 +247,10 @@ partial class ServiceForm
         _btnAdmin.FlatAppearance.BorderSize = 0;
         _btnAdmin.FlatStyle = FlatStyle.Flat;
         _btnAdmin.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnAdmin.Location = new Point(880, 10);
+        _btnAdmin.Location = new Point(1006, 13);
+        _btnAdmin.Margin = new Padding(3, 4, 3, 4);
         _btnAdmin.Name = "_btnAdmin";
-        _btnAdmin.Size = new Size(270, 28);
+        _btnAdmin.Size = new Size(309, 37);
         _btnAdmin.TabIndex = 0;
         _btnAdmin.Text = "🔒 Войти как администратор";
         _btnAdmin.UseVisualStyleBackColor = false;
@@ -263,10 +266,11 @@ partial class ServiceForm
         _tabs.Controls.Add(_tabDirectionCorrections);
         _tabs.Controls.Add(_tabSett);
         _tabs.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _tabs.Location = new Point(0, 44);
+        _tabs.Location = new Point(0, 59);
+        _tabs.Margin = new Padding(3, 4, 3, 4);
         _tabs.Name = "_tabs";
         _tabs.SelectedIndex = 0;
-        _tabs.Size = new Size(1348, 544);
+        _tabs.Size = new Size(1541, 725);
         _tabs.TabIndex = 1;
         // 
         // _tabChannel
@@ -275,9 +279,10 @@ partial class ServiceForm
         _tabChannel.Controls.Add(_rbMain);
         _tabChannel.Controls.Add(_rbBackup);
         _tabChannel.Controls.Add(_lblChannelNote);
-        _tabChannel.Location = new Point(4, 26);
+        _tabChannel.Location = new Point(4, 32);
+        _tabChannel.Margin = new Padding(3, 4, 3, 4);
         _tabChannel.Name = "_tabChannel";
-        _tabChannel.Size = new Size(1340, 514);
+        _tabChannel.Size = new Size(1533, 689);
         _tabChannel.TabIndex = 0;
         _tabChannel.Text = "Канал";
         // 
@@ -285,9 +290,9 @@ partial class ServiceForm
         // 
         _lblChannelTitle.AutoSize = true;
         _lblChannelTitle.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblChannelTitle.Location = new Point(20, 16);
+        _lblChannelTitle.Location = new Point(23, 21);
         _lblChannelTitle.Name = "_lblChannelTitle";
-        _lblChannelTitle.Size = new Size(190, 20);
+        _lblChannelTitle.Size = new Size(246, 25);
         _lblChannelTitle.TabIndex = 0;
         _lblChannelTitle.Text = "Выбор активного канала";
         // 
@@ -296,9 +301,10 @@ partial class ServiceForm
         _rbMain.AutoSize = true;
         _rbMain.Checked = true;
         _rbMain.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-        _rbMain.Location = new Point(20, 52);
+        _rbMain.Location = new Point(23, 69);
+        _rbMain.Margin = new Padding(3, 4, 3, 4);
         _rbMain.Name = "_rbMain";
-        _rbMain.Size = new Size(219, 29);
+        _rbMain.Size = new Size(271, 34);
         _rbMain.TabIndex = 1;
         _rbMain.TabStop = true;
         _rbMain.Text = "Канал: Основной (CH0)";
@@ -308,9 +314,10 @@ partial class ServiceForm
         // 
         _rbBackup.AutoSize = true;
         _rbBackup.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-        _rbBackup.Location = new Point(20, 90);
+        _rbBackup.Location = new Point(23, 120);
+        _rbBackup.Margin = new Padding(3, 4, 3, 4);
         _rbBackup.Name = "_rbBackup";
-        _rbBackup.Size = new Size(225, 29);
+        _rbBackup.Size = new Size(280, 34);
         _rbBackup.TabIndex = 2;
         _rbBackup.Text = "Канал: Резервный (CH1)";
         _rbBackup.CheckedChanged += RbBackup_CheckedChanged;
@@ -319,9 +326,9 @@ partial class ServiceForm
         // 
         _lblChannelNote.AutoSize = true;
         _lblChannelNote.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblChannelNote.Location = new Point(20, 136);
+        _lblChannelNote.Location = new Point(23, 181);
         _lblChannelNote.Name = "_lblChannelNote";
-        _lblChannelNote.Size = new Size(485, 21);
+        _lblChannelNote.Size = new Size(622, 28);
         _lblChannelNote.TabIndex = 3;
         _lblChannelNote.Text = "Изменение канала применяется немедленно и не требует пароля.";
         // 
@@ -330,9 +337,10 @@ partial class ServiceForm
         _tabMonitor.Controls.Add(_pnlMonitorLogs);
         _tabMonitor.Controls.Add(_pnlMonitorChannels);
         _tabMonitor.Controls.Add(_pnlMonitorTop);
-        _tabMonitor.Location = new Point(4, 26);
+        _tabMonitor.Location = new Point(4, 32);
+        _tabMonitor.Margin = new Padding(3, 4, 3, 4);
         _tabMonitor.Name = "_tabMonitor";
-        _tabMonitor.Size = new Size(1340, 514);
+        _tabMonitor.Size = new Size(1533, 689);
         _tabMonitor.TabIndex = 1;
         _tabMonitor.Text = "Сервисный режим Статика";
         // 
@@ -340,10 +348,9 @@ partial class ServiceForm
         // 
         _pnlMonitorLogs.Controls.Add(_lstLog);
         _pnlMonitorLogs.Dock = DockStyle.Fill;
-        _pnlMonitorLogs.Location = new Point(0, 213);
-        _pnlMonitorLogs.Margin = new Padding(3, 2, 3, 2);
+        _pnlMonitorLogs.Location = new Point(0, 284);
         _pnlMonitorLogs.Name = "_pnlMonitorLogs";
-        _pnlMonitorLogs.Size = new Size(1340, 301);
+        _pnlMonitorLogs.Size = new Size(1533, 405);
         _pnlMonitorLogs.TabIndex = 13;
         // 
         // _lstLog
@@ -354,8 +361,9 @@ partial class ServiceForm
         _lstLog.IntegralHeight = false;
         _lstLog.ItemHeight = 15;
         _lstLog.Location = new Point(0, 0);
+        _lstLog.Margin = new Padding(3, 4, 3, 4);
         _lstLog.Name = "_lstLog";
-        _lstLog.Size = new Size(1340, 301);
+        _lstLog.Size = new Size(1533, 405);
         _lstLog.TabIndex = 10;
         _lstLog.DrawItem += LstLog_DrawItem;
         // 
@@ -363,10 +371,9 @@ partial class ServiceForm
         // 
         _pnlMonitorChannels.Controls.Add(_tlpMonitorChannels);
         _pnlMonitorChannels.Dock = DockStyle.Top;
-        _pnlMonitorChannels.Location = new Point(0, 76);
-        _pnlMonitorChannels.Margin = new Padding(3, 2, 3, 2);
+        _pnlMonitorChannels.Location = new Point(0, 101);
         _pnlMonitorChannels.Name = "_pnlMonitorChannels";
-        _pnlMonitorChannels.Size = new Size(1340, 137);
+        _pnlMonitorChannels.Size = new Size(1533, 183);
         _pnlMonitorChannels.TabIndex = 12;
         // 
         // _tlpMonitorChannels
@@ -378,11 +385,10 @@ partial class ServiceForm
         _tlpMonitorChannels.Controls.Add(_pnlCh1, 1, 0);
         _tlpMonitorChannels.Dock = DockStyle.Fill;
         _tlpMonitorChannels.Location = new Point(0, 0);
-        _tlpMonitorChannels.Margin = new Padding(3, 2, 3, 2);
         _tlpMonitorChannels.Name = "_tlpMonitorChannels";
         _tlpMonitorChannels.RowCount = 1;
         _tlpMonitorChannels.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpMonitorChannels.Size = new Size(1340, 137);
+        _tlpMonitorChannels.Size = new Size(1533, 183);
         _tlpMonitorChannels.TabIndex = 0;
         // 
         // _pnlCh0
@@ -390,18 +396,19 @@ partial class ServiceForm
         _pnlCh0.Controls.Add(_lblCh0);
         _pnlCh0.Controls.Add(_lblCh0Cap);
         _pnlCh0.Dock = DockStyle.Fill;
-        _pnlCh0.Location = new Point(3, 3);
+        _pnlCh0.Location = new Point(3, 4);
+        _pnlCh0.Margin = new Padding(3, 4, 3, 4);
         _pnlCh0.Name = "_pnlCh0";
-        _pnlCh0.Size = new Size(664, 131);
+        _pnlCh0.Size = new Size(760, 175);
         _pnlCh0.TabIndex = 6;
         // 
         // _lblCh0
         // 
         _lblCh0.Dock = DockStyle.Fill;
         _lblCh0.Font = new Font("Courier New", 48F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblCh0.Location = new Point(0, 21);
+        _lblCh0.Location = new Point(0, 28);
         _lblCh0.Name = "_lblCh0";
-        _lblCh0.Size = new Size(664, 110);
+        _lblCh0.Size = new Size(760, 147);
         _lblCh0.TabIndex = 1;
         _lblCh0.Text = "—";
         _lblCh0.TextAlign = ContentAlignment.MiddleCenter;
@@ -413,7 +420,7 @@ partial class ServiceForm
         _lblCh0Cap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblCh0Cap.Location = new Point(0, 0);
         _lblCh0Cap.Name = "_lblCh0Cap";
-        _lblCh0Cap.Size = new Size(175, 21);
+        _lblCh0Cap.Size = new Size(225, 28);
         _lblCh0Cap.TabIndex = 0;
         _lblCh0Cap.Text = "Канал: Основной (CH0)";
         _lblCh0Cap.TextAlign = ContentAlignment.MiddleLeft;
@@ -423,18 +430,19 @@ partial class ServiceForm
         _pnlCh1.Controls.Add(_lblCh1);
         _pnlCh1.Controls.Add(_lblCh1Cap);
         _pnlCh1.Dock = DockStyle.Fill;
-        _pnlCh1.Location = new Point(673, 3);
+        _pnlCh1.Location = new Point(769, 4);
+        _pnlCh1.Margin = new Padding(3, 4, 3, 4);
         _pnlCh1.Name = "_pnlCh1";
-        _pnlCh1.Size = new Size(664, 131);
+        _pnlCh1.Size = new Size(761, 175);
         _pnlCh1.TabIndex = 7;
         // 
         // _lblCh1
         // 
         _lblCh1.Dock = DockStyle.Fill;
         _lblCh1.Font = new Font("Courier New", 48F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblCh1.Location = new Point(0, 21);
+        _lblCh1.Location = new Point(0, 28);
         _lblCh1.Name = "_lblCh1";
-        _lblCh1.Size = new Size(664, 110);
+        _lblCh1.Size = new Size(761, 147);
         _lblCh1.TabIndex = 1;
         _lblCh1.Text = "—";
         _lblCh1.TextAlign = ContentAlignment.MiddleCenter;
@@ -446,7 +454,7 @@ partial class ServiceForm
         _lblCh1Cap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblCh1Cap.Location = new Point(0, 0);
         _lblCh1Cap.Name = "_lblCh1Cap";
-        _lblCh1Cap.Size = new Size(181, 21);
+        _lblCh1Cap.Size = new Size(231, 28);
         _lblCh1Cap.TabIndex = 0;
         _lblCh1Cap.Text = "Канал: Резервный (CH1)";
         _lblCh1Cap.TextAlign = ContentAlignment.MiddleLeft;
@@ -456,9 +464,8 @@ partial class ServiceForm
         _pnlMonitorTop.Controls.Add(_tlpMonitorTop);
         _pnlMonitorTop.Dock = DockStyle.Top;
         _pnlMonitorTop.Location = new Point(0, 0);
-        _pnlMonitorTop.Margin = new Padding(3, 2, 3, 2);
         _pnlMonitorTop.Name = "_pnlMonitorTop";
-        _pnlMonitorTop.Size = new Size(1340, 76);
+        _pnlMonitorTop.Size = new Size(1533, 101);
         _pnlMonitorTop.TabIndex = 11;
         // 
         // _tlpMonitorTop
@@ -481,12 +488,11 @@ partial class ServiceForm
         _tlpMonitorTop.Controls.Add(_dotConn, 1, 0);
         _tlpMonitorTop.Dock = DockStyle.Fill;
         _tlpMonitorTop.Location = new Point(0, 0);
-        _tlpMonitorTop.Margin = new Padding(3, 2, 3, 2);
         _tlpMonitorTop.Name = "_tlpMonitorTop";
         _tlpMonitorTop.RowCount = 2;
         _tlpMonitorTop.RowStyles.Add(new RowStyle(SizeType.Percent, 52F));
         _tlpMonitorTop.RowStyles.Add(new RowStyle(SizeType.Percent, 48F));
-        _tlpMonitorTop.Size = new Size(1340, 76);
+        _tlpMonitorTop.Size = new Size(1533, 101);
         _tlpMonitorTop.TabIndex = 0;
         // 
         // _cmbPort
@@ -494,19 +500,19 @@ partial class ServiceForm
         _cmbPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _cmbPort.Location = new Point(5, 4);
-        _cmbPort.Margin = new Padding(4, 0, 4, 3);
+        _cmbPort.Location = new Point(6, 8);
+        _cmbPort.Margin = new Padding(5, 0, 5, 4);
         _cmbPort.Name = "_cmbPort";
-        _cmbPort.Size = new Size(213, 25);
+        _cmbPort.Size = new Size(243, 31);
         _cmbPort.TabIndex = 0;
         // 
         // _lblRate
         // 
         _lblRate.Dock = DockStyle.Fill;
         _lblRate.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblRate.Location = new Point(4, 39);
+        _lblRate.Location = new Point(4, 52);
         _lblRate.Name = "_lblRate";
-        _lblRate.Size = new Size(215, 36);
+        _lblRate.Size = new Size(247, 48);
         _lblRate.TabIndex = 5;
         _lblRate.Text = "— фр/с";
         _lblRate.TextAlign = ContentAlignment.MiddleCenter;
@@ -515,9 +521,9 @@ partial class ServiceForm
         // 
         _lblConn.Dock = DockStyle.Fill;
         _lblConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblConn.Location = new Point(631, 1);
+        _lblConn.Location = new Point(721, 1);
         _lblConn.Name = "_lblConn";
-        _lblConn.Size = new Size(413, 37);
+        _lblConn.Size = new Size(474, 50);
         _lblConn.TabIndex = 4;
         _lblConn.Text = "Нет подключения";
         _lblConn.TextAlign = ContentAlignment.MiddleCenter;
@@ -527,10 +533,10 @@ partial class ServiceForm
         _btnClearLog.Dock = DockStyle.Fill;
         _btnClearLog.FlatStyle = FlatStyle.Flat;
         _btnClearLog.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnClearLog.Location = new Point(1057, 4);
-        _btnClearLog.Margin = new Padding(9, 3, 9, 3);
+        _btnClearLog.Location = new Point(1209, 5);
+        _btnClearLog.Margin = new Padding(10, 4, 10, 4);
         _btnClearLog.Name = "_btnClearLog";
-        _btnClearLog.Size = new Size(273, 31);
+        _btnClearLog.Size = new Size(313, 42);
         _btnClearLog.TabIndex = 9;
         _btnClearLog.Text = "Очистить";
         _btnClearLog.UseVisualStyleBackColor = false;
@@ -543,10 +549,10 @@ partial class ServiceForm
         _chkLog.CheckState = CheckState.Checked;
         _chkLog.Dock = DockStyle.Fill;
         _chkLog.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkLog.Location = new Point(1066, 42);
-        _chkLog.Margin = new Padding(18, 3, 18, 3);
+        _chkLog.Location = new Point(1220, 56);
+        _chkLog.Margin = new Padding(21, 4, 21, 4);
         _chkLog.Name = "_chkLog";
-        _chkLog.Size = new Size(255, 30);
+        _chkLog.Size = new Size(291, 40);
         _chkLog.TabIndex = 8;
         _chkLog.Text = "Лог активен";
         // 
@@ -555,10 +561,10 @@ partial class ServiceForm
         _btnPortRefresh.Dock = DockStyle.Fill;
         _btnPortRefresh.FlatStyle = FlatStyle.Flat;
         _btnPortRefresh.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnPortRefresh.Location = new Point(501, 4);
-        _btnPortRefresh.Margin = new Padding(9, 3, 9, 3);
+        _btnPortRefresh.Location = new Point(572, 5);
+        _btnPortRefresh.Margin = new Padding(10, 4, 10, 4);
         _btnPortRefresh.Name = "_btnPortRefresh";
-        _btnPortRefresh.Size = new Size(117, 31);
+        _btnPortRefresh.Size = new Size(135, 42);
         _btnPortRefresh.TabIndex = 3;
         _btnPortRefresh.Text = "↺";
         _btnPortRefresh.UseVisualStyleBackColor = false;
@@ -570,10 +576,10 @@ partial class ServiceForm
         _btnConn.FlatAppearance.BorderSize = 0;
         _btnConn.FlatStyle = FlatStyle.Flat;
         _btnConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnConn.Location = new Point(317, 4);
-        _btnConn.Margin = new Padding(9, 3, 9, 3);
+        _btnConn.Location = new Point(362, 5);
+        _btnConn.Margin = new Padding(10, 4, 10, 4);
         _btnConn.Name = "_btnConn";
-        _btnConn.Size = new Size(165, 31);
+        _btnConn.Size = new Size(189, 42);
         _btnConn.TabIndex = 2;
         _btnConn.Text = "Подключить";
         _btnConn.UseVisualStyleBackColor = false;
@@ -582,10 +588,10 @@ partial class ServiceForm
         // _dotConn
         // 
         _dotConn.Dock = DockStyle.Fill;
-        _dotConn.Location = new Point(232, 9);
-        _dotConn.Margin = new Padding(9, 8, 9, 8);
+        _dotConn.Location = new Point(265, 12);
+        _dotConn.Margin = new Padding(10, 11, 10, 11);
         _dotConn.Name = "_dotConn";
-        _dotConn.Size = new Size(66, 21);
+        _dotConn.Size = new Size(76, 28);
         _dotConn.TabIndex = 1;
         // 
         // _tabDynamicService
@@ -593,9 +599,10 @@ partial class ServiceForm
         _tabDynamicService.Controls.Add(_pnlLogs);
         _tabDynamicService.Controls.Add(_pnlChannels);
         _tabDynamicService.Controls.Add(_pnlTop);
-        _tabDynamicService.Location = new Point(4, 26);
+        _tabDynamicService.Location = new Point(4, 32);
+        _tabDynamicService.Margin = new Padding(3, 4, 3, 4);
         _tabDynamicService.Name = "_tabDynamicService";
-        _tabDynamicService.Size = new Size(1340, 514);
+        _tabDynamicService.Size = new Size(1533, 689);
         _tabDynamicService.TabIndex = 2;
         _tabDynamicService.Text = "Сервисный режим Динамика";
         // 
@@ -603,10 +610,9 @@ partial class ServiceForm
         // 
         _pnlLogs.Controls.Add(_lstDynamicLog);
         _pnlLogs.Dock = DockStyle.Fill;
-        _pnlLogs.Location = new Point(0, 213);
-        _pnlLogs.Margin = new Padding(3, 2, 3, 2);
+        _pnlLogs.Location = new Point(0, 284);
         _pnlLogs.Name = "_pnlLogs";
-        _pnlLogs.Size = new Size(1340, 301);
+        _pnlLogs.Size = new Size(1533, 405);
         _pnlLogs.TabIndex = 13;
         // 
         // _lstDynamicLog
@@ -617,8 +623,9 @@ partial class ServiceForm
         _lstDynamicLog.IntegralHeight = false;
         _lstDynamicLog.ItemHeight = 15;
         _lstDynamicLog.Location = new Point(0, 0);
+        _lstDynamicLog.Margin = new Padding(3, 4, 3, 4);
         _lstDynamicLog.Name = "_lstDynamicLog";
-        _lstDynamicLog.Size = new Size(1340, 301);
+        _lstDynamicLog.Size = new Size(1533, 405);
         _lstDynamicLog.TabIndex = 10;
         _lstDynamicLog.DrawItem += LstDynamicLog_DrawItem;
         // 
@@ -626,10 +633,9 @@ partial class ServiceForm
         // 
         _pnlChannels.Controls.Add(_tlpChannels);
         _pnlChannels.Dock = DockStyle.Top;
-        _pnlChannels.Location = new Point(0, 76);
-        _pnlChannels.Margin = new Padding(3, 2, 3, 2);
+        _pnlChannels.Location = new Point(0, 101);
         _pnlChannels.Name = "_pnlChannels";
-        _pnlChannels.Size = new Size(1340, 137);
+        _pnlChannels.Size = new Size(1533, 183);
         _pnlChannels.TabIndex = 12;
         // 
         // _tlpChannels
@@ -641,20 +647,20 @@ partial class ServiceForm
         _tlpChannels.Controls.Add(_pnlDynamicCh1, 1, 0);
         _tlpChannels.Dock = DockStyle.Fill;
         _tlpChannels.Location = new Point(0, 0);
-        _tlpChannels.Margin = new Padding(3, 2, 3, 2);
         _tlpChannels.Name = "_tlpChannels";
         _tlpChannels.RowCount = 1;
         _tlpChannels.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpChannels.Size = new Size(1340, 137);
+        _tlpChannels.Size = new Size(1533, 183);
         _tlpChannels.TabIndex = 0;
         // 
         // _pnlDynamicCh0
         // 
         _pnlDynamicCh0.Controls.Add(_tlpCh0);
         _pnlDynamicCh0.Dock = DockStyle.Fill;
-        _pnlDynamicCh0.Location = new Point(3, 3);
+        _pnlDynamicCh0.Location = new Point(3, 4);
+        _pnlDynamicCh0.Margin = new Padding(3, 4, 3, 4);
         _pnlDynamicCh0.Name = "_pnlDynamicCh0";
-        _pnlDynamicCh0.Size = new Size(664, 131);
+        _pnlDynamicCh0.Size = new Size(760, 175);
         _pnlDynamicCh0.TabIndex = 6;
         // 
         // _tlpCh0
@@ -665,21 +671,20 @@ partial class ServiceForm
         _tlpCh0.Controls.Add(_lblDynamicCh0Cap, 0, 0);
         _tlpCh0.Dock = DockStyle.Fill;
         _tlpCh0.Location = new Point(0, 0);
-        _tlpCh0.Margin = new Padding(3, 2, 3, 2);
         _tlpCh0.Name = "_tlpCh0";
         _tlpCh0.RowCount = 2;
         _tlpCh0.RowStyles.Add(new RowStyle(SizeType.Percent, 27.4285717F));
         _tlpCh0.RowStyles.Add(new RowStyle(SizeType.Percent, 72.57143F));
-        _tlpCh0.Size = new Size(664, 131);
+        _tlpCh0.Size = new Size(760, 175);
         _tlpCh0.TabIndex = 2;
         // 
         // _lblDynamicCh0
         // 
         _lblDynamicCh0.Dock = DockStyle.Fill;
         _lblDynamicCh0.Font = new Font("Courier New", 48F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblDynamicCh0.Location = new Point(3, 35);
+        _lblDynamicCh0.Location = new Point(3, 48);
         _lblDynamicCh0.Name = "_lblDynamicCh0";
-        _lblDynamicCh0.Size = new Size(658, 96);
+        _lblDynamicCh0.Size = new Size(754, 127);
         _lblDynamicCh0.TabIndex = 1;
         _lblDynamicCh0.Text = "—";
         _lblDynamicCh0.TextAlign = ContentAlignment.MiddleCenter;
@@ -691,7 +696,7 @@ partial class ServiceForm
         _lblDynamicCh0Cap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblDynamicCh0Cap.Location = new Point(3, 0);
         _lblDynamicCh0Cap.Name = "_lblDynamicCh0Cap";
-        _lblDynamicCh0Cap.Size = new Size(658, 35);
+        _lblDynamicCh0Cap.Size = new Size(754, 48);
         _lblDynamicCh0Cap.TabIndex = 0;
         _lblDynamicCh0Cap.Text = "Канал: Основной (CH0)";
         _lblDynamicCh0Cap.TextAlign = ContentAlignment.MiddleLeft;
@@ -700,9 +705,10 @@ partial class ServiceForm
         // 
         _pnlDynamicCh1.Controls.Add(_tlpCh1);
         _pnlDynamicCh1.Dock = DockStyle.Fill;
-        _pnlDynamicCh1.Location = new Point(673, 3);
+        _pnlDynamicCh1.Location = new Point(769, 4);
+        _pnlDynamicCh1.Margin = new Padding(3, 4, 3, 4);
         _pnlDynamicCh1.Name = "_pnlDynamicCh1";
-        _pnlDynamicCh1.Size = new Size(664, 131);
+        _pnlDynamicCh1.Size = new Size(761, 175);
         _pnlDynamicCh1.TabIndex = 7;
         // 
         // _tlpCh1
@@ -713,21 +719,20 @@ partial class ServiceForm
         _tlpCh1.Controls.Add(_lblDynamicCh1Cap, 0, 0);
         _tlpCh1.Dock = DockStyle.Fill;
         _tlpCh1.Location = new Point(0, 0);
-        _tlpCh1.Margin = new Padding(3, 2, 3, 2);
         _tlpCh1.Name = "_tlpCh1";
         _tlpCh1.RowCount = 2;
         _tlpCh1.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1428566F));
         _tlpCh1.RowStyles.Add(new RowStyle(SizeType.Percent, 70.85714F));
-        _tlpCh1.Size = new Size(664, 131);
+        _tlpCh1.Size = new Size(761, 175);
         _tlpCh1.TabIndex = 3;
         // 
         // _lblDynamicCh1
         // 
         _lblDynamicCh1.Dock = DockStyle.Fill;
         _lblDynamicCh1.Font = new Font("Courier New", 48F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblDynamicCh1.Location = new Point(3, 38);
+        _lblDynamicCh1.Location = new Point(3, 51);
         _lblDynamicCh1.Name = "_lblDynamicCh1";
-        _lblDynamicCh1.Size = new Size(658, 93);
+        _lblDynamicCh1.Size = new Size(755, 124);
         _lblDynamicCh1.TabIndex = 1;
         _lblDynamicCh1.Text = "—";
         _lblDynamicCh1.TextAlign = ContentAlignment.MiddleCenter;
@@ -739,7 +744,7 @@ partial class ServiceForm
         _lblDynamicCh1Cap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblDynamicCh1Cap.Location = new Point(3, 0);
         _lblDynamicCh1Cap.Name = "_lblDynamicCh1Cap";
-        _lblDynamicCh1Cap.Size = new Size(658, 38);
+        _lblDynamicCh1Cap.Size = new Size(755, 51);
         _lblDynamicCh1Cap.TabIndex = 0;
         _lblDynamicCh1Cap.Text = "Канал: Резервный (CH1)";
         _lblDynamicCh1Cap.TextAlign = ContentAlignment.MiddleLeft;
@@ -749,9 +754,8 @@ partial class ServiceForm
         _pnlTop.Controls.Add(_tlpTop);
         _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(0, 0);
-        _pnlTop.Margin = new Padding(3, 2, 3, 2);
         _pnlTop.Name = "_pnlTop";
-        _pnlTop.Size = new Size(1340, 76);
+        _pnlTop.Size = new Size(1533, 101);
         _pnlTop.TabIndex = 11;
         // 
         // _tlpTop
@@ -774,12 +778,11 @@ partial class ServiceForm
         _tlpTop.Controls.Add(_dotDynamicConn, 1, 0);
         _tlpTop.Dock = DockStyle.Fill;
         _tlpTop.Location = new Point(0, 0);
-        _tlpTop.Margin = new Padding(3, 2, 3, 2);
         _tlpTop.Name = "_tlpTop";
         _tlpTop.RowCount = 2;
         _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 52F));
         _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 48F));
-        _tlpTop.Size = new Size(1340, 76);
+        _tlpTop.Size = new Size(1533, 101);
         _tlpTop.TabIndex = 0;
         // 
         // _cmbDynamicPort
@@ -789,19 +792,19 @@ partial class ServiceForm
         _cmbDynamicPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDynamicPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         _cmbDynamicPort.ForeColor = Color.FromArgb(35, 49, 63);
-        _cmbDynamicPort.Location = new Point(5, 4);
-        _cmbDynamicPort.Margin = new Padding(4, 0, 4, 3);
+        _cmbDynamicPort.Location = new Point(6, 8);
+        _cmbDynamicPort.Margin = new Padding(5, 0, 5, 4);
         _cmbDynamicPort.Name = "_cmbDynamicPort";
-        _cmbDynamicPort.Size = new Size(213, 25);
+        _cmbDynamicPort.Size = new Size(243, 31);
         _cmbDynamicPort.TabIndex = 0;
         // 
         // _lblDynamicRate
         // 
         _lblDynamicRate.Dock = DockStyle.Fill;
         _lblDynamicRate.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicRate.Location = new Point(4, 39);
+        _lblDynamicRate.Location = new Point(4, 52);
         _lblDynamicRate.Name = "_lblDynamicRate";
-        _lblDynamicRate.Size = new Size(215, 36);
+        _lblDynamicRate.Size = new Size(247, 48);
         _lblDynamicRate.TabIndex = 5;
         _lblDynamicRate.Text = "— сэмпл/с";
         _lblDynamicRate.TextAlign = ContentAlignment.MiddleCenter;
@@ -810,9 +813,9 @@ partial class ServiceForm
         // 
         _lblDynamicConn.Dock = DockStyle.Fill;
         _lblDynamicConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicConn.Location = new Point(631, 1);
+        _lblDynamicConn.Location = new Point(721, 1);
         _lblDynamicConn.Name = "_lblDynamicConn";
-        _lblDynamicConn.Size = new Size(413, 37);
+        _lblDynamicConn.Size = new Size(474, 50);
         _lblDynamicConn.TabIndex = 4;
         _lblDynamicConn.Text = "Нет подключения";
         _lblDynamicConn.TextAlign = ContentAlignment.MiddleCenter;
@@ -822,10 +825,10 @@ partial class ServiceForm
         _btnDynamicClearLog.Dock = DockStyle.Fill;
         _btnDynamicClearLog.FlatStyle = FlatStyle.Flat;
         _btnDynamicClearLog.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDynamicClearLog.Location = new Point(1057, 4);
-        _btnDynamicClearLog.Margin = new Padding(9, 3, 9, 3);
+        _btnDynamicClearLog.Location = new Point(1209, 5);
+        _btnDynamicClearLog.Margin = new Padding(10, 4, 10, 4);
         _btnDynamicClearLog.Name = "_btnDynamicClearLog";
-        _btnDynamicClearLog.Size = new Size(273, 31);
+        _btnDynamicClearLog.Size = new Size(313, 42);
         _btnDynamicClearLog.TabIndex = 9;
         _btnDynamicClearLog.Text = "Очистить";
         _btnDynamicClearLog.UseVisualStyleBackColor = false;
@@ -838,10 +841,10 @@ partial class ServiceForm
         _chkDynamicLog.CheckState = CheckState.Checked;
         _chkDynamicLog.Dock = DockStyle.Fill;
         _chkDynamicLog.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkDynamicLog.Location = new Point(1066, 42);
-        _chkDynamicLog.Margin = new Padding(18, 3, 18, 3);
+        _chkDynamicLog.Location = new Point(1220, 56);
+        _chkDynamicLog.Margin = new Padding(21, 4, 21, 4);
         _chkDynamicLog.Name = "_chkDynamicLog";
-        _chkDynamicLog.Size = new Size(255, 30);
+        _chkDynamicLog.Size = new Size(291, 40);
         _chkDynamicLog.TabIndex = 8;
         _chkDynamicLog.Text = "Лог активен";
         // 
@@ -850,10 +853,10 @@ partial class ServiceForm
         _btnDynamicPortRefresh.Dock = DockStyle.Fill;
         _btnDynamicPortRefresh.FlatStyle = FlatStyle.Flat;
         _btnDynamicPortRefresh.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDynamicPortRefresh.Location = new Point(501, 4);
-        _btnDynamicPortRefresh.Margin = new Padding(9, 3, 9, 3);
+        _btnDynamicPortRefresh.Location = new Point(572, 5);
+        _btnDynamicPortRefresh.Margin = new Padding(10, 4, 10, 4);
         _btnDynamicPortRefresh.Name = "_btnDynamicPortRefresh";
-        _btnDynamicPortRefresh.Size = new Size(117, 31);
+        _btnDynamicPortRefresh.Size = new Size(135, 42);
         _btnDynamicPortRefresh.TabIndex = 3;
         _btnDynamicPortRefresh.Text = "↺  Обновить";
         _btnDynamicPortRefresh.UseVisualStyleBackColor = false;
@@ -864,10 +867,10 @@ partial class ServiceForm
         _btnDynamicConn.Dock = DockStyle.Fill;
         _btnDynamicConn.FlatStyle = FlatStyle.Flat;
         _btnDynamicConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDynamicConn.Location = new Point(317, 4);
-        _btnDynamicConn.Margin = new Padding(9, 3, 9, 3);
+        _btnDynamicConn.Location = new Point(362, 5);
+        _btnDynamicConn.Margin = new Padding(10, 4, 10, 4);
         _btnDynamicConn.Name = "_btnDynamicConn";
-        _btnDynamicConn.Size = new Size(165, 31);
+        _btnDynamicConn.Size = new Size(189, 42);
         _btnDynamicConn.TabIndex = 2;
         _btnDynamicConn.Text = "Подключить";
         _btnDynamicConn.UseVisualStyleBackColor = false;
@@ -876,18 +879,19 @@ partial class ServiceForm
         // _dotDynamicConn
         // 
         _dotDynamicConn.Dock = DockStyle.Fill;
-        _dotDynamicConn.Location = new Point(232, 9);
-        _dotDynamicConn.Margin = new Padding(9, 8, 9, 8);
+        _dotDynamicConn.Location = new Point(265, 12);
+        _dotDynamicConn.Margin = new Padding(10, 11, 10, 11);
         _dotDynamicConn.Name = "_dotDynamicConn";
-        _dotDynamicConn.Size = new Size(66, 21);
+        _dotDynamicConn.Size = new Size(76, 28);
         _dotDynamicConn.TabIndex = 1;
         // 
         // _tabCalibS
         // 
         _tabCalibS.Controls.Add(_pnlCalibS);
-        _tabCalibS.Location = new Point(4, 26);
+        _tabCalibS.Location = new Point(4, 32);
+        _tabCalibS.Margin = new Padding(3, 4, 3, 4);
         _tabCalibS.Name = "_tabCalibS";
-        _tabCalibS.Size = new Size(1340, 514);
+        _tabCalibS.Size = new Size(1533, 689);
         _tabCalibS.TabIndex = 3;
         _tabCalibS.Text = "Калибровка Статика";
         // 
@@ -898,8 +902,9 @@ partial class ServiceForm
         _pnlCalibS.Controls.Add(_pnlCalibSHead);
         _pnlCalibS.Dock = DockStyle.Fill;
         _pnlCalibS.Location = new Point(0, 0);
+        _pnlCalibS.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibS.Name = "_pnlCalibS";
-        _pnlCalibS.Size = new Size(1340, 514);
+        _pnlCalibS.Size = new Size(1533, 689);
         _pnlCalibS.TabIndex = 0;
         // 
         // _pnlCalibSBody
@@ -909,10 +914,11 @@ partial class ServiceForm
         _pnlCalibSBody.BorderStyle = BorderStyle.FixedSingle;
         _pnlCalibSBody.Controls.Add(_tlpCalibSBody);
         _pnlCalibSBody.Dock = DockStyle.Fill;
-        _pnlCalibSBody.Location = new Point(0, 76);
+        _pnlCalibSBody.Location = new Point(0, 101);
+        _pnlCalibSBody.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSBody.Name = "_pnlCalibSBody";
-        _pnlCalibSBody.Padding = new Padding(4, 3, 4, 3);
-        _pnlCalibSBody.Size = new Size(1340, 438);
+        _pnlCalibSBody.Padding = new Padding(5, 4, 5, 4);
+        _pnlCalibSBody.Size = new Size(1533, 588);
         _pnlCalibSBody.TabIndex = 1;
         // 
         // _tlpCalibSBody
@@ -925,13 +931,12 @@ partial class ServiceForm
         _tlpCalibSBody.Controls.Add(_dgvCalib, 1, 0);
         _tlpCalibSBody.Controls.Add(_pnlCalibSForm, 0, 0);
         _tlpCalibSBody.Dock = DockStyle.Fill;
-        _tlpCalibSBody.Location = new Point(4, 3);
-        _tlpCalibSBody.Margin = new Padding(3, 2, 3, 2);
+        _tlpCalibSBody.Location = new Point(5, 4);
         _tlpCalibSBody.Name = "_tlpCalibSBody";
         _tlpCalibSBody.RowCount = 1;
         _tlpCalibSBody.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         _tlpCalibSBody.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        _tlpCalibSBody.Size = new Size(1330, 430);
+        _tlpCalibSBody.Size = new Size(1521, 578);
         _tlpCalibSBody.TabIndex = 15;
         // 
         // _dgvCalib
@@ -939,42 +944,43 @@ partial class ServiceForm
         _dgvCalib.AllowUserToAddRows = false;
         _dgvCalib.AllowUserToDeleteRows = false;
         _dgvCalib.AllowUserToResizeRows = false;
-        dataGridViewCellStyle1.BackColor = Color.White;
-        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        _dgvCalib.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+        dataGridViewCellStyle8.BackColor = Color.White;
+        dataGridViewCellStyle8.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvCalib.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
         _dgvCalib.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         _dgvCalib.BackgroundColor = Color.White;
-        dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(196, 225, 230);
-        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(26, 26, 26);
-        dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-        _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+        dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle9.SelectionBackColor = Color.FromArgb(196, 225, 230);
+        dataGridViewCellStyle9.SelectionForeColor = Color.FromArgb(26, 26, 26);
+        dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+        _dgvCalib.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
         _dgvCalib.ColumnHeadersHeight = 34;
         _dgvCalib.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _dgvCalib.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumnCalibActive, dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumnCalibCreated, dataGridViewTextBoxColumnCalibDeleted });
-        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle3.BackColor = SystemColors.Window;
-        dataGridViewCellStyle3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        dataGridViewCellStyle3.SelectionForeColor = Color.FromArgb(26, 26, 26);
-        dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-        _dgvCalib.DefaultCellStyle = dataGridViewCellStyle3;
+        dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle10.BackColor = SystemColors.Window;
+        dataGridViewCellStyle10.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+        dataGridViewCellStyle10.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle10.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        dataGridViewCellStyle10.SelectionForeColor = Color.FromArgb(26, 26, 26);
+        dataGridViewCellStyle10.WrapMode = DataGridViewTriState.False;
+        _dgvCalib.DefaultCellStyle = dataGridViewCellStyle10;
         _dgvCalib.Dock = DockStyle.Fill;
         _dgvCalib.EditMode = DataGridViewEditMode.EditOnEnter;
         _dgvCalib.EnableHeadersVisualStyles = false;
         _dgvCalib.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _dgvCalib.GridColor = Color.FromArgb(212, 216, 222);
-        _dgvCalib.Location = new Point(255, 4);
+        _dgvCalib.Location = new Point(291, 5);
+        _dgvCalib.Margin = new Padding(3, 4, 3, 4);
         _dgvCalib.Name = "_dgvCalib";
         _dgvCalib.RowHeadersVisible = false;
         _dgvCalib.RowHeadersWidth = 62;
-        dataGridViewCellStyle4.BackColor = Color.White;
-        dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        _dgvCalib.RowsDefaultCellStyle = dataGridViewCellStyle4;
+        dataGridViewCellStyle11.BackColor = Color.White;
+        dataGridViewCellStyle11.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvCalib.RowsDefaultCellStyle = dataGridViewCellStyle11;
         _dgvCalib.RowTemplate.Height = 30;
         _dgvCalib.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _dgvCalib.Size = new Size(1071, 422);
+        _dgvCalib.Size = new Size(1226, 568);
         _dgvCalib.TabIndex = 5;
         // 
         // dataGridViewTextBoxColumnCalibActive
@@ -1027,10 +1033,9 @@ partial class ServiceForm
         _pnlCalibSForm.BorderStyle = BorderStyle.FixedSingle;
         _pnlCalibSForm.Controls.Add(_pnlCalibSFormInner);
         _pnlCalibSForm.Dock = DockStyle.Fill;
-        _pnlCalibSForm.Location = new Point(4, 3);
-        _pnlCalibSForm.Margin = new Padding(3, 2, 3, 2);
+        _pnlCalibSForm.Location = new Point(4, 4);
         _pnlCalibSForm.Name = "_pnlCalibSForm";
-        _pnlCalibSForm.Size = new Size(244, 424);
+        _pnlCalibSForm.Size = new Size(280, 570);
         _pnlCalibSForm.TabIndex = 6;
         // 
         // _pnlCalibSFormInner
@@ -1038,9 +1043,8 @@ partial class ServiceForm
         _pnlCalibSFormInner.Controls.Add(_tlpCalibSForm);
         _pnlCalibSFormInner.Dock = DockStyle.Fill;
         _pnlCalibSFormInner.Location = new Point(0, 0);
-        _pnlCalibSFormInner.Margin = new Padding(3, 2, 3, 2);
         _pnlCalibSFormInner.Name = "_pnlCalibSFormInner";
-        _pnlCalibSFormInner.Size = new Size(242, 422);
+        _pnlCalibSFormInner.Size = new Size(278, 568);
         _pnlCalibSFormInner.TabIndex = 1;
         // 
         // _tlpCalibSForm
@@ -1048,14 +1052,13 @@ partial class ServiceForm
         _tlpCalibSForm.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
         _tlpCalibSForm.ColumnCount = 1;
         _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+        _tlpCalibSForm.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 23F));
         _tlpCalibSForm.Controls.Add(_btnAddRow, 0, 4);
         _tlpCalibSForm.Controls.Add(_btnDelRow, 0, 5);
         _tlpCalibSForm.Controls.Add(_btnCalibSave, 0, 8);
         _tlpCalibSForm.Controls.Add(chbShowHistory, 0, 0);
         _tlpCalibSForm.Dock = DockStyle.Fill;
         _tlpCalibSForm.Location = new Point(0, 0);
-        _tlpCalibSForm.Margin = new Padding(3, 2, 3, 2);
         _tlpCalibSForm.Name = "_tlpCalibSForm";
         _tlpCalibSForm.RowCount = 9;
         _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111107F));
@@ -1067,7 +1070,7 @@ partial class ServiceForm
         _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111107F));
         _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111107F));
         _tlpCalibSForm.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1111107F));
-        _tlpCalibSForm.Size = new Size(242, 422);
+        _tlpCalibSForm.Size = new Size(278, 568);
         _tlpCalibSForm.TabIndex = 6;
         // 
         // _btnAddRow
@@ -1076,10 +1079,10 @@ partial class ServiceForm
         _btnAddRow.Dock = DockStyle.Fill;
         _btnAddRow.FlatStyle = FlatStyle.Flat;
         _btnAddRow.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnAddRow.Location = new Point(13, 190);
-        _btnAddRow.Margin = new Padding(12, 5, 12, 5);
+        _btnAddRow.Location = new Point(15, 260);
+        _btnAddRow.Margin = new Padding(14, 7, 14, 7);
         _btnAddRow.Name = "_btnAddRow";
-        _btnAddRow.Size = new Size(216, 35);
+        _btnAddRow.Size = new Size(248, 48);
         _btnAddRow.TabIndex = 6;
         _btnAddRow.Text = "Добавить строку →";
         _btnAddRow.UseVisualStyleBackColor = false;
@@ -1091,10 +1094,10 @@ partial class ServiceForm
         _btnDelRow.Dock = DockStyle.Fill;
         _btnDelRow.FlatStyle = FlatStyle.Flat;
         _btnDelRow.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDelRow.Location = new Point(13, 236);
-        _btnDelRow.Margin = new Padding(12, 5, 12, 5);
+        _btnDelRow.Location = new Point(15, 323);
+        _btnDelRow.Margin = new Padding(14, 7, 14, 7);
         _btnDelRow.Name = "_btnDelRow";
-        _btnDelRow.Size = new Size(216, 35);
+        _btnDelRow.Size = new Size(248, 48);
         _btnDelRow.TabIndex = 7;
         _btnDelRow.Text = "Удалить строку →";
         _btnDelRow.UseVisualStyleBackColor = false;
@@ -1107,10 +1110,10 @@ partial class ServiceForm
         _btnCalibSave.FlatAppearance.BorderSize = 0;
         _btnCalibSave.FlatStyle = FlatStyle.Flat;
         _btnCalibSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnCalibSave.Location = new Point(13, 374);
-        _btnCalibSave.Margin = new Padding(12, 5, 12, 5);
+        _btnCalibSave.Location = new Point(15, 512);
+        _btnCalibSave.Margin = new Padding(14, 7, 14, 7);
         _btnCalibSave.Name = "_btnCalibSave";
-        _btnCalibSave.Size = new Size(216, 42);
+        _btnCalibSave.Size = new Size(248, 48);
         _btnCalibSave.TabIndex = 14;
         _btnCalibSave.Text = "Сохранить";
         _btnCalibSave.UseVisualStyleBackColor = false;
@@ -1120,10 +1123,10 @@ partial class ServiceForm
         // 
         chbShowHistory.AutoSize = true;
         chbShowHistory.Dock = DockStyle.Fill;
-        chbShowHistory.Location = new Point(16, 4);
-        chbShowHistory.Margin = new Padding(15, 3, 3, 3);
+        chbShowHistory.Location = new Point(18, 5);
+        chbShowHistory.Margin = new Padding(17, 4, 3, 4);
         chbShowHistory.Name = "chbShowHistory";
-        chbShowHistory.Size = new Size(222, 39);
+        chbShowHistory.Size = new Size(256, 54);
         chbShowHistory.TabIndex = 15;
         chbShowHistory.Text = "Показать историю";
         chbShowHistory.UseVisualStyleBackColor = true;
@@ -1135,8 +1138,9 @@ partial class ServiceForm
         _pnlCalibSHead.Controls.Add(tlpCalibSHead);
         _pnlCalibSHead.Dock = DockStyle.Top;
         _pnlCalibSHead.Location = new Point(0, 0);
+        _pnlCalibSHead.Margin = new Padding(3, 4, 3, 4);
         _pnlCalibSHead.Name = "_pnlCalibSHead";
-        _pnlCalibSHead.Size = new Size(1340, 76);
+        _pnlCalibSHead.Size = new Size(1533, 101);
         _pnlCalibSHead.TabIndex = 0;
         // 
         // tlpCalibSHead
@@ -1163,21 +1167,21 @@ partial class ServiceForm
         tlpCalibSHead.Controls.Add(_rbCh0Calib, 3, 0);
         tlpCalibSHead.Dock = DockStyle.Fill;
         tlpCalibSHead.Location = new Point(0, 0);
-        tlpCalibSHead.Margin = new Padding(2);
+        tlpCalibSHead.Margin = new Padding(2, 3, 2, 3);
         tlpCalibSHead.Name = "tlpCalibSHead";
         tlpCalibSHead.RowCount = 2;
         tlpCalibSHead.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         tlpCalibSHead.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tlpCalibSHead.Size = new Size(1338, 74);
+        tlpCalibSHead.Size = new Size(1531, 99);
         tlpCalibSHead.TabIndex = 5;
         // 
         // _lblStaticCalibConn
         // 
         _lblStaticCalibConn.Dock = DockStyle.Fill;
         _lblStaticCalibConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblStaticCalibConn.Location = new Point(167, 1);
+        _lblStaticCalibConn.Location = new Point(190, 1);
         _lblStaticCalibConn.Name = "_lblStaticCalibConn";
-        _lblStaticCalibConn.Size = new Size(215, 35);
+        _lblStaticCalibConn.Size = new Size(247, 48);
         _lblStaticCalibConn.TabIndex = 4;
         _lblStaticCalibConn.Text = "Нет подключения";
         _lblStaticCalibConn.TextAlign = ContentAlignment.MiddleCenter;
@@ -1186,10 +1190,10 @@ partial class ServiceForm
         // 
         _cmbStaticCalibPort.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbStaticCalibPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _cmbStaticCalibPort.Location = new Point(5, 3);
-        _cmbStaticCalibPort.Margin = new Padding(4, 0, 4, 3);
+        _cmbStaticCalibPort.Location = new Point(6, 7);
+        _cmbStaticCalibPort.Margin = new Padding(5, 0, 5, 4);
         _cmbStaticCalibPort.Name = "_cmbStaticCalibPort";
-        _cmbStaticCalibPort.Size = new Size(154, 25);
+        _cmbStaticCalibPort.Size = new Size(175, 31);
         _cmbStaticCalibPort.TabIndex = 0;
         // 
         // _btnStaticCalibConn
@@ -1198,10 +1202,9 @@ partial class ServiceForm
         _btnStaticCalibConn.Dock = DockStyle.Fill;
         _btnStaticCalibConn.FlatAppearance.BorderColor = Color.Black;
         _btnStaticCalibConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnStaticCalibConn.Location = new Point(4, 39);
-        _btnStaticCalibConn.Margin = new Padding(3, 2, 3, 2);
+        _btnStaticCalibConn.Location = new Point(4, 53);
         _btnStaticCalibConn.Name = "_btnStaticCalibConn";
-        _btnStaticCalibConn.Size = new Size(156, 32);
+        _btnStaticCalibConn.Size = new Size(179, 42);
         _btnStaticCalibConn.TabIndex = 2;
         _btnStaticCalibConn.Text = "Подключить";
         _btnStaticCalibConn.UseVisualStyleBackColor = false;
@@ -1213,10 +1216,10 @@ partial class ServiceForm
         _btnCapture.Dock = DockStyle.Fill;
         _btnCapture.FlatStyle = FlatStyle.Flat;
         _btnCapture.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnCapture.Location = new Point(405, 3);
-        _btnCapture.Margin = new Padding(19, 2, 19, 2);
+        _btnCapture.Location = new Point(463, 4);
+        _btnCapture.Margin = new Padding(22, 3, 22, 3);
         _btnCapture.Name = "_btnCapture";
-        _btnCapture.Size = new Size(156, 31);
+        _btnCapture.Size = new Size(178, 42);
         _btnCapture.TabIndex = 4;
         _btnCapture.Text = "Захватить";
         _btnCapture.UseVisualStyleBackColor = false;
@@ -1228,10 +1231,10 @@ partial class ServiceForm
         _btnStaticCalibPortRefresh.Dock = DockStyle.Fill;
         _btnStaticCalibPortRefresh.FlatAppearance.BorderColor = Color.Black;
         _btnStaticCalibPortRefresh.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnStaticCalibPortRefresh.Location = new Point(195, 39);
-        _btnStaticCalibPortRefresh.Margin = new Padding(31, 2, 31, 2);
+        _btnStaticCalibPortRefresh.Location = new Point(222, 53);
+        _btnStaticCalibPortRefresh.Margin = new Padding(35, 3, 35, 3);
         _btnStaticCalibPortRefresh.Name = "_btnStaticCalibPortRefresh";
-        _btnStaticCalibPortRefresh.Size = new Size(159, 32);
+        _btnStaticCalibPortRefresh.Size = new Size(183, 42);
         _btnStaticCalibPortRefresh.TabIndex = 3;
         _btnStaticCalibPortRefresh.Text = "↺ Обновить";
         _btnStaticCalibPortRefresh.UseVisualStyleBackColor = false;
@@ -1242,9 +1245,9 @@ partial class ServiceForm
         _lblLiveAdcCap.AutoSize = true;
         _lblLiveAdcCap.Dock = DockStyle.Fill;
         _lblLiveAdcCap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblLiveAdcCap.Location = new Point(822, 1);
+        _lblLiveAdcCap.Location = new Point(940, 1);
         _lblLiveAdcCap.Name = "_lblLiveAdcCap";
-        _lblLiveAdcCap.Size = new Size(249, 35);
+        _lblLiveAdcCap.Size = new Size(286, 48);
         _lblLiveAdcCap.TabIndex = 2;
         _lblLiveAdcCap.Text = "Текущий код АЦП";
         _lblLiveAdcCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1256,9 +1259,9 @@ partial class ServiceForm
         _lblStaticCalibMassCap.Dock = DockStyle.Fill;
         _lblStaticCalibMassCap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblStaticCalibMassCap.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblStaticCalibMassCap.Location = new Point(822, 37);
+        _lblStaticCalibMassCap.Location = new Point(940, 50);
         _lblStaticCalibMassCap.Name = "_lblStaticCalibMassCap";
-        _lblStaticCalibMassCap.Size = new Size(249, 36);
+        _lblStaticCalibMassCap.Size = new Size(286, 48);
         _lblStaticCalibMassCap.TabIndex = 5;
         _lblStaticCalibMassCap.Text = "Текущая масса";
         _lblStaticCalibMassCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1269,9 +1272,9 @@ partial class ServiceForm
         _lblStaticCalibMass.Dock = DockStyle.Fill;
         _lblStaticCalibMass.Font = new Font("Courier New", 13F, FontStyle.Bold, GraphicsUnit.Point);
         _lblStaticCalibMass.ForeColor = Color.FromArgb(192, 0, 192);
-        _lblStaticCalibMass.Location = new Point(1078, 37);
+        _lblStaticCalibMass.Location = new Point(1233, 50);
         _lblStaticCalibMass.Name = "_lblStaticCalibMass";
-        _lblStaticCalibMass.Size = new Size(256, 36);
+        _lblStaticCalibMass.Size = new Size(294, 48);
         _lblStaticCalibMass.TabIndex = 6;
         _lblStaticCalibMass.Text = "—";
         _lblStaticCalibMass.TextAlign = ContentAlignment.MiddleLeft;
@@ -1281,9 +1284,9 @@ partial class ServiceForm
         _lblLiveAdc.AutoSize = true;
         _lblLiveAdc.Dock = DockStyle.Fill;
         _lblLiveAdc.Font = new Font("Courier New", 13F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblLiveAdc.Location = new Point(1078, 1);
+        _lblLiveAdc.Location = new Point(1233, 1);
         _lblLiveAdc.Name = "_lblLiveAdc";
-        _lblLiveAdc.Size = new Size(256, 35);
+        _lblLiveAdc.Size = new Size(294, 48);
         _lblLiveAdc.TabIndex = 3;
         _lblLiveAdc.Text = "—";
         _lblLiveAdc.TextAlign = ContentAlignment.MiddleLeft;
@@ -1293,10 +1296,10 @@ partial class ServiceForm
         _rbCh1Calib.AutoSize = true;
         _rbCh1Calib.Dock = DockStyle.Fill;
         _rbCh1Calib.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _rbCh1Calib.Location = new Point(588, 40);
-        _rbCh1Calib.Margin = new Padding(7, 3, 3, 3);
+        _rbCh1Calib.Location = new Point(672, 54);
+        _rbCh1Calib.Margin = new Padding(8, 4, 3, 4);
         _rbCh1Calib.Name = "_rbCh1Calib";
-        _rbCh1Calib.Size = new Size(227, 30);
+        _rbCh1Calib.Size = new Size(261, 40);
         _rbCh1Calib.TabIndex = 1;
         _rbCh1Calib.Text = "Канал: Резервный (CH1)";
         _rbCh1Calib.CheckedChanged += RbCh1Calib_CheckedChanged;
@@ -1307,10 +1310,10 @@ partial class ServiceForm
         _rbCh0Calib.Checked = true;
         _rbCh0Calib.Dock = DockStyle.Fill;
         _rbCh0Calib.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _rbCh0Calib.Location = new Point(588, 4);
-        _rbCh0Calib.Margin = new Padding(7, 3, 3, 3);
+        _rbCh0Calib.Location = new Point(672, 5);
+        _rbCh0Calib.Margin = new Padding(8, 4, 3, 4);
         _rbCh0Calib.Name = "_rbCh0Calib";
-        _rbCh0Calib.Size = new Size(227, 29);
+        _rbCh0Calib.Size = new Size(261, 40);
         _rbCh0Calib.TabIndex = 0;
         _rbCh0Calib.TabStop = true;
         _rbCh0Calib.Text = "Канал: Основной (CH0)";
@@ -1319,9 +1322,10 @@ partial class ServiceForm
         // _tabDirectionCorrections
         // 
         _tabDirectionCorrections.Controls.Add(_pnlDirectionCorrections);
-        _tabDirectionCorrections.Location = new Point(4, 26);
+        _tabDirectionCorrections.Location = new Point(4, 32);
+        _tabDirectionCorrections.Margin = new Padding(3, 4, 3, 4);
         _tabDirectionCorrections.Name = "_tabDirectionCorrections";
-        _tabDirectionCorrections.Size = new Size(1340, 514);
+        _tabDirectionCorrections.Size = new Size(1533, 689);
         _tabDirectionCorrections.TabIndex = 4;
         _tabDirectionCorrections.Text = "Коэффициенты направлений";
         // 
@@ -1332,8 +1336,9 @@ partial class ServiceForm
         _pnlDirectionCorrections.Controls.Add(_pnlDirectionCorrectionsHead);
         _pnlDirectionCorrections.Dock = DockStyle.Fill;
         _pnlDirectionCorrections.Location = new Point(0, 0);
+        _pnlDirectionCorrections.Margin = new Padding(3, 4, 3, 4);
         _pnlDirectionCorrections.Name = "_pnlDirectionCorrections";
-        _pnlDirectionCorrections.Size = new Size(1340, 514);
+        _pnlDirectionCorrections.Size = new Size(1533, 689);
         _pnlDirectionCorrections.TabIndex = 0;
         // 
         // _pnlDirectionCorrectionsBody
@@ -1342,9 +1347,10 @@ partial class ServiceForm
         _pnlDirectionCorrectionsBody.BorderStyle = BorderStyle.FixedSingle;
         _pnlDirectionCorrectionsBody.Controls.Add(pnlDirectionCorrectionsMain);
         _pnlDirectionCorrectionsBody.Dock = DockStyle.Fill;
-        _pnlDirectionCorrectionsBody.Location = new Point(0, 75);
+        _pnlDirectionCorrectionsBody.Location = new Point(0, 99);
+        _pnlDirectionCorrectionsBody.Margin = new Padding(3, 4, 3, 4);
         _pnlDirectionCorrectionsBody.Name = "_pnlDirectionCorrectionsBody";
-        _pnlDirectionCorrectionsBody.Size = new Size(1340, 385);
+        _pnlDirectionCorrectionsBody.Size = new Size(1533, 519);
         _pnlDirectionCorrectionsBody.TabIndex = 1;
         // 
         // pnlDirectionCorrectionsMain
@@ -1354,7 +1360,7 @@ partial class ServiceForm
         pnlDirectionCorrectionsMain.Location = new Point(0, 0);
         pnlDirectionCorrectionsMain.Margin = new Padding(0);
         pnlDirectionCorrectionsMain.Name = "pnlDirectionCorrectionsMain";
-        pnlDirectionCorrectionsMain.Size = new Size(1338, 383);
+        pnlDirectionCorrectionsMain.Size = new Size(1531, 517);
         pnlDirectionCorrectionsMain.TabIndex = 26;
         // 
         // tlpDirectionCorrectionsMain
@@ -1366,12 +1372,11 @@ partial class ServiceForm
         tlpDirectionCorrectionsMain.Controls.Add(_dgvDirectionCorrectionProfiles, 1, 0);
         tlpDirectionCorrectionsMain.Dock = DockStyle.Fill;
         tlpDirectionCorrectionsMain.Location = new Point(0, 0);
-        tlpDirectionCorrectionsMain.Margin = new Padding(3, 2, 3, 2);
         tlpDirectionCorrectionsMain.Name = "tlpDirectionCorrectionsMain";
         tlpDirectionCorrectionsMain.RowCount = 1;
         tlpDirectionCorrectionsMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         tlpDirectionCorrectionsMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tlpDirectionCorrectionsMain.Size = new Size(1338, 383);
+        tlpDirectionCorrectionsMain.Size = new Size(1531, 517);
         tlpDirectionCorrectionsMain.TabIndex = 25;
         // 
         // tlpDirections
@@ -1382,13 +1387,12 @@ partial class ServiceForm
         tlpDirections.Controls.Add(tlpDirectionCorrectionsRight, 0, 0);
         tlpDirections.Controls.Add(tlpDirectionCorrectionsLeft, 0, 1);
         tlpDirections.Dock = DockStyle.Fill;
-        tlpDirections.Location = new Point(3, 2);
-        tlpDirections.Margin = new Padding(3, 2, 3, 2);
+        tlpDirections.Location = new Point(3, 3);
         tlpDirections.Name = "tlpDirections";
         tlpDirections.RowCount = 2;
         tlpDirections.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         tlpDirections.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tlpDirections.Size = new Size(648, 379);
+        tlpDirections.Size = new Size(742, 511);
         tlpDirections.TabIndex = 25;
         // 
         // tlpDirectionCorrectionsRight
@@ -1410,8 +1414,7 @@ partial class ServiceForm
         tlpDirectionCorrectionsRight.Controls.Add(_lblCodePlusCap, 0, 3);
         tlpDirectionCorrectionsRight.Controls.Add(_lblAutoCalcPlus, 0, 2);
         tlpDirectionCorrectionsRight.Dock = DockStyle.Fill;
-        tlpDirectionCorrectionsRight.Location = new Point(3, 2);
-        tlpDirectionCorrectionsRight.Margin = new Padding(3, 2, 3, 2);
+        tlpDirectionCorrectionsRight.Location = new Point(3, 3);
         tlpDirectionCorrectionsRight.Name = "tlpDirectionCorrectionsRight";
         tlpDirectionCorrectionsRight.RowCount = 6;
         tlpDirectionCorrectionsRight.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
@@ -1420,7 +1423,7 @@ partial class ServiceForm
         tlpDirectionCorrectionsRight.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
         tlpDirectionCorrectionsRight.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
         tlpDirectionCorrectionsRight.RowStyles.Add(new RowStyle(SizeType.Percent, 24F));
-        tlpDirectionCorrectionsRight.Size = new Size(642, 185);
+        tlpDirectionCorrectionsRight.Size = new Size(736, 249);
         tlpDirectionCorrectionsRight.TabIndex = 0;
         // 
         // _lblSecPlus_01
@@ -1429,9 +1432,9 @@ partial class ServiceForm
         _lblSecPlus_01.Dock = DockStyle.Fill;
         _lblSecPlus_01.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
         _lblSecPlus_01.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblSecPlus_01.Location = new Point(217, 0);
+        _lblSecPlus_01.Location = new Point(248, 0);
         _lblSecPlus_01.Name = "_lblSecPlus_01";
-        _lblSecPlus_01.Size = new Size(209, 29);
+        _lblSecPlus_01.Size = new Size(240, 39);
         _lblSecPlus_01.TabIndex = 27;
         _lblSecPlus_01.Text = "Поправочный коэффициент →";
         _lblSecPlus_01.TextAlign = ContentAlignment.MiddleCenter;
@@ -1444,7 +1447,7 @@ partial class ServiceForm
         _lblSecPlus_00.ForeColor = Color.FromArgb(46, 58, 70);
         _lblSecPlus_00.Location = new Point(3, 0);
         _lblSecPlus_00.Name = "_lblSecPlus_00";
-        _lblSecPlus_00.Size = new Size(208, 29);
+        _lblSecPlus_00.Size = new Size(239, 39);
         _lblSecPlus_00.TabIndex = 2;
         _lblSecPlus_00.Text = "──────────────────";
         _lblSecPlus_00.TextAlign = ContentAlignment.MiddleRight;
@@ -1455,9 +1458,9 @@ partial class ServiceForm
         _lblSecPlus_02.Dock = DockStyle.Fill;
         _lblSecPlus_02.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
         _lblSecPlus_02.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblSecPlus_02.Location = new Point(432, 0);
+        _lblSecPlus_02.Location = new Point(494, 0);
         _lblSecPlus_02.Name = "_lblSecPlus_02";
-        _lblSecPlus_02.Size = new Size(207, 29);
+        _lblSecPlus_02.Size = new Size(239, 39);
         _lblSecPlus_02.TabIndex = 28;
         _lblSecPlus_02.Text = "──────────────────";
         _lblSecPlus_02.TextAlign = ContentAlignment.MiddleLeft;
@@ -1466,10 +1469,10 @@ partial class ServiceForm
         // 
         _txtKPlus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtKPlus.Font = new Font("Courier New", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtKPlus.Location = new Point(218, 32);
-        _txtKPlus.Margin = new Padding(4, 0, 4, 0);
+        _txtKPlus.Location = new Point(250, 45);
+        _txtKPlus.Margin = new Padding(5, 0, 5, 0);
         _txtKPlus.Name = "_txtKPlus";
-        _txtKPlus.Size = new Size(207, 23);
+        _txtKPlus.Size = new Size(236, 26);
         _txtKPlus.TabIndex = 4;
         // 
         // _lblKPlusEquals
@@ -1477,9 +1480,9 @@ partial class ServiceForm
         _lblKPlusEquals.AutoSize = true;
         _lblKPlusEquals.Dock = DockStyle.Fill;
         _lblKPlusEquals.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblKPlusEquals.Location = new Point(3, 29);
+        _lblKPlusEquals.Location = new Point(3, 39);
         _lblKPlusEquals.Name = "_lblKPlusEquals";
-        _lblKPlusEquals.Size = new Size(208, 29);
+        _lblKPlusEquals.Size = new Size(239, 39);
         _lblKPlusEquals.TabIndex = 3;
         _lblKPlusEquals.Text = "Значение =";
         _lblKPlusEquals.TextAlign = ContentAlignment.MiddleRight;
@@ -1490,10 +1493,10 @@ partial class ServiceForm
         _btnCalcPlus.FlatAppearance.BorderSize = 0;
         _btnCalcPlus.FlatStyle = FlatStyle.Flat;
         _btnCalcPlus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnCalcPlus.Location = new Point(226, 143);
-        _btnCalcPlus.Margin = new Padding(12, 5, 12, 5);
+        _btnCalcPlus.Location = new Point(259, 192);
+        _btnCalcPlus.Margin = new Padding(14, 7, 14, 7);
         _btnCalcPlus.Name = "_btnCalcPlus";
-        _btnCalcPlus.Size = new Size(191, 37);
+        _btnCalcPlus.Size = new Size(218, 50);
         _btnCalcPlus.TabIndex = 11;
         _btnCalcPlus.Text = "Рассчитать";
         _btnCalcPlus.UseVisualStyleBackColor = false;
@@ -1504,9 +1507,9 @@ partial class ServiceForm
         _lblMassPlusCap.AutoSize = true;
         _lblMassPlusCap.Dock = DockStyle.Fill;
         _lblMassPlusCap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblMassPlusCap.Location = new Point(3, 109);
+        _lblMassPlusCap.Location = new Point(3, 146);
         _lblMassPlusCap.Name = "_lblMassPlusCap";
-        _lblMassPlusCap.Size = new Size(208, 29);
+        _lblMassPlusCap.Size = new Size(239, 39);
         _lblMassPlusCap.TabIndex = 9;
         _lblMassPlusCap.Text = "Эталон (т)";
         _lblMassPlusCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1517,10 +1520,10 @@ partial class ServiceForm
         _btnCapPlus.FlatAppearance.BorderSize = 0;
         _btnCapPlus.FlatStyle = FlatStyle.Flat;
         _btnCapPlus.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnCapPlus.Location = new Point(443, 84);
-        _btnCapPlus.Margin = new Padding(14, 4, 14, 4);
+        _btnCapPlus.Location = new Point(507, 112);
+        _btnCapPlus.Margin = new Padding(16, 5, 16, 5);
         _btnCapPlus.Name = "_btnCapPlus";
-        _btnCapPlus.Size = new Size(185, 21);
+        _btnCapPlus.Size = new Size(213, 29);
         _btnCapPlus.TabIndex = 8;
         _btnCapPlus.Text = "Захватить";
         _btnCapPlus.UseVisualStyleBackColor = false;
@@ -1530,20 +1533,20 @@ partial class ServiceForm
         // 
         _txtMassPlus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtMassPlus.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtMassPlus.Location = new Point(218, 113);
-        _txtMassPlus.Margin = new Padding(4, 0, 4, 0);
+        _txtMassPlus.Location = new Point(250, 153);
+        _txtMassPlus.Margin = new Padding(5, 0, 5, 0);
         _txtMassPlus.Name = "_txtMassPlus";
-        _txtMassPlus.Size = new Size(207, 21);
+        _txtMassPlus.Size = new Size(236, 24);
         _txtMassPlus.TabIndex = 10;
         // 
         // _txtCodePlus
         // 
         _txtCodePlus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtCodePlus.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtCodePlus.Location = new Point(218, 84);
-        _txtCodePlus.Margin = new Padding(4, 0, 4, 0);
+        _txtCodePlus.Location = new Point(250, 114);
+        _txtCodePlus.Margin = new Padding(5, 0, 5, 0);
         _txtCodePlus.Name = "_txtCodePlus";
-        _txtCodePlus.Size = new Size(207, 21);
+        _txtCodePlus.Size = new Size(236, 24);
         _txtCodePlus.TabIndex = 7;
         // 
         // _lblCodePlusCap
@@ -1551,9 +1554,9 @@ partial class ServiceForm
         _lblCodePlusCap.AutoSize = true;
         _lblCodePlusCap.Dock = DockStyle.Fill;
         _lblCodePlusCap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblCodePlusCap.Location = new Point(3, 80);
+        _lblCodePlusCap.Location = new Point(3, 107);
         _lblCodePlusCap.Name = "_lblCodePlusCap";
-        _lblCodePlusCap.Size = new Size(208, 29);
+        _lblCodePlusCap.Size = new Size(239, 39);
         _lblCodePlusCap.TabIndex = 6;
         _lblCodePlusCap.Text = "Код АЦП";
         _lblCodePlusCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1563,9 +1566,9 @@ partial class ServiceForm
         _lblAutoCalcPlus.AutoSize = true;
         _lblAutoCalcPlus.Dock = DockStyle.Fill;
         _lblAutoCalcPlus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblAutoCalcPlus.Location = new Point(3, 58);
+        _lblAutoCalcPlus.Location = new Point(3, 78);
         _lblAutoCalcPlus.Name = "_lblAutoCalcPlus";
-        _lblAutoCalcPlus.Size = new Size(208, 22);
+        _lblAutoCalcPlus.Size = new Size(239, 29);
         _lblAutoCalcPlus.TabIndex = 5;
         _lblAutoCalcPlus.Text = "Авторасчёт";
         _lblAutoCalcPlus.TextAlign = ContentAlignment.MiddleCenter;
@@ -1589,8 +1592,7 @@ partial class ServiceForm
         tlpDirectionCorrectionsLeft.Controls.Add(_txtCodeMinus, 1, 3);
         tlpDirectionCorrectionsLeft.Controls.Add(_btnCapMinus, 2, 3);
         tlpDirectionCorrectionsLeft.Dock = DockStyle.Fill;
-        tlpDirectionCorrectionsLeft.Location = new Point(3, 191);
-        tlpDirectionCorrectionsLeft.Margin = new Padding(3, 2, 3, 2);
+        tlpDirectionCorrectionsLeft.Location = new Point(3, 258);
         tlpDirectionCorrectionsLeft.Name = "tlpDirectionCorrectionsLeft";
         tlpDirectionCorrectionsLeft.RowCount = 6;
         tlpDirectionCorrectionsLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
@@ -1599,7 +1601,7 @@ partial class ServiceForm
         tlpDirectionCorrectionsLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
         tlpDirectionCorrectionsLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 16F));
         tlpDirectionCorrectionsLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 24F));
-        tlpDirectionCorrectionsLeft.Size = new Size(642, 186);
+        tlpDirectionCorrectionsLeft.Size = new Size(736, 250);
         tlpDirectionCorrectionsLeft.TabIndex = 1;
         // 
         // _lblSecMinus_01
@@ -1608,9 +1610,9 @@ partial class ServiceForm
         _lblSecMinus_01.Dock = DockStyle.Fill;
         _lblSecMinus_01.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
         _lblSecMinus_01.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblSecMinus_01.Location = new Point(217, 0);
+        _lblSecMinus_01.Location = new Point(248, 0);
         _lblSecMinus_01.Name = "_lblSecMinus_01";
-        _lblSecMinus_01.Size = new Size(208, 29);
+        _lblSecMinus_01.Size = new Size(239, 40);
         _lblSecMinus_01.TabIndex = 28;
         _lblSecMinus_01.Text = "Поправочный коэффициент ←";
         _lblSecMinus_01.TextAlign = ContentAlignment.MiddleCenter;
@@ -1623,7 +1625,7 @@ partial class ServiceForm
         _lblSecMinus_00.ForeColor = Color.FromArgb(46, 58, 70);
         _lblSecMinus_00.Location = new Point(3, 0);
         _lblSecMinus_00.Name = "_lblSecMinus_00";
-        _lblSecMinus_00.Size = new Size(208, 29);
+        _lblSecMinus_00.Size = new Size(239, 40);
         _lblSecMinus_00.TabIndex = 12;
         _lblSecMinus_00.Text = "──────────────────";
         _lblSecMinus_00.TextAlign = ContentAlignment.MiddleRight;
@@ -1632,10 +1634,10 @@ partial class ServiceForm
         // 
         _txtKMinus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtKMinus.Font = new Font("Courier New", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtKMinus.Location = new Point(218, 32);
-        _txtKMinus.Margin = new Padding(4, 0, 4, 0);
+        _txtKMinus.Location = new Point(250, 47);
+        _txtKMinus.Margin = new Padding(5, 0, 5, 0);
         _txtKMinus.Name = "_txtKMinus";
-        _txtKMinus.Size = new Size(206, 23);
+        _txtKMinus.Size = new Size(235, 26);
         _txtKMinus.TabIndex = 14;
         // 
         // _lblSecMinus_02
@@ -1644,9 +1646,9 @@ partial class ServiceForm
         _lblSecMinus_02.Dock = DockStyle.Fill;
         _lblSecMinus_02.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
         _lblSecMinus_02.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblSecMinus_02.Location = new Point(431, 0);
+        _lblSecMinus_02.Location = new Point(493, 0);
         _lblSecMinus_02.Name = "_lblSecMinus_02";
-        _lblSecMinus_02.Size = new Size(208, 29);
+        _lblSecMinus_02.Size = new Size(240, 40);
         _lblSecMinus_02.TabIndex = 27;
         _lblSecMinus_02.Text = "──────────────────";
         _lblSecMinus_02.TextAlign = ContentAlignment.MiddleLeft;
@@ -1656,9 +1658,9 @@ partial class ServiceForm
         _lblKMinusEquals.AutoSize = true;
         _lblKMinusEquals.Dock = DockStyle.Fill;
         _lblKMinusEquals.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblKMinusEquals.Location = new Point(3, 29);
+        _lblKMinusEquals.Location = new Point(3, 40);
         _lblKMinusEquals.Name = "_lblKMinusEquals";
-        _lblKMinusEquals.Size = new Size(208, 29);
+        _lblKMinusEquals.Size = new Size(239, 40);
         _lblKMinusEquals.TabIndex = 13;
         _lblKMinusEquals.Text = "Значение =";
         _lblKMinusEquals.TextAlign = ContentAlignment.MiddleRight;
@@ -1668,9 +1670,9 @@ partial class ServiceForm
         _lblAutoCalcMinus.AutoSize = true;
         _lblAutoCalcMinus.Dock = DockStyle.Fill;
         _lblAutoCalcMinus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblAutoCalcMinus.Location = new Point(3, 58);
+        _lblAutoCalcMinus.Location = new Point(3, 80);
         _lblAutoCalcMinus.Name = "_lblAutoCalcMinus";
-        _lblAutoCalcMinus.Size = new Size(208, 22);
+        _lblAutoCalcMinus.Size = new Size(239, 30);
         _lblAutoCalcMinus.TabIndex = 15;
         _lblAutoCalcMinus.Text = "Авторасчёт";
         _lblAutoCalcMinus.TextAlign = ContentAlignment.MiddleCenter;
@@ -1681,10 +1683,10 @@ partial class ServiceForm
         _btnCalcMinus.FlatAppearance.BorderSize = 0;
         _btnCalcMinus.FlatStyle = FlatStyle.Flat;
         _btnCalcMinus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnCalcMinus.Location = new Point(226, 143);
-        _btnCalcMinus.Margin = new Padding(12, 5, 12, 5);
+        _btnCalcMinus.Location = new Point(259, 197);
+        _btnCalcMinus.Margin = new Padding(14, 7, 14, 7);
         _btnCalcMinus.Name = "_btnCalcMinus";
-        _btnCalcMinus.Size = new Size(190, 38);
+        _btnCalcMinus.Size = new Size(217, 46);
         _btnCalcMinus.TabIndex = 21;
         _btnCalcMinus.Text = "Рассчитать";
         _btnCalcMinus.UseVisualStyleBackColor = false;
@@ -1695,9 +1697,9 @@ partial class ServiceForm
         _lblMassMinusCap.AutoSize = true;
         _lblMassMinusCap.Dock = DockStyle.Fill;
         _lblMassMinusCap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblMassMinusCap.Location = new Point(3, 109);
+        _lblMassMinusCap.Location = new Point(3, 150);
         _lblMassMinusCap.Name = "_lblMassMinusCap";
-        _lblMassMinusCap.Size = new Size(208, 29);
+        _lblMassMinusCap.Size = new Size(239, 40);
         _lblMassMinusCap.TabIndex = 19;
         _lblMassMinusCap.Text = "Эталон (т)";
         _lblMassMinusCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1707,9 +1709,9 @@ partial class ServiceForm
         _lblCodeMinusCap.AutoSize = true;
         _lblCodeMinusCap.Dock = DockStyle.Fill;
         _lblCodeMinusCap.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblCodeMinusCap.Location = new Point(3, 80);
+        _lblCodeMinusCap.Location = new Point(3, 110);
         _lblCodeMinusCap.Name = "_lblCodeMinusCap";
-        _lblCodeMinusCap.Size = new Size(208, 29);
+        _lblCodeMinusCap.Size = new Size(239, 40);
         _lblCodeMinusCap.TabIndex = 16;
         _lblCodeMinusCap.Text = "Код АЦП";
         _lblCodeMinusCap.TextAlign = ContentAlignment.MiddleRight;
@@ -1718,20 +1720,20 @@ partial class ServiceForm
         // 
         _txtMassMinus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtMassMinus.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtMassMinus.Location = new Point(218, 113);
-        _txtMassMinus.Margin = new Padding(4, 0, 4, 0);
+        _txtMassMinus.Location = new Point(250, 158);
+        _txtMassMinus.Margin = new Padding(5, 0, 5, 0);
         _txtMassMinus.Name = "_txtMassMinus";
-        _txtMassMinus.Size = new Size(206, 21);
+        _txtMassMinus.Size = new Size(235, 24);
         _txtMassMinus.TabIndex = 20;
         // 
         // _txtCodeMinus
         // 
         _txtCodeMinus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _txtCodeMinus.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtCodeMinus.Location = new Point(218, 84);
-        _txtCodeMinus.Margin = new Padding(4, 0, 4, 0);
+        _txtCodeMinus.Location = new Point(250, 118);
+        _txtCodeMinus.Margin = new Padding(5, 0, 5, 0);
         _txtCodeMinus.Name = "_txtCodeMinus";
-        _txtCodeMinus.Size = new Size(206, 21);
+        _txtCodeMinus.Size = new Size(235, 24);
         _txtCodeMinus.TabIndex = 17;
         // 
         // _btnCapMinus
@@ -1740,10 +1742,10 @@ partial class ServiceForm
         _btnCapMinus.FlatAppearance.BorderSize = 0;
         _btnCapMinus.FlatStyle = FlatStyle.Flat;
         _btnCapMinus.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnCapMinus.Location = new Point(442, 84);
-        _btnCapMinus.Margin = new Padding(14, 4, 14, 4);
+        _btnCapMinus.Location = new Point(506, 115);
+        _btnCapMinus.Margin = new Padding(16, 5, 16, 5);
         _btnCapMinus.Name = "_btnCapMinus";
-        _btnCapMinus.Size = new Size(186, 21);
+        _btnCapMinus.Size = new Size(214, 30);
         _btnCapMinus.TabIndex = 18;
         _btnCapMinus.Text = "Захватить";
         _btnCapMinus.UseVisualStyleBackColor = false;
@@ -1754,19 +1756,19 @@ partial class ServiceForm
         _dgvDirectionCorrectionProfiles.AllowUserToAddRows = false;
         _dgvDirectionCorrectionProfiles.AllowUserToDeleteRows = false;
         _dgvDirectionCorrectionProfiles.AllowUserToResizeRows = false;
-        dataGridViewCellStyle5.BackColor = Color.White;
-        dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        _dgvDirectionCorrectionProfiles.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+        dataGridViewCellStyle12.BackColor = Color.White;
+        dataGridViewCellStyle12.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvDirectionCorrectionProfiles.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle12;
         _dgvDirectionCorrectionProfiles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         _dgvDirectionCorrectionProfiles.BackgroundColor = Color.White;
-        dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle6.BackColor = Color.FromArgb(147, 112, 219);
-        dataGridViewCellStyle6.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-        dataGridViewCellStyle6.ForeColor = Color.FromArgb(240, 255, 240);
-        dataGridViewCellStyle6.SelectionBackColor = Color.FromArgb(147, 112, 219);
-        dataGridViewCellStyle6.SelectionForeColor = Color.FromArgb(240, 255, 240);
-        dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+        dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle13.BackColor = Color.FromArgb(147, 112, 219);
+        dataGridViewCellStyle13.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+        dataGridViewCellStyle13.ForeColor = Color.FromArgb(240, 255, 240);
+        dataGridViewCellStyle13.SelectionBackColor = Color.FromArgb(147, 112, 219);
+        dataGridViewCellStyle13.SelectionForeColor = Color.FromArgb(240, 255, 240);
+        dataGridViewCellStyle13.WrapMode = DataGridViewTriState.True;
+        _dgvDirectionCorrectionProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
         _dgvDirectionCorrectionProfiles.ColumnHeadersHeight = 34;
         _dgvDirectionCorrectionProfiles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _dgvDirectionCorrectionProfiles.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8 });
@@ -1775,18 +1777,19 @@ partial class ServiceForm
         _dgvDirectionCorrectionProfiles.EnableHeadersVisualStyles = false;
         _dgvDirectionCorrectionProfiles.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _dgvDirectionCorrectionProfiles.GridColor = Color.FromArgb(212, 216, 222);
-        _dgvDirectionCorrectionProfiles.Location = new Point(657, 3);
+        _dgvDirectionCorrectionProfiles.Location = new Point(751, 4);
+        _dgvDirectionCorrectionProfiles.Margin = new Padding(3, 4, 3, 4);
         _dgvDirectionCorrectionProfiles.MultiSelect = false;
         _dgvDirectionCorrectionProfiles.Name = "_dgvDirectionCorrectionProfiles";
         _dgvDirectionCorrectionProfiles.ReadOnly = true;
         _dgvDirectionCorrectionProfiles.RowHeadersVisible = false;
         _dgvDirectionCorrectionProfiles.RowHeadersWidth = 62;
-        dataGridViewCellStyle7.BackColor = Color.White;
-        dataGridViewCellStyle7.SelectionBackColor = Color.FromArgb(220, 232, 247);
-        _dgvDirectionCorrectionProfiles.RowsDefaultCellStyle = dataGridViewCellStyle7;
+        dataGridViewCellStyle14.BackColor = Color.White;
+        dataGridViewCellStyle14.SelectionBackColor = Color.FromArgb(220, 232, 247);
+        _dgvDirectionCorrectionProfiles.RowsDefaultCellStyle = dataGridViewCellStyle14;
         _dgvDirectionCorrectionProfiles.RowTemplate.Height = 28;
         _dgvDirectionCorrectionProfiles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        _dgvDirectionCorrectionProfiles.Size = new Size(678, 377);
+        _dgvDirectionCorrectionProfiles.Size = new Size(777, 509);
         _dgvDirectionCorrectionProfiles.TabIndex = 24;
         // 
         // dataGridViewTextBoxColumn4
@@ -1840,19 +1843,20 @@ partial class ServiceForm
         _pnlDirectionCorrectionsBottom.Controls.Add(_lblFormulaD);
         _pnlDirectionCorrectionsBottom.Controls.Add(_btnDirectionCorrectionProfileSave);
         _pnlDirectionCorrectionsBottom.Dock = DockStyle.Bottom;
-        _pnlDirectionCorrectionsBottom.Location = new Point(0, 460);
+        _pnlDirectionCorrectionsBottom.Location = new Point(0, 618);
+        _pnlDirectionCorrectionsBottom.Margin = new Padding(3, 4, 3, 4);
         _pnlDirectionCorrectionsBottom.Name = "_pnlDirectionCorrectionsBottom";
-        _pnlDirectionCorrectionsBottom.Padding = new Padding(16, 9, 16, 9);
-        _pnlDirectionCorrectionsBottom.Size = new Size(1340, 54);
+        _pnlDirectionCorrectionsBottom.Padding = new Padding(18, 12, 18, 12);
+        _pnlDirectionCorrectionsBottom.Size = new Size(1533, 71);
         _pnlDirectionCorrectionsBottom.TabIndex = 2;
         // 
         // _lblFormulaD
         // 
         _lblFormulaD.AutoSize = true;
         _lblFormulaD.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblFormulaD.Location = new Point(16, 15);
+        _lblFormulaD.Location = new Point(18, 20);
         _lblFormulaD.Name = "_lblFormulaD";
-        _lblFormulaD.Size = new Size(427, 21);
+        _lblFormulaD.Size = new Size(540, 28);
         _lblFormulaD.TabIndex = 22;
         _lblFormulaD.Text = "Динамическая масса = статическая масса × коэффициент";
         // 
@@ -1860,9 +1864,10 @@ partial class ServiceForm
         // 
         _btnDirectionCorrectionProfileSave.FlatStyle = FlatStyle.Flat;
         _btnDirectionCorrectionProfileSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDirectionCorrectionProfileSave.Location = new Point(589, 9);
+        _btnDirectionCorrectionProfileSave.Location = new Point(673, 12);
+        _btnDirectionCorrectionProfileSave.Margin = new Padding(3, 4, 3, 4);
         _btnDirectionCorrectionProfileSave.Name = "_btnDirectionCorrectionProfileSave";
-        _btnDirectionCorrectionProfileSave.Size = new Size(220, 34);
+        _btnDirectionCorrectionProfileSave.Size = new Size(251, 45);
         _btnDirectionCorrectionProfileSave.TabIndex = 23;
         _btnDirectionCorrectionProfileSave.Text = "Применить и сохранить";
         _btnDirectionCorrectionProfileSave.UseVisualStyleBackColor = false;
@@ -1875,26 +1880,30 @@ partial class ServiceForm
         _pnlDirectionCorrectionsHead.Controls.Add(_tlpHeaders);
         _pnlDirectionCorrectionsHead.Dock = DockStyle.Top;
         _pnlDirectionCorrectionsHead.Location = new Point(0, 0);
+        _pnlDirectionCorrectionsHead.Margin = new Padding(3, 4, 3, 4);
         _pnlDirectionCorrectionsHead.Name = "_pnlDirectionCorrectionsHead";
-        _pnlDirectionCorrectionsHead.Size = new Size(1340, 75);
+        _pnlDirectionCorrectionsHead.Size = new Size(1533, 99);
         _pnlDirectionCorrectionsHead.TabIndex = 0;
         // 
         // _tlpHeaders
         // 
         _tlpHeaders.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-        _tlpHeaders.ColumnCount = 4;
-        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.1232872F));
-        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.0851936F));
-        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.4077759F));
-        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.2200165F));
-        _tlpHeaders.Controls.Add(_lblLiveWeightD, 3, 1);
-        _tlpHeaders.Controls.Add(_lblLiveAdcD, 3, 0);
-        _tlpHeaders.Controls.Add(_lblLiveAdcCapD, 2, 0);
+        _tlpHeaders.ColumnCount = 5;
+        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.4155931F));
+        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.6078434F));
+        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.7843132F));
+        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.973856F));
+        _tlpHeaders.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.06536F));
+        _tlpHeaders.Controls.Add(_rbCh1CalibDynamic, 2, 1);
+        _tlpHeaders.Controls.Add(_rbCh0CalibDynamic, 2, 0);
         _tlpHeaders.Controls.Add(_btnDirectionCorrectionPortRefresh, 1, 1);
         _tlpHeaders.Controls.Add(_btnDirectionCorrectionConn, 0, 1);
         _tlpHeaders.Controls.Add(_lblDirectionCorrectionConn, 1, 0);
-        _tlpHeaders.Controls.Add(_lblLiveWeightCapD, 2, 1);
         _tlpHeaders.Controls.Add(_cmbDirectionCorrectionPort, 0, 0);
+        _tlpHeaders.Controls.Add(_lblLiveWeightD, 4, 1);
+        _tlpHeaders.Controls.Add(_lblLiveAdcD, 4, 0);
+        _tlpHeaders.Controls.Add(_lblLiveAdcCapD, 3, 0);
+        _tlpHeaders.Controls.Add(_lblLiveWeightCapD, 3, 1);
         _tlpHeaders.Dock = DockStyle.Fill;
         _tlpHeaders.Location = new Point(0, 0);
         _tlpHeaders.Margin = new Padding(0);
@@ -1902,7 +1911,7 @@ partial class ServiceForm
         _tlpHeaders.RowCount = 2;
         _tlpHeaders.RowStyles.Add(new RowStyle(SizeType.Percent, 48.61111F));
         _tlpHeaders.RowStyles.Add(new RowStyle(SizeType.Percent, 51.38889F));
-        _tlpHeaders.Size = new Size(1338, 73);
+        _tlpHeaders.Size = new Size(1531, 97);
         _tlpHeaders.TabIndex = 9;
         // 
         // _lblLiveWeightD
@@ -1911,9 +1920,9 @@ partial class ServiceForm
         _lblLiveWeightD.Dock = DockStyle.Fill;
         _lblLiveWeightD.Font = new Font("Courier New", 13F, FontStyle.Bold, GraphicsUnit.Point);
         _lblLiveWeightD.ForeColor = Color.FromArgb(192, 0, 192);
-        _lblLiveWeightD.Location = new Point(988, 36);
+        _lblLiveWeightD.Location = new Point(1225, 47);
         _lblLiveWeightD.Name = "_lblLiveWeightD";
-        _lblLiveWeightD.Size = new Size(346, 36);
+        _lblLiveWeightD.Size = new Size(302, 49);
         _lblLiveWeightD.TabIndex = 3;
         _lblLiveWeightD.Text = "—";
         _lblLiveWeightD.TextAlign = ContentAlignment.MiddleLeft;
@@ -1925,9 +1934,9 @@ partial class ServiceForm
         _lblLiveAdcD.Dock = DockStyle.Fill;
         _lblLiveAdcD.Font = new Font("Courier New", 13F, FontStyle.Bold, GraphicsUnit.Point);
         _lblLiveAdcD.ForeColor = Color.Fuchsia;
-        _lblLiveAdcD.Location = new Point(988, 1);
+        _lblLiveAdcD.Location = new Point(1225, 1);
         _lblLiveAdcD.Name = "_lblLiveAdcD";
-        _lblLiveAdcD.Size = new Size(346, 34);
+        _lblLiveAdcD.Size = new Size(302, 45);
         _lblLiveAdcD.TabIndex = 1;
         _lblLiveAdcD.Text = "—";
         _lblLiveAdcD.TextAlign = ContentAlignment.MiddleLeft;
@@ -1939,9 +1948,9 @@ partial class ServiceForm
         _lblLiveAdcCapD.Dock = DockStyle.Fill;
         _lblLiveAdcCapD.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblLiveAdcCapD.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblLiveAdcCapD.Location = new Point(675, 1);
+        _lblLiveAdcCapD.Location = new Point(950, 1);
         _lblLiveAdcCapD.Name = "_lblLiveAdcCapD";
-        _lblLiveAdcCapD.Size = new Size(306, 34);
+        _lblLiveAdcCapD.Size = new Size(268, 45);
         _lblLiveAdcCapD.TabIndex = 0;
         _lblLiveAdcCapD.Text = "Текущий код АЦП";
         _lblLiveAdcCapD.TextAlign = ContentAlignment.MiddleRight;
@@ -1952,10 +1961,10 @@ partial class ServiceForm
         _btnDirectionCorrectionPortRefresh.FlatAppearance.BorderSize = 0;
         _btnDirectionCorrectionPortRefresh.FlatStyle = FlatStyle.Flat;
         _btnDirectionCorrectionPortRefresh.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDirectionCorrectionPortRefresh.Location = new Point(246, 39);
-        _btnDirectionCorrectionPortRefresh.Margin = new Padding(16, 2, 3, 2);
+        _btnDirectionCorrectionPortRefresh.Location = new Point(194, 51);
+        _btnDirectionCorrectionPortRefresh.Margin = new Padding(18, 3, 3, 3);
         _btnDirectionCorrectionPortRefresh.Name = "_btnDirectionCorrectionPortRefresh";
-        _btnDirectionCorrectionPortRefresh.Size = new Size(120, 30);
+        _btnDirectionCorrectionPortRefresh.Size = new Size(137, 40);
         _btnDirectionCorrectionPortRefresh.TabIndex = 7;
         _btnDirectionCorrectionPortRefresh.Text = "↺ Обновить";
         _btnDirectionCorrectionPortRefresh.UseVisualStyleBackColor = false;
@@ -1967,10 +1976,9 @@ partial class ServiceForm
         _btnDirectionCorrectionConn.FlatAppearance.BorderSize = 0;
         _btnDirectionCorrectionConn.FlatStyle = FlatStyle.Flat;
         _btnDirectionCorrectionConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnDirectionCorrectionConn.Location = new Point(4, 38);
-        _btnDirectionCorrectionConn.Margin = new Padding(3, 2, 3, 2);
+        _btnDirectionCorrectionConn.Location = new Point(4, 50);
         _btnDirectionCorrectionConn.Name = "_btnDirectionCorrectionConn";
-        _btnDirectionCorrectionConn.Size = new Size(222, 32);
+        _btnDirectionCorrectionConn.Size = new Size(168, 43);
         _btnDirectionCorrectionConn.TabIndex = 6;
         _btnDirectionCorrectionConn.Text = "Подключить";
         _btnDirectionCorrectionConn.UseVisualStyleBackColor = false;
@@ -1980,12 +1988,11 @@ partial class ServiceForm
         // 
         _lblDirectionCorrectionConn.AutoSize = true;
         _lblDirectionCorrectionConn.BackColor = Color.Transparent;
-        _lblDirectionCorrectionConn.Dock = DockStyle.Fill;
         _lblDirectionCorrectionConn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblDirectionCorrectionConn.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblDirectionCorrectionConn.Location = new Point(233, 1);
+        _lblDirectionCorrectionConn.Location = new Point(179, 1);
         _lblDirectionCorrectionConn.Name = "_lblDirectionCorrectionConn";
-        _lblDirectionCorrectionConn.Size = new Size(435, 34);
+        _lblDirectionCorrectionConn.Size = new Size(277, 28);
         _lblDirectionCorrectionConn.TabIndex = 8;
         _lblDirectionCorrectionConn.Text = "Динамика: нет подключения";
         _lblDirectionCorrectionConn.TextAlign = ContentAlignment.MiddleCenter;
@@ -1997,9 +2004,9 @@ partial class ServiceForm
         _lblLiveWeightCapD.Dock = DockStyle.Fill;
         _lblLiveWeightCapD.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _lblLiveWeightCapD.ForeColor = Color.FromArgb(46, 58, 70);
-        _lblLiveWeightCapD.Location = new Point(675, 36);
+        _lblLiveWeightCapD.Location = new Point(950, 47);
         _lblLiveWeightCapD.Name = "_lblLiveWeightCapD";
-        _lblLiveWeightCapD.Size = new Size(306, 36);
+        _lblLiveWeightCapD.Size = new Size(268, 49);
         _lblLiveWeightCapD.TabIndex = 2;
         _lblLiveWeightCapD.Text = "Текущая масса";
         _lblLiveWeightCapD.TextAlign = ContentAlignment.MiddleRight;
@@ -2011,10 +2018,10 @@ partial class ServiceForm
         _cmbDirectionCorrectionPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDirectionCorrectionPort.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         _cmbDirectionCorrectionPort.ForeColor = Color.FromArgb(35, 49, 63);
-        _cmbDirectionCorrectionPort.Location = new Point(5, 3);
-        _cmbDirectionCorrectionPort.Margin = new Padding(4, 0, 4, 3);
+        _cmbDirectionCorrectionPort.Location = new Point(6, 6);
+        _cmbDirectionCorrectionPort.Margin = new Padding(5, 0, 5, 4);
         _cmbDirectionCorrectionPort.Name = "_cmbDirectionCorrectionPort";
-        _cmbDirectionCorrectionPort.Size = new Size(220, 25);
+        _cmbDirectionCorrectionPort.Size = new Size(164, 31);
         _cmbDirectionCorrectionPort.TabIndex = 4;
         // 
         // _tabSett
@@ -2057,9 +2064,10 @@ partial class ServiceForm
         _tabSett.Controls.Add(_chkDynamicEma);
         _tabSett.Controls.Add(_lblDynamicEmaAlphaCap);
         _tabSett.Controls.Add(_txtDynamicEmaAlpha);
-        _tabSett.Location = new Point(4, 26);
+        _tabSett.Location = new Point(4, 32);
+        _tabSett.Margin = new Padding(3, 4, 3, 4);
         _tabSett.Name = "_tabSett";
-        _tabSett.Size = new Size(1340, 514);
+        _tabSett.Size = new Size(1533, 689);
         _tabSett.TabIndex = 5;
         _tabSett.Text = "Настройки";
         // 
@@ -2067,9 +2075,9 @@ partial class ServiceForm
         // 
         _lblPortCap.AutoSize = true;
         _lblPortCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblPortCap.Location = new Point(20, 20);
+        _lblPortCap.Location = new Point(23, 27);
         _lblPortCap.Name = "_lblPortCap";
-        _lblPortCap.Size = new Size(81, 19);
+        _lblPortCap.Size = new Size(97, 23);
         _lblPortCap.TabIndex = 0;
         _lblPortCap.Text = "COM-порт:";
         // 
@@ -2077,27 +2085,29 @@ partial class ServiceForm
         // 
         _cmbSettPort.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbSettPort.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _cmbSettPort.Location = new Point(220, 16);
+        _cmbSettPort.Location = new Point(251, 21);
+        _cmbSettPort.Margin = new Padding(3, 4, 3, 4);
         _cmbSettPort.Name = "_cmbSettPort";
-        _cmbSettPort.Size = new Size(200, 29);
+        _cmbSettPort.Size = new Size(228, 36);
         _cmbSettPort.TabIndex = 1;
         // 
         // _lblNpvCap
         // 
         _lblNpvCap.AutoSize = true;
         _lblNpvCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblNpvCap.Location = new Point(20, 56);
+        _lblNpvCap.Location = new Point(23, 75);
         _lblNpvCap.Name = "_lblNpvCap";
-        _lblNpvCap.Size = new Size(58, 19);
+        _lblNpvCap.Size = new Size(70, 23);
         _lblNpvCap.TabIndex = 2;
         _lblNpvCap.Text = "НПВ (т):";
         // 
         // _txtNpv
         // 
         _txtNpv.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtNpv.Location = new Point(220, 52);
+        _txtNpv.Location = new Point(251, 69);
+        _txtNpv.Margin = new Padding(3, 4, 3, 4);
         _txtNpv.Name = "_txtNpv";
-        _txtNpv.Size = new Size(200, 29);
+        _txtNpv.Size = new Size(228, 34);
         _txtNpv.TabIndex = 3;
         _txtNpv.Text = "140";
         // 
@@ -2105,9 +2115,9 @@ partial class ServiceForm
         // 
         _lblDiscCap.AutoSize = true;
         _lblDiscCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDiscCap.Location = new Point(20, 92);
+        _lblDiscCap.Location = new Point(23, 123);
         _lblDiscCap.Name = "_lblDiscCap";
-        _lblDiscCap.Size = new Size(99, 19);
+        _lblDiscCap.Size = new Size(122, 23);
         _lblDiscCap.TabIndex = 4;
         _lblDiscCap.Text = "Дискретность:";
         // 
@@ -2116,27 +2126,29 @@ partial class ServiceForm
         _cmbDisc.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbDisc.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         _cmbDisc.Items.AddRange(new object[] { "0.1 т", "0.05 т", "0.01 т" });
-        _cmbDisc.Location = new Point(220, 88);
+        _cmbDisc.Location = new Point(251, 117);
+        _cmbDisc.Margin = new Padding(3, 4, 3, 4);
         _cmbDisc.Name = "_cmbDisc";
-        _cmbDisc.Size = new Size(200, 29);
+        _cmbDisc.Size = new Size(228, 36);
         _cmbDisc.TabIndex = 5;
         // 
         // _lblZeroCap
         // 
         _lblZeroCap.AutoSize = true;
         _lblZeroCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblZeroCap.Location = new Point(20, 128);
+        _lblZeroCap.Location = new Point(23, 171);
         _lblZeroCap.Name = "_lblZeroCap";
-        _lblZeroCap.Size = new Size(141, 19);
+        _lblZeroCap.Size = new Size(173, 23);
         _lblZeroCap.TabIndex = 6;
         _lblZeroCap.Text = "Лимит нуля (% НПВ):";
         // 
         // _txtZeroLimit
         // 
         _txtZeroLimit.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtZeroLimit.Location = new Point(220, 124);
+        _txtZeroLimit.Location = new Point(251, 165);
+        _txtZeroLimit.Margin = new Padding(3, 4, 3, 4);
         _txtZeroLimit.Name = "_txtZeroLimit";
-        _txtZeroLimit.Size = new Size(200, 29);
+        _txtZeroLimit.Size = new Size(228, 34);
         _txtZeroLimit.TabIndex = 7;
         _txtZeroLimit.Text = "2";
         // 
@@ -2144,18 +2156,19 @@ partial class ServiceForm
         // 
         _lblPasswordCap.AutoSize = true;
         _lblPasswordCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblPasswordCap.Location = new Point(20, 164);
+        _lblPasswordCap.Location = new Point(23, 219);
         _lblPasswordCap.Name = "_lblPasswordCap";
-        _lblPasswordCap.Size = new Size(104, 19);
+        _lblPasswordCap.Size = new Size(129, 23);
         _lblPasswordCap.TabIndex = 8;
         _lblPasswordCap.Text = "Новый пароль:";
         // 
         // _txtNewPassword
         // 
         _txtNewPassword.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtNewPassword.Location = new Point(220, 160);
+        _txtNewPassword.Location = new Point(251, 213);
+        _txtNewPassword.Margin = new Padding(3, 4, 3, 4);
         _txtNewPassword.Name = "_txtNewPassword";
-        _txtNewPassword.Size = new Size(200, 29);
+        _txtNewPassword.Size = new Size(228, 34);
         _txtNewPassword.TabIndex = 9;
         _txtNewPassword.UseSystemPasswordChar = true;
         // 
@@ -2163,9 +2176,10 @@ partial class ServiceForm
         // 
         _btnSaveSettings.FlatStyle = FlatStyle.Flat;
         _btnSaveSettings.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _btnSaveSettings.Location = new Point(20, 204);
+        _btnSaveSettings.Location = new Point(23, 272);
+        _btnSaveSettings.Margin = new Padding(3, 4, 3, 4);
         _btnSaveSettings.Name = "_btnSaveSettings";
-        _btnSaveSettings.Size = new Size(130, 34);
+        _btnSaveSettings.Size = new Size(149, 45);
         _btnSaveSettings.TabIndex = 10;
         _btnSaveSettings.Text = "Сохранить";
         _btnSaveSettings.UseVisualStyleBackColor = false;
@@ -2175,9 +2189,9 @@ partial class ServiceForm
         // 
         _lblFilterStaticCap.AutoSize = true;
         _lblFilterStaticCap.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblFilterStaticCap.Location = new Point(490, 20);
+        _lblFilterStaticCap.Location = new Point(560, 27);
         _lblFilterStaticCap.Name = "_lblFilterStaticCap";
-        _lblFilterStaticCap.Size = new Size(199, 19);
+        _lblFilterStaticCap.Size = new Size(239, 23);
         _lblFilterStaticCap.TabIndex = 11;
         _lblFilterStaticCap.Text = "Фильтры потока — статика";
         // 
@@ -2185,10 +2199,9 @@ partial class ServiceForm
         // 
         _chkStaticClamp.AutoSize = true;
         _chkStaticClamp.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkStaticClamp.Location = new Point(490, 56);
-        _chkStaticClamp.Margin = new Padding(3, 2, 3, 2);
+        _chkStaticClamp.Location = new Point(560, 75);
         _chkStaticClamp.Name = "_chkStaticClamp";
-        _chkStaticClamp.Size = new Size(142, 23);
+        _chkStaticClamp.Size = new Size(173, 27);
         _chkStaticClamp.TabIndex = 12;
         _chkStaticClamp.Text = "Клэмп кодов АЦП";
         _chkStaticClamp.UseVisualStyleBackColor = true;
@@ -2197,18 +2210,19 @@ partial class ServiceForm
         // 
         _lblStaticClampMinCap.AutoSize = true;
         _lblStaticClampMinCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblStaticClampMinCap.Location = new Point(525, 92);
+        _lblStaticClampMinCap.Location = new Point(600, 123);
         _lblStaticClampMinCap.Name = "_lblStaticClampMinCap";
-        _lblStaticClampMinCap.Size = new Size(71, 19);
+        _lblStaticClampMinCap.Size = new Size(85, 23);
         _lblStaticClampMinCap.TabIndex = 13;
         _lblStaticClampMinCap.Text = "Мин. код:";
         // 
         // _txtStaticClampMin
         // 
         _txtStaticClampMin.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtStaticClampMin.Location = new Point(700, 88);
+        _txtStaticClampMin.Location = new Point(800, 117);
+        _txtStaticClampMin.Margin = new Padding(3, 4, 3, 4);
         _txtStaticClampMin.Name = "_txtStaticClampMin";
-        _txtStaticClampMin.Size = new Size(132, 29);
+        _txtStaticClampMin.Size = new Size(150, 34);
         _txtStaticClampMin.TabIndex = 14;
         _txtStaticClampMin.Text = "0";
         // 
@@ -2216,18 +2230,19 @@ partial class ServiceForm
         // 
         _lblStaticClampMaxCap.AutoSize = true;
         _lblStaticClampMaxCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblStaticClampMaxCap.Location = new Point(525, 128);
+        _lblStaticClampMaxCap.Location = new Point(600, 171);
         _lblStaticClampMaxCap.Name = "_lblStaticClampMaxCap";
-        _lblStaticClampMaxCap.Size = new Size(75, 19);
+        _lblStaticClampMaxCap.Size = new Size(90, 23);
         _lblStaticClampMaxCap.TabIndex = 15;
         _lblStaticClampMaxCap.Text = "Макс. код:";
         // 
         // _txtStaticClampMax
         // 
         _txtStaticClampMax.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtStaticClampMax.Location = new Point(700, 124);
+        _txtStaticClampMax.Location = new Point(800, 165);
+        _txtStaticClampMax.Margin = new Padding(3, 4, 3, 4);
         _txtStaticClampMax.Name = "_txtStaticClampMax";
-        _txtStaticClampMax.Size = new Size(132, 29);
+        _txtStaticClampMax.Size = new Size(150, 34);
         _txtStaticClampMax.TabIndex = 16;
         _txtStaticClampMax.Text = "65535";
         // 
@@ -2235,10 +2250,9 @@ partial class ServiceForm
         // 
         _chkStaticDelta.AutoSize = true;
         _chkStaticDelta.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkStaticDelta.Location = new Point(490, 164);
-        _chkStaticDelta.Margin = new Padding(3, 2, 3, 2);
+        _chkStaticDelta.Location = new Point(560, 219);
         _chkStaticDelta.Name = "_chkStaticDelta";
-        _chkStaticDelta.Size = new Size(128, 23);
+        _chkStaticDelta.Size = new Size(156, 27);
         _chkStaticDelta.TabIndex = 17;
         _chkStaticDelta.Text = "Фильтр скачков";
         _chkStaticDelta.UseVisualStyleBackColor = true;
@@ -2247,18 +2261,19 @@ partial class ServiceForm
         // 
         _lblStaticDeltaMaxCap.AutoSize = true;
         _lblStaticDeltaMaxCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblStaticDeltaMaxCap.Location = new Point(525, 200);
+        _lblStaticDeltaMaxCap.Location = new Point(600, 267);
         _lblStaticDeltaMaxCap.Name = "_lblStaticDeltaMaxCap";
-        _lblStaticDeltaMaxCap.Size = new Size(140, 19);
+        _lblStaticDeltaMaxCap.Size = new Size(170, 23);
         _lblStaticDeltaMaxCap.TabIndex = 18;
         _lblStaticDeltaMaxCap.Text = "Макс. скачок (коды):";
         // 
         // _txtStaticDeltaMax
         // 
         _txtStaticDeltaMax.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtStaticDeltaMax.Location = new Point(700, 196);
+        _txtStaticDeltaMax.Location = new Point(800, 261);
+        _txtStaticDeltaMax.Margin = new Padding(3, 4, 3, 4);
         _txtStaticDeltaMax.Name = "_txtStaticDeltaMax";
-        _txtStaticDeltaMax.Size = new Size(132, 29);
+        _txtStaticDeltaMax.Size = new Size(150, 34);
         _txtStaticDeltaMax.TabIndex = 19;
         _txtStaticDeltaMax.Text = "5000";
         // 
@@ -2266,10 +2281,9 @@ partial class ServiceForm
         // 
         _chkStaticEma.AutoSize = true;
         _chkStaticEma.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkStaticEma.Location = new Point(490, 236);
-        _chkStaticEma.Margin = new Padding(3, 2, 3, 2);
+        _chkStaticEma.Location = new Point(560, 315);
         _chkStaticEma.Name = "_chkStaticEma";
-        _chkStaticEma.Size = new Size(144, 23);
+        _chkStaticEma.Size = new Size(178, 27);
         _chkStaticEma.TabIndex = 20;
         _chkStaticEma.Text = "Сглаживание EMA";
         _chkStaticEma.UseVisualStyleBackColor = true;
@@ -2278,18 +2292,19 @@ partial class ServiceForm
         // 
         _lblStaticEmaAlphaCap.AutoSize = true;
         _lblStaticEmaAlphaCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblStaticEmaAlphaCap.Location = new Point(525, 272);
+        _lblStaticEmaAlphaCap.Location = new Point(600, 363);
         _lblStaticEmaAlphaCap.Name = "_lblStaticEmaAlphaCap";
-        _lblStaticEmaAlphaCap.Size = new Size(86, 19);
+        _lblStaticEmaAlphaCap.Size = new Size(105, 23);
         _lblStaticEmaAlphaCap.TabIndex = 21;
         _lblStaticEmaAlphaCap.Text = "Альфа (0..1):";
         // 
         // _txtStaticEmaAlpha
         // 
         _txtStaticEmaAlpha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtStaticEmaAlpha.Location = new Point(700, 268);
+        _txtStaticEmaAlpha.Location = new Point(800, 357);
+        _txtStaticEmaAlpha.Margin = new Padding(3, 4, 3, 4);
         _txtStaticEmaAlpha.Name = "_txtStaticEmaAlpha";
-        _txtStaticEmaAlpha.Size = new Size(132, 29);
+        _txtStaticEmaAlpha.Size = new Size(150, 34);
         _txtStaticEmaAlpha.TabIndex = 22;
         _txtStaticEmaAlpha.Text = "0.3";
         // 
@@ -2297,9 +2312,9 @@ partial class ServiceForm
         // 
         _lblFilterDynamicCap.AutoSize = true;
         _lblFilterDynamicCap.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-        _lblFilterDynamicCap.Location = new Point(875, 20);
+        _lblFilterDynamicCap.Location = new Point(1000, 27);
         _lblFilterDynamicCap.Name = "_lblFilterDynamicCap";
-        _lblFilterDynamicCap.Size = new Size(218, 19);
+        _lblFilterDynamicCap.Size = new Size(260, 23);
         _lblFilterDynamicCap.TabIndex = 23;
         _lblFilterDynamicCap.Text = "Фильтры потока — динамика";
         // 
@@ -2307,10 +2322,9 @@ partial class ServiceForm
         // 
         _chkDynamicClamp.AutoSize = true;
         _chkDynamicClamp.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkDynamicClamp.Location = new Point(875, 56);
-        _chkDynamicClamp.Margin = new Padding(3, 2, 3, 2);
+        _chkDynamicClamp.Location = new Point(1000, 75);
         _chkDynamicClamp.Name = "_chkDynamicClamp";
-        _chkDynamicClamp.Size = new Size(142, 23);
+        _chkDynamicClamp.Size = new Size(173, 27);
         _chkDynamicClamp.TabIndex = 24;
         _chkDynamicClamp.Text = "Клэмп кодов АЦП";
         _chkDynamicClamp.UseVisualStyleBackColor = true;
@@ -2319,18 +2333,19 @@ partial class ServiceForm
         // 
         _lblDynamicClampMinCap.AutoSize = true;
         _lblDynamicClampMinCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicClampMinCap.Location = new Point(910, 92);
+        _lblDynamicClampMinCap.Location = new Point(1040, 123);
         _lblDynamicClampMinCap.Name = "_lblDynamicClampMinCap";
-        _lblDynamicClampMinCap.Size = new Size(71, 19);
+        _lblDynamicClampMinCap.Size = new Size(85, 23);
         _lblDynamicClampMinCap.TabIndex = 25;
         _lblDynamicClampMinCap.Text = "Мин. код:";
         // 
         // _txtDynamicClampMin
         // 
         _txtDynamicClampMin.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtDynamicClampMin.Location = new Point(1085, 88);
+        _txtDynamicClampMin.Location = new Point(1240, 117);
+        _txtDynamicClampMin.Margin = new Padding(3, 4, 3, 4);
         _txtDynamicClampMin.Name = "_txtDynamicClampMin";
-        _txtDynamicClampMin.Size = new Size(132, 29);
+        _txtDynamicClampMin.Size = new Size(150, 34);
         _txtDynamicClampMin.TabIndex = 26;
         _txtDynamicClampMin.Text = "0";
         // 
@@ -2338,18 +2353,19 @@ partial class ServiceForm
         // 
         _lblDynamicClampMaxCap.AutoSize = true;
         _lblDynamicClampMaxCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicClampMaxCap.Location = new Point(910, 128);
+        _lblDynamicClampMaxCap.Location = new Point(1040, 171);
         _lblDynamicClampMaxCap.Name = "_lblDynamicClampMaxCap";
-        _lblDynamicClampMaxCap.Size = new Size(75, 19);
+        _lblDynamicClampMaxCap.Size = new Size(90, 23);
         _lblDynamicClampMaxCap.TabIndex = 27;
         _lblDynamicClampMaxCap.Text = "Макс. код:";
         // 
         // _txtDynamicClampMax
         // 
         _txtDynamicClampMax.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtDynamicClampMax.Location = new Point(1085, 124);
+        _txtDynamicClampMax.Location = new Point(1240, 165);
+        _txtDynamicClampMax.Margin = new Padding(3, 4, 3, 4);
         _txtDynamicClampMax.Name = "_txtDynamicClampMax";
-        _txtDynamicClampMax.Size = new Size(132, 29);
+        _txtDynamicClampMax.Size = new Size(150, 34);
         _txtDynamicClampMax.TabIndex = 28;
         _txtDynamicClampMax.Text = "65535";
         // 
@@ -2357,10 +2373,9 @@ partial class ServiceForm
         // 
         _chkDynamicDelta.AutoSize = true;
         _chkDynamicDelta.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkDynamicDelta.Location = new Point(875, 164);
-        _chkDynamicDelta.Margin = new Padding(3, 2, 3, 2);
+        _chkDynamicDelta.Location = new Point(1000, 219);
         _chkDynamicDelta.Name = "_chkDynamicDelta";
-        _chkDynamicDelta.Size = new Size(128, 23);
+        _chkDynamicDelta.Size = new Size(156, 27);
         _chkDynamicDelta.TabIndex = 29;
         _chkDynamicDelta.Text = "Фильтр скачков";
         _chkDynamicDelta.UseVisualStyleBackColor = true;
@@ -2369,18 +2384,19 @@ partial class ServiceForm
         // 
         _lblDynamicDeltaMaxCap.AutoSize = true;
         _lblDynamicDeltaMaxCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicDeltaMaxCap.Location = new Point(910, 200);
+        _lblDynamicDeltaMaxCap.Location = new Point(1040, 267);
         _lblDynamicDeltaMaxCap.Name = "_lblDynamicDeltaMaxCap";
-        _lblDynamicDeltaMaxCap.Size = new Size(140, 19);
+        _lblDynamicDeltaMaxCap.Size = new Size(170, 23);
         _lblDynamicDeltaMaxCap.TabIndex = 30;
         _lblDynamicDeltaMaxCap.Text = "Макс. скачок (коды):";
         // 
         // _txtDynamicDeltaMax
         // 
         _txtDynamicDeltaMax.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtDynamicDeltaMax.Location = new Point(1085, 196);
+        _txtDynamicDeltaMax.Location = new Point(1240, 261);
+        _txtDynamicDeltaMax.Margin = new Padding(3, 4, 3, 4);
         _txtDynamicDeltaMax.Name = "_txtDynamicDeltaMax";
-        _txtDynamicDeltaMax.Size = new Size(132, 29);
+        _txtDynamicDeltaMax.Size = new Size(150, 34);
         _txtDynamicDeltaMax.TabIndex = 31;
         _txtDynamicDeltaMax.Text = "5000";
         // 
@@ -2388,10 +2404,9 @@ partial class ServiceForm
         // 
         _chkDynamicStuck.AutoSize = true;
         _chkDynamicStuck.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkDynamicStuck.Location = new Point(875, 236);
-        _chkDynamicStuck.Margin = new Padding(3, 2, 3, 2);
+        _chkDynamicStuck.Location = new Point(1000, 315);
         _chkDynamicStuck.Name = "_chkDynamicStuck";
-        _chkDynamicStuck.Size = new Size(152, 23);
+        _chkDynamicStuck.Size = new Size(185, 27);
         _chkDynamicStuck.TabIndex = 32;
         _chkDynamicStuck.Text = "Застрявший датчик";
         _chkDynamicStuck.UseVisualStyleBackColor = true;
@@ -2400,18 +2415,19 @@ partial class ServiceForm
         // 
         _lblDynamicStuckSamplesCap.AutoSize = true;
         _lblDynamicStuckSamplesCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicStuckSamplesCap.Location = new Point(910, 272);
+        _lblDynamicStuckSamplesCap.Location = new Point(1040, 363);
         _lblDynamicStuckSamplesCap.Name = "_lblDynamicStuckSamplesCap";
-        _lblDynamicStuckSamplesCap.Size = new Size(115, 19);
+        _lblDynamicStuckSamplesCap.Size = new Size(144, 23);
         _lblDynamicStuckSamplesCap.TabIndex = 33;
         _lblDynamicStuckSamplesCap.Text = "Порог (сэмплов):";
         // 
         // _txtDynamicStuckSamples
         // 
         _txtDynamicStuckSamples.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtDynamicStuckSamples.Location = new Point(1085, 268);
+        _txtDynamicStuckSamples.Location = new Point(1240, 357);
+        _txtDynamicStuckSamples.Margin = new Padding(3, 4, 3, 4);
         _txtDynamicStuckSamples.Name = "_txtDynamicStuckSamples";
-        _txtDynamicStuckSamples.Size = new Size(132, 29);
+        _txtDynamicStuckSamples.Size = new Size(150, 34);
         _txtDynamicStuckSamples.TabIndex = 34;
         _txtDynamicStuckSamples.Text = "150";
         // 
@@ -2419,10 +2435,9 @@ partial class ServiceForm
         // 
         _chkDynamicEma.AutoSize = true;
         _chkDynamicEma.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _chkDynamicEma.Location = new Point(875, 308);
-        _chkDynamicEma.Margin = new Padding(3, 2, 3, 2);
+        _chkDynamicEma.Location = new Point(1000, 411);
         _chkDynamicEma.Name = "_chkDynamicEma";
-        _chkDynamicEma.Size = new Size(144, 23);
+        _chkDynamicEma.Size = new Size(178, 27);
         _chkDynamicEma.TabIndex = 35;
         _chkDynamicEma.Text = "Сглаживание EMA";
         _chkDynamicEma.UseVisualStyleBackColor = true;
@@ -2431,18 +2446,19 @@ partial class ServiceForm
         // 
         _lblDynamicEmaAlphaCap.AutoSize = true;
         _lblDynamicEmaAlphaCap.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-        _lblDynamicEmaAlphaCap.Location = new Point(910, 344);
+        _lblDynamicEmaAlphaCap.Location = new Point(1040, 459);
         _lblDynamicEmaAlphaCap.Name = "_lblDynamicEmaAlphaCap";
-        _lblDynamicEmaAlphaCap.Size = new Size(86, 19);
+        _lblDynamicEmaAlphaCap.Size = new Size(105, 23);
         _lblDynamicEmaAlphaCap.TabIndex = 36;
         _lblDynamicEmaAlphaCap.Text = "Альфа (0..1):";
         // 
         // _txtDynamicEmaAlpha
         // 
         _txtDynamicEmaAlpha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-        _txtDynamicEmaAlpha.Location = new Point(1085, 340);
+        _txtDynamicEmaAlpha.Location = new Point(1240, 453);
+        _txtDynamicEmaAlpha.Margin = new Padding(3, 4, 3, 4);
         _txtDynamicEmaAlpha.Name = "_txtDynamicEmaAlpha";
-        _txtDynamicEmaAlpha.Size = new Size(132, 29);
+        _txtDynamicEmaAlpha.Size = new Size(150, 34);
         _txtDynamicEmaAlpha.TabIndex = 37;
         _txtDynamicEmaAlpha.Text = "0.2";
         // 
@@ -2450,15 +2466,44 @@ partial class ServiceForm
         // 
         _rateTimer.Tick += RateTimer_Tick;
         // 
+        // _rbCh0CalibDynamic
+        //
+        _rbCh0CalibDynamic.AutoSize = true;
+        _rbCh0CalibDynamic.Checked = true;
+        _rbCh0CalibDynamic.Dock = DockStyle.Fill;
+        _rbCh0CalibDynamic.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+        _rbCh0CalibDynamic.Location = new Point(637, 5);
+        _rbCh0CalibDynamic.Margin = new Padding(8, 4, 3, 4);
+        _rbCh0CalibDynamic.Name = "_rbCh0CalibDynamic";
+        _rbCh0CalibDynamic.Size = new Size(306, 37);
+        _rbCh0CalibDynamic.TabIndex = 9;
+        _rbCh0CalibDynamic.TabStop = true;
+        _rbCh0CalibDynamic.Text = "Канал: Основной (CH0)";
+        _rbCh0CalibDynamic.CheckedChanged += RbCh0CalibDynamic_CheckedChanged;
+        //
+        // _rbCh1CalibDynamic
+        //
+        _rbCh1CalibDynamic.AutoSize = true;
+        _rbCh1CalibDynamic.Dock = DockStyle.Fill;
+        _rbCh1CalibDynamic.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+        _rbCh1CalibDynamic.Location = new Point(637, 51);
+        _rbCh1CalibDynamic.Margin = new Padding(8, 4, 3, 4);
+        _rbCh1CalibDynamic.Name = "_rbCh1CalibDynamic";
+        _rbCh1CalibDynamic.Size = new Size(306, 41);
+        _rbCh1CalibDynamic.TabIndex = 10;
+        _rbCh1CalibDynamic.Text = "Канал: Резервный (CH1)";
+        _rbCh1CalibDynamic.CheckedChanged += RbCh1CalibDynamic_CheckedChanged;
+        //
         // ServiceForm
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.FromArgb(255, 192, 255);
-        ClientSize = new Size(1348, 598);
+        ClientSize = new Size(1541, 797);
         Controls.Add(_btnAdmin);
         Controls.Add(_tabs);
-        MinimumSize = new Size(638, 469);
+        Margin = new Padding(3, 4, 3, 4);
+        MinimumSize = new Size(727, 610);
         Name = "ServiceForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Сервисный режим";
@@ -2704,4 +2749,6 @@ partial class ServiceForm
     private Panel _pnlCalibSForm;
     private Panel _pnlCalibSFormInner;
     private CheckBox chbShowHistory;
+    private RadioButton _rbCh1CalibDynamic;
+    private RadioButton _rbCh0CalibDynamic;
 }

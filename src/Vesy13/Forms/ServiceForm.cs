@@ -60,6 +60,7 @@ public partial class ServiceForm : Form
     private int _lastDynCh0;
     private int _lastDynCh1;
     private bool _suppressCalibKRefresh;
+    private int _calibrationMassRowIndex = -1;
 
 
     public ServiceForm()
@@ -426,11 +427,14 @@ public partial class ServiceForm : Form
         _dgvCalib.CellValueChanged += DgvCalib_CellValueChanged;
         _dgvCalib.CellEndEdit += DgvCalib_CellEndEdit;
         _dgvCalib.CurrentCellDirtyStateChanged += DgvCalib_CurrentCellDirtyStateChanged;
-        _dgvCalib.CellClick += DgvCalib_CellClick;
+        _dgvCalib.CellEnter += DgvCalib_CellEnter;
+        _dgvCalib.CellLeave += DgvCalib_CellLeave;
         chbShowHistory.CheckedChanged += ChbShowHistory_CheckedChanged;
         _rateTimer.Start();
         _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
         _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.Backup;
+        _rbCh0CalibDynamic.Checked = _directionCorrectionSim.Channel == ActiveChannel.Main;
+        _rbCh1CalibDynamic.Checked = _directionCorrectionSim.Channel == ActiveChannel.Backup;
         RefreshPorts();
         RefreshDynamicPorts();
         LoadSettingsUi();
@@ -575,8 +579,7 @@ public partial class ServiceForm : Form
         if (_staticServiceSim is null) return;
         if (_staticServiceSim.Channel == channel &&
             (_staticCalibSim is null || _staticCalibSim.Channel == channel) &&
-            (_dynamicServiceSim is null || _dynamicServiceSim.Channel == channel) &&
-            (_directionCorrectionSim is null || _directionCorrectionSim.Channel == channel)) return;
+            (_dynamicServiceSim is null || _dynamicServiceSim.Channel == channel)) return;
 
         ActiveChannel old = _staticServiceSim.Channel;
         _staticServiceSim.Channel = channel;
@@ -584,8 +587,6 @@ public partial class ServiceForm : Form
             _staticCalibSim.Channel = channel;
         if (_dynamicServiceSim is not null)
             _dynamicServiceSim.Channel = channel;
-        if (_directionCorrectionSim is not null)
-            _directionCorrectionSim.Channel = channel;
         _settings.Current.ActiveChannel = channel;
         _settings.Save();
         UpdateLiveAdcLabel();
@@ -665,6 +666,28 @@ public partial class ServiceForm : Form
             LoadCalibPoints();
             UpdateLiveAdcLabel();
         }
+    }
+
+    private void RbCh0CalibDynamic_CheckedChanged(object? sender, EventArgs e)
+    {
+        if (_rbCh0CalibDynamic.Checked)
+            SetDirectionCorrectionChannel(ActiveChannel.Main);
+    }
+
+    private void RbCh1CalibDynamic_CheckedChanged(object? sender, EventArgs e)
+    {
+        if (_rbCh1CalibDynamic.Checked)
+            SetDirectionCorrectionChannel(ActiveChannel.Backup);
+    }
+
+    private void SetDirectionCorrectionChannel(ActiveChannel channel)
+    {
+        if (_directionCorrectionSim is null || _directionCorrectionSim.Channel == channel) return;
+
+        ActiveChannel old = _directionCorrectionSim.Channel;
+        _directionCorrectionSim.Channel = channel;
+        UpdateLiveDirectionCorrectionLabels();
+        AuditLogger.Action(AuditLogger.AdcChannelChanged, "DirectionCorrectionAdcChannel", $"{old} -> {channel}", Environment.UserDomainName, Environment.UserName);
     }
 
     private void RateTimer_Tick(object? sender, EventArgs e)
@@ -1701,25 +1724,25 @@ public partial class ServiceForm : Form
         }
     }
 
-    private void DgvCalib_CellClick(object? sender, DataGridViewCellEventArgs e)
+    private void DgvCalib_CellEnter(object? sender, DataGridViewCellEventArgs e)
     {
-        if (e.RowIndex < 0 || e.ColumnIndex != 3) return;
-
-        var row = _dgvCalib.Rows[e.RowIndex];
-        if (row.Tag is CalibPoint { Id: > 0 } || row.Cells[0].Value?.ToString() != "Да") return;
-        if (!TryParseCalibDecimal(_lblStaticCalibMass.Text, out decimal mass)) return;
-
-        _suppressCalibKRefresh = true;
-        try
-        {
-            row.Cells[2].Value = mass.ToString("F3", CultureInfo.InvariantCulture);
-        }
-        finally
-        {
-            _suppressCalibKRefresh = false;
-        }
+        _calibrationMassRowIndex = e.RowIndex >= 0 && e.ColumnIndex == 3 && IsNewActiveCalibrationRow(e.RowIndex)
+            ? e.RowIndex
+            : -1;
 
         UpdateStaticCalibMassLabel(_calibUseCh0 ? _lastStaticCalibCh0 : _lastStaticCalibCh1);
+    }
+
+    private void DgvCalib_CellLeave(object? sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex == _calibrationMassRowIndex && e.ColumnIndex == 3)
+            _calibrationMassRowIndex = -1;
+    }
+
+    private bool IsNewActiveCalibrationRow(int rowIndex)
+    {
+        var row = _dgvCalib.Rows[rowIndex];
+        return row.Tag is not CalibPoint { Id: > 0 } && row.Cells[0].Value?.ToString() == "Да";
     }
 
     private void DgvCalib_CellEndEdit(object? sender, DataGridViewCellEventArgs e)
@@ -1979,27 +2002,39 @@ public partial class ServiceForm : Form
     private void UpdateStaticCalibMassLabel(int code)
     {
         if (_lblStaticCalibMass is null) return;
-        if (code == 0)
+
+        double? mass = null;
+        if (code != 0)
         {
-            _lblStaticCalibMass.Text = "—";
-            return;
+            var channel = _calibUseCh0 ? ActiveChannel.Main : ActiveChannel.Backup;
+            var points = ReadGridPoints();
+            bool isZeroCalibrationPoint = points.Any(point =>
+                point.Channel == (channel == ActiveChannel.Main ? 0 : 1) &&
+                point.IsActive && point.Mass == 0 && point.AdcCode == code);
+            mass = isZeroCalibrationPoint ? 0 : CalibrationCalculator.Convert(points, code, channel);
         }
 
-        var channel = _calibUseCh0 ? ActiveChannel.Main : ActiveChannel.Backup;
-        var points = ReadGridPoints();
-        bool isZeroCalibrationPoint = points.Any(point =>
-            point.Channel == (channel == ActiveChannel.Main ? 0 : 1) &&
-            point.IsActive && point.Mass == 0 && point.AdcCode == code);
-        if (isZeroCalibrationPoint)
-        {
-            _lblStaticCalibMass.Text = "0";
-            return;
-        }
-
-        double? mass = CalibrationCalculator.Convert(points, code, channel);
         _lblStaticCalibMass.Text = mass is null
-            ? "нет калибровки"
+            ? "—"
             : mass.Value.ToString("F5", CultureInfo.InvariantCulture);
+        UpdateFocusedCalibrationMass(mass);
+    }
+
+    private void UpdateFocusedCalibrationMass(double? mass)
+    {
+        if (mass is null || _calibrationMassRowIndex < 0 || !IsNewActiveCalibrationRow(_calibrationMassRowIndex))
+            return;
+
+        _suppressCalibKRefresh = true;
+        try
+        {
+            _dgvCalib.Rows[_calibrationMassRowIndex].Cells[2].Value =
+                mass.Value.ToString("F3", CultureInfo.InvariantCulture);
+        }
+        finally
+        {
+            _suppressCalibKRefresh = false;
+        }
     }
 
     // ── Direction correction profile ─────────────────────────────────────────────────
