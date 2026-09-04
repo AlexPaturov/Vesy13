@@ -51,7 +51,7 @@ public partial class StaticWeighingForm : Form
     private double ReadRawTonnes(int adcCode) => CalculateStatic(adcCode)?.Tonnes ?? 0;
 
     private bool HasStaticCalibration() => _ldb.CalibPoints.Any(point =>
-        point.Channel == (_sim.Channel == ActiveChannel.Main ? 0 : 1) &&
+        point.Channel == (_sim.Channel == ActiveChannel.CH0 ? 0 : 1) &&
         point.IsActive && point.Mass > 0);
 
     private bool ValidateBeforeWeigh()
@@ -62,14 +62,14 @@ public partial class StaticWeighingForm : Form
             return false;
         }
         if (HasStaticCalibration()) return true;
-        MessageBox.Show($"Нет статической калибровки для канала {(_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1")}.",
+        MessageBox.Show($"Нет статической калибровки для канала {(_sim.Channel == ActiveChannel.CH0 ? "CH0" : "CH1")}.",
             "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         return false;
     }
 
     private string BuildStaticCalcDiagnostic(int adcCode, double rawTonnes, double resultTonnes)
     {
-        int channel = _sim.Channel == ActiveChannel.Main ? 0 : 1;
+        int channel = _sim.Channel == ActiveChannel.CH0 ? 0 : 1;
         var staticResult = CalculateStatic(adcCode);
         var point = staticResult?.Point;
         int activeCount = staticResult?.ActivePointCount ?? 0;
@@ -345,7 +345,7 @@ public partial class StaticWeighingForm : Form
         var audit = AuditLogger.GetQueueStatus();
         var messages = new List<string>();
         if (!HasStaticCalibration())
-            messages.Add($"Статическая калибровка: не задана для канала {(_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1")}");
+            messages.Add($"Статическая калибровка: не задана для канала {(_sim.Channel == ActiveChannel.CH0 ? "CH0" : "CH1")}");
         if (!_weighingStorageAvailable)
             messages.Add("Взвешивание: БД недоступна, запись не сохранена");
 
@@ -359,9 +359,9 @@ public partial class StaticWeighingForm : Form
         _lblStorage.ForeColor = hasError ? Color.Red : UiColors.TextMuted;
     }
 
-    private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
+    private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.CH0 ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
-    private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.Main ? f.Ch0 : f.Ch1;
+    private int ActiveCode(SimA04Frame f) => _sim.Channel == ActiveChannel.CH0 ? f.Ch0 : f.Ch1;
 
     private static void SetBogieValue(Label label, double tonnes) => label.Text = $"{tonnes:F2} т";
 

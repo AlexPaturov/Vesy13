@@ -9,7 +9,7 @@ public sealed class AppSettings
     public string AdcPortName { get; set; } = "COM1";
 
     /// <summary>Активный канал АЦП (CH0/CH1), общий для статики и динамики. Переключается на вкладке «Канал» сервисной формы; переживает перезапуск программы.</summary>
-    public ActiveChannel ActiveChannel { get; set; } = ActiveChannel.Main;
+    public ActiveChannel ActiveChannel { get; set; } = ActiveChannel.CH0;
     public double MaxCapacityTonnes { get; set; } = 140.0;
     public double WeightDiscretizationTonnes { get; set; } = 0.05;
     public double OperatorZeroLimitPercent { get; set; } = 2.0;

@@ -59,7 +59,7 @@ public sealed class StaticFilterPipeline : IDisposable
         bool ch0Dropped = !Accept(frame.Ch0, "CH0", ref _prevCh0);
         bool ch1Dropped = !Accept(frame.Ch1, "CH1", ref _prevCh1);
 
-        bool activeDropped = _reader.Channel == ActiveChannel.Main ? ch0Dropped : ch1Dropped;
+        bool activeDropped = _reader.Channel == ActiveChannel.CH0 ? ch0Dropped : ch1Dropped;
         if (activeDropped) return;
 
         int ch0 = ch0Dropped ? frame.Ch0 : Smooth(frame.Ch0, ref _emaCh0);

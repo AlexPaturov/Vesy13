@@ -14,7 +14,7 @@ public static class CalibrationTestRunner
     {
         Validate(anchors);
 
-        int channelNumber = channel == ActiveChannel.Main ? 0 : 1;
+        int channelNumber = channel == ActiveChannel.CH0 ? 0 : 1;
         int zeroCode = anchors.Single(point => point.Mass == 0).AdcCode;
         var calibrationPoints = anchors
             .OrderBy(point => point.AdcCode)

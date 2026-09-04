@@ -48,7 +48,7 @@ public class SimA04ReaderDynamic : IDisposable
     public bool IsPoisoned { get; private set; }
 
     public string PortName { get; private set; } = "COM1";
-    public ActiveChannel Channel { get; set; } = ActiveChannel.Main;
+    public ActiveChannel Channel { get; set; } = ActiveChannel.CH0;
     public long RawBytesReceived { get; private set; }
     public long SkippedBytes { get; private set; }
     public long SamplesReceived { get; private set; }

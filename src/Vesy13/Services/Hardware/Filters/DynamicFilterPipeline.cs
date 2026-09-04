@@ -73,7 +73,7 @@ public sealed class DynamicFilterPipeline : IDisposable
         bool ch0Dropped = !Accept(sample.Ch0, "CH0", ref _prevCh0, ref _deltaCandidateCh0, ref _stuckCodeCh0, ref _stuckCountCh0);
         bool ch1Dropped = !Accept(sample.Ch1, "CH1", ref _prevCh1, ref _deltaCandidateCh1, ref _stuckCodeCh1, ref _stuckCountCh1);
 
-        bool activeDropped = _reader.Channel == ActiveChannel.Main ? ch0Dropped : ch1Dropped;
+        bool activeDropped = _reader.Channel == ActiveChannel.CH0 ? ch0Dropped : ch1Dropped;
         if (activeDropped) return;
 
         int ch0 = ch0Dropped ? sample.Ch0 : Smooth(sample.Ch0, ref _emaCh0);

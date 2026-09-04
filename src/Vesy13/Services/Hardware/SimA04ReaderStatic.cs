@@ -4,9 +4,9 @@ using Vesy13.Models;
 namespace Vesy13.Services.Hardware;
 
 /// <summary>
-/// Активный канал АЦП: Main — основной (CH0), Backup — резервный (CH1).
+/// Активный канал АЦП: CH0 — основной (CH0), CH1 — резервный (CH1).
 /// </summary>
-public enum ActiveChannel { Main, Backup }
+public enum ActiveChannel { CH0, CH1 }
 
 /// <summary>
 /// Драйвер COM-порта для АЦП «СИМ А04».
@@ -50,8 +50,8 @@ public class SimA04ReaderStatic : IDisposable
     /// <summary>Имя COM-порта, переданного в <see cref="Open"/>.</summary>
     public string        PortName      { get; private set; } = "COM1";
 
-    /// <summary>Активный канал: Main → CH0, Backup → CH1.</summary>
-    public ActiveChannel Channel       { get; set; } = ActiveChannel.Main;
+    /// <summary>Активный канал: CH0 → CH0, CH1 → CH1.</summary>
+    public ActiveChannel Channel       { get; set; } = ActiveChannel.CH0;
 
     /// <summary>
     /// Открывает COM-порт, запускает цикл поллинга и генерирует <see cref="ConnectionChanged"/>.

@@ -232,64 +232,64 @@ public partial class ServiceForm : Form
         _btnDirectionCorrectionPortRefresh.ForeColor = ServiceUiColors.TextPrimary;
         _lblDirectionCorrectionConn.Font = ServiceUiFonts.Body;
         _lblDirectionCorrectionConn.ForeColor = ServiceUiColors.TextPrimary;
-        _lblSecPlus_00.Font = ServiceUiFonts.BodyBold;
-        _lblSecPlus_00.ForeColor = ServiceUiColors.TextPrimary;
-        _lblSecPlus_01.Font = ServiceUiFonts.BodyBold;
-        _lblSecPlus_01.ForeColor = ServiceUiColors.TextPrimary;
-        _lblSecPlus_02.Font = ServiceUiFonts.BodyBold;
-        _lblSecPlus_02.ForeColor = ServiceUiColors.TextPrimary;
-        _lblKPlusEquals.Font = ServiceUiFonts.Medium;
-        _lblKPlusEquals.ForeColor = ServiceUiColors.TextPrimary;
-        _txtKPlus.Font = ServiceUiFonts.Mono;
-        _txtKPlus.BackColor = ServiceUiColors.InputBack;
-        _txtKPlus.ForeColor = ServiceUiColors.InputFore;
-        _lblAutoCalcPlus.Font = ServiceUiFonts.Body;
-        _lblAutoCalcPlus.ForeColor = ServiceUiColors.Disconnected;
-        _lblCodePlusCap.Font = ServiceUiFonts.Body;
-        _lblCodePlusCap.ForeColor = ServiceUiColors.TextPrimary;
-        _txtCodePlus.Font = ServiceUiFonts.MonoSmall;
-        _txtCodePlus.BackColor = ServiceUiColors.InputBack;
-        _txtCodePlus.ForeColor = ServiceUiColors.InputFore;
-        _btnCapPlus.Font = ServiceUiFonts.Small;
-        _btnCapPlus.BackColor = ServiceUiColors.NeutralAction;
-        _btnCapPlus.ForeColor = ServiceUiColors.TextPrimary;
-        _lblMassPlusCap.Font = ServiceUiFonts.Body;
-        _lblMassPlusCap.ForeColor = ServiceUiColors.TextPrimary;
-        _txtMassPlus.Font = ServiceUiFonts.MonoSmall;
-        _txtMassPlus.BackColor = ServiceUiColors.InputBack;
-        _txtMassPlus.ForeColor = ServiceUiColors.InputFore;
-        _btnCalcPlus.Font = ServiceUiFonts.Body;
-        _btnCalcPlus.BackColor = ServiceUiColors.SecondaryAction;
-        _btnCalcPlus.ForeColor = ServiceUiColors.TextOnDark;
-        _lblSecMinus_00.Font = ServiceUiFonts.BodyBold;
-        _lblSecMinus_00.ForeColor = ServiceUiColors.TextPrimary;
-        _lblSecMinus_01.Font = ServiceUiFonts.BodyBold;
-        _lblSecMinus_01.ForeColor = ServiceUiColors.TextPrimary;
-        _lblSecMinus_02.Font = ServiceUiFonts.BodyBold;
-        _lblSecMinus_02.ForeColor = ServiceUiColors.TextPrimary;
-        _lblKMinusEquals.Font = ServiceUiFonts.Medium;
-        _lblKMinusEquals.ForeColor = ServiceUiColors.TextPrimary;
-        _txtKMinus.Font = ServiceUiFonts.Mono;
-        _txtKMinus.BackColor = ServiceUiColors.InputBack;
-        _txtKMinus.ForeColor = ServiceUiColors.InputFore;
-        _lblAutoCalcMinus.Font = ServiceUiFonts.Body;
-        _lblAutoCalcMinus.ForeColor = ServiceUiColors.Disconnected;
-        _lblCodeMinusCap.Font = ServiceUiFonts.Body;
-        _lblCodeMinusCap.ForeColor = ServiceUiColors.TextPrimary;
-        _txtCodeMinus.Font = ServiceUiFonts.MonoSmall;
-        _txtCodeMinus.BackColor = ServiceUiColors.InputBack;
-        _txtCodeMinus.ForeColor = ServiceUiColors.InputFore;
-        _btnCapMinus.Font = ServiceUiFonts.Small;
-        _btnCapMinus.BackColor = ServiceUiColors.NeutralAction;
-        _btnCapMinus.ForeColor = ServiceUiColors.TextPrimary;
-        _lblMassMinusCap.Font = ServiceUiFonts.Body;
-        _lblMassMinusCap.ForeColor = ServiceUiColors.TextPrimary;
-        _txtMassMinus.Font = ServiceUiFonts.MonoSmall;
-        _txtMassMinus.BackColor = ServiceUiColors.InputBack;
-        _txtMassMinus.ForeColor = ServiceUiColors.InputFore;
-        _btnCalcMinus.Font = ServiceUiFonts.Body;
-        _btnCalcMinus.BackColor = ServiceUiColors.SecondaryAction;
-        _btnCalcMinus.ForeColor = ServiceUiColors.TextOnDark;
+        _lblSecRight_00.Font = ServiceUiFonts.BodyBold;
+        _lblSecRight_00.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecRight_01.Font = ServiceUiFonts.BodyBold;
+        _lblSecRight_01.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecRight_02.Font = ServiceUiFonts.BodyBold;
+        _lblSecRight_02.ForeColor = ServiceUiColors.TextPrimary;
+        _lblKRightEquals.Font = ServiceUiFonts.Medium;
+        _lblKRightEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _tbRightFactor.Font = ServiceUiFonts.Mono;                       
+        _tbRightFactor.BackColor = ServiceUiColors.InputBack;            
+        _tbRightFactor.ForeColor = ServiceUiColors.InputFore;            
+        _lblAutoCalcRight.Font = ServiceUiFonts.Body;
+        _lblAutoCalcRight.ForeColor = ServiceUiColors.Disconnected;
+        _lblCodeRightCap.Font = ServiceUiFonts.Body;
+        _lblCodeRightCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtCodeRight.Font = ServiceUiFonts.MonoSmall;
+        _txtCodeRight.BackColor = ServiceUiColors.InputBack;
+        _txtCodeRight.ForeColor = ServiceUiColors.InputFore;
+        _btnCapRight.Font = ServiceUiFonts.Small;
+        _btnCapRight.BackColor = ServiceUiColors.NeutralAction;
+        _btnCapRight.ForeColor = ServiceUiColors.TextPrimary;
+        _lblMassRightCap.Font = ServiceUiFonts.Body;
+        _lblMassRightCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtMassRight.Font = ServiceUiFonts.MonoSmall;
+        _txtMassRight.BackColor = ServiceUiColors.InputBack;
+        _txtMassRight.ForeColor = ServiceUiColors.InputFore;
+        _btnCalcRight.Font = ServiceUiFonts.Body;
+        _btnCalcRight.BackColor = ServiceUiColors.SecondaryAction;
+        _btnCalcRight.ForeColor = ServiceUiColors.TextOnDark;
+        _lblSecLeft_00.Font = ServiceUiFonts.BodyBold;
+        _lblSecLeft_00.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecLeft_01.Font = ServiceUiFonts.BodyBold;
+        _lblSecLeft_01.ForeColor = ServiceUiColors.TextPrimary;
+        _lblSecLeft_02.Font = ServiceUiFonts.BodyBold;
+        _lblSecLeft_02.ForeColor = ServiceUiColors.TextPrimary;
+        _lblKLeftEquals.Font = ServiceUiFonts.Medium;
+        _lblKLeftEquals.ForeColor = ServiceUiColors.TextPrimary;
+        _tbLeftFactor.Font = ServiceUiFonts.Mono;
+        _tbLeftFactor.BackColor = ServiceUiColors.InputBack;
+        _tbLeftFactor.ForeColor = ServiceUiColors.InputFore;
+        _lblAutoCalcLeft.Font = ServiceUiFonts.Body;
+        _lblAutoCalcLeft.ForeColor = ServiceUiColors.Disconnected;
+        _lblCodeLeftCap.Font = ServiceUiFonts.Body;
+        _lblCodeLeftCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtCodeLeft.Font = ServiceUiFonts.MonoSmall;
+        _txtCodeLeft.BackColor = ServiceUiColors.InputBack;
+        _txtCodeLeft.ForeColor = ServiceUiColors.InputFore;
+        _btnCapLeft.Font = ServiceUiFonts.Small;
+        _btnCapLeft.BackColor = ServiceUiColors.NeutralAction;
+        _btnCapLeft.ForeColor = ServiceUiColors.TextPrimary;
+        _lblMassLeftCap.Font = ServiceUiFonts.Body;
+        _lblMassLeftCap.ForeColor = ServiceUiColors.TextPrimary;
+        _txtMassLeft.Font = ServiceUiFonts.MonoSmall;
+        _txtMassLeft.BackColor = ServiceUiColors.InputBack;
+        _txtMassLeft.ForeColor = ServiceUiColors.InputFore;
+        _btnCalcLeft.Font = ServiceUiFonts.Body;
+        _btnCalcLeft.BackColor = ServiceUiColors.SecondaryAction;
+        _btnCalcLeft.ForeColor = ServiceUiColors.TextOnDark;
         _lblFormulaD.Font = ServiceUiFonts.Body;
         _lblFormulaD.ForeColor = ServiceUiColors.TextMuted;
         _btnDirectionCorrectionProfileSave.Font = ServiceUiFonts.Body;
@@ -411,7 +411,10 @@ public partial class ServiceForm : Form
     {
         base.OnLoad(e);
         ApplyTheme();
-        if (DesignMode || _staticServiceSim is null) return;
+
+        if (DesignMode || _staticServiceSim is null) 
+            return;
+
         AuditLogger.Action(AuditLogger.FormOpened, "Form Open", "ServiceForm");
         _staticServiceSim.ConnectionTimeoutMs = 1000;
         _staticCalibSim.ConnectionTimeoutMs = 1000;
@@ -431,10 +434,10 @@ public partial class ServiceForm : Form
         _dgvCalib.CellLeave += DgvCalib_CellLeave;
         chbShowHistory.CheckedChanged += ChbShowHistory_CheckedChanged;
         _rateTimer.Start();
-        _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.Main;
-        _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.Backup;
-        _rbCh0CalibDynamic.Checked = _directionCorrectionSim.Channel == ActiveChannel.Main;
-        _rbCh1CalibDynamic.Checked = _directionCorrectionSim.Channel == ActiveChannel.Backup;
+        _rbMain.Checked = _staticServiceSim.Channel == ActiveChannel.CH0;
+        _rbBackup.Checked = _staticServiceSim.Channel == ActiveChannel.CH1;
+        _rbCh0CalibDynamic.Checked = _directionCorrectionSim.Channel == ActiveChannel.CH0;
+        _rbCh1CalibDynamic.Checked = _directionCorrectionSim.Channel == ActiveChannel.CH1;
         RefreshPorts();
         RefreshDynamicPorts();
         LoadSettingsUi();
@@ -517,20 +520,20 @@ public partial class ServiceForm : Form
     {
         int code = CurrentDynamicAdcCode();
         if (_directionCorrectionSim is null || !_directionCorrectionSim.IsConnected || code == 0) return;
-        _txtCodePlus.Text = code.ToString();
+        _txtCodeRight.Text = code.ToString();
     }
 
     private void BtnCalcPlus_Click(object? sender, EventArgs e) =>
-        CalculateDirectionCorrection(_txtCodePlus, _txtMassPlus, _txtKPlus, "→");
+        CalculateDirectionCorrection(_txtCodeRight, _txtMassRight, _tbRightFactor, "→");       // TODO
 
     private void BtnCapMinus_Click(object? sender, EventArgs e)
     {
         int code = CurrentDynamicAdcCode();
         if (_directionCorrectionSim is null || !_directionCorrectionSim.IsConnected || code == 0) return;
-        _txtCodeMinus.Text = code.ToString();
+        _txtCodeLeft.Text = code.ToString();
     }
     private void BtnCalcMinus_Click(object? sender, EventArgs e) =>
-        CalculateDirectionCorrection(_txtCodeMinus, _txtMassMinus, _txtKMinus, "←");
+        CalculateDirectionCorrection(_txtCodeLeft, _txtMassLeft, _tbLeftFactor, "←");    // TODO
 
     private void CalculateDirectionCorrection(TextBox codeInput, TextBox massInput, TextBox factorOutput, string direction)
     {
@@ -544,7 +547,7 @@ public partial class ServiceForm : Form
         var staticResult = CalibrationCalculator.CalculateStatic(_calib.CalibPoints, code, _directionCorrectionSim.Channel);
         if (staticResult is null)
         {
-            string channel = _directionCorrectionSim.Channel == ActiveChannel.Main ? "CH0" : "CH1";
+            string channel = _directionCorrectionSim.Channel == ActiveChannel.CH0 ? "CH0" : "CH1";
             MessageBox.Show($"Для канала {channel} нет активной статической калибровочной точки.\nСначала сохраните статическую калибровку этого канала.",
                 $"Расчёт коэффициента {direction}", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
@@ -565,13 +568,13 @@ public partial class ServiceForm : Form
     private void RbMain_CheckedChanged(object? sender, EventArgs e)
     {
         if (_rbMain.Checked)
-            SetActiveChannel(ActiveChannel.Main);
+            SetActiveChannel(ActiveChannel.CH0);
     }
 
     private void RbBackup_CheckedChanged(object? sender, EventArgs e)
     {
         if (_rbBackup.Checked)
-            SetActiveChannel(ActiveChannel.Backup);
+            SetActiveChannel(ActiveChannel.CH1);
     }
 
     private void SetActiveChannel(ActiveChannel channel)
@@ -671,13 +674,13 @@ public partial class ServiceForm : Form
     private void RbCh0CalibDynamic_CheckedChanged(object? sender, EventArgs e)
     {
         if (_rbCh0CalibDynamic.Checked)
-            SetDirectionCorrectionChannel(ActiveChannel.Main);
+            SetDirectionCorrectionChannel(ActiveChannel.CH0);
     }
 
     private void RbCh1CalibDynamic_CheckedChanged(object? sender, EventArgs e)
     {
         if (_rbCh1CalibDynamic.Checked)
-            SetDirectionCorrectionChannel(ActiveChannel.Backup);
+            SetDirectionCorrectionChannel(ActiveChannel.CH1);
     }
 
     private void SetDirectionCorrectionChannel(ActiveChannel channel)
@@ -2006,10 +2009,10 @@ public partial class ServiceForm : Form
         double? mass = null;
         if (code != 0)
         {
-            var channel = _calibUseCh0 ? ActiveChannel.Main : ActiveChannel.Backup;
+            var channel = _calibUseCh0 ? ActiveChannel.CH0 : ActiveChannel.CH1;
             var points = ReadGridPoints();
             bool isZeroCalibrationPoint = points.Any(point =>
-                point.Channel == (channel == ActiveChannel.Main ? 0 : 1) &&
+                point.Channel == (channel == ActiveChannel.CH0 ? 0 : 1) &&
                 point.IsActive && point.Mass == 0 && point.AdcCode == code);
             mass = isZeroCalibrationPoint ? 0 : CalibrationCalculator.Convert(points, code, channel);
         }
@@ -2042,14 +2045,14 @@ public partial class ServiceForm : Form
     private int CurrentDynamicAdcCode()
     {
         if (_directionCorrectionSim is null) return 0;
-        return _directionCorrectionSim.Channel == ActiveChannel.Main ? _lastDynCh0 : _lastDynCh1;
+        return _directionCorrectionSim.Channel == ActiveChannel.CH0 ? _lastDynCh0 : _lastDynCh1;
     }
 
     private void UpdateDynamicCaptureButtons()
     {
         bool canCapture = _directionCorrectionSim is { IsConnected: true } && CurrentDynamicAdcCode() != 0;
-        _btnCapPlus.Enabled = canCapture;
-        _btnCapMinus.Enabled = canCapture;
+        _btnCapRight.Enabled = canCapture;
+        _btnCapLeft.Enabled = canCapture;
     }
 
     private void UpdateLiveDirectionCorrectionLabels()
@@ -2083,8 +2086,8 @@ public partial class ServiceForm : Form
             return;
         }
 
-        bool rightOk = double.TryParse(_txtKPlus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double rightFactor);
-        bool leftOk = double.TryParse(_txtKMinus.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double leftFactor);
+        bool rightOk = double.TryParse(_tbRightFactor.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double rightFactor);  
+        bool leftOk = double.TryParse(_tbLeftFactor.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double leftFactor);    
         if (!rightOk && !leftOk)
         {
             _lblLiveWeightD.Text = "—";
@@ -2094,7 +2097,7 @@ public partial class ServiceForm : Form
 
         string right = rightOk ? FormatServiceDynamicWeight(staticResult.Tonnes * rightFactor) : "—";
         string left = leftOk ? FormatServiceDynamicWeight(staticResult.Tonnes * leftFactor) : "—";
-        _lblLiveWeightD.Text = $"→ {right} т  ← {left} т";
+        _lblLiveWeightD.Text = $"→ {right} т  ← {left} т";                                                                          // TODO
         _lblLiveWeightD.ForeColor = ServiceUiColors.Info;
     }
 
@@ -2121,25 +2124,26 @@ public partial class ServiceForm : Form
 
     private async void BtnDirectionCorrectionProfileSave_Click(object? sender, EventArgs e)
     {
-        string plusText = _txtKPlus.Text.Trim();
-        string minusText = _txtKMinus.Text.Trim();
-        bool hasPlus = plusText.Length > 0;
-        bool hasMinus = minusText.Length > 0;
+        string rightFactorText = _tbRightFactor.Text.Trim();        
+        string leftFactorText = _tbLeftFactor.Text.Trim();      
+        bool hasRightFactor = rightFactorText.Length > 0;              
+        bool hasLeftFactor = leftFactorText.Length > 0;              
 
-        if (!hasPlus && !hasMinus)
+        if (!hasRightFactor && !hasLeftFactor)
         {
             MessageBox.Show("Введите коэффициент направления → или ← для сохранения.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        double kp = _calib.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor;
-        double km = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor;
-        if (hasPlus && !double.TryParse(plusText, NumberStyles.Float, CultureInfo.InvariantCulture, out kp))
+        double kr = _calib.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor;
+        double kl = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor;
+        if (hasRightFactor && !double.TryParse(rightFactorText, NumberStyles.Float, CultureInfo.InvariantCulture, out kr))
         {
             MessageBox.Show("Некорректное значение коэффициента направления →.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
-        if (hasMinus && !double.TryParse(minusText, NumberStyles.Float, CultureInfo.InvariantCulture, out km))
+
+        if (hasLeftFactor && !double.TryParse(leftFactorText, NumberStyles.Float, CultureInfo.InvariantCulture, out kl))
         {
             MessageBox.Show("Некорректное значение коэффициента направления ←.", "Сохранение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
@@ -2147,7 +2151,8 @@ public partial class ServiceForm : Form
 
         try
         {
-            var changedProfiles = await _calib.SaveDirectionCorrectionProfileAsync(new DirectionCorrectionProfile { RightDirectionCorrectionFactor = kp, LeftDirectionCorrectionFactor = km });
+            var changedProfiles = await _calib.SaveDirectionCorrectionProfileAsync(
+                new DirectionCorrectionProfile { RightDirectionCorrectionFactor = kr, LeftDirectionCorrectionFactor = kl });
             _settings.UpdateCalibrationCache(_calib.CalibPoints, _calib.ActiveDirectionCorrectionProfile);
             _settings.Save();
             await LoadDirectionCorrectionProfileAsync();
@@ -2194,8 +2199,8 @@ public partial class ServiceForm : Form
     {
         if (_calib is null) return;
 
-        _txtKPlus.Text = _calib.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture);
-        _txtKMinus.Text = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture);
+        _tbRightFactor.Text = _calib.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture);   // TODO
+        _tbLeftFactor.Text = _calib.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor.ToString("G8", CultureInfo.InvariantCulture);   // TODO
 
         try
         {

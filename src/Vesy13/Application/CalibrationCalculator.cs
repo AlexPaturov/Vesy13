@@ -20,7 +20,7 @@ public static class CalibrationCalculator
     /// </summary>
     public static StaticCalibrationResult? CalculateStatic(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
     {
-        int ch = channel == ActiveChannel.Main ? 0 : 1;
+        int ch = channel == ActiveChannel.CH0 ? 0 : 1;
         var active = points
             .Where(p => p.Channel == ch && p.IsActive)
             .OrderBy(p => p.AdcCode)
@@ -76,7 +76,7 @@ public static class CalibrationCalculator
     /*
     public static StaticCalibrationResult? CalculateStatic(IEnumerable<CalibPoint> points, int adcCode, ActiveChannel channel)
     {
-        int ch = channel == ActiveChannel.Main ? 0 : 1;
+        int ch = channel == ActiveChannel.CH0 ? 0 : 1;
         var active = points
             .Where(p => p.Channel == ch && p.IsActive)
             .OrderBy(p => p.AdcCode)

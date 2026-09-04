@@ -9,7 +9,7 @@ namespace Vesy13.Forms;
 
 /// <summary>
 /// Форма динамического взвешивания: фиксирует две тележки на ходу и рассчитывает
-/// нетто с учётом направления движения состава (→/←).
+/// нетто с учётом направления движения состава (С лева/С права).
 /// </summary>
 public partial class DynamicWeighingForm : Form
 {
@@ -54,9 +54,9 @@ public partial class DynamicWeighingForm : Form
         };
     }
 
-    private Direction GetDirection() => _rbPlus.Checked ? Direction.Right : Direction.Left;
+    private Direction GetDirection() => _rbRightFactor.Checked ? Direction.Right : Direction.Left;  // TODO
 
-    private string GetDirectionText() => GetDirection() == Direction.Right ? "→ (+)" : "← (–)";
+    private string GetDirectionText() => GetDirection() == Direction.Right ? "→ (+)" : "← (–)";     // TODO 
 
     private bool HasDirectionCorrectionProfile() =>
         _ldb.ActiveDirectionCorrectionProfile.IsActive && _ldb.ActiveDirectionCorrectionProfile.DeletedAt is null;
@@ -65,26 +65,22 @@ public partial class DynamicWeighingForm : Form
         CalibrationCalculator.CalculateStatic(_ldb.CalibPoints, adcCode, _sim.Channel);
 
     private bool HasStaticCalibration() => _ldb.CalibPoints.Any(point =>
-        point.Channel == (_sim.Channel == ActiveChannel.Main ? 0 : 1) &&
+        point.Channel == (_sim.Channel == ActiveChannel.CH0 ? 0 : 1) &&
         point.IsActive && point.Mass > 0);
 
     private double SelectedDirectionCorrectionFactor() => GetDirection() == Direction.Right
         ? _ldb.ActiveDirectionCorrectionProfile.RightDirectionCorrectionFactor
         : _ldb.ActiveDirectionCorrectionProfile.LeftDirectionCorrectionFactor;
 
-    private bool HasValidDirectionCorrectionFactor() =>
-        HasDirectionCorrectionProfile() && SelectedDirectionCorrectionFactor() > 0;
+    private bool HasValidDirectionCorrectionFactor() => HasDirectionCorrectionProfile() && SelectedDirectionCorrectionFactor() > 0;
 
     private double ReadRawTonnes(int adcCode)
     {
         var staticResult = CalculateStatic(adcCode);
-        return staticResult is null
-            ? 0
-            : CalibrationCalculator.ApplyDirectionCorrection(staticResult.Tonnes, _ldb.ActiveDirectionCorrectionProfile, GetDirection());
+        return staticResult is null ? 0 : CalibrationCalculator.ApplyDirectionCorrection(staticResult.Tonnes, _ldb.ActiveDirectionCorrectionProfile, GetDirection());
     }
 
-    private double ToTonnes(int adcCode) =>
-        WeightFormatter.RoundToDiscretization(ReadRawTonnes(adcCode) - _zeroOffsetTonnes, _settings.Current.WeightDiscretizationTonnes);
+    private double ToTonnes(int adcCode) => WeightFormatter.RoundToDiscretization(ReadRawTonnes(adcCode) - _zeroOffsetTonnes, _settings.Current.WeightDiscretizationTonnes);
 
     private bool ValidateBeforeWeigh()
     {
@@ -94,7 +90,7 @@ public partial class DynamicWeighingForm : Form
             return false;
         }
 
-        if (!_rbPlus.Checked && !_rbMinus.Checked)
+        if (!_rbRightFactor.Checked && !_rbLeftFactor.Checked)
         {
             MessageBox.Show("Выберите направление движения состава.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
@@ -102,7 +98,7 @@ public partial class DynamicWeighingForm : Form
 
         if (!HasStaticCalibration())
         {
-            string channel = _sim.Channel == ActiveChannel.Main ? "CH0" : "CH1";
+            string channel = _sim.Channel == ActiveChannel.CH0 ? "CH0" : "CH1";
             MessageBox.Show($"Нет активной статической калибровки для канала {channel}.", "Взвешивание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
@@ -128,10 +124,10 @@ public partial class DynamicWeighingForm : Form
         _gbDir.BackColor = UiColors.Surface;
         _gbDir.Font       = UiFonts.Body;
         _gbDir.ForeColor  = UiColors.TextPrimary;
-        _rbPlus.Font      = UiFonts.Medium;
-        _rbPlus.ForeColor  = UiColors.TextPrimary;
-        _rbMinus.Font     = UiFonts.Medium;
-        _rbMinus.ForeColor = UiColors.TextPrimary;
+        _rbRightFactor.Font      = UiFonts.Medium;
+        _rbRightFactor.ForeColor  = UiColors.TextPrimary;
+        _rbLeftFactor.Font     = UiFonts.Medium;
+        _rbLeftFactor.ForeColor = UiColors.TextPrimary;
         _lblChannel.Font  = UiFonts.Medium;
         _lblChannel.ForeColor = UiColors.TextMuted;
         _pnlDisplay.BackColor = UiColors.DisplayBackground;
@@ -209,8 +205,8 @@ public partial class DynamicWeighingForm : Form
         SetupGridColumns();
         _filter.FilteredSampleReceived += OnSample;
         _sim.ConnectionChanged += OnConnectionChanged;
-        _rbPlus.CheckedChanged += Direction_CheckedChanged;
-        _rbMinus.CheckedChanged += Direction_CheckedChanged;
+        _rbRightFactor.CheckedChanged += Direction_CheckedChanged;
+        _rbLeftFactor.CheckedChanged += Direction_CheckedChanged;
         AuditLogger.QueueStatusChanged += OnAuditQueueStatusChanged;
         _uiRefreshTimer.Start();
         EnsureAdcConnected(showError: true);
@@ -251,8 +247,8 @@ public partial class DynamicWeighingForm : Form
             _filter.FilteredSampleReceived  -= OnSample;
             _filter.Dispose();
             _sim.ConnectionChanged          -= OnConnectionChanged;
-            _rbPlus.CheckedChanged          -= Direction_CheckedChanged;
-            _rbMinus.CheckedChanged         -= Direction_CheckedChanged;
+            _rbRightFactor.CheckedChanged          -= Direction_CheckedChanged;
+            _rbLeftFactor.CheckedChanged         -= Direction_CheckedChanged;
             AuditLogger.QueueStatusChanged  -= OnAuditQueueStatusChanged;
             _sim.Close();
         }
@@ -356,14 +352,12 @@ public partial class DynamicWeighingForm : Form
         if (connected)
         {
             string state = _adcConnectionEstablished ? "connection restored" : "connection established";
-            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", state,
-                "SimA04Dynamic", _sim.PortName);
+            AuditLogger.Action(AuditLogger.AdcConnected, "AdcConnection", state, "SimA04Dynamic", _sim.PortName);
             _adcConnectionEstablished = true;
         }
         else if (_adcConnectionEstablished)
         {
-            AuditLogger.Error(AuditLogger.AdcDisconnected, "AdcConnection", "connection lost",
-                "SimA04Dynamic", _sim.PortName);
+            AuditLogger.Error(AuditLogger.AdcDisconnected, "AdcConnection", "connection lost", "SimA04Dynamic", _sim.PortName);
         }
 
         UpdateConn(connected);
@@ -417,9 +411,9 @@ public partial class DynamicWeighingForm : Form
         UpdateButtonStates();
     }
 
-    private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.Main ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
+    private void UpdateChannelLabel() => _lblChannel.Text = _sim.Channel == ActiveChannel.CH0 ? "Канал: Основной (CH0)" : "Канал: Резервный (CH1)";
 
-    private int ActiveCode(SimA04DynamicSample sample) => _sim.Channel == ActiveChannel.Main ? sample.Ch0 : sample.Ch1;
+    private int ActiveCode(SimA04DynamicSample sample) => _sim.Channel == ActiveChannel.CH0 ? sample.Ch0 : sample.Ch1;
 
     private static void SetBogieValue(Label label, double tonnes) => label.Text = $"{tonnes:F2} т";
 
@@ -432,8 +426,8 @@ public partial class DynamicWeighingForm : Form
     private void UpdateDirectionControls()
     {
         bool enabled = _state == WeighState.Idle && _wagonNumber == 0;
-        _rbPlus.Enabled = enabled;
-        _rbMinus.Enabled = enabled;
+        _rbRightFactor.Enabled = enabled;
+        _rbLeftFactor.Enabled = enabled;
     }
 
     // ── Weighing logic ─────────────────────────────────────────────────────
@@ -449,15 +443,15 @@ public partial class DynamicWeighingForm : Form
             _wagonNumber++;
             if (_wagonNumber == 1)
                 _trainStartTime = DateTime.Now;
-            _bogie1Code         = ActiveCode(_lastSample);
-            _bogie1CalibrationPointId = CalculateStatic(_bogie1Code)?.Point.Id;
-            _directionCorrectionProfileId = _ldb.ActiveDirectionCorrectionProfile.Id;
-            double   bogie1Tonnes = ToTonnes(_bogie1Code);
-            _state              = WeighState.Bogie1Captured;
+            _bogie1Code                     = ActiveCode(_lastSample);
+            _bogie1CalibrationPointId       = CalculateStatic(_bogie1Code)?.Point.Id;
+            _directionCorrectionProfileId   = _ldb.ActiveDirectionCorrectionProfile.Id;
+            double   bogie1Tonnes           = ToTonnes(_bogie1Code);
+            _state                          = WeighState.Bogie1Captured;
             SetBogieValue(_lblBogie1Value, bogie1Tonnes);
-            _lblBogie2Value.Text = "—";
-            _btnWeigh.Text      = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
-            _btnWeigh.BackColor = UiColors.PendingAction;
+            _lblBogie2Value.Text            = "—";
+            _btnWeigh.Text                  = "ВЗВЕСИТЬ   [Пробел]   —   Тележка 2";
+            _btnWeigh.BackColor             = UiColors.PendingAction;
         }
         else
         {
@@ -465,6 +459,7 @@ public partial class DynamicWeighingForm : Form
             double   bogie1Tonnes = ToTonnes(_bogie1Code);
             double   bogie2Tonnes = ToTonnes(bogie2Code);
             DateTime wagonTime = DateTime.Now;
+            
             var record = new LocalWagon
             {
                 Number    = _wagonNumber,
@@ -478,6 +473,7 @@ public partial class DynamicWeighingForm : Form
                 Direction = GetDirectionText(),
                 Mode      = "ДИНАМИКА",
             };
+
             AddToGrid(record);
             _state              = WeighState.Idle;
             SetBogieValue(_lblBogie1Value, bogie1Tonnes);
@@ -574,7 +570,7 @@ public partial class DynamicWeighingForm : Form
         var audit = AuditLogger.GetQueueStatus();
         var messages = new List<string>();
         if (!HasStaticCalibration())
-            messages.Add("Статическая калибровка: нет активной точки для " + (_sim.Channel == ActiveChannel.Main ? "CH0" : "CH1"));
+            messages.Add("Статическая калибровка: нет активной точки для " + (_sim.Channel == ActiveChannel.CH0 ? "CH0" : "CH1"));
         if (!HasDirectionCorrectionProfile())
             messages.Add("Поправочные коэффициенты направления: нет активного профиля");
         else if (!HasValidDirectionCorrectionFactor())

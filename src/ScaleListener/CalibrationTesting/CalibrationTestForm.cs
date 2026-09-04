@@ -10,7 +10,7 @@ public partial class CalibrationTestForm : Form
     private IReadOnlyList<CalibrationTestResult> _results = Array.Empty<CalibrationTestResult>();
     private volatile bool _isShuttingDown;
     private int _activeAdcCode;
-    private ActiveChannel _selectedChannel = ActiveChannel.Main;
+    private ActiveChannel _selectedChannel = ActiveChannel.CH0;
 
     public CalibrationTestForm()
     {
@@ -39,7 +39,7 @@ public partial class CalibrationTestForm : Form
 
     private void CmbChannel_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        _selectedChannel = _cmbChannel.SelectedIndex == 0 ? ActiveChannel.Main : ActiveChannel.Backup;
+        _selectedChannel = _cmbChannel.SelectedIndex == 0 ? ActiveChannel.CH0 : ActiveChannel.CH1;
         if (_gridResults.Rows.Count > 0)
             RunScenario();
         UpdateActiveCodeLabel();
@@ -221,8 +221,8 @@ public partial class CalibrationTestForm : Form
     private void SendStaticResponse()
     {
         int code = Volatile.Read(ref _activeAdcCode);
-        int ch0 = CurrentChannel == ActiveChannel.Main ? code : 0;
-        int ch1 = CurrentChannel == ActiveChannel.Backup ? code : 0;
+        int ch0 = CurrentChannel == ActiveChannel.CH0 ? code : 0;
+        int ch1 = CurrentChannel == ActiveChannel.CH1 ? code : 0;
         byte[] frame = SimA04StaticFrameBuilder.Build(ch0, ch1);
         _port.Write(frame, 0, frame.Length);
     }
@@ -236,7 +236,7 @@ public partial class CalibrationTestForm : Form
 
     private void UpdateActiveCodeLabel()
     {
-        string channel = CurrentChannel == ActiveChannel.Main ? "CH0" : "CH1";
+        string channel = CurrentChannel == ActiveChannel.CH0 ? "CH0" : "CH1";
         string connection = _port?.IsOpen == true ? "ONLINE" : "OFFLINE";
         _lblActiveCode.Text = $"{connection}  COM4  {channel}={_activeAdcCode}";
     }
