@@ -21,27 +21,10 @@
 Перед проверкой связи с АЦП нужно убедиться, что в `settings.json` выбран порт
 текущего окружения:
 
-- prod: `AdcPortName = COM1`;
-- dev: `AdcPortName = COM1`;
+- prod, dev: `AdcPortName = COM1`;
 - эмулятор `ScaleListener`: `COM4`.
 
 ## Сборка
-
-```bash
-dotnet build Vesy13.sln
-```
-
-Основное приложение:
-
-```bash
-dotnet run --project Vesy13.csproj
-```
-
-Тестовый эмулятор:
-
-```bash
-dotnet run --project ScaleListener/ScaleListener.csproj
-```
 
 ## `settings.json`
 

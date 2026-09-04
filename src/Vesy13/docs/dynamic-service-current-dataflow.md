@@ -1,28 +1,7 @@
 # Текущие потоки данных: сервисная динамика и калибровка динамики
 
-Дата фиксации: 2026-07-01. Актуализировано 2026-07-28 (см. правки «Точки входа» и «Путь raw-log»).
-
-Документ описывает текущее фактическое устройство `ServiceForm` после выполнения групп 1, 2 и 3: обработчики данных, workflow подключения и диагностические счётчики разделены по вкладкам.
-
 ## Точки входа
 
-Внутри `ServiceForm` динамические процессы используют разные экземпляры reader-а:
-
-```text
-ServiceForm._dynamicServiceSim : SimA04ReaderDynamic
-ServiceForm._directionCorrectionSim   : SimA04ReaderDynamic
-```
-
-Оба reader-а создаются внутри самой `ServiceForm` (`new SimA04ReaderDynamic`) — после рефакторинга развязки reader-ов (`docs/status_2026-08-21.md`) ни один не приходит извне; раньше `_dynamicServiceSim` был общим экземпляром с `MainForm._dynamicSim`. `_dynamicServiceSim` обслуживает вкладку `Сервисный режим Динамика`, `_directionCorrectionSim` — только вкладку `Коэффициенты направлений`.
-
-Каждый `SimA04ReaderDynamic` читает свой открытый COM-порт, собирает 5-байтовый динамический сэмпл и публикует события:
-
-```text
-COM port bytes
-  -> SimA04ReaderDynamic.ProcessByte
-  -> RawSampleReceived(raw bytes)
-  -> SampleReceived(parsed SimA04DynamicSample)
-```
 
 ## Подписки на данные
 
@@ -33,13 +12,6 @@ Tabs_SelectedIndexChanged
   -> UpdateDynamicDataSubscriptions()
   -> SetDynamicServiceDataSubscription(active tab == _tabDynamicService)
   -> SetDirectionCorrectionProfileDataSubscription(active tab == _tabDirectionCorrections)
-```
-
-Для `Сервисный режим Динамика`:
-
-```text
-_dynamicServiceSim.RawSampleReceived += OnDynamicServiceRawSample
-_dynamicServiceSim.SampleReceived    += OnDynamicServiceSample
 ```
 
 Для `Коэффициенты направлений`:
@@ -139,23 +111,6 @@ CurrentDynamicAdcCode()
   -> _lblLiveWeightD
 ```
 
-Raw-log калибровка динамики не получает и не пишет.
-
-## Переключение вкладок
-
-При смене вкладки выполняются разделённые действия:
-
-```text
-Tabs_SelectedIndexChanged
-  -> UpdateDynamicDataSubscriptions()
-  -> если вкладка _tabMonitor или _tabCalibS: CloseDynamicConnections()
-  -> если вкладка _tabDynamicService: CloseStaticConnection(); CloseDirectionCorrectionProfileConnection()
-  -> если вкладка _tabDirectionCorrections: CloseStaticConnection(); CloseDynamicServiceConnection()
-  -> иначе CloseStaticConnection(); CloseDynamicConnections()
-```
-
-Переход между `_tabDynamicService` и `_tabDirectionCorrections` больше не удерживает общий stream.
-
 ## Текущая блок-схема
 
 ```text
@@ -177,9 +132,3 @@ Tabs_SelectedIndexChanged
                                                                 v
                                                      _lblLiveAdcD/_lblLiveWeightD
 ```
-
-## Граница ответственности
-
-`Сервисный режим Динамика` и `Коэффициенты направлений` используют отдельные reader-ы,
-подписки и workflow подключения. Они не должны снова делить reader, raw-поток,
-журнал или состояние подключения.
