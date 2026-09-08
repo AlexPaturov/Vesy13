@@ -1,14 +1,12 @@
-bin/
-obj/
+**/bin/
+**/obj/
 TestResults/
-*.user
 .vs/
 .idea/
-/Properties/PublishProfiles/
+*.user
 *.suo
 /settings.json
-
-# WinForms designer resources generated without actual resources
+**/Properties/PublishProfiles/
 *.resx
 
 # Installer payload: kept next to install.ps1 on the build machine, never committed
@@ -16,13 +14,5 @@ install/database/*.exe
 install/application/publish/
 /install/application/ScaleListenerPublish/
 /install/application/Vesy13Publish/
-/ScaleListener/Properties/PublishProfiles/
-/DynamicDumpDec/DynamicDumpDec/Properties/PublishProfiles/
-/SerialProbe/SerialProbe/Properties/PublishProfiles/
-/StaticDumpDec/StaticDumpDec/Properties/PublishProfiles/
 /install/win7
 /install/win7x32
-
-# Same generated/host-specific files after moving projects under src
-/src/ScaleListener/Properties/PublishProfiles/
-/src/Vesy13/Properties/PublishProfiles/
