@@ -7,13 +7,9 @@ TestResults/
 /Properties/PublishProfiles/
 *.suo
 /settings.json
-# Empty WinForms designer resources generated without actual resources
-/MainForm.resx
-/ScaleListener/MainForm.resx
-/ScaleListener/DynamicForm.resx
-/ScaleListener/DynamicFaultForm.resx
-/ScaleListener/StaticFaultForm.resx
-/ScaleListener/StaticForm.resx
+
+# WinForms designer resources generated without actual resources
+*.resx
 
 # Installer payload: kept next to install.ps1 on the build machine, never committed
 install/database/*.exe
@@ -28,7 +24,5 @@ install/application/publish/
 /install/win7x32
 
 # Same generated/host-specific files after moving projects under src
-/src/ScaleListener/*.resx
 /src/ScaleListener/Properties/PublishProfiles/
-/src/Vesy13/MainForm.resx
 /src/Vesy13/Properties/PublishProfiles/
