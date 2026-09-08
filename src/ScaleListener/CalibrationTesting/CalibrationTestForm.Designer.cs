@@ -15,7 +15,7 @@ partial class CalibrationTestForm
 
     private void InitializeComponent()
     {
-        components = new System.ComponentModel.Container();
+        DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
         _pnlTop = new Panel();
         _tlpTop = new TableLayoutPanel();
         _lblChannel = new Label();
@@ -29,8 +29,8 @@ partial class CalibrationTestForm
         _gridAnchors = new DataGridView();
         _colAnchorMass = new DataGridViewTextBoxColumn();
         _colAnchorCode = new DataGridViewTextBoxColumn();
-        _lblAnchors = new Label();
         _lblAnchorsHint = new Label();
+        _lblAnchors = new Label();
         _gridResults = new DataGridView();
         _colCheckpoint = new DataGridViewTextBoxColumn();
         _colAdcCode = new DataGridViewTextBoxColumn();
@@ -53,18 +53,18 @@ partial class CalibrationTestForm
         ((System.ComponentModel.ISupportInitialize)_gridResults).BeginInit();
         _pnlBottom.SuspendLayout();
         SuspendLayout();
-        //
+        // 
         // _pnlTop
-        //
+        // 
         _pnlTop.Controls.Add(_tlpTop);
         _pnlTop.Dock = DockStyle.Top;
         _pnlTop.Location = new Point(0, 0);
         _pnlTop.Name = "_pnlTop";
         _pnlTop.Size = new Size(1184, 62);
         _pnlTop.TabIndex = 0;
-        //
+        // 
         // _tlpTop
-        //
+        // 
         _tlpTop.ColumnCount = 7;
         _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F));
         _tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
@@ -87,9 +87,9 @@ partial class CalibrationTestForm
         _tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         _tlpTop.Size = new Size(1184, 62);
         _tlpTop.TabIndex = 0;
-        //
+        // 
         // _lblChannel
-        //
+        // 
         _lblChannel.Dock = DockStyle.Fill;
         _lblChannel.Location = new Point(3, 0);
         _lblChannel.Name = "_lblChannel";
@@ -97,21 +97,21 @@ partial class CalibrationTestForm
         _lblChannel.TabIndex = 0;
         _lblChannel.Text = "Канал";
         _lblChannel.TextAlign = ContentAlignment.MiddleRight;
-        //
+        // 
         // _cmbChannel
-        //
+        // 
         _cmbChannel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _cmbChannel.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbChannel.Items.AddRange(new object[] { "CH0", "CH1" });
-        _cmbChannel.Location = new Point(94, 14);
+        _cmbChannel.Location = new Point(94, 17);
         _cmbChannel.Margin = new Padding(4, 0, 4, 0);
         _cmbChannel.Name = "_cmbChannel";
         _cmbChannel.Size = new Size(102, 36);
         _cmbChannel.TabIndex = 1;
         _cmbChannel.SelectedIndexChanged += CmbChannel_SelectedIndexChanged;
-        //
+        // 
         // _btnRun
-        //
+        // 
         _btnRun.Dock = DockStyle.Fill;
         _btnRun.FlatStyle = FlatStyle.Flat;
         _btnRun.Location = new Point(207, 7);
@@ -121,9 +121,9 @@ partial class CalibrationTestForm
         _btnRun.TabIndex = 2;
         _btnRun.Text = "Выполнить тест";
         _btnRun.Click += BtnRun_Click;
-        //
+        // 
         // _btnReset
-        //
+        // 
         _btnReset.Dock = DockStyle.Fill;
         _btnReset.FlatStyle = FlatStyle.Flat;
         _btnReset.Location = new Point(382, 7);
@@ -133,9 +133,9 @@ partial class CalibrationTestForm
         _btnReset.TabIndex = 3;
         _btnReset.Text = "Пример";
         _btnReset.Click += BtnReset_Click;
-        //
+        // 
         // _btnExport
-        //
+        // 
         _btnExport.Dock = DockStyle.Fill;
         _btnExport.Enabled = false;
         _btnExport.FlatStyle = FlatStyle.Flat;
@@ -146,9 +146,9 @@ partial class CalibrationTestForm
         _btnExport.TabIndex = 4;
         _btnExport.Text = "Экспорт CSV";
         _btnExport.Click += BtnExport_Click;
-        //
+        // 
         // _btnConnect
-        //
+        // 
         _btnConnect.Dock = DockStyle.Fill;
         _btnConnect.FlatStyle = FlatStyle.Flat;
         _btnConnect.Location = new Point(682, 7);
@@ -158,41 +158,40 @@ partial class CalibrationTestForm
         _btnConnect.TabIndex = 5;
         _btnConnect.Text = "Connect";
         _btnConnect.Click += BtnConnect_Click;
-        //
+        // 
         // _lblActiveCode
-        //
+        // 
         _lblActiveCode.Dock = DockStyle.Fill;
-        _lblActiveCode.Font = new Font("Courier New", 11F, FontStyle.Bold);
+        _lblActiveCode.Font = new Font("Courier New", 11F, FontStyle.Bold, GraphicsUnit.Point);
         _lblActiveCode.Location = new Point(833, 0);
         _lblActiveCode.Name = "_lblActiveCode";
         _lblActiveCode.Size = new Size(348, 62);
         _lblActiveCode.TabIndex = 6;
         _lblActiveCode.TextAlign = ContentAlignment.MiddleLeft;
-        //
+        // 
         // _splitMain
-        //
+        // 
         _splitMain.Dock = DockStyle.Fill;
         _splitMain.FixedPanel = FixedPanel.Panel1;
         _splitMain.Location = new Point(0, 62);
         _splitMain.Name = "_splitMain";
-        //
+        // 
         // _splitMain.Panel1
-        //
+        // 
         _splitMain.Panel1.Controls.Add(_gridAnchors);
         _splitMain.Panel1.Controls.Add(_lblAnchorsHint);
         _splitMain.Panel1.Controls.Add(_lblAnchors);
-        //
+        // 
         // _splitMain.Panel2
-        //
+        // 
         _splitMain.Panel2.Controls.Add(_gridResults);
         _splitMain.Panel2.Controls.Add(_lblResults);
         _splitMain.Size = new Size(1184, 544);
         _splitMain.SplitterDistance = 330;
         _splitMain.TabIndex = 1;
-        //
+        // 
         // _gridAnchors
-        //
-        _gridAnchors.AllowUserToDeleteRows = true;
+        // 
         _gridAnchors.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         _gridAnchors.BackgroundColor = Color.White;
         _gridAnchors.ColumnHeadersHeight = 34;
@@ -202,44 +201,47 @@ partial class CalibrationTestForm
         _gridAnchors.Location = new Point(0, 42);
         _gridAnchors.Name = "_gridAnchors";
         _gridAnchors.RowHeadersVisible = false;
+        _gridAnchors.RowHeadersWidth = 51;
         _gridAnchors.RowTemplate.Height = 30;
         _gridAnchors.Size = new Size(330, 452);
         _gridAnchors.TabIndex = 1;
-        //
+        // 
         // _colAnchorMass
-        //
+        // 
         _colAnchorMass.HeaderText = "Масса, т";
+        _colAnchorMass.MinimumWidth = 6;
         _colAnchorMass.Name = "_colAnchorMass";
-        //
+        // 
         // _colAnchorCode
-        //
+        // 
         _colAnchorCode.HeaderText = "Код АЦП";
+        _colAnchorCode.MinimumWidth = 6;
         _colAnchorCode.Name = "_colAnchorCode";
-        //
-        // _lblAnchors
-        //
-        _lblAnchors.Dock = DockStyle.Top;
-        _lblAnchors.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-        _lblAnchors.Location = new Point(0, 0);
-        _lblAnchors.Name = "_lblAnchors";
-        _lblAnchors.Size = new Size(330, 42);
-        _lblAnchors.TabIndex = 0;
-        _lblAnchors.Text = "Контрольные точки";
-        _lblAnchors.TextAlign = ContentAlignment.MiddleCenter;
-        //
+        // 
         // _lblAnchorsHint
-        //
+        // 
         _lblAnchorsHint.Dock = DockStyle.Bottom;
-        _lblAnchorsHint.Font = new Font("Segoe UI", 10F);
+        _lblAnchorsHint.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
         _lblAnchorsHint.Location = new Point(0, 494);
         _lblAnchorsHint.Name = "_lblAnchorsHint";
         _lblAnchorsHint.Size = new Size(330, 50);
         _lblAnchorsHint.TabIndex = 2;
         _lblAnchorsHint.Text = "Ровно одна точка должна иметь массу 0 т.\nКоды должны возрастать вместе с массой.";
         _lblAnchorsHint.TextAlign = ContentAlignment.MiddleCenter;
-        //
+        // 
+        // _lblAnchors
+        // 
+        _lblAnchors.Dock = DockStyle.Top;
+        _lblAnchors.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+        _lblAnchors.Location = new Point(0, 0);
+        _lblAnchors.Name = "_lblAnchors";
+        _lblAnchors.Size = new Size(330, 42);
+        _lblAnchors.TabIndex = 0;
+        _lblAnchors.Text = "Контрольные точки";
+        _lblAnchors.TextAlign = ContentAlignment.MiddleCenter;
+        // 
         // _gridResults
-        //
+        // 
         _gridResults.AllowUserToAddRows = false;
         _gridResults.AllowUserToDeleteRows = false;
         _gridResults.BackgroundColor = Color.White;
@@ -251,86 +253,94 @@ partial class CalibrationTestForm
         _gridResults.Name = "_gridResults";
         _gridResults.ReadOnly = true;
         _gridResults.RowHeadersVisible = false;
+        _gridResults.RowHeadersWidth = 51;
         _gridResults.RowTemplate.Height = 30;
         _gridResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _gridResults.Size = new Size(850, 502);
         _gridResults.TabIndex = 1;
         _gridResults.SelectionChanged += GridResults_SelectionChanged;
-        //
+        // 
         // _colCheckpoint
-        //
+        // 
         _colCheckpoint.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+        _colCheckpoint.DefaultCellStyle = dataGridViewCellStyle3;
         _colCheckpoint.HeaderText = "Проверка";
         _colCheckpoint.MinimumWidth = 220;
-        _colCheckpoint.Width = 220;
-        _colCheckpoint.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
         _colCheckpoint.Name = "_colCheckpoint";
         _colCheckpoint.ReadOnly = true;
-        //
+        _colCheckpoint.Width = 220;
+        // 
         // _colAdcCode
-        //
+        // 
         _colAdcCode.HeaderText = "ADC";
+        _colAdcCode.MinimumWidth = 6;
         _colAdcCode.Name = "_colAdcCode";
         _colAdcCode.ReadOnly = true;
         _colAdcCode.Width = 80;
-        //
+        // 
         // _colExpected
-        //
+        // 
         _colExpected.HeaderText = "Эталон (т)";
+        _colExpected.MinimumWidth = 6;
         _colExpected.Name = "_colExpected";
         _colExpected.ReadOnly = true;
         _colExpected.Width = 110;
-        //
+        // 
         // _colActual
-        //
+        // 
         _colActual.HeaderText = "Текущий (т)";
+        _colActual.MinimumWidth = 6;
         _colActual.Name = "_colActual";
         _colActual.ReadOnly = true;
         _colActual.Width = 110;
-        //
+        // 
         // _colError
-        //
+        // 
         _colError.HeaderText = "Ошибка (т)";
+        _colError.MinimumWidth = 6;
         _colError.Name = "_colError";
         _colError.ReadOnly = true;
         _colError.Width = 105;
-        //
+        // 
         // _colPoint
-        //
+        // 
         _colPoint.HeaderText = "ID точки";
+        _colPoint.MinimumWidth = 6;
         _colPoint.Name = "_colPoint";
         _colPoint.ReadOnly = true;
         _colPoint.Width = 90;
-        //
+        // 
         // _colStatus
-        //
+        // 
         _colStatus.HeaderText = "Статус";
+        _colStatus.MinimumWidth = 6;
         _colStatus.Name = "_colStatus";
         _colStatus.ReadOnly = true;
         _colStatus.Width = 80;
-        //
+        // 
         // _lblResults
-        //
+        // 
         _lblResults.Dock = DockStyle.Top;
-        _lblResults.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+        _lblResults.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
         _lblResults.Location = new Point(0, 0);
         _lblResults.Name = "_lblResults";
         _lblResults.Size = new Size(850, 42);
         _lblResults.TabIndex = 0;
         _lblResults.Text = "Текущий CalibrationCalculator и линейный эталон";
         _lblResults.TextAlign = ContentAlignment.MiddleCenter;
-        //
+        // 
         // _pnlBottom
-        //
+        // 
         _pnlBottom.Controls.Add(_lblStatus);
         _pnlBottom.Dock = DockStyle.Bottom;
         _pnlBottom.Location = new Point(0, 606);
         _pnlBottom.Name = "_pnlBottom";
         _pnlBottom.Size = new Size(1184, 45);
         _pnlBottom.TabIndex = 2;
-        //
+        // 
         // _lblStatus
-        //
+        // 
         _lblStatus.Dock = DockStyle.Fill;
         _lblStatus.Location = new Point(0, 0);
         _lblStatus.Name = "_lblStatus";
@@ -338,21 +348,21 @@ partial class CalibrationTestForm
         _lblStatus.Size = new Size(1184, 45);
         _lblStatus.TabIndex = 0;
         _lblStatus.TextAlign = ContentAlignment.MiddleLeft;
-        //
+        // 
         // _saveCsvDialog
-        //
+        // 
         _saveCsvDialog.DefaultExt = "csv";
         _saveCsvDialog.FileName = "calibration-before.csv";
         _saveCsvDialog.Filter = "CSV (*.csv)|*.csv|Все файлы (*.*)|*.*";
         _saveCsvDialog.Title = "Сохранить результаты проверки калибровки";
-        //
+        // 
         // CalibrationTestForm
-        //
+        // 
         ClientSize = new Size(1184, 651);
         Controls.Add(_splitMain);
         Controls.Add(_pnlBottom);
         Controls.Add(_pnlTop);
-        Font = new Font("Segoe UI", 12F);
+        Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
         MinimumSize = new Size(1000, 600);
         Name = "CalibrationTestForm";
         Text = "Scale Listener - Проверка калибровки - COM4  4800/Even";
