@@ -10,9 +10,4 @@ TestResults/
 *.resx
 
 # Installer payload: kept next to install.ps1 on the build machine, never committed
-install/database/*.exe
-install/application/publish/
-/install/application/ScaleListenerPublish/
-/install/application/Vesy13Publish/
-/install/win7
-/install/win7x32
+**/install/
