@@ -11,10 +11,4 @@ TestResults/
 
 # Installer payload: kept next to install.ps1 on the build machine, never committed
 **/install/
-/src/Vesy13/Forms/CorrectionsForm.resx
-/src/Vesy13/Forms/DynamicWeighingForm.resx
-/src/Vesy13/Forms/LogsForm.resx
-/src/Vesy13/Forms/PasswordDialog.resx
-/src/Vesy13/Forms/PrintForm.resx
-/src/Vesy13/Forms/ServiceForm.resx
-/src/Vesy13/Forms/StaticWeighingForm.resx
+
